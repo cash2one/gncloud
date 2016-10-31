@@ -43,6 +43,15 @@ def _wait_for_job(job_path):
 
 
 class Instance(object):
+    def _find_internal_network(self, int_network):
+        switch = self.conn.Msvm_VirtualEthernetSwitch(ElementName=int_network)
+        print(switch)
+        if not switch:
+            msg = "Network switch '%s' not found" % int_network
+            LOG.error(msg)
+            raise ValueError(msg)
+        return switch[0]
+
     def __init__(self, hyperv, name, vhdfile=None, memory_mb=1024, vcpus=1, int_network=None):
         LOG.debug('Instance > init')
         self.hyperv = hyperv
@@ -129,7 +138,11 @@ class Instance(object):
 class HyperV(object):
     def __init__(self, server_name, user, passwd):
         LOG.debug('HyperV > init')
-        connection = wmi.connect_server(server=server_name, user=user, password=passwd, namespace=r"root\virtualization\v2")
+        #connection = wmi.connect_server(server=server_name, user=user, password=passwd, namespace=r"root\virtualization\v2")
+        # 외부 아이피에서는 접근 시 'RPC 서버를 사용할 수 없습니다' 에러가 발생하여 리모트 컨트롤이 현재 안 되는 상태
+        # (해당 문제를 해결할 수 있다면 외부 서버에서의 컨트롤이 가능하나 현재는 큰 의미가 없는 이슈)
+        # 내부에서 접근 시에는 server, namespace만 입력한다. 로컬 서버에서는 아이디 및 패스워드를 이용한 커넥션이 안됨
+        connection = wmi.connect_server(server=server_name, namespace=r"root\virtualization\v2")
         self.conn = wmi.WMI(wmi=connection)
         self.management = self.conn.Msvm_VirtualSystemManagementService()[0]
 
@@ -147,8 +160,11 @@ if __name__ == "__main__":
     INSTANCE['name'] = "test-sv"
     INSTANCE['memory_mb'] = 512
     INSTANCE['vcpus'] = 1
+    try:
+        hyperv = HyperV(SERVER, USER, PASSWORD)
+        instance = hyperv.create(**INSTANCE)
 
-    hyperv = HyperV(SERVER, USER, PASSWORD)
-    instance = hyperv.create(**INSTANCE)
-
-    instance.start()
+        instance.start()
+        instance.stop()
+    except Exception as err:
+        print str(unicode(err))
