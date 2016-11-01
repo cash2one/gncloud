@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, jsonify
-from conn.kvm import init_kvm_conn, server_list, server_create, server_delete
+from kvm.conn import server_list, server_create, server_delete
 app = Flask(__name__)
 
 
@@ -17,7 +17,7 @@ def create():
 @app.route('/delete')
 def delete():
     server_delete()
-    return "ok"
+    return "ok"a
 
 
 if __name__ == '__main__':
