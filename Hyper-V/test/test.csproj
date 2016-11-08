@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2CC43364-6E61-47D9-9650-7D7EFD9BEFBD}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>test</RootNamespace>
+    <AssemblyName>test</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppHealth\cs\AppHealthStatus.cs" />
+    <Compile Include="DynamicMemory\cs\Slp.cs" />
+    <Compile Include="EnhancedSession\cs\Available.cs" />
+    <Compile Include="EnhancedSession\cs\Enable.cs" />
+    <Compile Include="FibreChannel\cs\ConfigureWwnGenerator.cs" />
+    <Compile Include="FibreChannel\cs\CreateSan.cs" />
+    <Compile Include="FibreChannel\cs\CreateVirtualFcPort.cs" />
+    <Compile Include="FibreChannel\cs\DeleteSan.cs" />
+    <Compile Include="FibreChannel\cs\DeleteVirtualFcPort.cs" />
+    <Compile Include="FibreChannel\cs\EnumerateFcPorts.cs" />
+    <Compile Include="FibreChannel\cs\FibreChannelUtilities.cs" />
+    <Compile Include="FibreChannel\cs\ModifySanName.cs" />
+    <Compile Include="FibreChannel\cs\ModifySanPorts.cs" />
+    <Compile Include="Generation2VM\cs\CreateVM.cs" />
+    <Compile Include="Generation2VM\cs\DeleteVM.cs" />
+    <Compile Include="Generation2VM\cs\GetBootOrder.cs" />
+    <Compile Include="Generation2VM\cs\GetPauseAfterBootFailure.cs" />
+    <Compile Include="Generation2VM\cs\GetSecureBoot.cs" />
+    <Compile Include="Generation2VM\cs\GetVMGeneration.cs" />
+    <Compile Include="Generation2VM\cs\SetBootOrder.cs" />
+    <Compile Include="Generation2VM\cs\SetBootProtocol.cs" />
+    <Compile Include="Generation2VM\cs\SetPauseAfterBootFailure.cs" />
+    <Compile Include="Generation2VM\cs\SetSecureBoot.cs" />
+    <Compile Include="IntegrationServices\cs\GuestServiceInterface.cs" />
+    <Compile Include="Metrics\cs\ControlMetrics.cs" />
+    <Compile Include="Metrics\cs\EnumerateMetrics.cs" />
+    <Compile Include="Metrics\cs\MetricUtilities.cs" />
+    <Compile Include="Metrics\cs\ModifyServiceSettings.cs" />
+    <Compile Include="Migration\cs\MigrationCommon.cs" />
+    <Compile Include="Migration\cs\MigrationSettings.cs" />
+    <Compile Include="Migration\cs\StorageMigration.cs" />
+    <Compile Include="Migration\cs\VmAndStorageMigration.cs" />
+    <Compile Include="Migration\cs\VmMigration.cs" />
+    <Compile Include="Networking\cs\AddAndRemovePorts.cs" />
+    <Compile Include="Networking\cs\AdvancedConnectionProperties.cs" />
+    <Compile Include="Networking\cs\AdvancedSwitchProperties.cs" />
+    <Compile Include="Networking\cs\ConnectVmToSwitch.cs" />
+    <Compile Include="Networking\cs\ConnectVmUsingResourcePool.cs" />
+    <Compile Include="Networking\cs\CreateSwitch.cs" />
+    <Compile Include="Networking\cs\DeleteSwitch.cs" />
+    <Compile Include="Networking\cs\EnumerateSwitch.cs" />
+    <Compile Include="Networking\cs\ManageExtension.cs" />
+    <Compile Include="Networking\cs\ModifyPorts.cs" />
+    <Compile Include="Networking\cs\ModifySwitch.cs" />
+    <Compile Include="Networking\cs\NetworkingUtilities.cs" />
+    <Compile Include="Networking\cs\SetRequiredFeature.cs" />
+    <Compile Include="Networking\cs\SupportsTrunkMode.cs" />
+    <Compile Include="Networking\cs\SyntheticEthernetPortProperties.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pvm\cs\FixUpUtilities.cs" />
+    <Compile Include="Pvm\cs\ImportUtilities.cs" />
+    <Compile Include="Replica\cs\ManageReplication.cs" />
+    <Compile Include="Replica\cs\ModifyServiceSettings.cs" />
+    <Compile Include="Replica\cs\ReplicaUtilities.cs" />
+    <Compile Include="ResourcePools\cs\MsvmResourceAllocationSettingData.cs" />
+    <Compile Include="ResourcePools\cs\MsvmResourcePool.cs" />
+    <Compile Include="ResourcePools\cs\MsvmResourcePoolConfigurationService.cs" />
+    <Compile Include="ResourcePools\cs\MsvmResourcePoolSettingData.cs" />
+    <Compile Include="ResourcePools\cs\ResourcePoolUtilities.cs" />
+    <Compile Include="ResourcePools\cs\ResourceUtilities.cs" />
+    <Compile Include="StorageQoS\cs\StorageQoS.cs" />
+    <Compile Include="Storage\cs\AttachVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\CompactVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\ConvertVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\CreateVirtualFloppyDisk.cs" />
+    <Compile Include="Storage\cs\CreateVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\DetachVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\GetVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\MergeVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\ResizeVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\SetParentVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\SetVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\StorageUtilities.cs" />
+    <Compile Include="Storage\cs\ValidateVirtualHardDisk.cs" />
+    <Compile Include="Storage\cs\VirtualHardDiskSettingData.cs" />
+    <Compile Include="Storage\cs\VirtualHardDiskState.cs" />
+    <Compile Include="VmOperations\cs\LinuxAffinityUtilities.cs" />
+    <Compile Include="WmiUtilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

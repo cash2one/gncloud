@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
+// PARTICULAR PURPOSE.
+//
+// Copyright (c) Microsoft. All rights reserved.
 
-namespace test
+namespace Microsoft.Samples.HyperV.Generation2VM
 {
     using System;
     using System.Globalization;
     using System.Management;
-    using Microsoft.Wmi.HyperV.Common;
+    using Microsoft.Samples.HyperV.Common;
 
     static class Generation2VMCreateSample
     {
@@ -18,7 +19,7 @@ namespace test
         /// </summary>
         /// <param name="serverName">The name of the server on which to create the Generation 2 VM.</param>
         /// <param name="vmName">The name of the VM to create.</param>
-        public static void
+        internal static void
         CreateGeneration2VM(
             string serverName,
             string vmName)
@@ -40,7 +41,7 @@ namespace test
                 {
                     virtualSystemSetting["ElementName"] = vmName;
                     virtualSystemSetting["ConfigurationDataRoot"] = "C:\\ProgramData\\Microsoft\\Windows\\Hyper-V\\";
-                    virtualSystemSetting["VirtualSystemSubtype"] = "Microsoft:Hyper-V:SubType:2";
+                    virtualSystemSetting["VirtualSystemSubtype"] = "Microsoft:Hyper-V:SubType:1";
 
                     string embeddedInstance = virtualSystemSetting.GetText(TextFormat.WmiDtd20);
 
