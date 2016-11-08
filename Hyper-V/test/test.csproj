@@ -67,6 +67,8 @@
     <Compile Include="Generation2VM\cs\SetBootProtocol.cs" />
     <Compile Include="Generation2VM\cs\SetPauseAfterBootFailure.cs" />
     <Compile Include="Generation2VM\cs\SetSecureBoot.cs" />
+    <Compile Include="Generation2VM\cs\StartVM.cs" />
+    <Compile Include="Generation2VM\cs\StopVM.cs" />
     <Compile Include="IntegrationServices\cs\GuestServiceInterface.cs" />
     <Compile Include="Metrics\cs\ControlMetrics.cs" />
     <Compile Include="Metrics\cs\EnumerateMetrics.cs" />

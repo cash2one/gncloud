@@ -234,6 +234,14 @@ namespace Microsoft.Samples.HyperV.Common
             return GetVmObject(name, "Msvm_ComputerSystem", scope);
         }
 
+        public static ManagementObject
+        GetGuestService(
+            string name,
+            ManagementScope scope)
+        {
+            return GetGuestServiceObject(name, "Msvm_GuestService", scope);
+        }
+
 
         /// <summary>
         /// Gets the Msvm_PlannedComputerSystem instance matching the requested virtual machine name.
@@ -264,6 +272,39 @@ namespace Microsoft.Samples.HyperV.Common
         {
             string vmQueryWql = string.Format(CultureInfo.InvariantCulture,
                 "SELECT * FROM {0} WHERE ElementName=\"{1}\"", className, name);
+
+            SelectQuery vmQuery = new SelectQuery(vmQueryWql);
+
+            using (ManagementObjectSearcher vmSearcher = new ManagementObjectSearcher(scope, vmQuery))
+            using (ManagementObjectCollection vmCollection = vmSearcher.Get())
+            {
+                if (vmCollection.Count == 0)
+                {
+                    throw new ManagementException(string.Format(CultureInfo.CurrentCulture,
+                        "No {0} could be found with name \"{1}\"",
+                        className,
+                        name));
+                }
+
+                //
+                // If multiple virtual machines exist with the requested name, return the first 
+                // one.
+                //
+                ManagementObject vm = GetFirstObjectFromCollection(vmCollection);
+
+                return vm;
+            }
+        }
+
+
+        private static ManagementObject
+        GetGuestServiceObject(
+            string name,
+            string className,
+            ManagementScope scope)
+        {
+            string vmQueryWql = string.Format(CultureInfo.InvariantCulture,
+                "SELECT * FROM {0}", className);
 
             SelectQuery vmQuery = new SelectQuery(vmQueryWql);
 

@@ -38,14 +38,22 @@ namespace test
             string vmName = "testvm";
             string first = "\\AcpiEx(VMBus,0,0)\\VenHw(9B17E5A2-0891-42DD-B653-80B5C22809BA,635161F83EDFC546913FF2D2F965ED0EDEC0CDF01C45974892F6A09D14FF12DC)\\MAC(000000000000)";
 
-            /* VM 생성 */
-            Console.WriteLine("---- CreateGeneration2VM ----");
-            Generation2VMCreateSample.CreateGeneration2VM(hostName, vmName);
-            
             /* VM 삭제 */
-            Console.WriteLine("---- DeleteGeneration2VM ----");
-            Generation2VMDeleteSample.DeleteGeneration2VM(hostName, vmName);
+            //Console.WriteLine("---- DeleteGeneration2VM ----");
+            //Generation2VMDeleteSample.DeleteGeneration2VM(hostName, vmName);
             //ImportUtilities.RemovePvm(vmName);
+
+            /* VM 생성 */
+            //Console.WriteLine("---- CreateGeneration2VM ----");
+            //Generation2VMCreateSample.CreateGeneration2VM(hostName, vmName);
+
+            /* VM 시작 */
+            //Console.WriteLine("---- StartGeneration2VM ----");
+            //Generation2VMStartSample.StartGeneration2VM(hostName, vmName);
+
+            /* VM 정지 */
+            Console.WriteLine("---- StopGeneration2VM ----");
+            Generation2VMStopSample.StopGeneration2VM(hostName, vmName);
 
             /*
             Console.WriteLine("---- GetVMGeneration ----");
