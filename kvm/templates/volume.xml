@@ -1,0 +1,14 @@
+<volume>
+    <name>{{ guest_name }}.img</name>
+    <allocation>5</allocation>
+    <capacity unit='G'>1</capacity>
+    <target>
+        <path>/var/lib/libvirt/{{ guest_name }}.img</path>
+        <permission>
+            <owner>0</owner>
+            <group>501</group>
+            <mode>0644</mode>
+            <label>test-guest</label>
+            </permission>
+        </target>
+    </volume>

@@ -1,0 +1,32 @@
+<domain type='kvm'>
+    <name>{{ guest_name }}</name>
+    <memory>{{ current_memory }}</memory>
+    <currentMemory>{{ current_memory }}</currentMemory>
+    <vcpu>{{ vcpu }}</vcpu>
+    <os>
+        <type arch='x86_64'>hvm</type>
+        <boot dev='hd'/>
+        </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>restart</on_crash>
+    <devices>
+        <disk type='file' device='disk'>
+            <source file='/var/lib/libvirt/images/{{ guest_name }}.img'/>
+            <target dev='hda' bus='virtio'/>
+            <driver name='qemu' type='raw'/>
+            </disk>
+        <disk type='file' device='cdrom'>
+            <driver name='qemu' type='raw'/>
+            <source file='/var/lib/libvirt/sshkeys/config.iso'/>
+            <target dev='hdc' bus='ide'/>
+            <readonly/>
+            <address type='drive' controller='0' bus='1' unit='0'/>
+            </disk>
+        <interface type='bridge'>
+            <source bridge='br0'/>
+            <model type='virtio'/>
+            </interface>
+        </devices>
+    </domain>
