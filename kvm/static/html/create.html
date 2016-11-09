@@ -1,0 +1,37 @@
+<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+
+- create -
+<br/>
+<br/><br/>
+<form id="create_form" id="create_form">
+    name: <input type="text" name="name"/>
+    <br/><br/>
+    cpu:
+    <select id="cpu" name="cpu">
+        <option value="1">1 core</option>
+        <option value="2">2 core</option>
+    </select>
+    <br/><br/>
+    memory:
+    <select id="memory" name="memory">
+        <option value="524288">512MB</option>
+        <option value="1048576">1G</option>
+    </select>
+    <br/><br/>
+</form>
+<input type="button" id="create" value="create" style="cursor:pointer;">
+
+<script>
+    $( "#create" ).click(function() {
+        $.ajax({
+            url:'/create',
+            type:'post',
+            data:$('#create_form').serialize(),
+            success:function(data){
+                alert("VM이 생성되었습니다");
+            }
+        })
+    });
+
+
+</script>
