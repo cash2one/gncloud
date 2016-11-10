@@ -13,13 +13,7 @@ URL = config.LIBVIRT_REMOTE_URL
 HOST = "192.168.0.131"
 USER = "root"
 
-#원격 libvirt 커넥션 테스트
-def init_kvm_conn():
-    conn = libvirt.openReadOnly(URL)
-    print conn.getHostname()
-
 def server_list():
-
         conn = libvirt.openReadOnly(URL)
         machine_list = []
 
@@ -118,7 +112,13 @@ def server_create(name, cpu, memory):
         #create vm
         conn = libvirt.open(URL)
         ptr_POOL = conn.storagePoolLookupByName("default")
+
+        # raw 이미지 사용시 volume.xml의 capacity가 적용됩니다
+        # qcow2 이미지 사용시 최대 8G 의 qcow 이미지에 세팅되어있는 virtual size: 8.0G 로 적용되어 무조건 8G의 이미지가 생성됩니다
+        # 테스트 결과 qcow 이미지를 사용해서 생성할때가 속도가 더 빠른것 같습니다
+        # defaultVol = ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud-1511.raw")
         defaultVol = ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud.qcow2")
+
         ptr_POOL.createXMLFrom(vol, defaultVol, 0)
         conn.createXML(guest, 0)
         conn.close()
@@ -137,6 +137,8 @@ def server_change_status(vm_name , status):
         ptr_VM.reboot()
     elif status == "resume":
         ptr_VM.resume()
+    elif status == "reboot":
+        ptr_VM.reboot();
     elif status == "delete":
         ptr_VM.destroy()
         ptr_POOL = conn.storagePoolLookupByName("default")
