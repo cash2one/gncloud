@@ -14,11 +14,10 @@ def list():
 
 @app.route('/create', methods=['POST'])
 def create():
-    name = request.form.get('name')
-    cpu = request.form.get('cpu')
-    memory = request.form.get('memory')
-    server_create(name, cpu, memory)
-    return "ok"
+    name = request.form['name']
+    cpu = request.form['cpu']
+    memory = request.form['memory']
+    return jsonify(message=server_create(name, cpu, memory))
 
 @app.route('/change_status/<vm_name>/<status>')
 def change_status(vm_name, status):
@@ -34,4 +33,5 @@ def view_list():
     return send_file("static/html/list.html")
 
 if __name__ == '__main__':
+    app.debug = True
     app.run()

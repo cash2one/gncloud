@@ -28,7 +28,11 @@
             type:'post',
             data:$('#create_form').serialize(),
             success:function(data){
-                alert("VM이 생성되었습니다");
+                if(data.message == "ok"){
+                    alert("VM이 생성되었습니다");
+                }else{
+                    alert(data.message)
+                }
             }
         })
     });
