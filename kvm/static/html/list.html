@@ -1,6 +1,7 @@
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 
 - list -
+<br/><br/><br/>
 <table id="table" border = "1">
     <tr>
         <td>name</td>
@@ -32,6 +33,11 @@
                         tr +="</select></td>"
                         tr += "</tr>"
 
+                    $("#table").append(tr);
+                }
+
+                if (data.lists.length == 0) {
+                    tr = "<tr><td colspan='6' align='center'>vm이 존재하지 않습니다</td></tr>>"
                     $("#table").append(tr);
                 }
             }
