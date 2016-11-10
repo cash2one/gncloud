@@ -61,15 +61,15 @@ def server_list():
         #                     mac_address = interfaceNode.attributes[attr].value
 
         #ssh 스크립트로 직접 guest에 할당된 ip 체크
-        if state == 1:
-            s = pxssh.pxssh()
-            s.login(HOST, USER)
-            s.sendline("/root/get_ipadress.sh "+dom.name())
-            s.prompt()
+        s = pxssh.pxssh()
+        s.login(HOST, USER)
+        s.sendline("/root/get_ipadress.sh " + dom.name())
+        s.prompt()
+        if len(s.before.split()) > 2:
             machine_info['ip'] = s.before.split()[2]
-            s.logout()
         else:
             machine_info['ip'] = ""
+        s.logout()
         machine_list.append(machine_info)
 
     conn.close()
