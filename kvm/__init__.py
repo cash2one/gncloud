@@ -17,7 +17,8 @@ def create():
     name = request.form['name']
     cpu = request.form['cpu']
     memory = request.form['memory']
-    return jsonify(message=server_create(name, cpu, memory))
+    hdd = request.form['hdd']
+    return jsonify(message=server_create(name, cpu, memory, hdd))
 
 @app.route('/change_status/<vm_name>/<status>')
 def change_status(vm_name, status):

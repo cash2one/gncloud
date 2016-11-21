@@ -1,7 +1,7 @@
 <volume>
     <name>{{ guest_name }}.img</name>
     <allocation>0</allocation>
-    <capacity unit='G'>14</capacity>
+    <capacity unit='G'>{{ hdd }}</capacity>
     <target>
 
         <permission>
