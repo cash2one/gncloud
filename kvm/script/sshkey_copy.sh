@@ -1,7 +1,8 @@
 #! /bin/bash
-rm -f default*;
-rm -f user-data;
-ssh-keygen -f default -N '';
-cp base_user-data user-data;
-echo '-' `cat ./default.pub` >> ./user-data;
-genisoimage -output config.iso -volid cidata -joliet -rock user-data meta-data
+path=$1
+rm -f $path/default*
+rm -f $path/user-data
+ssh-keygen -f $path/default -N ''
+cp $path/base_user-data $path/user-data
+echo '-' `cat $path/default.pub` >> $path/user-data
+genisoimage -output $path/config.iso -volid cidata -joliet -rock $path/user-data $path/meta-data

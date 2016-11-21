@@ -8,10 +8,13 @@ from pexpect import pxssh
 from xml.dom import minidom
 from kvm.util.config import config
 from flask import  render_template
+import paramiko
 
 URL = config.LIBVIRT_REMOTE_URL
 HOST = "192.168.0.131"
 USER = "root"
+REMOTE_SSH_KEY_PATH = "/var/lib/libvirt/sshkeys"
+LOCAL_SSH_KEY_PATH = "/Users/yhk/.ssh/id_rsa"
 
 def server_list():
         conn = libvirt.openReadOnly(URL)
@@ -56,15 +59,19 @@ def server_list():
             #                     mac_address = interfaceNode.attributes[attr].value
 
             #ssh 스크립트로 직접 guest에 할당된 ip 체크
-            s = pxssh.pxssh()
-            s.login(HOST, USER)
-            s.sendline("/root/get_ipadress.sh " + dom.name())
-            s.prompt()
-            if len(s.before.split()) > 2:
-                machine_info['ip'] = s.before.split()[2]
-            else:
-                machine_info['ip'] = ""
-            s.logout()
+
+            # pxssh
+            # s = pxssh.pxssh()
+            # s.login(HOST, USER)
+            # s.sendline("/root/get_ipadress.sh " + dom.name())
+            # s.prompt()
+            # paramiki
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(HOST, username=USER, key_filename="/Users/yhk/.ssh/id_rsa")
+            stdin, stdout, stderr = ssh.exec_command('/root/get_ipadress.sh ' + dom.name())
+            machine_info['ip'] = stdout.readlines()
+            ssh.close()
             machine_list.append(machine_info)
 
         conn.close()
@@ -90,12 +97,21 @@ def get_ip(domainName, mac_address):
 def server_create(name, cpu, memory):
     try:
         #create ssh key
-        s = pxssh.pxssh()
-        s.login(HOST, USER)
-        s.sendline("cd /var/lib/librt/sshkeys")
-        s.sendline("./sshkey_coyp.sh")
-        s.prompt()
-        s.logout()
+        # pxssh
+        # s = pxssh.pxssh()
+        # s.login(HOST, USER)
+        # s.sendline("cd /var/lib/librt/sshkeys")
+        # s.sendline("./sshkey_coyp.sh")
+        # s.prompt()
+        # s.logout()
+
+        # paramiko
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
+        stdin, stdout, stderr = ssh.exec_command('/var/lib/libvirt/sshkeys/sshkey_copy.sh ' + REMOTE_SSH_KEY_PATH)
+        print stdout.readlines()
+        ssh.close()
 
         #guest 생성 정보 xml 템플릿 생성
         vol = render_template(
