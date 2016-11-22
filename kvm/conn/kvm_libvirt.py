@@ -146,7 +146,6 @@ def server_create(name, cpu, memory, hdd):
        return errmsg
 
 
-
 def server_change_status(vm_name , status):
     conn = libvirt.open(URL)
     ptr_VM = conn.lookupByName(vm_name)
@@ -162,8 +161,20 @@ def server_change_status(vm_name , status):
         ptr_VM.destroy()
         ptr_POOL = conn.storagePoolLookupByName("default")
         ptr_POOL.storageVolLookupByName(vm_name + ".img").delete()
-        conn.close()
+    elif status == "save":
+        ptr_POOL = conn.storagePoolLookupByName("default")
+        org_vol = ptr_POOL.storageVolLookupByName(vm_name + ".img")
+        info = org_vol.info()
+        save_vol = render_template(
+            "volume.xml"
+            , guest_name=org_vol.name() + "_20161"
+            , hdd=humansize(info[1])
+        )
+        ptr_POOL.createXMLFrom(save_vol, org_vol, 0)
+
+    conn.close()
 
 
-
-
+# size convert BYTE TO GIGA
+def humansize(nbytes):
+    return nbytes / (1024 * 1024 * 1024)
