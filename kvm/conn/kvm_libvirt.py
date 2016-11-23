@@ -161,18 +161,28 @@ def server_change_status(vm_name , status):
         ptr_VM.destroy()
         ptr_POOL = conn.storagePoolLookupByName("default")
         ptr_POOL.storageVolLookupByName(vm_name + ".img").delete()
-    elif status == "save":
-        ptr_POOL = conn.storagePoolLookupByName("default")
-        org_vol = ptr_POOL.storageVolLookupByName(vm_name + ".img")
-        info = org_vol.info()
-        save_vol = render_template(
-            "volume.xml"
-            , guest_name=org_vol.name() + "_20161"
-            , hdd=humansize(info[1])
-        )
-        ptr_POOL.createXMLFrom(save_vol, org_vol, 0)
 
     conn.close()
+
+
+def server_volume_list():
+    conn = libvirt.open(URL)
+    ptr_POOL = conn.storagePoolLookupByName("default")
+    return ptr_POOL.listVolumes()
+
+
+def server_create_snap(name_volume, name_snap):
+    conn = libvirt.open(URL)
+    ptr_POOL = conn.storagePoolLookupByName("default")
+    org_vol = ptr_POOL.storageVolLookupByName(name_volume)
+    info = org_vol.info()
+    save_vol = render_template(
+        "volume.xml"
+        , guest_name=name_snap
+        , hdd=humansize(info[1])
+    )
+    ptr_POOL.createXMLFrom(save_vol, org_vol, 0)
+    return "ok"
 
 
 # size convert BYTE TO GIGA

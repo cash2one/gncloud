@@ -1,0 +1,22 @@
+<h2 class="sub-header">VM LIST</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>FROM</th>
+            <th>SUBJECT</th>
+            <th>SENT</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="message in emails.messages">
+            <td>{{ message.from }}</td>
+            <td>{{ message.subject }}</td>
+            <td>{{ message.sent | date:'MMM d, y h:mm:ss a' }}</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
