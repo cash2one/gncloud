@@ -29,7 +29,7 @@
 <script>
     $( "#create" ).click(function() {
         $.ajax({
-            url:'/create',
+            url:'/guest_create',
             type:'post',
             data:$('#create_form').serialize(),
             success:function(data){

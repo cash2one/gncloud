@@ -3,18 +3,30 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>FROM</th>
-            <th>SUBJECT</th>
-            <th>SENT</th>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>CPU</th>
+            <th>MEMORY</th>
+            <th>HDD</th>
+            <th>IP</th>
+            <th>KIND</th>
+            <th>ACTION</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="message in emails.messages">
-            <td>{{ message.from }}</td>
-            <td>{{ message.subject }}</td>
-            <td>{{ message.sent | date:'MMM d, y h:mm:ss a' }}</td>
+        <tr ng-repeat="list in guest_list">
+            <td>{{ list.id }}</td>
+            <td>{{ list.name }}</td>
+            <td>{{ list.cpu }}</td>
+            <td>{{ list.memory }}</td>
+            <td>{{ list.hdd }}</td>
+            <td>{{ list.ip }}</td>
+            <td>{{ list.kind }}</td>
+            <td>
+                <select ng-model="myActions" ng-options="action.name for action in actions" ng-change="update('{{ list.name }}', myActions)">
+                </select>
+            </td>
         </tr>
-
         </tbody>
     </table>
 </div>

@@ -16,7 +16,7 @@ USER = "root"
 REMOTE_SSH_KEY_PATH = "/var/lib/libvirt/sshkeys"
 LOCAL_SSH_KEY_PATH = "/Users/yhk/.ssh/id_rsa"
 
-def server_list():
+def kvm_list():
         conn = libvirt.openReadOnly(URL)
         machine_list = []
 
@@ -95,7 +95,7 @@ def get_ip(domainName, mac_address):
     return ip
 
 
-def server_create(name, cpu, memory, hdd):
+def kvm_create(name, cpu, memory, hdd):
     try:
         #create ssh key
         # pxssh
@@ -146,7 +146,7 @@ def server_create(name, cpu, memory, hdd):
        return errmsg
 
 
-def server_change_status(vm_name , status):
+def kvm_change_status(vm_name , status):
     conn = libvirt.open(URL)
     ptr_VM = conn.lookupByName(vm_name)
     if status == 'suspend':

@@ -9,6 +9,7 @@ from kvm.util.logger import logger
 class Config:
 
     LIBVIRT_REMOTE_URL = ""
+    DB_URL = ""
 
     def __init__(self, path="../conf/config.conf"):
         config_section = "DEFAULT"
@@ -26,6 +27,7 @@ class Config:
         logger.info("Default Conf file path : %s", os.path.abspath(config_file))
         result = parser.read(config_file)
         self.LIBVIRT_REMOTE_URL = parser.get(config_section, "LIBVIRT_REMOTE_URL")
+        self.DB_URL = parser.get(config_section, "DB_URL")
 
 # 전역 공통사용 객체이다.
 local_custom_file = os.environ.get('CONFIG_FILE_PATH')
