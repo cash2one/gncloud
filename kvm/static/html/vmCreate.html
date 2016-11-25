@@ -1,0 +1,33 @@
+<h2 class="sub-header">인스턴스 만들기</h2>
+<form ng-submit="submit()" ng-controller="ExampleController">
+<div class="table-responsive">
+    <div class="col-xs-2">
+        <label for="ex1">이름</label>
+        <input type="text" name="name" placeholder="name" class="form-control" maxlength="20">
+    </div>
+    <div class="col-xs-2">
+        <label for="ex1">vCpu</label>
+        <select id="cpu" name="cpu" class="form-control">
+            <option value="1">1 core</option>
+            <option value="2">2 core</option>
+        </select>
+    </div>
+    <div class="col-xs-2">
+        <label for="ex1">메모리</label>
+        <select id="memory" name="memory" class="form-control">
+            <option value="524288">512MB</option>
+            <option value="1048576">1G</option>
+        </select>
+    </div>
+    <div class="col-xs-2">
+        <label for="ex1">디스크</label>
+        <select id="hdd" name="hdd" class="form-control">
+            <option value=10>10G</option>
+            <option value=30>30G</option>
+            <option value=50>50G</option>
+        </select>
+    </div>
+</div><br/>
+    <input type="submit" id="submit" value="생성" />
+</form>
+</div>

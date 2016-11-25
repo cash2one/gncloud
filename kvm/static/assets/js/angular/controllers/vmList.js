@@ -9,7 +9,6 @@ angular
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
 
-        // 이메일 객체를 생성
         $scope.guest_list = {};
 
         $http({
@@ -38,16 +37,15 @@ angular
 
         $scope.myActions = $scope.actions[0];
 
-        $scope.update = function(name, action) {
-
+        $scope.update = function(name, action, index) {
             $http({
                 method: 'get',
                 url:'/gncloud/change_status/'+name+'/'+action.name ,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data, status, headers, config) {
-                    alert(name+" guest의 상태가 변경되었습니다")
-                    $window.location.reload();
+                    alert(name+" guest의 상태가 변경되었습니다");
+                    $scope.guest_list.splice(index, 1);
                 })
                 .error(function(data, status, headers, config) {
                     console.log(status);
