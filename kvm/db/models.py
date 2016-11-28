@@ -34,23 +34,20 @@ class GnGuestMachines(Base):
 
 class GnGuestImages(Base):
     __tablename__ = 'GN_GUEST_IMAGES'
-    name = Column(String(50), primary_key=True, nullable=False)
-    type = Column(String(10), primary_key=False, nullable=False)
-    source_dist = Column(String(100), primary_key=False, nullable=True)
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String(50), primary_key=False, nullable=False)
+    type = Column(String(20), primary_key=False, nullable=False)
     reg_dt = Column(DateTime, primary_key=False, nullable=False)
-    os = Column(String(20), primary_key=False, nullable=True)
 
-    def __init__(self, name=None, type=None , source_dist=None, reg_dt=None, os=None):
+    def __init__(self, name=None, type=None, reg_dt=None):
         self.name = name
         self.type = type
-        self.source_dist = source_dist
         self.reg_dt = reg_dt
-        self.os = os
 
 
     def __repr__(self):
-        return '<Name %r / Type %r / Source_dist %r / Reg_dt %r / Os %r>' \
-               % (self.name, self.type, self.source_dist, self.reg_dt, self.os)
+        return '<ID %r / Name %r / Type %r / Reg_dt %r>' \
+               % (self.id, self.name, self.type, self.reg_dt)
 
     def __json__(self):
-        return ['name', 'type', 'source_dist', 'reg_dt', 'os']
+        return ['id', 'name', 'type', 'reg_dt']

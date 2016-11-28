@@ -20,6 +20,7 @@
             <td>{{ list.type }}</td>
             <td>
                 <select ng-model="myActions" ng-options="action.name for action in actions" ng-change="update('{{ list.name }}', myActions, {{ $index }})">
+                    <option value="">선택</option>
                 </select>
             </td>
         </tr>

@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('vmListCtrl', function ($scope, $http) {
+    .controller('guestListCtrl', function ($scope, $http) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -12,9 +12,9 @@ angular
         $scope.guest_list = {};
 
         $http({
-            method: 'get', //방식
-            url: '/gncloud/guest_list', /* 통신할 URL */
-            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+            method: 'get',
+            url: '/gncloud/guest_list',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function(data, status, headers, config) {
                 if( data ) {
@@ -28,19 +28,17 @@ angular
             });
 
         $scope.actions = [
-            {name:'select'},
-            {name:'reboot'},
-            {name:'suspend'},
-            {name:'resume'},
-            {name:'delete'},
+            {name: '스냅샷', type: 'snap'},
+            {name: '시작', type: 'start'},
+            {name: '중지', type: 'stop'},
+            {name: '재시작', type: 'resume'},
+            {name: '삭제', type: 'delete'},
         ];
-
-        $scope.myActions = $scope.actions[0];
 
         $scope.update = function(name, action, index) {
             $http({
                 method: 'get',
-                url:'/gncloud/change_status/'+name+'/'+action.name ,
+                url: '/gncloud/change_status/' + name + '/' + action.type,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data, status, headers, config) {

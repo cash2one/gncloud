@@ -6,8 +6,9 @@ var serviceConfig = function ($routeProvider, $locationProvider) {
 
     $routeProvider
         .when('/main', {templateUrl: '/main.html', controller: 'mainCtrl'})
-        .when('/vmList', {templateUrl: '/vmList.html', controller: 'vmListCtrl'})
-        .when('/vmCreate', {templateUrl: '/vmCreate.html', controller: 'vmCreateCtrl'})
+        .when('/guestList', {templateUrl: '/guestList.html', controller: 'guestListCtrl'})
+        .when('/guestCreate', {templateUrl: '/guestCreate.html', controller: 'guestCreateCtrl'})
+        .when('/guestSnapList', {templateUrl: '/guestSnapList.html', controller: 'guestSnapListCtrl'})
 }
 
 // 서비스 페이지 설정

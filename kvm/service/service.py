@@ -1,16 +1,23 @@
 __author__ = 'yhk'
 
-from kvm.db.models import GnGuestMachines
+from kvm.db.models import GnGuestMachines, GnGuestImages
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status
 import paramiko
+import datetime
+import time
 
 HOST = "192.168.0.131"
 USER = "root"
 
-def server_create(name, cpu, memory, hdd):
+
+def server_create(name, cpu, memory, hdd, base):
     try:
-        kvm_create(name, cpu, memory, hdd);
+        if (base == ""):
+            kvm_create(name, cpu, memory, hdd)
+        else:
+            kvm_create(name, cpu, memory, hdd)
+
         ip = ""
         while len(ip) == 0:
             ip = getIpAddress(name)
@@ -37,9 +44,18 @@ def server_list():
     list = GnGuestMachines.query.all();
     return list
 
+
+def server_snap_list(type):
+    list = db_session.query(GnGuestImages).filter(GnGuestImages.type == type).all();
+    return list
+
 def server_change_status(name, status):
-    kvm_change_status(name, status);
+    now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    kvm_change_status(name, status, now)
     if status == 'delete':
         db_session.query(GnGuestMachines).filter(GnGuestMachines.name == name).delete();
         db_session.commit()
-
+    elif status == "snap":
+        guest_snap = GnGuestImages(name=name + "_" + now, type="kvm_snap", reg_dt=time.strftime('%Y-%m-%d %H:%M:%S'))
+        db_session.add(guest_snap)
+        db_session.commit()

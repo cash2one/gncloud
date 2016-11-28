@@ -9,6 +9,7 @@ from xml.dom import minidom
 from kvm.util.config import config
 from flask import  render_template
 import paramiko
+import datetime
 
 URL = config.LIBVIRT_REMOTE_URL
 HOST = "192.168.0.131"
@@ -146,7 +147,7 @@ def kvm_create(name, cpu, memory, hdd):
        return errmsg
 
 
-def kvm_change_status(vm_name , status):
+def kvm_change_status(vm_name, status, datetime):
     conn = libvirt.open(URL)
     ptr_VM = conn.lookupByName(vm_name)
     if status == 'suspend':
@@ -161,11 +162,13 @@ def kvm_change_status(vm_name , status):
         ptr_VM.destroy()
         ptr_POOL = conn.storagePoolLookupByName("default")
         ptr_POOL.storageVolLookupByName(vm_name + ".img").delete()
+    elif status == "snap":
+        server_create_snap(vm_name, vm_name + "_" + datetime)
 
     conn.close()
 
 
-def server_volume_list():
+def server_snap_list():
     conn = libvirt.open(URL)
     ptr_POOL = conn.storagePoolLookupByName("default")
     return ptr_POOL.listVolumes()
@@ -174,7 +177,7 @@ def server_volume_list():
 def server_create_snap(name_volume, name_snap):
     conn = libvirt.open(URL)
     ptr_POOL = conn.storagePoolLookupByName("default")
-    org_vol = ptr_POOL.storageVolLookupByName(name_volume)
+    org_vol = ptr_POOL.storageVolLookupByName(name_volume + ".img")
     info = org_vol.info()
     save_vol = render_template(
         "volume.xml"
