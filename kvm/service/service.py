@@ -13,13 +13,13 @@ USER = "root"
 
 def server_create(name, cpu, memory, hdd, base):
     try:
-        kvm_create(name, cpu, memory, hdd, base)
+        id = kvm_create(name, cpu, memory, hdd, base)
 
         ip = ""
         while len(ip) == 0:
             ip = getIpAddress(name)
-
-        vm_machine = GnVmMachines(name=name, cpu=cpu, memory=memory, hdd=hdd, type='kvm', ip=ip, host_id=1, os='centos',
+        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, hdd=hdd, type='kvm', ip=ip, host_id=1,
+                                  os='centos',
                                   os_ver='7', os_sub_ver='03', bit='', author='곽영호', status='running')
         db_session.add(vm_machine)
         db_session.commit()

@@ -144,14 +144,15 @@ def kvm_create(name, cpu, memory, hdd, base):
         # raw 이미지 사용시 volume.xml의 capacity가 적용됩니다
         # qcow2 이미지 사용시 최대 8G 의 qcow 이미지에 세팅되어있는 virtual size: 8.0G 로 적용되어 무조건 8G의 이미지가 생성됩니다
         # 테스트 결과 qcow 이미지를 사용해서 생성할때가 속도가 더 빠른것 같습니다
-        defaultVol = ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud-1608.raw")
+        # defaultVol = ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud-1608.raw")
         # ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud.qcow2").resize(10737000000)
-        # defaultVol = ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud.qcow2")
+        defaultVol = ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud.qcow2")
 
         ptr_POOL.createXMLFrom(vol, defaultVol, 0)
         conn.createXML(guest, 0)
+        id = conn.lookupByName(name).UUIDString()
         conn.close()
-        return "ok"
+        return id
     except IOError as errmsg:
        return errmsg
 
@@ -203,9 +204,10 @@ def server_write(time):
         dom = conn.lookupByID(id)
         print('cpu info:')
         stats = dom.getCPUStats(True)
-        print('cpu_time:    ' + str(stats[0]['cpu_time']))
-        print('system_time: ' + str(stats[0]['system_time']))
-        print('user_time:   ' + str(stats[0]['user_time']))
+        # print('cpu_time:    ' + str(stats[0]['cpu_time']))
+        # print('system_time: ' + str(stats[0]['system_time']))
+        # print('user_time:   ' + str(stats[0]['user_time']))
+        print((stats[0]['user_time'] * 100) / (stats[0]['cpu_time'] + stats[0]['system_time'] + stats[0]['user_time']))
 
         stats = dom.memoryStats()
         print('memory info:')

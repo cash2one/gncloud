@@ -7,8 +7,8 @@ from kvm.db.database import Base
 
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(50), primary_key=False, nullable=False)
+    id = Column(String(30), primary_key=True, nullable=False)
+    name = Column(String(50), primary_key=True, nullable=False)
     type = Column(String(50), primary_key=False, nullable=False)
     cpu = Column(Integer, primary_key=False, nullable=False)
     memory = Column(Integer, primary_key=False, nullable=False)
@@ -25,8 +25,9 @@ class GnVmMachines(Base):
     stop_time = Column(DateTime, default=datetime.datetime.utcnow)
     status = Column(String(10), primary_key=False, nullable=False)
 
-    def __init__(self, name=None, type=None, cpu=None, memory=None, hdd=None, ip=None, host_id=None, os=None,
+    def __init__(self, id=id, name=None, type=None, cpu=None, memory=None, hdd=None, ip=None, host_id=None, os=None,
                  os_ver=None, os_sub_ver=None, bit=None, author=None, status=None):
+        self.id = id
         self.name = name
         self.type = type
         self.cpu = cpu
