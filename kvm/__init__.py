@@ -31,7 +31,7 @@ def create():
     cpu = request.json['cpu']
     memory = request.json['memory']
     hdd = request.json['hdd']
-    base = request.json['base']
+    base = request.json['baseImage']
     return jsonify(status=True, message=server_create(name, cpu, memory, hdd, base))
 
 
@@ -53,8 +53,8 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 if __name__ == '__main__':
-    # cron = Scheduler(daemon=True)
-    # cron.add_interval_job(job_function, seconds=10)
-    # cron.start()
+    cron = Scheduler(daemon=True)
+    cron.add_interval_job(job_function, seconds=10)
+    cron.start()
     app.run()
 

@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 __author__ = 'yhk'
 
-from kvm.db.models import GnGuestMachines, GnGuestImages
+from kvm.db.models import GnVmMachines, GnVmImages
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, server_write
 import paramiko
@@ -18,8 +19,9 @@ def server_create(name, cpu, memory, hdd, base):
         while len(ip) == 0:
             ip = getIpAddress(name)
 
-        guest_machine = GnGuestMachines(name=name, cpu=cpu, memory=memory, hdd=hdd, type='kvm', ip=ip, status='running')
-        db_session.add(guest_machine)
+        vm_machine = GnVmMachines(name=name, cpu=cpu, memory=memory, hdd=hdd, type='kvm', ip=ip, host_id=1, os='centos',
+                                  os_ver='7', os_sub_ver='03', bit='', author='곽영호', status='running')
+        db_session.add(vm_machine)
         db_session.commit()
     except IOError as errmsg:
         return errmsg
@@ -37,22 +39,22 @@ def getIpAddress(name):
     return ip
 
 def server_list():
-    list = GnGuestMachines.query.all();
+    list = GnVmMachines.query.all();
     return list
 
 
 def server_image_list(type):
-    list = db_session.query(GnGuestImages).filter(GnGuestImages.type == type).all();
+    list = db_session.query(GnVmImages).filter(GnVmImages.type == type).all();
     return list
 
 def server_change_status(name, status):
     now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     kvm_change_status(name, status, now)
     if status == 'delete':
-        db_session.query(GnGuestMachines).filter(GnGuestMachines.name == name).delete();
+        db_session.query(GnVmMachines).filter(GnVmMachines.name == name).delete();
         db_session.commit()
     elif status == "snap":
-        guest_snap = GnGuestImages(name=name + "_" + now, type="kvm_snap", reg_dt=time.strftime('%Y-%m-%d %H:%M:%S'))
+        guest_snap = GnVmImages(name=name + "_" + now, type="kvm_snap", reg_dt=time.strftime('%Y-%m-%d %H:%M:%S'))
         db_session.add(guest_snap)
         db_session.commit()
 

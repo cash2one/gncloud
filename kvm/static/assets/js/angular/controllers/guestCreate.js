@@ -26,6 +26,7 @@ angular
 
 
         $scope.data = {};
+        $scope.data.baseImage = "";
         $scope.submit = function() {
             $http({
                 method  : 'POST',
@@ -43,7 +44,7 @@ angular
         };
 
         $scope.update_image = function (list) {
-            $scope.data.base = list.name;
+            if (list != null) $scope.data.baseImage = list.name;
         };
 
     });
