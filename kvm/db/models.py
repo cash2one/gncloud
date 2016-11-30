@@ -14,8 +14,9 @@ class GnGuestMachines(Base):
     memory = Column(Integer, primary_key=False, nullable=False)
     hdd = Column(Integer, primary_key=False, nullable=False)
     ip = Column(String(20), primary_key=False, nullable=False)
+    status = Column(String(20), primary_key=False, nullable=False)
 
-    def __init__(self, name=None, type=None , cpu=None, memory=None, hdd=None, ip =None):
+    def __init__(self, name=None, type=None, cpu=None, memory=None, hdd=None, ip=None, status=None):
         self.name = name
         self.type = type
         self.cpu = cpu
@@ -25,11 +26,11 @@ class GnGuestMachines(Base):
 
 
     def __repr__(self):
-        return '<ID %r / Name %r / Type %r / Cpu %r / Memory %r / Hdd %r / Ip %r>' \
-               % (self.id, self.name, self.type, self.cpu, self.memory, self.hdd, self.ip)
+        return '<ID %r / Name %r / Type %r / Cpu %r / Memory %r / Hdd %r / Ip %r / Status %r>' \
+               % (self.id, self.name, self.type, self.cpu, self.memory, self.hdd, self.ip, self.status)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'cpu', 'memory', 'hdd', 'ip']
+        return ['id', 'name', 'type', 'cpu', 'memory', 'hdd', 'ip', 'status']
 
 
 class GnGuestImages(Base):

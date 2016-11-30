@@ -4,7 +4,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from kvm.util.config import config
 
-engine = create_engine(config.DB_URL, convert_unicode=True)
+engine = create_engine(config.DB_URL, convert_unicode=True, pool_recycle=500, pool_size=5, max_overflow=20, echo=False,
+                       echo_pool=True)
 
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
@@ -17,4 +18,5 @@ def init_db():
     # import all modules here that might define models so that
     # they will be registered properly on the metadata.  Otherwise
     # you will have to import them first before calling init_db()
+    import kvm.db.models
     Base.metadata.create_all(engine)

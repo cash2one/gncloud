@@ -1,19 +1,30 @@
 # -*- coding: utf-8 -*-
 
+import atexit
+import logging
 from flask import Flask, send_file, jsonify, request
-from kvm.service.kvm_libvirt import server_create_snap
-from kvm.service.service import server_create, server_list, server_change_status, server_snap_list
+from kvm.db.database import db_session
+from kvm.service.service import server_create, server_list, server_change_status, server_image_list, server_monitor
 from datetime import timedelta
 from kvm.util.json_encoder import AlchemyEncoder
+from apscheduler.scheduler import Scheduler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 app.json_encoder = AlchemyEncoder
 
+
+### cron job start ###
+def job_function():
+    server_monitor()
+
+
+### cron job end ###
+
+#### rest start ####
 @app.route('/guest_list')
 def list():
     return jsonify(status=True, message="success", list=server_list())
-
 
 @app.route('/guest_create', methods=['POST'])
 def create():
@@ -29,15 +40,20 @@ def change_status(vm_name, status):
     server_change_status(vm_name, status)
     return "ok"
 
-
 @app.route('/list_guest_snap', methods=['GET'])
 def list_volume():
-    return jsonify(status=True, message="success", list=server_snap_list(request.args.get('type')))
+    return jsonify(status=True, message="success", list=server_image_list(request.args.get('type')))
 
-@app.route("/view/<page>")
-def view_list(page):
-    return send_file("static/html/" + page + ".html")
+
+#### rest end ####
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 if __name__ == '__main__':
-    # app.debug = True
+    cron = Scheduler(daemon=True)
+    cron.add_interval_job(job_function, seconds=5)
+    cron.start()
     app.run()
+

@@ -96,7 +96,7 @@ def get_ip(domainName, mac_address):
     return ip
 
 
-def kvm_create(name, cpu, memory, hdd):
+def kvm_create(name, cpu, memory, hdd, base):
     try:
         #create ssh key
         # pxssh
@@ -115,12 +115,19 @@ def kvm_create(name, cpu, memory, hdd):
         print stdout.readlines()
         ssh.close()
 
-        #guest 생성 정보 xml 템플릿 생성
-        vol = render_template(
-            "volume.xml"
-            ,guest_name= name
-            , hdd=hdd
-        )
+
+        # 스냅샷 기반 유무에 따른 생성 로직 분기
+        if base == "":
+            # guest 생성 정보 xml 템플릿 생성
+            vol = render_template(
+                "volume.xml"
+                , guest_name=name
+                , hdd=hdd
+            )
+        else:
+            server_image_copy(base, name)
+
+
         guest = render_template(
             "guest.xml"
             ,guest_name = name
@@ -146,7 +153,6 @@ def kvm_create(name, cpu, memory, hdd):
     except IOError as errmsg:
        return errmsg
 
-
 def kvm_change_status(vm_name, status, datetime):
     conn = libvirt.open(URL)
     ptr_VM = conn.lookupByName(vm_name)
@@ -163,18 +169,18 @@ def kvm_change_status(vm_name, status, datetime):
         ptr_POOL = conn.storagePoolLookupByName("default")
         ptr_POOL.storageVolLookupByName(vm_name + ".img").delete()
     elif status == "snap":
-        server_create_snap(vm_name, vm_name + "_" + datetime)
+        server_image_copy(vm_name, vm_name + "_" + datetime)
 
     conn.close()
 
 
-def server_snap_list():
+def server_image_list():
     conn = libvirt.open(URL)
     ptr_POOL = conn.storagePoolLookupByName("default")
     return ptr_POOL.listVolumes()
 
 
-def server_create_snap(name_volume, name_snap):
+def server_image_copy(name_volume, name_snap):
     conn = libvirt.open(URL)
     ptr_POOL = conn.storagePoolLookupByName("default")
     org_vol = ptr_POOL.storageVolLookupByName(name_volume + ".img")
@@ -187,6 +193,17 @@ def server_create_snap(name_volume, name_snap):
     ptr_POOL.createXMLFrom(save_vol, org_vol, 0)
     return "ok"
 
+
+def server_write(time):
+    conn = libvirt.open(URL)
+    for id in conn.listDomainsID():
+        dom = conn.lookupByID(id)
+        cpu_stats = dom.getCPUStats(False)
+        for (i, cpu) in enumerate(cpu_stats):
+            print("guest:" + dom.name() + ' CPU ' + str(i) + ' Time: ' + str(cpu['cpu_time'] / 1000000000.))
+
+    print("==========" + time)
+    conn.close()
 
 # size convert BYTE TO GIGA
 def humansize(nbytes):

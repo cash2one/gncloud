@@ -2,7 +2,7 @@ __author__ = 'yhk'
 
 from kvm.db.models import GnGuestMachines, GnGuestImages
 from kvm.db.database import db_session
-from kvm.service.kvm_libvirt import kvm_create, kvm_change_status
+from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, server_write
 import paramiko
 import datetime
 import time
@@ -10,19 +10,15 @@ import time
 HOST = "192.168.0.131"
 USER = "root"
 
-
 def server_create(name, cpu, memory, hdd, base):
     try:
-        if (base == ""):
-            kvm_create(name, cpu, memory, hdd)
-        else:
-            kvm_create(name, cpu, memory, hdd)
+        kvm_create(name, cpu, memory, hdd, base)
 
         ip = ""
         while len(ip) == 0:
             ip = getIpAddress(name)
 
-        guest_machine = GnGuestMachines(name=name,cpu=cpu,memory=memory,hdd=hdd,type='kvm',ip=ip)
+        guest_machine = GnGuestMachines(name=name, cpu=cpu, memory=memory, hdd=hdd, type='kvm', ip=ip, status='running')
         db_session.add(guest_machine)
         db_session.commit()
     except IOError as errmsg:
@@ -45,7 +41,7 @@ def server_list():
     return list
 
 
-def server_snap_list(type):
+def server_image_list(type):
     list = db_session.query(GnGuestImages).filter(GnGuestImages.type == type).all();
     return list
 
@@ -59,3 +55,8 @@ def server_change_status(name, status):
         guest_snap = GnGuestImages(name=name + "_" + now, type="kvm_snap", reg_dt=time.strftime('%Y-%m-%d %H:%M:%S'))
         db_session.add(guest_snap)
         db_session.commit()
+
+
+def server_monitor():
+    now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    server_write(now);
