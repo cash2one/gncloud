@@ -10,20 +10,12 @@ namespace com.gncloud.hyperv.agent.Controllers
     {
         
         [Route("powershell/execute")]
-        [HttpGet]
-        public String GetExecuteScript(String execute_script, String result_script)
+        [HttpPost]
+        public String GetExecuteScript(String script)
         {
             PowerShellService ctrl = new PowerShellService();
-            
-            if (result_script != null)
-            {
-                ctrl.executePowerShellScript(execute_script);
-                return ctrl.resultPowerShellScript(result_script);
-            }
-            else
-            {
-                return ctrl.resultPowerShellScript(execute_script);
-            }
+
+            return ctrl.powerShellScript(script);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace agent
 
             config.MapHttpAttributeRoutes();
 
-            config.Formatters.Add(new BrowserJsonFormatter());
+            //config.Formatters.Add(new BrowserJsonFormatter());
 
             /*
             config.Routes.MapHttpRoute("API Default", "api/{controller}/{id}",

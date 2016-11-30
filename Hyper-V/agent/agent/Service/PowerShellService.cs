@@ -22,16 +22,7 @@ namespace com.gncloud.hyperv.agent.Service
         {
         }
 
-        public void executePowerShellScript(String script)
-        {
-            //log.Info("Execute Script: " + script);
-            // Execute PowerShell Script.
-            Collection<PSObject> execute = PowerShell.Create()
-                    .AddScript(script)
-                    .Invoke();
-        }
-
-        public String resultPowerShellScript(String script)
+        public String powerShellScript(String script)
         {
             //log.Info("Result Script: " + script);
             // Execute PowerShell Script for Result Value.
@@ -39,7 +30,14 @@ namespace com.gncloud.hyperv.agent.Service
                     .AddScript(script)
                     .Invoke();
 
-            return result[0].ToString();
+            if (result.Count == 0)
+            {
+                return "{}";
+            }
+            else
+            {
+                return result[0].ToString();
+            }
         }
     }
 }
