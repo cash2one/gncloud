@@ -3,5 +3,4 @@
 bin
 obj
 packages/
-packages.config
 test/
