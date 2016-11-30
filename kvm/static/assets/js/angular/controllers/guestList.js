@@ -12,8 +12,8 @@ angular
         $scope.guest_list = {};
 
         $http({
-            method: 'get',
-            url: '/gncloud/guest_list',
+            method: 'GET',
+            url: '/gncloud/vm',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function(data, status, headers, config) {
@@ -37,8 +37,8 @@ angular
 
         $scope.update = function(name, action, index) {
             $http({
-                method: 'get',
-                url: '/gncloud/change_status/' + name + '/' + action.type,
+                method: 'PUT',
+                url: '/gncloud/vm/status/' + name + '/' + action.type,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data, status, headers, config) {

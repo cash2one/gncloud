@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from xml.etree import ElementTree
+
 __author__ = 'yhk'
 
 import ConfigParser
@@ -195,14 +197,34 @@ def server_image_copy(name_volume, name_snap):
 
 
 def server_write(time):
+    print("==========start" + time)
     conn = libvirt.open(URL)
     for id in conn.listDomainsID():
         dom = conn.lookupByID(id)
-        cpu_stats = dom.getCPUStats(False)
-        for (i, cpu) in enumerate(cpu_stats):
-            print("guest:" + dom.name() + ' CPU ' + str(i) + ' Time: ' + str(cpu['cpu_time'] / 1000000000.))
+        print('cpu info:')
+        stats = dom.getCPUStats(True)
+        print('cpu_time:    ' + str(stats[0]['cpu_time']))
+        print('system_time: ' + str(stats[0]['system_time']))
+        print('user_time:   ' + str(stats[0]['user_time']))
 
-    print("==========" + time)
+        stats = dom.memoryStats()
+        print('memory info:')
+        for name in stats:
+            print('  ' + str(stats[name]) + ' (' + name + ')')
+
+        print('IO info:')
+        tree = ElementTree.fromstring(dom.XMLDesc())
+        iface = tree.find('devices/interface/target').get('dev')
+        stats = dom.interfaceStats(iface)
+        print('read bytes:    ' + str(stats[0]))
+        print('read packets:  ' + str(stats[1]))
+        print('read errors:   ' + str(stats[2]))
+        print('read drops:    ' + str(stats[3]))
+        print('write bytes:   ' + str(stats[4]))
+        print('write packets: ' + str(stats[5]))
+        print('write errors:  ' + str(stats[6]))
+        print('write drops:   ' + str(stats[7]))
+
     conn.close()
 
 # size convert BYTE TO GIGA

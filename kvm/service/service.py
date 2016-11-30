@@ -24,7 +24,7 @@ def server_create(name, cpu, memory, hdd, base):
     except IOError as errmsg:
         return errmsg
 
-    return "ok"
+    return "success"
 
 def getIpAddress(name):
     ssh = paramiko.SSHClient()
@@ -55,7 +55,6 @@ def server_change_status(name, status):
         guest_snap = GnGuestImages(name=name + "_" + now, type="kvm_snap", reg_dt=time.strftime('%Y-%m-%d %H:%M:%S'))
         db_session.add(guest_snap)
         db_session.commit()
-
 
 def server_monitor():
     now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')

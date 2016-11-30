@@ -12,8 +12,8 @@ angular
         $scope.guest_snap_list = {};
 
         $http({
-            method: 'get',
-            url: '/gncloud/list_guest_snap?type=kvm_snap',
+            method: 'GET',
+            url: '/gncloud/vm/images/kvm_snap',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {

@@ -4,9 +4,8 @@ from sqlalchemy.orm import relationship, backref
 from kvm.db.database import Base
 
 
-
-class GnGuestMachines(Base):
-    __tablename__ = 'GN_GUEST_MACHINES'
+class GnVmMachines(Base):
+    __tablename__ = 'GN_VM_MACHINES'
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String(50), primary_key=False, nullable=False)
     type = Column(String(50), primary_key=False, nullable=False)
@@ -33,8 +32,8 @@ class GnGuestMachines(Base):
         return ['id', 'name', 'type', 'cpu', 'memory', 'hdd', 'ip', 'status']
 
 
-class GnGuestImages(Base):
-    __tablename__ = 'GN_GUEST_IMAGES'
+class GnVmImages(Base):
+    __tablename__ = 'GN_VM_IMAGES'
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String(50), primary_key=False, nullable=False)
     type = Column(String(20), primary_key=False, nullable=False)

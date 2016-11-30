@@ -17,32 +17,33 @@ app.json_encoder = AlchemyEncoder
 ### cron job start ###
 def job_function():
     server_monitor()
-
-
 ### cron job end ###
 
 #### rest start ####
-@app.route('/guest_list')
+@app.route('/vm', methods=['GET'])
 def list():
     return jsonify(status=True, message="success", list=server_list())
 
-@app.route('/guest_create', methods=['POST'])
+
+@app.route('/vm', methods=['POST'])
 def create():
     name = request.json['name']
     cpu = request.json['cpu']
     memory = request.json['memory']
     hdd = request.json['hdd']
     base = request.json['base']
-    return jsonify(message=server_create(name, cpu, memory, hdd, base))
+    return jsonify(status=True, message=server_create(name, cpu, memory, hdd, base))
 
-@app.route('/change_status/<vm_name>/<status>')
+
+@app.route('/vm/status/<vm_name>/<status>', methods=['PUT'])
 def change_status(vm_name, status):
     server_change_status(vm_name, status)
-    return "ok"
+    return jsonify(status=True, message="success")
 
-@app.route('/list_guest_snap', methods=['GET'])
-def list_volume():
-    return jsonify(status=True, message="success", list=server_image_list(request.args.get('type')))
+
+@app.route('/vm/images/<type>', methods=['GET'])
+def list_volume(type):
+    return jsonify(status=True, message="success", list=server_image_list(type))
 
 
 #### rest end ####
@@ -52,8 +53,8 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 if __name__ == '__main__':
-    cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=5)
-    cron.start()
+    # cron = Scheduler(daemon=True)
+    # cron.add_interval_job(job_function, seconds=10)
+    # cron.start()
     app.run()
 

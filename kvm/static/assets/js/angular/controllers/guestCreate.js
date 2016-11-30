@@ -9,8 +9,8 @@ angular
         }).parent().addClass('active');
 
         $http({
-            method: 'get',
-            url: '/gncloud/list_guest_snap?type=kvm_snap',
+            method: 'GET',
+            url: '/gncloud/vm/images/kvm_snap',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -29,7 +29,7 @@ angular
         $scope.submit = function() {
             $http({
                 method  : 'POST',
-                url     : '/gncloud/guest_create',
+                url: '/gncloud/vm',
                 data: $scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
