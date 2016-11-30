@@ -7,7 +7,8 @@ from controller.powershellController import *
 
 app = Flask(__name__)
 
-app.add_url_rule("/vm", view_func=newVm, methods=['POST'])
+app.add_url_rule("/manual", view_func=manual, methods=['GET', 'POST'])
+app.add_url_rule("/vm/status/<vm_name>/<status>", view_func=hvm_state, methods=['GET', 'POST'])
 
 
 if __name__ == '__main__':
