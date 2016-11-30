@@ -1,5 +1,0 @@
-*.sln
-.vs
-bin
-obj
-packages.config
