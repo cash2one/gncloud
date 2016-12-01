@@ -1,4 +1,5 @@
 .idea/
 *.iml
 *.pyc
-.test/
+test_controller/
+test_service/

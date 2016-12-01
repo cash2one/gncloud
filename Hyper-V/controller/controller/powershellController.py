@@ -21,26 +21,44 @@ def manual():
 
 # VM을 생성한다.
 # Request
+# Response
 def hvm_create():
+    # VM Name (Hyper-V에서는 VMName의 중복이 가능, VM별 구분은 VMId로 구분 필요)
     name = request.args.get('name')
+    # CPU Core 수
     cpu = request.args.get('cpu')
+    # 디스크 경로
     hdd = request.args.get('hdd')
+    # 가상머신 메모리
     memory = request.args.get('memory')
+    # 베이스 이미지 경로
     baseImage = request.args.get('baseImage')
-
+    # todo parameter 1. OSType 파라미터가 필요해 보임
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
-    # todo hvm_create 1. 새 머신을 만든다. (New-VM)
-    # todo hvm_create 1. 머신이 생성되었는지 확인한다. (New-VM 리턴값 체크)
-    # todo hvm_create 2. 새 머신에서 추가적인 설정을 한다 (Set-VM / 리턴값 없음)
-    # todo hvm_create 3. 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD / 리턴값 없음)
-    # todo hvm_create 4. 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive / 리턴값 없음)
-    # todo hvm_create 5. VM에 IP를 설정한다. (???)
-    # todo hvm_create 6. 요청된 작업이 제대로 실행되었는지 체크한다 (Get-VM)
-    # todo hvm_create 7. 새로 생성된 가상머신 데이터를 DB에 저장한다.
-    return ""
+    # 새 머신을 만든다. (New-VM)
+    # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
+    PATH = "c:\images"
+    SWITCHNAME = "out"
+    new_vm = ps.new_vm(Name=name, MemoryStartupBytes=memory, Path=PATH, SwitchName=SWITCHNAME)
+    # 머신이 생성되었는지 확인한다. (New-VM 리턴값 체크)
+    if new_vm is not None:
+        # 새 머신에서 추가적인 설정을 한다 (Set-VM)
+        set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessCount=cpu)
+        # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
+        # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
+        CONVERT_VHD_DESTINATIONPATH = "C:\\images\\testvm_disk2\\disk.vhdx"
+        CONVERT_VHD_PATH = "C:\\images\\windows10.vhdx"
+        convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
+        # todo hvm_create 5. 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive / 리턴값 없음)
+        # todo hvm_create 6. VM에 IP를 설정한다. (???)
+        # todo hvm_create 8. 새로 생성된 가상머신 데이터를 DB에 저장한다.
+        return jsonify(status=True, massage="VM 생성 성공")
+    else:
+        return jsonify(status=False, massage="VM 생성 실패")
 
 
 # VM 리스트 정보를 가져온다.
+# Request
 # Response
 # {
 #   list: JSONArray
