@@ -27,6 +27,7 @@ class PowerShell(object):
         return ""
 
     # Start-VM -VMName (가상머신 이름)
+    # 가상머신을 시작한다.
     def start_vm(self, vm_name):
         script = "Start-VM -VMName " + vm_name + self.CONVERTTO_JSON
         return self.send(script)
@@ -40,7 +41,6 @@ class PowerShell(object):
     def get_vm(self):
         script = "Get-VM" + self.CONVERTTO_JSON
         return self.send(script)
-
 
     # agent 모듈에 파워쉘 스크립트를 전달하여 실행하고 결과를 받아온다.
     def send(self, script):

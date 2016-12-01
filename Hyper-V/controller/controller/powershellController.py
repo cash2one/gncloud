@@ -20,7 +20,15 @@ def manual():
 
 
 # VM을 생성한다.
+# Request
 def hvm_create():
+
+    name = request.args.get('name')
+    cpu = request.args.get('cpu')
+    hdd = request.args.get('hdd')
+    memory = request.args.get('memory')
+    baseImage = request.args.get('baseImage')
+
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     # todo hvm_create 1. 새 머신을 만든다. (New-VM)
     # todo hvm_create 1. 머신이 생성되었는지 확인한다. (New-VM 리턴값 체크)
@@ -29,7 +37,38 @@ def hvm_create():
     # todo hvm_create 4. 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive / 리턴값 없음)
     # todo hvm_create 5. VM에 IP를 설정한다. (???)
     # todo hvm_create 6. 요청된 작업이 제대로 실행되었는지 체크한다 (Get-VM)
+    # todo hvm_create 7. 새로 생성된 가상머신 데이터를 DB에 저장한다.
     return ""
+
+
+# VM 리스트 정보를 가져온다.
+# Response
+# {
+#   list: JSONArray
+#       {
+#           cpu: int,
+#           hdd: int,
+#           id: int,
+#           ip: String,
+#           memory: int?
+#           name: String,
+#           status: ?
+#           type: String (hyperv)
+#       },
+#   message: String,
+#   status: boolean
+# }
+def hvm_vm_list():
+    ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
+    vm_list = ps.get_vm()
+    return jsonify(list=vm_list, message="", status=True)
+
+
+# VM 하나의 정보를 가져온다.
+def hvm_vm(vm_name):
+    ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
+    vm = ps.get_vm(vm_name)
+    return jsonify(vm=vm, message="", status=True)
 
 
 # VM 상태를 변경한다.
@@ -64,9 +103,9 @@ def hvm_state(vm_name, status):
 
     if status == "start":
         # VM 시작
-        # 가상머신을 시작한다. (Start-VM)
+        # 1. 가상머신을 시작한다. (Start-VM)
         start = ps.start_vm(vm_name)
-        # 가상머신 상태를 체크한다. (Get-VM)
+        # 2. 가상머신 상태를 체크한다. (Get-VM)
         result = ps.get_vm(vm_name)
         if result['State'] is 2:
             return jsonify(status=True, message="가상머신이 정상적으로 실행되었습니다.")
@@ -75,14 +114,24 @@ def hvm_state(vm_name, status):
         else:
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
     elif status == "stop":
-        # 가상머신을 정지한다. (Stop-VM)
+        # todo stop 1. 가상머신을 정지한다. (Stop-VM)
+        # todo stop 2. 가상머신 상태를 체크한다. (Get-VM)
+        # todo stop 3. 변경된 가상머신 상태를 DB에 업데이트한다.
         return jsonify(status=False, message="상태 미완성")
     elif status == "resume":
-        # 가상머신을 재시작한다. (Stop-VM)
+        # todo resume 1. 가상머신을 재시작한다. (Restart-VM)
+        # todo resume 2. 가상머신 상태를 체크한다. 다만 (Get-VM)
         return jsonify(status=False, message="상태 미완성")
     elif status == "delete":
+        # todo delete 1. 가상머신을 정지한다. (Stop-VM)
+        # todo delete 2. 가상머신을 삭제한다. (Remove-VM)
+        # todo delete 3. 가상머신을 리스트를 가져와서 가상머신이 삭제되었는지 확인한다. (Get-VM List)
+        # todo delete 4. 변경된 가상머신 상태를 DB에 업데이트한다.
+        # (현재는 구현하지 않는다.) todo delete 5. 삭제된 데이터를
         return jsonify(status=False, message="상태 미완성")
     elif status == "snap":
+        # todo snap 1. 가상머신 현재 상태를 스냅샷으로 저장한다. (???)
+        # todo snap 2. 생성된 스냅샷 내용을 DB에 저장한다
         return jsonify(status=False, message="상태 미완성")
     else:
         return jsonify(status=False, message="정상적인 상태 정보를 받지 못했습니다.")
