@@ -54,7 +54,7 @@ def shutdown_session(exception=None):
 
 if __name__ == '__main__':
     cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=10)
+    cron.add_interval_job(job_function, minutes=5)
     cron.start()
     app.run()
 

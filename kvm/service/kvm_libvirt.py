@@ -6,7 +6,6 @@ __author__ = 'yhk'
 import ConfigParser
 import os
 import libvirt
-from pexpect import pxssh
 from xml.dom import minidom
 from kvm.util.config import config
 from flask import  render_template
@@ -63,12 +62,7 @@ def kvm_list():
 
             #ssh 스크립트로 직접 guest에 할당된 ip 체크
 
-            # pxssh
-            # s = pxssh.pxssh()
-            # s.login(HOST, USER)
-            # s.sendline("/root/get_ipadress.sh " + dom.name())
-            # s.prompt()
-            # paramiki
+            # paramiko
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(HOST, username=USER, key_filename="/Users/yhk/.ssh/id_rsa")
@@ -100,15 +94,6 @@ def get_ip(domainName, mac_address):
 
 def kvm_create(name, cpu, memory, hdd, base):
     try:
-        #create ssh key
-        # pxssh
-        # s = pxssh.pxssh()
-        # s.login(HOST, USER)
-        # s.sendline("cd /var/lib/librt/sshkeys")
-        # s.sendline("./sshkey_coyp.sh")
-        # s.prompt()
-        # s.logout()
-
         # paramiko
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -156,7 +141,8 @@ def kvm_create(name, cpu, memory, hdd, base):
     except IOError as errmsg:
        return errmsg
 
-def kvm_change_status(vm_name, status, datetime):
+
+def kvm_change_status(vm_name, status, datetime, URL):
     conn = libvirt.open(URL)
     ptr_VM = conn.lookupByName(vm_name)
     if status == 'suspend':
@@ -198,35 +184,9 @@ def server_image_copy(name_volume, name_snap):
 
 
 def server_write(time):
-    print("==========start" + time)
     conn = libvirt.open(URL)
-    for id in conn.listDomainsID():
-        dom = conn.lookupByID(id)
-        print('cpu info:')
-        stats = dom.getCPUStats(True)
-        # print('cpu_time:    ' + str(stats[0]['cpu_time']))
-        # print('system_time: ' + str(stats[0]['system_time']))
-        # print('user_time:   ' + str(stats[0]['user_time']))
-        print((stats[0]['user_time'] * 100) / (stats[0]['cpu_time'] + stats[0]['system_time'] + stats[0]['user_time']))
 
-        stats = dom.memoryStats()
-        print('memory info:')
-        for name in stats:
-            print('  ' + str(stats[name]) + ' (' + name + ')')
-
-        print('IO info:')
-        tree = ElementTree.fromstring(dom.XMLDesc())
-        iface = tree.find('devices/interface/target').get('dev')
-        stats = dom.interfaceStats(iface)
-        print('read bytes:    ' + str(stats[0]))
-        print('read packets:  ' + str(stats[1]))
-        print('read errors:   ' + str(stats[2]))
-        print('read drops:    ' + str(stats[3]))
-        print('write bytes:   ' + str(stats[4]))
-        print('write packets: ' + str(stats[5]))
-        print('write errors:  ' + str(stats[6]))
-        print('write drops:   ' + str(stats[7]))
-
+    print("==========start" + time)
     conn.close()
 
 # size convert BYTE TO GIGA

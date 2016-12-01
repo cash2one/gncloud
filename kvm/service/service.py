@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 __author__ = 'yhk'
 
-from kvm.db.models import GnVmMachines, GnVmImages
+from kvm.db.models import GnVmMachines, GnVmImages, GnHostMachines, GnVmMonitor
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, server_write
 import paramiko
 import datetime
 import time
 
-HOST = "192.168.0.131"
 USER = "root"
+LOCAL_SSH_KEY_PATH = "/Users/yhk/.ssh/id_rsa"
 
 def server_create(name, cpu, memory, hdd, base):
     try:
@@ -29,9 +29,10 @@ def server_create(name, cpu, memory, hdd, base):
     return "success"
 
 def getIpAddress(name):
+    HOST = db_session.query(GnVmMachines).filter(GnVmMachines.name == name).all().GnHostMachines.ip;
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(HOST, username=USER, key_filename="/Users/yhk/.ssh/id_rsa")
+    ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
     stdin, stdout, stderr = ssh.exec_command('/root/get_ipadress.sh ' + name)
     ip = stdout.readlines()
     ssh.close()
@@ -48,8 +49,11 @@ def server_image_list(type):
     return list
 
 def server_change_status(name, status):
+    guest_info = GnVmMachines.query.filter(GnVmMachines.name == name).one();
+    ip = guest_info.gnHostMachines.ip
+    URL = 'qemu+ssh://root@' + ip + '/system?socket=/var/run/libvirt/libvirt-sock'
     now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    kvm_change_status(name, status, now)
+    kvm_change_status(name, status, now, URL)
     if status == 'delete':
         db_session.query(GnVmMachines).filter(GnVmMachines.name == name).delete();
         db_session.commit()
@@ -59,5 +63,19 @@ def server_change_status(name, status):
         db_session.commit()
 
 def server_monitor():
-    now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    server_write(now);
+    lists = db_session.query(GnVmMachines).filter(GnVmMachines.type == "kvm").all()
+
+    for list in lists:
+        HOST = list.gnHostMachines.ip
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
+        stdin, stdout, stderr = ssh.exec_command('/root/get_vm_use.sh mem ' + list.ip)
+        cpu_use = stdout.readlines()
+        stdin, stdout, stderr = ssh.exec_command('/root/get_vm_use.sh cpu ' + list.ip)
+        mem_use = stdout.readlines()
+        ssh.close()
+
+        vm_monitor = GnVmMonitor(name=list.name, cpu_use=cpu_use, mem_use=mem_use)
+        db_session.add(vm_monitor)
+        db_session.commit()
