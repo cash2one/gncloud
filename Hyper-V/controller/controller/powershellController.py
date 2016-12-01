@@ -9,7 +9,8 @@ def manual():
     script = request.args.get('script')
     ps = PowerShell('60.196.149.135', '8180', 'powershell/execute')
 
-    return ps.send(script)
+    #return ps.send(script)
+    return jsonify(result=ps.send(script))
 
 
 def hvm_state(vm_name, status):
