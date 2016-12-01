@@ -24,49 +24,50 @@ class GnHostMachines(Base):
 
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'
-    id = Column(String(30), primary_key=True, nullable=False)
-    name = Column(String(50), primary_key=True, nullable=False)
-    type = Column(String(50), primary_key=False, nullable=False)
+    vm_id = Column(String(30), primary_key=True, nullable=False)
+    vm_name = Column(String(50), primary_key=True, nullable=False)
+    vm_type = Column(String(50), primary_key=False, nullable=False)
     cpu = Column(Integer, primary_key=False, nullable=False)
     memory = Column(Integer, primary_key=False, nullable=False)
-    hdd = Column(Integer, primary_key=False, nullable=False)
+    disk = Column(Integer, primary_key=False, nullable=False)
     ip = Column(String(20), primary_key=False, nullable=False)
     host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'))
     os = Column(String(10), primary_key=False, nullable=True)
     os_ver = Column(String(20), primary_key=False, nullable=True)
     os_sub_ver = Column(String(20), primary_key=False, nullable=True)
     os_bit = Column(String(2), primary_key=False, nullable=True)
-    author = Column(String(15), primary_key=False, nullable=False)
+    author_id = Column(String(15), primary_key=False, nullable=False)
     create_time = Column(DateTime, default=datetime.datetime.utcnow)
     start_time = Column(DateTime, default=datetime.datetime.utcnow)
     stop_time = Column(DateTime, default=datetime.datetime.utcnow)
     status = Column(String(10), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
 
-    def __init__(self, id=id, name=None, type=None, cpu=None, memory=None, hdd=None, ip=None, host_id=None, os=None,
-                 os_ver=None, os_sub_ver=None, os_bit=None, author=None, status=None):
-        self.id = id
-        self.name = name
-        self.type = type
+    def __init__(self, vm_id=vm_id, vm_name=None, vm_type=None, cpu=None, memory=None, disk=None, ip=None, host_id=None,
+                 os=None,
+                 os_ver=None, os_sub_ver=None, os_bit=None, author_id=None, status=None):
+        self.vm_id = vm_id
+        self.vm_name = vm_name
+        self.vm_type = vm_type
         self.cpu = cpu
         self.memory = memory
-        self.hdd = hdd
+        self.disk = disk
         self.ip = ip
         self.host_id = host_id
         self.os = os
         self.os_ver = os_ver
         self.os_sub_ver = os_sub_ver
         self.os_bit = os_bit
-        self.author = author
+        self.author_id = author_id
         self.status = status
 
 
     def __repr__(self):
-        return '<ID %r / Name %r / Type %r / Cpu %r / Memory %r / Hdd %r / Ip %r / Status %r>' \
-               % (self.id, self.name, self.type, self.cpu, self.memory, self.hdd, self.ip, self.status)
+        return '<Vm_id %r / Vm_name %r / Vm_type %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r>' \
+               % (self.vm_id, self.vm_name, self.vm_type, self.cpu, self.memory, self.disk, self.ip, self.status)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'cpu', 'memory', 'hdd', 'ip', 'status']
+        return ['vm_id', 'vm_name', 'vm_type', 'cpu', 'memory', 'disk', 'ip', 'status']
 
 
 class GnVmImages(Base):

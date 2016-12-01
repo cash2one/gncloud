@@ -17,10 +17,14 @@ def server_create(name, cpu, memory, hdd, base):
 
         ip = ""
         while len(ip) == 0:
-            ip = getIpAddress(name)
-        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, hdd=hdd, type='kvm', ip=ip, host_id=1,
-                                  os='centos',
-                                  os_ver='7', os_sub_ver='03', bit='', author='곽영호', status='running')
+            ip = getIpAddress(name, '192.168.0.131')
+
+        if len(ip) != 0:
+            setStaticIpAddress(ip, '192.168.0.131')
+
+        vm_machine = GnVmMachines(vm_id=id, vm_name=name, cpu=cpu, memory=memory, disk=hdd, vm_type='kvm', ip=ip,
+                                  host_id=1, os='centos',
+                                  os_ver='7', os_sub_ver='03', os_bit='', author_id='곽영호', status='running')
         db_session.add(vm_machine)
         db_session.commit()
     except IOError as errmsg:
@@ -28,16 +32,28 @@ def server_create(name, cpu, memory, hdd, base):
 
     return "success"
 
-def getIpAddress(name):
-    HOST = db_session.query(GnVmMachines).filter(GnVmMachines.name == name).all().GnHostMachines.ip;
+
+def getIpAddress(name, HOST):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
     stdin, stdout, stderr = ssh.exec_command('/root/get_ipadress.sh ' + name)
     ip = stdout.readlines()
     ssh.close()
-
     return ip
+
+
+def setStaticIpAddress(ip, HOST):
+    try:
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
+        ssh.exec_command('/root/set_vm_ip.sh ' + ip)
+        ssh.close()
+    except IOError as errmsg:
+        print("error")
+
+
 
 def server_list():
     list = GnVmMachines.query.all();
@@ -55,7 +71,7 @@ def server_change_status(name, status):
     now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     kvm_change_status(name, status, now, URL)
     if status == 'delete':
-        db_session.query(GnVmMachines).filter(GnVmMachines.name == name).delete();
+        db_session.query(GnVmMachines).filter(GnVmMachines.vm_name == name).delete();
         db_session.commit()
     elif status == "snap":
         guest_snap = GnVmImages(name=name + "_" + now, type="kvm_snap", reg_dt=time.strftime('%Y-%m-%d %H:%M:%S'))
