@@ -22,7 +22,6 @@ def manual():
 # VM을 생성한다.
 # Request
 def hvm_create():
-
     name = request.args.get('name')
     cpu = request.args.get('cpu')
     hdd = request.args.get('hdd')
