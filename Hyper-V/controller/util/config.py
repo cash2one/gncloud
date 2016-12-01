@@ -8,6 +8,9 @@ import sys
 class Config:
 
     DB_URL = ""
+    AGENT_SERVER_IP = ""
+    AGENT_PORT = ""
+    AGENT_REST_URI = ""
 
     def __init__(self, path="../conf/config.conf"):
         # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
@@ -26,6 +29,9 @@ class Config:
         result = parser.read(config_file)
 
         self.DB_URL = parser.get(config_section, "DB_URL")
+        self.AGENT_SERVER_IP = parser.get(config_section, "AGENT_SERVER_IP")
+        self.AGENT_PORT = parser.get(config_section, "AGENT_PORT")
+        self.AGENT_REST_URI = parser.get(config_section, "AGENT_REST_URI")
 
 
 # 전역 공통사용 객체이다.

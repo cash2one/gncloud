@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+__author__ = 'gncloud'
+
 import datetime
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship, backref
@@ -42,7 +44,6 @@ class GnVmMachines(Base):
         self.author = author
         self.status = status
 
-
     def __repr__(self):
         return '<ID %r / Name %r / Type %r / Cpu %r / Memory %r / Hdd %r / Ip %r / Status %r>' \
                % (self.id, self.name, self.type, self.cpu, self.memory, self.hdd, self.ip, self.status)
@@ -62,7 +63,6 @@ class GnVmImages(Base):
         self.name = name
         self.type = type
         self.reg_dt = reg_dt
-
 
     def __repr__(self):
         return '<ID %r / Name %r / Type %r / Reg_dt %r>' \
