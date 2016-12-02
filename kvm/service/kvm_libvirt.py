@@ -139,7 +139,7 @@ def kvm_create(name, cpu, memory, hdd, base):
         conn.close()
         return id
     except IOError as errmsg:
-       return errmsg
+        return str(errmsg)
 
 
 def kvm_change_status(vm_name, status, datetime, URL):
