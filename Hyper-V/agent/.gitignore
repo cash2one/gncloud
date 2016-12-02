@@ -1,5 +1,4 @@
-*.sln
 .vs
 bin
 obj
-test/
+packages/

@@ -108,28 +108,48 @@ def hvm_state(id):
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start = ps.start_vm(id)
+        print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
-        result = ps.get_vm(id)
-        if result['State'] is 2:
+        if start['State'] is 2:
             return jsonify(status=True, message="가상머신이 정상적으로 실행되었습니다.")
-        elif result['State'] is not 2:
+        elif start['State'] is not 2:
             return jsonify(status=False, message="가상머신이 실행되지 않았습니다.")
         else:
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
     elif type == "stop":
-        # todo stop 1. 가상머신을 정지한다. (Stop-VM)
-        # todo stop 2. 가상머신 상태를 체크한다. (Get-VM)
+        #stop 1. 가상머신을 정지한다. (Stop-VM)
+        stop = ps.stop_vm(id)
+        # stop 2. 가상머신 상태를 체크한다. (Get-VM)
+        if stop['State'] is 3:
+            return jsonify(status=True, message="가상머신이 종료되었습니다.")
+        else:
+            return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
         # todo stop 3. 변경된 가상머신 상태를 DB에 업데이트한다.
         return jsonify(status=False, message="상태 미완성")
-    elif type == "resume":
-        # todo resume 1. 가상머신을 재시작한다. (Restart-VM)
-        # todo resume 2. 가상머신 상태를 체크한다. 다만 (Get-VM)
-        return jsonify(status=False, message="상태 미완성")
+    elif type == "restart":
+        restart = ps.restart_vm(id)
+        # resume 1. 가상머신을 재시작한다. (Restart-VM)
+        if restart['State'] is 2:
+            return jsonify(status=True, message="가상머신이 정상적으로 재시작되었습니다.")
+        else:
+            return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
+        # resume 2. 가상머신 상태를 체크한다. 다만 (Get-VM)
     elif type == "shutdown":
         # todo shutdown 1.
         return jsonify(status=False, message="미구현")
-    elif type == "restart":
-        return jsonify(status=False, message="미구현")
+    elif type == "suspend":
+        suspend = ps.suspend_vm(id)
+        if suspend['State'] is 9:
+            return  jsonify(status=True, message="가상머신이 일시정지되었습니다.")
+        else:
+            return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
+    elif type == "resume":
+        resume = ps.resume_vm(id)
+        if resume['State'] is 2:
+            return jsonify(status=True, message="가상머신이 재시작되었습니다.")
+        else:
+            return jsonify(status=True, message="정상적인 결과값이 아닙니다.")
+        return jsonify(status=False, message="")
     elif type == "powerdown":
         return jsonify(status=False, message="상태 미완성")
     else:
