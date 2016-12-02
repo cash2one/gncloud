@@ -13,7 +13,6 @@ from db.models import GnVmMachines
 
 
 class PowerShell(object):
-
     # 스크립트 실행 결과를 JSON 형식으로 받도록 하기 위한 커맨드
     CONVERTTO_JSON = " | ConvertTo-Json"
     # Script Default 설정이 리턴값을 주지 않는 경우 해당 옵션이 추가되어야 리턴값이 나온다.
@@ -86,9 +85,41 @@ class PowerShell(object):
 
     # 가상머신을 시작한다.
     # example) $vm = Get-VM -Id 8102C1F1-6A15-4BDC-8BF1-C8ECBE9D94E2; Start-VM -VM $vm | Convertto-Json
-    def start_vm(self, vm_name):
-        script = "$vm = Get-VM -Id " + vm_name + "; "
+    def start_vm(self, vm_Id):
+        script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Start-VM -VM $vm"
+        script += self.CONVERTTO_JSON
+        return self.send(script)
+
+    # 가상머신을 종료한다. -force, -turnoff
+    def stop_vm(self, vm_Id):
+        script = "$vm = Get-VM -Id " + vm_Id + "; "
+        script += "Stop-VM -Force $vm "
+        script += self.PASSTHRU
+        script += self.CONVERTTO_JSON
+        return self.send(script)
+
+    #가상머신을 재부팅 한다
+    def restart_vm(self, vm_Id):
+        script = "$vm = Get-VM -Id " + vm_Id + "; "
+        script += "Restart-VM -Force $vm "
+        script += self.PASSTHRU
+        script += self.CONVERTTO_JSON
+        return self.send(script)
+
+    #가상머신을 일시정지상태로 돌린다. 리턴 state = 9
+    def suspend_vm(self, vm_Id):
+        script = "$vm = Get-VM -Id " + vm_Id + "; "
+        script += "Suspend-VM -VM $vm "
+        script += self.PASSTHRU
+        script += self.CONVERTTO_JSON
+        return self.send(script)
+
+   #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
+    def resume_vm(self, vm_Id):
+        script = "$vm = Get-VM -Id " + vm_Id + "; "
+        script += "Resume-VM -VM $vm "
+        script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
 
@@ -120,5 +151,5 @@ class PowerShell(object):
         url += "?script=" + script
         # todo send. 추후 스크립트를 URL에 포함시켜 보내지 않고 Post data로 전달받을 수 있도록 agent 수정 필요
         data = {'script': script}
-        response = requests.post(url, data=json.dumps(data), timeout=1000*60*20)
+        response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
