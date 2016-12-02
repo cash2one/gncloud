@@ -7,6 +7,7 @@ from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, server_write
 import paramiko
 import datetime
 import time
+from pexpect import pxssh
 
 USER = "root"
 LOCAL_SSH_KEY_PATH = "/Users/yhk/.ssh/id_rsa"
@@ -28,7 +29,7 @@ def server_create(name, cpu, memory, hdd, base):
         db_session.add(vm_machine)
         db_session.commit()
     except IOError as errmsg:
-        return errmsg
+        return str(errmsg)
 
     return "success"
 
@@ -45,11 +46,22 @@ def getIpAddress(name, HOST):
 
 def setStaticIpAddress(ip, HOST):
     try:
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
-        ssh.exec_command('/root/set_vm_ip.sh ' + ip)
-        ssh.close()
+        # vm에 sudo명령을 사용하기 위해 ssh 접속 라이브러리 교체
+        # ssh = paramiko.SSHClient()
+        # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
+        # stdin, stdout, stderr = ssh.exec_command('/root/set_vm_ip.sh ' + ip)
+        # stdin, stdout, stderr = ssh.exec_command('/root/set_vm_ip.sh ' + ip)
+        # ssh.close()
+
+        # pxssh
+        s = pxssh.pxssh()
+        s.login(HOST, USER)
+        s.sendline('/root/set_vm_ip.sh %s' % (ip[0]))
+        s.sendline('yes')
+        s.prompt()
+        s.logout()
+
     except IOError as errmsg:
         print("error")
 
