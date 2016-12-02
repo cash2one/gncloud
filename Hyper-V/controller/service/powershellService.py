@@ -9,7 +9,6 @@ __author__ = 'jhjeon'
 
 import json
 import requests
-from db.models import GnVmMachines
 
 
 class PowerShell(object):
