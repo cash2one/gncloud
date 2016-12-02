@@ -7,6 +7,25 @@ from sqlalchemy.orm import relationship, backref
 from db.database import Base
 
 
+class GnController(Base):
+    __tablename__ = 'GN_CONTROLLER'
+    controller_id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    controller_name = Column(String(50), nullable=True, default=None)
+    ip = Column(String(20), nullable=True, default=None)
+    port = Column(Integer, nullable=True, default=None)
+    type = Column(String(10), nullable=True, default=None)
+
+    def __init__(self, controller_name, ip, port, type):
+        self.controller_name = controller_name
+        self.ip = ip
+        self.port = port
+        self.type = type
+
+    def __repr__(self):
+        return "<GnController(controller_id='%r', controller_name='%r', ip='%r', port='%r', type='%r')>" \
+               % (self.controller_id, self.controller_name, self.ip, self.port, self.type)
+
+
 class GnDepts(Base):
     __tablename__ = 'GN_DEPTS'
     dept_code = Column(String(3), primary_key=True, nullable=False)
@@ -15,7 +34,7 @@ class GnDepts(Base):
     mem_quota = Column(Integer, nullable=True, default=None)
     disk_quota = Column(Integer, nullable=True, default=None)
 
-    def __init__(self, dept_code, dept_name, cpu_quota, mem_quota, disk_quota):
+    def __init__(self, dept_code, dept_name=None, cpu_quota=None, mem_quota=None, disk_quota=None):
         self.dept_code = dept_code
         self.dept_name = dept_name
         self.cpu_quota = cpu_quota
@@ -124,50 +143,6 @@ class GnUsers(Base):
     def __repr__(self):
         return "<GnUsers(user_id='%r', user_name='%r', privilege='%r', dept_code='%r', tel='%r', email='%r', start_date='%r', end_date='%r')>" \
                % (self.user_id, self.user_name, self.privilege, self.dept_code, self.tel, self.email, self.start_date, self.end_date)
-
-
-class GnVmImages(Base):
-    __tablename__ = 'GN_VM_IMAGES'
-    image_id = Column(String(100), primary_key=True, nullable=False)
-    image_name = Column(String(50), nullable=False, default='')
-    image_filename = Column(String(100), nullable=True, default='')
-    image_type = Column(String(10), nullable=False, default='')
-    image_sub_type = Column(String(10), nullable=False, default='')
-    image_icon = Column(String(100), nullable=True, default=None)
-    os = Column(String(10), nullable=True, default=None)
-    os_ver = Column(String(20), nullable=True, default=None)
-    os_subver = Column(String(20), nullable=True, default=None)
-    os_bit = Column(String(2), nullable=True, default=None)
-    dept_code = Column(String(3), nullable=True, default=None)
-    author_id = Column(String(15), nullable=True, default=None)
-    create_time = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-
-    def __init__(self, image_id, image_name='', image_filename='',
-                 image_type='', image_sub_type='', image_icon=None,
-                 os=None, os_ver=None, os_subver=None, os_bit=None,
-                 dept_code=None, author_id=None, create_time=datetime.datetime.utcnow):
-        self.image_id = image_id
-        self.image_name = image_name
-        self.image_filename = image_filename
-        self.image_type = image_type
-        self.image_sub_type = image_sub_type
-        self.image_icon = image_icon
-        self.os = os
-        self.os_ver = os_ver
-        self.os_subver = os_subver
-        self.os_bit = os_bit
-        self.dept_code = dept_code
-        self.author_id = author_id
-        self.create_time = create_time
-
-    def __repr__(self):
-        return "<GnUsers(" \
-               "image_id='%r', image_name='%r', image_filename='%r', " \
-               "image_type='%r', image_sub_type='%r', image_icon='%r', " \
-               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', dept_code='%r', author_id='%r')>" \
-               % (self.image_id, self.image_name, self.image_filename, self.image_type,
-                  self.image_sub_type, self.image_icon, self.os, self.os_ver, self.os_subver,
-                  self.os_bit, self.dept_code, self.author_id, self.create_time)
 
 
 class GnVmImages(Base):
