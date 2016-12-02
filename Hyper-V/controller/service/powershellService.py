@@ -73,13 +73,15 @@ class PowerShell(object):
     # / Add-VMHardDiskDrive -VM $vm -Path C:\images\2_testvm\disk.vhdx
     # Return ?
     def add_vmharddiskdrive(self, **kwargs):
-        script = "Add-VMHardDiskDrive"
+        script = "Add-VMHardDiskDrive $vm"
         for option, value in kwargs.items():
             # vmId 값의 경우 VMObject를 불러오기 위해서 필요한 값이므로 Set-VM Script에서는 직접 넣지 않는다.
             if option == "VMId":
                 vmscript = "$vm = Get-VM -Id " + value + "; "
             else:
                 script += " -" + option + " " + value
+        script += self.PASSTHRU
+        script += self.CONVERTTO_JSON
         return self.send(vmscript + script)
 
     # 가상머신을 시작한다.
