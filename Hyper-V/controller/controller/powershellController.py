@@ -20,9 +20,7 @@ def manual():
 
 # VM 생성 및 실행
 def hvm_create():
-    # VM Name (Hyper-V에서는 VMName의 중복이 가능, VM별 구분은 VMId로 구분 필요)
-    name = request.args.get('name')
-    # CPU Core 수
+    # cpu core 수
     cpu = request.args.get('cpu')
     # 디스크 경로
     hdd = request.args.get('hdd')
@@ -30,8 +28,18 @@ def hvm_create():
     memory = request.args.get('memory')
     # 베이스 이미지 경로
     baseImage = request.args.get('baseImage')
-    # todo parameter 1. OSType 파라미터가 필요해 보임
+
+    os = request.args.get('os')
+    os_ver = request.args.get('os_ver')
+    os_subver = request.args.get('os_subver')
+    os_bit = request.args.get('os_bit')
+    author_id = request.args.get('author_id')
+
+    # VM Name (Hyper-V에서는 VMName의 중복이 가능, VM별 구분은 VMId로 구분 필요)
+    name = request.args.get('name')
+
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
+
     # 새 머신을 만든다. (New-VM)
     # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     PATH = "c:\images"
@@ -59,12 +67,15 @@ def hvm_create():
 
 # todo REST. VM 스냅샷 생성
 def hvm_snap(id):
+    name = request.args.get("name")
+    type = request.args.get("type")
+    author_id = request.args.get("author_id")
     return jsonify(status=False, message="미구현")
 
 
 # todo REST. VM 상태변경
 # -------------------------------------------------------
-# 스냅샷 상태 snap / 시작 start / 정지 stop / 재시작 resume / 삭제 delete
+# VM 상태 "start", "stop", "resume", "shutdown", "restart", "powerdown"
 # -------------------------------------------------------
 # VM State Value and Meaning (Windows WMI Manual에서 가져옴, 상태 변경 작업 시 참고할 것)
 # Other 1 - Corresponds to CIM_EnabledLogicalElement.EnabledState = Other.
@@ -114,30 +125,29 @@ def hvm_state(id):
         # todo resume 1. 가상머신을 재시작한다. (Restart-VM)
         # todo resume 2. 가상머신 상태를 체크한다. 다만 (Get-VM)
         return jsonify(status=False, message="상태 미완성")
-    elif type == "delete":
-        # todo delete 1. 가상머신을 정지한다. (Stop-VM)
-        # todo delete 2. 가상머신을 삭제한다. (Remove-VM)
-        # todo delete 3. 가상머신을 리스트를 가져와서 가상머신이 삭제되었는지 확인한다. (Get-VM List)
-        # todo delete 4. 변경된 가상머신 상태를 DB에 업데이트한다.
-        # (현재는 구현하지 않는다.) todo delete 5. 삭제된 데이터를
-        return jsonify(status=False, message="상태 미완성")
-    elif type == "snap":
-        # todo snap 1. 가상머신 현재 상태를 스냅샷으로 저장한다. (???)
-        # todo snap 2. 생성된 스냅샷 내용을 DB에 저장한다
+    elif type == "shutdown":
+        # todo shutdown 1.
+        return jsonify(status=False, message="미구현")
+    elif type == "restart":
+        return jsonify(status=False, message="미구현")
+    elif type == "powerdown":
         return jsonify(status=False, message="상태 미완성")
     else:
         return jsonify(status=False, message="정상적인 상태 정보를 받지 못했습니다.")
 
 
-# VM 정보
+# todo REST. VM 정보
 def hvm_vm(vmid):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
+    # Powershell Script를 통해 VM 정보를 가져온다.
     vm = ps.get_vm(vmid)
+    # todo get-vm. VM 정보를 DB에서 가져온다.
     return jsonify(vm=vm, message="", status=True)
 
 
-# VM 리스트 정보
+# todo REST. VM 리스트 정보
 def hvm_vm_list():
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     vm_list = ps.get_vm()
+    # todo get-vm. VM 정보를 DB에서 가져온다.
     return jsonify(list=vm_list, message="", status=True)
