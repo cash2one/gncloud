@@ -92,7 +92,7 @@ def get_ip(domainName, mac_address):
     return ip
 
 
-def kvm_create(name, cpu, memory, hdd, base):
+def kvm_create(name, cpu, memory, disk, base_name, base_sub_type):
     try:
         # paramiko
         ssh = paramiko.SSHClient()
@@ -104,36 +104,29 @@ def kvm_create(name, cpu, memory, hdd, base):
 
 
         # 스냅샷 기반 유무에 따른 생성 로직 분기
-        if base == "":
+        if base_sub_type == "base":
             # guest 생성 정보 xml 템플릿 생성
             vol = render_template(
                 "volume.xml"
                 , guest_name=name
-                , hdd=hdd
+                , disk=disk
             )
+            conn = libvirt.open(URL)
+            ptr_POOL = conn.storagePoolLookupByName("default")
+
+            defaultVol = ptr_POOL.storageVolLookupByName(base_name)
+            ptr_POOL.createXMLFrom(vol, defaultVol, 0)
+            ptr_POOL.storageVolLookupByName(name + ".img").resize(gigaToByte(int(disk)))
         else:
-            server_image_copy(base, name)
+            server_image_copy(base_name, name)
 
-
+        # vm 생성
         guest = render_template(
             "guest.xml"
             ,guest_name = name
             ,current_memory = memory
             ,vcpu = cpu
         )
-
-        #create vm
-        conn = libvirt.open(URL)
-        ptr_POOL = conn.storagePoolLookupByName("default")
-
-        # raw 이미지 사용시 volume.xml의 capacity가 적용됩니다
-        # qcow2 이미지 사용시 최대 8G 의 qcow 이미지에 세팅되어있는 virtual size: 8.0G 로 적용되어 무조건 8G의 이미지가 생성됩니다
-        # 테스트 결과 qcow 이미지를 사용해서 생성할때가 속도가 더 빠른것 같습니다
-        # defaultVol = ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud-1608.raw")
-        # ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud.qcow2").resize(10737000000)
-        defaultVol = ptr_POOL.storageVolLookupByName("CentOS-7-x86_64-GenericCloud.qcow2")
-
-        ptr_POOL.createXMLFrom(vol, defaultVol, 0)
         conn.createXML(guest, 0)
         id = conn.lookupByName(name).UUIDString()
         conn.close()
@@ -177,18 +170,17 @@ def server_image_copy(name_volume, name_snap):
     save_vol = render_template(
         "volume.xml"
         , guest_name=name_snap
-        , hdd=humansize(info[1])
+        , hdd=byteToGiga(info[1])
     )
     ptr_POOL.createXMLFrom(save_vol, org_vol, 0)
     return "ok"
 
 
-def server_write(time):
-    conn = libvirt.open(URL)
-
-    print("==========start" + time)
-    conn.close()
-
 # size convert BYTE TO GIGA
-def humansize(nbytes):
+def byteToGiga(nbytes):
     return nbytes / (1024 * 1024 * 1024)
+
+
+# size convert GIGA TO BYTE
+def gigaToByte(gigabytes):
+    return gigabytes * 1024 * 1024 * 1024

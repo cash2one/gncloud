@@ -1,14 +1,14 @@
 <volume>
     <name>{{ guest_name }}.img</name>
     <allocation>0</allocation>
-    <capacity unit='G'>{{ hdd }}</capacity>
+    <capacity unit='G'>{{ disk }}</capacity>
     <target>
 
         <permission>
             <owner>107</owner>
             <group>501</group>
             <mode>0744</mode>
-            <label>test-guest</label>
+            <label>{{ guest_name }}-volume</label>
             </permission>
     </target>
 </volume>

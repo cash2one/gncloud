@@ -25,23 +25,31 @@ def list():
     return jsonify(status=True, message="success", list=server_list())
 
 
-@app.route('/vm', methods=['POST'])
+@app.route('/vm/create', methods=['POST'])
 def create():
     name = request.json['name']
     cpu = request.json['cpu']
     memory = request.json['memory']
-    hdd = request.json['hdd']
-    base = request.json['baseImage']
-    return jsonify(status=True, message=server_create(name, cpu, memory, hdd, base))
+    disk = request.json['hdd']
+    image_id = request.json['image_id']
+    return jsonify(status=True, message=server_create(name, cpu, memory, disk, image_id))
 
 
-@app.route('/vm/status/<vm_name>/<status>', methods=['PUT'])
-def change_status(vm_name, status):
-    server_change_status(vm_name, status)
+@app.route('/vm/<id>/status', methods=['PUT'])
+def change_status(id):
+    status = request.json['status']
+    server_change_status(id, status)
     return jsonify(status=True, message="success")
 
 
-@app.route('/vm/images/<type>', methods=['GET'])
+@app.route('/vm/<id>/snap', methods=['PUT'])
+def create_snap(id):
+    status = request.json['status']
+    server_change_status(id, status)
+    return jsonify(status=True, message="success")
+
+
+@app.route('/vm/images/list/<type>', methods=['GET'])
 def list_volume(type):
     return jsonify(status=True, message="success", list=server_image_list(type))
 
@@ -56,5 +64,4 @@ if __name__ == '__main__':
     # cron = Scheduler(daemon=True)
     # cron.add_interval_job(job_function, minutes=5)
     # cron.start()
-    app.run()
-
+    app.run(debug=True)

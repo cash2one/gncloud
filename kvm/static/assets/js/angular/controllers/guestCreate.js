@@ -10,12 +10,12 @@ angular
 
         $http({
             method: 'GET',
-            url: '/gncloud/vm/images/kvm_snap',
+            url: '/api/kvm/vm/images/list/base',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
                 if (data) {
-                    $scope.guest_snap_list = data.list;
+                    $scope.image_list = data.list;
                 }
                 else {
                 }
@@ -26,11 +26,10 @@ angular
 
 
         $scope.data = {};
-        $scope.data.baseImage = "";
         $scope.submit = function() {
             $http({
                 method  : 'POST',
-                url: '/gncloud/vm',
+                url: '/api/kvm/vm/create',
                 data: $scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
@@ -43,8 +42,8 @@ angular
                 });
         };
 
-        $scope.update_image = function (list) {
-            if (list != null) $scope.data.baseImage = list.name;
+        $scope.update_image = function (data) {
+            if (data != null) $scope.data.image_id = data.image_id;
         };
 
     });

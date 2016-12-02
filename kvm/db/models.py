@@ -43,9 +43,10 @@ class GnVmMachines(Base):
     status = Column(String(10), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
 
-    def __init__(self, vm_id=vm_id, vm_name=None, vm_type=None, cpu=None, memory=None, disk=None, ip=None, host_id=None,
-                 os=None,
-                 os_ver=None, os_sub_ver=None, os_bit=None, author_id=None, status=None):
+    def __init__(self, vm_id=vm_id, vm_name=None, vm_type=None, cpu=None
+                 , memory=None, disk=None, ip=None, host_id=None
+                 , os=None, os_ver=None, os_sub_ver=None, os_bit=None
+                 , author_id=None, status=None):
         self.vm_id = vm_id
         self.vm_name = vm_name
         self.vm_type = vm_type
@@ -72,23 +73,49 @@ class GnVmMachines(Base):
 
 class GnVmImages(Base):
     __tablename__ = 'GN_VM_IMAGES'
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(50), primary_key=False, nullable=False)
-    type = Column(String(20), primary_key=False, nullable=False)
-    reg_dt = Column(DateTime, primary_key=False, nullable=False)
+    image_id = Column(String(100), primary_key=True, nullable=False)
+    image_name = Column(String(50), primary_key=False, nullable=False)
+    image_filename = Column(String(100), primary_key=False, nullable=False)
+    image_type = Column(String(10), primary_key=False, nullable=False)
+    image_sub_type = Column(String(10), primary_key=False, nullable=False)
+    image_icon = Column(String(100), primary_key=False, nullable=False)
+    os = Column(String(10), primary_key=False, nullable=False)
+    os_ver = Column(String(20), primary_key=False, nullable=False)
+    os_subver = Column(String(20), primary_key=False, nullable=False)
+    os_bit = Column(String(2), primary_key=False, nullable=False)
+    dept_code = Column(String(3), primary_key=False, nullable=False)
+    author_id = Column(String(15), primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.utcnow)
 
-    def __init__(self, name=None, type=None, reg_dt=None):
-        self.name = name
-        self.type = type
-        self.reg_dt = reg_dt
+    def __init__(self, image_id=None, image_name=None, image_filename=None, image_type=None
+                 , image_sub_type=None, image_icon=None, os=None, os_ver=None, os_subver=None
+                 , os_bit=None, dept_code=None, autor_id=None):
+        self.image_id = image_id
+        self.image_name = image_name
+        self.image_filename = image_filename
+        self.image_type = image_type
+        self.image_sub_type = image_sub_type
+        self.image_icon = image_icon
+        self.os = os
+        self.os_ver = os_ver
+        self.os_subver = os_subver
+        self.os_bit = os_bit
+        self.dept_code = dept_code
+        self.author_id = autor_id
 
 
     def __repr__(self):
-        return '<ID %r / Name %r / Type %r / Reg_dt %r>' \
-               % (self.id, self.name, self.type, self.reg_dt)
+        return '<Image_id %r / Image_name %r / Image_file_name %r / Image_type %r / Image_sub_type %r >' \
+               '<Image_icon %r / Os %r / Os_ver %r / Os_subver %r />' \
+               '<Dept_code %r / Author_id %r / Create_time %r>' \
+               % (self.image_id, self.image_name, self.image_file_name, self.image_type, self.image_sub_type
+                  , self.image_icon, self.os, self.os_ver, self.os_subver, self.os_bit
+                  , self.dept_code, self.author_id, self.create_time)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'reg_dt']
+        return ['image_id', 'image_name', 'image_filename', 'image_type', 'image_sub_type'
+            , 'image_icon', 'os', 'os_ver', 'os_subver', 'os_bit'
+            , 'dept_code', 'author_id', 'create_time']
 
 
 class GnVmMonitor(Base):
