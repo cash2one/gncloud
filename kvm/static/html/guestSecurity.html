@@ -1,0 +1,12 @@
+<h2 class="sub-header">SSH keys</h2>
+<form ng-submit="submit()" ng-controller="guestSecurityCtrl">
+    <div class="form-group">
+        <textarea class="form-control" rows="5" ng-model="data.sshkey" id="comment"
+                  placeholder="SSH key content"></textarea>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="data.name" id="pwd" placeholder="name">
+    </div>
+    <input type="submit" id="submit" value="생성"/>
+</form>
+</div>

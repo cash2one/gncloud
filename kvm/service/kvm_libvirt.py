@@ -15,7 +15,6 @@ import datetime
 URL = config.LIBVIRT_REMOTE_URL
 HOST = "192.168.0.131"
 USER = "root"
-REMOTE_SSH_KEY_PATH = "/var/lib/libvirt/sshkeys"
 LOCAL_SSH_KEY_PATH = "/Users/yhk/.ssh/id_rsa"
 
 def kvm_list():
@@ -98,7 +97,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type):
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
-        stdin, stdout, stderr = ssh.exec_command('/var/lib/libvirt/sshkeys/sshkey_copy.sh ' + REMOTE_SSH_KEY_PATH)
+        stdin, stdout, stderr = ssh.exec_command('/var/lib/libvirt/initcloud/sshkey_copy.sh')
         print stdout.readlines()
         ssh.close()
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'yhk'
 
-from kvm.db.models import GnVmMachines, GnVmImages, GnHostMachines, GnVmMonitor
+from kvm.db.models import GnVmMachines, GnVmImages, GnHostMachines, GnVmMonitor, GnSshKeys
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status
 import paramiko
@@ -15,19 +15,25 @@ LOCAL_SSH_KEY_PATH = "/Users/yhk/.ssh/id_rsa"
 
 def server_create(name, cpu, memory, disk, image_id):
     try:
+        # host 선택 룰
+
         # base image 조회
         image_info = db_session.query(GnVmImages).filter(GnVmImages.image_id == image_id).one()
 
         # vm 생성
         id = kvm_create(name, cpu, memory, disk, image_info.image_filename, image_info.image_sub_type)
+
         #ip 세팅
         ip = ""
         while len(ip) == 0:
             ip = getIpAddress(name, '192.168.0.131')
 
         print("start ==ssh set static ip==")
-        if len(ip) != 0:
-            setStaticIpAddress(ip, '192.168.0.131')
+        # if len(ip) != 0:
+        #    setStaticIpAddress(ip, '192.168.0.131')
+
+
+        # 기존 저장된 ssh key 등록
 
         # db 저장
         vm_machine = GnVmMachines(vm_id=id, vm_name=name, cpu=cpu, memory=memory, disk=disk
@@ -46,7 +52,7 @@ def getIpAddress(name, HOST):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
-    stdin, stdout, stderr = ssh.exec_command('/root/get_ipadress.sh ' + name)
+    stdin, stdout, stderr = ssh.exec_command('/root/libvirt/get_ipadress.sh ' + name)
     ip = stdout.readlines()
     ssh.close()
     return ip
@@ -66,7 +72,7 @@ def setStaticIpAddress(ip, HOST):
         s = pxssh.pxssh()
         s.login(HOST, USER)
         print("==c1==")
-        s.sendline('/root/set_vm_ip.sh %s' % (ip[0]))
+        s.sendline('/root/libvirt/set_vm_ip.sh %s' % (ip[0]))
         s.prompt()
         print("==c2==")
         s.sendline('yes')
@@ -114,12 +120,41 @@ def server_monitor():
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
-        stdin, stdout, stderr = ssh.exec_command('/root/get_vm_use.sh mem ' + list.ip)
+        stdin, stdout, stderr = ssh.exec_command('/root/libvirt/get_vm_use.sh mem ' + list.ip)
         cpu_use = stdout.readlines()
-        stdin, stdout, stderr = ssh.exec_command('/root/get_vm_use.sh cpu ' + list.ip)
+        stdin, stdout, stderr = ssh.exec_command('/root/libvirt/get_vm_use.sh cpu ' + list.ip)
         mem_use = stdout.readlines()
         ssh.close()
 
         vm_monitor = GnVmMonitor(name=list.name, cpu_use=cpu_use, mem_use=mem_use)
         db_session.add(vm_monitor)
         db_session.commit()
+
+
+def user_add_sshkey(team_name, sshkey, name):
+    # 해당 팀의 vm 리스트 조회
+    list = db_session.query(GnVmMachines).all();
+    fingerprint = ""
+    for gnVmMachine in list:
+        s = pxssh.pxssh()
+        s.login(gnVmMachine.gnHostMachines.host_ip, USER)
+        s.sendline("/root/libvirt/add_sshkeys.sh '" + sshkey + "' " + gnVmMachine.ip)
+        s.prompt()
+        if fingerprint == "":
+            s.sendline("ssh-keygen -lf /root/libvirt/sshkey.pub")
+            s.prompt()
+            fingerprint = s.before.replace("ssh-keygen -lf /root/libvirt/sshkey.pub\r\n", "").split(" ")[1]
+        s.logout()
+
+        # 쉘스크립트 제대로 동작하지 않아 paramiko 사용하지 않음
+        # ssh = paramiko.SSHClient()
+        # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # ssh.connect(gnVmMachine.gnHostMachines.host_ip, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
+        # stdin, stdout, stderr = ssh.exec_command("/root/libvirt/add_sshkeys.sh '"+ sshkey +"' "+gnVmMachine.ip)
+        # ssh.close()
+
+    # db 저장
+    gnSshKeys = GnSshKeys(team_name=team_name, key_name=name, key_fingerprint=fingerprint, key_content=sshkey)
+    db_session.add(gnSshKeys)
+    db_session.commit()
+

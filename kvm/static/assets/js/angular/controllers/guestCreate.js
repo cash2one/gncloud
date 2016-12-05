@@ -29,9 +29,11 @@ angular
         $scope.submit = function() {
             $http({
                 method  : 'POST',
-                url: '/api/kvm/vm/create',
+                url: '/api/kvm/vm',
                 data: $scope.data,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                }
             })
                 .success(function(data) {
                     if (data.message == "ok") {

@@ -4,7 +4,8 @@ import atexit
 import logging
 from flask import Flask, send_file, jsonify, request
 from kvm.db.database import db_session
-from kvm.service.service import server_create, server_list, server_change_status, server_image_list, server_monitor
+from kvm.service.service import server_create, server_list, server_change_status, server_image_list, server_monitor, \
+    user_add_sshkey
 from datetime import timedelta
 from kvm.util.json_encoder import AlchemyEncoder
 from apscheduler.scheduler import Scheduler
@@ -20,6 +21,7 @@ def job_function():
 ### cron job end ###
 
 #### rest start ####
+
 @app.route('/vm', methods=['GET'])
 def list():
     return jsonify(status=True, message="success", list=server_list())
@@ -53,6 +55,14 @@ def create_snap(id):
 def list_volume(type):
     return jsonify(status=True, message="success", list=server_image_list(type))
 
+
+@app.route('/user/sshkey', methods=['POST'])
+def add_sshKey():
+    team_name = 1
+    sshkey = request.json['sshkey']
+    name = request.json['name']
+    user_add_sshkey(team_name, sshkey, name)
+    return jsonify(status=True, message="success")
 
 #### rest end ####
 
