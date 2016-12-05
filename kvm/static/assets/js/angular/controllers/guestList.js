@@ -13,7 +13,7 @@ angular
 
         $http({
             method: 'GET',
-            url: '/gncloud/vm',
+            url: '/api/kvm/vm',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function(data, status, headers, config) {
@@ -28,17 +28,18 @@ angular
             });
 
         $scope.actions = [
-            {name: '스냅샷', type: 'snap'},
-            {name: '시작', type: 'start'},
-            {name: '중지', type: 'stop'},
-            {name: '재시작', type: 'resume'},
+            {name: '시작', type: 'resume'},
+            {name: '정지', type: 'suspend'},
+            {name: '재시작', type: 'reboot'},
             {name: '삭제', type: 'delete'},
+            {name: '스냅샷', type: 'snap'}
         ];
 
         $scope.update = function(name, action, index) {
             $http({
                 method: 'PUT',
-                url: '/gncloud/vm/status/' + name + '/' + action.type,
+                url: '/api/kvm/vm/' + name,
+                data: action,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data, status, headers, config) {

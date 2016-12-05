@@ -92,8 +92,8 @@ def server_image_list(type):
 
 
 def server_change_status(name, status):
-    guest_info = GnVmMachines.query.filter(GnVmMachines.name == name).one();
-    ip = guest_info.gnHostMachines.ip
+    guest_info = GnVmMachines.query.filter(GnVmMachines.vm_name == name).one();
+    ip = guest_info.gnHostMachines.host_ip
     URL = 'qemu+ssh://root@' + ip + '/system?socket=/var/run/libvirt/libvirt-sock'
     now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     kvm_change_status(name, status, now, URL)

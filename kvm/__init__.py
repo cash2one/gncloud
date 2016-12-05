@@ -25,7 +25,7 @@ def list():
     return jsonify(status=True, message="success", list=server_list())
 
 
-@app.route('/vm/create', methods=['POST'])
+@app.route('/vm', methods=['POST'])
 def create():
     name = request.json['name']
     cpu = request.json['cpu']
@@ -35,9 +35,9 @@ def create():
     return jsonify(status=True, message=server_create(name, cpu, memory, disk, image_id))
 
 
-@app.route('/vm/<id>/status', methods=['PUT'])
+@app.route('/vm/<id>', methods=['PUT'])
 def change_status(id):
-    status = request.json['status']
+    status = request.json['type']
     server_change_status(id, status)
     return jsonify(status=True, message="success")
 

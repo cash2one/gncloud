@@ -138,10 +138,10 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type):
 def kvm_change_status(vm_name, status, datetime, URL):
     conn = libvirt.open(URL)
     ptr_VM = conn.lookupByName(vm_name)
-    if status == 'suspend':
+    if status == 'start':
+        ptr_VM.resume()
+    elif status == "suspend":
         ptr_VM.suspend()
-    elif status == "reboot":
-        ptr_VM.reboot()
     elif status == "resume":
         ptr_VM.resume()
     elif status == "reboot":

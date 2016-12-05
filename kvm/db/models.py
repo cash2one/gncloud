@@ -7,20 +7,28 @@ from kvm.db.database import Base
 
 class GnHostMachines(Base):
     __tablename__ = "GN_HOST_MACHINES"
-    id = Column(Integer, primary_key=True, nullable=False)
-    ip = Column(String(20), primary_key=False, nullable=False)
-    type = Column(String(50), primary_key=False, nullable=False)
+    host_id = Column(String(100), primary_key=True, nullable=False)
+    host_name = Column(String(100), primary_key=False, nullable=False)
+    host_ip = Column(String(50), primary_key=False, nullable=False)
+    host_type = Column(String(10), primary_key=False, nullable=False)
+    cpu = Column(Integer, primary_key=False, nullable=False)
+    mem = Column(Integer, primary_key=False, nullable=False)
+    disk = Column(Integer, primary_key=False, nullable=False)
+    max_cpu = Column(Integer, primary_key=False, nullable=False)
+    max_mem = Column(Integer, primary_key=False, nullable=False)
+    max_disk = Column(Integer, primary_key=False, nullable=False)
+    host_agent_port = Column(Integer, primary_key=False, nullable=False)
 
-    def __init__(self, ip=None, type=None):
-        self.ip = ip
-        self.type = type
+    def __init__(self, host_id=None, host_type=None):
+        self.host_id = host_id
+        self.host_type = host_type
 
     def __repr__(self):
-        return '<ID %r / Ip %r / Type %r>' \
-               % (self.id, self.ip, self.type)
+        return '<Host_id %r / Host_ip %r / host_type %r>' \
+               % (self.host_id, self.host_ip, self.host_type)
 
     def __json__(self):
-        return ['id', 'ip', 'type']
+        return ['host_id', 'host_ip', 'host_type']
 
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'
@@ -31,7 +39,7 @@ class GnVmMachines(Base):
     memory = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
     ip = Column(String(20), primary_key=False, nullable=False)
-    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'))
+    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.host_id'))
     os = Column(String(10), primary_key=False, nullable=True)
     os_ver = Column(String(20), primary_key=False, nullable=True)
     os_sub_ver = Column(String(20), primary_key=False, nullable=True)
