@@ -73,7 +73,8 @@ def hvm_create():
 
 
 # todo REST. VM 스냅샷 생성
-def hvm_snap(id):
+def hvm_snapshot():
+    org_id = request.args.get("org_id")
     name = request.args.get("name")
     type = request.args.get("type")
     author_id = request.args.get("author_id")
@@ -163,6 +164,15 @@ def hvm_state(id):
         return jsonify(status=False, message="정상적인 상태 정보를 받지 못했습니다.")
 
 
+# todo REST. VM 삭제
+def hvm_delete(id):
+    ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
+    # todo REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
+    # todo REST hvm_delete 2. VM을 삭제한다.
+    # todo REST hvm_delete 3. 삭제된 VM DB 데이터를 삭제 상태로 업데이트한다.
+    return jsonify(vm=vm, message="", status=True)
+
+
 # todo REST. VM 정보
 def hvm_vm(vmid):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
@@ -178,3 +188,29 @@ def hvm_vm_list():
     vm_list = ps.get_vm()
     # todo get-vm. VM 정보를 DB에서 가져온다.
     return jsonify(list=vm_list, message="", status=True)
+
+
+# todo REST. VM 이미지 생성 및 업로드
+# 업로드 기능은 나중에 구현 예정, 이미지 정보만 업데이트할 것
+def hvm_new_image():
+    return jsonify(status=False, message="미구현")
+
+
+# todo REST. VM 이미지 수정
+def hvm_modify_image():
+    return jsonify(status=False, message="미구현")
+
+
+# todo REST. VM 이미지 삭제
+def hvm_delete_image():
+    return jsonify(status=False, message="미구현")
+
+
+# todo REST. VM 이미지 리스트
+def hvm_image_list():
+    return jsonify(status=False, message="미구현")
+
+
+# todo REST. VM 이미지 정보
+def hvm_image():
+    return jsonify(status=False, message="미구현")

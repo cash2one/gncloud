@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
-from flask import Flask, redirect, send_file
+from flask import Flask, redirect, url_for
 from controller.powershellController import *
 from util.config import config
 
@@ -10,16 +10,30 @@ app = Flask(__name__)
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
 app.add_url_rule("/manual", view_func=manual, methods=['GET'])
+# --- VM 함수 --- #
 # VM 생성 및 실행
-app.add_url_rule("/vm/create", view_func=hvm_create, methods=['POST'])
+app.add_url_rule("/vm/machine", view_func=hvm_create, methods=['POST'])
 # VM 스냅샷 생성
-app.add_url_rule("/vm/<id>/snap", view_func=hvm_snap, methods=['POST'])
+app.add_url_rule("/vm/machine/snapshot", view_func=hvm_snapshot, methods=['POST'])
 # VM 상태변경
-app.add_url_rule("/vm/<id>/status", view_func=hvm_state, methods=['POST'])
+app.add_url_rule("/vm/machines/<id>", view_func=hvm_state, methods=['PUT'])
+# VM 삭제
+app.add_url_rule("/vm/machines/<id>", view_func=hvm_delete, methods=['DELETE'])
 # VM 정보
-app.add_url_rule("/vm/<vmid>", view_func=hvm_vm, methods=['GET'])
+app.add_url_rule("/vm/machines/<vmid>", view_func=hvm_vm, methods=['GET'])
 # VM 리스트 정보
-app.add_url_rule("/vm", view_func=hvm_vm_list, methods=['GET'])
+app.add_url_rule("/vm/machines", view_func=hvm_vm_list, methods=['GET'])
+# --- VM 이미지 함수 --- #
+# VM 이미지 생성 및 업로드
+app.add_url_rule("/vm/images", view_func=hvm_new_image, methods=['POST'])
+# VM 이미지 수정
+app.add_url_rule("/vm/images/<id>", view_func=hvm_modify_image, methods=['PUT'])
+# VM 이미지 삭제
+app.add_url_rule("/vm/images/<id>", view_func=hvm_delete_image, methods=['DELETE'])
+# VM 이미지 리스트
+app.add_url_rule("/vm/images/<type>", view_func=hvm_image_list, methods=['GET'])
+# VM 이미지 정보
+app.add_url_rule("/vm/images/<type>/<id>", view_func=hvm_image, methods=['GET'])
 
 
 # Controller 상태 확인
@@ -31,37 +45,7 @@ def isAlive():
 # 페이지 리스트
 @app.route("/")
 def index():
-    return send_file("static/html/index.html")
-
-
-@app.route("/main")
-def main():
-    return send_file("static/html/main.html")
-
-
-@app.route("/guestCreate")
-def guest_create():
-    return send_file("static/html/guestCreate.html")
-
-
-@app.route("/guestList")
-def guest_list():
-    return send_file("static/html/guestList.html")
-
-
-@app.route("/guestLogin")
-def guest_login():
-    return send_file("static/html/guestLogin.html")
-
-
-@app.route("/guestRunList")
-def guest_run_list():
-    return send_file("static/html/guestRunList.html")
-
-
-@app.route("/guestSnapList")
-def guest_snap_list():
-    return send_file("static/html/guestSnapList.html")
+    return redirect(url_for("isAlive"))
 
 
 if __name__ == '__main__':
