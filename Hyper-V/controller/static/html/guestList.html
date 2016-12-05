@@ -1,0 +1,32 @@
+<h2 class="sub-header">VM 인스턴스</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>이름</th>
+            <th>머신유형</th>
+            <th>내부 IP</th>
+            <th>외부 IP</th>
+            <th>종류</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="list in guest_list">
+            <td>{{ list.vm_name }}</td>
+            <td>vCpu {{ list.cpu }}개, vRam {{ list.memory }}, vHdd {{ list.hdd }}GB</td>
+            <td>{{ list.ip }}</td>
+            <td>{{ list.ip }}</td>
+            <td>{{ list.vm_type }}</td>
+            <td>
+                <select ng-model="myActions" ng-options="action.name for action in actions"
+                        ng-change="update('{{ list.vm_name }}', myActions, {{ $index }})">
+                    <option value="">선택</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
