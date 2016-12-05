@@ -13,7 +13,7 @@ import requests
 
 class PowerShell(object):
     # 스크립트 실행 결과를 JSON 형식으로 받도록 하기 위한 커맨드
-    CONVERTTO_JSON = " | ConvertTo-Json"
+    CONVERTTO_JSON = " | ConvertTo-Json -Compress"
     # Script Default 설정이 리턴값을 주지 않는 경우 해당 옵션이 추가되어야 리턴값이 나온다.
     PASSTHRU = " -Passthru"
     VERBOSE = " -Verbose"
