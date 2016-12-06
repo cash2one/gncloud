@@ -4,7 +4,7 @@ import datetime
 import string
 import random
 
-salt = "test"
+
 
 #datetime + salt => sha256
 def random_string(salt, number):
@@ -35,5 +35,6 @@ def random_string(salt, number):
 #     return hash.hexdigest()[:number]
 
 # if __name__ == "__main__":
-    #     for i in range(100):
-    #         print(random_string1(salt,8))
+#     salt = "test"
+#     for i in range(100):
+#         print(random_string(salt,8))
