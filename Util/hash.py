@@ -7,11 +7,11 @@ import random
 salt = "test"
 
 #datetime + salt => sha256
-def random_string1(salt, number):
+def random_string(salt, number):
     base = str(datetime.datetime.now())
-    print "base: {0} salt: {1}".format(base, salt)
+    #print "base: {0} salt: {1}".format(base, salt)
     msg = base+", "+salt
-    print msg
+    #print msg
     hash = hashlib.sha256()
     hash.update(base+", "+salt)
 
