@@ -24,33 +24,32 @@ def manual():
 # VM 생성 및 실행
 def hvm_create():
 
-    request_param = request.form.to_dict()
-
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
     # 새 머신을 만든다. (New-VM)
     # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     SWITCHNAME = "out"
-    new_vm = ps.new_vm(Name=request_param['name'], MemoryStartupBytes=request_param['memory'], Path="C:\images", SwitchName=SWITCHNAME)
+    new_vm = ps.new_vm(Name=request.form['name'], MemoryStartupBytes=request.form['memory'], Path="C:\images", SwitchName=SWITCHNAME)
+
     # 머신이 생성되었는지 확인한다. (New-VM 리턴값 체크)
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
-        set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessCount=request_param['cpu'])
+        set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=request.form['cpu'])
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # todo. CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         CONVERT_VHD_DESTINATIONPATH = "C:\\images\\disk.vhdx"
-        CONVERT_VHD_PATH = "C:\Users\Public\Documents\Hyper-V\Virtual hard disks\windows_server_2012_r2.vhdx"
-        convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
-        # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
-        add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
+        # CONVERT_VHD_PATH = "C:\Users\Public\Documents\Hyper-V\Virtual hard disks\windows_server_2012_r2.vhdx"
+        # convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
+        # # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
+        # add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
         # todo hvm_create 6. VM에 IP를 설정한다. (???)
         # VM을 시작한다.
         start_vm = ps.start_vm(new_vm['VMId'])
         # todo hvm_create 7. 새로 생성된 가상머신 데이터를 DB에 저장한다.
-        vm = GnVmMachines(start_vm['VMId'], request_param['name'], '', 'hyperv', start_vm['VMId'], 1, '192.168.0.144', request_param['cpu'],
-                          request_param['memory'], CONVERT_VHD_DESTINATIONPATH, request_param['os']
-                          , request_param['os_ver'], request_param['os_subver'], request_param['os_bit'], None, request_param['author_id'], datetime.datetime.utcnow,
-                          datetime.datetime.utcnow, None, start_vm['state'])
+        vm = GnVmMachines("s7es923i", request.form['name'], '', 'hyperv', start_vm['VMId'], request.form['name'],
+                          '1', "192.168.0.131", request.form['cpu'], request.form['memory'], request.form['hdd'], request.form['os']
+                          , request.form['os_ver'], request.form['os_subver'], request.form['os_bit'], "", request.form['author_id'], datetime.datetime.now(),
+                          datetime.datetime.now(), None, start_vm['State'])
         db_session.add(vm)
         db_session.commit()
         return jsonify(status=True, massage="VM 생성 성공")

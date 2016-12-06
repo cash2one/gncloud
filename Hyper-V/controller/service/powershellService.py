@@ -32,7 +32,12 @@ class PowerShell(object):
     def new_vm(self, **kwargs):
         script = "New-VM"
         for option, value in kwargs.items():
-            script += " -" + option + " " + value
+            if option == "Path":
+                script += " -" + option + " '" + value + "'"
+            elif option == "MemoryStartupBytes":
+                script += " -" + option + " " + value + "MB"
+            else:
+                script += " -" + option + " " + value
         script += " -Generation " + str(self.GENERATION_TYPE_2)
         script += self.CONVERTTO_JSON
         return self.send(script)
@@ -60,7 +65,12 @@ class PowerShell(object):
     def convert_vhd(self, **kwargs):
         script = "Convert-VHD"
         for option, value in kwargs.items():
-            script += " -" + option + " " + value
+            if option == "Path" or option == "DestinationPath":
+                script += " -" + option + " '" + value + "'"
+            elif option == "BlockSizeBytes":
+                script += " -" + option + " " + value + "GB"
+            else:
+                script += " -" + option + " '" + value + "'"
         script += self.VERBOSE
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
@@ -76,6 +86,8 @@ class PowerShell(object):
             # vmId 값의 경우 VMObject를 불러오기 위해서 필요한 값이므로 Set-VM Script에서는 직접 넣지 않는다.
             if option == "VMId":
                 vmscript = "$vm = Get-VM -Id " + value + "; "
+            elif option == "Path":
+                script += " -" + option + " '" + value + "'"
             else:
                 script += " -" + option + " " + value
         script += self.PASSTHRU
@@ -87,6 +99,7 @@ class PowerShell(object):
     def start_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Start-VM -VM $vm"
+        script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
 
@@ -98,6 +111,7 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
+
     #가상머신을 재부팅 한다
     def restart_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
@@ -105,6 +119,7 @@ class PowerShell(object):
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
+
 
     #가상머신을 일시정지상태로 돌린다. 리턴 state = 9
     def suspend_vm(self, vm_Id):
@@ -114,6 +129,7 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
+
    #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
     def resume_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
@@ -121,6 +137,7 @@ class PowerShell(object):
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
+
 
     # 가상머신 하나의 정보를 가져온다.
     # example) $vm = Get-VM -Id 8102C1F1-6A15-4BDC-8BF1-C8ECBE9D94E2 | Convertto-Json

@@ -3,6 +3,8 @@ __author__ = 'jhjeon'
 
 from service.powershellService import PowerShell
 from util.config import config
+from sqlalchemy.sql import func
+import datetime
 
 
 def test_service_new_vm():
@@ -32,4 +34,7 @@ def test_add_vmharddiskdrive():
 # print vm
 # print test_service_set_vm(vm)
 # return print test_service_convert_vhd()
-print test_add_vmharddiskdrive()
+# print test_add_vmharddiskdrive()
+
+now = datetime.datetime.now()
+print now
