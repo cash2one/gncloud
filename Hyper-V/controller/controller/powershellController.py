@@ -11,6 +11,7 @@ from service.powershellService import PowerShell
 from db.database import db_session
 from db.models import GnVmMachines
 from util.config import config
+from util.hash import random_string
 
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
@@ -38,18 +39,18 @@ def hvm_create():
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # todo. CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         CONVERT_VHD_DESTINATIONPATH = "C:\\images\\disk.vhdx"
-        # CONVERT_VHD_PATH = "C:\Users\Public\Documents\Hyper-V\Virtual hard disks\windows_server_2012_r2.vhdx"
-        # convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
-        # # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
-        # add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
+        CONVERT_VHD_PATH = "C:\Users\Public\Documents\Hyper-V\Virtual hard disks\windows_server_2012_r2.vhdx"
+        convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
+        # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
+        add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
         # todo hvm_create 6. VM에 IP를 설정한다. (???)
         # VM을 시작한다.
         start_vm = ps.start_vm(new_vm['VMId'])
         # todo hvm_create 7. 새로 생성된 가상머신 데이터를 DB에 저장한다.
-        vm = GnVmMachines("s7es923i", request.form['name'], '', 'hyperv', start_vm['VMId'], request.form['name'],
+        vm = GnVmMachines(random_string(config.SALT, 8), request.form['name'], '', 'hyperv', start_vm['VMId'], request.form['name'],
                           '1', "192.168.0.131", request.form['cpu'], request.form['memory'], request.form['hdd'], request.form['os']
                           , request.form['os_ver'], request.form['os_subver'], request.form['os_bit'], "", request.form['author_id'], datetime.datetime.now(),
-                          datetime.datetime.now(), None, start_vm['State'])
+                          datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
         db_session.add(vm)
         db_session.commit()
         return jsonify(status=True, massage="VM 생성 성공")

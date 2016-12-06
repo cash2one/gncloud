@@ -169,3 +169,34 @@ class PowerShell(object):
         data = {'script': script}
         response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
+
+    def get_state_string(self, state):
+        if state is 1:
+            return "Other"
+        elif state is 2:
+            return "Running"
+        elif state is 3:
+            return "Off"
+        elif state is 4:
+            # 현재 버전에서는 사용하지 않는 상태..
+            return "Stopping"
+        elif state is 6:
+            return "Starting"
+        elif state is 9:
+            return "Paused"
+        elif state is 10:
+            return "Starting"
+        elif state is 11:
+            return "Reset"
+        elif state is 32773:
+            return "Saving"
+        elif state is 32776:
+            return "Pausing"
+        elif state is 32777:
+            return "Resuming"
+        elif state is 32779:
+            return "FastSaved"
+        elif state is 32780:
+            return "FastSaving"
+        else:
+            return "Other"
