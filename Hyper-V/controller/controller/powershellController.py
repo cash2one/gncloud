@@ -15,7 +15,7 @@ from util.config import config
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
 def manual():
-    script = request.args.get('script')
+    script = request.form['script']
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     # return ps.send(script)
     return jsonify(result=ps.send(script))
@@ -23,38 +23,23 @@ def manual():
 
 # VM 생성 및 실행
 def hvm_create():
-    # cpu core 수
-    cpu = request.args.get('cpu')
-    # 디스크 설정
-    hdd = request.args.get('hdd')
-    # 가상머신 메모리
-    memory = request.args.get('memory')
-    # 베이스 이미지 경로
-    baseImage = request.args.get('baseImage')
 
-    os = request.args.get('os')
-    os_ver = request.args.get('os_ver')
-    os_subver = request.args.get('os_subver')
-    os_bit = request.args.get('os_bit')
-    author_id = request.args.get('author_id')
-
-    # VM Name (Hyper-V에서는 VMName의 중복이 가능, VM별 구분은 VMId로 구분 필요)
-    name = request.args.get('name')
+    request_param = request.form.to_dict()
 
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
     # 새 머신을 만든다. (New-VM)
     # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     SWITCHNAME = "out"
-    new_vm = ps.new_vm(Name=name, MemoryStartupBytes=memory, Path="C:\images", SwitchName=SWITCHNAME)
+    new_vm = ps.new_vm(Name=request_param['name'], MemoryStartupBytes=request_param['memory'], Path="C:\images", SwitchName=SWITCHNAME)
     # 머신이 생성되었는지 확인한다. (New-VM 리턴값 체크)
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
-        set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessCount=cpu)
+        set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessCount=request_param['cpu'])
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # todo. CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
-        CONVERT_VHD_DESTINATIONPATH = "C:\\images\\testvm_disk2\\disk.vhdx"
-        CONVERT_VHD_PATH = "C:\\images\\windows10.vhdx"
+        CONVERT_VHD_DESTINATIONPATH = "C:\\images\\disk.vhdx"
+        CONVERT_VHD_PATH = "C:\Users\Public\Documents\Hyper-V\Virtual hard disks\windows_server_2012_r2.vhdx"
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
@@ -62,8 +47,9 @@ def hvm_create():
         # VM을 시작한다.
         start_vm = ps.start_vm(new_vm['VMId'])
         # todo hvm_create 7. 새로 생성된 가상머신 데이터를 DB에 저장한다.
-        vm = GnVmMachines(start_vm['VMId'], name, '', 'hyperv', start_vm['VMId'], 1, '192.168.0.144', cpu,
-                          memory, CONVERT_VHD_DESTINATIONPATH, os, os_ver, os_subver, os_bit, None, author_id, datetime.datetime.utcnow,
+        vm = GnVmMachines(start_vm['VMId'], request_param['name'], '', 'hyperv', start_vm['VMId'], 1, '192.168.0.144', request_param['cpu'],
+                          request_param['memory'], CONVERT_VHD_DESTINATIONPATH, request_param['os']
+                          , request_param['os_ver'], request_param['os_subver'], request_param['os_bit'], None, request_param['author_id'], datetime.datetime.utcnow,
                           datetime.datetime.utcnow, None, start_vm['state'])
         db_session.add(vm)
         db_session.commit()
@@ -74,10 +60,10 @@ def hvm_create():
 
 # todo REST. VM 스냅샷 생성
 def hvm_snapshot():
-    org_id = request.args.get("org_id")
-    name = request.args.get("name")
-    type = request.args.get("type")
-    author_id = request.args.get("author_id")
+    org_id = request.form['org_id']
+    name = request.form['name']
+    type = request.form['type']
+    author_id = request.form['author_id']
     return jsonify(status=False, message="미구현")
 
 
@@ -170,7 +156,7 @@ def hvm_delete(id):
     # todo REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
     # todo REST hvm_delete 2. VM을 삭제한다.
     # todo REST hvm_delete 3. 삭제된 VM DB 데이터를 삭제 상태로 업데이트한다.
-    return jsonify(vm=vm, message="", status=True)
+    return jsonify(message="", status=True)
 
 
 # todo REST. VM 정보
