@@ -45,7 +45,7 @@ angular
         };
 
         $scope.update_image = function (data) {
-            if (data != null) $scope.data.image_id = data.image_id;
+            if (data != null) $scope.data.id = data.id;
         };
 
     });

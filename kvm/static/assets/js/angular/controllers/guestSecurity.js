@@ -8,22 +8,6 @@ angular
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
 
-        //$http({
-        //    method: 'GET',
-        //    url: '/api/kvm/vm/images/list/base',
-        //    headers: {'Content-Type': 'application/json; charset=utf-8'}
-        //})
-        //    .success(function (data, status, headers, config) {
-        //        if (data) {
-        //            $scope.image_list = data.list;
-        //        }
-        //        else {
-        //        }
-        //    })
-        //    .error(function (data, status, headers, config) {
-        //        console.log(status);
-        //    });
-
 
         $scope.data = {};
         $scope.submit = function () {

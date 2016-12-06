@@ -5,10 +5,12 @@ import logging
 from flask import Flask, send_file, jsonify, request
 from kvm.db.database import db_session
 from kvm.service.service import server_create, server_list, server_change_status, server_image_list, server_monitor, \
-    user_add_sshkey
+    add_user_sshkey, delete_user_sshkey, list_user_sshkey
 from datetime import timedelta
 from kvm.util.json_encoder import AlchemyEncoder
 from apscheduler.scheduler import Scheduler
+from gevent.wsgi import WSGIServer
+
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -33,8 +35,9 @@ def create():
     cpu = request.json['cpu']
     memory = request.json['memory']
     disk = request.json['hdd']
-    image_id = request.json['image_id']
-    return jsonify(status=True, message=server_create(name, cpu, memory, disk, image_id))
+    image_id = request.json['id']
+    team_name = "1"
+    return jsonify(status=True, message=server_create(name, cpu, memory, disk, image_id, team_name))
 
 
 @app.route('/vm/<id>', methods=['PUT'])
@@ -61,8 +64,21 @@ def add_sshKey():
     team_name = 1
     sshkey = request.json['sshkey']
     name = request.json['name']
-    user_add_sshkey(team_name, sshkey, name)
+    add_user_sshkey(team_name, sshkey, name)
     return jsonify(status=True, message="success")
+
+
+@app.route('/user/sshkey/<id>', methods=['DELETE'])
+def delete_sshKey(id):
+    team_name = 1
+    delete_user_sshkey(id, team_name)
+    return jsonify(status=True, message="success")
+
+
+@app.route('/user/sshkey', methods=['GET'])
+def list_sshKey():
+    team_name = 1
+    return jsonify(status=True, message="success", list=list_user_sshkey(team_name))
 
 #### rest end ####
 
@@ -74,4 +90,6 @@ if __name__ == '__main__':
     # cron = Scheduler(daemon=True)
     # cron.add_interval_job(job_function, minutes=5)
     # cron.start()
-    app.run(debug=True)
+    # app.run(debug=True)
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()

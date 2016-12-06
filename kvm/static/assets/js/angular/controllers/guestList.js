@@ -35,10 +35,10 @@ angular
             {name: '스냅샷', type: 'snap'}
         ];
 
-        $scope.update = function(name, action, index) {
+        $scope.update = function (id, action, index) {
             $http({
                 method: 'PUT',
-                url: '/api/kvm/vm/' + name,
+                url: '/api/kvm/vm/' + id,
                 data: action,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
