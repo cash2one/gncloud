@@ -63,11 +63,13 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#/guestLogin">login</a></li>
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li id="in"><a href="#/guestLogin">login</a></li>
+                <li id="out"><a href=javascript:logout();>logout</a></li>
+                <li id="dash"><a href="#">Dashboard</a></li>
+                <li id="setting"><a href="#">Settings</a></li>
+                <li id="profile"><a href="#">Profile</a></li>
+                <li id="help"><a href="#">Help</a></li>
+                <li><a id="name" href="#/guestRestPut"></a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <input type="text" class="form-control" placeholder="Search...">
@@ -81,12 +83,12 @@
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                <li><a href="#/main">Reports</a></li>
-                <li><a href="#/guestList">인스턴스</a></li>
-                <li><a href="#/guestCreate">인스턴스 만들기</a></li>
-                <li><a href="#/guestSnapList">스냅샷</a></li>
-                <li><a href="#/monitor">모니터링</a></li>
-
+                <li id="report"><a href="#/main">Reports</a></li>
+                <li id="inst"><a href="#/guestList">인스턴스</a></li>
+                <li id="make"><a href="#/guestCreate">인스턴스 만들기</a></li>
+                <li id="snap"><a href="#/guestSnapList">스냅샷</a></li>
+                <li id="monitor"><a href="#/monitor">모니터링</a></li>
+                <p></p>
             </ul>
         </div>
 
@@ -105,5 +107,46 @@
         <script src="/js/holder.min.js"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="/js/ie10-viewport-bug-workaround.js"></script>
+        <script language="javascript">
+            $.ajax({
+                type: "GET",
+                url: '/manager/vm/logincheck',
+                headers: {'Content-Type': 'application/json; charset=utf-8'},
+
+                success:function(data) {
+                    if (data.status == 1) {
+                        $("#in").hide();
+                        $("#name").html(data.message);
+                    }
+                    else {
+                        $("#out").hide();
+                        $("#report").hide();
+                        $("#inst").hide();
+                        $("#make").hide();
+                        $("#snap").hide();
+                        $("#monitor").hide();
+                        $("#dash").hide();
+                        $("#setting").hide();
+                        $("#profile").hide();
+                        $("#help").hide();
+
+                    }
+                }
+            })
+
+
+            function logout()
+            {
+                $.ajax({
+                    type: "GET",
+                    url: '/manager/vm/guestLogout',
+                    headers: {'Content-Type': 'application/json; charset=utf-8'},
+                    success: function () {
+                        alert("logout");
+                    }
+
+                })
+            }
+        </script>
 </body>
 </html>

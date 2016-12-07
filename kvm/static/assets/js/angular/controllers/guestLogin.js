@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestLoginCtrl', function ($scope, $http) {
+    .controller('guestLoginCtrl', function ($scope, $http, $location) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -14,21 +14,23 @@ angular
         $scope.submit = function() {
             $http({
                 method  : 'POST',
-                url: '/monitor/vm/guestLogin',
+                url: '/manager/vm/guestLogin',
                 data: $scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data) {
-                    if (data.message == "True") {
-                        alert("로그인이 되었습니다.");
-                    } else {
-                        alert(data.message)
-                    }
-                });
+                        if (data.status == true) {
+                            $location.url('/#')
+                            alert(data.message)
+                        } else {
+                            alert(data.message)
+                        }
+                    });
+
+
+
         };
 
-        $scope.update_image = function (list) {
-            if (list != null) $scope.data.baseImage = list.name;
-        };
+
 
     });

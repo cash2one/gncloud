@@ -11,7 +11,7 @@ angular
         $scope.test_list = {};
         $http({
             method: 'GET',
-            url: '/gncloud/vm',
+            url: '/manager/vm',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
 
@@ -28,7 +28,7 @@ angular
         $interval(function(){
             $http({
                 method: 'GET',
-                url: '/monitor/vm',
+                url: '/manager/vm',
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
@@ -42,6 +42,6 @@ angular
                 .error(function (data, status, headers, config) {
                     console.log(status);
                 });
-        },5000);
+        },50000);
 
     });

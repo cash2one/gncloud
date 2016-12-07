@@ -32,9 +32,9 @@ class GnHostMachines(Base):
 
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'
-    vm_id = Column(String(30), primary_key=True, nullable=False)
-    vm_name = Column(String(50), primary_key=True, nullable=False)
-    vm_type = Column(String(50), primary_key=False, nullable=False)
+    id = Column(String(30), primary_key=True, nullable=False)
+    name = Column(String(50), primary_key=True, nullable=False)
+    type = Column(String(50), primary_key=False, nullable=False)
     cpu = Column(Integer, primary_key=False, nullable=False)
     memory = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
@@ -51,13 +51,13 @@ class GnVmMachines(Base):
     status = Column(String(10), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
 
-    def __init__(self, vm_id=vm_id, vm_name=None, vm_type=None, cpu=None
+    def __init__(self, id=id, name=None, type=None, cpu=None
                  , memory=None, disk=None, ip=None, host_id=None
                  , os=None, os_ver=None, os_sub_ver=None, os_bit=None
                  , author_id=None, status=None):
-        self.vm_id = vm_id
-        self.vm_name = vm_name
-        self.vm_type = vm_type
+        self.id = id
+        self.name = name
+        self.type = type
         self.cpu = cpu
         self.memory = memory
         self.disk = disk
@@ -72,11 +72,11 @@ class GnVmMachines(Base):
 
 
     def __repr__(self):
-        return '<Vm_id %r / Vm_name %r / Vm_type %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r>' \
-               % (self.vm_id, self.vm_name, self.vm_type, self.cpu, self.memory, self.disk, self.ip, self.status)
+        return '<id %r / name %r / type %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r>' \
+               % (self.id, self.name, self.type, self.cpu, self.memory, self.disk, self.ip, self.status)
 
     def __json__(self):
-        return ['vm_id', 'vm_name', 'vm_type', 'cpu', 'memory', 'disk', 'ip', 'status']
+        return ['id', 'name', 'type', 'cpu', 'memory', 'disk', 'ip', 'status']
 
 
 class GnVmImages(Base):
