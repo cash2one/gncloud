@@ -40,7 +40,7 @@ angular
             var url = '/api/kvm/vm/' + id;
             var method = "PUT";
             if (action.type == "delete") {
-                url = '/api/kvm/vm/machin' + id;
+                url = '/api/kvm/vm/machines/' + id;
                 method = 'DELETE';
             }
 

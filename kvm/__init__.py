@@ -40,7 +40,8 @@ def create_vm():
     disk = request.json['hdd']
     image_id = request.json['id']
     team_name = "1"  # session
-    return jsonify(status=True, message=server_create(name, cpu, memory, disk, image_id, team_name))
+    server_create(name, cpu, memory, disk, image_id, team_name)
+    return jsonify(status=True, message="sucess")
 
 
 @app.route('/vm/machines/<id>', methods=['PUT'])
@@ -97,12 +98,6 @@ def delete_sshKey(id):
 def list_sshKey():
     team_name = 1
     return jsonify(status=True, message="success", list=list_user_sshkey(team_name))
-
-
-@app.route('/test', methods=['GET'])
-def test():
-    team_name = 1 / 0
-    return jsonify(status=True, message="success")
 
 #### rest end ####
 
