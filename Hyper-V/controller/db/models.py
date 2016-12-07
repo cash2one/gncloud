@@ -127,10 +127,10 @@ class GnUsers(Base):
     dept_code = Column(String(3), nullable=True, default=None)
     tel = Column(String(15), nullable=True, default=None)
     email = Column(String(15), nullable=True, default=None)
-    start_date = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    start_date = Column(DateTime, nullable=False, default=datetime.datetime.now())
     end_date = Column(DateTime, nullable=True, default=None)
 
-    def __init__(self, user_id, user_name, privilege=None, dept_code=None, tel=None, email=None, start_date=datetime.datetime.utcnow, end_date=None):
+    def __init__(self, user_id, user_name, privilege=None, dept_code=None, tel=None, email=None, start_date=datetime.datetime.now(), end_date=None):
         self.user_id = user_id
         self.user_name = user_name
         self.privilege = privilege
@@ -159,12 +159,12 @@ class GnVmImages(Base):
     os_bit = Column(String(2), nullable=True, default=None)
     dept_code = Column(String(3), nullable=True, default=None)
     author_id = Column(String(15), nullable=True, default=None)
-    create_time = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
 
     def __init__(self, image_id, image_name='', image_filename='',
                  image_type='', image_sub_type='', image_icon=None,
                  os=None, os_ver=None, os_subver=None, os_bit=None,
-                 dept_code=None, author_id=None, create_time=datetime.datetime.utcnow):
+                 dept_code=None, author_id=None, create_time=datetime.datetime.now()):
         self.image_id = image_id
         self.image_name = image_name
         self.image_filename = image_filename
@@ -191,37 +191,43 @@ class GnVmImages(Base):
 
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'
-    vm_id = Column(String(100), primary_key=True, nullable=False)
-    vm_name = Column(String(50), nullable=False, default='')
-    vm_tag = Column(String(100), nullable=True, default='')
-    vm_type = Column(String(10), nullable=False, default='')
-    vm_internal_id = Column(String(10), nullable=False, default='')
-    host_id = Column(String(100), nullable=True, default=None)
-    ip = Column(String(10), nullable=True, default=None)
-    cpu = Column(String(20), nullable=True, default=None)
-    memory = Column(String(20), nullable=True, default=None)
-    disk = Column(String(2), nullable=True, default=None)
+    id = Column(String(8), primary_key=True, nullable=False)
+    name = Column(String(50), nullable=True, default='')
+    tag = Column(String(100), nullable=True, default='')
+    type = Column(String(10), nullable=False, default='')
+    internal_id = Column(String(100), nullable=True, default='')
+    internal_name = Column(String(100), nullable=True, default='')
+    host_id = Column(String(100), nullable=False, default=None)
+    ip = Column(String(20), nullable=True, default=None)
+    cpu = Column(Integer, nullable=False)
+    memory = Column(Integer, nullable=False)
+    disk = Column(Integer, nullable=False)
     os = Column(String(10), nullable=True, default=None)
     os_ver = Column(String(20), nullable=True, default=None)
     os_sub_ver = Column(String(20), nullable=True, default=None)
     os_bit = Column(String(2), nullable=True, default=None)
-    dept_code = Column(String(3), nullable=True, default=None)
-    author_id = Column(String(15), nullable=True, default=None)
-    create_time = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    start_time = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    stop_time = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    status = Column(String(3), nullable=True, default=None)
+    team_name = Column(String(50), nullable=True, default=None)
+    author_id = Column(String(3), nullable=True, default=None)
+    create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    start_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    stop_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    status = Column(String(10), nullable=True, default=None)
 
-    def __init__(self, vm_id, vm_name='', vm_tag='', vm_type='', vm_internal_id='',
-                 host_id='', ip='', cpu=None, memory=None, disk=None,
+    def __init__(self,
+                 id, name='', tag='', type='',
+                 internal_id='', internal_name='',
+                 host_id='', ip='',
+                 cpu=None, memory=None, disk=None,
                  os=None, os_ver=None, os_sub_ver=None, os_bit=None,
-                 dept_code=None, author_id=None, create_time=None,
-                 start_time=None, stop_time=None, status=None):
-        self.vm_id = vm_id
-        self.vm_name = vm_name
-        self.vm_tag = vm_tag
-        self.vm_type = vm_type
-        self.vm_internal_id = vm_internal_id
+                 team_name=None, author_id=None,
+                 create_time=datetime.datetime.now(), start_time=datetime.datetime.now(), stop_time=datetime.datetime.now(),
+                 status=None):
+        self.id = id
+        self.name = name
+        self.tag = tag
+        self.type = type
+        self.internal_id = internal_id
+        self.internal_name = internal_name
         self.host_id = host_id
         self.ip = ip
         self.cpu = cpu
@@ -231,7 +237,7 @@ class GnVmMachines(Base):
         self.os_ver = os_ver
         self.os_sub_ver = os_sub_ver
         self.os_bit = os_bit
-        self.dept_code = dept_code
+        self.team_name = team_name
         self.author_id = author_id
         self.create_time = create_time
         self.start_time = start_time
@@ -240,13 +246,13 @@ class GnVmMachines(Base):
 
     def __repr__(self):
         return "<GnVmMachines(" \
-               "vm_id='%r', vm_name='%r', vm_tag='%r', vm_type='%r', vm_internal_id='%r', " \
+               "id='%r', name='%r', tag='%r', type='%r', internal_id='%r', internal_name='%r'" \
                "host_id='%r', ip='%r', cpu='%r', memory='%r', disk='%r', os='%r', " \
                "os_ver='%r', os_sub_ver='%r', os_bit='%r', dept_code='%r', author_id='%r', " \
                "create_time='%r', start_time='%r', stop_time='%r', status='%r' )>" \
-               % (self.vm_id, self.vm_name, self.vm_tag, self.vm_type, self.vm_internal_id,
-                  self.host_id, self.ip, self.cpu, self.memory, self.disk, self.os,
-                  self.os_ver, self.os_sub_ver, self.os_bit, self.dept_code, self.author_id,
+               % (self.id, self.name, self.tag, self.type, self.internal_id, self.internal_name,
+                  self.host_id, self.ip, self.cpu, self.memory, self.disk,
+                  self.os, self.os_ver, self.os_sub_ver, self.os_bit, self.team_name, self.author_id,
                   self.create_time, self.start_time, self.stop_time, self.status)
 
 

@@ -13,14 +13,14 @@
         </thead>
         <tbody>
         <tr ng-repeat="list in guest_list">
-            <td>{{ list.vm_name }}</td>
+            <td>{{ list.name }}</td>
             <td>vCpu {{ list.cpu }}개, vRam {{ list.memory }}, vHdd {{ list.disk }}GB</td>
             <td>{{ list.ip }}</td>
             <td>{{ list.ip }}</td>
-            <td>{{ list.vm_type }}</td>
+            <td>{{ list.type }}</td>
             <td>
                 <select ng-model="myActions" ng-options="action.name for action in actions"
-                        ng-change="update('{{ list.vm_name }}', myActions, {{ $index }})">
+                        ng-change="update('{{ list.id }}', myActions, {{ $index }})">
                     <option value="">선택</option>
                 </select>
             </td>

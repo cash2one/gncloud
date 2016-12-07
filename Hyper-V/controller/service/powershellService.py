@@ -13,7 +13,7 @@ import requests
 
 class PowerShell(object):
     # 스크립트 실행 결과를 JSON 형식으로 받도록 하기 위한 커맨드
-    CONVERTTO_JSON = " | ConvertTo-Json"
+    CONVERTTO_JSON = " | ConvertTo-Json -Compress"
     # Script Default 설정이 리턴값을 주지 않는 경우 해당 옵션이 추가되어야 리턴값이 나온다.
     PASSTHRU = " -Passthru"
     VERBOSE = " -Verbose"
@@ -32,7 +32,12 @@ class PowerShell(object):
     def new_vm(self, **kwargs):
         script = "New-VM"
         for option, value in kwargs.items():
-            script += " -" + option + " " + value
+            if option == "Path":
+                script += " -" + option + " '" + value + "'"
+            elif option == "MemoryStartupBytes":
+                script += " -" + option + " " + value + "MB"
+            else:
+                script += " -" + option + " " + value
         script += " -Generation " + str(self.GENERATION_TYPE_2)
         script += self.CONVERTTO_JSON
         return self.send(script)
@@ -60,7 +65,12 @@ class PowerShell(object):
     def convert_vhd(self, **kwargs):
         script = "Convert-VHD"
         for option, value in kwargs.items():
-            script += " -" + option + " " + value
+            if option == "Path" or option == "DestinationPath":
+                script += " -" + option + " '" + value + "'"
+            elif option == "BlockSizeBytes":
+                script += " -" + option + " " + value + "GB"
+            else:
+                script += " -" + option + " '" + value + "'"
         script += self.VERBOSE
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
@@ -76,6 +86,8 @@ class PowerShell(object):
             # vmId 값의 경우 VMObject를 불러오기 위해서 필요한 값이므로 Set-VM Script에서는 직접 넣지 않는다.
             if option == "VMId":
                 vmscript = "$vm = Get-VM -Id " + value + "; "
+            elif option == "Path":
+                script += " -" + option + " '" + value + "'"
             else:
                 script += " -" + option + " " + value
         script += self.PASSTHRU
@@ -87,6 +99,7 @@ class PowerShell(object):
     def start_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Start-VM -VM $vm"
+        script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
 
@@ -98,6 +111,7 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
+
     #가상머신을 재부팅 한다
     def restart_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
@@ -105,6 +119,7 @@ class PowerShell(object):
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
+
 
     #가상머신을 일시정지상태로 돌린다. 리턴 state = 9
     def suspend_vm(self, vm_Id):
@@ -114,6 +129,7 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
+
    #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
     def resume_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
@@ -121,6 +137,7 @@ class PowerShell(object):
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
+
 
     # 가상머신 하나의 정보를 가져온다.
     # example) $vm = Get-VM -Id 8102C1F1-6A15-4BDC-8BF1-C8ECBE9D94E2 | Convertto-Json
@@ -152,3 +169,34 @@ class PowerShell(object):
         data = {'script': script}
         response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
+
+    def get_state_string(self, state):
+        if state is 1:
+            return "Other"
+        elif state is 2:
+            return "Running"
+        elif state is 3:
+            return "Off"
+        elif state is 4:
+            # 현재 버전에서는 사용하지 않는 상태..
+            return "Stopping"
+        elif state is 6:
+            return "Starting"
+        elif state is 9:
+            return "Paused"
+        elif state is 10:
+            return "Starting"
+        elif state is 11:
+            return "Reset"
+        elif state is 32773:
+            return "Saving"
+        elif state is 32776:
+            return "Pausing"
+        elif state is 32777:
+            return "Resuming"
+        elif state is 32779:
+            return "FastSaved"
+        elif state is 32780:
+            return "FastSaving"
+        else:
+            return "Other"

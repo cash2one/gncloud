@@ -3,7 +3,7 @@
 <div class="table-responsive">
     <div class="col-xs-3">
         <label for="ex1">스냅샷</label>
-        <select class="form-control" ng-model="guest_image" ng-options="list.image_name for list in image_list"
+        <select class="form-control" ng-model="guest_image" ng-options="list.name for list in image_list"
                 ng-change="update_image(guest_image)">
             <option value="">선택</option>
         </select>

@@ -1,2 +1,1 @@
-# -*- coding: utf-8 -*-
-__author__ = 'white'
+__author__ = 'jhjeon'
