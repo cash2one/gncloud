@@ -3,7 +3,7 @@ __author__ = 'yhk'
 
 from kvm.db.models import GnVmMachines, GnVmImages, GnHostMachines, GnVmMonitor, GnSshKeys
 from kvm.db.database import db_session
-from kvm.service.kvm_libvirt import kvm_create, kvm_change_status
+from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
 import paramiko
 import datetime
 import time
@@ -29,7 +29,7 @@ def server_create(name, cpu, memory, disk, image_id, team_name):
         while len(ip) == 0:
             ip = getIpAddress(name, host_ip)
 
-        # if len(ip) != 0:
+        if len(ip) != 0:
             setStaticIpAddress(ip, '192.168.0.131')
 
 
@@ -85,9 +85,34 @@ def server_list():
     return list
 
 
+def server_delete(id):
+    guest_info = GnVmMachines.query.filter(GnVmMachines.id == id).one();
+
+    # backup image
+    s = pxssh.pxssh()
+    s.login(guest_info.gnHostMachines.ip, USER)
+    s.sendline('cp /var/lib/libvirt/image/%s.img /var/lib/libvirt/backup/$s.img' % (
+    guest_info.internal_name, guest_info.internal_name))
+
+    # vm 삭제
+    kvm_vm_delete(guest_info.internal_name);
+
+    # db 저장
+    db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete();
+    db_session.commit()
+
 def server_image_list(type):
     list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     return list
+
+
+def server_image_delete(id):
+    image_info = GnVmImages.query.filter(GnVmImages.id == id).one();
+    # 물리적 이미지 삭제
+    kvm_image_delete(image_info.filename)
+    # db 저장
+    db_session.query(GnVmImages).filter(GnVmImages.id == id).delete();
+    db_session.commit()
 
 
 def server_change_status(id, status):
@@ -96,14 +121,23 @@ def server_change_status(id, status):
     URL = 'qemu+ssh://root@' + ip + '/system?socket=/var/run/libvirt/libvirt-sock'
     now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     kvm_change_status(guest_info.internal_name, status, now, URL)
-    if status == 'delete':
-        db_session.query(GnVmMachines).filter(GnVmMachines.name == guest_info.internal_name).delete();
-        db_session.commit()
-    elif status == "snap":
-        guest_snap = GnVmImages(name=guest_info.internal_name + "_" + now, type="kvm_snap",
-                                reg_dt=time.strftime('%Y-%m-%d %H:%M:%S'))
-        db_session.add(guest_snap)
-        db_session.commit()
+
+
+def server_create_snapshot(id, name, user_id, team_code):
+    guest_info = GnVmMachines.query.filter(GnVmMachines.id == id).one();
+
+    # 네이밍
+    new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+
+    # 디스크 복사
+    kvm_image_copy(guest_info.internal_name, new_image_name)
+
+    # db 저장
+    guest_snap = GnVmImages(id="1234", name=name, type="kvm", sub_type="snap", filename=new_image_name + ".img"
+                            , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
+                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id)
+    db_session.add(guest_snap)
+    db_session.commit()
 
 
 def server_monitor():

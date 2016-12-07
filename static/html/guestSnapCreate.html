@@ -1,0 +1,20 @@
+<h2 class="sub-header">인스턴스 만들기</h2>
+<form ng-submit="submit()" ng-controller="guestSnapCreateCtrl">
+    <div class="table-responsive">
+        <div class="col-xs-3">
+            <label for="ex1">스냅샷</label>
+            <select class="form-control" ng-model="guest_image" ng-options="list.name for list in list"
+                    ng-change="update_image(guest_image)">
+                <option value="">선택</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <label for="ex1">이름</label>
+            <input type="text" ng-model="data.name" placeholder="name" class="form-control" maxlength="20">
+        </div>
+        <input type="hidden" id="base" name="base" ng-model="data.org_id" class="form-control">
+    </div>
+    <br/>
+    <input type="submit" id="submit" value="생성"/>
+</form>
+</div>

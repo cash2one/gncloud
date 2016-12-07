@@ -117,7 +117,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type):
             ptr_POOL.createXMLFrom(vol, defaultVol, 0)
             ptr_POOL.storageVolLookupByName(name + ".img").resize(gigaToByte(int(disk)))
         else:
-            server_image_copy(base_name, name)
+            kvm_image_copy(base_name, name)
 
         # vm 생성
         guest = render_template(
@@ -131,7 +131,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type):
         conn.close()
         return id
     except IOError as errmsg:
-        return str(errmsg)
+        print(str(errmsg))
 
 
 def kvm_change_status(vm_name, status, datetime, URL):
@@ -145,23 +145,35 @@ def kvm_change_status(vm_name, status, datetime, URL):
         ptr_VM.resume()
     elif status == "reboot":
         ptr_VM.reboot();
-    elif status == "delete":
-        ptr_VM.destroy()
-        ptr_POOL = conn.storagePoolLookupByName("default")
-        ptr_POOL.storageVolLookupByName(vm_name + ".img").delete()
-    elif status == "snap":
-        server_image_copy(vm_name, vm_name + "_" + datetime)
 
     conn.close()
 
 
-def server_image_list():
+def kvm_vm_delete(guest_name):
+    conn = libvirt.open(URL)
+    ptr_VM = conn.lookupByName(guest_name)
+    ptr_VM.destroy()
+    ptr_POOL = conn.storagePoolLookupByName("default")
+    ptr_POOL.storageVolLookupByName(guest_name + ".img").delete()
+    conn.close()
+
+
+def kvm_image_list():
     conn = libvirt.open(URL)
     ptr_POOL = conn.storagePoolLookupByName("default")
-    return ptr_POOL.listVolumes()
+    list = ptr_POOL.listVolumes()
+    conn.close()
+    return list
 
 
-def server_image_copy(name_volume, name_snap):
+def kvm_image_delete(name):
+    conn = libvirt.open(URL)
+    ptr_POOL = conn.storagePoolLookupByName("default")
+    ptr_POOL.storageVolLookupByName(name).delete()
+    conn.close()
+
+
+def kvm_image_copy(name_volume, name_snap):
     conn = libvirt.open(URL)
     ptr_POOL = conn.storagePoolLookupByName("default")
     org_vol = ptr_POOL.storageVolLookupByName(name_volume + ".img")
@@ -172,7 +184,8 @@ def server_image_copy(name_volume, name_snap):
         , hdd=byteToGiga(info[1])
     )
     ptr_POOL.createXMLFrom(save_vol, org_vol, 0)
-    return "ok"
+    conn.close()
+
 
 
 # size convert BYTE TO GIGA

@@ -13,17 +13,19 @@ angular
 
         $http({
             method: 'GET',
-            url: '/api/kvm/vm',
+            url: '/api/kvm/vm/machines',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
-            .success(function(data, status, headers, config) {
-                if( data ) {
+            .success(function (data, status, headers, config) {
+                if (data.status == true) {
                     $scope.guest_list = data.list;
+
+                } else {
+                    alert(data.message);
                 }
-                else {
-                }
+
             })
-            .error(function(data, status, headers, config) {
+            .error(function (data, status, headers, config) {
                 console.log(status);
             });
 
@@ -36,15 +38,26 @@ angular
         ];
 
         $scope.update = function (id, action, index) {
+            var url = '/api/kvm/vm/' + id;
+            var method = "PUT";
+            if (action.type == "delete") {
+                url = '/api/kvm/vm/machin' + id;
+                method = 'DELETE';
+            }
+
             $http({
-                method: 'PUT',
-                url: '/api/kvm/vm/' + id,
+                method: method,
+                url: url,
                 data: action,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data, status, headers, config) {
-                    alert(name+" guest의 상태가 변경되었습니다");
-                    $scope.guest_list.splice(index, 1);
+                    if (data.status == true) {
+                        alert(name + " guest의 상태가 변경되었습니다");
+                        $scope.guest_list.splice(index, 1);
+                    } else {
+                        alert(data.message);
+                    }
                 })
                 .error(function(data, status, headers, config) {
                     console.log(status);

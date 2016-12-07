@@ -10,7 +10,7 @@ angular
 
         $http({
             method: 'GET',
-            url: '/api/kvm/vm/images/list/base',
+            url: '/api/kvm/vm/images/base',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -29,10 +29,10 @@ angular
         $scope.submit = function() {
             $http({
                 method  : 'POST',
-                url: '/api/kvm/vm',
+                url: '/api/kvm/vm/machine',
                 data: $scope.data,
                 headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
+                    'Content-Type': 'application/json; charset=utf-8'
                 }
             })
                 .success(function(data) {

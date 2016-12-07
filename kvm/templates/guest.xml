@@ -1,7 +1,7 @@
 <domain type='kvm'>
     <name>{{ guest_name }}</name>
-    <memory>{{ current_memory }}</memory>
-    <currentMemory>{{ current_memory }}</currentMemory>
+    <memory unit='M'>{{ current_memory }}</memory>
+    <currentMemory unit='M'>{{ current_memory }}</currentMemory>
     <vcpu>{{ vcpu }}</vcpu>
     <os>
         <type arch='x86_64'>hvm</type>
