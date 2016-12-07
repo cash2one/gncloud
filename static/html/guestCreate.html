@@ -1,42 +1,41 @@
 <h2 class="sub-header">인스턴스 만들기</h2>
 <form ng-submit="submit()" ng-controller="guestCreateCtrl">
-    <div class="table-responsive">
-        <div class="col-xs-3">
-            <label for="ex1">스냅샷</label>
-            <select class="form-control" ng-model="guest_image" ng-options="list.name for list in image_list"
-                    ng-change="update_image(guest_image)">
-                <option value="">선택</option>
-            </select>
-        </div>
-        <div class="col-xs-2">
-            <label for="ex1">이름</label>
-            <input type="text" ng-model="data.name" placeholder="name" class="form-control" maxlength="20">
-        </div>
-        <div class="col-xs-2">
-            <label for="ex1">vCpu</label>
-            <select id="cpu" name="cpu" ng-model="data.cpu" class="form-control">
-                <option value="1">1 core</option>
-                <option value="2">2 core</option>
-            </select>
-        </div>
-        <div class="col-xs-2">
-            <label for="ex1">메모리</label>
-            <select id="memory" name="memory" ng-model="data.memory" class="form-control">
-                <option value="512">512MB</option>
-                <option value="1000">1G</option>
-            </select>
-        </div>
-        <div class="col-xs-2">
-            <label for="ex1">디스크</label>
-            <select id="hdd" name="hdd" ng-model="data.hdd" class="form-control">
-                <option value=10>10G</option>
-                <option value=30>30G</option>
-                <option value=50>50G</option>
-            </select>
-        </div>
-        <input type="hidden" id="base" name="base" ng-model="data.base" class="form-control">
+<div class="table-responsive">
+    <div class="col-xs-3">
+        <label for="ex1">스냅샷</label>
+        <select class="form-control" ng-model="guest_image" ng-options="list.name for list in image_list"
+                ng-change="update_image(guest_image)">
+            <option value="">선택</option>
+        </select>
     </div>
-    <br/>
-    <input type="submit" id="submit" value="생성"/>
+    <div class="col-xs-2">
+        <label for="ex1">이름</label>
+        <input type="text" ng-model="data.name" placeholder="name" class="form-control" maxlength="20">
+    </div>
+    <div class="col-xs-2">
+        <label for="ex1">vCpu</label>
+        <select id="cpu" name="cpu" ng-model="data.cpu" class="form-control">
+            <option value="1">1 core</option>
+            <option value="2">2 core</option>
+        </select>
+    </div>
+    <div class="col-xs-2">
+        <label for="ex1">메모리</label>
+        <select id="memory" name="memory" ng-model="data.memory" class="form-control">
+            <option value="512">512MB</option>
+            <option value="1000">1G</option>
+        </select>
+    </div>
+    <div class="col-xs-2">
+        <label for="ex1">디스크</label>
+        <select id="hdd" name="hdd" ng-model="data.hdd" class="form-control">
+            <option value=10>10G</option>
+            <option value=30>30G</option>
+            <option value=50>50G</option>
+        </select>
+    </div>
+    <input type="hidden" id="base" name="base" ng-model="data.base" class="form-control">
+</div><br/>
+    <input type="submit" id="submit" value="생성" />
 </form>
 </div>
