@@ -147,10 +147,10 @@ class GnUsers(Base):
 
 class GnVmImages(Base):
     __tablename__ = 'GN_VM_IMAGES'
-    image_id = Column(String(100), primary_key=True, nullable=False)
-    image_name = Column(String(50), nullable=False, default='')
-    image_filename = Column(String(100), nullable=True, default='')
-    image_type = Column(String(10), nullable=False, default='')
+    id = Column(String(8), primary_key=True, nullable=False)
+    name = Column(String(50), nullable=False, default='')
+    filename = Column(String(100), nullable=True, default='')
+    type = Column(String(10), nullable=False, default='')
     image_sub_type = Column(String(10), nullable=False, default='')
     image_icon = Column(String(100), nullable=True, default=None)
     os = Column(String(10), nullable=True, default=None)
@@ -161,11 +161,11 @@ class GnVmImages(Base):
     author_id = Column(String(15), nullable=True, default=None)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
 
-    def __init__(self, image_id, image_name='', image_filename='',
+    def __init__(self, id, image_name='', image_filename='',
                  image_type='', image_sub_type='', image_icon=None,
                  os=None, os_ver=None, os_subver=None, os_bit=None,
                  dept_code=None, author_id=None, create_time=datetime.datetime.now()):
-        self.image_id = image_id
+        self.id = id
         self.image_name = image_name
         self.image_filename = image_filename
         self.image_type = image_type
@@ -181,7 +181,7 @@ class GnVmImages(Base):
 
     def __repr__(self):
         return "<GnVmImages(" \
-               "image_id='%r', image_name='%r', image_filename='%r', " \
+               "id='%r', image_name='%r', image_filename='%r', " \
                "image_type='%r', image_sub_type='%r', image_icon='%r', " \
                "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', dept_code='%r', author_id='%r')>" \
                % (self.image_id, self.image_name, self.image_filename, self.image_type,
@@ -206,7 +206,7 @@ class GnVmMachines(Base):
     os_ver = Column(String(20), nullable=True, default=None)
     os_sub_ver = Column(String(20), nullable=True, default=None)
     os_bit = Column(String(2), nullable=True, default=None)
-    team_name = Column(String(50), nullable=True, default=None)
+    team_code = Column(String(10), nullable=True, default=None)
     author_id = Column(String(3), nullable=True, default=None)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     start_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
@@ -219,7 +219,7 @@ class GnVmMachines(Base):
                  host_id='', ip='',
                  cpu=None, memory=None, disk=None,
                  os=None, os_ver=None, os_sub_ver=None, os_bit=None,
-                 team_name=None, author_id=None,
+                 team_code=None, author_id=None,
                  create_time=datetime.datetime.now(), start_time=datetime.datetime.now(), stop_time=datetime.datetime.now(),
                  status=None):
         self.id = id
@@ -237,7 +237,7 @@ class GnVmMachines(Base):
         self.os_ver = os_ver
         self.os_sub_ver = os_sub_ver
         self.os_bit = os_bit
-        self.team_name = team_name
+        self.team_code = team_code
         self.author_id = author_id
         self.create_time = create_time
         self.start_time = start_time
@@ -248,11 +248,11 @@ class GnVmMachines(Base):
         return "<GnVmMachines(" \
                "id='%r', name='%r', tag='%r', type='%r', internal_id='%r', internal_name='%r'" \
                "host_id='%r', ip='%r', cpu='%r', memory='%r', disk='%r', os='%r', " \
-               "os_ver='%r', os_sub_ver='%r', os_bit='%r', dept_code='%r', author_id='%r', " \
+               "os_ver='%r', os_sub_ver='%r', os_bit='%r', team_code='%r', author_id='%r', " \
                "create_time='%r', start_time='%r', stop_time='%r', status='%r' )>" \
                % (self.id, self.name, self.tag, self.type, self.internal_id, self.internal_name,
                   self.host_id, self.ip, self.cpu, self.memory, self.disk,
-                  self.os, self.os_ver, self.os_sub_ver, self.os_bit, self.team_name, self.author_id,
+                  self.os, self.os_ver, self.os_sub_ver, self.os_bit, self.team_code, self.author_id,
                   self.create_time, self.start_time, self.stop_time, self.status)
 
 
