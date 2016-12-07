@@ -1,17 +1,18 @@
-<h2 class="sub-header">Login</h2>
+ <h2 class="sub-header">Login</h2>
 <form ng-submit="submit()" ng-controller="guestLoginCtrl">
-    <div class="table-responsive">
-        <div style="text-align:center">
-            <label for="ex1">ID</label>
-            <input type="text" ng-model="data.user_id" placeholder="user_id" class="form-control" maxlength="30">
-        </div>
-        <div style="text-align:center">
-            <label for="ex2">Password</label>
-            <input type="text" ng-model="data.password" placeholder="password" class="form-control" maxlength="30">
-        </div>
-
-        <div style="text-aling:center">
-            <input type="submit" id="submit" name="login" value="로그인"/>
-        </div>
-
+        <div class="table-responsive">
+            <div>
+                <input type="text" ng-model="data.team_code" placeholder="team_code" class="form-control" maxlength="50" required />
+            </div>
+            <div>
+                <input type="text" ng-model="data.user_id" placeholder="user_id" class="form-control" minlength="6" maxlength="30" required />
+            </div>
+            <div>
+                 <input type="password" ng-model="data.password" placeholder="password" class="form-control" maxlength="30" required />
+            </div>
+                <input type="checkbox" id="id_save">ID저장 <input type="checkbox" id="auto_login">자동 로그인<br>
+            <div>
+                <input type="submit" id="submit" name="login" value="로그인" />
+            </div>
+       </div>
 </form>

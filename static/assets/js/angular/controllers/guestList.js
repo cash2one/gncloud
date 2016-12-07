@@ -33,8 +33,7 @@ angular
             {name: '시작', type: 'resume'},
             {name: '정지', type: 'suspend'},
             {name: '재시작', type: 'reboot'},
-            {name: '삭제', type: 'delete'},
-            {name: '스냅샷', type: 'snap'}
+            {name: '삭제', type: 'delete'}
         ];
 
         $scope.update = function (id, action, index) {
@@ -51,7 +50,7 @@ angular
                 data: action,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-                .success(function (data, status, headers, config) {
+                .success(function(data, status, headers, config) {
                     if (data.status == true) {
                         alert(name + " guest의 상태가 변경되었습니다");
                         $scope.guest_list.splice(index, 1);
@@ -59,7 +58,7 @@ angular
                         alert(data.message);
                     }
                 })
-                .error(function (data, status, headers, config) {
+                .error(function(data, status, headers, config) {
                     console.log(status);
                 });
 

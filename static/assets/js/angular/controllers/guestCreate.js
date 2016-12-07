@@ -26,16 +26,16 @@ angular
 
 
         $scope.data = {};
-        $scope.submit = function () {
+        $scope.submit = function() {
             $http({
-                method: 'POST',
+                method  : 'POST',
                 url: '/api/kvm/vm/machine',
                 data: $scope.data,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
             })
-                .success(function (data) {
+                .success(function(data) {
                     if (data.message == "ok") {
                         alert("VM이 생성되었습니다");
                     } else {
