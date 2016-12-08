@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 __author__ = 'yhk'
 
-from kvm.db.models import GnVmMachines, GnVmImages, GnHostMachines, GnVmMonitor, GnSshKeys
+from kvm.db.models import GnVmMachines, GnVmImages, GnHostMachines, GnVmMonitor, GnSshKeys, GnId
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
 import paramiko
 import datetime
 import time
 from pexpect import pxssh
-import pexpect
+from kvm.util.hash import random_string
 
 USER = "root"
 LOCAL_SSH_KEY_PATH = "/Users/yhk/.ssh/id_rsa"
@@ -42,7 +42,17 @@ def server_create(name, cpu, memory, disk, image_id, team_name):
             s.logout()
 
         # db 저장
-        vm_machine = GnVmMachines(id=id[0:7], name=name, cpu=cpu, memory=memory, disk=disk
+        # id 생성
+        while True:
+            id = random_string(8)
+            check_info = GnId.query.filter(GnId.id == id).first();
+            if not check_info:
+                id_info = GnId(id,'kvn')
+                db_session.add(id_info)
+                db_session.commit()
+                break
+
+        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type='kvm', internal_id=id, internal_name=name, ip=ip, host_id=1, os=image_info.os,
                                   os_ver=image_info.os_ver
                                   , os_sub_ver=image_info.os_subver, os_bit=image_info.os_bit, author_id='곽영호',
@@ -52,8 +62,6 @@ def server_create(name, cpu, memory, disk, image_id, team_name):
         print("==end==")
     except IOError as errmsg:
         return str(errmsg)
-
-    return "success"
 
 
 def getIpAddress(name, HOST):
@@ -91,8 +99,8 @@ def server_delete(id):
     # backup image
     s = pxssh.pxssh()
     s.login(guest_info.gnHostMachines.ip, USER)
-    s.sendline('cp /var/lib/libvirt/image/%s.img /var/lib/libvirt/backup/$s.img' % (
-    guest_info.internal_name, guest_info.internal_name))
+    s.sendline("cp /var/lib/libvirt/image/"+guest_info.internal_name+".img /var/lib/libvirt/backup/"+guest_info.internal_name+".img")
+    s.close()
 
     # vm 삭제
     kvm_vm_delete(guest_info.internal_name);

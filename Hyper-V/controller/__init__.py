@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, jsonify
 from controller.powershellController import *
 from util.config import config
 

@@ -171,3 +171,17 @@ class GnSshKeys(Base):
 
     def __json__(self):
         return ['id', 'team_name', 'key_name', 'key_fingerprint', 'key_content']
+
+class GnId(Base):
+    __tablename__ = "GN_ID"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(20), primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.utcnow)
+
+    def __init__(self, id=None, type=None):
+        self.id = id
+        self.type = type
+
+    def __repr__(self):
+        return '<Id %r / Type %r >' \
+               % (self.id, self.type)

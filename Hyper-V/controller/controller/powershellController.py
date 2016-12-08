@@ -43,10 +43,9 @@ def hvm_create():
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
-        # todo hvm_create 6. VM에 IP를 설정한다. (???)
         # VM을 시작한다.
         start_vm = ps.start_vm(new_vm['VMId'])
-        # todo hvm_create 7. 새로 생성된 가상머신 데이터를 DB에 저장한다.
+        # 새로 생성된 가상머신 데이터를 DB에 저장한다.
         vm = GnVmMachines(random_string(config.SALT, 8), request.form['name'], '', 'hyperv', start_vm['VMId'], request.form['name'],
                           '1', "192.168.0.131", request.form['cpu'], request.form['memory'], request.form['hdd'], request.form['os']
                           , request.form['os_ver'], request.form['os_subver'], request.form['os_bit'], "", request.form['author_id'], datetime.datetime.now(),
@@ -64,6 +63,11 @@ def hvm_snapshot():
     name = request.form['name']
     type = request.form['type']
     author_id = request.form['author_id']
+    # todo hvm_snapshot 1. VM 정지 (Stop-VM)
+    # todo hvm_snapshot 2. 스냅샷을 생성한다.
+    # todo hvm_snapshot 3. 생성된 스냅샷 이미지 이름 변경 (2번에서 이름 변경이 안 될 경우)
+    # todo hvm_snapshot 4. 생성된 스냅샷 이미지 이름 를 지정된 폴더에 옮긴다. (테스트 때에는 C:\images 로 한다.)
+    # todo hvm_snapshot 5. 생성된 스냅샷의 정보를 데이터베이스에 저장한다.
     return jsonify(status=False, message="미구현")
 
 
@@ -98,15 +102,17 @@ def hvm_state(id):
     type = request.args.get('type')
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
+    vm = GnVmMachines.query.filter_by().first
+
     if type == "start":
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
-        start = ps.start_vm(id)
+        start_vm = ps.start_vm(id)
         print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
-        if start['State'] is 2:
+        if start_vm['State'] is 2:
             return jsonify(status=True, message="가상머신이 정상적으로 실행되었습니다.")
-        elif start['State'] is not 2:
+        elif start_vm['State'] is not 2:
             return jsonify(status=False, message="가상머신이 실행되지 않았습니다.")
         else:
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
