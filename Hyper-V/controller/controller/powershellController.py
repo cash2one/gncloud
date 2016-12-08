@@ -43,7 +43,6 @@ def hvm_create():
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
-        # todo hvm_create 6. VM에 IP를 설정한다. (???)
         # VM을 시작한다.
         start_vm = ps.start_vm(new_vm['VMId'])
         # 새로 생성된 가상머신 데이터를 DB에 저장한다.

@@ -26,75 +26,6 @@ class GnController(Base):
                % (self.controller_id, self.controller_name, self.ip, self.port, self.type)
 
 
-class GnContainers(Base):
-    __tablename__ = 'GN_CONTAINERS'
-    id = Column(String(8), primary_key=True, nullable=False, unique=True)
-    name = Column(String(50), nullable=True, default=None)
-    tag = Column(String(100), nullable=True, default=None)
-    internal_id = Column(String(100), nullable=True, default=None)
-    internal_name = Column(String(100), nullable=True, default=None)
-    host_id = Column(String(100), nullable=True, default=None)
-    cpu = Column(Integer, nullable=True, default=None)
-    memory = Column(Integer, nullable=True, default=None)
-    disk = Column(Integer, nullable=True, default=None)
-    team_code = Column(String(10), nullable=True, default=None)
-    author_id = Column(String(3), nullable=True, default=None)
-    create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
-    start_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
-    stop_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
-    status = Column(String(10), nullable=True, default=None)  # running, starting, error, stop, stoping, create, delete
-
-    def __init__(self, id, name, tag, internal_id,
-                 internal_name, host_id, cpu, memory, disk,
-                 team_code, author_id, create_time, start_time, stop_time, status):
-        self.id = id
-        self.name = name
-        self.tag = tag
-        self.internal_id = internal_id
-        self.internal_name = internal_name
-        self.host_id = host_id
-        self.cpu = cpu
-        self.memory = memory
-        self.disk = disk
-        self.team_code = team_code
-        self.author_id = author_id
-        self.create_time = create_time
-        self.start_time = start_time
-        self.stop_time = stop_time
-        self.status = status
-
-    def __repr__(self):
-        return "<GNContainers" \
-               "(controller_id='%r', name='%r', tag='%r', " \
-               "internal_id='%r', internal_name='%r',host_id='%r',cpu='%r'," \
-               "memory='%r',disk='%r',team_code='%r',author_id='%r'," \
-               "create_time='%r',start_time='%r',stop_time='%r',status='%r' )" \
-               % (self.id, self.name, self.tag, self.internal_id,
-                  self.internal_name, self.host_id, self.cpu,
-                  self.memory, self.disk, self.team_code,
-                  self.author_id, self.create_time, self.start_time,
-                  self.stop_time, self.status)
-
-
-class GnContainerDetail(Base):
-    __tablename__ = 'GN_CONTAINER_DETAIL'
-    id = Column(String(8), primary_key=True, nullable=False)
-    arg_type = Column(String(10), primary_key=True, nullable=False)
-    argument = Column(String(200), primary_key=True, nullable=False)
-    description = Column(String(300), nullable=False, default=None)
-
-    def __init__(self, id, arg_type, argument, description):
-        self.id = id
-        self.arg_type = arg_type
-        self.argument = argument
-        self.description = description
-
-    def __repr__(self):
-        return "<GnContainerDetail(id='%r', arg_type='%r', argument='%r', description='%r')>" \
-               % (self.id, self.arg_type, self.argument, self.description)
-
-
-
 class GnDepts(Base):
     __tablename__ = 'GN_DEPTS'
     dept_code = Column(String(3), primary_key=True, nullable=False)
@@ -220,42 +151,42 @@ class GnVmImages(Base):
     name = Column(String(50), nullable=False, default='')
     filename = Column(String(100), nullable=True, default='')
     type = Column(String(10), nullable=False, default='')
-    sub_type = Column(String(10), nullable=False, default='')
-    icon = Column(String(100), nullable=True, default=None)
+    image_sub_type = Column(String(10), nullable=False, default='')
+    image_icon = Column(String(100), nullable=True, default=None)
     os = Column(String(10), nullable=True, default=None)
     os_ver = Column(String(20), nullable=True, default=None)
     os_subver = Column(String(20), nullable=True, default=None)
     os_bit = Column(String(2), nullable=True, default=None)
-    team_code = Column(String(3), nullable=True, default=None)
+    dept_code = Column(String(3), nullable=True, default=None)
     author_id = Column(String(15), nullable=True, default=None)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
 
-    def __init__(self, id='', image_name='', filename='',
-                 type='', sub_type='', icon=None,
+    def __init__(self, id, image_name='', image_filename='',
+                 image_type='', image_sub_type='', image_icon=None,
                  os=None, os_ver=None, os_subver=None, os_bit=None,
-                 team_code=None, author_id=None, create_time=datetime.datetime.now()):
+                 dept_code=None, author_id=None, create_time=datetime.datetime.now()):
         self.id = id
-        self.name = image_name
-        self.filename = filename
-        self.type = type
-        self.sub_type = sub_type
-        self.icon = icon
+        self.image_name = image_name
+        self.image_filename = image_filename
+        self.image_type = image_type
+        self.image_sub_type = image_sub_type
+        self.image_icon = image_icon
         self.os = os
         self.os_ver = os_ver
         self.os_subver = os_subver
         self.os_bit = os_bit
-        self.team_code = team_code
+        self.dept_code = dept_code
         self.author_id = author_id
         self.create_time = create_time
 
     def __repr__(self):
         return "<GnVmImages(" \
-               "id='%r', name='%r', filename='%r', " \
-               "type='%r', sub_type='%r', icon='%r', " \
-               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r')>" \
-               % (self.id, self.name, self.filename, self.type,
-                  self.sub_type, self.icon, self.os, self.os_ver, self.os_subver,
-                  self.os_bit, self.team_code, self.author_id, self.create_time)
+               "id='%r', image_name='%r', image_filename='%r', " \
+               "image_type='%r', image_sub_type='%r', image_icon='%r', " \
+               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', dept_code='%r', author_id='%r')>" \
+               % (self.image_id, self.image_name, self.image_filename, self.image_type,
+                  self.image_sub_type, self.image_icon, self.os, self.os_ver, self.os_subver,
+                  self.os_bit, self.dept_code, self.author_id, self.create_time)
 
 
 class GnVmMachines(Base):
@@ -289,8 +220,7 @@ class GnVmMachines(Base):
                  cpu=None, memory=None, disk=None,
                  os=None, os_ver=None, os_sub_ver=None, os_bit=None,
                  team_code=None, author_id=None,
-                 create_time=datetime.datetime.now(), start_time=datetime.datetime.now(),
-                 stop_time=datetime.datetime.now(),
+                 create_time=datetime.datetime.now(), start_time=datetime.datetime.now(), stop_time=datetime.datetime.now(),
                  status=None):
         self.id = id
         self.name = name
