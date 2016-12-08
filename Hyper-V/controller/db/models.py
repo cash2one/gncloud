@@ -76,6 +76,24 @@ class GnContainers(Base):
                   self.stop_time, self.status)
 
 
+class GnContainerDetail(Base):
+    __tablename__ = 'GN_CONTAINER_DETAIL'
+    id = Column(String(8), primary_key=True, nullable=False)
+    arg_type = Column(String(10), primary_key=True, nullable=False)
+    argument = Column(String(200), primary_key=True, nullable=False)
+    description = Column(String(300), nullable=False, default=None)
+
+    def __init__(self, id, arg_type, argument, description):
+        self.id = id
+        self.arg_type = arg_type
+        self.argument = argument
+        self.description = description
+
+    def __repr__(self):
+        return "<GnContainerDetail(id='%r', arg_type='%r', argument='%r', description='%r')>" \
+               % (self.id, self.arg_type, self.argument, self.description)
+
+
 
 class GnDepts(Base):
     __tablename__ = 'GN_DEPTS'
@@ -212,7 +230,7 @@ class GnVmImages(Base):
     author_id = Column(String(15), nullable=True, default=None)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
 
-    def __init__(self, id, image_name='', filename='',
+    def __init__(self, id='', image_name='', filename='',
                  type='', sub_type='', icon=None,
                  os=None, os_ver=None, os_subver=None, os_bit=None,
                  team_code=None, author_id=None, create_time=datetime.datetime.now()):
@@ -234,11 +252,10 @@ class GnVmImages(Base):
         return "<GnVmImages(" \
                "id='%r', name='%r', filename='%r', " \
                "type='%r', sub_type='%r', icon='%r', " \
-               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r')>" \
+               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r')>" \
                % (self.id, self.name, self.filename, self.type,
                   self.sub_type, self.icon, self.os, self.os_ver, self.os_subver,
                   self.os_bit, self.team_code, self.author_id, self.create_time)
-
 
 
 class GnVmMachines(Base):
@@ -272,7 +289,8 @@ class GnVmMachines(Base):
                  cpu=None, memory=None, disk=None,
                  os=None, os_ver=None, os_sub_ver=None, os_bit=None,
                  team_code=None, author_id=None,
-                 create_time=datetime.datetime.now(), start_time=datetime.datetime.now(), stop_time=datetime.datetime.now(),
+                 create_time=datetime.datetime.now(), start_time=datetime.datetime.now(),
+                 stop_time=datetime.datetime.now(),
                  status=None):
         self.id = id
         self.name = name
