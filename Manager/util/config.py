@@ -5,7 +5,7 @@ import ConfigParser
 import os
 
 import sys
-from manager.util.logger import logger
+from Manager.util.logger import logger
 
 
 class Config:

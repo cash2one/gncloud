@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 import datetime
 
-from manager.db.database import Base
+from Manager.db.database import Base
 
 
 class GnVmMachines(Base):
@@ -13,27 +13,33 @@ class GnVmMachines(Base):
     id = Column(String(30), primary_key=True, nullable=False)
     name = Column(String(50), primary_key=True, nullable=False)
     type = Column(String(50), primary_key=False, nullable=False)
+    internal_id = Column(String(100), primary_key=False, nullable=False)
+    internal_name = Column(String(100), primary_key=False, nullable=False)
     cpu = Column(Integer, primary_key=False, nullable=False)
     memory = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
     ip = Column(String(20), primary_key=False, nullable=False)
-    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'))
+    host_id = Column(Integer, primary_key=False, nullable=False)
     os = Column(String(10), primary_key=False, nullable=True)
     os_ver = Column(String(20), primary_key=False, nullable=True)
     os_sub_ver = Column(String(20), primary_key=False, nullable=True)
     os_bit = Column(String(2), primary_key=False, nullable=True)
+    team_code = Column(String(50), primary_key=False, nullable=True)
     author_id = Column(String(15), primary_key=False, nullable=False)
     create_time = Column(DateTime, default=datetime.datetime.utcnow)
     start_time = Column(DateTime, default=datetime.datetime.utcnow)
     stop_time = Column(DateTime, default=datetime.datetime.utcnow)
     status = Column(String(10), primary_key=False, nullable=False)
 
-
-    def __init__(self, id=id, name=None, type=None, cpu=None, memory=None, disk=None, ip=None, host_id=None, os=None, os_ver=None, os_sub_ver=None, os_bit=None, author=None, status=None):
-
+    def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None, cpu=None
+                 , memory=None, disk=None, ip=None, host_id=None
+                 , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
+                 , author_id=None, status=None):
         self.id = id
         self.name = name
         self.type = type
+        self.internal_id = internal_id
+        self.internal_name = internal_name
         self.cpu = cpu
         self.memory = memory
         self.disk = disk
@@ -43,16 +49,18 @@ class GnVmMachines(Base):
         self.os_ver = os_ver
         self.os_sub_ver = os_sub_ver
         self.os_bit = os_bit
-        self.author_id = author
+        self.team_ = team_code
+        self.author_id = author_id
         self.status = status
 
 
     def __repr__(self):
-        return '<ID %r / Name %r / Type %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r>' \
-               % (self.id, self.name, self.type, self.cpu, self.memory, self.disk, self.ip, self.status)
+        return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r>' \
+               % (self.id, self.name, self.type, self.internal_id, self.internal_name, self.cpu, self.memory, self.disk,
+                  self.ip, self.status)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'cpu', 'memory', 'disk', 'ip', 'status']
+        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status']
 
 
 class GnUser(Base):
@@ -105,12 +113,12 @@ class GnUser(Base):
 
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'
-    team_code = Column(Integer, primary_key=True, nullable=False)
+    team_code = Column(String(10), primary_key=True, nullable=False)
     team_name = Column(String(50), primary_key=False, nullable=False)
     author_id = Column(String(50), primary_key=False, nullable=False)
-    cpu_quota = Column(String(50), primary_key=False, nullable=False)
-    mem_quota = Column(String(50), primary_key=False, nullable=False)
-    disk_quota = Column(String(50), primary_key=False, nullable=False)
+    cpu_quota = Column(Integer, primary_key=False, nullable=False)
+    mem_quota = Column(Integer, primary_key=False, nullable=False)
+    disk_quota = Column(Integer, primary_key=False, nullable=False)
 
     def __init__(self, team_code = team_code, team_name= team_name, author_id =author_id, cpu_quota =cpu_quota, mem_quota = mem_quota, disk_quota = disk_quota):
         self.team_code = team_code
