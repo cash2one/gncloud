@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
 
-import atexit
-import logging
-from flask import Flask, send_file, jsonify, request
-from Manager.db.database import db_session
-from Manager.util.json_encoder import AlchemyEncoder
+from flask import Flask, jsonify, request, session, escape
 from datetime import timedelta
-from service.service import test_list, login_list
+
+from manager.db.database import db_session
+from manager.util.json_encoder import AlchemyEncoder
+from service.service import test_list, login_list, me_list, teamcheck_list, sign_up, repair
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 app.json_encoder = AlchemyEncoder
-
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 #### rest start ####
+@app.route('/')
+def index():
+    if 'userId' in session:
+        return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
+    return jsonify(status=False, message='You are not logged in')
+
 @app.route('/vm', methods=['GET'])
 def run_list():
     return jsonify(status=True, message="success", list=test_list())
@@ -23,7 +28,72 @@ def run_list():
 def login():
     user_id = request.json['user_id']
     password = request.json['password']
-    return jsonify(status=True, message="정보가 잘못되었습니다", list=login_list(user_id, password))
+    team_code = request.json['team_code']
+    user_info = login_list(user_id, password, team_code)
+    if user_info != None:
+        session['userId'] = user_info.user_id;
+        session['userName'] = user_info.user_name;
+        session['teamCode'] = user_info.team_code;
+        return jsonify(status=True, message="login as "+user_id)
+    else:
+        return jsonify(status=False, message="정보가 잘못되었습니다")
+
+@app.route('/vm/guestLogout', methods=['GET'])
+def logout():
+    # print session['userId']
+    session.clear()
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/logincheck', methods=['GET'])
+def logincheck():
+    if session.get('userId',None):
+        return jsonify(status= 1, message=session['userName'])
+    else:
+        return jsonify(status= 2)
+
+@app.route('/vm/guestMeList', methods=['GET'])
+def my_list():
+    if session.get('userId',None):
+        myuser = session['userId']
+        return jsonify(status=True, message="success", list=me_list(myuser))
+    else:
+        pass
+
+@app.route('/vm/guestTeam', methods=['GET'])
+def teamcheck():
+    if session.get('userId',None):
+        teamcode=session['teamCode']
+        return jsonify(status=True, message="success", list=teamcheck_list(teamcode))
+
+@app.route('/vm/guestSignUp', methods=['POST'])
+def signup_list():
+    user_name = request.json['user_name']
+    user_id = request.json['user_id']
+    password = request.json['password']
+    password_re = request.json['password_re']
+    if(sign_up(user_name,user_id,password,password_re)!=None):
+        return  jsonify(status=True, message="success")
+    else:
+        return jsonify(status = False, message = "false")
+
+@app.route('/vm/guestRepair', methods=['POST'])
+def repair_list():
+    password = request.json['password']
+    password_new = request.json['password_new']
+    password_re = request.json['password_re']
+    tel = request.json['tel']
+    email = request.json['email']
+    if session.get('userId', None):
+        user_id=session['userId']
+        user_name =session['userName']
+        team_code = session['teamCode']
+        if(repair(user_id,user_name,team_code ,password, password_new, password_re, tel, email) != None):
+            return jsonify(status=True, message = 'success')
+        elif(repair(password, password_new, password_re, tel, email) == 1):
+            return jsonify (status=False, message = '비밀번호가 틀렸습니다.')
+        else:
+            return jsonify(status=False, message = 'False')
+
 
 
 #### rest stop ####

@@ -3,9 +3,10 @@ __author__ = 'NaDa'
 
 import ConfigParser
 import os
-import sys
 
-from Manager.util.logger import logger
+import sys
+from manager.util.logger import logger
+
 
 class Config:
 
