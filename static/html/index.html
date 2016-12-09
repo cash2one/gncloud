@@ -50,6 +50,8 @@
     <script type="text/javascript" src="/js/angular/controllers/guestKeyList.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestSnapCreate.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/dashboard.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/guestMeList.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/guestSignUp.js"></script>
 </head>
 
 <body landing-scrollspy>
@@ -69,6 +71,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li id="in"><a href="#/guestLogin">login</a></li>
+                <li><a href="#/guestSignUp">SignUp</a></li>
                 <li id="out"><a href=javascript:logout();>logout</a></li>
                 <li id="dash"><a href="#">Dashboard</a></li>
                 <li id="setting"><a href="#">Settings</a></li>
@@ -95,6 +98,7 @@
                 <li><a href="#/guestSnapCreate">스냅샷 만들기</a></li>
                 <li><a href="#/guestKeyList">ssh_key_list</a></li>
                 <li><a href="#/dashboard">dashboard</a></li>
+                <li><a href="#/guestMeList">개인설정</a></li>
                 <p></p>
             </ul>
         </div>
@@ -155,5 +159,6 @@
                 })
             }
         </script>
+</div>
 </body>
 </html>

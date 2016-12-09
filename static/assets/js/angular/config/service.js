@@ -13,6 +13,8 @@ var serviceConfig = function ($routeProvider, $locationProvider) {
         .when('/guestLogout', {templateUrl: '/index.html', controller: 'guestLogoutCtrl'})
         .when('/guestKeyList', {templateUrl: '/guestKeyList.html', controller: 'guestKeyListCtrl'})
         .when('/guestSnapCreate', {templateUrl: '/guestSnapCreate.html', controller: 'guestSnapCreateCtrl'})
+        .when('/guestMeList', {templateUrl: '/guestMeList.html', controller: 'guestMeListCtrl'})
+        .when('/guestSignUp', {templateUrl: '/guestSignUp.html', controller: 'guestSignUpCtrl'})
         .when('/dashboard', {templateUrl: '/dashboard.html', controller: 'dashboardCtrl'})
 }
 
