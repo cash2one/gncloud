@@ -35,6 +35,11 @@ app.add_url_rule("/vm/images/<type>", view_func=hvm_image_list, methods=['GET'])
 # VM 이미지 정보
 app.add_url_rule("/vm/images/<type>/<id>", view_func=hvm_image, methods=['GET'])
 
+@app.route('/test', methods=['POST'])
+def test():
+    request.json['type']
+    return jsonify(status=True, message="success")
+
 
 # Controller 상태 확인
 @app.route("/service/isAlive")
