@@ -13,6 +13,7 @@ var serviceConfig = function ($routeProvider, $locationProvider) {
         .when('/guestLogout', {templateUrl: '/index.html', controller: 'guestLogoutCtrl'})
         .when('/guestKeyList', {templateUrl: '/guestKeyList.html', controller: 'guestKeyListCtrl'})
         .when('/guestSnapCreate', {templateUrl: '/guestSnapCreate.html', controller: 'guestSnapCreateCtrl'})
+        .when('/dashboard', {templateUrl: '/dashboard.html', controller: 'dashboardCtrl'})
 }
 
 // 서비스 페이지 설정
