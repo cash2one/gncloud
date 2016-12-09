@@ -154,23 +154,24 @@ class GnVmMonitor(Base):
 class GnSshKeys(Base):
     __tablename__ = "GN_SSH_KEYS"
     id = Column(Integer, primary_key=True, nullable=False)
-    team_name = Column(String(50), primary_key=False, nullable=False)
-    key_name = Column(String(100), primary_key=False, nullable=False)
-    key_fingerprint = Column(String(50), primary_key=False, nullable=False)
-    key_content = Column(Text, primary_key=False, nullable=False)
+    team_code = Column(String(50), primary_key=False, nullable=False)
+    name = Column(String(100), primary_key=False, nullable=False)
+    fingerprint = Column(String(50), primary_key=False, nullable=False)
+    path = Column(String(100), primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.utcnow)
 
-    def __init__(self, team_name=None, key_name=None, key_fingerprint=None, key_content=None):
-        self.team_name = team_name
-        self.key_name = key_name
-        self.key_fingerprint = key_fingerprint
-        self.key_content = key_content
+    def __init__(self, team_code=None, name=None, fingerprint=None, path=None):
+        self.team_code = team_code
+        self.name = name
+        self.fingerprint = fingerprint
+        self.path = path
 
     def __repr__(self):
-        return '<Team_name %r / Team_name %r / Key_name %r / Key_fingerprint %r / Key_content %r>' \
-               % (self.id, self.team_name, self.key_name, self.key_fingerprint, self.key_content)
+        return '<Id %r /Team_code %r / name %r / fingerprint %r / path %r >' \
+               % (self.id, self.team_code, self.name, self.fingerprint, self.path)
 
     def __json__(self):
-        return ['id', 'team_name', 'key_name', 'key_fingerprint', 'key_content']
+        return ['id', 'name', 'fingerprint', 'create_time']
 
 class GnId(Base):
     __tablename__ = "GN_ID"
