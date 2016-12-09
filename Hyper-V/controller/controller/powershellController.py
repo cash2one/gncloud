@@ -108,9 +108,12 @@ def hvm_state(id):
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start_vm = ps.start_vm(id)
-        print id
+        #print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
         if start_vm['State'] is 2:
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id']).update({"status":"Running"})
+            db_session.commit()
+            #print start_vm['Id']
             return jsonify(status=True, message="가상머신이 정상적으로 실행되었습니다.")
         elif start_vm['State'] is not 2:
             return jsonify(status=False, message="가상머신이 실행되지 않았습니다.")
@@ -121,6 +124,8 @@ def hvm_state(id):
         stop = ps.stop_vm(id)
         # stop 2. 가상머신 상태를 체크한다. (Get-VM)
         if stop['State'] is 3:
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']).update({"status":"Stop"})
+            db_session.commit()
             return jsonify(status=True, message="가상머신이 종료되었습니다.")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
@@ -140,12 +145,16 @@ def hvm_state(id):
     elif type == "suspend":
         suspend = ps.suspend_vm(id)
         if suspend['State'] is 9:
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id']).update({"status":"Suspend"})
+            db_session.commit()
             return  jsonify(status=True, message="가상머신이 일시정지되었습니다.")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
     elif type == "resume":
         resume = ps.resume_vm(id)
         if resume['State'] is 2:
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == resume['Id']).update({"status":"Running"})
+            db_session.commit()
             return jsonify(status=True, message="가상머신이 재시작되었습니다.")
         else:
             return jsonify(status=True, message="정상적인 결과값이 아닙니다.")
