@@ -131,24 +131,30 @@ class GnVmImages(Base):
             , 'team_code', 'author_id', 'create_time']
 
 
-class GnVmMonitor(Base):
-    __tablename__ = "GN_VM_MONITOR"
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(20), primary_key=False, nullable=False)
-    cpu_use = Column(Numeric, primary_key=False, nullable=False)
-    mem_use = Column(Numeric, primary_key=False, nullable=False)
+class GnMonitorHist(Base):
+    __tablename__ = "GN_MONITOR_HIST"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cur_time = Column(DateTime, default=datetime.datetime.utcnow)
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
 
-    def __init__(self, name=None, cpu_use=None, mem_use=None):
-        self.name = name
-        self.cpu_use = cpu_use
-        self.mem_use = mem_use
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
 
     def __repr__(self):
-        return '<ID %r / Name %r / Cpu_use %r / Mem_use %r>' \
-               % (self.id, self.name, self.cpu_use, self.mem_use)
+        return '<ID %r / Type %r / Cpu_usage %r / Mem_usage %r / Disk_usage %r / Net_usage %r>' \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
 
     def __json__(self):
-        return ['id', 'name', 'cpu_use', 'mem_use']
+        return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage']
 
 
 class GnSshKeys(Base):

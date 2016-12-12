@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'yhk'
 
-from kvm.db.models import GnVmMachines, GnVmImages, GnHostMachines, GnVmMonitor, GnSshKeys, GnId
+from kvm.db.models import GnVmMachines, GnVmImages, GnMonitorHist, GnSshKeys, GnId
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
 import paramiko
@@ -153,16 +153,38 @@ def server_monitor():
 
     for list in lists:
         HOST = list.gnHostMachines.ip
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
-        stdin, stdout, stderr = ssh.exec_command(config.SCRIPT_PATH+"get_vm_use.sh mem " + list.ip)
-        cpu_use = stdout.readlines()
-        stdin, stdout, stderr = ssh.exec_command(config.SCRIPT_PATH+"/root/libvirt/get_vm_use.sh cpu " + list.ip)
-        mem_use = stdout.readlines()
-        ssh.close()
 
-        vm_monitor = GnVmMonitor(name=list.name, cpu_use=cpu_use, mem_use=mem_use)
+        #ssh = paramiko.SSHClient()
+        #ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        #ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
+        # stdin, stdout, stderr = ssh.exec_command(config.SCRIPT_PATH+"get_vm_use.sh cpu " + list.ip)
+        # cpu_use = stdout.readlines()
+        # stdin, stdout, stderr = ssh.exec_command(config.SCRIPT_PATH+"get_vm_use.sh mem " + list.ip)
+        # mem_use = stdout.readlines()
+        # stdin, stdout, stderr = ssh.exec_command(config.SCRIPT_PATH+"get_vm_use.sh disk " + list.ip)
+        # disk_use = stdout.readlines()
+        #stdin, stdout, stderr = ssh.exec_command(config.SCRIPT_PATH+"get_vm_use.sh cpu " + list.ip)
+        #net_use = stdout.readlines()
+        #ssh.close()
+
+        s = pxssh.pxssh()
+        s.login(HOST, USER)
+        s.sendline(config.SCRIPT_PATH+"get_vm_use.sh cpu " + list.ip)
+        s.prompt()
+        cpu_use = (str(s.before)).split("\r\n")[3]
+        s.sendline(config.SCRIPT_PATH+"get_vm_use.sh mem " + list.ip)
+        s.prompt()
+        mem_use = (str(s.before)).split("\r\n")[2]
+        s.sendline(config.SCRIPT_PATH+"get_vm_use.sh disk " + list.ip)
+        s.prompt()
+        disk_use = (str(s.before)).split("\r\n")[2]
+        s.sendline(config.SCRIPT_PATH+"get_vm_use.sh net " + list.ip)
+        s.prompt()
+        net_use = (str(s.before)).split("\r\n")[2]
+
+        s.logout()
+
+        vm_monitor = GnMonitorHist(id=list.id, type="kvm", cpu_usage=cpu_use, mem_usage=mem_use, disk_usage=disk_use, net_usage=net_use)
         db_session.add(vm_monitor)
         db_session.commit()
 
@@ -207,4 +229,8 @@ def list_user_sshkey(team_code):
 
 def getsshkey_info(id):
     return db_session.query(GnSshKeys).filter(GnSshKeys.id == id).one()
+
+def vm_detail_info(id):
+    db_session.query(GnVmMachines).filter(GnVmMachines.id == id).all()
+
 
