@@ -9,7 +9,8 @@ import datetime
 from flask import request, jsonify
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines
+from db.models import GnVmMachines, GnVmImages
+
 from util.config import config
 from util.hash import random_string
 
@@ -24,13 +25,13 @@ def manual():
 
 # VM 생성 및 실행
 def hvm_create():
-
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
     # 새 머신을 만든다. (New-VM)
     # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     SWITCHNAME = "out"
-    new_vm = ps.new_vm(Name=request.form['name'], MemoryStartupBytes=request.form['memory'], Path="C:\images", SwitchName=SWITCHNAME)
+    new_vm = ps.new_vm(Name=request.form['name'], MemoryStartupBytes=request.form['memory'], Path="C:\images",
+                       SwitchName=SWITCHNAME)
 
     # 머신이 생성되었는지 확인한다. (New-VM 리턴값 체크)
     if new_vm is not None:
@@ -46,9 +47,12 @@ def hvm_create():
         # VM을 시작한다.
         start_vm = ps.start_vm(new_vm['VMId'])
         # 새로 생성된 가상머신 데이터를 DB에 저장한다.
-        vm = GnVmMachines(random_string(config.SALT, 8), request.form['name'], '', 'hyperv', start_vm['VMId'], request.form['name'],
-                          '1', "192.168.0.131", request.form['cpu'], request.form['memory'], request.form['hdd'], request.form['os']
-                          , request.form['os_ver'], request.form['os_subver'], request.form['os_bit'], "", request.form['author_id'], datetime.datetime.now(),
+        vm = GnVmMachines(random_string(config.SALT, 8), request.form['name'], '', 'hyperv', start_vm['VMId'],
+                          request.form['name'],
+                          '1', "192.168.0.131", request.form['cpu'], request.form['memory'], request.form['hdd'],
+                          request.form['os']
+                          , request.form['os_ver'], request.form['os_subver'], request.form['os_bit'], "",
+                          request.form['author_id'], datetime.datetime.now(),
                           datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
         db_session.add(vm)
         db_session.commit()
@@ -58,17 +62,30 @@ def hvm_create():
 
 
 # todo REST. VM 스냅샷 생성
+# todo hvm_snapshot 1. VM 정지 (Stop-VM)
+# todo hvm_snapshot 2. 스냅샷을 생성한다.
+# todo hvm_snapshot 3. 생성된 스냅샷 이미지 이름 변경 (2번에서 이름 변경이 안 될 경우)
+# todo hvm_snapshot 4. 생성된 스냅샷 이미지 이름 를 지정된 폴더에 옮긴다. (테스트 때에는 C:\images 로 한다.)
+# todo hvm_snapshot 5. 생성된 스냅샷의 정보를 데이터베이스에 저장한다.
 def hvm_snapshot():
+    ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
+    # 지금은 internal_id 받아야한다
+    org_id = request.json['org_id'] #원본 이미지 아이디
+    print org_id
+    name = request.json['name']
+    stop_vm = ps.stop_vm(org_id) #원본 이미지 인스턴스 종료
+    if stop_vm['State'] is 3:
+        create_snap = ps.create_snap(org_id)
+        print create_snap
+        return jsonify(status=True, message="성공")
+
+'''
     org_id = request.form['org_id']
     name = request.form['name']
     type = request.form['type']
     author_id = request.form['author_id']
-    # todo hvm_snapshot 1. VM 정지 (Stop-VM)
-    # todo hvm_snapshot 2. 스냅샷을 생성한다.
-    # todo hvm_snapshot 3. 생성된 스냅샷 이미지 이름 변경 (2번에서 이름 변경이 안 될 경우)
-    # todo hvm_snapshot 4. 생성된 스냅샷 이미지 이름 를 지정된 폴더에 옮긴다. (테스트 때에는 C:\images 로 한다.)
-    # todo hvm_snapshot 5. 생성된 스냅샷의 정보를 데이터베이스에 저장한다.
-    return jsonify(status=False, message="미구현")
+'''
+
 
 
 # todo REST. VM 상태변경
@@ -98,29 +115,36 @@ def hvm_snapshot():
 # FastSaving 32780 - Corresponds to EnabledStateFastSuspending. State transition from Running to FastSaved.
 # -------------------------------------------------------
 def hvm_state(id):
-
-    type = request.args.get('type')
+    type = request.json['type']
+    # type = request.args.get('type')
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
-    vm = GnVmMachines.query.filter_by().first
+    #    vm = GnVmMachines.query.filter_by().first
 
     if type == "start":
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start_vm = ps.start_vm(id)
-        print id
+        # print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
         if start_vm['State'] is 2:
-            return jsonify(status=True, message="가상머신이 정상적으로 실행되었습니다.")
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id']).update(
+                {"status": "Running"})
+            db_session.commit()
+            # print start_vm['Id']
+            return jsonify(status=True, message="start success")
         elif start_vm['State'] is not 2:
-            return jsonify(status=False, message="가상머신이 실행되지 않았습니다.")
+            return jsonify(status=False, message="fail")
         else:
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
     elif type == "stop":
-        #stop 1. 가상머신을 정지한다. (Stop-VM)
+        # stop 1. 가상머신을 정지한다. (Stop-VM)
         stop = ps.stop_vm(id)
         # stop 2. 가상머신 상태를 체크한다. (Get-VM)
         if stop['State'] is 3:
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']).update(
+                {"status": "Stop"})
+            db_session.commit()
             return jsonify(status=True, message="가상머신이 종료되었습니다.")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
@@ -133,19 +157,25 @@ def hvm_state(id):
             return jsonify(status=True, message="가상머신이 정상적으로 재시작되었습니다.")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
-        # resume 2. 가상머신 상태를 체크한다. 다만 (Get-VM)
+            # resume 2. 가상머신 상태를 체크한다. 다만 (Get-VM)
     elif type == "shutdown":
         # todo shutdown 1.
         return jsonify(status=False, message="미구현")
     elif type == "suspend":
         suspend = ps.suspend_vm(id)
         if suspend['State'] is 9:
-            return  jsonify(status=True, message="가상머신이 일시정지되었습니다.")
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id']).update(
+                {"status": "Suspend"})
+            db_session.commit()
+            return jsonify(status=True, message="가상머신이 일시정지되었습니다.")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
     elif type == "resume":
         resume = ps.resume_vm(id)
         if resume['State'] is 2:
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == resume['Id']).update(
+                {"status": "Running"})
+            db_session.commit()
             return jsonify(status=True, message="가상머신이 재시작되었습니다.")
         else:
             return jsonify(status=True, message="정상적인 결과값이 아닙니다.")
@@ -185,10 +215,30 @@ def hvm_vm_list():
 # todo REST. VM 이미지 생성 및 업로드
 # 업로드 기능은 나중에 구현 예정, 이미지 정보만 업데이트할 것
 def hvm_new_image():
-    return jsonify(status=False, message="미구현")
+
+    name = request.json['name']
+    filename = request.json['filename']
+    icon = request.json['icon']
+    os = request.json['os']
+    os_ver = request.json['os_ver']
+    os_subver = request.json['os_subver']
+    subtype = request.json['subtype']
+    type = request.json['type']
+    author_id = request.json['author_id']
+    os_bit = request.json['os_bit']
+    team_code = request.json['team_code']
+
+    insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
+                                    icon, os, os_ver, os_subver, os_bit, team_code,
+                                    author_id, datetime.datetime.now())
+    db_session.add(insert_image_query)
+    db_session.commit()
+    # todo 1. 한글입력시 글자깨짐현상 해결해야함
+    # todo 2. 정상 입력되었는지 확인후에 메시지 출력
+    return jsonify(status=True, message="success")
 
 
-# todo REST. VM 이미지 수정
+# tdo REST. VM 이미지 수정
 def hvm_modify_image():
     return jsonify(status=False, message="미구현")
 

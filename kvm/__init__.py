@@ -80,7 +80,7 @@ def delete_vm_image(id):
     return jsonify(status=True, message="success")
 
 
-@app.route('/user/sshkey', methods=['POST'])
+@app.route('/account/keys', methods=['POST'])
 def add_sshKey():
     team_code = 1
     name = request.json['name']
@@ -88,14 +88,14 @@ def add_sshKey():
     return jsonify(status=True, message="success")
 
 
-@app.route('/user/sshkey/<id>', methods=['DELETE'])
+@app.route('/account/keys/<id>', methods=['DELETE'])
 def delete_sshKey(id):
     team_code = 1
     delete_user_sshkey(id)
     return jsonify(status=True, message="success")
 
 
-@app.route('/user/sshkey', methods=['GET'])
+@app.route('/account/keys', methods=['GET'])
 def list_sshKey():
     team_code = 1
     return jsonify(status=True, message="success", list=list_user_sshkey(team_code))

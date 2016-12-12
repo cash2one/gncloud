@@ -153,6 +153,18 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
+    # 스냅샷 생성
+    def create_snap(self, vm_Id):
+        script = "Invoke-Command -ComputerName GNCLOUDWIN -ScriptBlock {"
+        script += "$vm = Get-VM -Id "
+        script += vm_Id + ";"
+        script += " powershell.exe -file C:\images\make_snap.ps1 "
+        script += '$vm.Name '
+        script += vm_Id+"_clone"
+        script += ' -passthru ; Get-ChildItem C:\images\Vhdx\*.vhdx | ConvertTo-Json -Compress }'
+        print script
+        return self.send(script)
+
     # agent 모듈에 파워쉘 스크립트를 전달하여 실행하고 결과를 받아온다.
     def send(self, script):
         address = self.address

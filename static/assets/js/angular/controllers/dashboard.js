@@ -9,34 +9,95 @@ angular
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
 
-        config = {
-            type: 'pie',
-            data: {
-                datasets: [{
-                    data: [225, 50, 100, 40],
-                    backgroundColor: [
-                        "rgb(233, 30, 99)",
-                        "rgb(255, 193, 7)",
-                        "rgb(0, 188, 212)",
-                        "rgb(139, 195, 74)"
-                    ],
-                }],
-                labels: [
-                    "Pink",
-                    "Amber",
-                    "Cyan",
-                    "Light Green"
-                ]
-            },
-            options: {
-                responsive: true,
-                legend: true
+        $http({
+            method: 'GET',
+            url: '/api/manager/useinfo',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data.status == true) {
+                    new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "quota"));
+                    new Chart(document.getElementById("memory_chart").getContext("2d"), $scope.getConfig(data.list.memory_per, "quota"));
+                    new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "quota"));
+                    new Chart(document.getElementById("status_chart").getContext("2d"), $scope.getConfig(data.list.vm_count, "status"));
+                    new Chart(document.getElementById("type_chart").getContext("2d"), $scope.getConfig(data.list.vm_type, "type"));
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
+
+        $scope.getConfig = function (data, type) {
+            var config = null;
+            if (type == 'quota') {
+                config = {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                "rgb(233, 30, 99)",
+                                "rgb(255, 193, 7)"
+                            ],
+                        }],
+                        labels: [
+                            "사용중",
+                            "미사"
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: true
+                    }
+                }
+            }else if (type == 'status') {
+                config = {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                "rgb(233, 30, 99)",
+                                "rgb(255, 193, 7)"
+                            ],
+                        }],
+                        labels: [
+                            "실행",
+                            "정지"
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: true
+                    }
+                }
+            }else if (type == 'type') {
+                config = {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                "rgb(233, 30, 99)",
+                                "rgb(255, 193, 7)"
+                            ],
+                        }],
+                        labels: [
+                            "kvm",
+                            "hiperv"
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: true
+                    }
+                }
             }
+            return config;
         }
 
-        new Chart(document.getElementById("cpu_chart").getContext("2d"), config);
-        new Chart(document.getElementById("memory_chart").getContext("2d"), config);
-        new Chart(document.getElementById("disk_chart").getContext("2d"), config);
-        new Chart(document.getElementById("kvm_chart").getContext("2d"), config);
-        new Chart(document.getElementById("hiperv_chart").getContext("2d"), config);
+
     });

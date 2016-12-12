@@ -12,7 +12,7 @@ angular
         $scope.getkeys = function() {
             $http({
                 method: 'GET',
-                url: '/api/kvm/user/sshkey',
+                url: '/api/kvm/account/keys',
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
@@ -31,7 +31,7 @@ angular
         $scope.update = function (id, index) {
             $http({
                 method: 'DELETE',
-                url: '/api/kvm/user/sshkey/' + id,
+                url: '/api/kvm/account/keys/' + id,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
@@ -46,7 +46,7 @@ angular
         $scope.save = function () {
             $http({
                 method: 'POST',
-                url: '/api/kvm/user/sshkey',
+                url: '/api/kvm/account/keys',
                 data: $scope.data,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
@@ -65,7 +65,7 @@ angular
         $scope.download = function (id) {
             $http({
                 method: 'GET',
-                url: "/api/kvm/user/sshkey/download/"+id,
+                url: "/api/kvm/account/keys/download/"+id,
                 data: $scope.data,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
