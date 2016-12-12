@@ -117,9 +117,9 @@ def hvm_state(id):
         else:
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
     elif type == "stop":
-        #stop 1. 가상머신을 정지한다. (Stop-VM)
+        # 1. 가상머신을 정지한다. (Stop-VM)
         stop = ps.stop_vm(id)
-        # stop 2. 가상머신 상태를 체크한다. (Get-VM)
+        # 2. 가상머신 상태를 체크한다. (Get-VM)
         if stop['State'] is 3:
             return jsonify(status=True, message="가상머신이 종료되었습니다.")
         else:
