@@ -3,6 +3,7 @@ __author__ = 'NaDa'
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+
 from Manager.util.config import config
 
 engine = create_engine(config.DB_URL, convert_unicode=True, pool_recycle=500, pool_size=5, max_overflow=20, echo=False,
@@ -19,5 +20,4 @@ def init_db():
     # import all modules here that might define models so that
     # they will be registered properly on the metadata.  Otherwise
     # you will have to import them first before calling init_db()
-    import Manager.db.models
     Base.metadata.create_all(engine)

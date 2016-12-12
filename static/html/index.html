@@ -35,19 +35,25 @@
     <!-- 공통 JS 파일 시작 -->
     <script src="/js/vendor/angular/angular.min.js"></script>
     <script src="/js/vendor/angular/angular-route.min.js"></script>
+    <script src="/js/checklist-model.js"></script>
+    <script src="/chart/js/Chart.bundle.js"></script>
 
     <!-- 서비스 컨트롤러 모음 -->
     <script type="text/javascript" src="/js/angular/app.js"></script>
     <script type="text/javascript" src="/js/angular/config/service.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/main.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestList.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/guestView.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestCreate.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestSnapList.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestRunList.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestLogin.js"></script>
-    <script type="text/javascript" src="/js/angular/controllers/guestSecurity.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestKeyList.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestSnapCreate.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/dashboard.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/guestMeList.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/guestSignUp.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/guestRepair.js"></script>
 </head>
 
 <body landing-scrollspy>
@@ -66,9 +72,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li id="in"><a href="#/guestLogin">login</a></li>
+                <li id="in"><a href="#/account">login</a></li>
+                <li><a href="#/account/users">SignUp</a></li>
                 <li id="out"><a href=javascript:logout();>logout</a></li>
-                <li id="dash"><a href="#">Dashboard</a></li>
+                <li id="dash"><a href="#/guestCreateTeam">Dashboard</a></li>
                 <li id="setting"><a href="#">Settings</a></li>
                 <li id="profile"><a href="#">Profile</a></li>
                 <li id="help"><a href="#">Help</a></li>
@@ -88,11 +95,13 @@
                 <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
                 <li id="report"><a href="#/main">Reports</a></li>
                 <li id="inst"><a href="#/guestList">인스턴스</a></li>
+                <li id="inst"><a href="#/guestView">인스턴스 상세</a></li>
                 <li id="make"><a href="#/guestCreate">인스턴스 만들기</a></li>
                 <li id="snap"><a href="#/guestSnapList">스냅샷</a></li>
                 <li><a href="#/guestSnapCreate">스냅샷 만들기</a></li>
-                <li><a href="#/guestSecurity">ssh_key</a></li>
                 <li><a href="#/guestKeyList">ssh_key_list</a></li>
+                <li><a href="#/dashboard">dashboard</a></li>
+                <li><a href="#/account/users/list">개인설정</a></li>
                 <p></p>
             </ul>
         </div>
@@ -153,5 +162,6 @@
                 })
             }
         </script>
+</div>
 </body>
 </html>

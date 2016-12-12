@@ -34,8 +34,20 @@
             <option value=50>50G</option>
         </select>
     </div>
-    <input type="hidden" id="base" name="base" ng-model="data.base" class="form-control">
-</div><br/>
-    <input type="submit" id="submit" value="생성" />
+</div>
+    <br/>
+    <div>
+        ssh key<br/>
+        <label ng-repeat="item in sshkey_list">
+            <!--<input type="checkbox" ng-model="sshkeys.id" ng-true-value="'{{list.id}}'" ng-false-value="''">  -->
+            <input type="checkbox" checkbox-group/>
+
+            {{ item.name }}
+        </label>
+    </div>
+<br/>
+<input type="submit" id="submit" value="생성" />
+
+
 </form>
 </div>

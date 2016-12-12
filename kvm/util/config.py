@@ -10,6 +10,10 @@ class Config:
 
     LIBVIRT_REMOTE_URL = ""
     DB_URL = ""
+    SCRIPT_PATH = ""
+    SSHKEY_PATH = ""
+    LIVERT_IMAGE_PATH = ""
+    LIVERT_IMAGE_BACKUP_PATH = ""
 
     def __init__(self, path="../conf/config.conf"):
         config_section = "DEFAULT"
@@ -28,6 +32,10 @@ class Config:
         result = parser.read(config_file)
         self.LIBVIRT_REMOTE_URL = parser.get(config_section, "LIBVIRT_REMOTE_URL")
         self.DB_URL = parser.get(config_section, "DB_URL")
+        self.SCRIPT_PATH = parser.get(config_section, "SCRIPT_PATH")
+        self.SSHKEY_PATH = parser.get(config_section, "SSHKEY_PATH")
+        self.LIVERT_IMAGE_PATH = parser.get(config_section, "LIVERT_IMAGE_PATH")
+        self.LIVERT_IMAGE_BACKUP_PATH = parser.get(config_section, "LIVERT_IMAGE_BACKUP_PATH")
 
 # 전역 공통사용 객체이다.
 local_custom_file = os.environ.get('CONFIG_FILE_PATH')

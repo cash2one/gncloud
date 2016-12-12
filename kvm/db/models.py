@@ -131,46 +131,53 @@ class GnVmImages(Base):
             , 'team_code', 'author_id', 'create_time']
 
 
-class GnVmMonitor(Base):
-    __tablename__ = "GN_VM_MONITOR"
-    id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String(20), primary_key=False, nullable=False)
-    cpu_use = Column(Numeric, primary_key=False, nullable=False)
-    mem_use = Column(Numeric, primary_key=False, nullable=False)
+class GnMonitorHist(Base):
+    __tablename__ = "GN_MONITOR_HIST"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cur_time = Column(DateTime, default=datetime.datetime.utcnow)
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
 
-    def __init__(self, name=None, cpu_use=None, mem_use=None):
-        self.name = name
-        self.cpu_use = cpu_use
-        self.mem_use = mem_use
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
 
     def __repr__(self):
-        return '<ID %r / Name %r / Cpu_use %r / Mem_use %r>' \
-               % (self.id, self.name, self.cpu_use, self.mem_use)
+        return '<ID %r / Type %r / Cpu_usage %r / Mem_usage %r / Disk_usage %r / Net_usage %r>' \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
 
     def __json__(self):
-        return ['id', 'name', 'cpu_use', 'mem_use']
+        return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage']
 
 
 class GnSshKeys(Base):
     __tablename__ = "GN_SSH_KEYS"
     id = Column(Integer, primary_key=True, nullable=False)
-    team_name = Column(String(50), primary_key=False, nullable=False)
-    key_name = Column(String(100), primary_key=False, nullable=False)
-    key_fingerprint = Column(String(50), primary_key=False, nullable=False)
-    key_content = Column(Text, primary_key=False, nullable=False)
+    team_code = Column(String(50), primary_key=False, nullable=False)
+    name = Column(String(100), primary_key=False, nullable=False)
+    fingerprint = Column(String(50), primary_key=False, nullable=False)
+    path = Column(String(100), primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.utcnow)
 
-    def __init__(self, team_name=None, key_name=None, key_fingerprint=None, key_content=None):
-        self.team_name = team_name
-        self.key_name = key_name
-        self.key_fingerprint = key_fingerprint
-        self.key_content = key_content
+    def __init__(self, team_code=None, name=None, fingerprint=None, path=None):
+        self.team_code = team_code
+        self.name = name
+        self.fingerprint = fingerprint
+        self.path = path
 
     def __repr__(self):
-        return '<Team_name %r / Team_name %r / Key_name %r / Key_fingerprint %r / Key_content %r>' \
-               % (self.id, self.team_name, self.key_name, self.key_fingerprint, self.key_content)
+        return '<Id %r /Team_code %r / name %r / fingerprint %r / path %r >' \
+               % (self.id, self.team_code, self.name, self.fingerprint, self.path)
 
     def __json__(self):
-        return ['id', 'team_name', 'key_name', 'key_fingerprint', 'key_content']
+        return ['id', 'name', 'fingerprint', 'create_time']
 
 class GnId(Base):
     __tablename__ = "GN_ID"

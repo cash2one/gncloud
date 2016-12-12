@@ -9,26 +9,29 @@ angular
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
 
-        $http({
-            method: 'GET',
-            url: '/api/kvm/user/sshkey',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.data_list = data.list;
-                }
-                else {
-                }
+        $scope.getkeys = function() {
+            $http({
+                method: 'GET',
+                url: '/api/kvm/account/keys',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.data_list = data.list;
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
 
         $scope.update = function (id, index) {
             $http({
                 method: 'DELETE',
-                url: '/api/kvm/user/sshkey/' + id,
+                url: '/api/kvm/account/keys/' + id,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
@@ -38,7 +41,50 @@ angular
                 .error(function (data, status, headers, config) {
                     console.log(status);
                 });
-
-
         }
+
+        $scope.save = function () {
+            $http({
+                method: 'POST',
+                url: '/api/kvm/account/keys',
+                data: $scope.data,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                }
+            })
+                .success(function (data) {
+                    if (data.status == true) {
+                        alert("SSH key 추가되었습니다");
+                        $scope.getkeys();
+                    } else {
+                        alert(data.message)
+                    }
+                });
+        };
+
+        $scope.download = function (id) {
+            $http({
+                method: 'GET',
+                url: "/api/kvm/account/keys/download/"+id,
+                data: $scope.data,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                }
+            })
+                .success(function (data, status, headers, config) {
+                    var header = headers(); // We set Content-disposition with filename in Controller.
+                    var fileName = header['content-disposition'].split("=")[1].replace(/\"/gi,'');
+                    var blob = new Blob([data],
+                        {type : 'application/octet-stream;charset=UTF-8'});
+                    var objectUrl = (window.URL || window.webkitURL).createObjectURL(blob);
+                    var link = angular.element('<a/>');
+                    link.attr({
+                        href : objectUrl,
+                        download : "sshkey"
+                    })[0].click();
+                });
+        };
+
+        $scope.getkeys();
+
     });
