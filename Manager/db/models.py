@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 import datetime
 
-from manager.db.database import Base
+from Manager.db.database import Base
 
 
 class GnVmMachines(Base):

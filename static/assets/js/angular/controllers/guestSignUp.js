@@ -11,7 +11,7 @@ angular
         $scope.submit = function() {
             $http({
                 method  : 'POST',
-                url: '/manager/vm/guestSignUp',
+                url: '/Manager/vm/account/users',
                 data: $scope.data,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'

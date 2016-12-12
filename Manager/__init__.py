@@ -3,8 +3,8 @@
 from flask import Flask, jsonify, request, session, escape
 from datetime import timedelta
 
-from manager.db.database import db_session
-from manager.util.json_encoder import AlchemyEncoder
+from Manager.db.database import db_session
+from Manager.util.json_encoder import AlchemyEncoder
 from service.service import test_list, login_list, me_list, teamcheck_list, sign_up, repair
 
 app = Flask(__name__)
@@ -24,7 +24,7 @@ def run_list():
     return jsonify(status=True, message="success", list=test_list())
 
 
-@app.route('/vm/guestLogin', methods=['POST'])
+@app.route('/vm/account', methods=['POST'])
 def login():
     user_id = request.json['user_id']
     password = request.json['password']
@@ -59,13 +59,13 @@ def my_list():
     else:
         pass
 
-@app.route('/vm/guestTeam', methods=['GET'])
+@app.route('/vm/account/users', methods=['GET'])
 def teamcheck():
     if session.get('userId',None):
         teamcode=session['teamCode']
         return jsonify(status=True, message="success", list=teamcheck_list(teamcode))
 
-@app.route('/vm/guestSignUp', methods=['POST'])
+@app.route('/vm/account/users', methods=['POST'])
 def signup_list():
     user_name = request.json['user_name']
     user_id = request.json['user_id']
@@ -76,23 +76,37 @@ def signup_list():
     else:
         return jsonify(status = False, message = "false")
 
-@app.route('/vm/guestRepair', methods=['POST'])
+@app.route('/vm/account/users/list', methods=['PUT'])
 def repair_list():
-    password = request.json['password']
-    password_new = request.json['password_new']
-    password_re = request.json['password_re']
-    tel = request.json['tel']
-    email = request.json['email']
+    password=""
+    password_new=""
+    password_ret=""
+    tel=""
+    email=""
+    if request.json == None:
+        return jsonify(status=False, message = 'False')
+    if 'password' in request.json:
+        password = request.json['password']
+    if 'password_new' in request.json:
+        password_new = request.json['password_new']
+    if 'password_ret' in request.json:
+        password_ret = request.json['password_ret']
+    if 'tel' in request.json:
+        tel = request.json['tel']
+    if 'email' in request.json:
+        email = request.json['email']
     if session.get('userId', None):
         user_id=session['userId']
         user_name =session['userName']
         team_code = session['teamCode']
-        if(repair(user_id,user_name,team_code ,password, password_new, password_re, tel, email) != None):
-            return jsonify(status=True, message = 'success')
-        elif(repair(password, password_new, password_re, tel, email) == 1):
-            return jsonify (status=False, message = '비밀번호가 틀렸습니다.')
+        test = repair(user_id, password, password_new,password_ret, tel, email)
+        if test == 2:
+            return jsonify(status=2, message='success')
+        elif test == 1:
+            return jsonify (status=1, message = '비밀번호가 틀렸습니다.')
         else:
             return jsonify(status=False, message = 'False')
+
 
 
 

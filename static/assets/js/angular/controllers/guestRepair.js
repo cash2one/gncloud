@@ -9,7 +9,7 @@ angular
         }).parent().addClass('active');
         $http({
             method: 'GET',
-            url: '/manager/vm/guestMeList',
+            url: '/Manager/vm/guestMeList',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -26,15 +26,15 @@ angular
             });
         $scope.submit = function() {
             $http({
-                method  : 'POST',
-                url: 'manager/vm/guestRepair',
+                method  : 'PUT',
+                url: '/Manager/vm/account/users/list',
                 data: $scope.data,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
             })
                 .success(function(data) {
-                    if (data.status == "True") {
+                    if (data.status == 2) {
                         alert("success");
 
                     }

@@ -14,7 +14,7 @@ angular
         $scope.submit = function() {
             $http({
                 method  : 'POST',
-                url: '/manager/vm/guestLogin',
+                url: '/Manager/vm/account',
                 data: $scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
@@ -22,6 +22,7 @@ angular
                         if (data.status == true) {
                             $location.url('/#')
                             alert(data.message)
+                            window.location.reload();
                         } else {
                             alert(data.message)
                         }

@@ -13,7 +13,7 @@ angular
 
         $http({
             method: 'GET',
-            url: '/manager/vm/guestMeList',
+            url: '/Manager/vm/guestMeList',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -31,7 +31,7 @@ angular
         $scope.team_list = {};
         $http({
             method: 'GET',
-            url: '/manager/vm/guestTeam',
+            url: '/Manager/vm/account/users',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -46,32 +46,5 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
-        //
-        //$scope.update = function (id, action, index) {
-        //    var url = '/manager/vm/guestMeList/' + id;
-        //    var method = "PUT";
-        //    if (action.type == "repair") {
-        //        url = '/manager/vm/guestMeList' + id;
-        //        method = 'PUT';
-        //    }
-        //
-        //    $http({
-        //        method: method,
-        //        url: url,
-        //        data: action,
-        //        headers: {'Content-Type': 'application/json; charset=utf-8'}
-        //    })
-        //        .success(function(data, status, headers, config) {
-        //            if (data.status == true) {
-        //                alert(name + " guest의 상태가 변경되었습니다");
-        //                $scope.guest_list.splice(index, 1);
-        //            } else {
-        //                alert(data.message);
-        //            }
-        //        })
-        //        .error(function(data, status, headers, config) {
-        //            console.log(status);
-        //        });
-        //
-        //}
+
     });
