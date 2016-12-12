@@ -3,6 +3,8 @@
 Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 제공)를 실행하는 Rest 함수들을 정의한다.
 각 Rest 함수들의 이름은 hvm_(Action을 대표하는 영단어 소문자)로 표기한다.
 """
+import json
+
 __author__ = 'jhjeon'
 
 import datetime
@@ -76,8 +78,34 @@ def hvm_snapshot():
     stop_vm = ps.stop_vm(org_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
         create_snap = ps.create_snap(org_id)
-        print create_snap
-        return jsonify(status=True, message="성공")
+        print create_snap['BaseName']
+        if create_snap['Name'] is not None:
+            base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id).first()
+            print create_snap['Name']
+
+            name = create_snap['BaseName']
+            filename = create_snap['Name']
+            icon = 'Windows_icon'
+            os = base_image_info.os
+            os_ver = base_image_info.os_ver
+            os_subver = base_image_info.os_sub_ver
+            subtype = 'snap'
+            type = 'hyperv'
+            author_id = request.json['author_id']
+            os_bit = base_image_info.os_bit
+            team_code = request.json['team_code']
+
+            insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
+                                            icon, os, os_ver, os_subver, os_bit, team_code,
+                                            author_id, datetime.datetime.now())
+            db_session.add(insert_image_query)
+            db_session.commit()
+
+            return jsonify(status=True, message="성공")
+        else:
+            return jsonify(status=False, message="실패")
+    else:
+        return jsonify(status=False, message="실패")
 
 '''
     org_id = request.form['org_id']
@@ -125,6 +153,7 @@ def hvm_state(id):
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start_vm = ps.start_vm(id)
+        print start_vm
         # print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
         if start_vm['State'] is 2:
@@ -239,13 +268,28 @@ def hvm_new_image():
 
 
 # tdo REST. VM 이미지 수정
-def hvm_modify_image():
+def hvm_modify_image(id):
+    #null 값이 들어오면 수정 하지 않는 기능으로 구현.....
     return jsonify(status=False, message="미구현")
 
 
 # todo REST. VM 이미지 삭제
-def hvm_delete_image():
-    return jsonify(status=False, message="미구현")
+def hvm_delete_image(id):
+    ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
+    vhd_Name = db_session.query(GnVmImages).filter(GnVmImages.id == id).first()
+    image_delete = ps.delete_vm(vhd_Name.name)
+    json_obj = json.dumps(image_delete)
+    json_size = len(json_obj)
+    if json_size <= 2: #size는 {} 포함인것 같습니다
+        delete_vm = db_session.query(GnVmImages).filter(GnVmImages.id == id).delete()
+        db_session.commit()
+        if delete_vm >=1:
+            print '성공'
+        else:
+            print '실패'
+        return jsonify(status=True, message="이미지 삭제")
+    else:
+        return jsonify(status=False, message="실패")
 
 
 # todo REST. VM 이미지 리스트
