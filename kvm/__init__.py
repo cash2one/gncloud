@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, jsonify, request, make_response
-from datetime import timedelta
-from gevent.wsgi import WSGIServer
-
+import atexit
+import logging
+from flask import Flask, send_file, jsonify, request, make_response
 from db.database import db_session
 from service.service import server_create, server_list, server_change_status, server_monitor \
     , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
     , server_image_delete, getsshkey_info
+from datetime import timedelta
 from kvm.util.json_encoder import AlchemyEncoder
+from apscheduler.scheduler import Scheduler
+from gevent.wsgi import WSGIServer
+from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
+
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -23,10 +27,6 @@ def job_function():
 ### cron job end ###
 
 #### rest start ####
-
-@app.route('/vm/machines', methods=['GET'])
-def list():
-    return jsonify(status=True, message="success", list=server_list())
 
 
 @app.route('/vm/machine', methods=['POST'])
@@ -95,7 +95,7 @@ def delete_sshKey(id):
 @app.route('/account/keys', methods=['GET'])
 def list_sshKey():
     team_code = 1
-    return jsonify(status=True, message="success", list=list_user_sshkey(team_code))
+    return jsonify(status=True, message="success", list=list_user_sshkey(team_code, db_session))
 
 
 @app.route('/user/sshkey/download/<id>', methods=['GET'])

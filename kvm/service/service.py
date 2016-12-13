@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'yhk'
 
-import subprocess
-
-import datetime
-from pexpect import pxssh
-
-from kvm.db.models import GnVmMachines, GnVmImages, GnMonitorHist, GnSshKeys, GnId
+from kvm.db.models import GnVmMachines, GnVmImages, GnMonitorHist, GnSshKeys, GnId, GnHostMachines, GnMonitor
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
 from kvm.util.hash import random_string
@@ -18,25 +13,21 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
     try:
         # host 선택 룰
         # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
-        # host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "kvm").all()
-        # for host_info in host_list:
-        #     use_sum_info = db_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
-        #                                     func.sum(GnVmMachines.memory).label("sum_mem"),
-        #                                     func.sum(GnVmMachines.disk).label("sum_disk")
-        #                                     ).filter(GnVmMachines.id == host_info.id)\
-        #                                      .group_by(GnVmMachines.host_id)\
-        #                                      .one_or_none()
-        #     rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
-        #     rest_mem = host_info.max_mem - use_sum_info.sum_mem
-        #     rest_disk = host_info.max_disk - use_sum_info.sum_disk
-        #
-        #     if rest_cpu >= cpu and rest_mem >= memory and rest_disk >= disk:
-        #         host_ip = host_info.ip
-        #         host_id = host_info.id
-        #         break
+        host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "kvm").all()
+        for host_info in host_list:
+            use_sum_info = db_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
+                                            func.sum(GnVmMachines.memory).label("sum_mem"),
+                                            func.sum(GnVmMachines.disk).label("sum_disk")
+                                            ).filter(GnVmMachines.host_id == host_info.id).one_or_none()
+            rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
+            rest_mem = host_info.max_mem - use_sum_info.sum_mem
+            rest_disk = host_info.max_disk - use_sum_info.sum_disk
 
-        host_ip = "192.168.0.27"
-        host_id = "5"
+            if rest_cpu >= int(cpu) and rest_mem >= int(memory) and rest_disk >= int(disk):
+                host_ip = host_info.ip
+                host_id = host_info.id
+                break
+
 
         # base image 조회
         image_info = db_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
@@ -53,12 +44,13 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             setStaticIpAddress(ip, host_ip)
 
         # 기존 저장된 ssh key 등록
-        sshkey_list = GnSshKeys.query.filter(GnSshKeys.id.in_(sshkeys)).all()
-        for gnSshkey in sshkey_list:
-            s = pxssh.pxssh()
-            s.login(host_ip, USER)
-            s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(gnSshkey.path) + "' " + str(ip))
-            s.logout()
+        if len(sshkeys) > 0:
+            sshkey_list = GnSshKeys.query.filter(GnSshKeys.id.in_(sshkeys)).all()
+            for gnSshkey in sshkey_list:
+                s = pxssh.pxssh()
+                s.login(host_ip, USER)
+                s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(gnSshkey.path) + "' " + str(ip))
+                s.logout()
 
         #db 저장
         #id 생성
@@ -105,27 +97,6 @@ def setStaticIpAddress(ip, HOST):
     except IOError as errmsg:
         pass
 
-
-def server_list():
-    list = GnVmMachines.query.all() #GnVmMachines.query.all();
-    for a in list:
-        tagArr = a.tag.split(',')
-        a.num = tagArr[0] + '+' +str(len(tagArr))
-        dt = a.create_time.strftime('%Y%m%d%H%M%S')
-        dt2 = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        if(int(dt2[:4])-int(dt[:4]) == 0):
-           if(int(dt2[:8])-int(dt[:8]) != 0):
-               a.day1 = str(int(dt2[:8])-int(dt[:8]))+ "일 전"
-           else:
-               if(int(dt2[6:])-int(dt[6:]) != 0):
-                   a.day1 = str((int(dt2[6:])-int(dt[6:]))/ 10000)+ "시간 전"
-               else:
-                   a.day1 = str((int(dt2[4:])-int(dt[4:]))/ 100)+ "분 전"
-        else:
-            a.day1 = str(int(dt2[:4])-int(dt[:4])) +"년 전"
-    return list
-
-
 def server_delete(id):
     guest_info = GnVmMachines.query.filter(GnVmMachines.id == id).one();
 
@@ -136,7 +107,7 @@ def server_delete(id):
     s.close()
 
     # vm 삭제
-    kvm_vm_delete(guest_info.internal_name);
+    kvm_vm_delete(guest_info.internal_name, guest_info.gnHostMachines.ip);
 
     # db 저장
     db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete();
@@ -158,10 +129,7 @@ def server_image_delete(id):
 
 def server_change_status(id, status):
     guest_info = GnVmMachines.query.filter(GnVmMachines.id == id).one();
-    ip = guest_info.gnHostMachines.ip
-    URL = 'qemu+ssh://root@' + ip + '/system?socket=/var/run/libvirt/libvirt-sock'
-    now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    kvm_change_status(guest_info.internal_name, status, now, URL)
+    kvm_change_status(guest_info.internal_name, status, guest_info.gnHostMachines.ip)
 
 
 def server_create_snapshot(id, name, user_id, team_code):
@@ -251,15 +219,12 @@ def delete_user_sshkey(id):
     # s.logout()
 
 
-def list_user_sshkey(team_code):
-    list = db_session.query(GnSshKeys).filter(GnSshKeys.team_code == team_code).all()
-    db_session.commit()
-    return list;
-
 def getsshkey_info(id):
     return db_session.query(GnSshKeys).filter(GnSshKeys.id == id).one()
 
 def vm_detail_info(id):
     db_session.query(GnVmMachines).filter(GnVmMachines.id == id).all()
+
+
 
 

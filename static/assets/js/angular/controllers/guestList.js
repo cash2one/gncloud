@@ -13,7 +13,7 @@ angular
 
         $http({
             method: 'GET',
-            url: '/api/kvm/vm/machines',
+            url: '/api/manager/vm/machines',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
