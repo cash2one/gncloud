@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'yhk'
 
-from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
+from kvm.db.models import GnVmMachines, GnVmImages, GnMonitorHist, GnSshKeys, GnId
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
 import paramiko
@@ -104,8 +104,23 @@ def setStaticIpAddress(ip, HOST):
         pass
 
 
-def server_list(sql_session):
-    list = sql_session.query(GnVmMachines).all();
+def server_list():
+    list = GnVmMachines.query.all() #GnVmMachines.query.all();
+    for a in list:
+        tagArr = a.tag.split(',')
+        a.num = tagArr[0] + '+' +str(len(tagArr))
+        dt = a.create_time.strftime('%Y%m%d%H%M%S')
+        dt2 = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        if(int(dt2[:4])-int(dt[:4]) == 0):
+           if(int(dt2[:8])-int(dt[:8]) != 0):
+               a.day1 = str(int(dt2[:8])-int(dt[:8]))+ "일 전"
+           else:
+               if(int(dt2[6:])-int(dt[6:]) != 0):
+                   a.day1 = str((int(dt2[6:])-int(dt[6:]))/ 10000)+ "시간 전"
+               else:
+                   a.day1 = str((int(dt2[4:])-int(dt[4:]))/ 100)+ "분 전"
+        else:
+            a.day1 = str(int(dt2[:4])-int(dt[:4])) +"년 전"
     return list
 
 
