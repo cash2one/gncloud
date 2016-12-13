@@ -10,7 +10,7 @@ angular
 
         $http({
             method: 'GET',
-            url: '/api/kvm/vm/images/base',
+            url: '/Manager/vm/images/base',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {

@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 __author__ = 'yhk'
 
+import subprocess
+
+import datetime
+from pexpect import pxssh
+
 from kvm.db.models import GnVmMachines, GnVmImages, GnMonitorHist, GnSshKeys, GnId
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
-import paramiko
-import datetime
-import time
-import subprocess
-from pexpect import pxssh
 from kvm.util.hash import random_string
 from kvm.util.config import config
-from sqlalchemy import func
 
 USER = "root"
 
@@ -143,9 +142,9 @@ def server_delete(id):
     db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete();
     db_session.commit()
 
-def server_image_list(type):
-    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
-    return list
+# def server_image_list(type):
+#     list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+#     return list
 
 
 def server_image_delete(id):
