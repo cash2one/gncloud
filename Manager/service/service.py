@@ -4,7 +4,7 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages
 from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
@@ -57,8 +57,11 @@ def repair(user_id, password, password_new, password_re, tel, email):
         test.eamil = email
 
     db_session.commit()
-    return 2 
-    
+    return 2
+
+def server_image_list(type):
+    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+    return list
 
 def getQuotaOfTeam(team_code):
     current_info = db_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),

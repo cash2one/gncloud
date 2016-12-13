@@ -117,6 +117,9 @@ def quota_info():
 def list():
     return jsonify(status=True, message="success", list=server_list(db_session))
 
+@app.route('/vm/images/<sub_type>', methods=['GET'])
+def list_volume(sub_type):
+    return jsonify(status=True, message="success", list=server_image_list(sub_type))
 
 #### rest stop ####
 

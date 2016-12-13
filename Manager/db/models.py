@@ -123,23 +123,6 @@ class GnUser(Base):
     def __json__(self):
         return ['user_id', 'password', 'team_code', 'user_name', 'tel' , 'email', 'gnTeam']
 
-# class GnMonitor(Base):
-#     __tablename__ = 'GN_MONITIOR'
-#     id = Column(Integer, primary_key=True, nullable= False)
-#     cpu_usage = Column(Integer, primary_key=False, nullable=False)
-#     mem_usage = Column(Integer, primary_key=False, nullable=False)
-#
-#     def __init__(self,id = id, cpu_usage =None, mem_usage=None):
-#         self.id = id
-#         self.cpu_usage = cpu_usage
-#         self.mem_usage = mem_usage
-#
-#     def __repr__(self):
-#         return '<ID %r / cpu_usage %r / mem_usage %r>' \
-#                % (self.cpu_usage, self.mem_usage)
-#
-#     def __json__(self):
-#         return  ['id', 'cpu_usage', 'mem_usage']
 
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'
@@ -164,6 +147,53 @@ class GnTeam(Base):
                % (self.team_name, self.team_code, self.author_id, self.cpu_quota, self.mem_quota, self.disk_quota)
 
     def __json__(self):
+        return  ['team_code', 'team_name', 'author_id', 'cpu_quota', 'mem_quota', 'disk_quota']
+
+class GnVmImages(Base):
+    __tablename__ = 'GN_VM_IMAGES'
+    id = Column(String(100), primary_key=True, nullable=False)
+    name = Column(String(50), primary_key=False, nullable=False)
+    filename = Column(String(100), primary_key=False, nullable=False)
+    type = Column(String(10), primary_key=False, nullable=False)
+    sub_type = Column(String(10), primary_key=False, nullable=False)
+    icon = Column(String(100), primary_key=False, nullable=False)
+    os = Column(String(10), primary_key=False, nullable=False)
+    os_ver = Column(String(20), primary_key=False, nullable=False)
+    os_subver = Column(String(20), primary_key=False, nullable=False)
+    os_bit = Column(String(2), primary_key=False, nullable=False)
+    team_code = Column(String(10), primary_key=False, nullable=False)
+    author_id = Column(String(15), primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.utcnow)
+
+
+    def __init__(self, id=None, name=None, filename=None, type=None
+                 , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
+                 , os_bit=None, team_code=None, author_id=None):
+        self.id = id
+        self.name = name
+        self.filename = filename
+        self.type = type
+        self.sub_type = sub_type
+        self.icon = icon
+        self.os = os
+        self.os_ver = os_ver
+        self.os_subver = os_subver
+        self.os_bit = os_bit
+        self.team_code = team_code
+        self.author_id = author_id
+
+
+
+    def __repr__(self):
+        return '<Id %r / Name %r / File_name %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_ver %r / Os_subver %r / Team_code %r /Author_id %r / Create_time %r >' \
+               % (self.id, self.name, self.file_name, self.type, self.sub_type
+                  , self.icon, self.os, self.os_ver, self.os_subver, self.os_bit
+                  , self.team_code, self.author_id, self.create_time)
+
+    def __json__(self):
+        return ['id', 'name', 'filename', 'type', 'sub_type'
+            , 'icon', 'os', 'os_ver', 'os_subver', 'os_bit'
+            , 'team_code', 'author_id', 'create_time']
         return  ['team_code', 'team_name', 'author_id', 'cpu_quota', 'mem_quota', 'disk_quota']
 
 class GnSshKeys(Base):
