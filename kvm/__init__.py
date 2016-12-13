@@ -125,9 +125,9 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 if __name__ == '__main__':
-    cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=5)
-    cron.start()
-    app.run(debug=True)
-    # http_server = WSGIServer(('', 5000), app)
-    # http_server.serve_forever()
+    # cron = Scheduler(daemon=True)
+    # cron.add_interval_job(job_function, seconds=20) #minites=1)
+    # cron.start()
+    # app.run(debug=True)
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()

@@ -11,9 +11,10 @@ from kvm.util.config import config
 from flask import  render_template
 import paramiko
 import datetime
+from pexpect import pxssh
 
 URL = config.LIBVIRT_REMOTE_URL
-HOST = "192.168.0.131"
+HOST = "192.168.0.22"
 USER = "root"
 LOCAL_SSH_KEY_PATH = "/Users/yhk/.ssh/id_rsa"
 
@@ -91,16 +92,18 @@ def get_ip(domainName, mac_address):
     return ip
 
 
-def kvm_create(name, cpu, memory, disk, base_name, base_sub_type):
+def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     try:
         # paramiko
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(HOST, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
+        ssh.connect(host_ip, username=USER, key_filename=LOCAL_SSH_KEY_PATH)
         stdin, stdout, stderr = ssh.exec_command('/var/lib/libvirt/initcloud/sshkey_copy.sh')
         print stdout.readlines()
         ssh.close()
 
+        url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1);
+        conn = libvirt.open(url)
 
         # 스냅샷 기반 유무에 따른 생성 로직 분기
         if base_sub_type == "base":
@@ -110,9 +113,8 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type):
                 , guest_name=name
                 , disk=disk
             )
-            conn = libvirt.open(URL)
-            ptr_POOL = conn.storagePoolLookupByName("default")
 
+            ptr_POOL = conn.storagePoolLookupByName("default")
             defaultVol = ptr_POOL.storageVolLookupByName(base_name)
             ptr_POOL.createXMLFrom(vol, defaultVol, 0)
             ptr_POOL.storageVolLookupByName(name + ".img").resize(gigaToByte(int(disk)))
@@ -122,14 +124,14 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type):
         # vm 생성
         guest = render_template(
             "guest.xml"
-            ,guest_name = name
-            ,current_memory = memory
-            ,vcpu = cpu
+            , guest_name=name
+            , current_memory=memory
+            , vcpu=cpu
         )
         conn.createXML(guest, 0)
-        id = conn.lookupByName(name).UUIDString()
+        uuid = conn.lookupByName(name).UUIDString()
         conn.close()
-        return id
+        return uuid
     except IOError as errmsg:
         print(str(errmsg))
 

@@ -5,6 +5,8 @@ PowerShell 스크립트를 전달할 함수들을 가지고 있는 PowerShell �
 모든 함수명은 소문자로, -는 _로 표현한다
 다른 결과가 나오지만 같은 명령어를 사용하여 함수명이 겹칠 경우, 함수명 뒤에 _(역할)로 추가적으로 함수명을 구분해준다.
 """
+import datetime
+
 __author__ = 'jhjeon'
 
 import json
@@ -130,7 +132,7 @@ class PowerShell(object):
         return self.send(script)
 
 
-   #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
+        #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
     def resume_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Resume-VM -VM $vm "
@@ -155,14 +157,19 @@ class PowerShell(object):
 
     # 스냅샷 생성
     def create_snap(self, vm_Id):
+        #snapshot_id = vm_Id + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        snapshot_id = "_"+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         script = "Invoke-Command -ComputerName GNCLOUDWIN -ScriptBlock {"
         script += "$vm = Get-VM -Id "
         script += vm_Id + ";"
+        script += "$vmn = $vm.Name;"
         script += " powershell.exe -file C:\images\make_snap.ps1 "
         script += '$vm.Name '
-        script += vm_Id+"_clone"
-        script += ' -passthru ; Get-ChildItem C:\images\Vhdx\*.vhdx | ConvertTo-Json -Compress }'
-        print script
+        script += snapshot_id #스냅샷의 아이디는 원본Name + 현재 날짜
+        script += ' -passthru ; Get-ChildItem -Path C:/images/vhdx/$vmn'
+        script += '"'+ snapshot_id
+        script += '.vhdx" | ConvertTo-Json -Compress }'
+        #print script
         return self.send(script)
 
     # agent 모듈에 파워쉘 스크립트를 전달하여 실행하고 결과를 받아온다.
@@ -181,6 +188,15 @@ class PowerShell(object):
         data = {'script': script}
         response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
+
+    #VM 이미지 삭제
+    def delete_vm(self, vhd_Name):
+        #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
+        script = "Invoke-Command -ComputerName GNCLOUDWIN -ScriptBlock {"
+        script += "Move-Item -Path C:/images/vhdx/" + vhd_Name + ".vhdx "
+        script += "-Destination C:/images/backup/" + vhd_Name + ".vhdx | ConvertTo-Json}"
+        print script
+        return self.send(script)
 
     def get_state_string(self, state):
         if state is 1:
