@@ -11,6 +11,7 @@ from datetime import timedelta
 from kvm.util.json_encoder import AlchemyEncoder
 from apscheduler.scheduler import Scheduler
 from gevent.wsgi import WSGIServer
+from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
 
 
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def job_function():
 
 @app.route('/vm/machines', methods=['GET'])
 def list():
-    return jsonify(status=True, message="success", list=server_list())
+    return jsonify(status=True, message="success", list=server_list(db_session))
 
 
 @app.route('/vm/machine', methods=['POST'])
@@ -98,7 +99,7 @@ def delete_sshKey(id):
 @app.route('/account/keys', methods=['GET'])
 def list_sshKey():
     team_code = 1
-    return jsonify(status=True, message="success", list=list_user_sshkey(team_code))
+    return jsonify(status=True, message="success", list=list_user_sshkey(team_code, db_session))
 
 
 @app.route('/user/sshkey/download/<id>', methods=['GET'])
