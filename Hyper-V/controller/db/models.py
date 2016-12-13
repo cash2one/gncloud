@@ -294,11 +294,13 @@ class GnVmImages(Base):
     team_code = Column(String(3), nullable=True, default=None)
     author_id = Column(String(15), nullable=True, default=None)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    status = Column(String(50), nullable=True, default=None)
 
     def __init__(self, id='', image_name='', filename='',
                  type='', sub_type='', icon=None,
                  os=None, os_ver=None, os_subver=None, os_bit=None,
-                 team_code=None, author_id=None, create_time=datetime.datetime.now()):
+                 team_code=None, author_id=None, create_time=datetime.datetime.now(),
+                 status=None):
         self.id = id
         self.name = image_name
         self.filename = filename
@@ -312,6 +314,7 @@ class GnVmImages(Base):
         self.team_code = team_code
         self.author_id = author_id
         self.create_time = create_time
+        self.status = status
 
     def __repr__(self):
         return "<GnVmImages(" \
@@ -320,7 +323,11 @@ class GnVmImages(Base):
                "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r')>" \
                % (self.id, self.name, self.filename, self.type,
                   self.sub_type, self.icon, self.os, self.os_ver, self.os_subver,
-                  self.os_bit, self.team_code, self.author_id, self.create_time)
+                  self.os_bit, self.team_code, self.author_id, self.create_time, self.status)
+
+    def __json__(self):
+        return ['id', 'name', 'filename', 'type','sub_type', 'icon', 'os', 'os_ver', 'os_bit',
+                'team_code', 'author_id', 'create_time', 'status']
 
 
 class GnVmMachines(Base):

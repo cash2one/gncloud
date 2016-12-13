@@ -132,7 +132,7 @@ class PowerShell(object):
         return self.send(script)
 
 
-   #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
+        #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
     def resume_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Resume-VM -VM $vm "
@@ -191,8 +191,10 @@ class PowerShell(object):
 
     #VM 이미지 삭제
     def delete_vm(self, vhd_Name):
+        #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
         script = "Invoke-Command -ComputerName GNCLOUDWIN -ScriptBlock {"
-        script += "Remove-Item -Path C:/images/vhdx/" + vhd_Name + ".vhdx | ConvertTo-Json}"
+        script += "Move-Item -Path C:/images/vhdx/" + vhd_Name + ".vhdx "
+        script += "-Destination C:/images/backup/" + vhd_Name + ".vhdx | ConvertTo-Json}"
         print script
         return self.send(script)
 
