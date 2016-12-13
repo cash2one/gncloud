@@ -224,6 +224,9 @@ def delete_user_sshkey(id):
     #
     # s.logout()
 
+def list_user_sshkey(team_code, sql_session):
+    list = sql_session.query(GnSshKeys).all()
+    return list
 
 def getsshkey_info(id):
     return db_session.query(GnSshKeys).filter(GnSshKeys.id == id).one()

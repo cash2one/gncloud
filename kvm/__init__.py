@@ -4,11 +4,12 @@ import atexit
 import logging
 from flask import Flask, send_file, jsonify, request, make_response
 from db.database import db_session
-from service.service import server_create, server_list, server_change_status, server_image_list, server_monitor \
+from service.service import server_create, server_change_status, server_image_list, server_monitor \
     , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
     , server_image_delete, getsshkey_info
 from datetime import timedelta
 from kvm.util.json_encoder import AlchemyEncoder
+from kvm.util.logger import logger
 from apscheduler.scheduler import Scheduler
 from gevent.wsgi import WSGIServer
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
@@ -112,7 +113,14 @@ def download_sshKey(id):
 
 # @app.errorhandler(Exception)
 # def all_exception_handler(error):
+#     logger.info('%s -- 500 ERROR', error)
 #     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
+
+@app.errorhandler(500)
+def internal_error(exception):
+    app.logger.error(exception)
+    logger.error('%s -- 500 ERROR', exception)
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 
 #### error handler end####
@@ -125,6 +133,6 @@ if __name__ == '__main__':
     # cron = Scheduler(daemon=True)
     # cron.add_interval_job(job_function, seconds=20) #minites=1)
     # cron.start()
-    # app.run(debug=True)
-    http_server = WSGIServer(('', 5000), app)
-    http_server.serve_forever()
+    app.run(debug=True)
+    # http_server = WSGIServer(('', 5000), app)
+    # http_server.serve_forever()
