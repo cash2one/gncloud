@@ -167,13 +167,9 @@ def hvm_state(id):
         else:
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
     elif type == "stop":
-<<<<<<< HEAD
-        # 1. 가상머신을 정지한다. (Stop-VM)
-=======
         # stop 1. 가상머신을 정지한다. (Stop-VM)
->>>>>>> fbd3acaee1c2ea2ae877b821ea71b1b8caa9ca37
         stop = ps.stop_vm(id)
-        # 2. 가상머신 상태를 체크한다. (Get-VM)
+        # stop 2. 가상머신 상태를 체크한다. (Get-VM)
         if stop['State'] is 3:
             update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']).update(
                 {"status": "Stop"})
@@ -297,8 +293,9 @@ def hvm_delete_image(id):
 
 
 # todo REST. VM 이미지 리스트
-def hvm_image_list():
-    return jsonify(status=False, message="미구현")
+def hvm_image_list(type):
+
+    return jsonify(status=True, message="성공")
 
 
 # todo REST. VM 이미지 정보
