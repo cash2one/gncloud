@@ -25,6 +25,20 @@ class GnController(Base):
         return "<GnController(controller_id='%r', controller_name='%r', ip='%r', port='%r', type='%r')>" \
                % (self.controller_id, self.controller_name, self.ip, self.port, self.type)
 
+class GnImagesPool(Base):
+    __tablename__ = 'GN_IMAGES_POOL'
+    id = Column(String(8), primary_key=True, nullable=False, unique=True)
+    type = Column(String(10), nullable=True, default=None)
+    image_path = Column(String(200), nullable=True, default=None)
+
+    def __init__(self,id,type,image_path):
+        self.id = id
+        self.type = type
+        self.image_path = image_path
+
+    def __repr__(self):
+        return "<GnImagesPool(id='%r', type='%r', image_path='%r')>" \
+               % (self.id, self.type, self.image_path)
 
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'
@@ -320,7 +334,7 @@ class GnVmImages(Base):
         return "<GnVmImages(" \
                "id='%r', name='%r', filename='%r', " \
                "type='%r', sub_type='%r', icon='%r', " \
-               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r')>" \
+               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r', status='%r')>" \
                % (self.id, self.name, self.filename, self.type,
                   self.sub_type, self.icon, self.os, self.os_ver, self.os_subver,
                   self.os_bit, self.team_code, self.author_id, self.create_time, self.status)
@@ -353,6 +367,7 @@ class GnVmMachines(Base):
     start_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     stop_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default=None)
+    num = Column(Integer, nullable=True, default=None)
 
     def __init__(self,
                  id, name='', tag='', type='',

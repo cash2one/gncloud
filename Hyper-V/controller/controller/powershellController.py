@@ -4,6 +4,7 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 각 Rest 함수들의 이름은 hvm_(Action을 대표하는 영단어 소문자)로 표기한다.
 """
 import json
+from util.json_encoder import AlchemyEncoder
 
 __author__ = 'jhjeon'
 
@@ -11,7 +12,7 @@ import datetime
 from flask import request, jsonify
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines, GnVmImages
+from db.models import GnVmMachines, GnVmImages, GnImagesPool
 
 from util.config import config
 from util.hash import random_string
@@ -29,32 +30,44 @@ def manual():
 def hvm_create():
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
+    base_image = request.json['base_image']
+    name = request.json['name']
+    memory = request.json['memory']
+    cpu = request.json['cpu']
+    hdd = request.json['hdd']
+    os = request.json['os']
+    os_ver = request.json['os_ver']
+    os_sub_ver=request.json['os_sub_ver']
+    os_bit = request.json['os_bit']
+    author_id = request.json['author_id']
+
     # 새 머신을 만든다. (New-VM)
     # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     SWITCHNAME = "out"
-    new_vm = ps.new_vm(Name=request.form['name'], MemoryStartupBytes=request.form['memory'], Path="C:\images",
+    new_vm = ps.new_vm(Name=name, MemoryStartupBytes=memory, Path="C:\images",
                        SwitchName=SWITCHNAME)
 
     # 머신이 생성되었는지 확인한다. (New-VM 리턴값 체크)
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
-        set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=request.form['cpu'])
+        set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=cpu)
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # todo. CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
-        CONVERT_VHD_DESTINATIONPATH = "C:\\images\\disk.vhdx"
-        CONVERT_VHD_PATH = "C:\Users\Public\Documents\Hyper-V\Virtual hard disks\windows_server_2012_r2.vhdx"
+        image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
+        CONVERT_VHD_DESTINATIONPATH = "C:/images/vhdx/base/"+name+".vhdx"
+        CONVERT_VHD_PATH = image_pool.image_path + base_image  #원본이미지로부터
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
         # VM을 시작한다.
         start_vm = ps.start_vm(new_vm['VMId'])
         # 새로 생성된 가상머신 데이터를 DB에 저장한다.
-        vm = GnVmMachines(random_string(config.SALT, 8), request.form['name'], '', 'hyperv', start_vm['VMId'],
-                          request.form['name'],
-                          '1', "192.168.0.131", request.form['cpu'], request.form['memory'], request.form['hdd'],
-                          request.form['os']
-                          , request.form['os_ver'], request.form['os_subver'], request.form['os_bit'], "",
-                          request.form['author_id'], datetime.datetime.now(),
+        vm = GnVmMachines(random_string(config.SALT, 8), name, '', 'hyperv', start_vm['VMId'],
+                          name,
+                          '1', "192.168.0.131", int(cpu), int(memory), int(hdd)*1024,
+                          os
+                          , os_ver, os_sub_ver, os_bit, "",
+                          author_id, datetime.datetime.now(),
                           datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
         db_session.add(vm)
         db_session.commit()
@@ -63,27 +76,27 @@ def hvm_create():
         return jsonify(status=False, massage="VM 생성 실패")
 
 
-# todo REST. VM 스냅샷 생성
-# todo hvm_snapshot 1. VM 정지 (Stop-VM)
-# todo hvm_snapshot 2. 스냅샷을 생성한다.
-# todo hvm_snapshot 3. 생성된 스냅샷 이미지 이름 변경 (2번에서 이름 변경이 안 될 경우)
-# todo hvm_snapshot 4. 생성된 스냅샷 이미지 이름 를 지정된 폴더에 옮긴다. (테스트 때에는 C:\images 로 한다.)
-# todo hvm_snapshot 5. 생성된 스냅샷의 정보를 데이터베이스에 저장한다.
+#  REST. VM 스냅샷 생성
+#  hvm_snapshot 1. VM 정지 (Stop-VM)
+#  hvm_snapshot 2. 스냅샷을 생성한다.
+#  hvm_snapshot 3. 생성된 스냅샷 이미지 이름 변경 (2번에서 이름 변경이 안 될 경우)
+#  hvm_snapshot 4. 생성된 스냅샷 이미지 이름 를 지정된 폴더에 옮긴다. (테스트 때에는 C:\images 로 한다.)
+#  hvm_snapshot 5. 생성된 스냅샷의 정보를 데이터베이스에 저장한다.
 def hvm_snapshot():
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     # 지금은 internal_id 받아야한다
     org_id = request.json['org_id'] #원본 이미지 아이디
     print org_id
-    name = request.json['name']
     stop_vm = ps.stop_vm(org_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
         create_snap = ps.create_snap(org_id)
         print create_snap['BaseName']
         if create_snap['Name'] is not None:
             base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id).first()
-            print create_snap['Name']
 
-            name = create_snap['BaseName']
+            name = request.json['name'] #request name 으로 저장해야한다.
+
+            print name
             filename = create_snap['Name']
             icon = 'Windows_icon'
             os = base_image_info.os
@@ -171,14 +184,14 @@ def hvm_state(id):
         stop = ps.stop_vm(id)
         # stop 2. 가상머신 상태를 체크한다. (Get-VM)
         if stop['State'] is 3:
+            # stop 3. 변경된 가상머신 상태를 DB에 업데이트한다.
             update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']).update(
                 {"status": "Stop"})
             db_session.commit()
             return jsonify(status=True, message="가상머신이 종료되었습니다.")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
-        # todo stop 3. 변경된 가상머신 상태를 DB에 업데이트한다.
-        return jsonify(status=False, message="상태 미완성")
+            # return jsonify(status=False, message="상태 미완성")
     elif type == "restart":
         restart = ps.restart_vm(id)
         # resume 1. 가상머신을 재시작한다. (Restart-VM)
@@ -241,7 +254,7 @@ def hvm_vm_list():
     return jsonify(list=vm_list, message="", status=True)
 
 
-# todo REST. VM 이미지 생성 및 업로드
+# REST. VM 이미지 생성 및 업로드
 # 업로드 기능은 나중에 구현 예정, 이미지 정보만 업데이트할 것
 def hvm_new_image():
 
@@ -269,33 +282,37 @@ def hvm_new_image():
 
 # tdo REST. VM 이미지 수정
 def hvm_modify_image(id):
-    #null 값이 들어오면 수정 하지 않는 기능으로 구현.....
+    # todo null 값이 들어오면 수정 하지 않는 기능으로 구현.....
     return jsonify(status=False, message="미구현")
 
 
-# todo REST. VM 이미지 삭제
-# todo 이미지를 백업 폴더로 옮긴다
-# todo 이미지 따로 관리
-
+# REST. VM 이미지 삭제
+# 이미지를 백업 폴더로 옮긴다
+# 이미지 따로 관리
 def hvm_delete_image(id):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     vhd_Name = db_session.query(GnVmImages).filter(GnVmImages.id == id).first()
-    image_delete = ps.delete_vm(vhd_Name.name)
+    image_delete = ps.delete_vm(vhd_Name.name, vhd_Name.sub_type)
     json_obj = json.dumps(image_delete)
     json_size = len(json_obj)
-    if json_size <= 2: #size는 {} 포함인것 같습니다
+    if json_size <= 2: #json 크기는 '{}' 포함
         delete_vm = db_session.query(GnVmImages).filter(GnVmImages.id == id).update({"status":"delete"})
         db_session.commit()
-        print delete_vm
-        return jsonify(status=True, message="이미지 삭제")
+        #update 완료시 리턴값은 1
+        if delete_vm == 1:
+            return jsonify(status=True, message="이미지 삭제 완료")
+        else:
+            return jsonify(status=False, message="데이터베이스 업데이트 실패")
     else:
-        return jsonify(status=False, message="실패")
+        return jsonify(status=False, message="이미지 삭제 실패")
 
 
-# todo REST. VM 이미지 리스트
+# REST. VM 이미지 리스트
 def hvm_image_list(type):
-
-    return jsonify(status=True, message="성공")
+    list_get_query = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all()
+    get_items_to_json = json.dumps(list_get_query, cls=AlchemyEncoder)
+    json.loads(get_items_to_json)
+    return jsonify(status=True, message="성공", list=json.loads(get_items_to_json))
 
 
 # todo REST. VM 이미지 정보
