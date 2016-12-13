@@ -1,32 +1,45 @@
-<h2 class="sub-header">VM 인스턴스</h2>
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>이름</th>
-            <th>머신유형</th>
-            <th>내부 IP</th>
-            <th>외부 IP</th>
-            <th>종류</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="list in guest_list">
-            <td>{{ list.name }}</td>
-            <td>vCpu {{ list.cpu }}개, vRam {{ list.memory }}, vHdd {{ list.disk }}GB</td>
-            <td>{{ list.ip }}</td>
-            <td>{{ list.ip }}</td>
-            <td>{{ list.type }}</td>
-            <td>
-                <select ng-model="myActions" ng-options="action.name for action in actions"
-                        ng-change="update('{{ list.id }}', myActions, {{ $index }})">
-                    <option value="">선택</option>
-                </select>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<div class="">
+    <h1>인스턴스</h1>
+    <h2>인스턴스 목록</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>사양</th>
+                <th>타입</th>
+                <th>IP</th>
+                <th>생성일</th>
+                <th>태그</th>
+                <th><!--더보기--></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="list in guest_list" ng-repeat="time in time_list">
+                <td class="td-first"><img src="/gn_images/ubuntu_icon.png" alt="ubuntu">{{ list.name }}</td>
+                <td class="cnt"> {{ list.cpu }} CPU /{{ list.memory }}MB Memory/{{ list.disk }}GB Disk</td>
+                <td class="cnt">{{ list.type }}</td>
+                <td class="cnt">{{ list.ip }}</td>
+                <td class="cnt">{{list.day1}}</td>
+                <td class="cnt"><span class="tag">{{list.num}}</span></td>
+                <td class = "cnt dropdown">더보기
+                    <span class="caret user-arrow" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
+                    <ul class="dropdown-menu-table" role="menu" >
+                        <li ng-repeat="test in actions">
+                            <a href ng-click="update(list.id,test,$index)">{{test.name}}</a>
+                        </li>
+                    </ul>
+
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </div>
-</div>
+                <!--<select ng-model="myActions" ng-options="action.name for action in actions"-->
+                        <!--ng-change="update('{{ list.id }}', myActions, {{ $index }})">-->
+                    <!--<option value="">선택</option>-->
+                <!--</select>-->
