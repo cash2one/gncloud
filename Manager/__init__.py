@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
-from service.service import test_list, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam
+from service.service import test_list, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_list
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -111,6 +111,11 @@ def repair_list():
 def quota_info():
     team_code = "004"
     return jsonify(status=True, message = 'success',list=getQuotaOfTeam(team_code))
+
+
+@app.route('/vm/machines', methods=['GET'])
+def list():
+    return jsonify(status=True, message="success", list=server_list(db_session))
 
 
 #### rest stop ####

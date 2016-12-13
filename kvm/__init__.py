@@ -28,10 +28,6 @@ def job_function():
 
 #### rest start ####
 
-@app.route('/vm/machines', methods=['GET'])
-def list():
-    return jsonify(status=True, message="success", list=server_list(db_session))
-
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
