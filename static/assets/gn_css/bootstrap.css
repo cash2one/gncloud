@@ -1,27 +1,25 @@
-/*!
- * Bootstrap v3.3.2 (http://getbootstrap.com)
- * Copyright 2011-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
-
-/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
-
+/*지앤클라우드 프라이빗 인스턴스 스타일시트*/
 /*나눔바른고딕 폰트*/
 @import url(nanumbarungothic.css);
-
-::selection{
-    background: #58c4c6;
-    color: #ffffff;
-}
 
 html {
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
-body {
-    overflow-y: scroll
+body{
+    overflow-y: scroll;
     font-family: 'Nanum Barun Gothic', sans-serif;
-  margin: 0;
+    margin: 0;    
+}
+
+/*commend*/
+.fl{float: left;}
+.fr{float: right;}
+.cnt{text-align: center;}
+
+::selection{
+    background: #58c4c6;
+    color: #ffffff;
 }
 article,
 aside,
@@ -194,9 +192,6 @@ optgroup {
 table {
   border-spacing: 0;
   border-collapse: collapse;
-}
-td{
-    font-size: 18px;
 }
 td,
 th {
@@ -6747,4 +6742,309 @@ button.close {
     display: none !important;
   }
 }
-/*# sourceMappingURL=bootstrap.css.map */
+
+/*=====================================================================*/
+
+/* ---HEADER 영역---*/
+a.navbar-brand{
+    display: block;
+    margin-top: 34px;
+}
+a.navbar-brand img{
+    width:209px; 
+    height: 39px; 
+}
+
+.navbar-nav{
+    text-align: center;
+}
+
+.navbar-nav li.menu1{
+    width: 65px;
+	height: 20px;
+    text-align: center;
+    margin-left: 85px;
+    margin-top: 51px;
+}
+
+.navbar-nav li.menu2{
+    width: 65px;
+	height: 20px;
+    text-align: center;
+    margin-left: 72px;
+    margin-top: 51px;
+}
+
+.navbar-nav li.menu3{
+	width: 49px;
+	height: 20px;
+    text-align: center;
+    margin-left: 72px;
+    margin-top: 51px;
+}
+
+ul li.menu1 a,
+ul li.menu2 a,
+ul li.menu3 a{
+    display: block;
+    text-decoration: none;
+}
+
+.menu1 a:hover{
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    color: #58c4c6;
+}
+
+/*HEADER 오른쪽*/
+/*인스턴스 생성 버튼(btn btn-success클래스는 bootstrap.css에)*/
+.navbar-right li.create-btn{
+    margin-top: 26px;    
+}
+
+button.creat-instance{ 
+    width: 190px;
+	height: 46px;
+}
+
+button.creat-instance-big{ 
+    width: 100%;
+	height: 80px;
+    margin-bottom: 100px;
+}
+
+.dropdown-top{
+    height: 20px;
+   margin-top: 50px
+}
+
+
+.user-arrow{
+   margin-top: 7px;
+    cursor: pointer;
+}
+
+.user{
+    display: block;
+    cursor: pointer;
+    margin-left: 43px;
+    width: 60px;
+	height: 19px;
+}
+
+.td-first img{
+    margin-right: 10px
+}
+
+.tag{
+    padding: 2px;
+    background-color: rgba(238,238,238,50);
+    color: #58c4c6;
+    border-radius: 3px;
+}
+
+.tab-title{
+    font-size: 16px;
+    color: #6f6f6f;
+    padding: 5px 5px 5px 0px; 
+    display: block;
+}
+
+.nav-tabs > li.active > a.tab-title{
+    font-size: 16px;
+    color: #58c4c6;
+}
+
+div.size-info{
+    margin:  auto;
+    text-align: center;
+    width: 100px;
+    padding: 5px;
+}
+div.size-info3{
+    margin:  auto;
+    text-align: center;
+    width: 100px;
+    padding: 5px;
+}
+
+div.border-bottom{
+    width: 50px;
+    margin: auto;
+    border-bottom: 1px solid rgba(215,215,215,.5);
+}
+.btn-default:hover div.border-bottom,
+.type-box:hover div.border-bottom{
+    width: 50px;
+    margin: auto;
+    border-bottom: 1px solid rgba(88,196,198,.2);
+}
+
+
+.type-box div.img-box{
+    background: url(../images/instance_create_windows-s.png)no-repeat;
+    display: block;
+    clear: left;
+    width: 54px;
+    height: 55px;
+    margin: 5px auto;
+    overflow: hidden;
+}
+
+div.snap-box{
+    width: 100%;
+    height: 129px;
+}
+
+div.snap-name{
+    width: 33.333%;
+    padding:  0 .5rem 1rem;
+}
+
+p.ellipsis{   
+    padding: 10px;
+    border: 2px solid rgba(215,215,215,.5);
+    border-radius: 3px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+
+img.elli-img-icon{
+    margin-right: 10px;
+    
+}
+
+input.input-ssh-name{
+    height: 37px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 200;
+    padding-left: 10px;
+}
+
+td.td-style{
+    font-size: 14px;
+}
+
+span.windows-small{
+    font-size: 0.7em;
+    font-weight: normal;
+    display: block;
+}
+
+img.img-icon{
+    display: block;
+    margin: auto;
+    margin-bottom: 5px;
+    
+}
+
+
+/*========== 인스턴스 상세페이지 STYLE ==========*/
+
+/*상단 title 영역*/
+h1.h1_regular{
+    margin-bottom: 0px;
+    color: #505050;
+    font-weight: normal;
+    font-size: 30px;    
+}
+
+ul.li-style > li{
+    list-style: none;
+    float: left;
+} 
+
+div.detail-spec{
+    width: 100%;
+    display: inline-block;
+    
+}
+
+div.detail-tag{
+    width: 100%;
+    display: inline-block;
+}
+
+/*on/off 버튼*/
+.material-switch > input[type="checkbox"] {
+    display: none;   
+}
+
+.material-switch > label {
+    cursor: pointer;
+    height: 0px;
+    position: relative; 
+    width: 40px;  
+}
+
+.material-switch > label::before {
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position:absolute;
+    opacity: 0.3;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+.material-switch > label::after {
+    background: rgb(255, 255, 255);
+    border-radius: 16px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    content: '';
+    height: 24px;
+    left: -4px;
+    margin-top: -8px;
+    position: absolute;
+    top: -4px;
+    transition: all 0.3s ease-in-out;
+    width: 24px;
+}
+.material-switch > input[type="checkbox"]:checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+.material-switch > input[type="checkbox"]:checked + label::after {
+    background: inherit;
+    left: 20px;
+}
+
+/*main-contents 영역*/
+div.row{
+    margin-left: 0;
+    margin-right: 0;
+}
+div.detail-main{
+    border-radius: 3px;
+    border: 2px solid rgba(215,215,215,.5);
+    margin-bottom: 53px;
+}
+
+/*DISK 막대 그래프*/
+div.disk-right-box{
+    width: 80%; 
+}
+
+.disk-graph{
+    width: 100%;
+    height: 50px;
+}
+
+.progress-bar{
+    line-height: 50px;
+    font-size: 24px;
+}
+
+/*삭제 버튼 영역*/
+div.detail-delete{
+    border-radius: 3px;
+    border: 2px solid rgba(215,215,215,.5);
+    margin-bottom: 100px;
+}

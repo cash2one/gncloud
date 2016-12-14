@@ -1,7 +1,7 @@
 __author__ = 'NaDa'
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime,  Numeric
 from sqlalchemy.orm import relationship
 import datetime
 
@@ -89,7 +89,7 @@ class GnVmMachines(Base):
                   self.ip, self.status, self.tag, self.create_time)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'num', 'day1']
+        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'os', 'tag', 'create_time', 'day1']
 
 
 
@@ -216,3 +216,27 @@ class GnSshKeys(Base):
 
     def __json__(self):
         return ['id', 'name', 'fingerprint', 'create_time']
+
+class GnMonitor(Base):
+    __tablename__ = "GN_MONITOR"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
+
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
+
+    def __repr__(self):
+        return '<ID %r / Type %r / Cpu_usage %r / Mem_usage %r / Disk_usage %r / Net_usage %r>' \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
+
+    def __json__(self):
+        return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage']

@@ -1,17 +1,5 @@
-﻿<!DOCTYPE html>
-<html ng-app="gncloud">
+﻿<html>
 <head>
-    <!--<base href="/">-->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
-    <title>GnCloud</title>
-
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
@@ -25,6 +13,7 @@
     <link href="/chart/css/animate.css" rel="stylesheet" />
     <link href="/chart/css/style.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="/gn_css/style_instance.css" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -37,44 +26,22 @@
     <script src="/js/vendor/angular/angular-route.min.js"></script>
     <script src="/js/checklist-model.js"></script>
     <script src="/chart/js/Chart.bundle.js"></script>
-
-
 </head>
 
 <body class="theme-red">
-    <section class="content">
         <div class="container-fluid">
-            <div class="block-header">
-                <h2>
-                    FLOT CHART
-                    <small>Taken from <a href="http://www.flotcharts.org" target="_blank">www.flotcharts.org</a></small>
-                </h2>
-            </div>
-
             <!-- Real-Time Chart -->
             <div class="row clearfix">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>REAL-TIME CHART</h2>
+                            <h2>CPU</h2>
                             <div class="pull-right">
                                 <div class="switch panel-switch-btn">
                                     <span class="m-r-10 font-12">REAL TIME</span>
                                     <label>OFF<input type="checkbox" id="realtime" checked><span class="lever switch-col-cyan"></span>ON</label>
                                 </div>
                             </div>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
                         </div>
                         <div class="body">
                             <div id="real_time_chart" class="flot-chart"></div>
@@ -85,7 +52,8 @@
             <!-- #END# Real-Time Chart -->
             </div>
         </div>
-    </section>
+
+
 
     <!-- Jquery Core Js -->
     <script src="/chart/js/jquery.min.js"></script>

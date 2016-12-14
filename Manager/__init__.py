@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
-from service.service import test_list, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_list, server_image_list
+from service.service import vm_list, vm_info, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -19,9 +19,13 @@ def index():
         return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
     return jsonify(status=False, message='You are not logged in')
 
-@app.route('/vm', methods=['GET'])
-def run_list():
-    return jsonify(status=True, message="success", list=test_list())
+@app.route('/vm/machines', methods=['GET'])
+def guest_list():
+    return jsonify(status=True, message="success", list=vm_list(db_session))
+
+@app.route('/vm/machines/<id>', methods=['GET'])
+def guest_info(id):
+    return jsonify(status=True, message="success", info=vm_info(db_session, id))
 
 
 @app.route('/vm/account', methods=['POST'])
@@ -113,13 +117,11 @@ def quota_info():
     return jsonify(status=True, message = 'success',list=getQuotaOfTeam(team_code))
 
 
-@app.route('/vm/machines', methods=['GET'])
-def list():
-    return jsonify(status=True, message="success", list=server_list(db_session))
-
 @app.route('/vm/images/<sub_type>', methods=['GET'])
 def list_volume(sub_type):
     return jsonify(status=True, message="success", list=server_image_list(sub_type))
+
+
 
 #### rest stop ####
 

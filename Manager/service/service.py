@@ -4,14 +4,44 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor
 from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
+def vm_list(sql_session):
+    list = sql_session.query(GnVmMachines).all()
+    for vmMachine in list:
+        tagArr = vmMachine.tag.split(',')
+        vmMachine.tag = tagArr[0] + '+' +str(len(tagArr))
+        dt = vmMachine.create_time.strftime('%Y%m%d%H%M%S')
+        dt2 = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        if(int(dt2[:4])-int(dt[:4]) == 0):
+            if(int(dt2[:8])-int(dt[:8]) != 0):
+                vmMachine.day1 = str(int(dt2[:8])-int(dt[:8]))+ "일 전"
+            else:
+                if(int(dt2[6:])-int(dt[6:]) != 0):
+                    vmMachine.day1 = str((int(dt2[6:])-int(dt[6:]))/ 10000)+ "시간 전"
+                else:
+                    vmMachine.day1 = str((int(dt2[4:])-int(dt[4:]))/ 100)+ "분 전"
+        else:
+            vmMachine.day1 = str(int(dt2[:4])-int(dt[:4])) +"년 전"
+    return list
 
-def test_list():
-    runlist = GnVmMachines.query.all()
-    return runlist
+def vm_info(sql_session, id):
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    vm_info.day1 = ""
+    monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
+    if monitor_info is not None:
+        total = vm_info.disk
+        use = int(monitor_info.disk_usage)
+        disk_per_info = int((use*100)/total)
+        rest_disk = total - use;
+        disk_info = {"total":total, "use":use, "rest_disk":rest_disk, "disk_per_info":disk_per_info}
+
+    info = {"vm_info":vm_info, "disk_info":disk_info}
+
+    return info
+
 
 def login_list(user_id, password, team_code):
     password = random_string(password)
@@ -21,8 +51,10 @@ def login_list(user_id, password, team_code):
 def me_list(myuser):
     return db_session.query(GnUser).filter(GnUser.user_id == myuser).one()
 
+
 def teamcheck_list(teamcode):
     return db_session.query(GnUser).filter(GnUser.team_code == teamcode).all()
+
 
 def sign_up(user_name, user_id, password, password_re):
     check = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
@@ -94,25 +126,6 @@ def getQuotaOfTeam(team_code):
                  , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info};
 
     return quato_info
-
-def server_list(sql_session):
-    list = sql_session.query(GnVmMachines).all()
-    for vmMachine in list:
-        tagArr = vmMachine.tag.split(',')
-        vmMachine.num = tagArr[0] + '+' +str(len(tagArr))
-        dt = vmMachine.create_time.strftime('%Y%m%d%H%M%S')
-        dt2 = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        if(int(dt2[:4])-int(dt[:4]) == 0):
-            if(int(dt2[:8])-int(dt[:8]) != 0):
-                vmMachine.day1 = str(int(dt2[:8])-int(dt[:8]))+ "일 전"
-            else:
-                if(int(dt2[6:])-int(dt[6:]) != 0):
-                    vmMachine.day1 = str((int(dt2[6:])-int(dt[6:]))/ 10000)+ "시간 전"
-                else:
-                    vmMachine.day1 = str((int(dt2[4:])-int(dt[4:]))/ 100)+ "분 전"
-        else:
-            vmMachine.day1 = str(int(dt2[:4])-int(dt[:4])) +"년 전"
-    return list
 
 
 def list_user_sshkey(team_code, sql_session):
