@@ -194,7 +194,6 @@ class GnVmImages(Base):
         return ['id', 'name', 'filename', 'type', 'sub_type'
             , 'icon', 'os', 'os_ver', 'os_subver', 'os_bit'
             , 'team_code', 'author_id', 'create_time']
-        return  ['team_code', 'team_name', 'author_id', 'cpu_quota', 'mem_quota', 'disk_quota']
 
 class GnSshKeys(Base):
     __tablename__ = "GN_SSH_KEYS"

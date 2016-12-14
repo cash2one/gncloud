@@ -4,13 +4,12 @@ import atexit
 import logging
 from flask import Flask, send_file, jsonify, request, make_response
 from db.database import db_session
-from service.service import server_create, server_list, server_change_status, server_monitor \
-from service.service import server_create, server_change_status, server_image_list, server_monitor \
+from service.service import server_create, server_change_status, server_monitor \
     , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
     , server_image_delete, getsshkey_info
 from datetime import timedelta
-from kvm.util.json_encoder import AlchemyEncoder
-from kvm.util.logger import logger
+from util.json_encoder import AlchemyEncoder
+from util.logger import logger
 from apscheduler.scheduler import Scheduler
 from gevent.wsgi import WSGIServer
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId

@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
-from service.service import test_list, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_list
+from service.service import test_list, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_list, server_image_list
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
