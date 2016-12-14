@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import atexit
-import logging
-from flask import Flask, send_file, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response
+from datetime import timedelta
+
 from db.database import db_session
 from service.service import server_create, server_change_status, server_monitor \
     , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
     , server_image_delete, getsshkey_info
-from datetime import timedelta
 from util.json_encoder import AlchemyEncoder
 from util.logger import logger
-from apscheduler.scheduler import Scheduler
-from gevent.wsgi import WSGIServer
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
-
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -40,7 +36,8 @@ def create_vm():
     disk = request.json['hdd']
     image_id = request.json['id']
     sshkeys = request.json['sshkeys']
-    server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys)
+    tag =request.json['tag']
+    server_create(name ,cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag)
     return jsonify(status=True, message="sucess")
 
 

@@ -13,7 +13,7 @@ angular
 
         $http({
             method: 'GET',
-            url: '/Manager/vm/guestMeList',
+            url: '/api/manager/vm/guestMeList',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -31,7 +31,7 @@ angular
         $scope.team_list = {};
         $http({
             method: 'GET',
-            url: '/Manager/vm/account/users',
+            url: '/api/manager/vm/account/users',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
