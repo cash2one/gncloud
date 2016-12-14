@@ -9,7 +9,7 @@ from util.config import config
 app = Flask(__name__)
 
 # --- VM 함수 --- #
-# Container 생성 및 실행
+# service 생성 및 실행
 app.add_url_rule("/container/services", view_func=doc_create, methods=['POST'])
 # Container 상태변경
 app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
