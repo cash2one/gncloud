@@ -30,45 +30,18 @@
         <li><a data-toggle="tab" class="tab-title" href="" onclick="javascript:test('snap');">스냅샷</a></li>
     </ul> <!-- class="nav nav-tabs"-->
     <br>
-    <div class="tab-content" ng-repeat="list in image_list">
+    <div class="tab-content" >
         <!--탭메뉴1 : 이미지 -->
-        <div id="image" class="tab-pane fade in active">
-            <div class="btn-group" role="group" aria-label="..." >
-                <ng-button type="button" name="" class="btn btn-default type-box">
-                    <img src="gn_images/instance_create_windows.png" alt="" class="img-icon">
-                    Windows
-                    <span class="windows-small">{{list.name}}</span>
-                </ng-button>
-            </div>
-            <!--<div class="btn-group" role="group" aria-label="...">-->
-                <!--<button type="button" class="btn btn-default type-box">-->
-                    <!--<img src="gn_images/instance_create_KVM.png" alt="" class="img-icon">-->
-                    <!--FreeBSD-->
-                    <!--<span class="windows-small">Server v.1</span>-->
-                <!--</button>-->
-            <!--</div>-->
-            <!--<div class="btn-group" role="group" aria-label="...">-->
-                <!--<button type="button" class="btn btn-default type-box">-->
-                    <!--<img src="gn_images/instance_create_KVM.png" alt="" class="img-icon">-->
-                    <!--fedora-->
-                    <!--<span class="windows-small">Server v.1</span>-->
-                <!--</button>-->
-            <!--</div>-->
-            <!--<div class="btn-group" role="group" aria-label="...">-->
-                <!--<button type="button" class="btn btn-default type-box">-->
-                    <!--<img src="gn_images/instance_create_KVM.png" alt="" class="img-icon">-->
-                    <!--Debian-->
-                    <!--<span class="windows-small">Server v.1</span>-->
-                <!--</button>-->
-            <!--</div>-->
-            <!--<div class="btn-group" role="group" aria-label="...">-->
-                <!--<button type="button" class="btn btn-default type-box">-->
-                    <!--<img src="gn_images/instance_create_docker.png" alt="" class="img-icon">-->
-                    <!--wordpress-->
-                    <!--<span class="windows-small">Server v.1</span>-->
-                <!--</button>-->
-            <!--</div>-->
-
+        <div id="image" class="tab-pane fade in active" >
+            <span ng-repeat="list in image_list">
+                <div class="btn-group" role="group" aria-label="..." >
+                    <ng-button type="button" name="" class="btn btn-default type-box">
+                        <img src="gn_images/instance_create_windows.png" alt="" class="img-icon">
+                        Windows
+                        <span class="windows-small">{{list.name}}</span>
+                    </ng-button>
+                </div>
+            </span>
         </div> <!--id="image" class="tab-pane fade in active"-->
         <!--탭메뉴2 : 스냅샷-->
         <div id="snap" class="tab-pane fade">
