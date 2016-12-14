@@ -55,6 +55,7 @@ def hvm_create():
         # todo. CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
         CONVERT_VHD_DESTINATIONPATH = "C:/images/vhdx/base/"+name+".vhdx"
+        #CONVERT_VHD_PATH = "C:/images/vhdx/original/"
         CONVERT_VHD_PATH = image_pool.image_path + base_image  #원본이미지로부터
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
@@ -64,11 +65,18 @@ def hvm_create():
         # 새로 생성된 가상머신 데이터를 DB에 저장한다.
         vm = GnVmMachines(random_string(config.SALT, 8), name, '', 'hyperv', start_vm['VMId'],
                           name,
-                          '1', "192.168.0.131", int(cpu), int(memory), int(hdd)*1024,
+                          '1', "192.168.0.131", int(cpu), int(memory), int(hdd),
                           os
                           , os_ver, os_sub_ver, os_bit, "",
                           author_id, datetime.datetime.now(),
                           datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
+
+        # 새로 생성된 가상머신의 base 이미지를 DB에 저장한다
+        vm_image = GnVmImages(random_string(config.SALT, 8), name, name+".vhdx", "hyperV", "base",
+                              "win_icon", os, os_ver, os_sub_ver, os_bit, "",
+                              author_id, datetime.datetime.now(), "")
+
+        db_session.add(vm_image)
         db_session.add(vm)
         db_session.commit()
         return jsonify(status=True, massage="VM 생성 성공")
@@ -96,7 +104,6 @@ def hvm_snapshot():
 
             name = request.json['name'] #request name 으로 저장해야한다.
 
-            print name
             filename = create_snap['Name']
             icon = 'Windows_icon'
             os = base_image_info.os
@@ -180,11 +187,7 @@ def hvm_state(id):
         else:
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
     elif type == "stop":
-<<<<<<< HEAD
-        # 1. 가상머신을 정지한다. (Stop-VM)
-=======
         # stop 1. 가상머신을 정지한다. (Stop-VM)
->>>>>>> 788f3063ec21d39d534c896f9fbd1593ea3dd433
         stop = ps.stop_vm(id)
         # stop 2. 가상머신 상태를 체크한다. (Get-VM)
         if stop['State'] is 3:
@@ -192,7 +195,7 @@ def hvm_state(id):
             update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']).update(
                 {"status": "Stop"})
             db_session.commit()
-            return jsonify(status=True, message="가상머신이 종료되었습니다.")
+            return jsonify(status=True, message="VM Stop")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
             # return jsonify(status=False, message="상태 미완성")
@@ -200,7 +203,7 @@ def hvm_state(id):
         restart = ps.restart_vm(id)
         # resume 1. 가상머신을 재시작한다. (Restart-VM)
         if restart['State'] is 2:
-            return jsonify(status=True, message="가상머신이 정상적으로 재시작되었습니다.")
+            return jsonify(status=True, message="VM Restart")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
             # resume 2. 가상머신 상태를 체크한다. 다만 (Get-VM)
@@ -235,17 +238,27 @@ def hvm_state(id):
 # todo REST. VM 삭제
 def hvm_delete(id):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
-    # todo REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
-    # todo REST hvm_delete 2. VM을 삭제한다.
-    # todo REST hvm_delete 3. 삭제된 VM DB 데이터를 삭제 상태로 업데이트한다.
-    return jsonify(message="", status=True)
+    vm_info =ps.get_vm_one(id)
+    #  REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
+    stop_vm = ps.stop_vm(id)
+    if stop_vm['State'] is 3:
+        delete_vm = ps.delete_vm(id, "base")
+        update_vm_machines = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id
+                                                                   == id).update({"status" : "Removed"})
+        db_session.commit()
+        update_vm_images = db_session.query(GnVmImages).filter(GnVmImages.filename == vm_info['VMName']
+                                                               +".vhdx").update({"status" : "Removed"})
+        db_session.commit()
+        # REST hvm_delete 2. VM을 삭제한다.
+        # todo REST hvm_delete 3. 삭제된 VM DB 데이터를 삭제 상태로 업데이트한다.
+        return jsonify(message="Remove success", status=True)
 
 
 # todo REST. VM 정보
 def hvm_vm(vmid):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     # Powershell Script를 통해 VM 정보를 가져온다.
-    vm = ps.get_vm(vmid)
+    vm = ps.get_vm_test(vmid)
     # todo get-vm. VM 정보를 DB에서 가져온다.
     return jsonify(vm=vm, message="", status=True)
 
@@ -286,7 +299,7 @@ def hvm_new_image():
 
 # tdo REST. VM 이미지 수정
 def hvm_modify_image(id):
-    # todo null 값이 들어오면 수정 하지 않는 기능으로 구현.....
+    # todo null 값이 들어오면 수정 하지 않는 기능으로 구현 .....
     return jsonify(status=False, message="미구현")
 
 
@@ -296,7 +309,7 @@ def hvm_modify_image(id):
 def hvm_delete_image(id):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     vhd_Name = db_session.query(GnVmImages).filter(GnVmImages.id == id).first()
-    image_delete = ps.delete_vm(vhd_Name.name, vhd_Name.sub_type)
+    image_delete = ps.delete_vm_Image(vhd_Name.filename, vhd_Name.sub_type)
     json_obj = json.dumps(image_delete)
     json_size = len(json_obj)
     if json_size <= 2: #json 크기는 '{}' 포함
@@ -304,11 +317,11 @@ def hvm_delete_image(id):
         db_session.commit()
         #update 완료시 리턴값은 1
         if delete_vm == 1:
-            return jsonify(status=True, message="이미지 삭제 완료")
+            return jsonify(status=True, message="image delete complete")
         else:
-            return jsonify(status=False, message="데이터베이스 업데이트 실패")
+            return jsonify(status=False, message="DB update fail")
     else:
-        return jsonify(status=False, message="이미지 삭제 실패")
+        return jsonify(status=False, message="image delete fail")
 
 
 # REST. VM 이미지 리스트
@@ -316,7 +329,7 @@ def hvm_image_list(type):
     list_get_query = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all()
     get_items_to_json = json.dumps(list_get_query, cls=AlchemyEncoder)
     json.loads(get_items_to_json)
-    return jsonify(status=True, message="성공", list=json.loads(get_items_to_json))
+    return jsonify(status=True, message="success", list=json.loads(get_items_to_json))
 
 
 # todo REST. VM 이미지 정보
