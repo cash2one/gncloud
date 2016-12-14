@@ -193,6 +193,9 @@ table {
   border-spacing: 0;
   border-collapse: collapse;
 }
+td{
+    font-size: 18px;
+}
 td,
 th {
   padding: 0;
@@ -6896,18 +6899,52 @@ div.border-bottom{
 
 div.snap-box{
     width: 100%;
-    height: 129px;
+    height: 90px;
 }
 
-div.snap-name{
-    width: 33.333%;
-    padding:  0 .5rem 1rem;
+button.snap-name{
+    width: 32.9%;
+}
+
+button.snap-name:nth-child(1){
+    margin-right: .5%;
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(2){
+    margin-right: .5%;
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(3){
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(4){
+    margin-right: .5%;
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(5){
+    margin-right: .5%;
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(6){
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(7){
+    margin-right: .5%;
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(8){
+    margin-right: .5%;
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(9){
+    margin-bottom: 10px;
+}
+button.snap-name:nth-child(10){
+    margin-right: .5%;
+    margin-bottom: 10px;
 }
 
 p.ellipsis{   
-    padding: 10px;
-    border: 2px solid rgba(215,215,215,.5);
-    border-radius: 3px;
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis;

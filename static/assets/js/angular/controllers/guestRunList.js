@@ -11,7 +11,7 @@ angular
         $scope.test_list = {};
         $http({
             method: 'GET',
-            url: '/vm',
+            url: '/api/vm',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
 

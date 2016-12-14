@@ -91,9 +91,13 @@ def repair(user_id, password, password_new, password_re, tel, email):
     db_session.commit()
     return 2
 
-def server_image_list(type):
-    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
-    return list
+def server_image_list(type, sub_type):
+    if(sub_type == ""):
+        list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+        return list
+    elif(sub_type != ""):
+        list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+        return list
 
 def getQuotaOfTeam(team_code):
     current_info = db_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),

@@ -117,6 +117,13 @@ def quota_info():
     return jsonify(status=True, message = 'success',list=getQuotaOfTeam(team_code))
 
 
+@app.route('/vm/machines', methods=['GET'])
+def list():
+    return jsonify(status=True, message="success", list=server_list(db_session))
+
+@app.route('/vm/images/<type>/<sub_type>', methods=['GET'])
+def list_volume(type, sub_type):
+    return jsonify(status=True, message="success", list=server_image_list(type, sub_type))
 @app.route('/vm/images/<sub_type>', methods=['GET'])
 def list_volume(sub_type):
     return jsonify(status=True, message="success", list=server_image_list(sub_type))
