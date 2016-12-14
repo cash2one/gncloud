@@ -3,36 +3,13 @@ from xml.etree import ElementTree
 
 __author__ = 'yhk'
 
-import ConfigParser
-import os
 import libvirt
-from xml.dom import minidom
 from kvm.util.config import config
 from flask import  render_template
-import paramiko
-import datetime
 from pexpect import pxssh
 
 
 USER = "root"
-
-def get_ip(domainName, mac_address):
-    conn = libvirt.open(URL)
-    dom = conn.lookupByName(domainName)
-
-    ifaces = dom.interfaceAddresses(libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT, 0)
-    i=0
-    for (name, val) in ifaces.iteritems():
-        i += 1
-        if val['addrs'] and val['hwaddr'] == mac_address:
-            for ipaddr in val['addrs']:
-                if ipaddr['type'] == libvirt.VIR_IP_ADDR_TYPE_IPV4:
-                    ip = ipaddr['addr']
-
-
-    conn.close()
-    return ip
-
 
 def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     try:
