@@ -14,7 +14,7 @@ angular
         $scope.submit = function() {
             $http({
                 method  : 'POST',
-                url: '/Manager/vm/account',
+                url: '/api/manager/vm/account',
                 data: $scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })

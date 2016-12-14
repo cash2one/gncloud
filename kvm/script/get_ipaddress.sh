@@ -1,7 +1,6 @@
  #!/bin/bash
 
 vm_name=$1
-
 bridge_name="br0"
 
 mac_address=`virsh dumpxml ${vm_name} | grep "mac address" | cut -d "'" -f 2`

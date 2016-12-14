@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import datetime
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Text, Numeric
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Numeric
+from sqlalchemy.orm import relationship
+
 from kvm.db.database import Base
 
 
@@ -52,12 +53,13 @@ class GnVmMachines(Base):
     start_time = Column(DateTime, default=datetime.datetime.utcnow)
     stop_time = Column(DateTime, default=datetime.datetime.utcnow)
     status = Column(String(10), primary_key=False, nullable=False)
+    tag = Column(String(100), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
 
     def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None, cpu=None
                  , memory=None, disk=None, ip=None, host_id=None
                  , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
-                 , author_id=None, status=None):
+                 , author_id=None, status=None, tag=None, create_time=None):
         self.id = id
         self.name = name
         self.type = type
@@ -75,15 +77,17 @@ class GnVmMachines(Base):
         self.team_ = team_code
         self.author_id = author_id
         self.status = status
+        self.tag = tag
+        self.create_time = create_time
 
 
     def __repr__(self):
-        return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r>' \
+        return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r / Tag %r / Create_time %r>' \
                % (self.id, self.name, self.type, self.internal_id, self.internal_name, self.cpu, self.memory, self.disk,
-                  self.ip, self.status)
+                  self.ip, self.status, self.tag, self.create_time)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status']
+        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'num', 'day1']
 
 
 class GnVmImages(Base):
@@ -102,6 +106,7 @@ class GnVmImages(Base):
     author_id = Column(String(15), primary_key=False, nullable=False)
     create_time = Column(DateTime, default=datetime.datetime.utcnow)
 
+
     def __init__(self, id=None, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
                  , os_bit=None, team_code=None, author_id=None):
@@ -119,8 +124,9 @@ class GnVmImages(Base):
         self.author_id = author_id
 
 
+
     def __repr__(self):
-        return '<Id %r / Name %r / File_name %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_ver %r / Os_subver %r / Team_code %r /Author_id %r / Create_time %r>' \
+        return '<Id %r / Name %r / File_name %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_ver %r / Os_subver %r / Team_code %r /Author_id %r / Create_time %r >' \
                % (self.id, self.name, self.file_name, self.type, self.sub_type
                   , self.icon, self.os, self.os_ver, self.os_subver, self.os_bit
                   , self.team_code, self.author_id, self.create_time)
@@ -129,6 +135,31 @@ class GnVmImages(Base):
         return ['id', 'name', 'filename', 'type', 'sub_type'
             , 'icon', 'os', 'os_ver', 'os_subver', 'os_bit'
             , 'team_code', 'author_id', 'create_time']
+
+
+class GnMonitor(Base):
+    __tablename__ = "GN_MONITOR"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
+
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
+
+    def __repr__(self):
+        return '<ID %r / Type %r / Cpu_usage %r / Mem_usage %r / Disk_usage %r / Net_usage %r>' \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
+
+    def __json__(self):
+        return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage']
 
 
 class GnMonitorHist(Base):

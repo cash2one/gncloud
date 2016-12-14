@@ -7,28 +7,45 @@ angular
         $('ul.nav-sidebar a').filter(function () {
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
-
-        $http({
-            method: 'GET',
-            url: '/api/kvm/vm/images/base',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.image_list = data.list;
-                }
-                else {
-                }
+        $scope.hyper = function(ty){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/images/base/' + ty,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.image_list = data.list;
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/images/snap/' + ty,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.snap_list = data.list;
+                        $("#snap").hide();
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
 
         $scope.sshkeys = [];
-
         $http({
             method: 'GET',
-            url: '/api/kvm/user/sshkey',
+            url: '/api/kvm/account/keys',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -42,11 +59,50 @@ angular
                 console.log(status);
             });
 
-
+        $scope.save = function () {
+            $http({
+                method: 'POST',
+                url: '/api/kvm/account/keys',
+                data: $scope.data,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                }
+            })
+                .success(function (data) {
+                    if (data.status == true) {
+                        alert("SSH key 추가되었습니다");
+                        $scope.getkeys();
+                    } else {
+                        alert(data.message)
+                    }
+                });
+        };
+        $scope.imageshow = function(){
+            $("#image").show();
+            $("#snap").hide();
+        }
+        $scope.snapshow = function(){
+            $("#image").hide();
+            $("#snap").show();
+        }
         $scope.data = {};
+        $scope.update_image = function (data) {
+            if (data != null){
+                $scope.data.id = data.id;
+            }
+        };
+        $scope.func = function(cpu, memory, hdd){
+            $scope.data.cpu = cpu
+            $scope.data.memory = memory
+            $scope.data.hdd = hdd
+            $scope.data.name = hdd
+
+        }
+
         $scope.submit = function() {
-            console.log($scope.sshkeys);
+            console.log($scope.data.id);
             $scope.data.sshkeys = $scope.sshkeys;
+            $scope.data.tag = $("#tag").val();
             $http({
                 method  : 'POST',
                 url: '/api/kvm/vm/machine',
@@ -64,9 +120,7 @@ angular
                 });
         };
 
-        $scope.update_image = function (data) {
-            if (data != null) $scope.data.id = data.id;
-        };
+
 
     })
     .directive("checkboxGroup", function() {

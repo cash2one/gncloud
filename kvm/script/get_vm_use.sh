@@ -2,8 +2,11 @@
 
 ip=$2
 if [ $1 = "cpu" ]; then
- ssh -i /var/lib/libvirt/sshkeys/default centos@${ip}  top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}'
-elif [ $1 = "mem" ]; then
- ssh -i /var/lib/libvirt/sshkeys/default centos@${ip} free | grep Mem | awk '{ print(100 - ($4/$2 * 100.0)) }'
-
+ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null centos@${ip}  top -bn2 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}'
+elif [ $1 = "mem" ]; then  
+ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null centos@${ip} free | grep Mem | awk '{ print(100 - ($4/$2 * 100.0)) }'
+elif [ $1 = "disk" ]; then
+ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null centos@${ip} df -P | grep -v ^Filesystem | awk '{sum += $3} END { print sum/1024}'
+elif [ $1 = "net" ]; then
+ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null centos@${ip} netstat -i | grep eth0 | awk '{print $3}'
 fi

@@ -2,7 +2,7 @@
     <!-- Main component for a primary marketing message or call to action -->
     <h1 class="h1_regular">
         <img src="gn_images/ubuntu_icon_cian.png" alt="아이콘" class="fl">
-        <span data-toggle="modal" data-target="#name-Modal">Ubuntu-512mb-sgp1-01</span>
+        <span data-toggle="modal" data-target="#name-Modal" ng-bind="vm_data.name"></span>
 
         <!-- Modal : 이름 수정 -->
         <div class="modal fade" id="name-Modal" role="dialog">
@@ -25,15 +25,15 @@
 
     <div class="detail-spec">
         <ul class="spec-group li-style">
-            <li>1 CPU</li>
+            <li><spna ng-bind="vm_data.cpu"></spna> CPU</li>
             <li>/</li>
-            <li>512 MB Memory</li>
+            <li><spna ng-bind="vm_data.memory"></spna> MB Memory</li>
             <li>/</li>
-            <li>20 GB Disk</li>
+            <li><spna ng-bind="vm_data.disk"></spna> GB Disk</li>
             <li>/</li>
-            <li>windows</li>
+            <li><spna ng-bind="vm_data.os"></spna></li>
             <li>/</li>
-            <li data-toggle="modal" data-target="#ip-Modal">128.199.88.190</li>
+            <li data-toggle="modal" data-target="#ip-Modal"><spna ng-bind="vm_data.ip"></spna></li>
 
             <!-- Modal : IP 수정 -->
             <div class="modal fade" id="ip-Modal" role="dialog">
@@ -54,10 +54,6 @@
             </div> <!--class="modal fade" id="myModal" role="dialog"-->
         </ul>
 
-        <div class="material-switch pull-right">
-            <input id="someSwitchOptionDefault" name="someSwitchOption001" type="checkbox"/>
-            <label for="someSwitchOptionDefault" class="label-default"></label>
-        </div>
     </div> <!--class="detail-spec"-->
 
     <!--태그-->
@@ -83,46 +79,43 @@
             </div> <!--class="modal-dialog modal-sm"-->
         </div> <!--class="modal fade" id="myModal" role="dialog"-->
         <!--태그 list-->
+
         <ul class="tag-group li-style">
-            <li>#패스트캣</li>
-            <li>#개발</li>
-            <li>#512MB</li>
+            <li  ng-repeat="item in tag_list track by $index">#{{ item }}</li>
         </ul><!-- class="tag-group li-style"-->
     </div> <!--class="detail-tag"-->
 </div> <!--class="title" END-->
 
+
 <div class="detail-main">
-    <!--CPU-->
     <div class="detail-cpu clearfix">
-        <h2 class="fl">CPU</h2>
-        <img src="gn_images/detail_cpu_graph.png" alt="CPU 그래프" class="fr">
-    </div> <!--class="detail-cpu"-->
-
-    <!--MEMORY-->
+        <canvas id="line_chart" height="150"></canvas>
+    </div>
     <div class="detail-memory clearfix">
-        <h2 class="fl">MEMORY</h2>
-        <img src="gn_images/detail_memory_graph.png" alt="MEMORY 그래프" class="fr">
-    </div> <!--class="detail-memory"-->
-
-    <!--DISK-->
+        <iframe src="/memory.html" width="100%" height="50%" scrolling='no' frameborder='0'></iframe>
+    </div>
     <div class="detail-disk clearfix">
         <h2 class="fl">DISK</h2>
         <div class="disk-right-box fr">
-            <span>30GB 사용가능 (총 30GB)</span>
+            <span><spna ng-bind="disk_data.rest_disk"></spna>GB 사용가능 (총 <spna ng-bind="disk_data.total"></spna>GB)</span>
             <div class="progress disk-graph fr">
-                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 30%;">
-                    30%
+                <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': disk_data.disk_per_info + '%' }">
+                    <spna ng-bind="disk_data.disk_per_info"></spna>
                 </div>
             </div>
             <div class="detail-use-box fl"><div class="use-box-sm fl"></div>사용량</div>
             <div class="detail-empty-box"><div class="empty-box-sm fl"></div>남은용량</div>
         </div>
-    </div><!-- class="detail-disk"-->
-
-</div> <!--class="detail-main"-->
+    </div>
+</div>
 
 <div class="detail-delete clearfix">
     <h2>삭제</h2>
     <h4>해당 인스턴스 및 관련된 모든 백업이 삭제되며, 모든 데이터는 복구할 수 없습니다.<br>정말 삭제 하시겠습니까?</h4>
     <button type="button" class="btn btn-link">삭제</button>
 </div> <!--class="detail-delete" -->
+
+<!--<div class="detail-main">-->
+        <!--<iframe src="/flot.html" width="100%" height="50%" scrolling='yes' frameborder='0'>-->
+<!--</div> -->
+

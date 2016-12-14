@@ -13,12 +13,13 @@ angular
 
         $http({
             method: 'GET',
-            url: '/api/kvm/vm/machines',
+            url: '/api/manager/vm/machines',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
                     $scope.guest_list = data.list;
+                    //alert($scope.guest_list.id);
 
                 } else {
                     alert(data.message);
@@ -37,7 +38,7 @@ angular
         ];
 
         $scope.update = function (id, action, index) {
-            var url = '/api/kvm/vm/' + id;
+            var url = '/api/kvm/vm/machines/' + id;
             var method = "PUT";
             if (action.type == "delete") {
                 url = '/api/kvm/vm/machines/' + id;

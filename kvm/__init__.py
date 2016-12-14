@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import atexit
-import logging
-from flask import Flask, send_file, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response
+from datetime import timedelta
+
 from db.database import db_session
-from service.service import server_create, server_list, server_change_status, server_image_list, server_monitor \
+from service.service import server_create, server_change_status, server_monitor \
     , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
     , server_image_delete, getsshkey_info
-from datetime import timedelta
-from kvm.util.json_encoder import AlchemyEncoder
-from apscheduler.scheduler import Scheduler
-from gevent.wsgi import WSGIServer
-
+from util.json_encoder import AlchemyEncoder
+from util.logger import logger
+from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -27,10 +25,6 @@ def job_function():
 
 #### rest start ####
 
-@app.route('/vm/machines', methods=['GET'])
-def list():
-    return jsonify(status=True, message="success", list=server_list())
-
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
@@ -42,7 +36,8 @@ def create_vm():
     disk = request.json['hdd']
     image_id = request.json['id']
     sshkeys = request.json['sshkeys']
-    server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys)
+    tag =request.json['tag']
+    server_create(name ,cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag)
     return jsonify(status=True, message="sucess")
 
 
@@ -69,9 +64,9 @@ def create_snap():
     return jsonify(status=True, message="success")
 
 
-@app.route('/vm/images/<sub_type>', methods=['GET'])
-def list_volume(sub_type):
-    return jsonify(status=True, message="success", list=server_image_list(sub_type))
+# @app.route('/vm/images/<sub_type>', methods=['GET'])
+# def list_volume(sub_type):
+#     return jsonify(status=True, message="success", list=server_image_list(sub_type))
 
 
 @app.route('/vm/images/<id>', methods=['DELETE'])
@@ -98,7 +93,7 @@ def delete_sshKey(id):
 @app.route('/account/keys', methods=['GET'])
 def list_sshKey():
     team_code = 1
-    return jsonify(status=True, message="success", list=list_user_sshkey(team_code))
+    return jsonify(status=True, message="success", list=list_user_sshkey(team_code, db_session))
 
 
 @app.route('/user/sshkey/download/<id>', methods=['GET'])
@@ -115,7 +110,14 @@ def download_sshKey(id):
 
 # @app.errorhandler(Exception)
 # def all_exception_handler(error):
+#     logger.info('%s -- 500 ERROR', error)
 #     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
+
+@app.errorhandler(500)
+def internal_error(exception):
+    app.logger.error(exception)
+    logger.error('%s -- 500 ERROR', exception)
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 
 #### error handler end####
@@ -125,9 +127,9 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 if __name__ == '__main__':
-    cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=5)
-    cron.start()
+    # cron = Scheduler(daemon=True)
+    # cron.add_interval_job(job_function, seconds=20) #minites=1)
+    # cron.start()
     app.run(debug=True)
     # http_server = WSGIServer(('', 5000), app)
     # http_server.serve_forever()

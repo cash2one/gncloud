@@ -5,13 +5,13 @@
   font-family: 'Nanum Barun Gothic';
   font-style: normal;
   font-weight: 200;
-  src: url(../../../../../Documents/publish_private/fonts/NanumBarunGothicUltraLight.eot);
+  src: url(/gn_fonts/fonts/NanumBarunGothicUltraLight.eot);
   src: local('Nanum Barun Gothic UltraLight'),
        local('NanumBarunGothicUltraLight'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicUltraLight.eot?#iefix) format('embedded-opentype'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicUltraLight.woff2) format('woff2'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicUltraLight.woff) format('woff'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicUltraLight.ttf) format('truetype');
+       url(/gn_fonts/NanumBarunGothicUltraLight.eot?#iefix) format('embedded-opentype'),
+       url(/gn_fonts/NanumBarunGothicUltraLight.woff2) format('woff2'),
+       url(/gn_fonts/fonts/NanumBarunGothicUltraLight.woff) format('woff'),
+       url(/gn_fonts/NanumBarunGothicUltraLight.ttf) format('truetype');
 }
 
 @font-face {
@@ -21,10 +21,10 @@
   src: url(../../../../../Documents/publish_private/fonts/NanumBarunGothicLight.eot);
   src: local('Nanum Barun Gothic Light'),
        local('NanumBarunGothicLight'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicLight.eot?#iefix) format('embedded-opentype'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicLight.woff2) format('woff2'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicLight.woff) format('woff'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicLight.ttf) format('truetype');
+      url(/gn_fonts/NanumBarunGothicUltraLight.eot?#iefix) format('embedded-opentype'),
+      url(/gn_fonts/NanumBarunGothicUltraLight.woff2) format('woff2'),
+      url(/gn_fonts/fonts/NanumBarunGothicUltraLight.woff) format('woff'),
+      url(/gn_fonts/NanumBarunGothicUltraLight.ttf) format('truetype');
 }
 
 @font-face {
@@ -34,22 +34,22 @@
   src: url(../../../../../Documents/publish_private/fonts/NanumBarunGothic.eot);
   src: local('Nanum Barun Gothic'),
        local('NanumBarunGothic'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothic.eot?#iefix) format('embedded-opentype'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothic.woff2) format('woff2'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothic.woff) format('woff'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothic.ttf) format('truetype');
+      url(/gn_fonts/NanumBarunGothicUltraLight.eot?#iefix) format('embedded-opentype'),
+      url(/gn_fonts/NanumBarunGothicUltraLight.woff2) format('woff2'),
+      url(/gn_fonts/fonts/NanumBarunGothicUltraLight.woff) format('woff'),
+      url(/gn_fonts/NanumBarunGothicUltraLight.ttf) format('truetype');
 }
 
 @font-face {
   font-family: 'Nanum Barun Gothic';
   font-style: normal;
   font-weight: 700;
-  src: url(../../../../../Documents/publish_private/fonts/NanumBarunGothicBold.eot);
+  src: url(/gn_fonts//NanumBarunGothicBold.eot);
   src: local('Nanum Barun Gothic Bold'),
        local('NanumBarunGothicBold'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicBold.eot?#iefix) format('embedded-opentype'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicBold.woff2) format('woff2'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicBold.woff) format('woff'),
-       url(../../../../../Documents/publish_private/fonts/NanumBarunGothicBold.ttf) format('truetype');
+      url(/gn_fonts/NanumBarunGothicUltraLight.eot?#iefix) format('embedded-opentype'),
+      url(/gn_fonts/NanumBarunGothicUltraLight.woff2) format('woff2'),
+      url(/gn_fonts/fonts/NanumBarunGothicUltraLight.woff) format('woff'),
+      url(/gn_fonts/NanumBarunGothicUltraLight.ttf) format('truetype');
 }
 

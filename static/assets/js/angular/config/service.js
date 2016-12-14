@@ -18,6 +18,7 @@ var serviceConfig = function ($routeProvider, $locationProvider) {
         .when('/account/users', {templateUrl: '/guestSignUp.html', controller: 'guestSignUpCtrl'})
         .when('/guestRepair', {templateUrl: '/guestRepair.html', controller: 'guestRepairCtrl'})
         .when('/dashboard', {templateUrl: '/dashboard.html', controller: 'dashboardCtrl'})
+        .when('/guestDetail', {templateUrl: '/guestDetail.html', controller: 'guestDetailCtrl'})
 }
 
 // 서비스 페이지 설정
