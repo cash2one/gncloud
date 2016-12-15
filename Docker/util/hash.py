@@ -5,8 +5,7 @@ import string
 import random
 
 
-
-#datetime + salt => sha256
+# datetime + salt => sha256
 def random_string(salt, number):
     base = str(datetime.datetime.now())
     #print "base: {0} salt: {1}".format(base, salt)
@@ -14,7 +13,6 @@ def random_string(salt, number):
     #print msg
     hash = hashlib.sha256()
     hash.update(base+", "+salt)
-
     return hash.hexdigest()[:number]
 
 # #upper/lower/number => random chice

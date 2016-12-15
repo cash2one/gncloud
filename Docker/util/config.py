@@ -17,6 +17,8 @@ class Config:
     DOCKER_MANAGE_IPADDR = None
     DOCKER_MANAGER_SSH_ID = None
     DOCKER_MANAGER_SSH_PASSWD = None
+    REPLICAS = None
+    RESTART_MAX_ATTEMPTS = None
 
     def __init__(self, path="../conf/config.conf"):
         # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
@@ -44,6 +46,8 @@ class Config:
         self.DOCKER_MANAGE_IPADDR = parser.get(config_section, "DOCKER_MANAGE_IPADDR")
         self.DOCKER_MANAGER_SSH_ID = parser.get(config_section, "DOCKER_MANAGER_SSH_ID")
         self.DOCKER_MANAGER_SSH_PASSWD = parser.get(config_section, "DOCKER_MANAGER_SSH_PASSWD")
+        self.REPLICAS = parser.get(config_section, "REPLICAS")
+        self.RESTART_MAX_ATTEMPTS = parser.get(config_section, "RESTART_MAX_ATTEMPTS")
 
 
 # 전역 공통사용 객체이다.
