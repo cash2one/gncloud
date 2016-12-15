@@ -20,9 +20,11 @@ def index():
         return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
     return jsonify(status=False, message='You are not logged in')
 
+
 @app.route('/vm/machines', methods=['GET'])
 def guest_list():
     return jsonify(status=True, message="success", list=vm_list(db_session))
+
 
 @app.route('/vm/machines/<id>', methods=['GET'])
 def guest_info(id):
@@ -122,9 +124,11 @@ def quota_info():
 def list():
     return jsonify(status=True, message="success", list=vm_list(db_session))
 
+
 @app.route('/vm/images/<type>/<sub_type>', methods=['GET'])
 def list_volume(type, sub_type):
     return jsonify(status=True, message="success", list=server_image_list(type, sub_type, db_session))
+
 
 @app.route('/vm/images/<sub_type>', methods=['GET'])
 def list_subtype_volume(sub_type):

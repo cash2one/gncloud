@@ -31,7 +31,8 @@ def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     vm_info.day1 = ""
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
-    monitor_history_info = sql_session.query(GnMonitorHist).filter(GnMonitorHist.id == id).all()
+    monitor_history_list = sql_session.query(GnMonitorHist).filter(GnMonitorHist.id == id).all()
+
     disk_info = {}
     if monitor_info is not None:
         total = vm_info.disk
@@ -39,8 +40,17 @@ def vm_info(sql_session, id):
         disk_per_info = int((use*100)/total)
         rest_disk = total - use;
         disk_info = {"total":total, "use":use, "rest_disk":rest_disk, "disk_per_info":disk_per_info}
+    x_info=[]
+    cpu_per_info=[]
+    memory_x_info=[]
+    memory_per_info=[]
+    for list in monitor_history_list:
+        x_info.append(list.cur_time.strftime('%H:%M'))
+        cpu_per_info.append(int(list.cpu_usage))
+        memory_per_info.append(int(list.mem_usage))
 
-    info = {"vm_info":vm_info, "disk_info":disk_info, "other_info":monitor_history_info}
+
+    info = {"vm_info":vm_info, "disk_info":disk_info, "x_info":x_info, "cpu_per_info":cpu_per_info, "memory_per_info":memory_per_info}
 
     return info
 

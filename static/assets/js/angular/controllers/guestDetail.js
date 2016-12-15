@@ -1,6 +1,9 @@
 angular
     .module('gncloud')
-    .controller('guestDetailCtrl', function ($scope, $http, $routeParams) {
+    .controller('guestDetailCtrl', function ($scope, $http, $routeParams, $sce) {
+
+        $scope.cpu_url = $sce.trustAsResourceUrl("/cpu.html?id="+$routeParams.id);
+        $scope.mem_url = $sce.trustAsResourceUrl("/memory.html?id="+$routeParams.id);
 
         $http({
             method: 'GET',
@@ -12,7 +15,6 @@ angular
                     $scope.vm_data = data.info.vm_info;
                     $scope.tag_list = data.info.vm_info.tag.split(",");
                     $scope.disk_data = data.info.disk_info;
-
                 }
                 else {
                     alert(data.message)
