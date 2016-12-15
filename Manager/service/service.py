@@ -4,7 +4,7 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist
 from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
@@ -31,6 +31,8 @@ def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     vm_info.day1 = ""
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
+    monitor_history_info = sql_session.query(GnMonitorHist).filter(GnMonitorHist.id == id).all()
+    disk_info = {}
     if monitor_info is not None:
         total = vm_info.disk
         use = int(monitor_info.disk_usage)
@@ -38,7 +40,7 @@ def vm_info(sql_session, id):
         rest_disk = total - use;
         disk_info = {"total":total, "use":use, "rest_disk":rest_disk, "disk_per_info":disk_per_info}
 
-    info = {"vm_info":vm_info, "disk_info":disk_info}
+    info = {"vm_info":vm_info, "disk_info":disk_info, "other_info":monitor_history_info}
 
     return info
 
@@ -91,29 +93,29 @@ def repair(user_id, password, password_new, password_re, tel, email):
     db_session.commit()
     return 2
 
-def server_image_list(type, sub_type):
+def server_image_list(type, sub_type, sql_session):
     if(sub_type == ""):
-        list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
         return list
     elif(sub_type != ""):
-        list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
         return list
 
-def getQuotaOfTeam(team_code):
-    current_info = db_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
+def getQuotaOfTeam(team_code, sql_session):
+    current_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
                         func.sum(GnVmMachines.memory).label("sum_mem"),
                         func.sum(GnVmMachines.disk).label("sum_disk")
                         ).filter(GnVmMachines.team_code == team_code).one()
-    limit_quota = db_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
-    vm_run_count = db_session.query(func.count(GnVmMachines.id).label("count"))\
+    limit_quota = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+    vm_run_count = sql_session.query(func.count(GnVmMachines.id).label("count"))\
                    .filter(GnVmMachines.team_code == team_code and GnVmMachines.status == "running").one()
-    vm_stop_count = db_session.query(func.count(GnVmMachines.id).label("count")) \
+    vm_stop_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code and GnVmMachines.status == "stop").one()
-    vm_kvm_count = db_session.query(func.count(GnVmMachines.id).label("count")) \
+    vm_kvm_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "kvm").one()
-    vm_hiperv_count = db_session.query(func.count(GnVmMachines.id).label("count")) \
+    vm_hiperv_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "hiperv").one()
-    vm_docker_count = db_session.query(func.count(GnVmMachines.id).label("count")) \
+    vm_docker_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "docker").one()
 
     cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]

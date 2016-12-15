@@ -1,11 +1,28 @@
 /*지앤클라우드 프라이빗 인스턴스 스타일시트*/
 /*나눔바른고딕 폰트*/
 @import url(nanumbarungothic.css);
+body{margin: 0; padding: 0; border: 0; }
 
 /*commend*/
+h1{margin: 0; margin-bottom: 55px;}
+h2{margin: 0; margin-bottom: 20px;}
+h3{margin: 0;}
+h4{margin: 0;}
+h5{margin: 0;}
+h6{margin: 0;}
+
+img{border: 0;}
+
 .fl{float: left;}
 .fr{float: right;}
 .cnt{text-align: center;}
+.border-box{
+    border-radius: 3px;
+    border: 2px solid rgba(215,215,215,.5);
+}
+.marg-bot100{
+    margin-bottom: 100px;
+}
 
 ::selection{
     background: #58c4c6;
@@ -66,6 +83,24 @@ ul li.menu3 a{
     color: #58c4c6;
 }
 
+.click{
+    color: #58c4c6 !important; 
+    cursor: pointer;
+    font-weight: normal;   
+}
+
+/*.click:hover{
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+    color: #58c4c6; 
+    cursor: pointer;
+    font-weight: normal;
+}*/
+
+
 /*HEADER 오른쪽*/
 /*인스턴스 생성 버튼(btn btn-success클래스는 bootstrap.css에)*/
 .navbar-right li.create-btn{
@@ -88,6 +123,56 @@ button.creat-instance-big{
    margin-top: 50px
 }
 
+.dropdown-header {
+  display: block;
+  padding: 3px 20px;
+  font-size: 12px;
+  line-height: 1.42857143;
+  color: #777;
+  white-space: nowrap;
+}
+
+.dropdown-menu > li > a{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #6f6f6f;
+    white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #58c4c6;
+  text-decoration: none;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease; 
+}
+
+.dropdown-menu-table > li > a{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #6f6f6f;
+    white-space: nowrap;
+}
+
+.dropdown-menu-table > li > a:hover,
+.dropdown-menu-table > li > a:focus {
+  color: #58c4c6;
+  text-decoration: none;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease; 
+}
 
 .user-arrow{
    margin-top: 7px;
@@ -120,7 +205,7 @@ button.creat-instance-big{
     display: block;
 }
 
-.nav-tabs > li.active > a.tab-title{
+li.active > .tab-title{
     font-size: 16px;
     color: #58c4c6;
 }
@@ -154,7 +239,7 @@ div.border-bottom{
 }
 
 .type-box div.img-box{
-    background: url(/gn_images/instance_create_windows-s.png)no-repeat;
+    background: url(../images/instance_create_windows-s.png)no-repeat;
     display: block;
     clear: left;
     width: 54px;
@@ -191,9 +276,19 @@ input.input-ssh-name{
     font-weight: 200;
     padding-left: 10px;
 }
+th{
+    font-size: 16px;
+    color: #6f6f6f;        
+}
 
 td.td-style{
     font-size: 14px;
+    color: #6f6f6f;
+}
+
+td.td-style > a{
+    font-size: 14px;
+    color: #6f6f6f;
 }
 
 span.windows-small{
@@ -217,10 +312,13 @@ img.img-icon{
 /*========== 인스턴스 상세페이지 STYLE ==========*/
 
 /*상단 title 영역*/
+.title{
+    margin-bottom: 10px;
+}
+
 div.detail-icon{
     width: 37px;
-    height: 117px;
-    vertical-align: top;
+    height: 38px;
     margin-right: 10px;
 }
 
@@ -233,6 +331,7 @@ h1.h1_regular{
 
 span.detail-h1-name{
     line-height: 45px;
+    cursor: pointer;
 }
 
 ul.li-style > li{
@@ -241,14 +340,38 @@ ul.li-style > li{
 } 
 
 div.detail-spec{
-    width: 100%;
+    /*width: 100%;*/
     display: inline-block;
-    
+    margin-left: 10px;
+    margin-bottom: 15px;    
+}
+
+div.detail-spec>ul>li{
+    font-size: 20px;
+    font-weight: 300;
+    color:#979797;
 }
 
 div.detail-tag{
-    width: 100%;
+    /*width: 100%;*/
     display: inline-block;
+    margin-left: 10px; 
+
+}
+
+img.tag-pencil{
+    margin: 5px 10px 0px 42px;
+    cursor: pointer;
+}
+
+ul.tag-group>li{
+    font-size: 20px;
+    font-weight: 300;
+    color : #58c4c6;
+    background-color: rgba(238,238,238,.5);
+    border-radius: 3px; 
+    padding: 3px;
+    margin: 0px 5px;
 }
 
 /*main-contents 영역*/
@@ -257,21 +380,41 @@ div.row{
     margin-right: 0;
 }
 div.detail-main{
-    border-radius: 3px;
-    border: 2px solid rgba(215,215,215,.5);
     margin-bottom: 53px;
 }
 
 div.detail-cpu{
-   margin-bottom: 53px; 
+    width: 94%;
+    margin: auto;
+    margin-top: 70px;
+   margin-bottom: 100px; 
 }
+
+.cpu-graph{
+    width: 80%;    
+}
+.cpu-graph img{
+    width: 100%;    
+} /*추후 이미지 대신 그래프로 교체되면 img대신 지정할 것*/
 
 div.detail-memory{
-    margin-bottom: 53px;
+    width: 94%;
+    margin: auto;    
+    margin-bottom: 100px;
 }
 
+.memory-graph{
+    width: 80%;    
+}
+
+.memory-graph img{
+    width: 100%;    
+} /*추후 이미지 대신 그래프로 교체되면 img대신 지정할 것*/
+
 div.detail-disk{
-    margin-bottom: 53px;
+    width: 94%;
+    margin: auto;    
+    margin-bottom: 70px;
 }
 
 /*DISK 막대 그래프*/
@@ -282,6 +425,25 @@ div.disk-right-box{
 .disk-graph{
     width: 100%;
     height: 50px;
+}
+
+.marg-bot10{
+    display: inline-block;
+    margin-bottom: 10px;    
+}
+
+.progress{
+    margin-bottom: 10px;
+}
+.progress-bar{
+    background-color: #58c4c6;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.progress-bar{
+    line-height: 50px;
+    font-size: 24px;
 }
 
 .detail-use-box{
@@ -309,24 +471,129 @@ div.disk-right-box{
     margin-right: 10px;
 }
 
-.progress-bar{
-    line-height: 50px;
-    font-size: 24px;
-}
-
 /*삭제 버튼 영역*/
 div.detail-delete{
-    border-radius: 3px;
-    border: 2px solid rgba(215,215,215,.5);
     margin-bottom: 100px;
 }
 
+.delete-box{
+    width: 94%;
+    margin: auto;
+    margin-top: 50px;
+   margin-bottom: 50px;     
+}
+
+/*삭제버튼*/
+.h4-txt{
+    margin-bottom: 20px;
+    font-weight: 200;
+    color: #7d7d7d;
+}
+
+.btn-link{
+    width: 250px;
+    height: 46px;
+    background-color: #ffffff;
+    color: #E60202;
+    border: 1px solid #E60202;
+    border-radius: 3px; 
+}
+
+.btn-link:hover,
+.btn-link:active{
+    width: 250px;
+    height: 46px;
+    background-color: rgba(230,2,2,.1);
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;    
+    color: #E60202;
+    border: 1px solid #E60202;
+    border-radius: 3px; 
+    text-decoration: none;
+}
+
+.btn-link:focus{
+    text-decoration: none;
+    background-color: #ffffff;
+    color: #E60202;
+    border: 1px solid #E60202;
+    border-radius: 3px; 
+}
 
 
 
 
 
+/*========== 인스턴스 이미지 STYLE ==========*/
 
+/*h2 tab*/
+li.active > a h2.h2-image-tab{
+    color: #58c4c6;
+}
+.h2-image-tab{
+    margin-bottom: 15px;
+}
+
+/*h2 tab > box tab*/
+.small-tabs{
+    margin: 29px 0;       
+}
+
+.tab-sm-box{
+    width: 150px;
+    height: 35px;
+    background-color: #ffffff;
+    border: 1px solid #d7d7d7;
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    color: #6f6f6f;
+    padding: 5px; 
+    display: block;
+}
+
+li.active > .tab-sm-box{
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #58c4c6;
+    border: 1px solid #58c4c6;
+}
+
+
+/*이미지 > 가상머신 > 이미지*/
+li.active > .tab-title{
+    font-size: 16px;
+    color: #58c4c6;
+}
+
+/*이미지 > 가상머신 > 스냅샷*/
+.snap-sel{
+    margin-bottom: 30px;    
+}
+
+.form-control{
+    width: 280px;
+    margin-right: 20px;
+}
+.snap-key{
+    height: 34px;
+    width: 135px;
+}
+
+/*이미지 > 컨테이너 > 목록*/
+
+.marg-top29{
+    margin-top: 29px;    
+}
+
+/*container width box*/
+.cont-box{
+    margin: 30px auto;
+    width: 94%;
+}
 
 
 

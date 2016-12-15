@@ -33,8 +33,7 @@ angular
         $scope.actions = [
             {name: '시작', type: 'resume'},
             {name: '정지', type: 'suspend'},
-            {name: '재시작', type: 'reboot'},
-            {name: '삭제', type: 'delete'}
+            {name: '재시작', type: 'reboot'}
         ];
 
         $scope.update = function (id, action, index) {

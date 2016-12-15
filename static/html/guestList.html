@@ -17,12 +17,12 @@
             </thead>
             <tbody>
             <tr ng-repeat="list in guest_list" >
-                <td class="td-first"><img src="/gn_images/ubuntu_icon.png" alt="ubuntu">{{ list.name }}</td>
-                <td class="cnt"> {{ list.cpu }} CPU /{{ list.memory }}MB Memory/{{ list.disk }}GB Disk</td>
+                <td class="td-first"><img src="/gn_images/ubuntu_icon.png" alt="ubuntu"><a href="#/guestDetail?id={{list.id}}"> {{ list.name }}</a></td>
+                <td class="cnt">{{ list.cpu }} CPU /{{ list.memory }}MB Memory/{{ list.disk }}GB Disk</td>
                 <td class="cnt">{{ list.type }}</td>
                 <td class="cnt">{{ list.ip }}</td>
                 <td class="cnt">{{list.day1}}</td>
-                <td class="cnt"><span class="tag">{{list.num}}</span></td>
+                <td class="cnt"><span class="tag">{{list.tag}}</span></td>
                 <td class = "cnt dropdown">더보기
                     <span class="caret user-arrow" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
                     <ul class="dropdown-menu-table" role="menu" >

@@ -51,9 +51,9 @@ class GnVmMachines(Base):
     os_bit = Column(String(2), primary_key=False, nullable=True)
     team_code = Column(String(50), primary_key=False, nullable=True)
     author_id = Column(String(15), primary_key=False, nullable=False)
-    create_time = Column(DateTime, default=datetime.datetime.utcnow)
-    start_time = Column(DateTime, default=datetime.datetime.utcnow)
-    stop_time = Column(DateTime, default=datetime.datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.datetime.now())
+    start_time = Column(DateTime, default=datetime.datetime.now())
+    stop_time = Column(DateTime, default=datetime.datetime.now())
     status = Column(String(10), primary_key=False, nullable=False)
     tag = Column(String(100), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
@@ -101,7 +101,7 @@ class GnUser(Base):
     team_code = Column(String(10), ForeignKey('GN_TEAM.team_code'))
     tel= Column(String(15), primary_key= False, nullable= False)
     email= Column(String(30), primary_key= False, nullable= False)
-    start_date = Column(DateTime, default=datetime.datetime.utcnow)
+    start_date = Column(DateTime, default=datetime.datetime.now())
     gnTeam=relationship('GnTeam')
 
 
@@ -163,7 +163,7 @@ class GnVmImages(Base):
     os_bit = Column(String(2), primary_key=False, nullable=False)
     team_code = Column(String(10), primary_key=False, nullable=False)
     author_id = Column(String(15), primary_key=False, nullable=False)
-    create_time = Column(DateTime, default=datetime.datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.datetime.now())
 
 
     def __init__(self, id=None, name=None, filename=None, type=None
@@ -202,7 +202,7 @@ class GnSshKeys(Base):
     name = Column(String(100), primary_key=False, nullable=False)
     fingerprint = Column(String(50), primary_key=False, nullable=False)
     path = Column(String(100), primary_key=False, nullable=False)
-    create_time = Column(DateTime, default=datetime.datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.datetime.now())
 
     def __init__(self, team_code=None, name=None, fingerprint=None, path=None):
         self.team_code = team_code
@@ -240,3 +240,29 @@ class GnMonitor(Base):
 
     def __json__(self):
         return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage']
+
+class GnMonitorHist(Base):
+    __tablename__ = "GN_MONITOR_HIST"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(6), primary_key=True, nullable=False)
+    cur_time = Column(DateTime, default=datetime.datetime.now())
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
+    cur_time = Column(DateTime, primary_key=True, default=datetime.datetime.now())
+
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
+
+    def __repr__(self):
+        return '<ID %r / Type %r / Cpu_usage %r / Mem_usage %r / Disk_usage %r / Net_usage %r>' \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
+
+    def __json__(self):
+        return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage', 'cur_time']

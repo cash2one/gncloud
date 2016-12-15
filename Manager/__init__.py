@@ -2,10 +2,11 @@
 
 from flask import Flask, jsonify, request, session, escape
 from datetime import timedelta
-
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list
+from db.database import db_session
+from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -114,19 +115,20 @@ def repair_list():
 @app.route('/useinfo', methods=['GET'])
 def quota_info():
     team_code = "004"
-    return jsonify(status=True, message = 'success',list=getQuotaOfTeam(team_code))
+    return jsonify(status=True, message = 'success',list=getQuotaOfTeam(team_code, db_session))
 
 
 @app.route('/vm/machines', methods=['GET'])
 def list():
-    return jsonify(status=True, message="success", list=server_list(db_session))
+    return jsonify(status=True, message="success", list=vm_list(db_session))
 
 @app.route('/vm/images/<type>/<sub_type>', methods=['GET'])
 def list_volume(type, sub_type):
-    return jsonify(status=True, message="success", list=server_image_list(type, sub_type))
+    return jsonify(status=True, message="success", list=server_image_list(type, sub_type, db_session))
+
 @app.route('/vm/images/<sub_type>', methods=['GET'])
-def list_volume(sub_type):
-    return jsonify(status=True, message="success", list=server_image_list(sub_type))
+def list_subtype_volume(sub_type):
+    return jsonify(status=True, message="success", list=server_image_list(sub_type,db_session))
 
 
 
@@ -139,3 +141,5 @@ def shutdown_session(exception=None):
 
 if __name__ == '__main__':
     app.run(port=8080)
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()
