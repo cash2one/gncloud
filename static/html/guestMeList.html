@@ -6,17 +6,20 @@
      </a>
 </div>
 <div class="header" style="border: 1px solid black">
-    <h2>{{Me_list.user_name}}</h2><br>
-    <b>아이디 : {{Me_list.user_id}}</b><br>
-    <b>연락처 : {{Me_list.tel}}</b><br>
-    <b>이메일 : {{Me_list.email}}</b><br>
+    <h2>{{te_list.user_name}}</h2><br>
+    <b>아이디 : {{te_list.user_id}}</b><br>
+    <b>연락처 : {{te_list.tel}}</b><br>
+    <b>이메일 : {{te_list.email}}</b><br>
 </div>
 <br>
 <br>
 <div class="team" style="border: 1px solid black">
-    <h2>{{Me_list.gnTeam.team_name}}</h2><br>
-    <b>팀 코드 : {{Me_list.gnTeam.team_code}}</b><br>
-    <b>팀  장 : {{Me_list.gnTeam.author_id}}</b><br>
+    <h2>{{team_list.team_name}}</h2><br>
+    <b>팀 코드 : {{team_list.team_code}}</b><br>
+    <b>팀  장 : {{team_list.author_id}}</b><br>
+    <h2>CPU  : {{team_list.cpu_quota}}</h2>
+    <h2>MEMORY:{{team_list.mem_quota}}</h2>
+    <h2>DISK  :{{team_list.disk_quota}}</h2>
     <!--<b>총  원 : {{}}</b><br>-->
     <!--<b>팀생성일 : {{}}</b><br>-->
 </div>
@@ -37,20 +40,58 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="list in team_list">
+        <tr ng-repeat="sh in sh_list">
             <!--<td>{{}}</td>-->
-            <td>{{list.user_name}}</td>
-            <td>{{list.user_id}}</td>
-            <td>{{list.tel}}</td>
-            <td>{{list.email}}</td>
-            <td>{{list.join}}</td>
-            <td>{{list.create}}</td>
-            <td>{{list.access}}</td>
+            <td>{{sh.user_name}}</td>
+            <td>{{sh.user_id}}</td>
+            <td>{{sh.tel}}</td>
+            <td>{{sh.email}}</td>
+            <td>{{sh.start_date}}</td>
+            <td>{{}}</td>
+            <td>{{}}</td>
         </tr>
         </tbody>
 </table>
 </div>
 
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <!--<th>번호</th>-->
+            <th>번호</th>
+            <th>등급</th>
+            <th>이름</th>
+            <th>아이디</th>
+            <th>이메일</th>
+            <th>연락처</th>
+            <th>신청일</th>
+            <th>승인일</th>
+            <th>상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="won in won_list">
+            <td>{{}}</td>
+            <td>{{}}</td>
+            <td>{{won[0].user_name}}</td>
+            <td ng-model="data.user_id">{{won[0].user_id}}</td>
+            <td>{{won[0].email}}</td>
+            <td>{{won[0].tel}}</td>
+            <td>{{}}</td>
+            <td ng-model="data.team_code">{{won[1].team_code}}</td>
+            <td>{{won[1].comfirm}}</td>
+            <td class = "cnt dropdown">더보기
+                <span class="caret user-arrow" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
+                <ul class="dropdown-menu-table" role="menu" >
+                    <li ng-repeat="ac in actions">
+                        <a href ng-click="update(won[0].user_id, won[1].team_code, ac)">{{ac.name}}</a>
+                    </li>
+                </ul>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 
 

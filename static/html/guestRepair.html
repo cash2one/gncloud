@@ -2,15 +2,15 @@
 <form ng-submit="submit()" ng-controller="guestRepairCtrl">
     <div class="table-responsive">
         <div class="col-xs-3">
-            <b>{{Me_list.GnTeam.team_name}}</b><br>
-            <b>{{Me_list.GnTeam.team_name}}</b><br>
-            <b>{{Me_list.user_name}}</b><br>
-            <b>{{Me_list.user_id}}</b><br>
+            <b>{{}}</b><br>
+            <b>{{}}</b><br>
+            <b>{{Me_list.gnUser.user_name}}</b><br>
+            <b>{{Me_list.gnUser.user_id}}</b><br>
             <b>현재비밀번호</b><input type="password" ng-model="data.password"  requierd /><br>
             <b>새 비밀번호</b><input type="password" ng-model="data.password_new" minlength="6" requierd /><br>
             <b>재 확 인</b><input type="password" ng-model="data.password_ret" minlength="6" requierd /><br>
-            <b>연 락 처</b><input type="text" ng-model="data.tel" minlength="6" placeholder="{{Me_list.tel}}" /><br>
-            <b>이 메 일</b><input type="text" ng-model="data.email" minlength="6" placeholder="{{Me_list.email}}" /><br>
+            <b>연 락 처</b><input type="text" ng-model="data.tel" minlength="6" placeholder="{{Me_list.gnUser.tel}}" /><br>
+            <b>이 메 일</b><input type="text" ng-model="data.email" minlength="6" placeholder="{{Me_list.gnUser.email}}" /><br>
         </div>
         <input type="hidden" id="base" name="base" ng-model="data.base" class="form-control">
     </div><br/>

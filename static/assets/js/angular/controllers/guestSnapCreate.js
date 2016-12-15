@@ -26,6 +26,13 @@ angular
 
 
         $scope.data = {};
+        $scope.update_image = function (data) {
+            if (data != null) {
+                $scope.data.ord_id = data.id;
+                $scope.data.type = data.type;
+            }
+        };
+
         $scope.submit = function () {
             var url = "/api/" + $scope.data.type + "/vm/machine/snapshots";
             $http({
@@ -46,11 +53,5 @@ angular
                 });
         };
 
-        $scope.update_image = function (data) {
-            if (data != null) {
-                $scope.data.ord_id = data.id;
-                $scope.data.type = data.type;
-            }
-        };
 
     });

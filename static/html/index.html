@@ -10,9 +10,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/gn_images/favicon-16x16.png">
     <title>지앤클라우드 프라이빗</title>
     <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/gn_css/bootstrap.css" />
     <link rel="stylesheet" href="/gn_css/style_instance_list.css" />
-    <link rel="stylesheet" href="gn_css/style_instance.css" />
+    <link rel="stylesheet" href="/gn_css/style_instance.css" />
     <!--<link href="/css/bootstrap.min.css" rel="stylesheet">-->
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <!--<link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
@@ -71,34 +72,32 @@
             <ul class="nav navbar-nav">
                 <li class="h4 menu1"><a href="#">대시보드</a></li>
                 <li class="h4 menu2"><a href="#/guestList">인스턴스</a></li>
-                <li class="h4 menu3"><a href="#/">이미지</a></li>
+                <li class="h4 menu3"><a href="#guestSnapList/">이미지</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="create-btn">
                     <a href="#/guestCreate">
-                        <button type="button" class="btn btn-success creat-instance">인스턴스 생성</button>
+                        <button type="submit" value="submit" class="btn btn-success creat-instance">인스턴스 생성</button>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <li class="dropdown dropdown-top">
-                            <a href="#" class="user h4" id="name"></a>
-                            <span class="caret user-arrow" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
-                            <ul class="dropdown-menu" role="menu">
-                                <li class="dropdown-headr">Nav header</li>
+                    <li class="dropdown">
+                        <a href="#/account/users/list" class="user h4" id="name"></a>
+                        <span class="caret user-arrow" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-headr">Nav header</li>
                                 <li><a href="#/guestRepair">개인설정</a></li>
                                 <li><a href=javascript:logout();>로그아웃</a></li>
                                 <li><a href="#/account">로그인</a> </li>
                             </ul>
-                        </li>
-                    </a>
+                    </li>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container">
+<div class="container marg-bot100">
     <!--<div class="row">-->
         <!--<div class="col-sm-3 col-md-2 sidebar">-->
             <!--<ul class="nav nav-sidebar">-->
@@ -168,10 +167,11 @@
             {
                 $.ajax({
                     type: "GET",
-                    url: '/manager/vm/guestLogout',
+                    url: '/api/manager/vm/guestLogout',
                     headers: {'Content-Type': 'application/json; charset=utf-8'},
                     success: function () {
                         alert("logout");
+                        window.location.reload();
                     }
 
                 })

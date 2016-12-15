@@ -8,7 +8,7 @@ angular
         $('ul.nav-sidebar a').filter(function () {
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
-
+        $('[data-toggle="tooltip"]').tooltip();
         $scope.guest_list = {};
 
         $http({
@@ -62,6 +62,10 @@ angular
                 .error(function(data, status, headers, config) {
                     console.log(status);
                 });
+
+        }
+
+        $scope.desc = function(){
 
         }
     });

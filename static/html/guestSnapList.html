@@ -1,22 +1,165 @@
-<h2 class="sub-header">스냅샷</h2>
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>이름</th>
-            <th>종류</th>
-            <th>생성일</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="list in guest_snap_list">
-            <td>{{ list.name }}</td>
-            <td>{{ list.type }}</td>
-            <td>{{ list.create_time }}</td>
-            <td><span ng-click="update(list.id,$index)">삭제</span></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-</div>
-</div>
+<div>
+    <h1>이미지</h1>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" class="" ng-click="snap('mac')"><h2 class-="h2-image-tab">가상머신</h2></a>
+        </li>
+        <li><a data-toggle="tab" class="" ng-click="snap('container')"><h2 class="h2-image-tab">컨테이너</h2></a>
+        </li>
+    </ul>
+    <!-- class="nav nav-tabs"-->
+    <!--가상머신/컨테이너-->
+    <div class="tab-content clearfix">
+        <!--탭메뉴1 : 가상머신 -->
+        <div id="machine" class="">
+            <!--가상머신 tab-->
+            <ul id="machine" class="nav small-tabs">
+                <li class="active"><a id="tab" data-toggle="tab" class="tab-sm-box" href="" ng-click="snap('image')">이미지</a></li>
+                <li><a id="sab" data-toggle="tab" class="tab-sm-box" href="" ng-click="snap('snap')">스냅샷</a></li>
+            </ul> <!-- class="nav nav-tabs"-->
+            <div class="tab-content clearfix">
+                <!--가상머신 > 이미지 -->
+                <div id="image" class="border-box snap-sel">
+                    <div class="table-responsive cont-box">
+                        <h2>목록</h2>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width:30%">OS</th>
+                                <th style="width:20%">버전</th>
+                                <th style="width:20%">Bit</th>
+                                <th style="width:20%">타입</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="base in base_list">
+                                <td class="td-style td-first" >
+                                    <img src="gn_images/image_container_windows_icon.png" alt="windows">
+                                    <a href="#">{{base.os}}</a>
+                                </td>
+                                <td class="td-style cnt">{{base.os_ver}}{{base.os_subver}}</td>
+                                <td class="td-style cnt">{{base.os_bit}}</td>
+                                <td class="td-style cnt">{{base.type}}</td>
+                                <td class="td-style cnt"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div> <!--class="table-responsive"-->
+                </div> <!--id="image" class="tab-pane fade in active"-->
+
+                <!--가상머신 > 스냅샷-->
+                <!--인스턴스 선택-->
+                <div id="snap" class="">
+                    <!--1.스냅샷 선택 박스-->
+                    <div class="border-box snap-sel">
+                        <div class="cont-box">
+                            <div class="marg-bot10">
+                                <select class="fl" ng-model="guest_image" ng-options="list.name for list in list" ng-change="update_image(guest_image)">
+                                    <option value="">인스턴스 선택</option>
+                                </select>
+                                <input type="text" ng-model="data.name"class="form-control fl" placeholder="스냅샷 이름">
+                                <button type="submit" value="submit" class="btn btn-primary snap-key" ng-click="submit()">스냅샷 생성</button>
+                            </div>
+                            <h4 class="h4-txt">
+                                스냅샷은 정지된 인스턴스만 가능합니다.<br>
+                                인스턴스를 정지 시키려면 <strong>인스턴스 목록 혹은, 정지시키실 인스턴스의 상세 페이지</strong>에서 적용하 실 수 있습니다.
+                            </h4>
+                        </div>
+                    </div> <!--class="border-box" 1.스냅샷 선택 박스-->
+
+                    <!--2.스냅샷 목록 박스-->
+                    <div class="border-box">
+                        <!--컨테이너 tab-->
+                        <div class="table-responsive cont-box">
+                            <h2>목록</h2>
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th style="width:20%">이름</th>
+                                    <th style="width:15%">OS</th>
+                                    <th style="width:15%">사이즈</th>
+                                    <th style="width:10%">타입</th>
+                                    <th style="width:10%">생성일<div class="refresh"></div></th>
+                                    <th style="width:10%"><!--더보기--></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="snap in snap_list">
+                                    <td class="td-style td-first">
+                                        <img src="gn_images/image_container_ubuntu_icon.png" alt="postgres">
+                                        <a href="#">{{snap.name}}</a>
+                                    </td>
+                                    <td class="td-style cnt">{{snap.os}}{{snap.os_ver}}</td>
+                                    <td class="td-style cnt">20 GB Disk</td>
+                                    <td class="td-style cnt">{{snap.type}}</td>
+                                    <td class="td-style cnt">4시간전</td>
+                                    <td class="td-style cnt dropdown">더보기
+                                        <!--더보기>드롭다운-->
+                                        <span class="caret" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
+                                        <ul class="dropdown-menu-table" role="menu">
+                                            <li class="dropdown-header">더보기</li>
+                                            <li ng-repeat="sel in actions"><a ng-click="update(snap.id,sel,$index)">{{sel.name}}</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div> <!--컨테이너 목록 class="table-responsive"-->
+                    </div> <!--class="border-box" 2.스냅샷 목록 박스-->
+                </div> <!--스냅샷-->
+            </div>  <!--class="tab-content"-->
+        </div> <!--id="image" class="tab-pane fade in active"-->
+
+
+        <!--탭메뉴2 : 컨테이너-->
+        <div id="container" class="border-box">
+            <!--컨테이너 tab-->
+            <div class="table-responsive cont-box">
+                <h2>목록</h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width:30%">OS</th>
+                        <th style="width:20%">버전</th>
+                        <th style="width:20%">태그</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="con in contain_list">
+                        <td class="td-style td-first">
+                            <img src="gn_images/image_container_postgress_icon.png" alt="postgres">
+                            <a href="#">{{con.name}}</a>
+                        </td>
+                        <td class="td-style cnt">9.6.0</td>
+                        <td class="td-style cnt"><span class="tag">latest</span></td>
+                        <td class="td-style cnt"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div> <!--컨테이너 목록 class="table-responsive"-->
+        </div> <!--스냅샷-->
+    </div> <!--가상머신 class="tab-content clearfix"-->
+
+
+<!--<h2 class="sub-header">스냅샷</h2>-->
+<!--<div class="table-responsive">-->
+    <!--<table class="table table-striped">-->
+        <!--<thead>-->
+        <!--<tr>-->
+            <!--<th>이름</th>-->
+            <!--<th>종류</th>-->
+            <!--<th>생성일</th>-->
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+        <!--<tr ng-repeat="list in guest_snap_list">-->
+            <!--<td>{{ list.name }}</td>-->
+            <!--<td>{{ list.type }}</td>-->
+            <!--<td>{{ list.create_time }}</td>-->
+            <!--<td><span ng-click="update(list.id,$index)">삭제</span></td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+    <!--</table>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->

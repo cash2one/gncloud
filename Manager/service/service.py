@@ -4,7 +4,7 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnUserTeam, GnSshKeys, GnContanierImage
 from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
@@ -13,16 +13,24 @@ def test_list():
     runlist = GnVmMachines.query.all()
     return runlist
 
-def login_list(user_id, password, team_code):
+def login_list(user_id, password):
     password = random_string(password)
-    return db_session.query(GnUser).filter(GnUser.team_code == team_code).filter(GnUser.user_id == user_id).filter(GnUser.password == password).one_or_none()
+    list = db_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password == password).one_or_none()
+    return list
 
 
-def me_list(myuser):
-    return db_session.query(GnUser).filter(GnUser.user_id == myuser).one()
+def me_list(user_id):
+    team =db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
+    list =db_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
+    return list
 
-def teamcheck_list(teamcode):
-    return db_session.query(GnUser).filter(GnUser.team_code == teamcode).all()
+def tea(user_id, team_code):
+    sub_stmt = db_session.query(GnUserTeam.user_id).filter(GnUserTeam.team_code == team_code)
+    list = db_session.query(GnUser).filter(GnUser.user_id.in_(sub_stmt)).all()
+    return list
+
+def teamcheck_list(user_id):
+    return db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
 
 def sign_up(user_name, user_id, password, password_re):
     check = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
@@ -60,12 +68,12 @@ def repair(user_id, password, password_new, password_re, tel, email):
     return 2
 
 def server_image_list(type, sub_type):
-    if(sub_type == ""):
-        list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
-        return list
-    elif(sub_type != ""):
-        list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
-        return list
+    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+    return list
+
+def server_image(type):
+    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+    return list
 
 def getQuotaOfTeam(team_code):
     current_info = db_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
@@ -100,7 +108,7 @@ def getQuotaOfTeam(team_code):
     return quato_info
 
 def server_list(sql_session):
-    list = sql_session.query(GnVmMachines).all()
+    list = sql_session.query(GnVmMachines).order_by("create_time desc").all()
     for vmMachine in list:
         tagArr = vmMachine.tag.split(',')
         vmMachine.num = tagArr[0] + '+' +str(len(tagArr))
@@ -124,4 +132,43 @@ def list_user_sshkey(team_code, sql_session):
     return list
 
 
+def teamsignup_list(comfirm, user_id):
+    if(comfirm == 'N'):
+        com= db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
+        com.comfirm = 'Y'
+        db_session.commit()
+    return 1
 
+def team_list(user_id):
+    list= db_session.query(GnUser).filter(GnUser.user_id ==user_id).one()
+    list.comfirm = ""
+    return list
+
+def container():
+    return db_session.query(GnContanierImage).all()
+
+def teamset(user_id, team_code):
+    list = db_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).all()
+    return list
+
+def approve_set(user_id,code,type,user_name):
+    if(type == 'approve'):
+        list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id==user_id).filter(GnUserTeam.team_code == code).one()
+        list.comfirm = "Y"
+        db_session.commit()
+        return True
+    if(type == 'change'):
+        list = db_session.query(GnTeam).filter(GnTeam.team_code== code).one()
+        list.author_id = user_name
+        db_session.commit()
+        return True
+    if(type == 'reset'):
+        list = db_session.query(GnUser).filter(GnUser.user_id==user_id).one()
+        list.password = random_string('11111111')
+        db_session.commit()
+        return True
+
+def team_delete(id ,code):
+    db_session.query(GnUserTeam).filter(GnUserTeam.user_id == id).filter(GnUserTeam.team_code == code).delete()
+    db_session.commit()
+    return True

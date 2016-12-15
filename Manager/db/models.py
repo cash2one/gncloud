@@ -1,3 +1,4 @@
+
 __author__ = 'NaDa'
 # -*- coding: utf-8 -*-
 
@@ -6,6 +7,7 @@ from sqlalchemy.orm import relationship
 import datetime
 
 from Manager.db.database import Base
+
 
 class GnHostMachines(Base):
     __tablename__ = "GN_HOST_MACHINES"
@@ -98,31 +100,44 @@ class GnUser(Base):
     user_id = Column(String(50), primary_key= True, nullable=False)
     password = Column(String(50), primary_key= False, nullable= False)
     user_name = Column(String(20), primary_key= False, nullable= False)
-    team_code = Column(String(10), ForeignKey('GN_TEAM.team_code'))
     tel= Column(String(15), primary_key= False, nullable= False)
     email= Column(String(30), primary_key= False, nullable= False)
     start_date = Column(DateTime, default=datetime.datetime.utcnow)
-    gnTeam=relationship('GnTeam')
 
-
-
-    def __init__(self, user_id = user_id, password= None, team_code=None, user_name=None, tel=None, email=None, start_date=None):
+    def __init__(self, user_id = user_id, password= None, user_name=None, tel=None, email=None, start_date=None):
 
         self.user_id = user_id
         self.password= password
-        self.team_code = team_code
         self.user_name = user_name
         self.tel = tel
         self.email = email
         self.start_date = start_date
 
+
     def __repr__(self):
-        return '< ID %r / Password %r / Team_code %r / User_name %r / Tel %r / Eamil %r / Team_name %r >' \
-                % (self.user_id, self.password, self.team_code, self.user_name, self.tel, self.email, self.gnTeam.team_name)
+        return '< ID %r / Password %r / User_name %r / Tel %r / Eamil %r/ Start_date %r />' \
+                % (self.user_id, self.password, self.user_name, self.tel, self.email, self.start_date)
 
     def __json__(self):
-        return ['user_id', 'password', 'team_code', 'user_name', 'tel' , 'email', 'gnTeam']
+        return ['user_id', 'password', 'user_name', 'tel' , 'email', 'start_date']
 
+class GnUserTeam(Base):
+    __tablename__="GN_USER_TEAMS"
+    user_id = Column(String(50),primary_key=True, nullable=False )
+    team_code = Column(String(20), primary_key=True, nullable=False)
+    comfirm = Column(String(1), primary_key=False, nullable=False)
+
+    def __init__(self, user_id=user_id, team_code=team_code, comfirm=comfirm):
+        self.user_id = user_id
+        self.team_code = team_code
+        self.comfirm = comfirm
+
+    def __repr__(self):
+        return '<Id %r /Team_code %r / Comfirm %r / >' \
+               % (self.user_id, self.team_code, self.comfirm, )
+
+    def __json__(self):
+        return ['user_id', 'team_code', 'comfirm']
 
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'
@@ -216,3 +231,34 @@ class GnSshKeys(Base):
 
     def __json__(self):
         return ['id', 'name', 'fingerprint', 'create_time']
+
+
+
+
+class GnContanierImage(Base):
+    __tablename__="GN_CONTAINER_IMAGES"
+    id = Column(String(8), primary_key=True, nullable=False, default='')
+    name = Column(String(50), nullable=False, default='')
+    icon = Column(String(100), nullable=True, default='')
+    internal_id = Column(String(100), nullable=True, default='')
+    internal_name = Column(String(100), nullable=True, default='')
+    team_code = Column(String(10), nullable=True, default='')
+    author_id = Column(String(15), nullable=True, default='')
+    create_time = Column( nullable=False, default=datetime.datetime.now())
+
+    def __init__(self, id=id, name= name, icon=icon, internal_id=internal_id, internal_name=internal_name, team_code=team_code, author_id =author_id, create_time=create_time):
+        self.id= id
+        self.name =name
+        self.icon = icon
+        self.internal_id= internal_id
+        self.internal_name = internal_name
+        self.team_code = team_code
+        self.author_id =author_id
+        self.create_time = create_time
+
+    def __repr__(self):
+        return '<ID %r / Name %r / Team_code %r / >'\
+            % (self.id, self.name, self.team_code)
+
+    def __json__(self):
+        return ['id', 'name', 'team_code']

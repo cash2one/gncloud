@@ -9,16 +9,14 @@ angular
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
 
-        //$scope.Me_list = {};
-
         $http({
             method: 'GET',
-            url: '/api/manager/vm/guestMeList',
+            url: '/api/manager/vm/account/users/list',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
-                    $scope.Me_list = data.list;
+                    $scope.te_list = data.list;
 
                 } else {
                     alert(data.message);
@@ -31,7 +29,7 @@ angular
         $scope.team_list = {};
         $http({
             method: 'GET',
-            url: '/api/manager/vm/account/users',
+            url: '/api/manager/vm/account/team',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -46,5 +44,74 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
+        $scope.sh_list ={};
+        $http({
+            method: 'GET',
+            url: '/api/manager/vm/acoount/teamlist',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data.status == true) {
+                    $scope.sh_list = data.list;
 
-    });
+                } else {
+                    alert(data.message);
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
+        $scope.won_list ={};
+        $http({
+            method: 'GET',
+            url: '/api/manager/vm/account/teamset',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data.status == true) {
+                    $scope.won_list = data.list;
+
+                } else {
+                    alert(data.message);
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
+
+        $scope.actions = [
+            {name: '승인', type: 'approve'},
+            {name: '등급변경', type: 'change'},
+            {name: '비밀번호초기화', type: 'reset'},
+            {name: '팀탈퇴', type: 'dropout'}
+        ];
+        $scope.data={};
+        $scope.update = function (id, code, action) {
+            var url = '/api/manager/vm/account/teamset/'+id+'/'+code;
+            var method = "PUT";
+            if (action.type == "dropout") {
+                url = '/api/manager/vm/account/teamset/'+id+'/'+code;
+                method = 'DELETE';
+            }
+
+            $http({
+                method: method,
+                url: url,
+                data: action,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function(data, status, headers, config) {
+                    if (data.status == true) {
+                        alert(name + " guest의 상태가 변경되었습니다");
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    console.log(status);
+                });
+
+        };
+        });

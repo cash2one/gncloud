@@ -2282,6 +2282,7 @@ th {
   width: 100%;
   max-width: 100%;
   margin-bottom: 20px;
+        overflow-y: hidden;
 }
 .table > thead > tr > th,
 .table > tbody > tr > th,
@@ -3140,15 +3141,7 @@ fieldset[disabled] .btn-default.active {
 /*  border-color: #2e6da4;*/
 }
 
-/*인스턴스 생성페이지 SSH 키 생성 버튼 클래스*/
-.ssh-key{
-    width: 135px;
-    height: 37px;
-}
-.ssh-create-key{
-    width: 100%;
-    height: 37px;
-}
+
 
 .btn-primary:hover,
 .btn-primary:focus,
@@ -3164,7 +3157,7 @@ fieldset[disabled] .btn-default.active {
     -o-transition: all .3s ease;
     transition: all .3s ease;    
     
-  /*border-color: #204d74;*/
+  border-color: rgba(215,215,215,1);
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -3477,17 +3470,7 @@ tbody.collapse.in {
           transition-property: height, visibility;
 }
 .user{float: left;}
-.caret {
-  float: right;
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 10px;
-  vertical-align: middle;
-  border-top: 5px solid #00afb4;
-  border-right: 5px solid transparent;
-  border-left: 5px solid transparent;
-}
+
 .dropup,
 .dropdown {
   position: relative;
@@ -3527,15 +3510,7 @@ tbody.collapse.in {
   overflow: hidden;
   background-color: #e5e5e5;
 }
-.dropdown-menu > li > a {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: normal;
-  line-height: 1.42857143;
-  color: #333;
-  white-space: nowrap;
-}
+
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
   color: #262626;
@@ -3568,28 +3543,6 @@ tbody.collapse.in {
 }
 
 /* ======= 테이블 드롭다운 메뉴 클래스 ======= */
-.dropdown-menu-table {
-  position: absolute;
-  top: 75%;
-  left: -5px;
-  z-index: 1000;
-  display: none;
-  float: left;
-  min-width: 120px;
-  padding: 5px 0;
-  margin: 2px 0 0;
-  font-size: 14px;
-  text-align: left;
-  list-style: none;
-  background-color: #fff;
-  -webkit-background-clip: padding-box;
-          background-clip: padding-box;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, .15);
-  border-radius: 4px;
-  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-}
 .dropdown-menu-table.pull-right {
   right: 0;
   left: auto;
@@ -4321,14 +4274,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   bottom: 0;
   margin-bottom: 0;
   border-width: 1px 0 0;
-}
-.navbar-brand {
-    margin-left: -15px;
-  float: left;
-  height: 39px;
-/*  padding: 15px 0px 0px 15px;*/
-  font-size: 18px;
-  line-height: 20px;
 }
 .navbar-brand:hover,
 .navbar-brand:focus {
@@ -5946,7 +5891,7 @@ button.close {
 .modal-header {
   min-height: 16.42857143px;
   padding: 15px;
-  /*border-bottom: 1px solid #e5e5e5;*/
+  border-bottom: none;
 }
 .modal-header .close {
   margin-top: -2px;
@@ -5962,7 +5907,7 @@ button.close {
 .modal-footer {
   padding: 15px;
   text-align: right;
-  /*border-top: 1px solid #e5e5e5;*/
+  border-top: none;
 }
 .modal-footer .btn + .btn {
   margin-bottom: 0;
@@ -5999,110 +5944,7 @@ button.close {
     width: 900px;
   }
 }
-.tooltip {
-  position: absolute;
-  z-index: 1070;
-  display: block;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: normal;
-  line-height: 1.4;
-  visibility: visible;
-  filter: alpha(opacity=0);
-  opacity: 0;
-}
-.tooltip.in {
-  filter: alpha(opacity=90);
-  opacity: .9;
-}
-.tooltip.top {
-  padding: 5px 0;
-  margin-top: -3px;
-}
-.tooltip.right {
-  padding: 0 5px;
-  margin-left: 3px;
-}
-.tooltip.bottom {
-  padding: 5px 0;
-  margin-top: 3px;
-}
-.tooltip.left {
-  padding: 0 5px;
-  margin-left: -3px;
-}
-.tooltip-inner {
-  max-width: 200px;
-  padding: 3px 8px;
-  color: #fff;
-  text-align: center;
-  text-decoration: none;
-  background-color: #000;
-  border-radius: 4px;
-}
-.tooltip-arrow {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-}
-.tooltip.top .tooltip-arrow {
-  bottom: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px 5px 0;
-  border-top-color: #000;
-}
-.tooltip.top-left .tooltip-arrow {
-  right: 5px;
-  bottom: 0;
-  margin-bottom: -5px;
-  border-width: 5px 5px 0;
-  border-top-color: #000;
-}
-.tooltip.top-right .tooltip-arrow {
-  bottom: 0;
-  left: 5px;
-  margin-bottom: -5px;
-  border-width: 5px 5px 0;
-  border-top-color: #000;
-}
-.tooltip.right .tooltip-arrow {
-  top: 50%;
-  left: 0;
-  margin-top: -5px;
-  border-width: 5px 5px 5px 0;
-  border-right-color: #000;
-}
-.tooltip.left .tooltip-arrow {
-  top: 50%;
-  right: 0;
-  margin-top: -5px;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #000;
-}
-.tooltip.bottom .tooltip-arrow {
-  top: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #000;
-}
-.tooltip.bottom-left .tooltip-arrow {
-  top: 0;
-  right: 5px;
-  margin-top: -5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #000;
-}
-.tooltip.bottom-right .tooltip-arrow {
-  top: 0;
-  left: 5px;
-  margin-top: -5px;
-  border-width: 0 5px 5px;
-  border-bottom-color: #000;
-}
+
 .popover {
   position: absolute;
   top: 0;
@@ -6759,36 +6601,6 @@ a.navbar-brand img{
     text-align: center;
 }
 
-.navbar-nav li.menu1{
-    width: 65px;
-	height: 20px;
-    text-align: center;
-    margin-left: 85px;
-    margin-top: 51px;
-}
-
-.navbar-nav li.menu2{
-    width: 65px;
-	height: 20px;
-    text-align: center;
-    margin-left: 72px;
-    margin-top: 51px;
-}
-
-.navbar-nav li.menu3{
-	width: 49px;
-	height: 20px;
-    text-align: center;
-    margin-left: 72px;
-    margin-top: 51px;
-}
-
-ul li.menu1 a,
-ul li.menu2 a,
-ul li.menu3 a{
-    display: block;
-    text-decoration: none;
-}
 
 .menu1 a:hover{
     -webkit-transition: all .3s ease;
@@ -6816,24 +6628,8 @@ button.creat-instance-big{
     margin-bottom: 100px;
 }
 
-.dropdown-top{
-    height: 20px;
-   margin-top: 50px
-}
 
 
-.user-arrow{
-   margin-top: 7px;
-    cursor: pointer;
-}
-
-.user{
-    display: block;
-    cursor: pointer;
-    margin-left: 43px;
-    width: 60px;
-	height: 19px;
-}
 
 .td-first img{
     margin-right: 10px
@@ -6894,64 +6690,6 @@ div.border-bottom{
     overflow: hidden;
 }
 
-div.snap-box{
-    width: 100%;
-    height: 90px;
-}
-
-button.snap-name{
-    width: 32.9%;
-}
-
-button.snap-name:nth-child(1){
-    margin-right: .5%;
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(2){
-    margin-right: .5%;
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(3){
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(4){
-    margin-right: .5%;
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(5){
-    margin-right: .5%;
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(6){
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(7){
-    margin-right: .5%;
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(8){
-    margin-right: .5%;
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(9){
-    margin-bottom: 10px;
-}
-button.snap-name:nth-child(10){
-    margin-right: .5%;
-    margin-bottom: 10px;
-}
-
-p.ellipsis{   
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis;
-}
-
-img.elli-img-icon{
-    margin-right: 10px;
-    
-}
-
 input.input-ssh-name{
     height: 37px;
     width: 100%;
@@ -6960,9 +6698,7 @@ input.input-ssh-name{
     padding-left: 10px;
 }
 
-td.td-style{
-    font-size: 14px;
-}
+
 
 span.windows-small{
     font-size: 0.7em;
