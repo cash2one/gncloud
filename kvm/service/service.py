@@ -2,12 +2,9 @@
 __author__ = 'yhk'
 
 import subprocess
-
 import datetime
 from pexpect import pxssh
-
 from sqlalchemy import func
-
 from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys, GnId
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
@@ -16,15 +13,19 @@ from kvm.util.config import config
 
 USER = "root"
 
-def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys):
+def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag):
+    result = {"status":True, "message":"sucess"}
+
     try:
         # host 선택 룰
         # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
+        host_ip = None
+        host_id = None
         host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "kvm").all()
         for host_info in host_list:
-            use_sum_info = db_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
-                                            func.sum(GnVmMachines.memory).label("sum_mem"),
-                                            func.sum(GnVmMachines.disk).label("sum_disk")
+            use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
+                                            func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
+                                            func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
                                             ).filter(GnVmMachines.host_id == host_info.id).one_or_none()
             rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
             rest_mem = host_info.max_mem - use_sum_info.sum_mem
@@ -35,12 +36,15 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
                 host_id = host_info.id
                 break
 
+        if(host_ip is None):
+            result = {"status":False, "message":"HOST 머신 리소스가 부족합니다"}
+            return result
 
         # base image 조회
         image_info = db_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
 
         # vm 생성
-        id = kvm_create(name, cpu, memory, disk, image_info.filename, image_info.sub_type, host_ip)
+        intern_id = kvm_create(name, cpu, memory, disk, image_info.filename, image_info.sub_type, host_ip)
 
         #ip 세팅
         ip = ""
@@ -71,12 +75,12 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
                 break
 
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
-                                  , type='kvm', internal_id=id, internal_name=name, ip=ip, host_id=host_id, os=image_info.os
+                                  , type='kvm', internal_id=intern_id, internal_name=name, ip=ip, host_id=host_id, os=image_info.os
                                   , os_ver=image_info.os_ver, os_sub_ver=image_info.os_subver, os_bit=image_info.os_bit
-                                  , team_code=team_code, author_id='곽영호',status='running')
+                                  , team_code=team_code, author_id=user_id,status='running', tag=tag)
         db_session.add(vm_machine)
         db_session.commit()
-        print("==end==")
+        return result
     except IOError as errmsg:
         print(errmsg)
 
@@ -119,10 +123,6 @@ def server_delete(id):
     # db 저장
     db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete();
     db_session.commit()
-
-# def server_image_list(type):
-#     list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
-#     return list
 
 
 def server_image_delete(id):

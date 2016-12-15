@@ -104,11 +104,15 @@
     <h2>SSH 키 설정</h2>
     <div class="">
         <button  type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#myModal">SSH 키 생성</button>
-        <span  ng-repeat="sshkey in sshkey_list">
-            <div  class="checkbox fl">
-                <label class="gn-ch-box"><input  type="checkbox" value="" class="check-style">{{sshkey.name}}</label>
-            </div>
-        </span>
+            <span ng-repeat="item in sshkey_list">
+                <div class="checkbox fl">
+                    <label class="gn-ch-box">
+                        <input type="checkbox" checkbox-group/>
+                        {{ item.name }}
+                    </label>
+                </div>
+            </span>
+
 
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">

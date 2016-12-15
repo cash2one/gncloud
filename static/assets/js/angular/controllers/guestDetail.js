@@ -22,4 +22,25 @@ angular
                 console.log(status);
             });
 
+
+        $scope.delete = function() {
+            $http({
+                method: 'DELETE',
+                url: '/api/'+$scope.vm_data.type+'/vm/machines/' + $scope.vm_data.id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                       alert("인스턴스가 삭제되었습니다");
+                       window.location.href = '#/guestList';
+                    }
+                    else {
+                        alert(data.message)
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
     });

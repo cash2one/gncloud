@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from apscheduler.scheduler import Scheduler
 
 from flask import Flask, jsonify, request, make_response
 from datetime import timedelta
+from gevent.pywsgi import WSGIServer
 
 from db.database import db_session
 from service.service import server_create, server_change_status, server_monitor \
@@ -10,6 +12,7 @@ from service.service import server_create, server_change_status, server_monitor 
 from util.json_encoder import AlchemyEncoder
 from util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
+import datetime
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -30,15 +33,15 @@ def job_function():
 def create_vm():
     team_code = "1"  # session
     user_id = "2"  # session
-    name = request.json['name']
+    name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')#request.json['name']
     cpu = request.json['cpu']
     memory = request.json['memory']
     disk = request.json['hdd']
     image_id = request.json['id']
     sshkeys = request.json['sshkeys']
     tag =request.json['tag']
-    server_create(name ,cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag)
-    return jsonify(status=True, message="sucess")
+    result = server_create(name ,cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag)
+    return jsonify(status=result["status"], message=result["message"])
 
 
 @app.route('/vm/machines/<id>', methods=['PUT'])
@@ -62,11 +65,6 @@ def create_snap():
     team_code = "1"  # session
     server_create_snapshot(ord_id, name, user_id, team_code)
     return jsonify(status=True, message="success")
-
-
-# @app.route('/vm/images/<sub_type>', methods=['GET'])
-# def list_volume(sub_type):
-#     return jsonify(status=True, message="success", list=server_image_list(sub_type))
 
 
 @app.route('/vm/images/<id>', methods=['DELETE'])
@@ -109,15 +107,10 @@ def download_sshKey(id):
 #### error handler start####
 
 # @app.errorhandler(Exception)
-# def all_exception_handler(error):
-#     logger.info('%s -- 500 ERROR', error)
+# def internal_error(error):
+#     app.logger.error(error)
+#     logger.error('%s -- 500 ERROR', error)
 #     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
-
-@app.errorhandler(500)
-def internal_error(exception):
-    app.logger.error(exception)
-    logger.error('%s -- 500 ERROR', exception)
-    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 
 #### error handler end####
@@ -127,9 +120,9 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 if __name__ == '__main__':
-    # cron = Scheduler(daemon=True)
-    # cron.add_interval_job(job_function, seconds=20) #minites=1)
-    # cron.start()
-    app.run(debug=True)
-    # http_server = WSGIServer(('', 5000), app)
-    # http_server.serve_forever()
+    cron = Scheduler(daemon=True)
+    cron.add_interval_job(job_function, seconds=120) #minites=1)
+    cron.start()
+    #app.run(debug=True)
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()

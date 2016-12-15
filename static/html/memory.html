@@ -1,68 +1,40 @@
 ﻿<html>
-<head>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+<body>
+<div>
+    <canvas id="line_chart" height="80"></canvas>
+</div>
 
-    <!-- Bootstrap core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+<!-- Jquery Core Js -->
+<script src="/chart/js/jquery.min.js"></script>
+<script src="/chart/js/Chart.bundle.js"></script>
+<script>
+    $(function () {
+        new Chart(document.getElementById("line_chart").getContext("2d"), getChartJs());
+    });
 
-
-    <link href="/chart/css/bootstrap.css" rel="stylesheet">
-    <link href="/chart/css/waves.css" rel="stylesheet" />
-    <link href="/chart/css/animate.css" rel="stylesheet" />
-    <link href="/chart/css/style.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="/gn_css/style_instance.css" />
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- 공통 JS 파일 시작 -->
-    <script src="/js/vendor/angular/angular.min.js"></script>
-    <script src="/js/vendor/angular/angular-route.min.js"></script>
-    <script src="/js/checklist-model.js"></script>
-    <script src="/chart/js/Chart.bundle.js"></script>
-</head>
-
-<body class="theme-red">
-        <div class="container-fluid">
-            <!-- Real-Time Chart -->
-            <div class="row clearfix">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>MEMORY</h2>
-                            <div class="pull-right">
-                                <div class="switch panel-switch-btn">
-                                    <span class="m-r-10 font-12">REAL TIME</span>
-                                    <label>OFF<input type="checkbox" id="realtime" checked><span class="lever switch-col-cyan"></span>ON</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="body">
-                            <div id="real_time_chart" class="flot-chart"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- #END# Real-Time Chart -->
-            </div>
-        </div>
-
-
-
-    <!-- Jquery Core Js -->
-    <script src="/chart/js/jquery.min.js"></script>
-    <script src="/chart/js/waves.js"></script>
-    <script src="/chart/js/jquery.flot.js"></script>
-    <script src="/chart/js/jquery.flot.resize.js"></script>
-    <script src="/chart/js/admin.js"></script>
-    <script src="/chart/js/flot.js"></script>
-    <script src="/chart/js/demo.js"></script>
+    function getChartJs(type) {
+        config = {
+                type: 'line',
+                data: {
+                    labels: ["January", "February", "March", "April", "May", "June", "July"],
+                    datasets: [{
+                        label: "My Second dataset",
+                        data: [28, 48, 40, 19, 86, 27, 90],
+                        borderColor: 'rgba(233, 30, 99, 0.75)',
+                        backgroundColor: 'rgba(233, 30, 99, 0.3)',
+                        pointBorderColor: 'rgba(233, 30, 99, 0)',
+                        pointBackgroundColor: 'rgba(233, 30, 99, 0.9)',
+                        pointBorderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    legend: false
+                }
+            }
+        return config;
+    }
+</script>
 </body>
 
 </html>
