@@ -22,7 +22,8 @@ app.json_encoder = AlchemyEncoder
 ### cron job start ###
 
 def job_function():
-    server_monitor()
+    #print("aa")
+    server_monitor(db_session)
 
 ### cron job end ###
 
