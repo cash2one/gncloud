@@ -4,7 +4,8 @@ from flask import Flask, jsonify, request, session, escape
 from datetime import timedelta
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
-from service.service import vm_list, vm_info, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list
+from service.service import vm_list, vm_info, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
+                            , vm_update_info, vm_info_graph
 from db.database import db_session
 from gevent.pywsgi import WSGIServer
 
@@ -29,6 +30,10 @@ def guest_list():
 @app.route('/vm/machines/<id>', methods=['GET'])
 def guest_info(id):
     return jsonify(status=True, message="success", info=vm_info(db_session, id))
+
+@app.route('/vm/machines/<id>/graph', methods=['GET'])
+def guest_info_graph(id):
+    return jsonify(status=True, message="success", info=vm_info_graph(db_session, id))
 
 
 @app.route('/vm/account', methods=['POST'])
@@ -135,8 +140,13 @@ def list_subtype_volume(sub_type):
     return jsonify(status=True, message="success", list=server_image_list(sub_type,db_session))
 
 
+@app.route('/vm/machines/<id>/<type>', methods=['PUT'])
+def update_guest_name(id, type):
+    change_value = request.json['value']
+    vm_update_info(id,type,change_value,db_session)
+    return jsonify(status=True, message="success")
 
-#### rest stop ####
+#### rest end ####
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -144,6 +154,6 @@ def shutdown_session(exception=None):
 
 
 if __name__ == '__main__':
-    app.run(port=8080)
-    http_server = WSGIServer(('', 5000), app)
+    # app.run(port=8080)
+    http_server = WSGIServer(('', 8080), app)
     http_server.serve_forever()

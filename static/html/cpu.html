@@ -30,7 +30,7 @@
         var data_info = null;
         $.ajax({
             type: "GET",
-            url: '/api/manager/vm/machines/'+ getParameter('id'),
+            url: '/api/manager/vm/machines/'+ getParameter('id')+'/graph',
             headers: {'Content-Type': 'application/json; charset=utf-8'},
             async:false,
             success: function (data) {

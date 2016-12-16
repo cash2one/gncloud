@@ -243,9 +243,10 @@ class GnMonitor(Base):
 
 class GnMonitorHist(Base):
     __tablename__ = "GN_MONITOR_HIST"
-    id = Column(String(8), primary_key=True, nullable=False)
-    type = Column(String(6), primary_key=True, nullable=False)
-    cur_time = Column(DateTime, default=datetime.datetime.now())
+    seq = Column(Integer, primary_key=True, nullable=False)
+    id = Column(String(8), primary_key=False, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cur_time = Column(DateTime, primary_key=False, nullable=False)
     cpu_usage = Column(Numeric, primary_key=False, nullable=False)
     mem_usage = Column(Numeric, primary_key=False, nullable=False)
     disk_usage = Column(Numeric, primary_key=False, nullable=False)

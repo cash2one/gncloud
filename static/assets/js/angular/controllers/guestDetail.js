@@ -4,6 +4,7 @@ angular
 
         $scope.cpu_url = $sce.trustAsResourceUrl("/cpu.html?id="+$routeParams.id);
         $scope.mem_url = $sce.trustAsResourceUrl("/memory.html?id="+$routeParams.id);
+        $scope.modify_data = {};
 
         $http({
             method: 'GET',
@@ -24,6 +25,55 @@ angular
                 console.log(status);
             });
 
+        $scope.change_name = function() {
+            if($("#vm_name").val() == "") {
+                alert("이름을 입력해주세요");
+                return false;
+            }
+            $http({
+                method: 'PUT',
+                url: '/api/manager/vm/machines/' + $scope.vm_data.id +'/name',
+                data: '{"value":"'+$("#vm_name").val()+'"}',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        alert("이름이 수정되었습니다");
+                        $scope.vm_data.name = $("#vm_name").val();
+                    }
+                    else {
+                        alert(data.message)
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.change_tag = function() {
+            if($("#vm_tag").val() == "") {
+                alert("태그를 입력해주세요");
+                return false;
+            }
+            $http({
+                method: 'PUT',
+                url: '/api/manager/vm/machines/' + $scope.vm_data.id +'/tag',
+                data: '{"value":"'+$("#vm_tag").val()+'"}',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        alert("태그가 수정되었습니다");
+                        $scope.tag_list = $("#vm_tag").val().split(",");
+                    }
+                    else {
+                        alert(data.message)
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
 
         $scope.delete = function() {
             $http({

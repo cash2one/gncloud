@@ -4,7 +4,7 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys
 from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
@@ -31,7 +31,6 @@ def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     vm_info.day1 = ""
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
-    monitor_history_list = sql_session.query(GnMonitorHist).filter(GnMonitorHist.id == id).all()
 
     disk_info = {}
     if monitor_info is not None:
@@ -40,18 +39,20 @@ def vm_info(sql_session, id):
         disk_per_info = int((use*100)/total)
         rest_disk = total - use;
         disk_info = {"total":total, "use":use, "rest_disk":rest_disk, "disk_per_info":disk_per_info}
+
+    info = {"vm_info":vm_info, "disk_info":disk_info}
+    return info
+
+def vm_info_graph(sql_session, id):
+    monitor_history_list = sql_session.query(GnMonitorHist).filter(GnMonitorHist.id == id).order_by(GnMonitorHist.cur_time.desc()).limit(5).all()
     x_info=[]
     cpu_per_info=[]
-    memory_x_info=[]
     memory_per_info=[]
-    for list in monitor_history_list:
+    for list in reversed(monitor_history_list):
         x_info.append(list.cur_time.strftime('%H:%M'))
         cpu_per_info.append(int(list.cpu_usage))
         memory_per_info.append(int(list.mem_usage))
-
-
-    info = {"vm_info":vm_info, "disk_info":disk_info, "x_info":x_info, "cpu_per_info":cpu_per_info, "memory_per_info":memory_per_info}
-
+    info = {"x_info":x_info, "cpu_per_info":cpu_per_info, "memory_per_info":memory_per_info}
     return info
 
 
@@ -148,5 +149,12 @@ def list_user_sshkey(team_code, sql_session):
     list = sql_session.query(GnSshKeys).all()
     return list
 
+def vm_update_info(id,type,change_value,sql_session):
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    if type == 'name':
+        vm_info.name = change_value
+    elif type == 'tag':
+        vm_info.tag = change_value
+    sql_session.commit()
 
 
