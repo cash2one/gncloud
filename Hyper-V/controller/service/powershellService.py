@@ -21,6 +21,7 @@ class PowerShell(object):
     VERBOSE = " -Verbose"
     GENERATION_TYPE_1 = 1
     GENERATION_TYPE_2 = 2
+    COMPUTER_NAME = " GNCLOUDWIN "
 
     def __init__(self, address, port, uri):
         self.address = address
@@ -40,7 +41,8 @@ class PowerShell(object):
                 script += " -" + option + " " + value + "MB"
             else:
                 script += " -" + option + " " + value
-        script += " -Generation " + str(self.GENERATION_TYPE_2)
+        #script += " -Generation " + str(self.GENERATION_TYPE_2)
+        script += " -Generation " + str(self.GENERATION_TYPE_1) #1세대 통일하여 생성
         script += self.CONVERTTO_JSON
         return self.send(script)
 
@@ -143,10 +145,18 @@ class PowerShell(object):
 
     # 가상머신 하나의 정보를 가져온다.
     # example) $vm = Get-VM -Id 8102C1F1-6A15-4BDC-8BF1-C8ECBE9D94E2 | Convertto-Json
-    def get_vm(self, vm_name):
+    def get_vm_one(self, vm_name):
         script = "Get-VM -Id " + vm_name
         script += self.CONVERTTO_JSON
         return self.send(script)
+
+    def get_vm_test(self, vm_name):
+        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME +" -ScriptBlock {"
+        script += "Get-VM -Id " +vm_name
+        script += self.CONVERTTO_JSON +" }"
+        return self.send(script)
+
+
 
     # 서버 내의 모든 가상머신 리스트 정보를 가져온다.
     # example) Get-VM
@@ -159,7 +169,7 @@ class PowerShell(object):
     def create_snap(self, vm_Id):
         #snapshot_id = vm_Id + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         snapshot_id = "_"+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        script = "Invoke-Command -ComputerName GNCLOUDWIN -ScriptBlock {"
+        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME +" -ScriptBlock {"
         script += "$vm = Get-VM -Id "
         script += vm_Id + ";"
         script += "$vmn = $vm.Name;"
@@ -190,13 +200,26 @@ class PowerShell(object):
         return json.loads(response.json())
 
     #VM 이미지 삭제
-    def delete_vm(self, vhd_Name,type):
+    def delete_vm_Image(self, vhd_File_Name, type):
         #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
-        script = "Invoke-Command -ComputerName GNCLOUDWIN -ScriptBlock {"
-        script += "Move-Item -Path C:/images/vhdx/"+type+"/" + vhd_Name + ".vhdx "
-        script += "-Destination C:/images/vhdx/backup/" + vhd_Name + ".vhdx | ConvertTo-Json}"
+        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME+" -ScriptBlock {"
+        script += "Move-Item -Path C:/images/vhdx/"+type+"/" + vhd_File_Name
+        script += " -Destination C:/images/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
         print script
         return self.send(script)
+
+
+    #VM 삭제
+    def delete_vm(self, vmId, type):
+        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME+" -ScriptBlock {"
+        script += "$vm = Get-VM -Id "+ vmId +";"
+        script += "$vmn = $vm.Name;"
+        script += "Remove-VM -VM $vm -Force;"
+        script += "Move-Item -Path C:/images/vhdx/"+type+'/$vmn".vhdx" '
+        script += "-Destination C:/images/vhdx/backup/ | ConvertTo-Json }"
+        print script
+        return self.send(script)
+
 
     def get_state_string(self, state):
         if state is 1:

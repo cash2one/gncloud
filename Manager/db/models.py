@@ -1,13 +1,11 @@
-
 __author__ = 'NaDa'
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime,  Numeric
 from sqlalchemy.orm import relationship
 import datetime
 
 from Manager.db.database import Base
-
 
 class GnHostMachines(Base):
     __tablename__ = "GN_HOST_MACHINES"
@@ -53,9 +51,9 @@ class GnVmMachines(Base):
     os_bit = Column(String(2), primary_key=False, nullable=True)
     team_code = Column(String(50), primary_key=False, nullable=True)
     author_id = Column(String(15), primary_key=False, nullable=False)
-    create_time = Column(DateTime, default=datetime.datetime.utcnow)
-    start_time = Column(DateTime, default=datetime.datetime.utcnow)
-    stop_time = Column(DateTime, default=datetime.datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.datetime.now())
+    start_time = Column(DateTime, default=datetime.datetime.now())
+    stop_time = Column(DateTime, default=datetime.datetime.now())
     status = Column(String(10), primary_key=False, nullable=False)
     tag = Column(String(100), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
@@ -91,7 +89,7 @@ class GnVmMachines(Base):
                   self.ip, self.status, self.tag, self.create_time)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'num', 'day1']
+        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'os', 'tag', 'create_time', 'day1']
 
 
 
@@ -102,17 +100,19 @@ class GnUser(Base):
     user_name = Column(String(20), primary_key= False, nullable= False)
     tel= Column(String(15), primary_key= False, nullable= False)
     email= Column(String(30), primary_key= False, nullable= False)
-    start_date = Column(DateTime, default=datetime.datetime.utcnow)
+    start_date = Column(DateTime, default=datetime.datetime.now())
 
-    def __init__(self, user_id = user_id, password= None, user_name=None, tel=None, email=None, start_date=None):
+
+
+    def __init__(self, user_id = user_id, password= None, team_code=None, user_name=None, tel=None, email=None, start_date=None):
 
         self.user_id = user_id
         self.password= password
+        self.team_code = team_code
         self.user_name = user_name
         self.tel = tel
         self.email = email
         self.start_date = start_date
-
 
     def __repr__(self):
         return '< ID %r / Password %r / User_name %r / Tel %r / Eamil %r/ Start_date %r />' \
@@ -178,7 +178,7 @@ class GnVmImages(Base):
     os_bit = Column(String(2), primary_key=False, nullable=False)
     team_code = Column(String(10), primary_key=False, nullable=False)
     author_id = Column(String(15), primary_key=False, nullable=False)
-    create_time = Column(DateTime, default=datetime.datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.datetime.now())
 
 
     def __init__(self, id=None, name=None, filename=None, type=None
@@ -217,7 +217,7 @@ class GnSshKeys(Base):
     name = Column(String(100), primary_key=False, nullable=False)
     fingerprint = Column(String(50), primary_key=False, nullable=False)
     path = Column(String(100), primary_key=False, nullable=False)
-    create_time = Column(DateTime, default=datetime.datetime.utcnow)
+    create_time = Column(DateTime, default=datetime.datetime.now())
 
     def __init__(self, team_code=None, name=None, fingerprint=None, path=None):
         self.team_code = team_code
@@ -261,4 +261,55 @@ class GnContanierImage(Base):
             % (self.id, self.name, self.team_code)
 
     def __json__(self):
-        return ['id', 'name', 'team_code']
+        return ['id', 'name', 'team_code']        
+
+class GnMonitor(Base):
+    __tablename__ = "GN_MONITOR"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
+
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
+
+    def __repr__(self):
+        return '<ID %r / Type %r / Cpu_usage %r / Mem_usage %r / Disk_usage %r / Net_usage %r>' \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
+
+    def __json__(self):
+        return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage']
+
+class GnMonitorHist(Base):
+    __tablename__ = "GN_MONITOR_HIST"
+    seq = Column(Integer, primary_key=True, nullable=False)
+    id = Column(String(8), primary_key=False, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cur_time = Column(DateTime, primary_key=False, nullable=False)
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
+    cur_time = Column(DateTime, primary_key=True, default=datetime.datetime.now())
+
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
+
+    def __repr__(self):
+        return '<ID %r / Type %r / Cpu_usage %r / Mem_usage %r / Disk_usage %r / Net_usage %r>' \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
+
+    def __json__(self):
+        return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage', 'cur_time']

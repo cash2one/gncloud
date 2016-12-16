@@ -362,7 +362,7 @@ class GnVmMachines(Base):
     os_sub_ver = Column(String(20), nullable=True, default=None)
     os_bit = Column(String(2), nullable=True, default=None)
     team_code = Column(String(10), nullable=True, default=None)
-    author_id = Column(String(3), nullable=True, default=None)
+    author_id = Column(String(50), nullable=True, default=None)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     start_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     stop_time = Column(DateTime, nullable=False, default=datetime.datetime.now())

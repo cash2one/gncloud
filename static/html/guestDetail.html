@@ -1,0 +1,131 @@
+<div class="title">
+    <div class="detail-icon fl">
+        <img src="/gn_images/ubuntu_icon_cian.png" alt="아이콘" class="fl">
+    </div>
+    <h1 class="h1_regular">
+        <span class="detail-h1-name" data-toggle="modal" data-target="#name-Modal"><spna ng-bind="vm_data.name"></spna> </span>
+
+        <!-- Modal : 이름 수정 -->
+        <div class="modal fade" id="name-Modal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">이름 수정</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="textarea" id="vm_name" placeholder="Ubuntu-512mb-sgp1-01" class="input-ssh-name" ng-required="true">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal" ng-click="change_name()">저장</button>
+                    </div>
+                </div> <!--class="modal-content"-->
+            </div> <!--class="modal-dialog modal-sm"-->
+        </div> <!--class="modal fade" id="myModal" role="dialog"-->
+    </h1>
+
+    <div class="detail-spec">
+        <ul class="spec-group li-style">
+            <li><spna ng-bind="vm_data.cpu"></spna> CPU</li>
+            <li>/</li>
+            <li><spna ng-bind="vm_data.memory"></spna> MB Memory</li>
+            <li>/</li>
+            <li><spna ng-bind="vm_data.disk"></spna> GB Disk</li>
+            <li>/</li>
+            <li><spna ng-bind="vm_data.os"></spna></li>
+            <li>/</li>
+            <li data-toggle="modal" data-target="#ip-Modal"><spna ng-bind="vm_data.ip"></spna></li>
+
+            <!-- Modal : IP 수정 -->
+            <div class="modal fade" id="ip-Modal" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">IP 관리</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="textarea" placeholder="128.199.88.190" class="input-ssh-name">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal">저장</button>
+                        </div>
+                    </div> <!--class="modal-content"-->
+                </div> <!--class="modal-dialog modal-sm"-->
+            </div> <!--class="modal fade" id="myModal" role="dialog"-->
+        </ul>
+    </div> <!--class="detail-spec"-->
+
+    <!--태그-->
+    <div class="detail-tag">
+        <img src="/gn_images/detail_tag_pencil.png" alt="태그 수정" class="fl tag-pencil" data-toggle="modal" data-target="#tag-modal">
+
+        <!-- Modal : 태그 수정 -->
+        <div class="modal fade" id="tag-modal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">태그 수정</h4>
+                        <span>태그와 태그는 쉼표로 구분됩니다.</span>
+                    </div>
+                    <div class="modal-body">
+                        <input type="input" placeholder="{{vm_data.tag}}" class="input-ssh-name" id="vm_tag">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal" ng-click="change_tag()">저장</button>
+                    </div>
+                </div> <!--class="modal-content"-->
+            </div> <!--class="modal-dialog modal-sm"-->
+        </div> <!--class="modal fade" id="myModal" role="dialog"-->
+        <!--태그 list-->
+        <ul class="tag-group li-style">
+            <li ng-repeat="item in tag_list track by $index">#{{ item }}</li>
+        </ul><!-- class="tag-group li-style"-->
+    </div> <!--class="detail-tag"-->
+</div> <!--class="title" END-->
+
+<div class="detail-main border-box">
+    <!--CPU-->
+    <div class="detail-cpu clearfix">
+        <h2 class="fl">CPU</h2>
+        <div class="cpu-graph fr">
+            <iframe src="{{cpu_url}}" width="100%" height="30%" scrolling='no' frameborder='0' id="if_cpu"></iframe>
+        </div>
+    </div> <!--class="detail-cpu"-->
+
+    <!--MEMORY-->
+    <div class="detail-memory clearfix">
+        <h2 class="fl">MEMORY</h2>
+        <div class="memory-graph fr">
+            <iframe src="{{mem_url}}" width="100%" height="30%" scrolling='no' frameborder='0' id="if_mem"></iframe>
+        </div>
+    </div> <!--class="detail-memory"-->
+
+    <!--DISK-->
+    <div class="detail-disk clearfix">
+        <h2 class="fl">DISK</h2>
+        <div class="disk-right-box fr">
+            <spna ng-bind="disk_data.rest_disk"></spna>GB 사용가능 (총 <spna ng-bind="disk_data.total"></spna>GB)</span>
+            <div class="progress disk-graph fr">
+                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': disk_data.disk_per_info + '%' }">
+                    <spna ng-bind="disk_data.disk_per_info"></spna>%
+                </div>
+            </div>
+            <div class="detail-use-box fl"><div class="use-box-sm fl"></div>사용량</div>
+            <div class="detail-empty-box"><div class="empty-box-sm fl"></div>남은용량</div>
+        </div>
+    </div><!-- class="detail-disk"-->
+
+</div> <!--class="detail-main"-->
+
+<div class="detail-delete border-box clearfix">
+    <div class="delete-box">
+        <h2>삭제</h2>
+        <h4 class="h4-txt">해당 인스턴스 및 관련된 모든 백업이 삭제되며, 모든 데이터는 복구할 수 없습니다.<br>정말 삭제 하시겠습니까?</h4>
+        <button type="button" class="btn btn-link" ng-click="delete()">삭제</button>
+    </div>
+</div> <!--class="detail-delete" -->
+</div> <!-- /container -->
+
+<input type="text" id="vm_id" value="">

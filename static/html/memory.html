@@ -1,0 +1,65 @@
+﻿<html>
+<body>
+<div>
+    <canvas id="line_chart" height="80"></canvas>
+</div>
+
+<!-- Jquery Core Js -->
+<script src="/chart/js/jquery.min.js"></script>
+<script src="/chart/js/Chart.bundle.js"></script>
+<script>
+    $(function () {
+        new Chart(document.getElementById("line_chart").getContext("2d"), getChartJs());
+    });
+
+    var getParameter = function (param) {
+        var returnValue;
+        var url = location.href;
+        var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+        for (var i = 0; i < parameters.length; i++) {
+            var varName = parameters[i].split('=')[0];
+            if (varName.toUpperCase() == param.toUpperCase()) {
+                returnValue = parameters[i].split('=')[1];
+                return decodeURIComponent(returnValue);
+            }
+        }
+    };
+
+
+    function getChartJs() {
+        var data_info = null;
+        $.ajax({
+            type: "GET",
+            url: '/api/manager/vm/machines/'+ getParameter('id')+'/graph',
+            headers: {'Content-Type': 'application/json; charset=utf-8'},
+            async:false,
+            success: function (data) {
+                data_info = data.info;
+            }
+        })
+
+        config = {
+            type: 'line',
+            data: {
+                labels: data_info.x_info,
+                datasets: [{
+                    label: "My Second dataset",
+                    data: data_info.memory_per_info,
+                    borderColor: 'rgba(233, 30, 99, 0.75)',
+                    backgroundColor: 'rgba(233, 30, 99, 0.3)',
+                    pointBorderColor: 'rgba(233, 30, 99, 0)',
+                    pointBackgroundColor: 'rgba(233, 30, 99, 0.9)',
+                    pointBorderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                legend: false
+            }
+        }
+        return config;
+    }
+</script>
+</body>
+
+</html>

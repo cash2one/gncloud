@@ -5,6 +5,8 @@ $(function () {
     new Chart(document.getElementById("pie_chart").getContext("2d"), getChartJs('pie'));
 });
 
+
+
 function getChartJs(type) {
     var config = null;
 
@@ -115,3 +117,5 @@ function getChartJs(type) {
     }
     return config;
 }
+
+

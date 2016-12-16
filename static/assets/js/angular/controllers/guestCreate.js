@@ -7,6 +7,7 @@ angular
         $('ul.nav-sidebar a').filter(function () {
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
+
         $scope.hyper = function(ty){
             $http({
                 method: 'GET',
@@ -43,21 +44,25 @@ angular
         }
 
         $scope.sshkeys = [];
-        $http({
-            method: 'GET',
-            url: '/api/kvm/account/keys',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.sshkey_list = data.list;
-                }
-                else {
-                }
+        $scope.getkeys = function () {
+            $http({
+                method: 'GET',
+                url: '/api/kvm/account/keys',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.sshkey_list = data.list;
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.getkeys();
 
         $scope.save = function () {
             $http({
@@ -100,7 +105,6 @@ angular
         }
 
         $scope.submit = function() {
-            console.log($scope.data.id);
             $scope.data.sshkeys = $scope.sshkeys;
             $scope.data.tag = $("#tag").val();
             $http({
@@ -113,7 +117,8 @@ angular
             })
                 .success(function(data) {
                     if (data.status == true) {
-                        alert("VM이 생성되었습니다");
+                        alert("인스턴스가 생성되었습니다");
+                        window.location.href = '#/guestList';
                     } else {
                         alert(data.message)
                     }
