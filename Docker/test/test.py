@@ -21,5 +21,5 @@ __author__ = 'jhjeon'
 import datetime
 
 timestr = "2016-12-15T11:58:27.5428889Z"
-time = datetime.datetime.strptime(timestr, "%Y-%m-%dT%H:%M:%S.%fZ")
+time = datetime.datetime.strptime(timestr[:-2], "%Y-%m-%dT%H:%M:%S.%f")
 print time

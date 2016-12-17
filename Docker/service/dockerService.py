@@ -3,6 +3,7 @@ __author__ = 'jhjeon'
 
 import json
 from pexpect import pxssh
+from db.models import GnDockerImage, GnDockerImageDetail
 from util.config import config
 
 
@@ -17,17 +18,18 @@ class DockerService(object):
             pass
 
     # Docker 서비스를 생성한다.
-    def docker_service_create(self, cpu, memory, connect_port, in_port, image, environmant=""):
+    def docker_service_create(self, image, cpu, memory):
+        dockerimage = GnDockerImage.query.filter_by(name=image).first()
+        image_detail = GnDockerImageDetail.query.filter_by(id=dockerimage.id).all()
         command = "docker service create"
         # command += " --name %s" % name
         command += " --limit-cpu %s --reserve-cpu %s" % (cpu, cpu)
         command += " --limit-memory %s --reserve-memory %s" % (memory, memory)
         command += " --replicas %s" % config.REPLICAS
         command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
-        command += " -p %s:%s" % (connect_port, in_port)
-        if len(environmant) != 0:
-            command += " -e %s" % environmant
-        command += " %s" % image
+        for detail in image_detail:
+            command += " %s" % detail.argument
+        command += " %s" % dockerimage.name
         service_id = self.send_command(command)
         if service_id[:5] == "Error":
             return service_id

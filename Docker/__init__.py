@@ -19,6 +19,8 @@ app.add_url_rule("/container/services/<id>", view_func=doc_delete, methods=['DEL
 app.add_url_rule("/container/services", view_func=doc_vm_list, methods=['GET'])
 # Container 이미지 생성 및 업로드
 app.add_url_rule("/container/images", view_func=doc_new_image, methods=['POST'])
+# Container 이미지 세부정보 입력
+app.add_url_rule("/container/images/detail", view_func=doc_new_image_detail, methods=['POST'])
 # Container 이미지 수정
 app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
 # Container 이미지 삭제
