@@ -104,12 +104,13 @@ class GnVmImages(Base):
     os_bit = Column(String(2), primary_key=False, nullable=False)
     team_code = Column(String(10), primary_key=False, nullable=False)
     author_id = Column(String(15), primary_key=False, nullable=False)
-    create_time = Column(DateTime, default=datetime.datetime.now())
+    create_time = Column(DateTime, primary_key=False, nullable=False)
+    ssh_id = Column(String(10), primary_key=False, nullable=False)
 
 
     def __init__(self, id=None, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
-                 , os_bit=None, team_code=None, author_id=None):
+                 , os_bit=None, team_code=None, author_id=None, ssh_id=None):
         self.id = id
         self.name = name
         self.filename = filename
@@ -122,19 +123,20 @@ class GnVmImages(Base):
         self.os_bit = os_bit
         self.team_code = team_code
         self.author_id = author_id
+        self.ssh_id = ssh_id
 
 
 
     def __repr__(self):
-        return '<Id %r / Name %r / File_name %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_ver %r / Os_subver %r / Team_code %r /Author_id %r / Create_time %r >' \
+        return '<Id %r / Name %r / File_name %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_ver %r / Os_subver %r / Team_code %r /Author_id %r / Create_time %r / Create_time %r / Ssh_id %r>' \
                % (self.id, self.name, self.file_name, self.type, self.sub_type
                   , self.icon, self.os, self.os_ver, self.os_subver, self.os_bit
-                  , self.team_code, self.author_id, self.create_time)
+                  , self.team_code, self.author_id, self.create_time, self.ssh_id)
 
     def __json__(self):
         return ['id', 'name', 'filename', 'type', 'sub_type'
             , 'icon', 'os', 'os_ver', 'os_subver', 'os_bit'
-            , 'team_code', 'author_id', 'create_time']
+            , 'team_code', 'author_id', 'create_time', 'ssh_id']
 
 
 class GnMonitor(Base):

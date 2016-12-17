@@ -51,8 +51,8 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         while len(ip) == 0:
             ip = getIpAddress(name, host_ip)
 
-        if len(ip) != 0:
-            setStaticIpAddress(ip, host_ip)
+        # if len(ip) != 0:
+        #     setStaticIpAddress(ip, host_ip, ssh_id)
 
         # 기존 저장된 ssh key 등록
         if len(sshkeys) > 0:
@@ -89,9 +89,9 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
 
 
 
-def getIpAddress(name, HOST):
+def getIpAddress(name, host_ip):
     s = pxssh.pxssh()
-    s.login(HOST, USER)
+    s.login(host_ip, USER)
     s.sendline(config.SCRIPT_PATH+"get_ipadress.sh " + name)
     s.prompt()
     ip = s.before.replace(config.SCRIPT_PATH+"get_ipadress.sh " + name + "\r\n", "")
@@ -99,11 +99,11 @@ def getIpAddress(name, HOST):
     return ip
 
 
-def setStaticIpAddress(ip, HOST):
+def setStaticIpAddress(ip, host_ip, ssh_id):
     try:
         s = pxssh.pxssh()
-        s.login(HOST, USER)
-        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh %s" % (ip))
+        s.login(host_ip, USER)
+        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh %s %s" % (ip, ssh_id))
         s.logout()
     except pxssh.TIMEOUT:
         print("==timeout==")
