@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 # 로그 설정 (초기 테스트용)
 formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
 
-LOG_FILENAME = './log/system.log'
+LOG_FILENAME = '../kvm.log'
 
 fileHandler = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=2000000, backupCount=7)
 streamHandler = logging.StreamHandler()

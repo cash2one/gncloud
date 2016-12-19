@@ -14,7 +14,7 @@ formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(linen
 # if not os.path.exists("./log/"):
 #     os.makedirs("./log/", 777)
 
-LOG_FILENAME = '../../log/system.log'
+LOG_FILENAME = '../manager.log'
 fileHandler = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=2000000, backupCount=7)
 streamHandler = logging.StreamHandler()
 
