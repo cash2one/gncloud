@@ -2,14 +2,13 @@
 
 from flask import Flask, jsonify, request, session, escape
 from datetime import timedelta
-from gevent.pywsgi import WSGIServer
-
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
-from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
-                            , vm_update_info, vm_info_graph , server_list, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete, checkteam, select, signup_team, comfirm_list, createteam_list
+from service.service import vm_list, vm_info, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
+                            , vm_update_info, vm_info_graph, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
+                            , team_delete
 from db.database import db_session
+from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)

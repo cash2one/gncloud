@@ -90,7 +90,7 @@ class GnVmMachines(Base):
                   self.ip, self.status, self.tag, self.create_time)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'os', 'tag', 'create_time', 'day1']
+        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'os', 'tag', 'create_time']
 
 
 

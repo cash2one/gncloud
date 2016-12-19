@@ -19,7 +19,37 @@ angular
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
                     $scope.guest_list = data.list;
-                    //alert($scope.guest_list.id);
+                    for(var i = 0 ; i < data.list.length ; i++){
+                        //태그 카운팅
+                        var count = data.list[i].tag.split(",");
+                        if(count.length - 1 > 0 ) {
+                            $scope.guest_list[i].tagFirst = count[0];
+                            $scope.guest_list[i].tagcount = "+" + (count.length - 1);
+                        }
+
+                        //날짜 카운팅
+                        $scope.guest_list[i].create_time_diff = data.list[i].create_time;
+                        var data_year = data.list[i].create_time.substring(0,4);
+                        var data_month = data.list[i].create_time.substring(5,7);
+                        var data_day = data.list[i].create_time.substring(8,10);
+                        var data_time = data.list[i].create_time.substring(11,13);
+                        var date = new Date();
+                        var year  = date.getFullYear();
+                        var month = date.getMonth() + 1; // 0부터 시작하므로 1더함 더함
+                        var day   = date.getDate();
+                        var time   = date.getHours();
+                        var dateDiff = "";
+                        if(data_year != year){
+                            dateDiff = (year-data_year)+"년 전";
+                        }else if(data_month != month){
+                            dateDiff = (month-data_Month)+"개월 전";
+                        }else if(data_day != day){
+                            dateDiff = (day-data_day)+"일 전";
+                        }else if(data_time != time){
+                            dateDiff = (time-data_time)+"시간 전";
+                        }
+                        $scope.guest_list[i].create_time_diff = dateDiff;
+                    }
 
                 } else {
                     alert(data.message);

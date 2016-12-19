@@ -21,9 +21,8 @@
                 <td class="cnt">{{ list.cpu }} CPU /{{ list.memory }}MB Memory/{{ list.disk }}GB Disk</td>
                 <td class="cnt">{{ list.type }}</td>
                 <td class="cnt">{{ list.ip }}</td>
-                <td class="cnt">{{list.day1}}</td>
-                <td class="cnt"><span class="tag">{{list.tag}}</span></td>
-                <td class="cnt"><p data-toggle="tooltip" title="{{list.create_time}}">{{list.day1}}</p></td>
+                <td class="td-style cnt"><p data-toggle="tooltip" title="{{list.create_time}}">{{list.create_time_diff}}</p></td>
+                <td class="td-style cnt">{{list.tagFirst}}<span class="tag" data-toggle="tooltip" title="#test #컨테이너">{{list.tagcount}}</span></td>
                 <td class = "cnt dropdown">더보기
                     <span class="caret" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
                     <ul class="dropdown-menu-table" role="menu" >
