@@ -19,15 +19,27 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data) {
-                        if (data.status == true) {
-                            $location.url('/#')
-                            alert(data.message)
+                        if (data.test == 'yes') {
+                            alert(data.message);
                             window.location.reload();
-                        } else {
-                            alert(data.message)
+                        }else if(data.test =='no'){
+                            alert(data.message);
+                            window.location.reload();
+                            $location.path('/guestSelectTeam');
                         }
-                    });
-
+                        else if(data.status ==false) {
+                            alert(data.message);
+                            window.location.reload();
+                        }
+                        else if(data.test =='noyes') {
+                            alert(data.message);
+                            window.location.reload();
+                            $location.path('/guestReadyTeam');
+                        }
+                    })
+                .error(function (data) {
+                    alert(data.message);
+                });
 
 
         };

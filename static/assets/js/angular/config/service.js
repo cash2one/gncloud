@@ -18,6 +18,9 @@ var serviceConfig = function ($routeProvider, $locationProvider) {
         .when('/guestRepair', {templateUrl: '/guestRepair.html', controller: 'guestRepairCtrl'})
         .when('/dashboard', {templateUrl: '/dashboard.html', controller: 'dashboardCtrl'})
         .when('/guestDetail', {templateUrl: '/guestDetail.html', controller: 'guestDetailCtrl'})
+        .when('/guestSelectTeam', {templateUrl: '/guestSelectTeam.html', controller: 'guestSelectTeamCtrl'})
+        .when('/guestReadyTeam', {templateUrl: '/guestReadyTeam.html', controller: 'guestReadyTeamCtrl'})
+        .when('/guestCreateTeam', {templateUrl: '/guestCreateTeam.html', controller: 'guestCreateTeamCtrl'})
 }
 
 // 서비스 페이지 설정

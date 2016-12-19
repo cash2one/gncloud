@@ -1,0 +1,7 @@
+<div class="marg-bot10">
+    <select class="fl" ng-model="guest_image" ng-options="list.team_name for list in list" ng-change="update_image(guest_image)">
+        <option value="">팀 선택</option>
+    </select>
+    <button type="submit" value="submit" class="btn btn-primary snap-key" ng-click="submit()">가입신청</button>
+    <h2>나의 팀을 찾을 수 없나요? 관리자라면 <a href="">팀을 만들어</a>주세요</h2>
+</div>

@@ -1,0 +1,6 @@
+
+    <h2></h2>
+    <b>{{team_list.team_name}} 가입 승인 대기 중입니다</b><br>
+
+    <b>신청일</b><b ng-repeat="list in sh_list">{{list.apply_date}}</b>
+    <b>혹시 잘못 신청하셧다면</b><a ng-click="delete(list.user_id, team_list.team_code)">가입을 취소</a><b>해주세요</b>
