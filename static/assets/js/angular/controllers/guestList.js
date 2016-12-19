@@ -9,6 +9,7 @@ angular
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
         $('[data-toggle="tooltip"]').tooltip();
+
         $scope.guest_list = {};
 
         $http({
@@ -95,6 +96,6 @@ angular
         }
 
         $scope.refresh = function(){
-
+            $scope.guest_list = Array.prototype.slice.call($scope.guest_list).reverse();
         }
     });
