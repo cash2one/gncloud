@@ -6,7 +6,6 @@ var serviceConfig = function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/main', {templateUrl: '/main.html', controller: 'mainCtrl'})
         .when('/guestList', {templateUrl: '/guestList.html', controller: 'guestListCtrl'})
-        .when('/guestView', {templateUrl: '/guestView.html', controller: 'guestViewCtrl'})
         .when('/guestCreate', {templateUrl: '/guestCreate.html', controller: 'guestCreateCtrl'})
         .when('/guestSnapList', {templateUrl: '/guestSnapList.html', controller: 'guestSnapListCtrl'})
         .when('/monitor', {templateUrl: '/guestRunList.html', controller: 'guestRunListCtrl'})

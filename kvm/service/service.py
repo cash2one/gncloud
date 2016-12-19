@@ -51,8 +51,8 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         while len(ip) == 0:
             ip = getIpAddress(name, host_ip)
 
-        # if len(ip) != 0:
-        #     setStaticIpAddress(ip, host_ip, ssh_id)
+        if len(ip) != 0:
+             setStaticIpAddress(ip, host_ip, image_info.ssh_id)
 
         # 기존 저장된 ssh key 등록
         if len(sshkeys) > 0:
@@ -60,7 +60,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             for gnSshkey in sshkey_list:
                 s = pxssh.pxssh()
                 s.login(host_ip, USER)
-                s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(gnSshkey.path) + "' " + str(ip))
+                s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(gnSshkey.path) + "' " + str(ip) + " "+image_info.ssh_id)
                 s.logout()
 
         #db 저장
@@ -172,16 +172,16 @@ def server_monitor(sql_session):
             host_ip = list.gnHostMachines.ip
             s = pxssh.pxssh()
             s.login(host_ip, USER)
-            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh cpu " + list.ip)
+            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh cpu " + list.ip + " "+list.os)
             s.prompt()
             cpu_use = (str(s.before)).split("\r\n")[3]
-            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh mem " + list.ip)
+            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh mem " + list.ip + " "+list.os)
             s.prompt()
             mem_use = (str(s.before)).split("\r\n")[2]
-            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh disk " + list.ip)
+            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh disk " + list.ip + " "+list.os)
             s.prompt()
             disk_use = (str(s.before)).split("\r\n")[2]
-            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh net " + list.ip)
+            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh net " + list.ip + " "+list.os)
             s.prompt()
             net_use = (str(s.before)).split("\r\n")[2]
             s.logout()
