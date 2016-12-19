@@ -57,13 +57,13 @@ def doc_state(id):
 
 # Container 삭제
 def doc_delete(id):
-    # 지정된 Docker Container를 삭제한다.
+    # 지정된 Docker 서비스를 삭제한다.
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     result = ds.docker_service_rm(id)
     # DB에 삭제된 내용을 업데이트한다.
-    container = GnContainers.query.filter_by(internal_id=id).first()
-    if container is not None:
-        container.status = "deleted"
+    service = GnContainers.query.filter_by(internal_id=id).first()
+    if service is not None:
+        service.status = "deleted"
         db_session.commit()
     if result == id:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")
@@ -71,14 +71,18 @@ def doc_delete(id):
         return jsonify(status=False, message=result)
 
 
-# todo. Container 정보
-def doc_vm():
-    return jsonify(status=False, message="미구현")
+# Container 정보
+def doc_vm(id):
+    user_id = request.form["user_id"]
+    DockerService = GnContainers(author_id=user_id, internal_id=id).first()
+    return jsonify(status=True, message="컨테이너 정보를 가져왔습니다.", result=DockerService)
 
 
-# todo. Container 리스트
+# Container 리스트
 def doc_vm_list():
-    return jsonify(status=False, message="미구현")
+    user_id = request.form["user_id"]
+    DockerService = GnContainers(author_id=user_id).all()
+    return jsonify(status=False, message="미구현", result=DockerService)
 
 
 # Container 이미지 생성 및 업로드
@@ -121,8 +125,15 @@ def doc_modify_image():
     return jsonify(status=False, message="미구현")
 
 
-# todo. Container 이미지 삭제
-def doc_delete_image():
+# Container 이미지 삭제
+def doc_delete_image(id):
+    # todo image delete. Docker Registry 이미지 삭제
+    image = GnDockerImage.query.filter_by(id=id).first()
+    image_detail = GnDockerImageDetail.query.filter_by(id=id).all()
+    image.status = "deleted"
+    for detail in image_detail:
+        detail.status = "deleted"
+    db_session.commit()
     return jsonify(status=False, message="미구현")
 
 

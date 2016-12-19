@@ -36,10 +36,12 @@ class DockerService(object):
         else:
             return self.docker_service_ps(service_id)
 
+    # Docker 서비스 정보를 가지고 온다.
     def docker_service_ps(self, id):
         command = "docker service inspect %s" % id
         return self.send_command_return_json(command)
 
+    # Docker 서비스를 삭제한다.
     def docker_service_rm(self, id):
         command = "docker service rm %s" % id
         return self.send_command(command)
