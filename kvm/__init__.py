@@ -13,6 +13,8 @@ from util.json_encoder import AlchemyEncoder
 from util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
 import datetime
+import logging
+from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -120,6 +122,12 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 if __name__ == '__main__':
+    # 로그 설정
+    formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
+    handler = RotatingFileHandler('kvm.log', maxBytes=2000000, backupCount=5)
+    handler.setFormatter(formatter)
+    handler.setLevel(logging.WARNING)
+
     cron = Scheduler(daemon=True)
     cron.add_interval_job(job_function, seconds=120) #minites=1)
     cron.start()

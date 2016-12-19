@@ -10,11 +10,12 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , vm_update_info, vm_info_graph, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam
 from db.database import db_session
+import logging
+from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 app.json_encoder = AlchemyEncoder
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 #### rest start ####
 @app.route('/')
@@ -224,6 +225,13 @@ def shutdown_session(exception=None):
 
 
 if __name__ == '__main__':
-    # app.run(port=8080)
-    http_server = WSGIServer(('', 8080), app)
-    http_server.serve_forever()
+
+    # 로그 설정
+    formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
+    handler = RotatingFileHandler('manager.log', maxBytes=2000000, backupCount=5)
+    handler.setFormatter(formatter)
+    handler.setLevel(logging.WARNING)
+
+    app.run(port=8080)
+    #http_server = WSGIServer(('', 8080), app)
+    #http_server.serve_forever()
