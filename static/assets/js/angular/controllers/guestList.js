@@ -64,7 +64,7 @@ angular
 
         }
 
-        $scope.desc = function(){
+        $scope.refresh = function(){
 
         }
     });

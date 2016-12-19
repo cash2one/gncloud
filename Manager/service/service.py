@@ -257,3 +257,6 @@ def createteam_list(team_name, team_code, author_id):
     db_session.add(vm)
     db_session.commit()
     return True
+
+def select():
+    return db_session.query(GnTeam).all()
