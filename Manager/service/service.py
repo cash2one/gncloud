@@ -10,7 +10,7 @@ from Manager.util.hash import random_string
 
 
 def vm_list(sql_session):
-    list = sql_session.query(GnVmMachines).all()
+    list = sql_session.query(GnVmMachines).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
         tagArr = vmMachine.tag.split(',')
         vmMachine.tag = tagArr[0] + '+' +str(len(tagArr))
@@ -128,8 +128,8 @@ def server_image_list(type, sub_type, sql_session):
     elif(sub_type != ""):
         list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
         return list
-def server_image_list(type, sub_type):
-    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+def server_image_list(type, sub_type, sql_session):
+    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
     return list
 
 

@@ -446,6 +446,7 @@ div.border-bottom{
     margin: auto;
     border-bottom: 1px solid rgba(215,215,215,.5);
 }
+
 .btn-default:hover div.border-bottom,
 .type-box:hover div.border-bottom{
     width: 50px;
