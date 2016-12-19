@@ -79,7 +79,7 @@ class GnDockerImage(Base):
         self.status = status
 
     def __repr__(self):
-        return "<GnDockerImage(id=%r, name=%r, filename=%r, team_code=%r, author_id=%r, create_time=%r, status=%r,)>" \
+        return "<GnDockerImage(id=%r, name=%r, filename=%r, team_code=%r, author_id=%r, create_time=%r, status=%r)>" \
                % (self.id, self.name, self.filename, self.team_code, self.author_id, self.create_time, self.status)
 
     def to_json(self):

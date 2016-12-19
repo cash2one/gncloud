@@ -115,8 +115,7 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-
-    #가상머신을 재부팅 한다
+    # 가상머신을 재부팅 한다
     def restart_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Restart-VM -Force $vm "
@@ -124,8 +123,7 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-
-    #가상머신을 일시정지상태로 돌린다. 리턴 state = 9
+    # 가상머신을 일시정지상태로 돌린다. 리턴 state = 9
     def suspend_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Suspend-VM -VM $vm "
@@ -133,15 +131,13 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-
-        #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
+    # 일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
     def resume_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Resume-VM -VM $vm "
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
-
 
     # 가상머신 하나의 정보를 가져온다.
     # example) $vm = Get-VM -Id 8102C1F1-6A15-4BDC-8BF1-C8ECBE9D94E2 | Convertto-Json
@@ -155,8 +151,6 @@ class PowerShell(object):
         script += "Get-VM -Id " +vm_name
         script += self.CONVERTTO_JSON +" }"
         return self.send(script)
-
-
 
     # 서버 내의 모든 가상머신 리스트 정보를 가져온다.
     # example) Get-VM
@@ -182,6 +176,26 @@ class PowerShell(object):
         #print script
         return self.send(script)
 
+    # VM 이미지 삭제
+    def delete_vm_Image(self, vhd_File_Name, type):
+        #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
+        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME+" -ScriptBlock {"
+        script += "Move-Item -Path C:/images/vhdx/"+type+"/" + vhd_File_Name
+        script += " -Destination C:/images/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
+        print script
+        return self.send(script)
+
+    # VM 삭제
+    def delete_vm(self, vmId, type):
+        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME+" -ScriptBlock {"
+        script += "$vm = Get-VM -Id "+ vmId +";"
+        script += "$vmn = $vm.Name;"
+        script += "Remove-VM -VM $vm -Force;"
+        script += "Move-Item -Path C:/images/vhdx/"+type+'/$vmn".vhdx" '
+        script += "-Destination C:/images/vhdx/backup/ | ConvertTo-Json }"
+        print script
+        return self.send(script)
+
     # agent 모듈에 파워쉘 스크립트를 전달하여 실행하고 결과를 받아온다.
     def send(self, script):
         address = self.address
@@ -198,28 +212,6 @@ class PowerShell(object):
         data = {'script': script}
         response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
-
-    #VM 이미지 삭제
-    def delete_vm_Image(self, vhd_File_Name, type):
-        #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
-        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME+" -ScriptBlock {"
-        script += "Move-Item -Path C:/images/vhdx/"+type+"/" + vhd_File_Name
-        script += " -Destination C:/images/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
-        print script
-        return self.send(script)
-
-
-    #VM 삭제
-    def delete_vm(self, vmId, type):
-        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME+" -ScriptBlock {"
-        script += "$vm = Get-VM -Id "+ vmId +";"
-        script += "$vmn = $vm.Name;"
-        script += "Remove-VM -VM $vm -Force;"
-        script += "Move-Item -Path C:/images/vhdx/"+type+'/$vmn".vhdx" '
-        script += "-Destination C:/images/vhdx/backup/ | ConvertTo-Json }"
-        print script
-        return self.send(script)
-
 
     def get_state_string(self, state):
         if state is 1:
