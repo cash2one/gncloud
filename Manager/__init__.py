@@ -2,14 +2,14 @@
 
 from flask import Flask, jsonify, request, session, escape
 from datetime import timedelta
+from gevent.pywsgi import WSGIServer
+
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
-from service.service import vm_list, vm_info, login_list, me_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
+from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph , server_list, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete
+                            , team_delete, checkteam, select, signup_team, comfirm_list, createteam_list
 from db.database import db_session
-from gevent.pywsgi import WSGIServer
-    
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -43,10 +43,21 @@ def login():
     user_id = request.json['user_id']
     password = request.json['password']
     user_info = login_list(user_id, password)
-    if user_info != None:
-        session['userId'] = user_info.user_id;
-        session['userName'] = user_info.user_name;
-        return jsonify(status=True, message="login as "+user_id)
+    team_info = checkteam(user_id)
+    if(user_info != None and team_info == None ):
+        session['userId'] = user_info.user_id
+        session['userName'] = user_info.user_name
+        return jsonify(status=True, message="login as "+user_id, test='no')
+    elif(user_info != None and team_info.comfirm == "Y"):
+        session['userId'] = user_info.user_id
+        session['userName'] = user_info.user_name
+        session['teamCode'] = team_info.team_code
+        return jsonify(status=True, message="login as "+user_id, test='yes')
+
+    elif(user_info != None and team_info.comfirm == "N" ):
+        session['userId'] = user_info.user_id
+        session['userName'] = user_info.user_name
+        return jsonify(status=True, message="login as "+user_id, test='noyes')
     else:
         return jsonify(status=False, message="정보가 잘못되었습니다")
 
@@ -138,7 +149,7 @@ def team():
 @app.route('/vm/account/team', methods=['GET'])
 def my_list():
     if session.get('userId',None):
-        return jsonify(status=True, message="success", list=me_list(session['userId']))
+        return jsonify(status=True, message="success", list=teamwon_list(session['userId']))
 
 @app.route('/vm/acoount/teamlist', methods=['GET'])
 def tea_list():
@@ -146,11 +157,6 @@ def tea_list():
     team_id = "002"
     return jsonify(status=True, message="success", list=tea(session_id, team_id))
 
-@app.route('/vm/account/user/', methods=['POST'])
-def teamsignup():
-    if session.get('userId',None):
-        comfirm = request.json['comfirm']
-    return jsonify(status=True, message="success", list= teamsignup_list(comfirm, session['userId']))
 
 @app.route('/vm/container/services', methods=['GET'])
 def container_list():
@@ -170,6 +176,7 @@ def approve(id,code):
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['DELETE'])
 def delete(id,code):
+    id = session['userId']
     team_delete(id, code)
     return jsonify(status=True, message="success")
 
@@ -184,6 +191,30 @@ def update_guest_name(id, type):
     change_value = request.json['value']
     vm_update_info(id,type,change_value,db_session)
     return jsonify(status=True, message="success")
+
+@app.route('/vm/account/selectteam', methods=['GET'])
+def selectteam():
+    return jsonify(status=True, message="success", list=select())
+
+@app.route('/vm/account/selectteam', methods=['POST'])
+def teamsignup():
+    team_code = request.json['team_code']
+    user_id = session['userId']
+    signup_team(team_code, user_id)
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/account/teamcomfirm', methods=['GET'])
+def comfirm():
+    user_id = session['userId']
+    return jsonify(status=True, message="success", list=comfirm_list(user_id))
+
+@app.route('/vm/account/createteam', methods=['POST'])
+def createteam():
+    team_name = request.json['team_name']
+    team_code = request.json['team_code']
+    author_id = session['userName']
+    return jsonify(status=True, message="success", list=createteam_list(team_name, team_code, author_id))
+
 
 #### rest end ####
 

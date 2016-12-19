@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/gn_css/bootstrap.css" />
     <link rel="stylesheet" href="/gn_css/style_instance_list.css" />
     <link rel="stylesheet" href="/gn_css/style_instance.css" />
+    <!--<link rel="stylesheet" href="/gn_css/nanumbarungothic.css"/>-->
     <link href='https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css' rel='stylesheet' type='text/css'>
     <!--<link href="/chart/css/style.css" rel="stylesheet">-->
     <!--<link href="/css/bootstrap.min.css" rel="stylesheet">-->
@@ -55,7 +56,9 @@
     <script type="text/javascript" src="/js/angular/controllers/guestSignUp.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestRepair.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestDetail.js"></script>
-
+    <script type="text/javascript" src="/js/angular/controllers/guestSelectTeam.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/guestReadyTeam.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/guestCreateTeam.js"></script>
 </head>
 
 <body landing-scrollspy>
@@ -76,9 +79,9 @@
         <div id="navbar" class="navbar-collapse collapse">
             <!--왼쪽메뉴-->
             <ul class="nav navbar-nav">
-                <li class="h4 menu1"><a href="#">대시보드</a></li>
-                <li class="h4 menu2"><a href="#/guestList">인스턴스</a></li>
-                <li class="h4 menu3"><a href="#guestSnapList/">이미지</a></li>
+                <li class="h4 h4-menu"><a href="#">대시보드</a></li>
+                <li class="h4 h4-menu"><a href="#/guestList">인스턴스</a></li>
+                <li class="h4 h4-menu"><a href="#guestSnapList/">이미지</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="create-btn">
@@ -91,7 +94,7 @@
                         <a href="#/account/users/list" class="user h4" id="name"></a>
                         <span class="caret user-arrow" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
                         <ul class="dropdown-menu" role="menu">
-                            <li class="dropdown-headr">Nav header</li>
+                            <!--<li class="dropdown-headr">Nav header</li>-->
                                 <li><a href="#/guestRepair">개인설정</a></li>
                                 <li><a href=javascript:logout();>로그아웃</a></li>
                                 <li><a href="#/account">로그인</a> </li>

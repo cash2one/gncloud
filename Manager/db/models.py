@@ -7,6 +7,7 @@ import datetime
 
 from Manager.db.database import Base
 
+
 class GnHostMachines(Base):
     __tablename__ = "GN_HOST_MACHINES"
     id = Column(String(100), primary_key=True, nullable=False)
@@ -126,18 +127,22 @@ class GnUserTeam(Base):
     user_id = Column(String(50),primary_key=True, nullable=False )
     team_code = Column(String(20), primary_key=True, nullable=False)
     comfirm = Column(String(1), primary_key=False, nullable=False)
+    apply_date = Column(DateTime, default=datetime.datetime.now())
+    approve_date = Column(DateTime, default=datetime.datetime.now())
 
-    def __init__(self, user_id=user_id, team_code=team_code, comfirm=comfirm):
+    def __init__(self, user_id=user_id, team_code=team_code, comfirm=comfirm, apply_date =apply_date, approve_date=approve_date):
         self.user_id = user_id
         self.team_code = team_code
         self.comfirm = comfirm
+        self.apply_date =apply_date
+        self.approve_date = approve_date
 
     def __repr__(self):
-        return '<Id %r /Team_code %r / Comfirm %r / >' \
-               % (self.user_id, self.team_code, self.comfirm, )
+        return '<Id %r /Team_code %r / Comfirm %r / Apply_date %r / Approve_date %r / >' \
+               % (self.user_id, self.team_code, self.comfirm, self.apply_date, self.approve_date)
 
     def __json__(self):
-        return ['user_id', 'team_code', 'comfirm']
+        return ['user_id', 'team_code', 'comfirm', 'apply_date', 'approve_date']
 
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'

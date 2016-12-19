@@ -4,9 +4,10 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnContanierImage 
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnContanierImage
 from Manager.db.database import db_session
 from Manager.util.hash import random_string
+
 
 def vm_list(sql_session):
     list = sql_session.query(GnVmMachines).all()
@@ -62,7 +63,7 @@ def login_list(user_id, password):
     return list
 
 
-def me_list(user_id):
+def teamwon_list(user_id):
     team =db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
     list =db_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
     return list
@@ -74,9 +75,15 @@ def tea(user_id, team_code):
     sub_stmt = db_session.query(GnUserTeam.user_id).filter(GnUserTeam.team_code == team_code)
     list = db_session.query(GnUser).filter(GnUser.user_id.in_(sub_stmt)).all()
     return list
-
+def checkteam(user_id):
+    checklist = db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one_or_none()
+    if(checklist != None):
+        return db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
+    else:
+        return None
 
 def teamcheck_list(user_id):
+    list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
     return db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
 
 def sign_up(user_name, user_id, password, password_re):
@@ -202,7 +209,6 @@ def teamsignup_list(comfirm, user_id):
 
 def team_list(user_id):
     list= db_session.query(GnUser).filter(GnUser.user_id ==user_id).one()
-    list.comfirm = ""
     return list
 
 def container():
@@ -231,5 +237,23 @@ def approve_set(user_id,code,type,user_name):
 
 def team_delete(id ,code):
     db_session.query(GnUserTeam).filter(GnUserTeam.user_id == id).filter(GnUserTeam.team_code == code).delete()
+    db_session.commit()
+    return True
+
+def signup_team(team_code,user_id):
+    vm = GnUserTeam(user_id= user_id, team_code= team_code, comfirm = 'N',apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    db_session.add(vm)
+    db_session.commit()
+    return True
+
+def comfirm_list(user_id):
+    team =db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
+    if(team.comfirm != 'Y'):
+        list =db_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
+        return list
+
+def createteam_list(team_name, team_code, author_id):
+    vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id)
+    db_session.add(vm)
     db_session.commit()
     return True
