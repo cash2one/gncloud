@@ -11,20 +11,8 @@ from Manager.util.hash import random_string
 def vm_list(sql_session):
     list = sql_session.query(GnVmMachines).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
-        tagArr = vmMachine.tag.split(',')
-        vmMachine.tag = tagArr[0] + '+' +str(len(tagArr))
-        dt = vmMachine.create_time.strftime('%Y%m%d%H%M%S')
-        dt2 = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        if(int(dt2[:4])-int(dt[:4]) == 0):
-            if(int(dt2[:8])-int(dt[:8]) != 0):
-                vmMachine.day1 = str(int(dt2[:8])-int(dt[:8]))+ "일 전"
-            else:
-                if(int(dt2[6:])-int(dt[6:]) != 0):
-                    vmMachine.day1 = str((int(dt2[6:])-int(dt[6:]))/ 10000)+ "시간 전"
-                else:
-                    vmMachine.day1 = str((int(dt2[4:])-int(dt[4:]))/ 100)+ "분 전"
-        else:
-            vmMachine.day1 = str(int(dt2[:4])-int(dt[:4])) +"년 전"
+        vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
+
     return list
 
 def vm_info(sql_session, id):
@@ -130,8 +118,8 @@ def server_image(type):
     list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     return list
 
-def getQuotaOfTeam(team_code):
-    current_info = db_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
+def getQuotaOfTeam(team_code, sql_session):
+    current_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
                         func.sum(GnVmMachines.memory).label("sum_mem"),
                         func.sum(GnVmMachines.disk).label("sum_disk")
                         ).filter(GnVmMachines.team_code == team_code).one()
@@ -161,25 +149,6 @@ def getQuotaOfTeam(team_code):
                  , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info};
 
     return quato_info
-
-def server_list(sql_session):
-    list = sql_session.query(GnVmMachines).order_by("create_time desc").all()
-    for vmMachine in list:
-        tagArr = vmMachine.tag.split(',')
-        vmMachine.num = tagArr[0] + '+' +str(len(tagArr))
-        dt = vmMachine.create_time.strftime('%Y%m%d%H%M%S')
-        dt2 = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        if(int(dt2[:4])-int(dt[:4]) == 0):
-            if(int(dt2[:8])-int(dt[:8]) != 0):
-                vmMachine.day1 = str(int(dt2[:8])-int(dt[:8]))+ "일 전"
-            else:
-                if(int(dt2[6:])-int(dt[6:]) != 0):
-                    vmMachine.day1 = str((int(dt2[6:])-int(dt[6:]))/ 10000)+ "시간 전"
-                else:
-                    vmMachine.day1 = str((int(dt2[4:])-int(dt[4:]))/ 100)+ "분 전"
-        else:
-            vmMachine.day1 = str(int(dt2[:4])-int(dt[:4])) +"년 전"
-    return list
 
 def list_user_sshkey(team_code, sql_session):
     list = sql_session.query(GnSshKeys).all()
