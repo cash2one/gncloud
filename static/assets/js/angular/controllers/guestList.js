@@ -20,12 +20,14 @@ angular
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
                     $scope.guest_list = data.list;
+
                     for(var i = 0 ; i < data.list.length ; i++){
-                        //태그 카운팅
-                        var count = data.list[i].tag.split(",");
-                        if(count.length - 1 > 0 ) {
-                            $scope.guest_list[i].tagFirst = count[0];
-                            $scope.guest_list[i].tagcount = "+" + (count.length - 1);
+                        var tagArr = data.list[i].tag.split(",");
+                        if(tagArr.length - 1 > 0 ) {
+                            $scope.guest_list[i].tagFirst = tagArr[0];
+                            $scope.guest_list[i].tagcount = "+" + (tagArr.length - 1);
+                        }else{
+                            $scope.guest_list[i].tagFirst = data.list[i].tag;
                         }
 
                         //날짜 카운팅
@@ -68,23 +70,15 @@ angular
         ];
 
         $scope.update = function (id, action, index) {
-            var url = '/api/kvm/vm/machines/' + id;
-            var method = "PUT";
-            if (action.type == "delete") {
-                url = '/api/kvm/vm/machines/' + id;
-                method = 'DELETE';
-            }
-
             $http({
-                method: method,
-                url: url,
+                method: "PUT",
+                url: "/api/kvm/vm/machines/" + id,
                 data: action,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
                         alert(name + " guest의 상태가 변경되었습니다");
-                        $scope.guest_list.splice(index, 1);
                     } else {
                         alert(data.message);
                     }

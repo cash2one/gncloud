@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from functools import wraps
 from apscheduler.scheduler import Scheduler
 
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, session
 from datetime import timedelta
 from gevent.pywsgi import WSGIServer
 
@@ -19,6 +20,7 @@ from logging.handlers import RotatingFileHandler
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 app.json_encoder = AlchemyEncoder
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 
 ### cron job start ###
@@ -30,6 +32,22 @@ def job_function():
 
 #### rest start ####
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'userId' not in session:
+            return jsonify(status=False, message="Session is expired")
+        else:
+            print("session is exist")
+
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/session_test', methods=['GET'])
+@login_required
+def session_test():
+    #print(session['userId'])
+    return jsonify(status=True)
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():

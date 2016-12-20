@@ -47,7 +47,7 @@ def vm_info_graph(sql_session, id):
 
 def login_list(user_id, password):
     password = random_string(password)
-    list = db_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password == password).one_or_none()
+    list = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
     return list
 
 
@@ -59,10 +59,14 @@ def teamwon_list(user_id):
 
 def teamcheck_list(teamcode):
     return db_session.query(GnUser).filter(GnUser.team_code == teamcode).all()
+
+
 def tea(user_id, team_code):
     sub_stmt = db_session.query(GnUserTeam.user_id).filter(GnUserTeam.team_code == team_code)
     list = db_session.query(GnUser).filter(GnUser.user_id.in_(sub_stmt)).all()
     return list
+
+
 def checkteam(user_id):
     checklist = db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one_or_none()
     if(checklist != None):
@@ -70,9 +74,11 @@ def checkteam(user_id):
     else:
         return None
 
+
 def teamcheck_list(user_id):
     list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
     return db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
+
 
 def sign_up(user_name, user_id, password, password_re):
     check = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()

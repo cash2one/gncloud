@@ -3,6 +3,20 @@ var serviceAddModules = [
 ];
 
 (function () {
-    angular.module('gncloud', serviceAddModules);
+    var app = angular.module('gncloud', serviceAddModules);
+    app.factory('serviceLogger', function ($location) {
+        return {
+            request: function (config) {
+                //$location.url("/account");
+                return config;
+            }
+        };
+    });
 })();
+
+
+
+
+
+
 
