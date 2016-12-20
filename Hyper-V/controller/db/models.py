@@ -305,16 +305,17 @@ class GnVmImages(Base):
     os_ver = Column(String(20), nullable=True, default=None)
     os_subver = Column(String(20), nullable=True, default=None)
     os_bit = Column(String(2), nullable=True, default=None)
-    team_code = Column(String(3), nullable=True, default=None)
+    team_code = Column(String(10), nullable=True, default=None)
     author_id = Column(String(15), nullable=True, default=None)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
-    status = Column(String(50), nullable=True, default=None)
+    status = Column(String(10), nullable=True, default=None)
+    ssh_id = Column(String(10), nullable=True, default=None)
 
     def __init__(self, id='', image_name='', filename='',
                  type='', sub_type='', icon=None,
                  os=None, os_ver=None, os_subver=None, os_bit=None,
                  team_code=None, author_id=None, create_time=datetime.datetime.now(),
-                 status=None):
+                 status=None, ssh_id=None):
         self.id = id
         self.name = image_name
         self.filename = filename
@@ -329,20 +330,22 @@ class GnVmImages(Base):
         self.author_id = author_id
         self.create_time = create_time
         self.status = status
+        self.ssh_id = ssh_id
 
     def __repr__(self):
         return "<GnVmImages(" \
                "id='%r', name='%r', filename='%r', " \
                "type='%r', sub_type='%r', icon='%r', " \
-               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r', status='%r')>" \
+               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r', status='%r', ssh_id='%r)>" \
                % (self.id, self.name, self.filename, self.type,
-                  self.sub_type, self.icon, self.os, self.os_ver, self.os_subver,
-                  self.os_bit, self.team_code, self.author_id, self.create_time, self.status)
+                  self.sub_type, self.icon, self.os, self.os_ver, self.os_sub_ver,
+                  self.os_bit, self.team_code, self.author_id, self.create_time, self.status, self.ssh_id)
 
+'''
     def __json__(self):
         return ['id', 'name', 'filename', 'type','sub_type', 'icon', 'os', 'os_ver', 'os_bit',
-                'team_code', 'author_id', 'create_time', 'status']
-
+                'team_code', 'author_id', 'create_time', 'status', 'ssh_id']
+'''
 
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'

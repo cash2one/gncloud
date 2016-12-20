@@ -14,6 +14,9 @@ class Config:
     AGENT_PORT = None
     AGENT_REST_URI = None
     SALT = None
+    DNS_ADDRESS = None
+    DNS_SUB_ADDRESS = None
+    COMPUTER_NAME = None
 
     def __init__(self, path="../conf/config.conf"):
         # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
@@ -38,6 +41,9 @@ class Config:
         self.AGENT_PORT = parser.get(config_section, "AGENT_PORT")
         self.AGENT_REST_URI = parser.get(config_section, "AGENT_REST_URI")
         self.SALT = parser.get(config_section, "SALT")
+        self.DNS_ADDRESS = parser.get(config_section, "DNS_ADDRESS")
+        self.DNS_SUB_ADDRESS = parser.get(config_section, "DNS_SUB_ADDRESS")
+        self.COMPUTER_NAME = parser.get(config_section, "COMPUTER_NAME")
 
 
 # 전역 공통사용 객체이다.
