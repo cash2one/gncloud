@@ -30,24 +30,29 @@ def job_function():
 
 ### cron job end ###
 
-#### rest start ####
+#####common function start#####
 
+
+####login check start####
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'userId' not in session:
-            return jsonify(status=False, message="Session is expired")
-        else:
-            print("session is exist")
+        #if 'userId' not in session:
+        #return jsonify(status=False, message="Session is expired")
 
         return f(*args, **kwargs)
     return decorated_function
+####login check end####
 
-@app.route('/session_test', methods=['GET'])
-@login_required
-def session_test():
-    #print(session['userId'])
-    return jsonify(status=True)
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
+
+
+#####common function end#####
+
+#### rest start ####
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
@@ -135,9 +140,7 @@ def download_sshKey(id):
 
 #### error handler end####
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
+
 
 if __name__ == '__main__':
     # 로그 설정
