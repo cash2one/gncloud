@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
+import logging
+from logging.handlers import RotatingFileHandler
 
 from flask import Flask, jsonify, request, session, escape
 from datetime import timedelta
-from gevent.pywsgi import WSGIServer
 
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select
-                        
+                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put
 from db.database import db_session
-import logging
-from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -197,8 +195,9 @@ def team():
 @app.route('/vm/account/team', methods=['GET'])
 @login_required
 def my_list():
+    team_owner = 'owner'
     if session.get('userId',None):
-        return jsonify(status=True, message="success", list=teamwon_list(session['userId']))
+        return jsonify(status=True, message="success", list=teamwon_list(session['userId'],session['teamCode'],team_owner ,db_session))
 
 
 @app.route('/vm/acoount/teamlist', methods=['GET'])
@@ -283,6 +282,16 @@ def createteam():
     author_id = session['userName']
     return jsonify(status=True, message="success", list=createteam_list(team_name, team_code, author_id))
 
+@app.route('/vm/account/teamname', methods=['GET'])
+@login_required
+def teamname():
+    return jsonify(status=True, message="success", list=select_list(session['teamCode']))
+
+@app.route('/vm/account/teamname', methods=['PUT'])
+@login_required
+def changeteamname():
+    team_name = request.json['team_name']
+    return jsonify(status=True, message="success", list=select_put(team_name,session['teamCode']))
 
 #### rest end ####
 

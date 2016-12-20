@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestMeListCtrl', function ($scope, $http) {
+    .controller('guestMeListCtrl', function ($scope, $http, dateModifyService) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -20,6 +20,23 @@ angular
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
                     $scope.te_list = data.list;
+
+                } else {
+                    alert(data.message);
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
+        $http({
+            method: 'GET',
+            url: '/api/manager/vm/account/teamname',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data.status == true) {
+                    $scope.teamname = data.list;
 
                 } else {
                     alert(data.message);
@@ -72,6 +89,7 @@ angular
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
                     $scope.won_list = data.list;
+                    $scope.won_list[0][0].total = data.list.length;
                     for(var i = 0 ; i < data.list.length ; i++) {
                         $scope.won_list[i][1].comf = data.list[i][1].comfirm;
                         if($scope.won_list[i][1].comf == 'Y'){
@@ -79,53 +97,10 @@ angular
                         } else {
                            var comfirm_re = '비승인'
                         }
-                        $scope.won_list[i][1].comf = comfirm_re
+                        $scope.won_list[i][1].comf = comfirm_re;
                         //날짜 카운팅
-                        $scope.won_list[i][1].create_time_diff = data.list[i][1].apply_date;
-                        var data_year = data.list[i][1].apply_date.substring(0, 4);
-                        var data_month = data.list[i][1].apply_date.substring(5, 7);
-                        var data_day = data.list[i][1].apply_date.substring(8, 10);
-                        var data_time = data.list[i][1].apply_date.substring(11, 13);
-                        var date = new Date();
-                        var year = date.getFullYear();
-                        var month = date.getMonth() + 1; // 0부터 시작하므로 1더함 더함
-                        var day = date.getDate();
-                        var time = date.getHours();
-                        var dateDiff = "";
-                        if (data_year != year) {
-                            dateDiff = (year - data_year) + "년 전";
-                        } else if (data_month != month) {
-                            dateDiff = (month - data_month) + "개월 전";
-                        } else if (data_day != day) {
-                            dateDiff = (day - data_day) + "일 전";
-                        } else if (data_time != time) {
-                            dateDiff = (time - data_time) + "시간 전";
-                        }
-                        $scope.won_list[i][1].create_time_diff = dateDiff;
-                    }
-                    for(var i = 0 ; i < data.list.length ; i++) {
-                        //날짜 카운팅
-                        $scope.won_list[i][1].create_time_diff1 = data.list[i][1].approve_date;
-                        var data_year = data.list[i][1].approve_date.substring(0, 4);
-                        var data_month = data.list[i][1].approve_date.substring(5, 7);
-                        var data_day = data.list[i][1].approve_date.substring(8, 10);
-                        var data_time = data.list[i][1].approve_date.substring(11, 13);
-                        var date = new Date();
-                        var year = date.getFullYear();
-                        var month = date.getMonth() + 1; // 0부터 시작하므로 1더함 더함
-                        var day = date.getDate();
-                        var time = date.getHours();
-                        var dateDiff = "";
-                        if (data_year != year) {
-                            dateDiff = (year - data_year) + "년 전";
-                        } else if (data_month != month) {
-                            dateDiff = (month - data_month) + "개월 전";
-                        } else if (data_day != day) {
-                            dateDiff = (day - data_day) + "일 전";
-                        } else if (data_time != time) {
-                            dateDiff = (time - data_time) + "시간 전";
-                        }
-                        $scope.won_list[i][1].create_time_diff1 = dateDiff;
+                        $scope.won_list[i][1].create_time_diff = dateModifyService.modifyDate(data.list[i][1].apply_date);
+                        $scope.won_list[i][1].create_time_diff1 = dateModifyService.modifyDate(data.list[i][1].approve_date);
                     }
                 } else {
                     alert(data.message);
@@ -190,6 +165,24 @@ angular
                 });
 
             };
+        $scope.change = function () {
+            $http({
+                method  : 'PUT',
+                url: '/api/manager/vm/account/teamname',
+                data: $scope.data,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            })
+                .success(function(data) {
+                    if (data.status == true) {
+                        alert("변경되었습니다")
+                    }
+                    else {
+                        alert(data.message)
+                    }
+                });
+        }
         $scope.download = function (id) {
             $http({
                 method: 'GET',

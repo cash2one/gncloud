@@ -51,10 +51,8 @@ def login_list(user_id, password):
     return list
 
 
-def teamwon_list(user_id):
-    owner = 'owner'
-    list =db_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_owner == owner).all()
-
+def teamwon_list(user_id,team_code,team,sql_session):
+    list =sql_session.query(GnUser, GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.team_owner==team).all()
     return list
 
 
@@ -245,3 +243,12 @@ def createteam_list(team_name, team_code, author_id):
 
 def select():
     return db_session.query(GnTeam).all()
+
+def select_list(team_code):
+    return db_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+
+def select_put(team_name, team_code):
+    lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()
+    lit.team_name = team_name
+    db_session.commit()
+    return True

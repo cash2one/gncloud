@@ -119,57 +119,7 @@
     </div> <!--id="key-sett" class="tab-pane fade"-->
 
     <!--팀 > 프로필-->
-    <div id="profile-team"  class="">
-        <div class="border-box profile-team">
-            <div class="cont-box">
-                <h2>{{team_list.team_name}}</h2>
-                <!--팀 수정버튼-->
-                <div class="clearfix fr">
-                    <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#modal-modi">수정</button>
-                    <!-- 팀 Modal -->
-                    <div class="modal fade" id="modal-modi" role="dialog">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">팀 수정</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="modal-line">
-                                    <div class="mod-txt fl">팀명</div><input type="text" class="input-mod-name" id="exampleInputPassword3" placeholder="연구 1팀">
-                                </div>
-                                <ul>
-                                    <li class="sett-title-modal fl">팀 코드</li>
-                                    <li class="sett-title-modal fl">develop</li>
-                                </ul>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal">저장</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                <div class="team-ul">
-                    <ul class="ul-sett-left">
-                        <li class="sett-title fl">팀 코드</li>
-                        <li class="sett-txt">{{team_list.team_code}}</li>
-                        <li class="sett-title fl">팀장</li>
-                        <li class="sett-txt">
-                            <span class="team-master">{{team_list.author_id}}</span>|
-                            <!--<span class="team-master">OOO</span>|-->
-                            <span class="team-master">010-2233-4455</span>|
-                            <span class="team-master">cs2014@naver.com</span></li>
-                        <li class="sett-title fl">총원</li>
-                        <li class="sett-txt"></li>
-                        <li class="sett-title fl">팀 생성일</li>
-                        <li class="sett-txt">{{team_list.create_date}}</li>
-                    </ul>
-                </div> <!--class="team-ul"-->
 
-            </div> <!--class="cont-box"-->
-        </div> <!--class="border-box profile-team"-->
-    </div> <!--id="profile-team"  class="tab-pane fade"-->
     <div id="team-reso"  class="">
         <div class="border-box profile-team">
             <div class="cont-box">
@@ -319,7 +269,59 @@
             </div> <!--class="cont-box"-->
         </div> <!--class="border-box profile-team"-->
     </div> <!--id="profile-team"  class="tab-pane fade"-->
+    <div id="profile-team"  class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h2>{{teamname.team_name}}</h2>
+                <!--팀 수정버튼-->
+                <div class="clearfix fr">
+                    <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#modal-modi">수정</button>
+                    <!-- 팀 Modal -->
+                    <div class="modal fade" id="modal-modi" role="dialog">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">팀 수정</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="modal-line">
+                                        <div class="mod-txt fl">팀명</div><input type="text" class="input-mod-name" ng-model="data.team_name" placeholder="{{teamname.team_name}}">
+                                    </div>
+                                    <ul>
+                                        <li class="sett-title-modal fl">팀 코드</li>
+                                        <li class="sett-title-modal fl">{{teamname.team_code}}</li>
+                                    </ul>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal" ng-click="change()">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-ul">
+                    <ul class="ul-sett-left" ><span ng-repeat="team in team_list">
+                        <li class="sett-title fl">팀 코드</li>
+                        <li class="sett-txt">{{team[1].team_code}}</li>
+                        <li class="sett-title fl">팀장</li>
+                        <li class="sett-txt">
+                            <span class="team-master">{{team[0].user_name}}</span>|
+                            <!--<span class="team-master">OOO</span>|-->
+                            <span class="team-master">{{team[0].tel}}</span>|
+                            <span class="team-master">{{team[0].email}}</span></li>
+                        </span>
+                        <li class="sett-title fl">총원</li>
+                        <li class="sett-txt" ng-repeat="won in won_list">{{won[0].total}}</li>
+                        <li class="sett-title fl">팀 생성일</li>
+                        <li class="sett-txt">{{teamname.create_date}}</li>
+                    </ul>
 
+                </div> <!--class="team-ul"-->
+
+            </div> <!--class="cont-box"-->
+        </div> <!--class="border-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade"-->
 </div> <!--class="tab-content right-box fl" -->
 
 
