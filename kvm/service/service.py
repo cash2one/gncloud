@@ -34,7 +34,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             if rest_cpu >= int(cpu) and rest_mem >= int(memory) and rest_disk >= int(disk):
                 host_ip = host_info.ip
                 host_id = host_info.id
-                break
+
 
         if(host_ip is None):
             result = {"status":False, "message":"HOST 머신 리소스가 부족합니다"}
@@ -79,7 +79,6 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
                                   , os_ver=image_info.os_ver, os_sub_ver=image_info.os_subver, os_bit=image_info.os_bit
                                   , team_code=team_code, author_id=user_id,status='running', tag=tag)
         db_session.add(vm_machine)
-
         return result
     except IOError as errmsg:
         db_session.rollback()
@@ -153,9 +152,16 @@ def server_create_snapshot(id, name, user_id, team_code):
         new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
         # 디스크 복사
-        kvm_image_copy(guest_info.internal_name, new_image_name)
+        kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
 
-        guest_snap = GnVmImages(id="1234", name=name, type="kvm", sub_type="snap", filename=new_image_name + ".img"
+        #id 생성
+        while True:
+            id = random_string(8)
+            check_info = GnId.query.filter(GnId.id == id).first();
+            if not check_info:
+                break
+
+        guest_snap = GnVmImages(id=id, name=name, type="kvm", sub_type="snap", filename=new_image_name + ".img"
                                 , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
                                 , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id)
         db_session.add(guest_snap)

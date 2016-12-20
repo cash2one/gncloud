@@ -52,21 +52,26 @@ angular
                 console.log(status);
             });
 
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/images/snap',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.snap_list = data.list;
-                }
-                else {
-                }
+
+        $scope.snapList = function() {
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/images/snap',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.snap_list = data.list;
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.snapList();
 
 
         $http({
@@ -85,25 +90,6 @@ angular
                 console.log(status);
             });
 
-
-
-
-        //$scope.update = function (id, index) {
-        //    $http({
-        //        method: 'DELETE',
-        //        url: '/api/kvm/vm/images/' + id,
-        //        headers: {'Content-Type': 'application/json; charset=utf-8'}
-        //    })
-        //        .success(function (data, status, headers, config) {
-        //            $scope.guest_snap_list.splice(index, 1);
-        //            alert("삭제되었습니다");
-        //        })
-        //        .error(function (data, status, headers, config) {
-        //            console.log(status);
-        //        });
-        //
-        //
-        //}
         $scope.actions = [
             {name: '시작', type: 'resume'},
             {name: '정지', type: 'suspend'},
@@ -172,7 +158,7 @@ angular
                 .success(function (data) {
                     if (data.status == true) {
                         alert("스냅샷이 생성되었습니다");
-
+                        $scope.snapList();
                     } else {
                         alert(data.message);
                     }

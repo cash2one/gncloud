@@ -184,7 +184,7 @@ def list_volume(type, sub_type):
 @app.route('/vm/images/<type>', methods=['GET'])
 @login_required
 def volume(type):
-    return jsonify(status=True, message="success", list=server_image(type))
+    return jsonify(status=True, message="success", list=server_image(type, db_session))
 
 
 @app.route('/vm/account/users/list', methods=['GET'])

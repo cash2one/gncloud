@@ -128,8 +128,8 @@ def server_image_list(type, sub_type, sql_session):
     return list
 
 
-def server_image(type):
-    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+def server_image(type, sql_session):
+    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     return list
 
 def getQuotaOfTeam(team_code, sql_session):

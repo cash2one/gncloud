@@ -84,10 +84,10 @@ def delete_vm(id):
 
 @app.route('/vm/machine/snapshots', methods=['POST'])
 def create_snap():
+    user_id = "yhkwak"  # session
+    team_code = "001"  # session
     ord_id = request.json['ord_id']
     name = request.json['name']
-    user_id = "yhkwak"  # session
-    team_code = "1"  # session
     server_create_snapshot(ord_id, name, user_id, team_code)
     return jsonify(status=True, message="success")
 
