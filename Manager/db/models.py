@@ -129,20 +129,22 @@ class GnUserTeam(Base):
     comfirm = Column(String(1), primary_key=False, nullable=False)
     apply_date = Column(DateTime, default=datetime.datetime.now())
     approve_date = Column(DateTime, default=datetime.datetime.now())
+    team_owner = Column(String(20), primary_key=False, nullable=False)
 
-    def __init__(self, user_id=user_id, team_code=team_code, comfirm=comfirm, apply_date =apply_date, approve_date=approve_date):
+    def __init__(self, user_id=user_id, team_code=team_code, comfirm=comfirm, apply_date =apply_date, approve_date=approve_date, team_owner = team_owner):
         self.user_id = user_id
         self.team_code = team_code
         self.comfirm = comfirm
         self.apply_date =apply_date
         self.approve_date = approve_date
+        self.team_owner = team_owner
 
     def __repr__(self):
-        return '<Id %r /Team_code %r / Comfirm %r / Apply_date %r / Approve_date %r / >' \
-               % (self.user_id, self.team_code, self.comfirm, self.apply_date, self.approve_date)
+        return '<Id %r /Team_code %r / Comfirm %r / Apply_date %r / Approve_date %r / Team_Owner %r />' \
+               % (self.user_id, self.team_code, self.comfirm, self.apply_date, self.approve_date, self.team_owner)
 
     def __json__(self):
-        return ['user_id', 'team_code', 'comfirm', 'apply_date', 'approve_date']
+        return ['user_id', 'team_code', 'comfirm', 'apply_date', 'approve_date', 'team_owner']
 
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'
@@ -152,22 +154,23 @@ class GnTeam(Base):
     cpu_quota = Column(Integer, primary_key=False, nullable=False)
     mem_quota = Column(Integer, primary_key=False, nullable=False)
     disk_quota = Column(Integer, primary_key=False, nullable=False)
+    create_date = Column(DateTime, default=datetime.datetime.now())
 
-    def __init__(self, team_code = team_code, team_name= team_name, author_id =author_id, cpu_quota =cpu_quota, mem_quota = mem_quota, disk_quota = disk_quota):
+    def __init__(self, team_code = team_code, team_name= team_name, author_id =author_id, cpu_quota =cpu_quota, mem_quota = mem_quota, disk_quota = disk_quota, create_date=create_date):
         self.team_code = team_code
         self.team_name = team_name
         self.author_id = author_id
         self.cpu_quota = cpu_quota
         self.mem_quota = mem_quota
         self.disk_quota = disk_quota
-
+        self.create_date = create_date
 
     def __repr__(self):
-        return '<TEAM_CODE %r / TEAM_NAME %r / AUTHOR_ID %r / CPU_QUOTA %r / MEM_QUOTA %r / DISK_QUOTA %r>' \
-               % (self.team_name, self.team_code, self.author_id, self.cpu_quota, self.mem_quota, self.disk_quota)
+        return '<TEAM_CODE %r / TEAM_NAME %r / AUTHOR_ID %r / CPU_QUOTA %r / MEM_QUOTA %r / DISK_QUOTA %r / CREATE_DATE %r />' \
+               % (self.team_name, self.team_code, self.author_id, self.cpu_quota, self.mem_quota, self.disk_quota, self.create_date)
 
     def __json__(self):
-        return  ['team_code', 'team_name', 'author_id', 'cpu_quota', 'mem_quota', 'disk_quota']
+        return  ['team_code', 'team_name', 'author_id', 'cpu_quota', 'mem_quota', 'disk_quota', 'create_date']
 
 class GnVmImages(Base):
     __tablename__ = 'GN_VM_IMAGES'

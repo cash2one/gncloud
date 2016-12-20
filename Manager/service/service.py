@@ -52,8 +52,9 @@ def login_list(user_id, password):
 
 
 def teamwon_list(user_id):
-    team =db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
-    list =db_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
+    owner = 'owner'
+    list =db_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_owner == owner).all()
+
     return list
 
 
@@ -183,8 +184,13 @@ def team_list(user_id):
 def container():
     return db_session.query(GnContanierImage).all()
 
-def teamset(user_id, team_code):
-    list = db_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).all()
+def teamset(user_id, team_code, sql_session):
+    list = sql_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).all()
+    for vm in list:
+        vm[0].start_date = vm[0].start_date.strftime('%Y-%m-%d %H:%M:%S')
+        vm[1].apply_date = vm[1].apply_date.strftime('%Y-%m-%d %H:%M:%S')
+        if(vm[1].approve_date != None):
+            vm[1].approve_date = vm[1].approve_date.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
 def approve_set(user_id,code,type,user_name):
@@ -194,9 +200,13 @@ def approve_set(user_id,code,type,user_name):
         db_session.commit()
         return True
     if(type == 'change'):
-        list = db_session.query(GnTeam).filter(GnTeam.team_code== code).one()
-        list.author_id = user_name
-        db_session.commit()
+        list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id== user_id).one()
+        if(list.team_owner == 'owner'):
+            list.team_owner = 'user'
+            db_session.commit()
+        elif(list.team_owner == 'user'):
+            list.team_owner = 'owner'
+            db_session.commit()
         return True
     if(type == 'reset'):
         list = db_session.query(GnUser).filter(GnUser.user_id==user_id).one()

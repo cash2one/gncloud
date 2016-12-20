@@ -8,7 +8,7 @@ from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam
+                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team
 from db.database import db_session
 
 app = Flask(__name__)
@@ -166,7 +166,7 @@ def container_list():
 def teamwon():
     user_id = session['userId']
     team_code = "002"
-    return jsonify(status=True, message="success", list=teamset(user_id, team_code))
+    return jsonify(status=True, message="success", list=teamset(user_id, team_code, db_session))
 @app.route('/vm/account/teamset/<id>/<code>',methods=['PUT'])
 def approve(id,code):
     type = request.json['type']
