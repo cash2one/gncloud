@@ -62,6 +62,32 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(vmscript + script)
 
+    def get_vm_ip_address(self, vmid):
+        script = '$vm = Get-VM -Id '+vmid+';'
+        script += '$ip = Get-VMNetworkAdapter -VMName $vm.VMName;'
+        script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json'
+        return self.send(script)
+
+    def set_vm_ip_address(self, ip, dns_address, dns_sub_address):
+        script = '$IP = "'+ip+'";'
+        script += '$MaskBits = 24;'
+        script += '$Gateway = "192.168.0.1";'
+        script += '$DNS = "' + dns_address + '";'
+        script += '$S_DNS = "'+ dns_sub_address +'";'
+        script += '$IPType = "IPv4";'
+        script += '$adapter = Get-NetAdapter | ? {$_.Status -eq "up"};'
+        script += 'If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress) {'
+        script += '    $adapter | Remove-NetIPAddress -AddressFamily $IPType -Confirm:$false}'
+        script += 'If (($adapter | Get-NetIPConfiguration).Ipv4DefaultGateway) {'
+        script += '    $adapter | Remove-NetRoute -AddressFamily $IPType -Confirm:$false}'
+        script += '$adapter | New-NetIPAddress -AddressFamily $IPType -IPAddress $IP -PrefixLength $MaskBits '
+        script += '-DefaultGateway $Gateway; '
+        script += '$adapter | Set-DnsClientServerAddress -ServerAddresses ($DNS, $S_DNS);'
+        script += 'Get-NetAdapter | ConvertTo-Json '
+        #self.send(script)
+        return self.send_new_vm(script, ip)
+
+
     # VHD 파일을 복사
     # example) Convert-VHD -DestinationPath C:\images\2_testvm\disk.vhdx
     # / -Path C:\images\windows10.vhdx -Verbose -Passthru | ConvertTo-Json
@@ -115,7 +141,8 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-    # 가상머신을 재부팅 한다
+
+    #가상머신을 재부팅 한다
     def restart_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Restart-VM -Force $vm "
@@ -123,7 +150,8 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-    # 가상머신을 일시정지상태로 돌린다. 리턴 state = 9
+
+    #가상머신을 일시정지상태로 돌린다. 리턴 state = 9
     def suspend_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Suspend-VM -VM $vm "
@@ -131,13 +159,15 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-    # 일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
+
+        #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
     def resume_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
         script += "Resume-VM -VM $vm "
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
+
 
     # 가상머신 하나의 정보를 가져온다.
     # example) $vm = Get-VM -Id 8102C1F1-6A15-4BDC-8BF1-C8ECBE9D94E2 | Convertto-Json
@@ -146,11 +176,6 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-    def get_vm_test(self, vm_name):
-        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME +" -ScriptBlock {"
-        script += "Get-VM -Id " +vm_name
-        script += self.CONVERTTO_JSON +" }"
-        return self.send(script)
 
     # 서버 내의 모든 가상머신 리스트 정보를 가져온다.
     # example) Get-VM
@@ -159,42 +184,48 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-    # 스냅샷 생성
-    def create_snap(self, vm_Id):
-        #snapshot_id = vm_Id + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        snapshot_id = "_"+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME +" -ScriptBlock {"
-        script += "$vm = Get-VM -Id "
-        script += vm_Id + ";"
-        script += "$vmn = $vm.Name;"
-        script += " powershell.exe -file C:\images\make_snap.ps1 "
-        script += '$vm.Name '
-        script += snapshot_id #스냅샷의 아이디는 원본Name + 현재 날짜
-        script += ' -passthru ; Get-ChildItem -Path C:/images/vhdx/snap/$vmn'
-        script += '"' + snapshot_id
-        script += '.vhdx" | ConvertTo-Json -Compress }'
-        #print script
-        return self.send(script)
 
-    # VM 이미지 삭제
-    def delete_vm_Image(self, vhd_File_Name, type):
+
+    #VM 이미지 삭제
+    def delete_vm_Image(self, vhd_File_Name, type,computer_name):
         #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
-        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME+" -ScriptBlock {"
+        script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
         script += "Move-Item -Path C:/images/vhdx/"+type+"/" + vhd_File_Name
         script += " -Destination C:/images/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
         print script
         return self.send(script)
 
-    # VM 삭제
-    def delete_vm(self, vmId, type):
-        script = "Invoke-Command -ComputerName "+self.COMPUTER_NAME+" -ScriptBlock {"
-        script += "$vm = Get-VM -Id "+ vmId +";"
+
+    #VM 삭제
+    def delete_vm(self, vmId, type, computer_name):
+        script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
+        script += "$vm = Get-VM -Id "+vmId+";"
         script += "$vmn = $vm.Name;"
         script += "Remove-VM -VM $vm -Force;"
         script += "Move-Item -Path C:/images/vhdx/"+type+'/$vmn".vhdx" '
         script += "-Destination C:/images/vhdx/backup/ | ConvertTo-Json }"
         print script
         return self.send(script)
+
+
+    #스냅샷 생성
+    def create_snap(self, vm_Id, computer_name):
+        snapshot_id = "_"+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        script = 'Invoke-Command -ComputerName '+computer_name+' -ScriptBlock {'
+        script += '$vm = Get-VM -Id '
+        script += vm_Id + ';'
+        script += '$VMname = $vm.Name;'
+        script += '$CloneVMname = "' +snapshot_id+'";'
+        script += 'Export-VM -Name $VMname -Path ' +'C:/images/$VMname"clone"/ '+';'
+        script += 'Move-Item '+'C:/images/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
+        script += '-Destination C:/images/vhdx/snap/$VMName$CloneVMname".vhdx";'
+        script += 'Remove-Item -Path C:/images/$VMname"clone" -Recurse ;'
+        script += 'Get-ChildItem -Path C:/images/vhdx/snap/$VMName'
+        script += '"' + snapshot_id
+        script += '.vhdx" | ConvertTo-Json -Compress}'
+        print script
+        return self.send(script)
+
 
     # agent 모듈에 파워쉘 스크립트를 전달하여 실행하고 결과를 받아온다.
     def send(self, script):
@@ -211,6 +242,20 @@ class PowerShell(object):
         # todo send. 추후 스크립트를 URL에 포함시켜 보내지 않고 Post data로 전달받을 수 있도록 agent 수정 필요
         data = {'script': script}
         response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
+        return json.loads(response.json())
+
+    # 새로 생성된 agent에 전달
+    def send_new_vm(self, script, address):
+        port = str(self.port)
+        uri = self.uri
+        url = "http://" + address
+        url += ":"
+        url += port
+        url += "/"
+        url += uri
+        url += "?script=" + script
+        data = {'script': script}
+        response = requests.post(url, data=json.dumps(data), timeout=5)
         return json.loads(response.json())
 
     def get_state_string(self, state):
