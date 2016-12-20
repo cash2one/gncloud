@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestListCtrl', function ($scope, $http) {
+    .controller('guestListCtrl', function ($scope, $http, dateModifyService) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -9,6 +9,7 @@ angular
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
         $('[data-toggle="tooltip"]').tooltip();
+
         $scope.guest_list = {};
 
         $http({
@@ -19,36 +20,16 @@ angular
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
                     $scope.guest_list = data.list;
-                    for(var i = 0 ; i < data.list.length ; i++){
-                        //태그 카운팅
-                        var count = data.list[i].tag.split(",");
-                        if(count.length - 1 > 0 ) {
-                            $scope.guest_list[i].tagFirst = count[0];
-                            $scope.guest_list[i].tagcount = "+" + (count.length - 1);
-                        }
 
-                        //날짜 카운팅
-                        $scope.guest_list[i].create_time_diff = data.list[i].create_time;
-                        var data_year = data.list[i].create_time.substring(0,4);
-                        var data_month = data.list[i].create_time.substring(5,7);
-                        var data_day = data.list[i].create_time.substring(8,10);
-                        var data_time = data.list[i].create_time.substring(11,13);
-                        var date = new Date();
-                        var year  = date.getFullYear();
-                        var month = date.getMonth() + 1; // 0부터 시작하므로 1더함 더함
-                        var day   = date.getDate();
-                        var time   = date.getHours();
-                        var dateDiff = "";
-                        if(data_year != year){
-                            dateDiff = (year-data_year)+"년 전";
-                        }else if(data_month != month){
-                            dateDiff = (month-data_Month)+"개월 전";
-                        }else if(data_day != day){
-                            dateDiff = (day-data_day)+"일 전";
-                        }else if(data_time != time){
-                            dateDiff = (time-data_time)+"시간 전";
+                    for(var i = 0 ; i < data.list.length ; i++){
+                        var tagArr = data.list[i].tag.split(",");
+                        if(tagArr.length - 1 > 0 ) {
+                            $scope.guest_list[i].tagFirst = tagArr[0];
+                            $scope.guest_list[i].tagcount = "+" + (tagArr.length - 1);
+                        }else{
+                            $scope.guest_list[i].tagFirst = data.list[i].tag;
                         }
-                        $scope.guest_list[i].create_time_diff = dateDiff;
+                        $scope.guest_list[i].create_time_diff = dateModifyService.modifyDate(data.list[i].create_time);
                     }
 
                 } else {
@@ -67,16 +48,9 @@ angular
         ];
 
         $scope.update = function (id, action, index) {
-            var url = '/api/kvm/vm/machines/' + id;
-            var method = "PUT";
-            if (action.type == "delete") {
-                url = '/api/kvm/vm/machines/' + id;
-                method = 'DELETE';
-            }
-
             $http({
-                method: method,
-                url: url,
+                method: "PUT",
+                url: "/api/kvm/vm/machines/" + id,
                 data: action,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
@@ -96,6 +70,6 @@ angular
         }
 
         $scope.refresh = function(){
-
+            $scope.guest_list = Array.prototype.slice.call($scope.guest_list).reverse();
         }
     });

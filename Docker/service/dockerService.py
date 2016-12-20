@@ -2,6 +2,7 @@
 __author__ = 'jhjeon'
 
 import json
+import requests
 from pexpect import pxssh
 from db.models import GnDockerImage, GnDockerImageDetail
 from util.config import config
@@ -57,3 +58,22 @@ class DockerService(object):
         self.cmd.prompt()
         result = self.cmd.before.split("\r\n", 1)[1]
         return json.loads(result.replace("\r\n", ""))
+
+    #
+    def send(self, method, script, data={}):
+        address = "192.168.22.23"
+        port = "5000"
+        url = "http://" + address
+        url += ":"
+        url += port
+        url += script
+        if method == "GET":
+            response = requests.get(url, data=json.dumps(data))
+        elif method == "POST":
+            response = requests.post(url, data=json.dumps(data))
+        elif method == "PUT":
+            response = requests.put(url, data=json.dumps(data))
+        elif method == "DELETE":
+            response = requests.delete(url, data=json.dumps(data))
+        # response = requests.delete(url, data=json.dumps(data), timeout=1000 * 60 * 20)
+        return json.loads(response.json())

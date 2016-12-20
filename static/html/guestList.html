@@ -10,7 +10,7 @@
                 <th>사양</th>
                 <th>타입</th>
                 <th>IP</th>
-                <th>생성일<div class="refresh" ng-click="refresh()"></th>
+                <th>생성일<div class="refresh" ng-click="refresh()"></div></th>
                 <th>태그</th>
                 <th><!--더보기--></th>
             </tr>
@@ -22,7 +22,7 @@
                 <td class="cnt">{{ list.type }}</td>
                 <td class="cnt">{{ list.ip }}</td>
                 <td class="td-style cnt"><p data-toggle="tooltip" title="{{list.create_time}}">{{list.create_time_diff}}</p></td>
-                <td class="td-style cnt">{{list.tagFirst}}<span class="tag" data-toggle="tooltip" title="#test #컨테이너">{{list.tagcount}}</span></td>
+                <td class="td-style cnt">{{list.tagFirst}}<span class="tag" data-toggle="tooltip" title="{{list.tag}}">{{list.tagcount}}</span></td>
                 <td class = "cnt dropdown">더보기
                     <span class="caret" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
                     <ul class="dropdown-menu-table" role="menu" >
@@ -39,7 +39,3 @@
     </div>
 </div>
 </div>
-                <!--<select ng-model="myActions" ng-options="action.name for action in actions"-->
-                        <!--ng-change="update('{{ list.id }}', myActions, {{ $index }})">-->
-                    <!--<option value="">선택</option>-->
-                <!--</select>-->

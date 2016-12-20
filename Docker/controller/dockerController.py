@@ -17,11 +17,11 @@ def doc_create():
     # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
     while len(GnContainers.query.filter_by(id=id).all()) != 0:
         id = random_string(config.SALT, 8)
-    name = request.form["name"]
-    tag = request.form["tag"]
-    cpu = request.form["cpu"]
-    memory = request.form["memory"]
-    image = request.form["image"]
+    name = request.json["name"]
+    tag = request.json["tag"]
+    cpu = request.json["cpu"]
+    memory = request.json["memory"]
+    image = request.json["image"]
     # Docker Container를 생성한다.
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     docker_service = ds.docker_service_create(image=image, cpu=cpu, memory=memory)
@@ -73,16 +73,16 @@ def doc_delete(id):
 
 # Container 정보
 def doc_vm(id):
-    user_id = request.form["user_id"]
-    DockerService = GnContainers(author_id=user_id, internal_id=id).first()
-    return jsonify(status=True, message="컨테이너 정보를 가져왔습니다.", result=DockerService)
+    user_id = request.json["user_id"]
+    service = GnContainers(author_id=user_id, internal_id=id).first()
+    return jsonify(status=True, message="컨테이너 정보를 가져왔습니다.", result=service)
 
 
 # Container 리스트
 def doc_vm_list():
-    user_id = request.form["user_id"]
-    DockerService = GnContainers(author_id=user_id).all()
-    return jsonify(status=False, message="미구현", result=DockerService)
+    user_id = request.json["user_id"]
+    service = GnContainers(author_id=user_id).all()
+    return jsonify(status=False, message="미구현", result=service)
 
 
 # Container 이미지 생성 및 업로드
@@ -93,16 +93,19 @@ def doc_new_image():
     # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
     while len(GnDockerImage.query.filter_by(id=id).all()) != 0:
         id = random_string(config.SALT, 8)
-    name = request.form["name"]
+    name = request.json["name"]
     # 이미지 Tag 중복 체크 중복되는 값이 존재할 경우 False 리턴 후 종료.
     if len(GnDockerImage.query.filter_by(name=name).all()) != 0:
         return jsonify(status=False, message="이미 존재하는 이미지입니다.")
     filename = ""
-    team_code = request.form["team_code"]
-    author_id = request.form["author_id"]
-    create_time = datetime.strptime(request.form["create_time"][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+    team_code = request.json["team_code"]
+    author_id = request.json["author_id"]
+    create_time = datetime.strptime(request.json["create_time"][:-2], '%Y-%m-%dT%H:%M:%S.%f')
     status = ""
-    image = GnDockerImage(id=id, name=name, filename=filename, team_code=team_code, author_id=author_id, create_time=create_time, status=status)
+    image = GnDockerImage(
+        id=id, name=name, filename=filename, team_code=team_code,
+        author_id=author_id, create_time=create_time, status=status
+    )
     db_session.add(image)
     db_session.commit()
     return jsonify(status=True, message="이미지 추가 완료", result=image.to_json())
@@ -110,13 +113,24 @@ def doc_new_image():
 
 # Container 이미지 세부정보 입력
 def doc_new_image_detail():
-    id = request.form["id"]
-    arg_type = request.form["arg_type"]
-    argument = request.form["argument"]
-    description = request.form["description"]
-    image_detail = GnDockerImageDetail(id=id, arg_type=arg_type, argument=argument, description=description)
-    db_session.add(image_detail)
-    db_session.commit()
+    id = request.json["id"]
+    arg_type = request.json["arg_type"]
+    argument = request.json["argument"]
+    description = request.json["description"]
+    image_detail = GnDockerImageDetail.query.filter_by(id=id, arg_type=arg_type).first()
+    try:
+        if image_detail is not None:
+            image_detail.argument = argument
+            image_detail.description = description
+        else:
+            image_detail = GnDockerImageDetail(
+                id=id, arg_type=arg_type, argument=argument, description=description
+            )
+            db_session.add(image_detail)
+    except:
+        db_session.rollback()
+    finally:
+        db_session.commit()
     return jsonify(status=True, message="이미지 세부정보 입력 완료", result=image_detail.to_json())
 
 
@@ -127,16 +141,35 @@ def doc_modify_image():
 
 # Container 이미지 삭제
 def doc_delete_image(id):
-    # todo image delete. Docker Registry 이미지 삭제
+    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+    version = "v1"
+    repositories = "repositories"
+    tags = "tags"
     image = GnDockerImage.query.filter_by(id=id).first()
-    image_detail = GnDockerImageDetail.query.filter_by(id=id).all()
-    image.status = "deleted"
-    for detail in image_detail:
-        detail.status = "deleted"
-    db_session.commit()
-    return jsonify(status=False, message="미구현")
+    if image is None:
+        return jsonify(status=False, message="존재하지 않는 이미지입니다.")
+    image_name = image.name.split("/")[1].split(":")[0]
+    image_tag = image.name.split("/")[1].split(":")[1]
+    # Docker Registry 이미지 삭제
+    result = ds.send("DELETE", "/" + version + "/" + repositories + "/" + image_name + "/" + tags + "/" + image_tag)
+    # 삭제된 상태를 이미지 및 이미지 상세 테이블에 적용
+    if result:
+        try:
+            image.status = "deleted"
+            image_detail = GnDockerImageDetail.query.filter_by(id=id).delete()
+        except:
+            db_session.rollback()
+        finally:
+            db_session.commit()
+        return jsonify(status=True, message="이미지 삭제 완료")
+    else:
+        return jsonify(status=False, message="이미지 삭제 실패")
 
 
-# todo. Container 이미지 리스트
+# Container 이미지 리스트
 def doc_image_list():
-    return jsonify(status=False, message="미구현")
+    imagelist = GnDockerImage.query.all()
+    result = []
+    for image in imagelist:
+        result.append(image.to_json())
+    return jsonify(status=True, message="컨테이너 이미지 리스트 호출 완료.", result=result)

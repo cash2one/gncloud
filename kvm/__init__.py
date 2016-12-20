@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from functools import wraps
 from apscheduler.scheduler import Scheduler
 
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, session
 from datetime import timedelta
 from gevent.pywsgi import WSGIServer
 
@@ -13,10 +14,13 @@ from util.json_encoder import AlchemyEncoder
 from util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
 import datetime
+import logging
+from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 app.json_encoder = AlchemyEncoder
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 
 ### cron job start ###
@@ -26,8 +30,29 @@ def job_function():
 
 ### cron job end ###
 
-#### rest start ####
+#####common function start#####
 
+
+####login check start####
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        #if 'userId' not in session:
+        #return jsonify(status=False, message="Session is expired")
+
+        return f(*args, **kwargs)
+    return decorated_function
+####login check end####
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
+
+
+#####common function end#####
+
+#### rest start ####
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
@@ -115,11 +140,15 @@ def download_sshKey(id):
 
 #### error handler end####
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
+
 
 if __name__ == '__main__':
+    # 로그 설정
+    formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
+    handler = RotatingFileHandler('kvm.log', maxBytes=2000000, backupCount=5)
+    handler.setFormatter(formatter)
+    handler.setLevel(logging.WARNING)
+
     cron = Scheduler(daemon=True)
     cron.add_interval_job(job_function, seconds=120) #minites=1)
     cron.start()
