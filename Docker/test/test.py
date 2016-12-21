@@ -17,9 +17,9 @@ __author__ = 'jhjeon'
 #     print "error msg: %s" % error
 #     s.logout()
 
-'''time date format test'''
-import datetime
-
-timestr = "2016-12-15T11:58:27.5428889Z"
-time = datetime.datetime.strptime(timestr[:-2], "%Y-%m-%dT%H:%M:%S.%f")
-print time
+# '''time date format test'''
+# import datetime
+#
+# timestr = "2016-12-15T11:58:27.5428889Z"
+# time = datetime.datetime.strptime(timestr[:-2], "%Y-%m-%dT%H:%M:%S.%f")
+# print time
