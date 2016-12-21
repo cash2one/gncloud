@@ -47,22 +47,25 @@ def vm_info_graph(sql_session, id):
 
 def login_list(user_id, password):
     password = random_string(password)
-    list = db_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password == password).one_or_none()
+    list = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
     return list
 
 
-def teamwon_list(user_id):
-    team =db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
-    list =db_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
+def teamwon_list(user_id,team_code,team,sql_session):
+    list =sql_session.query(GnUser, GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.team_owner==team).all()
     return list
 
 
 def teamcheck_list(teamcode):
     return db_session.query(GnUser).filter(GnUser.team_code == teamcode).all()
+
+
 def tea(user_id, team_code):
     sub_stmt = db_session.query(GnUserTeam.user_id).filter(GnUserTeam.team_code == team_code)
     list = db_session.query(GnUser).filter(GnUser.user_id.in_(sub_stmt)).all()
     return list
+
+
 def checkteam(user_id):
     checklist = db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one_or_none()
     if(checklist != None):
@@ -70,9 +73,11 @@ def checkteam(user_id):
     else:
         return None
 
+
 def teamcheck_list(user_id):
     list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
     return db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
+
 
 def sign_up(user_name, user_id, password, password_re):
     check = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
@@ -121,8 +126,8 @@ def server_image_list(type, sub_type, sql_session):
     return list
 
 
-def server_image(type):
-    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+def server_image(type, sql_session):
+    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     return list
 
 def getQuotaOfTeam(team_code, sql_session):
@@ -151,7 +156,7 @@ def getQuotaOfTeam(team_code, sql_session):
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hiperv_count.count]
     docker_info = vm_docker_count.count
-    quato_info = {'cpu_per':cpu_per_info, 'memory_per':memory_per_info, 'disk_per':disk_per_info
+    quato_info = {'cpu_per':cpu_per_info, 'mem_per':memory_per_info, 'disk_per':disk_per_info
                  , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
                  , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info};
 
@@ -183,8 +188,13 @@ def team_list(user_id):
 def container():
     return db_session.query(GnContanierImage).all()
 
-def teamset(user_id, team_code):
-    list = db_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).all()
+def teamset(user_id, team_code, sql_session):
+    list = sql_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).all()
+    for vm in list:
+        vm[0].start_date = vm[0].start_date.strftime('%Y-%m-%d %H:%M:%S')
+        vm[1].apply_date = vm[1].apply_date.strftime('%Y-%m-%d %H:%M:%S')
+        if(vm[1].approve_date != None):
+            vm[1].approve_date = vm[1].approve_date.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
 def approve_set(user_id,code,type,user_name):
@@ -194,9 +204,13 @@ def approve_set(user_id,code,type,user_name):
         db_session.commit()
         return True
     if(type == 'change'):
-        list = db_session.query(GnTeam).filter(GnTeam.team_code== code).one()
-        list.author_id = user_name
-        db_session.commit()
+        list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id== user_id).one()
+        if(list.team_owner == 'owner'):
+            list.team_owner = 'user'
+            db_session.commit()
+        elif(list.team_owner == 'user'):
+            list.team_owner = 'owner'
+            db_session.commit()
         return True
     if(type == 'reset'):
         list = db_session.query(GnUser).filter(GnUser.user_id==user_id).one()
@@ -229,3 +243,12 @@ def createteam_list(team_name, team_code, author_id):
 
 def select():
     return db_session.query(GnTeam).all()
+
+def select_list(team_code):
+    return db_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+
+def select_put(team_name, team_code):
+    lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()
+    lit.team_name = team_name
+    db_session.commit()
+    return True

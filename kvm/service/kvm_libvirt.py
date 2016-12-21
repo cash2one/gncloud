@@ -18,7 +18,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
         s.sendline("/var/lib/libvirt/initcloud/sshkey_copy.sh " + name)
         s.logout()
 
-        url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1);
+        url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
         conn = libvirt.open(url)
 
         # 스냅샷 기반 유무에 따른 생성 로직 분기
@@ -53,7 +53,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
 
 
 def kvm_change_status(vm_name, status, host_ip):
-    url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1);
+    url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
     conn = libvirt.open(url)
     ptr_VM = conn.lookupByName(vm_name)
     if status == 'start':
@@ -69,7 +69,7 @@ def kvm_change_status(vm_name, status, host_ip):
 
 
 def kvm_vm_delete(guest_name, host_ip):
-    url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1);
+    url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
     conn = libvirt.open(url)
     ptr_VM = conn.lookupByName(guest_name)
     ptr_VM.destroy()
@@ -93,8 +93,8 @@ def kvm_image_delete(name):
     conn.close()
 
 
-def kvm_image_copy(name_volume, name_snap):
-    conn = libvirt.open(config.LIBVIRT_REMOTE_URL)
+def kvm_image_copy(name_volume, name_snap, host_ip):
+    conn = libvirt.open(config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1))
     ptr_POOL = conn.storagePoolLookupByName("default")
     org_vol = ptr_POOL.storageVolLookupByName(name_volume + ".img")
     info = org_vol.info()

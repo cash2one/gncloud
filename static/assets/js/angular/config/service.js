@@ -1,8 +1,4 @@
-var serviceConfig = function ($routeProvider, $locationProvider) {
-
-    /**
-     * Created by jhjeon on 2016-09-29.
-     */
+var serviceConfig = function ($routeProvider, $httpProvider) {
     $routeProvider
         .when('/main', {templateUrl: '/main.html', controller: 'mainCtrl'})
         .when('/guestList', {templateUrl: '/guestList.html', controller: 'guestListCtrl'})
@@ -21,6 +17,8 @@ var serviceConfig = function ($routeProvider, $locationProvider) {
         .when('/guestSelectTeam', {templateUrl: '/guestSelectTeam.html', controller: 'guestSelectTeamCtrl'})
         .when('/guestReadyTeam', {templateUrl: '/guestReadyTeam.html', controller: 'guestReadyTeamCtrl'})
         .when('/guestCreateTeam', {templateUrl: '/guestCreateTeam.html', controller: 'guestCreateTeamCtrl'})
+
+    $httpProvider.interceptors.push('serviceLogger');
 }
 
 // 서비스 페이지 설정

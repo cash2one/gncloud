@@ -104,7 +104,7 @@ class GnVmImages(Base):
     os_bit = Column(String(2), primary_key=False, nullable=False)
     team_code = Column(String(10), primary_key=False, nullable=False)
     author_id = Column(String(15), primary_key=False, nullable=False)
-    create_time = Column(DateTime, primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.now())
     ssh_id = Column(String(10), primary_key=False, nullable=False)
 
 
