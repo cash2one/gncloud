@@ -110,8 +110,8 @@ def setStaticIpAddress(ip, host_ip, ssh_id):
     except IOError as errmsg:
         pass
 
-def server_delete(id):
-    guest_info = GnVmMachines.query.filter(GnVmMachines.id == id).one();
+def server_delete(id,sql_session):
+    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one();
 
     # backup image
     s = pxssh.pxssh()
@@ -123,25 +123,24 @@ def server_delete(id):
     kvm_vm_delete(guest_info.internal_name, guest_info.gnHostMachines.ip);
 
     # db 저장
-    db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete();
-    db_session.commit()
+    guest_info.status = "Removed"
+    sql_session.commit()
 
 
-def server_image_delete(id):
+def server_image_delete(id, sql_session):
 
-    image_info = GnVmImages.query.filter(GnVmImages.id == id).one();
-    # 물리적 이미지 삭제
+    image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
+    # 물리적 이미지 삭제하지 않고 데이터만 삭제된걸로 수정
     kvm_image_delete(image_info.filename)
-    try:
-        db_session.query(GnVmImages).filter(GnVmImages.id == id).delete();
-    finally:
-        db_session.commit()
+    image_info.status = "Removed"
+    sql_session.commit()
 
 
-
-def server_change_status(id, status):
-    guest_info = GnVmMachines.query.filter(GnVmMachines.id == id).one();
+def server_change_status(id, status, sql_session):
+    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     kvm_change_status(guest_info.internal_name, status, guest_info.gnHostMachines.ip)
+    guest_info.status = status
+    sql_session.commit()
 
 
 def server_create_snapshot(id, name, user_id, team_code):
@@ -157,7 +156,7 @@ def server_create_snapshot(id, name, user_id, team_code):
         #id 생성
         while True:
             id = random_string(8)
-            check_info = GnId.query.filter(GnId.id == id).first();
+            check_info = GnId.query.filter(GnId.id == id).first()
             if not check_info:
                 break
 

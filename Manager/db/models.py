@@ -189,10 +189,9 @@ class GnVmImages(Base):
     create_time = Column(DateTime, default=datetime.datetime.now())
 
 
-    def __init__(self, id=None, name=None, filename=None, type=None
+    def __init__(self, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
                  , os_bit=None, team_code=None, author_id=None):
-        self.id = id
         self.name = name
         self.filename = filename
         self.type = type
@@ -209,9 +208,7 @@ class GnVmImages(Base):
 
     def __repr__(self):
         return '<Id %r / Name %r / File_name %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_ver %r / Os_subver %r / Team_code %r /Author_id %r / Create_time %r >' \
-               % (self.id, self.name, self.file_name, self.type, self.sub_type
-                  , self.icon, self.os, self.os_ver, self.os_subver, self.os_bit
-                  , self.team_code, self.author_id, self.create_time)
+               % (self.id, self.name, self.file_name, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time)
 
     def __json__(self):
         return ['id', 'name', 'filename', 'type', 'sub_type'

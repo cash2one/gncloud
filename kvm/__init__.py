@@ -70,13 +70,13 @@ def create_vm():
 @app.route('/vm/machines/<id>', methods=['PUT'])
 def change_status(id):
     status = request.json['type']
-    server_change_status(id, status)
+    server_change_status(id, status, db_session)
     return jsonify(status=True, message="success")
 
 
 @app.route('/vm/machines/<id>', methods=['DELETE'])
 def delete_vm(id):
-    server_delete(id)
+    server_delete(id, db_session)
     return jsonify(status=True, message="success")
 
 
@@ -92,7 +92,7 @@ def create_snap():
 
 @app.route('/vm/images/<id>', methods=['DELETE'])
 def delete_vm_image(id):
-    server_image_delete(id)
+    server_image_delete(id, db_session)
     return jsonify(status=True, message="success")
 
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     handler.setLevel(logging.WARNING)
 
     cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=120) #minites=1)
+    cron.add_interval_job(job_function, seconds=60) #minites=1)
     cron.start()
     #app.run(debug=True)
     http_server = WSGIServer(('', 5000), app)
