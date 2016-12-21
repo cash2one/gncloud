@@ -34,15 +34,13 @@ def job_function():
 
 
 ####login check start####
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        #if 'userId' not in session:
-        #return jsonify(status=False, message="Session is expired")
 
-        return f(*args, **kwargs)
-    return decorated_function
-####login check end####
+# @app.before_request
+# def before_request():
+#     if ('userId' not in session) \
+#             and request.endpoint != 'guestLogout' \
+#             and request.endpoint != 'account':
+#         return make_response(jsonify(status=False),401)
 
 
 @app.teardown_appcontext

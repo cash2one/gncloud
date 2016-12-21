@@ -3,7 +3,7 @@ from functools import wraps
 import logging
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, jsonify, request, session, escape
+from flask import Flask, jsonify, request, session, escape, make_response
 from datetime import timedelta
 
 from Manager.db.database import db_session
@@ -22,17 +22,12 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 #####common function start#####
 
 
-####login check start####
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        #if 'userId' not in session:
-            #return jsonify(status=False, message="Session is expired")
-
-        return f(*args, **kwargs)
-    return decorated_function
-####login check end####
-
+# @app.before_request
+# def before_request():
+#     if ('userId' not in session) \
+#             and request.endpoint != 'guestLogout' \
+#             and request.endpoint != 'account':
+#         return make_response(jsonify(status=False),401)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -44,31 +39,26 @@ def shutdown_session(exception=None):
 
 #### rest start ####
 @app.route('/')
-@login_required
 def index():
     return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
 
 
 @app.route('/vm/machines', methods=['GET'])
-@login_required
 def guest_list():
     return jsonify(status=True, message="success", list=vm_list(db_session))
 
 
 @app.route('/vm/machines/<id>', methods=['GET'])
-@login_required
 def guest_info(id):
     return jsonify(status=True, message="success", info=vm_info(db_session, id))
 
 
 @app.route('/vm/machines/<id>/graph', methods=['GET'])
-@login_required
 def guest_info_graph(id):
     return jsonify(status=True, message="success", info=vm_info_graph(db_session, id))
 
 
 @app.route('/vm/account', methods=['POST'])
-@login_required
 def login():
     user_id = request.json['user_id']
     password = request.json['password']
@@ -93,14 +83,12 @@ def login():
 
 
 @app.route('/vm/guestLogout', methods=['GET'])
-@login_required
 def logout():
     session.clear()
     return jsonify(status=True, message="success")
 
 
 @app.route('/vm/logincheck', methods=['GET'])
-@login_required
 def logincheck():
     if session.get('userId',None):
         return jsonify(status= 1, message=session['userName'])
@@ -109,14 +97,12 @@ def logincheck():
 
 
 @app.route('/vm/account/users', methods=['GET'])
-@login_required
 def teamcheck():
     if session.get('userId',None):
         return jsonify(status=True, message="success", list=teamcheck_list(session['userId']))
 
 
 @app.route('/vm/account/users', methods=['POST'])
-@login_required
 def signup_list():
     user_name = request.json['user_name']
     user_id = request.json['user_id']
@@ -129,7 +115,6 @@ def signup_list():
 
 
 @app.route('/vm/account/users/list', methods=['PUT'])
-@login_required
 def repair_list():
     password=""
     password_new=""
@@ -161,39 +146,33 @@ def repair_list():
 
 
 @app.route('/useinfo', methods=['GET'])
-@login_required
 def quota_info():
     team_code = "004"
     return jsonify(status=True, message = 'success',list=getQuotaOfTeam(team_code, db_session))
 
 
 @app.route('/vm/machines', methods=['GET'])
-@login_required
 def list():
     return jsonify(status=True, message="success", list=vm_list(db_session))
 
 
 @app.route('/vm/images/<type>/<sub_type>', methods=['GET'])
-@login_required
 def list_volume(type, sub_type):
     return jsonify(status=True, message="success", list=server_image_list(type, sub_type, db_session))
 
 
 @app.route('/vm/images/<type>', methods=['GET'])
-@login_required
 def volume(type):
     return jsonify(status=True, message="success", list=server_image(type, db_session))
 
 
 @app.route('/vm/account/users/list', methods=['GET'])
-@login_required
 def team():
     if session.get('userId', None):
         return jsonify(status=True, message="success", list=team_list(session['userId']))
 
 
 @app.route('/vm/account/team', methods=['GET'])
-@login_required
 def my_list():
     team_owner = 'owner'
     if session.get('userId',None):
@@ -201,7 +180,6 @@ def my_list():
 
 
 @app.route('/vm/acoount/teamlist', methods=['GET'])
-@login_required
 def tea_list():
     session_id = ''
     team_id = "002"
@@ -209,20 +187,17 @@ def tea_list():
 
 
 @app.route('/vm/container/services', methods=['GET'])
-@login_required
 def container_list():
     return jsonify(status=True, message="success", list=container())
 
 
 @app.route('/vm/account/teamset',methods=['GET'])
-@login_required
 def teamwon():
     user_id = session['userId']
     team_code = "002"
     return jsonify(status=True, message="success", list=teamset(user_id, team_code, db_session))
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['PUT'])
-@login_required
 def approve(id,code):
     type = request.json['type']
     user_name = session['userName']
@@ -231,7 +206,6 @@ def approve(id,code):
 
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['DELETE'])
-@login_required
 def delete(id,code):
     id = session['userId']
     team_delete(id, code)
@@ -239,13 +213,11 @@ def delete(id,code):
 
 
 @app.route('/vm/images/<sub_type>', methods=['GET'])
-@login_required
 def list_subtype_volume(sub_type):
     return jsonify(status=True, message="success", list=server_image_list(sub_type,db_session))
 
 
 @app.route('/vm/machines/<id>/<type>', methods=['PUT'])
-@login_required
 def update_guest_name(id, type):
     change_value = request.json['value']
     vm_update_info(id,type,change_value,db_session)
@@ -253,13 +225,11 @@ def update_guest_name(id, type):
 
 
 @app.route('/vm/account/selectteam', methods=['GET'])
-@login_required
 def selectteam():
     return jsonify(status=True, message="success", list=select())
 
 
 @app.route('/vm/account/selectteam', methods=['POST'])
-@login_required
 def teamsignup():
     team_code = request.json['team_code']
     user_id = session['userId']
@@ -268,14 +238,12 @@ def teamsignup():
 
 
 @app.route('/vm/account/teamcomfirm', methods=['GET'])
-@login_required
 def comfirm():
     user_id = session['userId']
     return jsonify(status=True, message="success", list=comfirm_list(user_id))
 
 
 @app.route('/vm/account/createteam', methods=['POST'])
-@login_required
 def createteam():
     team_name = request.json['team_name']
     team_code = request.json['team_code']
@@ -283,12 +251,10 @@ def createteam():
     return jsonify(status=True, message="success", list=createteam_list(team_name, team_code, author_id))
 
 @app.route('/vm/account/teamname', methods=['GET'])
-@login_required
 def teamname():
     return jsonify(status=True, message="success", list=select_list(session['teamCode']))
 
 @app.route('/vm/account/teamname', methods=['PUT'])
-@login_required
 def changeteamname():
     team_name = request.json['team_name']
     return jsonify(status=True, message="success", list=select_put(team_name,session['teamCode']))

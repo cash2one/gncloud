@@ -7,10 +7,13 @@ var serviceAddModules = [
 
     app.factory('serviceLogger', function ($location) {
         return {
-            request: function (config) {
-                //$location.url("/account");
-                return config;
-            }
+            responseError: function(response) {
+                if(response.status == 401){
+                   alert("로그인이 필요합니다");
+                   $location.url("/account");
+                }
+                return response;
+            },
         };
     });
 

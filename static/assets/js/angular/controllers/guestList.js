@@ -33,13 +33,12 @@ angular
                     }
 
                 } else {
-                    alert(data.message);
+                    if(data.message != null) {
+                        alert(data.message);
+                    }
                 }
 
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
 
         $scope.actions = [
             {name: '시작', type: 'resume'},
@@ -60,12 +59,11 @@ angular
                         window.location.reload();
                         $scope.guest_list.splice(index, 1);
                     } else {
-                        alert(data.message);
+                        if(data.message != null) {
+                            alert(data.message);
+                        }
                     }
                 })
-                .error(function(data, status, headers, config) {
-                    console.log(status);
-                });
 
         }
 
