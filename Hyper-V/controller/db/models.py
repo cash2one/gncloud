@@ -2,7 +2,7 @@
 __author__ = 'gncloud'
 
 import datetime
-from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Boolean, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Boolean, ForeignKey, Text, Numeric
 from sqlalchemy.orm import relationship, backref
 from db.database import Base
 
@@ -370,7 +370,6 @@ class GnVmMachines(Base):
     start_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     stop_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default=None)
-    num = Column(Integer, nullable=True, default=None)
 
     def __init__(self,
                  id, name='', tag='', type='',
@@ -404,16 +403,64 @@ class GnVmMachines(Base):
         self.stop_time = stop_time
         self.status = status
 
+
     def __repr__(self):
         return "<GnVmMachines(" \
                "id='%r', name='%r', tag='%r', type='%r', internal_id='%r', internal_name='%r'" \
                "host_id='%r', ip='%r', cpu='%r', memory='%r', disk='%r', os='%r', " \
                "os_ver='%r', os_sub_ver='%r', os_bit='%r', team_code='%r', author_id='%r', " \
-               "create_time='%r', start_time='%r', stop_time='%r', status='%r' )>" \
+               "create_time='%r', start_time='%r', stop_time='%r', status='%r')>" \
                % (self.id, self.name, self.tag, self.type, self.internal_id, self.internal_name,
                   self.host_id, self.ip, self.cpu, self.memory, self.disk,
                   self.os, self.os_ver, self.os_sub_ver, self.os_bit, self.team_code, self.author_id,
                   self.create_time, self.start_time, self.stop_time, self.status)
+
+
+class GnMonitor(Base):
+    __tablename__ = "GN_MONITOR"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
+
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
+
+    def __repr__(self):
+        return "<GnMonitor( id='%r', type='%r', cpu_usage='%r', mem_usage='%r', disk_usage='%r'," \
+               "net_usage='%r')>" \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
+
+class GnMonitorHist(Base):
+    __tablename__ = "GN_MONITOR_HIST"
+    seq = Column(Integer, primary_key=True, nullable=False)
+    id = Column(String(8), primary_key=False, nullable=False)
+    type = Column(String(6), primary_key=False, nullable=False)
+    cur_time = Column(DateTime, primary_key=False, nullable=False)
+    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
+    mem_usage = Column(Numeric, primary_key=False, nullable=False)
+    disk_usage = Column(Numeric, primary_key=False, nullable=False)
+    net_usage = Column(Numeric, primary_key=False, nullable=False)
+
+    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+        self.id = id
+        self.type = type
+        self.cpu_usage = cpu_usage
+        self.mem_usage = mem_usage
+        self.disk_usage = disk_usage
+        self.net_usage = net_usage
+
+    def __repr__(self):
+        return "<GnMonitorHist(id='%r',type='%r', cpu_usage='%r', mem_usage='%r', disk_usage='%r'," \
+               "net_usage='%r'" \
+               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.mem_usage)
 
 
 # GN_VM_MONITOR 아직 작업 못함
