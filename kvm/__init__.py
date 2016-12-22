@@ -143,9 +143,10 @@ def download_sshKey(id):
 if __name__ == '__main__':
     # 로그 설정
     formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
-    handler = RotatingFileHandler('kvm.log', maxBytes=2000000, backupCount=5)
+    handler = RotatingFileHandler('./manager.log', maxBytes=2000000, backupCount=5)
     handler.setFormatter(formatter)
     handler.setLevel(logging.WARNING)
+    app.logger.addHandler(handler)
 
     cron = Scheduler(daemon=True)
     cron.add_interval_job(job_function, seconds=60) #minites=1)

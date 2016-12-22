@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-from functools import wraps
-import logging
-from logging.handlers import RotatingFileHandler
-
+import traceback
 from flask import Flask, jsonify, request, session, escape, make_response
 from datetime import timedelta
 
@@ -34,6 +31,10 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 def shutdown_session(exception=None):
     db_session.remove()
 
+@app.errorhandler(500)
+def internal_error(error):
+    print(traceback.format_exc())
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 #####common function end#####
 
@@ -273,12 +274,6 @@ def systembase():
 if __name__ == '__main__':
 
     # 로그 설정
-    formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
-    handler = RotatingFileHandler('./manager.log', maxBytes=2000000, backupCount=5)
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.WARNING)
-    app.logger.addHandler(handler)
-
     app.run(port=8081)
     #http_server = WSGIServer(('', 8080), app)
     #http_server.serve_forever()
