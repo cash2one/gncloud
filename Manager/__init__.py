@@ -60,8 +60,8 @@ def guest_info_graph(id):
 
 @app.route('/vm/account', methods=['POST'])
 def login():
-    user_id = request.json['user_id']
-    password = request.json['password']
+    user_id = request.json['login_id']
+    password = request.json['login_pw']
     user_info = login_list(user_id, password)
     team_info = checkteam(user_id)
     if(user_info != None and team_info == None ):

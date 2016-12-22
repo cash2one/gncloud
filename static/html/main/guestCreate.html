@@ -5,15 +5,15 @@
     <h2>타입 선택</h2>
     <div class="btn-group" role="group" aria-label="..." >
         <button type="button" class="btn btn-default type-box box1" ng-click="hyper('hyperv')" required>
-            <img src="gn_images/instance_create_windows.png" alt="" class="img-icon">Hyper-V</button>
+            <img src="/gn_images/instance_create_windows.png" alt="" class="img-icon">Hyper-V</button>
     </div>
     <div class="btn-group" role="group" aria-label="...">
         <button type="button" class="btn btn-default type-box box1" ng-click="hyper('kvm')" required>
-            <img src="gn_images/instance_create_KVM.png" alt="" class="img-icon">KVM</button>
+            <img src="/gn_images/instance_create_KVM.png" alt="" class="img-icon">KVM</button>
     </div>
     <div class="btn-group" role="group" aria-label="...">
         <button type="button" class="btn btn-default type-box box1" ng-click="hyper('docker')" required>
-            <img src="gn_images/instance_create_docker.png" alt="" class="img-icon">docker</button>
+            <img src="/gn_images/instance_create_docker.png" alt="" class="img-icon">docker</button>
     </div>
 
     <!--<div class="btn-group" data-toggle="buttons">-->
@@ -49,7 +49,7 @@
             <span ng-repeat="list in image_list">
                 <div class="btn-group" role="group" aria-label="..." >
                     <ng-button type="button" name="" class="btn btn-default type-box box2" ng-click="update_image(list)" required>
-                        <img src="gn_images/instance_create_windows.png" alt="" class="img-icon">
+                        <img src="/gn_images/instance_create_windows.png" alt="" class="img-icon">
                         {{list.os}}
                         <span class="windows-small">{{list.name}}</span>
                     </ng-button>
@@ -61,7 +61,7 @@
             <div class="snap-box" >
                      <button type="button" name="" class="btn btn-default snap-name fl" ng-repeat="snap in snap_list" required>
                          <p class="ellipsis">
-                             <img src="gn_images/ubuntu_icon.png" alt="" class="elli-img-icon">{{snap.name}}</p>
+                             <img src="/gn_images/ubuntu_icon.png" alt="" class="elli-img-icon">{{snap.name}}</p>
                      </button>
             </div>
         </div>
