@@ -10,7 +10,8 @@ from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put
+                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put, team_table \
+                            , pathimage
 from db.database import db_session
 
 app = Flask(__name__)
@@ -44,6 +45,7 @@ def index():
 
 
 @app.route('/vm/machines', methods=['GET'])
+@login_required
 def guest_list():
     return jsonify(status=True, message="success", list=vm_list(db_session))
 
@@ -188,7 +190,7 @@ def tea_list():
 
 @app.route('/vm/container/services', methods=['GET'])
 def container_list():
-    return jsonify(status=True, message="success", list=container())
+    return jsonify(status=True, message="success", list=container(db_session))
 
 
 @app.route('/vm/account/teamset',methods=['GET'])
@@ -259,6 +261,13 @@ def changeteamname():
     team_name = request.json['team_name']
     return jsonify(status=True, message="success", list=select_put(team_name,session['teamCode']))
 
+@app.route('/vm/account/teamtable', methods=['GET'])
+def teamshow():
+    return jsonify(status=True, message="success", list=team_table(db_session))
+
+@app.route('/vm/systems/path', methods=['GET'])
+def systembase():
+    return jsonify(status=True, message="success", list=pathimage(db_session))
 #### rest end ####
 
 

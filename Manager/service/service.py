@@ -4,7 +4,7 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnContanierImage
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnContanierImage, GnImagePool
 from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
@@ -185,8 +185,11 @@ def team_list(user_id):
     list= db_session.query(GnUser).filter(GnUser.user_id ==user_id).one()
     return list
 
-def container():
-    return db_session.query(GnContanierImage).all()
+def container(sql_sesssion):
+    list = sql_sesssion.query(GnContanierImage).all()
+    for vm in list:
+        vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
+    return list
 
 def teamset(user_id, team_code, sql_session):
     list = sql_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).all()
@@ -235,6 +238,8 @@ def comfirm_list(user_id):
         list =db_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
         return list
 
+
+
 def createteam_list(team_name, team_code, author_id):
     vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id)
     db_session.add(vm)
@@ -252,3 +257,20 @@ def select_put(team_name, team_code):
     lit.team_name = team_name
     db_session.commit()
     return True
+
+def team_table(sql_sesseion):
+    list = sql_sesseion.query(GnTeam).all()
+    result = []
+    for team_info in list:
+        team_info.create_date = team_info.create_date.strftime('%Y-%m-%d %H:%M:%S')
+        user_list = sql_sesseion.query(GnUserTeam, GnUser).join(GnUser, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_info.team_code).all()
+        team_table = {"team_info":team_info, "user_list":user_list}
+        result.append(team_table);
+
+    return result
+
+def pathimage(sql_session):
+    list = sql_session.query(GnImagePool, GnVmImages).join(GnVmImages, GnImagePool.id == GnVmImages.pool_id).all()
+    for data in list:
+        data[1].create_time = data[1].create_time.strftime('%Y-%m-%d %H:%M:%S')
+    return list
