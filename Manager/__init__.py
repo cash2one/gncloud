@@ -20,12 +20,12 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 #####common function start#####
 
 
-# @app.before_request
-# def before_request():
-#     if ('userId' not in session) \
-#             and request.endpoint != 'guestLogout' \
-#             and request.endpoint != 'account':
-#         return make_response(jsonify(status=False),401)
+@app.before_request
+def before_request():
+    if ('userId' not in session) \
+            and request.endpoint != 'guestLogout' \
+            and request.endpoint != 'account':
+        return make_response(jsonify(status=False),401)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):

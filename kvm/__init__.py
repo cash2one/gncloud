@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import logging
-from logging.handlers import RotatingFileHandler
+import traceback
 
 from apscheduler.scheduler import Scheduler
 from flask import Flask, jsonify, request, make_response
@@ -34,18 +33,22 @@ def job_function():
 
 ####login check start####
 
-# @app.before_request
-# def before_request():
-#     if ('userId' not in session) \
-#             and request.endpoint != 'guestLogout' \
-#             and request.endpoint != 'account':
-#         return make_response(jsonify(status=False),401)
+@app.before_request
+def before_request():
+    if ('userId' not in session) \
+            and request.endpoint != 'guestLogout' \
+            and request.endpoint != 'account':
+        return make_response(jsonify(status=False),401)
 
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
+@app.errorhandler(500)
+def internal_error(error):
+    print(traceback.format_exc())
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 #####common function end#####
 
