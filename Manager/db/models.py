@@ -190,7 +190,7 @@ class GnVmImages(Base):
     pool_id = Column(String(8), primary_key=False, nullable=False)
 
 
-    def __init__(self , name=None, filename=None, type=None
+    def __init__(self, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
                  , os_bit=None, team_code=None, author_id=None, pool_id= None):
         self.name = name

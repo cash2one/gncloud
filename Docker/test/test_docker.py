@@ -47,11 +47,51 @@ __author__ = 'jhjeon'
 # # print ds.docker_service_create(name="test", connect_port="2222", in_port="22", image="mariadb", environmant="MYSQL_ROOT_PASSWORD=fastcat1151")
 # print ds.docker_service_ps("test")
 
-import docker
-from docker import Client
+# import docker
+# from docker import client
+#
+#
+# client = docker.from_env()
+#
+# services = client.services.list()
+# print services
+''' 서비스 내 container id 및 container가 위치한 node 가져오기 '''
+# from pexpect import pxssh
+# from util.config import config
+#
+# container_list = []
+#
+# cmd = pxssh.pxssh()
+# login_check = cmd.login(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+# cmd.sendline("docker service ps 4si28t2tmzkc")
+# cmd.prompt()
+#
+# command_result = cmd.before.split("\r\n")
+#
+# for line in command_result:
+#     container_info = line.split()
+#     if len(container_info) == 0:
+#         pass
+#     elif container_info[0] == "docker" or container_info[0] == "ID":
+#         pass
+#     else:
+#         container = {}
+#         container['internal_id'] = container_info[0]
+#         container['internal_name'] = container_info[1]
+#         container['host_name'] = container_info[3]
+#         container_list.append(container)
+# print container_list
+import json
+from pexpect import pxssh
+from util.config import config
 
+container_list = []
 
-client = docker.from_env()
+cmd = pxssh.pxssh()
+login_check = cmd.login(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+cmd.sendline("docker service inspect 4si28t2tmzkc")
+cmd.prompt()
 
-services = client.services.list()
-print services
+result = cmd.before.split("\r\n", 1)[1]
+result_json = json.loads(result.replace("\r\n", ""))
+print result_json[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']

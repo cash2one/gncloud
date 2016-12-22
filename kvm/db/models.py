@@ -104,14 +104,14 @@ class GnVmImages(Base):
     os_bit = Column(String(2), primary_key=False, nullable=False)
     team_code = Column(String(10), primary_key=False, nullable=False)
     author_id = Column(String(15), primary_key=False, nullable=False)
-    create_time = Column(DateTime, primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.now())
     ssh_id = Column(String(10), primary_key=False, nullable=False)
+    status = Column(String(10), primary_key=False, nullable=False)
 
 
-    def __init__(self, id=None, name=None, filename=None, type=None
+    def __init__(self, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
-                 , os_bit=None, team_code=None, author_id=None, ssh_id=None):
-        self.id = id
+                 , os_bit=None, team_code=None, author_id=None, ssh_id=None, status=None):
         self.name = name
         self.filename = filename
         self.type = type
@@ -124,6 +124,7 @@ class GnVmImages(Base):
         self.team_code = team_code
         self.author_id = author_id
         self.ssh_id = ssh_id
+        self.status = status
 
 
 
@@ -136,7 +137,7 @@ class GnVmImages(Base):
     def __json__(self):
         return ['id', 'name', 'filename', 'type', 'sub_type'
             , 'icon', 'os', 'os_ver', 'os_subver', 'os_bit'
-            , 'team_code', 'author_id', 'create_time', 'ssh_id']
+            , 'team_code', 'author_id', 'create_time', 'ssh_id', 'status']
 
 
 class GnMonitor(Base):

@@ -34,15 +34,13 @@ def job_function():
 
 
 ####login check start####
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        #if 'userId' not in session:
-        #return jsonify(status=False, message="Session is expired")
 
-        return f(*args, **kwargs)
-    return decorated_function
-####login check end####
+# @app.before_request
+# def before_request():
+#     if ('userId' not in session) \
+#             and request.endpoint != 'guestLogout' \
+#             and request.endpoint != 'account':
+#         return make_response(jsonify(status=False),401)
 
 
 @app.teardown_appcontext
@@ -72,29 +70,29 @@ def create_vm():
 @app.route('/vm/machines/<id>', methods=['PUT'])
 def change_status(id):
     status = request.json['type']
-    server_change_status(id, status)
+    server_change_status(id, status, db_session)
     return jsonify(status=True, message="success")
 
 
 @app.route('/vm/machines/<id>', methods=['DELETE'])
 def delete_vm(id):
-    server_delete(id)
+    server_delete(id, db_session)
     return jsonify(status=True, message="success")
 
 
 @app.route('/vm/machine/snapshots', methods=['POST'])
 def create_snap():
+    user_id = "yhkwak"  # session
+    team_code = "001"  # session
     ord_id = request.json['ord_id']
     name = request.json['name']
-    user_id = "yhkwak"  # session
-    team_code = "1"  # session
     server_create_snapshot(ord_id, name, user_id, team_code)
     return jsonify(status=True, message="success")
 
 
 @app.route('/vm/images/<id>', methods=['DELETE'])
 def delete_vm_image(id):
-    server_image_delete(id)
+    server_image_delete(id, db_session)
     return jsonify(status=True, message="success")
 
 
@@ -150,7 +148,7 @@ if __name__ == '__main__':
     handler.setLevel(logging.WARNING)
 
     cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=120) #minites=1)
+    cron.add_interval_job(job_function, seconds=60) #minites=1)
     cron.start()
     #app.run(debug=True)
     http_server = WSGIServer(('', 5000), app)

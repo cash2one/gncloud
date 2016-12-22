@@ -1,8 +1,4 @@
 var serviceConfig = function ($routeProvider, $httpProvider) {
-
-    /**
-     * Created by jhjeon on 2016-09-29.
-     */
     $routeProvider
         .when('/main', {templateUrl: '/main.html', controller: 'mainCtrl'})
         .when('/guestList', {templateUrl: '/guestList.html', controller: 'guestListCtrl'})

@@ -4,7 +4,7 @@ __author__ = 'jhjeon'
 import json
 import requests
 from pexpect import pxssh
-from db.models import GnDockerImage, GnDockerImageDetail
+from db.models import GnDockerServices, GnDockerImage, GnDockerImageDetail
 from util.config import config
 
 
@@ -19,17 +19,26 @@ class DockerService(object):
             pass
 
     # Docker 서비스를 생성한다.
-    def docker_service_create(self, image, cpu, memory):
+    def docker_service_create(self, id, replicas, image, cpu, memory):
         dockerimage = GnDockerImage.query.filter_by(name=image).first()
+        if dockerimage is None:
+            return None
         image_detail = GnDockerImageDetail.query.filter_by(id=dockerimage.id).all()
         command = "docker service create"
         # command += " --name %s" % name
         command += " --limit-cpu %s --reserve-cpu %s" % (cpu, cpu)
         command += " --limit-memory %s --reserve-memory %s" % (memory, memory)
-        command += " --replicas %s" % config.REPLICAS
+        # command += " --replicas %s" % config.REPLICAS
+        command += " --replicas %s" % replicas
+        command += " --constraint 'node.role != manager'"
         command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
+        # type=volume,source=jhjeon_mytomcat,destination=/usr/local/tomcat
+        # command += " --mount type=volume,source=%s,destination%s" % config.RESTART_MAX_ATTEMPTS
         for detail in image_detail:
-            command += " %s" % detail.argument
+            if detail.arg_type == "mount":
+                command += " " + (detail.argument % id)
+            else:
+                command += " %s" % detail.argument
         command += " %s" % dockerimage.name
         service_id = self.send_command(command)
         if service_id[:5] == "Error":
@@ -47,12 +56,47 @@ class DockerService(object):
         command = "docker service rm %s" % id
         return self.send_command(command)
 
+    # Docker 서비스의 컨테이너를 가져온다.
+    def get_service_containers(self, internal_id):
+        container_list = []
+        command = "docker service ps %s" % internal_id
+        result = self.send_command_return_all_line(command)
+
+        for line in result:
+            container_info = line.split()
+            if len(container_info) == 0:
+                pass
+            elif container_info[0] == "docker" or container_info[0] == "ID":
+                pass
+            else:
+                container = {}
+                container['internal_id'] = container_info[0]
+                container['internal_name'] = container_info[1]
+                container['host_name'] = container_info[4]
+                container_list.append(container)
+        return container_list
+
+    # Docker 서비스의 볼륨 정보를 가져온다.
+    def get_service_volumes(self, internal_id):
+        volume_list = []
+        command = "docker service inspect %s" % internal_id
+        result = self.send_command_return_json(command)
+        return result[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
+
+    #
     def send_command(self, command):
         self.cmd.sendline(command)
         self.cmd.prompt()
         result = self.cmd.before.split("\r\n", 1)[1]
         return result.replace("\r\n", "")
 
+    #
+    def send_command_return_all_line(self, command):
+        self.cmd.sendline(command)
+        self.cmd.prompt()
+        return self.cmd.before.split("\r\n")
+
+    #
     def send_command_return_json(self, command):
         self.cmd.sendline(command)
         self.cmd.prompt()
@@ -60,13 +104,11 @@ class DockerService(object):
         return json.loads(result.replace("\r\n", ""))
 
     #
-    def send(self, method, script, data={}):
-        address = "192.168.22.23"
-        port = "5000"
+    def send(self, address, port, method, uri, data={}):
         url = "http://" + address
         url += ":"
         url += port
-        url += script
+        url += uri
         if method == "GET":
             response = requests.get(url, data=json.dumps(data))
         elif method == "POST":

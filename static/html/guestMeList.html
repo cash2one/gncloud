@@ -136,28 +136,28 @@
                     <ul class="team-graph-cpu fl">
                         <li class="sett-title-graph">CPU</li>
                         <li class="team-graph-box">
-                            <img src="images/sett_team_cpu_graph.png" alt="cpu 정보">
+                            <canvas id="cpu_chart" height="150"></canvas>
                         </li>
-                        <li class="sett-txt-mid-graph cpu-per">70% 사용중</li>
-                        <li class="sett-txt-graph">35 / 50 CORE</li>
+                        <li class="sett-txt-mid-graph cpu-per"><span id="cpu_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li>
                     </ul>
 
                     <ul class="team-graph-mem fl">
                         <li class="sett-title-graph">MEMORY</li>
                         <li class="team-graph-box">
-                            <img src="images/sett_team_mem_graph.png" alt="memory 정보">
+                            <canvas id="memory_chart" height="150"></canvas>
                         </li>
-                        <li class="sett-txt-mid-graph mem-per">50% 사용중</li>
-                        <li class="sett-txt-graph">64 / 128 GB</li>
+                        <li class="sett-txt-mid-graph mem-per"><span id="mem_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span> MB</li>
                     </ul>
 
                     <ul class="team-graph-dis fl">
                         <li class="sett-title-graph">DISK</li>
                         <li class="team-graph-box">
-                            <img src="images/sett_team_dis_graph.png" alt="disk 정보">
+                            <canvas id="disk_chart" height="150"></canvas>
                         </li>
-                        <li class="sett-txt-mid-graph dis-per">20% 사용중</li>
-                        <li class="sett-txt-graph">0.6 / 3 TB</li>
+                        <li class="sett-txt-mid-graph dis-per"><span id="disk_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span> GB</li>
                     </ul>
                 </div><!-- class="team-graph clearfix" -->
 

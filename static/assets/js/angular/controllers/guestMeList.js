@@ -402,4 +402,103 @@ angular
                 $("#machine").fadeIn();
             }
         }
-        });
+
+        //**********리소스*************//
+        $http({
+            method: 'GET',
+            url: '/api/manager/useinfo',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data.status == true) {
+                    new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "quota"));
+                    new Chart(document.getElementById("memory_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "quota"));
+                    new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "quota"));
+
+                    $("#cpu_per").html(data.list.cpu_per[0]);
+                    $("#cpu_use_cnt").html(data.list.cpu_cnt[0]);
+                    $("#cpu_total_cnt").html(data.list.cpu_cnt[1]);
+                    $("#mem_per").html(data.list.mem_per[0]);
+                    $("#mem_use_cnt").html(data.list.mem_cnt[0]);
+                    $("#mem_total_cnt").html(data.list.mem_cnt[1]);
+                    $("#disk_per").html(data.list.disk_per[0]);
+                    $("#disk_use_cnt").html(data.list.disk_cnt[0]);
+                    $("#disk_total_cnt").html(data.list.disk_cnt[1]);
+                }
+                else {
+                    alert(data.message)
+                }
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
+
+        $scope.getConfig = function (data, type) {
+            var config = null;
+            if (type == 'quota') {
+                config = {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                "rgb(233, 30, 99)",
+                                "rgb(204, 204, 204)"
+                            ],
+                        }],
+                        labels: [
+                            "사용중",
+                            "미사용"
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: true
+                    }
+                }
+            }else if (type == 'status') {
+                config = {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                "rgb(233, 30, 99)",
+                                "rgb(255, 193, 7)"
+                            ],
+                        }],
+                        labels: [
+                            "실행",
+                            "정지"
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: true
+                    }
+                }
+            }else if (type == 'type') {
+                config = {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                "rgb(233, 30, 99)",
+                                "rgb(255, 193, 7)"
+                            ],
+                        }],
+                        labels: [
+                            "kvm",
+                            "hiperv"
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: true
+                    }
+                }
+            }
+            return config;
+        }
+    });

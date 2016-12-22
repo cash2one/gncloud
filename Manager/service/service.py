@@ -126,8 +126,8 @@ def server_image_list(type, sub_type, sql_session):
     return list
 
 
-def server_image(type):
-    list = db_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+def server_image(type, sql_session):
+    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     return list
 
 def getQuotaOfTeam(team_code, sql_session):
@@ -142,11 +142,11 @@ def getQuotaOfTeam(team_code, sql_session):
         .filter(GnVmMachines.team_code == team_code and GnVmMachines.status == "stop").one()
     vm_kvm_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "kvm").one()
-    vm_hiperv_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "hiperv").one()
+    vm_hyperv_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
+        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "hyperv").one()
     vm_docker_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "docker").one()
-
+    team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
     cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
     memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
     disk_per_info = [int((current_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info.sum_disk/limit_quota.disk_quota)*100))]
@@ -154,9 +154,9 @@ def getQuotaOfTeam(team_code, sql_session):
     mem_cnt_info = [int(current_info.sum_mem), limit_quota.mem_quota]
     disk_cnt_info = [int(current_info.sum_disk), limit_quota.disk_quota]
     count_info = [vm_run_count.count,vm_stop_count.count]
-    type_info = [vm_kvm_count.count,vm_hiperv_count.count]
+    type_info = [vm_kvm_count.count,vm_hyperv_count.count]
     docker_info = vm_docker_count.count
-    quato_info = {'cpu_per':cpu_per_info, 'memory_per':memory_per_info, 'disk_per':disk_per_info
+    quato_info = {'team_name':team_info.team_name, 'cpu_per':cpu_per_info, 'mem_per':memory_per_info, 'disk_per':disk_per_info
                  , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
                  , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info};
 
