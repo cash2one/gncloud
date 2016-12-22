@@ -24,7 +24,7 @@ a:focus {
     color: #505050;
 }
 
-.nav-tabs > li > a:hover {
+.nav-tabs > li > a {
     border: none;
 }
 
@@ -220,8 +220,10 @@ button.creat-instance-big{
 .table-responsive {
     padding-bottom: 100px;
     height: auto;
-    overflow-x: auto;
-    overflow-y: hidden;
+    /*overflow-x: auto;
+    overflow-y: hidden;*/
+    overflow-x: visible;
+    overflow-y: visible;
 }
 
 
@@ -358,6 +360,7 @@ button.creat-instance-big{
 
 .open > .dropdown-menu {
   display: block;
+    /*overflow: visible;*/
 }
 
 .dropdown-menu-table {
@@ -381,6 +384,7 @@ button.creat-instance-big{
     border-radius: 3px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    /*overflow: visible;*/
 }
 
 .dropdown-menu-table > li > a{
@@ -404,6 +408,14 @@ button.creat-instance-big{
     transition: all .3s ease; 
 }
 
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    height: 70px;
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: middle;
+    border-top: 2px solid rgba(215,215,215,.5);
+    /*text-align: center;*/
+}
 
 .caret {
     background: url(../gn_images/dd_arrow.png) no-repeat;
@@ -1002,7 +1014,11 @@ img.img-icon{
   margin-left: -3px;
 }
 .tooltip-inner {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;    
   max-width: 200px;
+  max-height: 50px;
   padding: 5px 10px;
   color: #fff;
   text-align: center;
@@ -1519,6 +1535,41 @@ display: inline-block;
 }
 
 /*모달창*/
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.modal {
+    position: fixed;
+    top: -100px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    display: none;
+    /* overflow: hidden; */
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+.modal-sett {
+    position: fixed;
+    top: -200px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    display: none;
+    /* overflow: hidden; */
+    -webkit-overflow-scrolling: touch;
+    outline: 0;
+}
+
+.modal-sm {
+    width: 400px;
+}
+
 .modal-header {
   min-height: 16.42857143px;
   padding: 15px;
@@ -1573,12 +1624,34 @@ div.mod-txt{
 
 input.input-mod-name{
     height: 37px;
-    width: 65%;
+    width: 60%;
     font-size: 15px;
     font-weight: 200;
     padding-left: 10px;
+    margin-right: 10px;
     margin: 5px 0;
     float: right;
+}
+
+input.input-mod-name-ep{
+    height: 37px;
+    width: 77.7%;
+    font-size: 15px;
+    font-weight: 200;
+    padding-left: 10px;
+    margin-right: 10px;
+    margin: 5px 0;
+    float: right;
+}
+
+.input-mod-btn{
+    height: 37px;
+    width: 15%;
+    font-size: 15px;
+    font-weight:400;
+    margin: 5px 0;
+    float: right; 
+    margin-left: 10px;
 }
 
 a.btn-modal-delete:hover{
@@ -1614,7 +1687,7 @@ ul-sett-right{
 
 /*table-responsive에 들어간 padding-bottom : 100 px reset*/
 .table-reset{
-    padding-bottom: 70px;
+    padding-bottom: 20px;
 }
 
 .td-more{
@@ -1697,6 +1770,282 @@ ul.team-graph-dis{
 .tr-on-wait{
     background-color: rgba(245,166,35,.1) !important;
 }
+
+
+/*시스템 관리자*/
+.table > thead > tr > th {
+    height: 30px;
+    vertical-align: middle;
+    border-top: none;
+    text-align: center;
+}
+
+.table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: none;
+}
+
+.th-team-sett-tit{
+    background-color: rgba(215,215,215,.2);
+}
+
+.name-tag-box{
+    display: inline-block;
+}
+
+.team-name-box{
+    text-align: center;
+    vertical-align: middle;
+    text-align: inherit;
+}
+
+.tag-box{
+    vertical-align: middle;
+}
+
+.tag-box span{
+    display: block;
+    margin-left: 5px;
+}
+
+/*클러스터 모달창 이름 스타일*/
+.label-box{
+    float: right;
+}
+
+.label-box label{
+    margin: 0px 17px;
+}
+
+.mod-input-name{
+    font-size: 15px;
+}
+
+select.form-control-clus{
+    width: 286px;
+    margin-right: 0px;
+    display: block;
+    padding: 6px 12px;
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 1.42857143;
+    color: #7d7d7d;
+    background-color: #fff;
+    background-image: visible;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    margin-top: 6px;
+    background-image: none;
+}
+
+.td-node{
+    display: inline-block;
+    width: 100%;
+}
+
+/*시스템 > 이미지 관리*/
+.pos-rel{
+    position: relative;
+}
+
+.btn-img-position{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.modal-img-inp {
+    width: 500px;
+}
+
+.img-mod-name{
+    height: 37px;
+    width: 68%;
+    font-size: 15px;
+    font-weight: 200;
+    padding-left: 10px;
+    margin-right: 10px;
+    margin: 5px 0;
+    float: right;
+}
+
+.img-mod-txt{
+    height: 37px;
+    width: 85.1%;
+    font-size: 15px;
+    font-weight: 200;
+    padding-left: 10px;
+    margin-right: 10px;
+    margin: 5px 0;
+    float: right;
+    border:  1px solid #cccccc;
+    border-radius: 3px;
+}
+
+.img-label-box{
+    width: 85.1%;
+    height: 37px;
+}
+
+.mod-img-name{
+    font-size: 15px;
+    margin-top: 15px !important;
+}
+
+.img-icon{
+    border-radius: 3px;
+    cursor: pointer;
+    float: left;
+    margin-left: 15px;
+    margin-top: 15px;
+    width: 100px;
+    height: 100px;
+    border: 2px solid rgba(215,215,215,.5);
+    background-color: #ffffff;
+}
+
+.img-icon:hover{
+    border: 3px solid rgba(88, 196, 198, 0.68);
+    background-color: rgba(100,100,100,.5);
+    -webkit-transition: all .1s ease-in-out;
+    -o-transition: all .1s ease-in-out;
+    transition: all .1s ease-in-out;
+    box-sizing: border-box;
+}
+
+.hov-img-txt{
+    opacity: 0;
+    display: block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 30% auto;
+}
+
+.img-icon:hover .hov-img-txt{
+    opacity: 1;
+    color: #505050;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;    
+}
+
+.open > .dropdown-img-icon-cont,
+.open > .dropdown-img-icon {
+    display: block;
+}
+
+.dropdown-img-icon{
+    position: absolute;
+    top: 22%;
+    left: 175px;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 120px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    /* overflow: visible; */    
+}
+
+.dropdown-img-icon-cont{
+    position: absolute;
+    top: 25%;
+    left: 175px;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 120px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 3px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    /* overflow: visible; */    
+}
+
+.dropdown-img-icon-cont > li > a,
+.dropdown-img-icon > li > a {
+    display: block;
+    padding: 5px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #6f6f6f;
+    white-space: nowrap;
+}
+
+
+.dropdown-img-icon-cont > li > a:hover, .dropdown-img-icon-cont > li > a:focus,
+.dropdown-img-icon > li > a:hover, .dropdown-img-icon > li > a:focus {
+    color: #58c4c6;
+    text-decoration: none;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    transition: all .3s ease;
+}
+
+.form-control-img{
+    width: 286px;
+    margin-right: 0px;
+    display: block;
+    padding: 6px 12px;
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 1.42857143;
+    color: #7d7d7d;
+    background-color: #fff;
+    background-image: visible;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    margin-top: 6px;
+    background-image: none;
+}
+
+.txtarea-img{
+    height: 50px;
+}
+
+/*h2 tab - 시스템 관리자 > 이미지 관리*/
+li.active > a h2.h2-image-tab-system{
+    color: #58c4c6;
+    font-size: 18px;
+}
+.h2-image-tab-system{
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
+
 
 
 

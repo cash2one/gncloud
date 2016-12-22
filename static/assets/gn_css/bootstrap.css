@@ -1168,6 +1168,11 @@ hr {
   overflow: visible;
   clip: auto;
 }
+
+.nav-tabs > li {
+    float: left;
+    margin-bottom: -2px;
+}
 /*h1,
 h2,
 h3,

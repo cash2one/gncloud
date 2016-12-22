@@ -131,7 +131,7 @@ class GnUserTeam(Base):
     approve_date = Column(DateTime, default=datetime.datetime.now())
     team_owner = Column(String(20), primary_key=False, nullable=False)
 
-    def __init__(self, user_id=user_id, team_code=team_code, comfirm=comfirm, apply_date =apply_date, approve_date=approve_date, team_owner = team_owner):
+    def __init__(self, user_id=user_id, team_code=None, comfirm=None, apply_date =None, approve_date=None, team_owner = None):
         self.user_id = user_id
         self.team_code = team_code
         self.comfirm = comfirm
@@ -156,7 +156,7 @@ class GnTeam(Base):
     disk_quota = Column(Integer, primary_key=False, nullable=False)
     create_date = Column(DateTime, default=datetime.datetime.now())
 
-    def __init__(self, team_code = team_code, team_name= team_name, author_id =author_id, cpu_quota =cpu_quota, mem_quota = mem_quota, disk_quota = disk_quota, create_date=create_date):
+    def __init__(self, team_code = team_code, team_name= None, author_id =None, cpu_quota =None, mem_quota = None, disk_quota = None, create_date=None):
         self.team_code = team_code
         self.team_name = team_name
         self.author_id = author_id
@@ -187,12 +187,12 @@ class GnVmImages(Base):
     team_code = Column(String(10), primary_key=False, nullable=False)
     author_id = Column(String(15), primary_key=False, nullable=False)
     create_time = Column(DateTime, default=datetime.datetime.now())
+    pool_id = Column(String(8), primary_key=False, nullable=False)
 
 
-    def __init__(self, id=None, name=None, filename=None, type=None
+    def __init__(self , name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
-                 , os_bit=None, team_code=None, author_id=None):
-        self.id = id
+                 , os_bit=None, team_code=None, author_id=None, pool_id= None):
         self.name = name
         self.filename = filename
         self.type = type
@@ -204,19 +204,15 @@ class GnVmImages(Base):
         self.os_bit = os_bit
         self.team_code = team_code
         self.author_id = author_id
+        self.pool_id = pool_id
 
 
 
     def __repr__(self):
-        return '<Id %r / Name %r / File_name %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_ver %r / Os_subver %r / Team_code %r /Author_id %r / Create_time %r >' \
-               % (self.id, self.name, self.file_name, self.type, self.sub_type
-                  , self.icon, self.os, self.os_ver, self.os_subver, self.os_bit
-                  , self.team_code, self.author_id, self.create_time)
-
+        return '< ID %r / Name %r / Filename %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_Ver %r / Os_subVer %r / Os_bit %r / Team_code %r / Author_id %r / Create_time %r / Pool_id %r/>'\
+                % (self.id, self.name, self.filename, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time, self.pool_id)
     def __json__(self):
-        return ['id', 'name', 'filename', 'type', 'sub_type'
-            , 'icon', 'os', 'os_ver', 'os_subver', 'os_bit'
-            , 'team_code', 'author_id', 'create_time']
+        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id']
 
 class GnSshKeys(Base):
     __tablename__ = "GN_SSH_KEYS"
@@ -254,7 +250,7 @@ class GnContanierImage(Base):
     author_id = Column(String(15), nullable=True, default='')
     create_time = Column( nullable=False, default=datetime.datetime.now())
 
-    def __init__(self, id=id, name= name, icon=icon, internal_id=internal_id, internal_name=internal_name, team_code=team_code, author_id =author_id, create_time=create_time):
+    def __init__(self, id=id, name= None, icon=None, internal_id=None, internal_name=None, team_code=None, author_id =None, create_time=None):
         self.id= id
         self.name =name
         self.icon = icon
@@ -265,11 +261,11 @@ class GnContanierImage(Base):
         self.create_time = create_time
 
     def __repr__(self):
-        return '<ID %r / Name %r / Team_code %r / >'\
-            % (self.id, self.name, self.team_code)
+        return '<ID %r / Name %r / Team_code %r / create_time %r / >'\
+            % (self.id, self.name, self.team_code, self.create_time)
 
     def __json__(self):
-        return ['id', 'name', 'team_code']        
+        return ['id', 'name', 'team_code', 'create_time']
 
 class GnMonitor(Base):
     __tablename__ = "GN_MONITOR"
@@ -321,3 +317,24 @@ class GnMonitorHist(Base):
 
     def __json__(self):
         return ['id', 'type', 'cpu_usage', 'mem_usage', 'disk_usage', 'net_usage', 'cur_time']
+
+
+class GnImagePool(Base):
+    __tablename__= "GN_IMAGES_POOL"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type =Column(String(10), primary_key=False, nullable=False)
+    image_path =Column(String(200), primary_key=False,nullable=False)
+    host_id =Column(String(8), primary_key=False, nullable=False)
+
+    def __init__(self, id=id, type=None, image_path=None, host_id=None):
+        self.id = id
+        self.type = type
+        self.image_path = image_path
+        self.host_id = host_id
+
+    def __repr__(self):
+        return '< ID %r / Type %r / Image_path %r / Host_id %r>'\
+                %(self.id , self.type, self.image_path, self.host_id)
+
+    def __json__(self):
+        return ['id', 'type', 'image_path', 'host_id']
