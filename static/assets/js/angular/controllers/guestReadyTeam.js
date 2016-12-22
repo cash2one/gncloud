@@ -55,7 +55,7 @@ angular
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
                         alert("가입취소되었습니다");
-                        $location.path('/guestSelectTeam');
+                        location.href="/main/#/guestSelectTeam"
                     } else {
                         alert(data.message);
                     }

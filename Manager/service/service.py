@@ -45,9 +45,9 @@ def vm_info_graph(sql_session, id):
     return info
 
 
-def login_list(user_id, password):
+def login_list(user_id, password, sql_session):
     password = random_string(password)
-    list = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
+    list = sql_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
     return list
 
 
@@ -60,28 +60,27 @@ def teamcheck_list(teamcode):
     return db_session.query(GnUser).filter(GnUser.team_code == teamcode).all()
 
 
-def tea(user_id, team_code):
-    sub_stmt = db_session.query(GnUserTeam.user_id).filter(GnUserTeam.team_code == team_code)
-    list = db_session.query(GnUser).filter(GnUser.user_id.in_(sub_stmt)).all()
+def tea(user_id, team_code, sql_session):
+    sub_stmt = sql_session.query(GnUserTeam.user_id).filter(GnUserTeam.team_code == team_code)
+    list = sql_session.query(GnUser).filter(GnUser.user_id.in_(sub_stmt)).all()
     return list
 
 
-def checkteam(user_id):
-    checklist = db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one_or_none()
+def checkteam(user_id, sql_session):
+    checklist = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one_or_none()
     if(checklist != None):
-        return db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
+        return sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
     else:
         return None
 
 
-def teamcheck_list(user_id):
-    list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
-    return db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
+def teamcheck_list(user_id,sql_session):
+    list = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
+    return sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
 
 
 def sign_up(user_name, user_id, password, password_re):
     check = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
-    print check
     if(password == password_re):
         if(check == None):
             password_sha = random_string(password_re)
@@ -181,8 +180,8 @@ def teamsignup_list(comfirm, user_id):
         db_session.commit()
     return 1
 
-def team_list(user_id):
-    list= db_session.query(GnUser).filter(GnUser.user_id ==user_id).one()
+def team_list(user_id, sql_sesssion):
+    list= sql_sesssion.query(GnUser).filter(GnUser.user_id ==user_id).one()
     return list
 
 def container(sql_sesssion):
@@ -232,10 +231,10 @@ def signup_team(team_code,user_id):
     db_session.commit()
     return True
 
-def comfirm_list(user_id):
-    team =db_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
+def comfirm_list(user_id, sql_session):
+    team =sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
     if(team.comfirm != 'Y'):
-        list =db_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
+        list =sql_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
         return list
 
 
@@ -246,11 +245,11 @@ def createteam_list(team_name, team_code, author_id):
     db_session.commit()
     return True
 
-def select():
-    return db_session.query(GnTeam).all()
+def select(sql_session ):
+    return sql_session.query(GnTeam).all()
 
-def select_list(team_code):
-    return db_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+def select_list(team_code, sql_session):
+    return sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
 
 def select_put(team_name, team_code):
     lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()

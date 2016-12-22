@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from functools import wraps
-from apscheduler.scheduler import Scheduler
+import traceback
 
-from flask import Flask, jsonify, request, make_response, session
+from apscheduler.scheduler import Scheduler
+from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta
 from gevent.pywsgi import WSGIServer
+import datetime
 
 from db.database import db_session
 from service.service import server_create, server_change_status, server_monitor \
@@ -13,9 +14,6 @@ from service.service import server_create, server_change_status, server_monitor 
 from util.json_encoder import AlchemyEncoder
 from util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
-import datetime
-import logging
-from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -35,18 +33,22 @@ def job_function():
 
 ####login check start####
 
-# @app.before_request
-# def before_request():
-#     if ('userId' not in session) \
-#             and request.endpoint != 'guestLogout' \
-#             and request.endpoint != 'account':
-#         return make_response(jsonify(status=False),401)
+@app.before_request
+def before_request():
+    if ('userId' not in session) \
+            and request.endpoint != 'guestLogout' \
+            and request.endpoint != 'account':
+        return make_response(jsonify(status=False),401)
 
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
+@app.errorhandler(500)
+def internal_error(error):
+    print(traceback.format_exc())
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 #####common function end#####
 
@@ -143,13 +145,14 @@ def download_sshKey(id):
 if __name__ == '__main__':
     # 로그 설정
     formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
-    handler = RotatingFileHandler('kvm.log', maxBytes=2000000, backupCount=5)
+    handler = RotatingFileHandler('./manager.log', maxBytes=2000000, backupCount=5)
     handler.setFormatter(formatter)
     handler.setLevel(logging.WARNING)
+    app.logger.addHandler(handler)
 
     cron = Scheduler(daemon=True)
     cron.add_interval_job(job_function, seconds=60) #minites=1)
     cron.start()
     #app.run(debug=True)
-    http_server = WSGIServer(('', 5000), app)
+    http_server = WSGIServer(('', 8080), app)
     http_server.serve_forever()

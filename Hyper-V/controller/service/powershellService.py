@@ -87,6 +87,27 @@ class PowerShell(object):
         #self.send(script)
         return self.send_new_vm(script, ip)
 
+    #vm들이 사용하고 있는 자원들의 정보를 받아온다. 모니터링을 위한 메소드
+    def get_vm_usage_info(self, ip):
+        script = ""
+        return self.send_get_vm_info(script, ip)
+
+    def send_get_vm_info(self, script, ip):
+        address = self.address
+        port = str(self.port)
+        uri = self.uri
+        url = "http://" + address
+        url += ":"
+        url += port
+        url += "/"
+        url += uri
+        # todo send. 나중에 이 부분은 agent에서 데이터 값을 받아 처리하도록 수정이 끝나면 지울 것
+        url += "?script=" + script
+        # todo send. 추후 스크립트를 URL에 포함시켜 보내지 않고 Post data로 전달받을 수 있도록 agent 수정 필요
+        data = {'script': script}
+        response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
+        return json.loads(response.json())
+
 
     # VHD 파일을 복사
     # example) Convert-VHD -DestinationPath C:\images\2_testvm\disk.vhdx
@@ -185,7 +206,6 @@ class PowerShell(object):
         return self.send(script)
 
 
-
     #VM 이미지 삭제
     def delete_vm_Image(self, vhd_File_Name, type,computer_name):
         #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
@@ -205,6 +225,12 @@ class PowerShell(object):
         script += "Move-Item -Path C:/images/vhdx/"+type+'/$vmn".vhdx" '
         script += "-Destination C:/images/vhdx/backup/ | ConvertTo-Json }"
         print script
+        return self.send(script)
+
+
+    # 모니터링을 위한 스크립트
+    def monitor(self, vm_ip):
+        script = ""
         return self.send(script)
 
 
