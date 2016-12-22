@@ -187,6 +187,7 @@
 
 - docker-registry-install.sh
     ```
+    yum -y install docker-registry
     sed -i 's/starch_backend: _env:SEARCH_BACKEND/search_backend: _env:SEARCH_BACKEND:sqlalchemy/g' \
             /etc/docker-registry.yml
     sed -i 's/sqlite:\/\/\/\/tmp\/docker-registry.db/sqlite:\/\/\/\/home\/gncloud\/docker-registry\/docker-registry.db/g' \
