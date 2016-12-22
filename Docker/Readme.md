@@ -7,29 +7,50 @@
 5. registry
 
 
-# 1. 공통
+## 1. 공통
 
-docker 설치 (1.12.4 버전)
+- docker 설치
+
+	- 1.12.4 버전
 
 
-# 2. controller
+## 2. controller
 
 - python 설치
 
-2.7.12 버전 설치
+	- 2.7.12 버전 설치
 
 - python package
 
-flask
-pip install flask
+    -  flask
+    ```
+    $ pip install flask
+    ```
 
-sqlalchemy
-pip install sqlalchemy
+    -  sqlalchemy
+    ```
+    $ pip install sqlalchemy
+    ```
 
-pexpect
-pip install pexpect
+    -  pexpect
+    ```
+    $ pip install pexpect
+    ```
 
-ConfigParser
-pip install ConfigParser
+    -  ConfigParser
+    ```
+    $ pip install ConfigParser
+    ```
 
-# 3. manager
+    -  ConfigParser
+    ```
+    $ pip install ConfigParser
+    ```
+
+## 3. manager
+
+
+## 4. worker
+
+
+## 5. registry
