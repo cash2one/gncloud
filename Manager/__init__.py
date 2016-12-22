@@ -22,9 +22,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 @app.before_request
 def before_request():
-    if ('userId' not in session) \
-            and request.endpoint != 'guestLogout' \
-            and request.endpoint != 'account':
+    if ('userId' not in session) and request.path != '/vm/guestLogout' and request.path != '/vm/account':
         return make_response(jsonify(status=False),401)
 
 @app.teardown_appcontext
