@@ -19,8 +19,10 @@ class DockerService(object):
             pass
 
     # Docker 서비스를 생성한다.
-    def docker_service_create(self, replicas, image, cpu, memory):
+    def docker_service_create(self, id, replicas, image, cpu, memory):
         dockerimage = GnDockerImage.query.filter_by(name=image).first()
+        if dockerimage is None:
+            return None
         image_detail = GnDockerImageDetail.query.filter_by(id=dockerimage.id).all()
         command = "docker service create"
         # command += " --name %s" % name
@@ -33,7 +35,10 @@ class DockerService(object):
         # type=volume,source=jhjeon_mytomcat,destination=/usr/local/tomcat
         # command += " --mount type=volume,source=%s,destination%s" % config.RESTART_MAX_ATTEMPTS
         for detail in image_detail:
-            command += " %s" % detail.argument
+            if detail.arg_type == "mount":
+                command += " " + (detail.argument % id)
+            else:
+                command += " %s" % detail.argument
         command += " %s" % dockerimage.name
         service_id = self.send_command(command)
         if service_id[:5] == "Error":
@@ -52,39 +57,31 @@ class DockerService(object):
         return self.send_command(command)
 
     # Docker 서비스의 컨테이너를 가져온다.
-    def get_service_containers(self, id):
+    def get_service_containers(self, internal_id):
         container_list = []
-        service = GnDockerServices.query.filter_by(id=id).first()
-        if service is None:
-            return None
-        else:
-            command = "docker service ps %s", service.internal_id
-            result = self.send_command_return_all_line(command)
+        command = "docker service ps %s" % internal_id
+        result = self.send_command_return_all_line(command)
 
-            for line in result:
-                container_info = line.split()
-                if len(container_info) == 0:
-                    pass
-                elif container_info[0] == "docker" or container_info[0] == "ID":
-                    pass
-                else:
-                    container = {}
-                    container['internal_id'] = container_info[0]
-                    container['internal_name'] = container_info[1]
-                    container['host_name'] = container_info[3]
-                    container_list.append(container)
-            return container_list
+        for line in result:
+            container_info = line.split()
+            if len(container_info) == 0:
+                pass
+            elif container_info[0] == "docker" or container_info[0] == "ID":
+                pass
+            else:
+                container = {}
+                container['internal_id'] = container_info[0]
+                container['internal_name'] = container_info[1]
+                container['host_name'] = container_info[4]
+                container_list.append(container)
+        return container_list
 
     # Docker 서비스의 볼륨 정보를 가져온다.
-    def get_service_volumes(self, id):
+    def get_service_volumes(self, internal_id):
         volume_list = []
-        service = GnDockerServices.query.filter_by(id=id).first()
-        if service is None:
-            return None
-        else:
-            command = "docker service inspect %s" % service.internal_id
-            result = self.send_command_return_json(command)
-            return result[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
+        command = "docker service inspect %s" % internal_id
+        result = self.send_command_return_json(command)
+        return result[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
 
     #
     def send_command(self, command):
@@ -99,6 +96,7 @@ class DockerService(object):
         self.cmd.prompt()
         return self.cmd.before.split("\r\n")
 
+    #
     def send_command_return_json(self, command):
         self.cmd.sendline(command)
         self.cmd.prompt()

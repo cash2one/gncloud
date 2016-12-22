@@ -27,7 +27,10 @@ def doc_create():
     # 컨테이너의 도커 서비스 초기화 ()
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # Docker Swarm Service를 생성한다.
-    docker_service = ds.docker_service_create(replicas=2, image=image, cpu=cpu, memory=memory)
+    docker_service = ds.docker_service_create(id=id, replicas=2, image=image, cpu=cpu, memory=memory)
+    # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
+    if docker_service is None:
+        return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
     if type(docker_service) is not list:
         return jsonify(status=False, message=docker_service)
     else:
@@ -46,7 +49,7 @@ def doc_create():
             create_time=datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f'),
             status="running")
         # 생성된 Service의 Container 정보를 DB에 저장한다.
-        service_container_list = ds.get_service_containers(id)
+        service_container_list = ds.get_service_containers(docker_service[0]['ID'])
         for service_container in service_container_list:
             node = GnHostDocker.query.filter_by(name=service_container['host_name']).first()
             container = GnDockerContainers(
@@ -56,7 +59,7 @@ def doc_create():
                 host_id=node.id
             )
             db_session.add(container)
-        # t생성된 volume 정보를 DB에 저장한다.
+        # 생성된 volume 정보를 DB에 저장한다.
         service_volume_list = ds.get_service_volumes(docker_service[0]['ID'])
         for service_volume in service_volume_list:
             volume = GnDockerVolumes(
