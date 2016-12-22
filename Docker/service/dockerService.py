@@ -4,7 +4,7 @@ __author__ = 'jhjeon'
 import json
 import requests
 from pexpect import pxssh
-from db.models import GnDockerServices, GnDockerImage, GnDockerImageDetail
+from db.models import GnDockerServices, GnDockerImage, GnDockerImageDetail, GnHostDocker
 from util.config import config
 
 
@@ -26,11 +26,11 @@ class DockerService(object):
         image_detail = GnDockerImageDetail.query.filter_by(id=dockerimage.id).all()
         command = "docker service create"
         # command += " --name %s" % name
-        command += " --limit-cpu %s --reserve-cpu %s" % (cpu, cpu)
-        command += " --limit-memory %s --reserve-memory %s" % (memory, memory)
+        command += " --limit-cpu %s" % cpu
+        command += " --limit-memory %s" % memory
         # command += " --replicas %s" % config.REPLICAS
         command += " --replicas %s" % replicas
-        command += " --constraint 'node.role != manager'"
+        command += " --constraint 'node.hostname != manager'"
         command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
         # type=volume,source=jhjeon_mytomcat,destination=/usr/local/tomcat
         # command += " --mount type=volume,source=%s,destination%s" % config.RESTART_MAX_ATTEMPTS
@@ -47,13 +47,19 @@ class DockerService(object):
             return self.docker_service_ps(service_id)
 
     # Docker 서비스 정보를 가지고 온다.
-    def docker_service_ps(self, id):
-        command = "docker service inspect %s" % id
+    def docker_service_ps(self, internal_id):
+        command = "docker service inspect %s" % internal_id
         return self.send_command_return_json(command)
 
     # Docker 서비스를 삭제한다.
-    def docker_service_rm(self, id):
-        command = "docker service rm %s" % id
+    def docker_service_rm(self, internal_id):
+        command = "docker service rm %s" % internal_id
+        return self.send_command(command)
+
+    # Docker 볼륨을 삭제한다.
+    def docker_volume_rm(self, host_id, internal_id):
+        node = GnHostDocker.query.filter_by(id=host_id).first()
+        command = "docker -H %s:2375 volume rm %s" % (node.ip, internal_id)
         return self.send_command(command)
 
     # Docker 서비스의 컨테이너를 가져온다.
@@ -61,7 +67,6 @@ class DockerService(object):
         container_list = []
         command = "docker service ps %s" % internal_id
         result = self.send_command_return_all_line(command)
-
         for line in result:
             container_info = line.split()
             if len(container_info) == 0:
@@ -72,13 +77,12 @@ class DockerService(object):
                 container = {}
                 container['internal_id'] = container_info[0]
                 container['internal_name'] = container_info[1]
-                container['host_name'] = container_info[4]
+                container['host_name'] = container_info[3]
                 container_list.append(container)
         return container_list
 
     # Docker 서비스의 볼륨 정보를 가져온다.
     def get_service_volumes(self, internal_id):
-        volume_list = []
         command = "docker service inspect %s" % internal_id
         result = self.send_command_return_json(command)
         return result[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']

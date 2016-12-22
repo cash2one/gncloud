@@ -64,8 +64,8 @@ def guest_info_graph(id):
 def login():
     user_id = request.json['login_id']
     password = request.json['login_pw']
-    user_info = login_list(user_id, password)
-    team_info = checkteam(user_id)
+    user_info = login_list(user_id, password, db_session)
+    team_info = checkteam(user_id, db_session)
     if(user_info != None and team_info == None ):
         session['userId'] = user_info.user_id
         session['userName'] = user_info.user_name
@@ -101,19 +101,8 @@ def logincheck():
 @app.route('/vm/account/users', methods=['GET'])
 def teamcheck():
     if session.get('userId',None):
-        return jsonify(status=True, message="success", list=teamcheck_list(session['userId']))
+        return jsonify(status=True, message="success", list=teamcheck_list(session['userId'],db_session))
 
-
-@app.route('/vm/account/users', methods=['POST'])
-def signup_list():
-    user_name = request.json['user_name']
-    user_id = request.json['user_id']
-    password = request.json['password']
-    password_re = request.json['password_re']
-    if(sign_up(user_name,user_id,password,password_re)!=None):
-        return  jsonify(status=True, message="success")
-    else:
-        return jsonify(status = False, message = "false")
 
 
 @app.route('/vm/account/users/list', methods=['PUT'])
@@ -171,7 +160,7 @@ def volume(type):
 @app.route('/vm/account/users/list', methods=['GET'])
 def team():
     if session.get('userId', None):
-        return jsonify(status=True, message="success", list=team_list(session['userId']))
+        return jsonify(status=True, message="success", list=team_list(session['userId'],db_session))
 
 
 @app.route('/vm/account/team', methods=['GET'])
@@ -185,7 +174,7 @@ def my_list():
 def tea_list():
     session_id = ''
     team_id = "002"
-    return jsonify(status=True, message="success", list=tea(session_id, team_id))
+    return jsonify(status=True, message="success", list=tea(session_id, team_id, db_session))
 
 
 @app.route('/vm/container/services', methods=['GET'])
@@ -228,7 +217,7 @@ def update_guest_name(id, type):
 
 @app.route('/vm/account/selectteam', methods=['GET'])
 def selectteam():
-    return jsonify(status=True, message="success", list=select())
+    return jsonify(status=True, message="success", list=select(db_session))
 
 
 @app.route('/vm/account/selectteam', methods=['POST'])
@@ -242,7 +231,7 @@ def teamsignup():
 @app.route('/vm/account/teamcomfirm', methods=['GET'])
 def comfirm():
     user_id = session['userId']
-    return jsonify(status=True, message="success", list=comfirm_list(user_id))
+    return jsonify(status=True, message="success", list=comfirm_list(user_id,db_session))
 
 
 @app.route('/vm/account/createteam', methods=['POST'])
@@ -254,7 +243,7 @@ def createteam():
 
 @app.route('/vm/account/teamname', methods=['GET'])
 def teamname():
-    return jsonify(status=True, message="success", list=select_list(session['teamCode']))
+    return jsonify(status=True, message="success", list=select_list(session['teamCode'],db_session))
 
 @app.route('/vm/account/teamname', methods=['PUT'])
 def changeteamname():
@@ -268,12 +257,15 @@ def teamshow():
 @app.route('/vm/systems/path', methods=['GET'])
 def systembase():
     return jsonify(status=True, message="success", list=pathimage(db_session))
+
+@app.route('/vm/account/maketeam', methods=['POST'])
+def maketeam():
+
+    return jsonify(status=True, message="success")
 #### rest end ####
 
 
 if __name__ == '__main__':
-
-    # 로그 설정
     app.run(port=8081)
     #http_server = WSGIServer(('', 8080), app)
     #http_server.serve_forever()

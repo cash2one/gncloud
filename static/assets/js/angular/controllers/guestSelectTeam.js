@@ -29,17 +29,17 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
-        $scope.data = {};
+        $scope.teaminfo={};
         $scope.update_image = function (data) {
             if (data != null) {
-                $scope.data.team_code = data.team_code;
+                $scope.teaminfo.team_code = data.team_code
             }
         };
         $scope.submit=function($location){
             $http({
                 method: 'POST',
                 url:'/api/manager/vm/account/selectteam' ,
-                data: $scope.data,
+                data: $scope.teaminfo,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                 }
@@ -47,7 +47,7 @@ angular
                 .success(function (data) {
                     if (data.status == true) {
                         alert("가입이 신청이 완료되었습니다");
-                        $location.path('/guestReadyTeam');
+                        location.href="/main/#/guestReadyTeam"
 
                     } else {
                         alert(data.message);

@@ -42,7 +42,7 @@ def doc_create():
             internal_id=docker_service[0]['ID'],
             internal_name=docker_service[0]['Spec']['Name'],
             cpu=cpu,
-            memory=docker_service[0]['Spec']['TaskTemplate']['Resources']['Reservations']['MemoryBytes']/1024,
+            memory=docker_service[0]['Spec']['TaskTemplate']['Resources']['Limits']['MemoryBytes']/1024,
             volume=id,
             team_code=team_code,
             author_id=author_id,
@@ -67,7 +67,7 @@ def doc_create():
                 name=service_volume['Source'],
                 path=service_volume['Target']
             )
-            db_session.add(container)
+            db_session.add(volume)
         db_session.add(service)
         db_session.commit()
         return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
@@ -75,8 +75,16 @@ def doc_create():
 
 # todo. Container 상태변경
 def doc_state(id):
-    # todo doc_state 1. Docker Container의 상태를 수정한다.
-    # todo doc_state 2. Docker Container 정보를 DB에 업데이트한다.
+    # todo doc_state Start 1. commit된 내용을 가지고 서비스 생성.
+    # todo doc_state if. 이미 서비스가 돌아가는 상태인 경우는 아무 것도 안하고 끝낸다.
+    # todo doc_state Start 2. 변경된 내용을 DB에 Update
+    # todo doc_state Restart 1. 컨테이너 커밋
+    # todo doc_state Restart 2. 서비스 삭제
+    # todo doc_state Restart 3. commit된 내용을 가지고 온다.
+    # todo doc_state Restart 4. 변경된 내용을 DB에 Update
+    # todo doc_state Stop 1. commit된 내용을 가지고 서비스 생성.
+    # todo doc_state Stop 2. 서비스 삭제
+    # todo doc_state Stop 3. DB에 상태 업데이트
     return jsonify(status=False, message="미구현")
 
 
@@ -84,13 +92,27 @@ def doc_state(id):
 def doc_delete(id):
     # 지정된 Docker 서비스를 삭제한다.
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-    result = ds.docker_service_rm(id)
+    service = GnDockerServices.query.filter_by(id=id).first()
+    containers = GnDockerContainers.query.filter_by(service_id=id).all()
+    volumes = GnDockerVolumes.query.filter_by(service_id=id).all()
+    volume_delete_success = True
+    result = ds.docker_service_rm(service.internal_id)
+    for container in containers:
+        result2 = ds.docker_volume_rm(container.host_id, id)
+        if result2 != id:
+            volume_delete_success = False
     # DB에 삭제된 내용을 업데이트한다.
-    service = GnDockerServices.query.filter_by(internal_id=id).first()
     if service is not None:
+        # 서비스 상태 수정
         service.status = "deleted"
+        # 컨테이너 상태 수정
+        for container in containers:
+            container.status = "deleted"
+        # 볼륨 상태 수정
+        for volume in volumes:
+            volume.status = "deleted"
         db_session.commit()
-    if result == id:
+    if result == service.internal_id and volume_delete_success:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")
     else:
         return jsonify(status=False, message=result)

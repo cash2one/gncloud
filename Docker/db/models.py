@@ -40,8 +40,7 @@ class GnHostDocker(Base):
         self.host_agent_port = host_agent_port
 
     def __repr__(self):
-        return "<GnHostDocker(id=%r, name=%r, ip=%r, type=%r, cpu=%r, mem=%r, disk=%r, max_cpu=%r, max_mem=%r, max_disk=%r, host_agent_port=%r)>" \
-               % (self.id, self.name, self.ip, self.type, self.cpu, self.mem, self.disk, self.max_cpu, self.max_mem, self.max_disk, self.host_agent_port)
+        return "<GnHostDocker %r>" % self.id
 
     def to_json(self):
         return dict(id=self.id, name=self.name, ip=self.ip, type=self.type, cpu=self.cpu, mem=self.mem,
@@ -88,8 +87,7 @@ class GnDockerServices(Base):
         self.status = status
 
     def __repr__(self):
-        return "<GnDockerServices(id=%r, name=%r, tag=%r, internal_id=%r, internal_name=%r, cpu=%r, memory=%r, disk=%r, team_code=%r, author_id=%r, create_time=%r, start_time=%r, stop_time=%r, status=%r, )>" \
-               % (self.id, self.name, self.tag, self.internal_id, self.internal_name, self.cpu, self.memory, self.disk, self.team_code, self.author_id, self.create_time, self.start_time, self.stop_time, self.status,)
+        return "<GnDockerServices %r>" % self.id
 
     def to_json(self):
         return dict(id=self.id, name=self.name, tag=self.tag, internal_id=self.internal_id,
@@ -114,8 +112,7 @@ class GnDockerContainers(Base):
         self.status = status
 
     def __repr__(self):
-        return "<GnDockerContainers(service_id=%r, internal_id=%r, internal_name=%r, host_id=%r, status=%r)>" \
-               % (self.service_id, self.internal_id, self.internal_name, self.host_id, self.status)
+        return "<GnDockerContainers %r_%r_%r>" % (self.service_id, self.internal_id, self.internal_name)
 
     def to_json(self):
         return dict(service_id=self.service_id, internal_id=self.internal_id,
@@ -129,17 +126,17 @@ class GnDockerVolumes(Base):
     path = Column(String(200), nullable=False, default='')
     status = Column(String(10), nullable=True, default='')
 
-    def __init__(self, service_id, name, path):
+    def __init__(self, service_id, name, path, status=""):
         self.service_id = service_id
         self.name = name
         self.path = path
+        self.status = status
 
     def __repr__(self):
-        return "<GnDockerVolumes(service_id=%r, name=%r, path=%r, status=%r)>" \
-               % (self.service_id, self.name, self.path)
+        return "<GnDockerVolumes %r_%r>" % (self.service_id, self.name)
 
     def to_json(self):
-        return dict(id=self.id, name=self.name, mountpoint=self.mountpoint)
+        return dict(id=self.id, name=self.name, mountpoint=self.mountpoint, status=self.status)
 
 
 class GnDockerImage(Base):
@@ -162,8 +159,7 @@ class GnDockerImage(Base):
         self.status = status
 
     def __repr__(self):
-        return "<GnDockerImage(id=%r, name=%r, filename=%r, team_code=%r, author_id=%r, create_time=%r, status=%r)>" \
-               % (self.id, self.name, self.filename, self.team_code, self.author_id, self.create_time, self.status)
+        return "<GnDockerImage %r>" % self
 
     def to_json(self):
         return dict(id=self.id, name=self.name, filename=self.filename, team_code=self.team_code,
@@ -172,7 +168,7 @@ class GnDockerImage(Base):
 
 class GnDockerImageDetail(Base):
     __tablename__ = 'GN_DOCKER_IMAGES_DETAIL'
-    id = Column(String(8), primary_key=True, nullable=False, default="")
+    id = Column(String(8), primary_key=True, nullable=False, default='')
     arg_type = Column(String(10), primary_key=True, nullable=False, default='')
     argument = Column(String(200), primary_key=True, nullable=False, default='')
     description = Column(String(300), nullable=True, default='')
@@ -184,8 +180,7 @@ class GnDockerImageDetail(Base):
         self.description = description
 
     def __repr__(self):
-        return "<GnDockerImageDetail(id=%r, arg_type=%r, argument=%r, description=%r)>" \
-               % (self.id, self.arg_type, self.argument, self.description)
+        return "<GnDockerImageDetail %r_%r_%r)>" % (self.id, self.arg_type, self.argument)
 
     def to_json(self):
         return dict(id=self.id, arg_type=self.arg_type, argument=self.argument, description=self.description)

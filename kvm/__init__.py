@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-from functools import wraps
-from apscheduler.scheduler import Scheduler
+import logging
+from logging.handlers import RotatingFileHandler
 
-from flask import Flask, jsonify, request, make_response, session
+from apscheduler.scheduler import Scheduler
+from flask import Flask, jsonify, request, make_response
 from datetime import timedelta
 from gevent.pywsgi import WSGIServer
+import datetime
 
 from db.database import db_session
 from service.service import server_create, server_change_status, server_monitor \
@@ -13,9 +15,6 @@ from service.service import server_create, server_change_status, server_monitor 
 from util.json_encoder import AlchemyEncoder
 from util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
-import datetime
-import logging
-from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -152,5 +151,5 @@ if __name__ == '__main__':
     cron.add_interval_job(job_function, seconds=60) #minites=1)
     cron.start()
     #app.run(debug=True)
-    http_server = WSGIServer(('', 5000), app)
+    http_server = WSGIServer(('', 8080), app)
     http_server.serve_forever()
