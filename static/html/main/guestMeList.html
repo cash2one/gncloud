@@ -1,0 +1,770 @@
+<h1>설정</h1>
+<!--왼쪽 메뉴-->
+<ul class="nav nav-pills left-menu fl">
+    <li class="left-title">개인</li>
+    <li class="left-name active"><a data-toggle="pill" ng-click="click('profile')">프로필</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('key-sett')">키 관리</a></li>
+
+    <li class="left-title marg-top29">팀</li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('profile-team')">프로필</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('team-reso')">리소스</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('team-group')">팀원</a></li>
+
+    <li class="left-title marg-top29">시스템</li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('profile-system')">프로필</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('team-sett')">팀 관리</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('cluster-sett')">클러스터 관리</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('image-sett')">이미지 관리</a></li>
+</ul>
+
+<div class="tab-content right-box fl">
+    <!--프로필-->
+    <div id="profile" class="">
+        <div class="border-box profile-user">
+            <div class="cont-box">
+                <h2>{{te_list.user_name}}
+
+                    <!--수정버튼-->
+                    <div class="clearfix fr">
+                        <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#myModal">수정</button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">프로필 수정</h4>
+                                    </div>
+                                    <div class="cont-box-modal">
+                                        <ul>
+                                            <li class="sett-title-modal fl">이름</li>
+                                            <li class="sett-txt-modal">{{te_list.user_name}}</li>
+                                            <li class="sett-title-modal fl">아이디</li>
+                                            <li class="sett-txt-modal">{{te_list.user_id}}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="modal-line">
+                                            <div class="mod-txt fl">현재 비밀번호</div><input type="password" class="input-mod-name" ng-model="data.password" placeholder="****" required />
+                                        </div>
+                                        <div class="modal-line">
+                                            <div class="mod-txt fl">새 비밀번호</div>
+                                            <input type="password" class="input-mod-name" ng-model="data.password_new"  placeholder="****" required />
+                                        </div>
+                                        <div class="modal-line">
+                                            <div class="mod-txt fl">비밀번호 확인</div>
+                                            <input type="password" class="input-mod-name" ng-model="data.password_ret"  placeholder="****" required />
+                                        </div>
+                                        <div class="modal-line">
+                                            <div class="mod-txt fl">연락처</div>
+                                            <input type="text" class="input-mod-name" ng-model="data.tel" placeholder="{{te_list.tel}}">
+                                        </div>
+                                        <div class="modal-line">
+                                            <div class="mod-txt fl">이메일</div>
+                                            <input type="text" class="input-mod-name" ng-model="data.email" placeholder="{{te_list.email}}">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary ssh-create-key marg-top29" data-dismiss="modal" ng-click="submit()">저장</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h2>
+
+                <ul >
+                    <li class="sett-title fl">아이디</li>
+                    <li class="sett-txt">{{te_list.user_id}}</li>
+                    <li class="sett-title fl">연락처</li>
+                    <li class="sett-txt">{{te_list.tel}}</li>
+                    <li class="sett-title fl">이메일</li>
+                    <li class="sett-txt">{{te_list.email}}</li>
+                </ul>
+            </div> <!--class="cont-box" 사용자 이름-->
+        </div>  <!--class="border-box profile-user"-->
+
+    </div> <!--id="profile" class="tab-pane fade in active"
+
+<!--SSH 키 관리-->
+    <div id="key-sett" class="">
+        <div class="border-box">
+            <div class="cont-box">
+                <h2>SSH Keys</h2>
+
+                <div class="table-responsive table-reset">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="data in data_list">
+                            <td class="td-style td-first">{{data.name}}</td>
+                            <td class="td-style cnt dropdown td-more">
+                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    더보기
+                                    <span class="caret" ></span>
+                                </div>
+                                <!--더보기>드롭다운-->
+                                <ul class="dropdown-menu-table" role="menu">
+                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                    <li><a ng-click="download(data.id)">키 내려받기</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div> <!--class="table-responsive table-reset"-->
+
+            </div>
+        </div>
+    </div> <!--id="key-sett" class="tab-pane fade"-->
+
+    <!--팀 > 프로필-->
+
+    <div id="team-reso"  class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h2>리소스</h2>
+
+                <!--팀 그래프-->
+                <div class="team-graph clearfix">
+                    <ul class="team-graph-cpu fl">
+                        <li class="sett-title-graph">CPU</li>
+                        <li class="team-graph-box">
+                            <canvas id="cpu_chart" height="150"></canvas>
+                        </li>
+                        <li class="sett-txt-mid-graph cpu-per"><span id="cpu_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li>
+                    </ul>
+
+                    <ul class="team-graph-mem fl">
+                        <li class="sett-title-graph">MEMORY</li>
+                        <li class="team-graph-box">
+                            <canvas id="memory_chart" height="150"></canvas>
+                        </li>
+                        <li class="sett-txt-mid-graph mem-per"><span id="mem_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span> MB</li>
+                    </ul>
+
+                    <ul class="team-graph-dis fl">
+                        <li class="sett-title-graph">DISK</li>
+                        <li class="team-graph-box">
+                            <canvas id="disk_chart" height="150"></canvas>
+                        </li>
+                        <li class="sett-txt-mid-graph dis-per"><span id="disk_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span> GB</li>
+                    </ul>
+                </div><!-- class="team-graph clearfix" -->
+
+            </div> <!--class="cont-box"-->
+        </div> <!--class="border-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
+    <!--팀 > 팀원-->
+    <div id="team-group"  class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h2>{{teamname.team_name}}</h2>
+
+                <div class="table-responsive table-reset">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>등급<div class="refresh"></div></th>
+                            <th>이름<div class="refresh"></div></th>
+                            <th>아이디</th>
+                            <th>연락처</th>
+                            <th>이메일</th>
+                            <th>신청일</th>
+                            <th>승인일</th>
+                            <!-----여기서부터 팀장 로그인 시 보이는 영역----->
+                            <th>상태<div class="refresh"></div></th>
+                            <th><!--더보기--></th>
+                        </tr>
+                        </thead>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="won in won_list">
+                            <td class="td-style cnt">{{$index+1}}</td>
+                            <td class="td-style cnt">{{won[1].team_owner}}</td>
+                            <td class="td-style cnt">{{won[0].user_name}}</td>
+                            <td class="td-style cnt" ng-model="data.user_id">{{won[0].user_id}}</td>
+                            <td class="td-style cnt">{{won[0].tel}}</td>
+                            <td class="td-style cnt">{{won[0].email}}</td>
+                            <td class="td-style cnt">{{won[1].create_time_diff}}</td><p data-toggle="tooltip" title='{{won[1].apply_date}}'></p></td>
+                            <td class="td-style cnt">{{won[1].create_time_diff1}}</td><p data-toggle="tooltip" title='{{won[1].approve_date}}'></p></td>
+                            <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
+                            <td class="td-style cnt">{{won[1].comf}}</td>
+                            <td class="td-style cnt dropdown td-more">
+                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    더보기
+                                    <span class="caret" ></span>
+                                </div>
+                                <!--더보기>드롭다운-->
+                                <ul class="dropdown-menu-table" role="menu">
+                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                    <li ng-repeat="ac in actions"><a href ng-click="update(won[0].user_id, won[1].team_code, ac)">{{ac.name}}</a></li>
+
+                                </ul>
+                            </td>
+                        </tr>
+                        <!--<tr class="tr-on-me"> &lt;!&ndash;class="tr-on-me" 로그인 한 사람이 나일 때&ndash;&gt;-->
+                            <!--<td class="td-style cnt">2</td>-->
+                            <!--<td class="td-style cnt">팀원</td>-->
+                            <!--<td class="td-style cnt">홍길동<br><span>(you)</span></td>-->
+                            <!--<td class="td-style cnt">홍대리</td>-->
+                            <!--<td class="td-style cnt">010-1234-5678</td>-->
+                            <!--<td class="td-style cnt">1234@naver.com</td>-->
+                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">6일전</p></td>-->
+                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">6일전</p></td>-->
+                            <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;여기서부터 팀장 로그인 시 보이는 영역-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
+                            <!--<td class="td-style cnt">승인</td>-->
+                            <!--<td class="td-style cnt dropdown td-more">-->
+                                <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
+                                    <!--더보기-->
+                                    <!--<span class="caret" ></span>-->
+                                <!--</div>-->
+                                <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
+                                <!--<ul class="dropdown-menu-table" role="menu">-->
+                                    <!--<li><a href="#">승인</a></li>-->
+                                    <!--<li><a href="#">등급 변경</a></li>-->
+                                    <!--<li><a href="#">비밀번호 초기화</a></li>-->
+                                    <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
+                                <!--</ul>-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                        <!--<tr class="tr-on-wait"> &lt;!&ndash;class="tr-on-road" 대기상태인 경우&ndash;&gt;-->
+                            <!--<td class="td-style cnt">1</td>-->
+                            <!--<td class="td-style cnt">팀원</td>-->
+                            <!--<td class="td-style cnt">김나리</td>-->
+                            <!--<td class="td-style cnt">나리김</td>-->
+                            <!--<td class="td-style cnt">010-9857-2222</td>-->
+                            <!--<td class="td-style cnt">-</td>-->
+                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">오늘</p></td>-->
+                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">오늘</p></td>-->
+                            <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;여기서부터 팀장 로그인 시 보이는 영역-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
+                            <!--<td class="td-style cnt">대기</td>-->
+                            <!--<td class="td-style cnt dropdown td-more">-->
+                                <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
+                                    <!--더보기-->
+                                    <!--<span class="caret" ></span>-->
+                                <!--</div>-->
+                                <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
+                                <!--<ul class="dropdown-menu-table" role="menu">-->
+                                    <!--&lt;!&ndash;<li class="dropdown-header">더보기</li> 삭제합니다&ndash;&gt;-->
+                                    <!--<li><a href="#">승인</a></li>-->
+                                    <!--<li><a href="#">등급 변경</a></li>-->
+                                    <!--<li><a href="#">비밀번호 초기화</a></li>-->
+                                    <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                        <!--class="table-responsive table-reset"-->
+
+            </div> <!--class="cont-box"-->
+        </div> <!--class="border-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade"-->
+    <div id="profile-team"  class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h2>{{teamname.team_name}}</h2>
+                <!--팀 수정버튼-->
+                <div class="clearfix fr">
+                    <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#modal-modi">수정</button>
+                    <!-- 팀 Modal -->
+                    <div class="modal fade" id="modal-modi" role="dialog">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">팀 수정</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="modal-line">
+                                        <div class="mod-txt fl">팀명</div><input type="text" class="input-mod-name" ng-model="data.team_name" placeholder="{{teamname.team_name}}">
+                                    </div>
+                                    <ul>
+                                        <li class="sett-title-modal fl">팀 코드</li>
+                                        <li class="sett-title-modal fl">{{teamname.team_code}}</li>
+                                    </ul>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal" ng-click="change()">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-ul">
+                    <ul class="ul-sett-left" ><span ng-repeat="team in team_list">
+                        <li class="sett-title fl">팀 코드</li>
+                        <li class="sett-txt">{{team[1].team_code}}</li>
+                        <li class="sett-title fl">팀장</li>
+                        <li class="sett-txt">
+                            <span class="team-master">{{team[0].user_name}}</span>|
+                            <!--<span class="team-master">OOO</span>|-->
+                            <span class="team-master">{{team[0].tel}}</span>|
+                            <span class="team-master">{{team[0].email}}</span></li>
+                        </span>
+                        <li class="sett-title fl">총원</li>
+                        <li class="sett-txt" ng-repeat="won in won_list">{{won[0].total}}</li>
+                        <li class="sett-title fl">팀 생성일</li>
+                        <li class="sett-txt">{{teamname.create_date}}</li>
+                    </ul>
+                </div>
+                </div> <!--class="team-ul"-->
+
+
+                         <!--class="cont-box"-->
+        </div> <!--class="border-box profile-team"-->
+    </div>
+    <!--시스템 > 프로필-->
+    <div id="profile-system"  class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h1>지앤 클라우드 프라이빗</h1>
+
+                <div class="team-ul">
+                    <ul class="ul-sett-left">
+                        <li class="sett-title fl">버전</li>
+                        <li class="sett-txt">Ver.9 (Build 9.30.56)</li>
+                        <li class="sett-title fl">날짜</li>
+                        <li class="sett-txt">
+                            2016.12.27
+                        </li>
+                        <li class="sett-title fl">저작권</li>
+                        <li class="sett-txt">
+                            &copy;&nbsp;COPYRIGHT&nbsp;&nbsp;지앤클라우드
+                            &nbsp;&nbsp;ALL&nbsp;&nbsp;RIGHT&nbsp;&nbsp;RESERVED.
+                        </li>
+                        <li class="sett-title fl">홈페이지</li>
+                        <li class="sett-txt">
+                            <a href="http://www.gnclouds.com" class="gn-url">www.gnclouds.com</a>
+                        </li>
+                        <li class="sett-title fl">이메일</li>
+                        <li class="sett-txt">
+                            <a href="mailto:cnh@gnclouds.com" class="gn-url">cnh@gnclouds.com</a>
+                        </li>
+                    </ul>
+                </div> <!--class="team-ul"-->
+
+            </div> <!--class="cont-box"-->
+        </div> <!--class="border-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade"-->
+
+    <!--시스템 > 팀 관리-->
+    <div id="team-sett" class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h2>팀 관리</h2>
+
+                <!--팀 관리 목록-->
+                <div class="table-responsive table-reset">
+                    <table class="table table-striped">
+                        <thead>
+                        <!--<tr>
+                          <th class="th-team-sett-tit" align=center colspan=5>정보</th>
+                          <th class="th-team-sett-tit" align=center colspan=4>사용률</th>
+                        </tr>-->
+                        <tr>
+                            <th>팀명</th>
+                            <th>팀 코드</th>
+                            <th>팀장</th>
+                            <th>팀원</th>
+                            <th>생성일<div class="refresh"></div></th>
+                            <th class="cpu-per">CPU</th>
+                            <th class="mem-per">MEMORY</th>
+                            <th class="dis-per">DISK</th>
+                            <th><!--더보기--></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="select in table">
+                            <td class="td-style cnt">{{select.team_name}}</td>
+                            <td class="td-style cnt">{{select.team_code}}</td>
+                            <td class="td-style cnt">{{select.owner_name}}<br><span>({{select.owner_id}})</span></td>
+                            <td class="td-style cnt">
+                                <div class="name-tag-box clearfix">
+                                    <div class="team-name-box fl">
+                                        {{select.user_name}}
+                                        <br>
+                                        <span>({{select.user_id}})</span>
+                                    </div>
+                                    <div class="tag-box fl">
+                                        <span class="tag" data-toggle="tooltip" title="오윤아(ohh5) / 이기선(ik2)">+2</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{select.create_time_diff}}</p></td>
+                            <td class="td-style cnt">{{select.cpu_quota}}</td>
+                            <td class="td-style cnt">{{select.mem_quota}}</td>
+                            <td class="td-style cnt">{{select.disk_quota}}</td>
+                            <td class="td-style cnt dropdown td-more">
+                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    더보기
+                                    <span class="caret" ></span>
+                                </div>
+                                <!--더보기>드롭다운-->
+                                <ul class="dropdown-menu-table" role="menu">
+                                    <li><a href="#">상세보기</a></li>
+                                    <li><a href="#" class="btn-modal-delete">삭제</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div> <!--class="table-responsive table-reset"-->
+
+            </div> <!--class="cont-box"-->
+        </div> <!--class="border-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
+
+    <!--시스템 > 클러스터 관리-->
+    <div id="cluster-sett" class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h2>클러스터 관리
+
+                    <!--클러스터 등록 버튼-->
+                    <div class="clearfix fr">
+                        <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#cluster">등록</button>
+
+                        <!-- 클러스터 Modal -->
+                        <div class="modal fade" id="cluster" role="dialog">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">클러스터 등록</h4>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="label-box">
+                                            <label class="radio-inline mod-input-name"><input type="radio" name="optradio">Hyper-V</label>
+                                            <label class="radio-inline mod-input-name"><input type="radio" name="optradio">KVM</label>
+                                            <label class="radio-inline mod-input-name"><input type="radio" name="optradio">Docker</label>
+                                        </div>
+                                        <div class="modal-line clearfix">
+                                            <div class="mod-txt fl">엔드 포인트</div>
+                                            <input type="text" class="input-mod-name-ep" id="exampleInputPassword3" placeholder="192.168.0.30:9090">
+                                        </div>
+                                        <div class="modal-line clearfix">
+                                            <div class="mod-txt fl">노드</div>
+                                            <button type="submit" class="btn btn-primary ssh-create-key input-mod-btn">추가</button>
+                                            <input type="text" class="input-mod-name" id="exampleInputPassword3" placeholder="192.168.0.100">
+                                        </div>
+                                        <!--추가된 노드-->
+                                        <select multiple class="form-control-clus fr">
+                                            <option>192.168.0.100</option>
+                                            <option>192.168.0.100</option>
+                                            <option>192.168.0.100</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal">저장</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!--클러스터 등록버튼 END-->
+
+                </h2>
+
+                <div class="table-responsive table-reset">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width:15%;">타입</th>
+                            <th style="width:25%;">엔드 포인트</th>
+                            <th style="width:25%;">노드</th>
+                            <th style="width:15%;">생성일<div class="refresh"></div></th>
+                            <th ><!--더보기--></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="td-style cnt">KVM</td>
+                            <td class="td-style cnt">192.168.0.30:9090</td>
+                            <td class="td-style cnt">
+                                <span class="td-node">192.168.0.30</span>
+                                <span class="td-node">192.168.0.30</span>
+                                <span class="td-node">192.168.0.30</span>
+                                <span class="td-node">192.168.0.30</span>
+                            </td>
+                            <td class="td-style cnt">1일전</td>
+                            <td class="td-style cnt dropdown td-more">
+                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    더보기
+                                    <span class="caret" ></span>
+                                </div>
+                                <!--더보기>드롭다운-->
+                                <ul class="dropdown-menu-table" role="menu">
+                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                    <li><a href="#">수정</a></li>
+                                    <li><a href="#" class="btn-modal-delete">삭제</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div> <!--class="table-responsive table-reset"-->
+
+            </div> <!--class="cont-box"-->
+        </div> <!--class="border-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade"-->
+
+    <!--시스템 > 이미지 관리-->
+    <div id="image-sett" class="">
+        <div class="border-box profile-team">
+            <div class="cont-box pos-rel">
+                <h2>이미지 관리</h2>
+
+
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" class="" ng-click="imageset('machine')"><h2 class="h2-image-tab-system">가상머신</h2></a></li>
+                    <li><a data-toggle="tab" class="" ng-click="imageset('container')"><h2 class="h2-image-tab-system">컨테이너</h2></a></li>
+                </ul> <!-- class="nav nav-tabs"-->
+
+                <!--시스템 > 이미지 관리 > 가상머신/컨테이너-->
+                <div class="tab-content clearfix">
+
+                    <!--탭메뉴1 : 가상머신 -->
+                    <div id="machine" class="tab-pane fade in active marg-top29">
+
+                        <!--이미지 등록 버튼 > 가상머신-->
+                        <div class="btn-img-position clearfix fr">
+                            <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#image">등록</button>
+
+                            <!-- 이미지 Modal -->
+                            <div class="modal-sett fade" id="image" role="dialog">
+                                <div class="modal-dialog modal-img-inp">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">이미지 등록</h4>
+                                        </div>
+
+                                        <div class="cont-box-modal">
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">아이콘</div>
+                                                <div class="img-icon" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                    <span class="hov-img-txt">이미지 등록</span>
+                                                </div>
+                                                <!--더보기>드롭다운-->
+                                                <ul class="dropdown-img-icon" role="menu">
+                                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                                    <li><a href="#">이미지 변경</a></li>
+                                                    <li><a href="#" class="btn-modal-delete">이미지 삭제</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">타입</div>
+                                                <div class="img-label-box fr">
+                                                    <label class="radio-inline mod-img-name"><input type="radio" name="optradio">Hyper-V</label>
+                                                    <label class="radio-inline mod-img-name"><input type="radio" name="optradio">KVM</label>
+                                                </div>
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">OS</div>
+                                                <input type="text" class="img-mod-txt" id="exampleInputPassword3" placeholder="windows">
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">버전</div>
+                                                <input type="text" class="img-mod-txt" id="exampleInputPassword3" placeholder="10">
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">BIT</div>
+                                                <input type="text" class="img-mod-txt" id="exampleInputPassword3" placeholder="64">
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">PATH</div>
+                                                <button type="submit" class="btn btn-primary ssh-create-key input-mod-btn">업로드</button>
+                                                <input type="text" class="img-mod-name" id="exampleInputPassword3" placeholder="/data/images/windows/windows_10_pro_x86.vhdx">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal">저장</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!--이미지 등록버튼 END-->
+
+                        <div class="table-responsive table-reset">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>OS</th>
+                                    <th>버전</th>
+                                    <th>BIT</th>
+                                    <th>타입</th>
+                                    <th>PATH</th>
+                                    <th>생성일<div class="refresh"></div></th>
+                                    <th><!--더보기--></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="path in paths">
+                                    <td class="td-style cnt">
+                                        <img src="gn_images/image_container_windows_icon.png" alt="">
+                                        {{path.os}}
+                                    </td>
+                                    <td class="td-style cnt">{{path.os}}{{path.os_ver}}</td>
+                                    <td class="td-style cnt">{{path.os_bit}}</td>
+                                    <td class="td-style cnt">{{path.type}}</td>
+                                    <td class="td-style cnt">{{path.image_path}}</td>
+                                    <td class="td-style cnt">{{path.create_time_diff}}</td>
+                                    <td class="td-style cnt dropdown td-more">
+                                        <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            더보기
+                                            <span class="caret" ></span>
+                                        </div>
+                                        <!--더보기>드롭다운-->
+                                        <ul class="dropdown-menu-table" role="menu">
+                                            <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                            <li><a href="#">수정</a></li>
+                                            <li><a href="#" class="btn-modal-delete">삭제</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div> <!--class="table-responsive table-reset"-->
+
+                    </div> <!--id="image" class="tab-pane fade in active"-->
+
+
+                    <!--시스템 > 이미지 관리 > 탭메뉴2 : 컨테이너-->
+                    <div id="container" class="marg-top29">
+
+                        <!--이미지 등록 버튼 > 컨테이너-->
+                        <div class="btn-img-position clearfix fr">
+                            <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#img-cont">등록</button>
+
+                            <!-- 이미지 Modal -->
+                            <div class="modal-sett fade" id="img-cont" role="dialog">
+                                <div class="modal-dialog modal-img-inp">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">이미지 등록</h4>
+                                          <span class="img-info">
+                                              도커 이미지 정보는 <a href="">http://hub.docker.com/explore/</a>에서 확인 가능 합니다.
+                                              특히, EXPOSEPORT 를 확인하여야 도커 컨테이너와 부모 시스템 간에 맵핑을 할 수 있습니다.
+                                              HA Proxy에 세팅을 할 때, 부모 시스템의 빈 포트 중 랜덤하게 연결 할 수 있습니다.
+                                          </span>
+                                        </div>
+
+                                        <div class="cont-box-modal">
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">아이콘</div>
+                                                <div class="img-icon" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                    <span class="hov-img-txt">이미지 등록</span>
+                                                </div>
+                                                <!--더보기>드롭다운-->
+                                                <ul class="dropdown-img-icon-cont" role="menu">
+                                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                                    <li><a href="#">이미지 변경</a></li>
+                                                    <li><a href="#" class="btn-modal-delete">이미지 삭제</a></li>
+                                                </ul>
+                                            </div>
+                                            <br>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">이름</div>
+                                                <input type="text" class="img-mod-txt" id="exampleInputPassword3" placeholder="postgress">
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">버전</div>
+                                                <input type="text" class="img-mod-txt" id="exampleInputPassword3" placeholder="16.04.1">
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">태그</div>
+                                                <input type="text" class="img-mod-txt" id="exampleInputPassword3" placeholder="태그와 태그는 쉼표로 구분 됩니다.">
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">포트</div>
+                                                <textarea class="img-mod-txt txtarea-img" rows="3"></textarea>
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">환경변수</div>
+                                                <textarea class="img-mod-txt txtarea-img" rows="3"></textarea>
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">볼륨</div>
+                                                <textarea class="img-mod-txt txtarea-img" rows="3"></textarea>
+                                            </div>
+                                            <div class="modal-line clearfix">
+                                                <div class="mod-txt fl">설명</div>
+                                                <textarea class="img-mod-txt txtarea-img" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal">저장</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!--이미지 등록버튼 END-->
+
+                        <div class="table-responsive table-reset">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>이름</th>
+                                    <th>버전</th>
+                                    <th>태그</th>
+                                    <th>생성일<div class="refresh"></div></th>
+                                    <th><!--더보기--></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="contain in contain_list">
+                                    <td class="td-style cnt">
+                                        <img src="gn_images/image_container_postgress_icon.png" alt="">
+                                        {{contain.name}}
+                                    </td>
+                                    <td class="td-style cnt">9.3.6</td>
+                                    <td class="td-style cnt">{{}}</td>
+                                    <td class="td-style cnt">{{contain.create_time_diff}}</td>
+                                    <td class="td-style cnt dropdown td-more">
+                                        <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            더보기
+                                            <span class="caret" ></span>
+                                        </div>
+                                        <!--더보기>드롭다운-->
+                                        <ul class="dropdown-menu-table" role="menu">
+                                            <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                            <li><a href="#">수정</a></li>
+                                            <li><a href="#" class="btn-modal-delete">삭제</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div> <!--class="table-responsive table-reset"-->
+
+                    </div> <!--스냅샷-->
+                </div> <!--가상머신 class="tab-content clearfix"--><!--id="profile-team"  class="tab-pane fade"-->
+</div> <!--class="tab-content right-box fl" -->
+
+

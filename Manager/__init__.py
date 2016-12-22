@@ -10,7 +10,8 @@ from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put
+                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put, team_table \
+                            , pathimage
 from db.database import db_session
 
 app = Flask(__name__)
@@ -60,8 +61,8 @@ def guest_info_graph(id):
 
 @app.route('/vm/account', methods=['POST'])
 def login():
-    user_id = request.json['user_id']
-    password = request.json['password']
+    user_id = request.json['login_id']
+    password = request.json['login_pw']
     user_info = login_list(user_id, password)
     team_info = checkteam(user_id)
     if(user_info != None and team_info == None ):
@@ -188,7 +189,7 @@ def tea_list():
 
 @app.route('/vm/container/services', methods=['GET'])
 def container_list():
-    return jsonify(status=True, message="success", list=container())
+    return jsonify(status=True, message="success", list=container(db_session))
 
 
 @app.route('/vm/account/teamset',methods=['GET'])
@@ -259,6 +260,13 @@ def changeteamname():
     team_name = request.json['team_name']
     return jsonify(status=True, message="success", list=select_put(team_name,session['teamCode']))
 
+@app.route('/vm/account/teamtable', methods=['GET'])
+def teamshow():
+    return jsonify(status=True, message="success", list=team_table(db_session))
+
+@app.route('/vm/systems/path', methods=['GET'])
+def systembase():
+    return jsonify(status=True, message="success", list=pathimage(db_session))
 #### rest end ####
 
 
@@ -266,10 +274,11 @@ if __name__ == '__main__':
 
     # 로그 설정
     formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
-    handler = RotatingFileHandler('manager.log', maxBytes=2000000, backupCount=5)
+    handler = RotatingFileHandler('./manager.log', maxBytes=2000000, backupCount=5)
     handler.setFormatter(formatter)
     handler.setLevel(logging.WARNING)
+    app.logger.addHandler(handler)
 
-    app.run(port=8080)
+    app.run(port=8081)
     #http_server = WSGIServer(('', 8080), app)
     #http_server.serve_forever()

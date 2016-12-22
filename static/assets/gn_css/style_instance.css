@@ -1,4 +1,3 @@
-
 /*지앤클라우드 프라이빗 인스턴스 스타일시트*/
 /*나눔바른고딕 폰트*/
 @import url(nanumbarungothic.css);
@@ -8,19 +7,19 @@ body{margin: 0; padding: 0; border: 0; overflow-y: scroll font-family: 'Nanum Ba
 h1{margin: 0; margin-bottom: 55px; line-height: 1;}
 h2{margin: 0; margin-bottom: 20px; line-height: 1;}
 h3{margin: 0; line-height: 1;}
-h4{margin: 0; line-height: 1;}
+h4{margin: 0; line-height: 1;} 
 h5{margin: 0; line-height: 1;}
 h6{margin: 0; line-height: 1;}
 
 img{border: 0;}
 *:focus {
-    outline: none !important;
+     outline: none !important;
 }
 a:hover,
 a:focus {
-    outline: 0;
-    outline: 0 -webkit-focus-ring-color;
-    outline-offset: 0;
+  outline: 0;
+  outline: 0 -webkit-focus-ring-color;
+  outline-offset: 0;
     text-decoration: none;
     color: #505050;
 }
@@ -51,42 +50,42 @@ a:focus {
 ul,
 ol {
     padding: 0;
-    margin-top: 0;
-    margin-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 ul ul,
 ol ul,
 ul ol,
 ol ol {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 .list-unstyled {
-    padding-left: 0;
-    list-style: none;
+  padding-left: 0;
+  list-style: none;
 }
 .list-inline {
-    padding-left: 0;
-    margin-left: -5px;
-    list-style: none;
+  padding-left: 0;
+  margin-left: -5px;
+  list-style: none;
 }
 .list-inline > li {
-    display: inline-block;
-    padding-right: 5px;
-    padding-left: 5px;
+  display: inline-block;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 dl {
-    margin-top: 0;
-    margin-bottom: 20px;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 dt,
 dd {
-    line-height: 1.42857143;
+  line-height: 1.42857143;
 }
 dt {
-    font-weight: bold;
+  font-weight: bold;
 }
 dd {
-    margin-left: 0;
+  margin-left: 0;
 }
 li{list-style: none;}
 
@@ -100,8 +99,8 @@ a.navbar-brand{
     margin-top: 17px;
 }
 a.navbar-brand img{
-    width:209px;
-    height: 39px;
+    width:209px; 
+    height: 39px; 
 }
 
 .navbar-nav{
@@ -116,7 +115,7 @@ a.navbar-brand img{
 
 .navbar-nav li.h4-menu{
     width: 65px;
-    height: 35px;
+	height: 35px;
     text-align: center;
     margin-left: 85px;
     margin-top: 40px;
@@ -143,18 +142,18 @@ a.navbar-brand img{
 }
 
 
-.navbar-default .navbar-nav>.active>a,
-.navbar-default .navbar-nav>.active>a:focus,
+.navbar-default .navbar-nav>.active>a, 
+.navbar-default .navbar-nav>.active>a:focus, 
 .navbar-default .navbar-nav>.active>a:hover{
     color: #58c4c6;
     background-color: transparent;
     -webkit-transition: all .8s ease-in-out;
     -o-transition: all .8s ease-in-out;
-    transition: all .8s ease-in-out;
+    transition: all .8s ease-in-out;    
 }
 
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a, 
+.nav-tabs > li.active > a:hover, 
 .nav-tabs > li.active > a:focus {
     color: #555;
     cursor: pointer;
@@ -163,7 +162,7 @@ a.navbar-brand img{
     border-bottom: 2px solid #58c4c6;
 }
 
-.nav>li>a:focus,
+.nav>li>a:focus, 
 .nav>li>a:hover {
     text-decoration: none;
     background-color: #ffffff;
@@ -184,9 +183,9 @@ ul li.h4-menu a{
 }
 
 .click{
-    color: #58c4c6 !important;
+    color: #58c4c6 !important; 
     cursor: pointer;
-    font-weight: normal;
+    font-weight: normal;   
 }
 
 /*.click:hover{
@@ -204,17 +203,17 @@ ul li.h4-menu a{
 /*HEADER 오른쪽*/
 /*인스턴스 생성 버튼*/
 .navbar-right li.create-btn{
-    margin-top: 20px;
+    margin-top: 20px;    
 }
 
-button.creat-instance{
+button.creat-instance{ 
     width: 190px;
-    height: 46px;
+	height: 46px;
 }
 
-button.creat-instance-big{
+button.creat-instance-big{ 
     width: 100%;
-    height: 80px;
+	height: 80px;
     margin-bottom: 100px;
 }
 
@@ -263,11 +262,11 @@ button.creat-instance-big{
 .form-password{
     width: 100%;
     padding-top:  30px;
-
+    
 }
 
 .form-password > .form-password-name{
-    display: block;
+    display: block;    
     color: #7d7d7d;
     padding: 7px 0;
     margin-right: 10px;
@@ -275,12 +274,12 @@ button.creat-instance-big{
 }
 
 .dropdown-header {
-    display: block;
-    padding: 3px 20px;
-    font-size: 12px;
-    line-height: 1.42857143;
-    color: #777;
-    white-space: nowrap;
+  display: block;
+  padding: 3px 20px;
+  font-size: 12px;
+  line-height: 1.42857143;
+  color: #777;
+  white-space: nowrap;
 }
 
 .dropdown-menu {
@@ -306,12 +305,12 @@ button.creat-instance-big{
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 
-.navbar-default .navbar-nav>.open>a,
-.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a, 
+.navbar-default .navbar-nav>.open>a:focus, 
 .navbar-default .navbar-nav>.open>a:hover {
     color: #505050;
     background-color: transparent;
-
+    
 }
 
 .navbar-nav > li > .dropdown-menu {
@@ -340,13 +339,13 @@ button.creat-instance-big{
 
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
-    color: #58c4c6;
-    text-decoration: none;
+  color: #58c4c6;
+  text-decoration: none;
     -webkit-transition: all .3s ease;
     -moz-transition: all .3s ease;
     -ms-transition: all .3s ease;
     -o-transition: all .3s ease;
-    transition: all .3s ease;
+    transition: all .3s ease; 
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
@@ -360,7 +359,7 @@ button.creat-instance-big{
 }
 
 .open > .dropdown-menu {
-    display: block;
+  display: block;
     /*overflow: visible;*/
 }
 
@@ -400,13 +399,13 @@ button.creat-instance-big{
 
 .dropdown-menu-table > li > a:hover,
 .dropdown-menu-table > li > a:focus {
-    color: #58c4c6;
-    text-decoration: none;
+  color: #58c4c6;
+  text-decoration: none;
     -webkit-transition: all .3s ease;
     -moz-transition: all .3s ease;
     -ms-transition: all .3s ease;
     -o-transition: all .3s ease;
-    transition: all .3s ease;
+    transition: all .3s ease; 
 }
 
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
@@ -423,52 +422,22 @@ button.creat-instance-big{
     -webkit-appearance: none;
     appearance: none;
     cursor: pointer;
-    float: right;
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    margin-left: 10px;
-    vertical-align: middle;
-    border: noncheckbox_arrow.png
-    cloud_icon.png
-    dash-container-icon.png
-    dash-cpu-circle.png
-    dash-dis-circle.png
-    dash-hyp-circle.png
-    dash-mac-circle.png
-    dash-mem-circle.png
-    dash-total-user.png
-    dd_arrow.png
-    detail_cpu_graph.png
-    detail_memory_graph.png
-    detail_tag_pencil.png
-    gncloud_private_header_logo.png
-    image_container_centos_icon.png
-    image_container_docker_icon.png
-    image_container_postgress_icon.png
-    image_container_ruby_icon.png
-    image_container_ubuntu_icon.png
-    image_container_windows_icon.png
-    instance_create_docker.png
-    instance_create_KVM.png
-    instance_create_windows-s.png
-    instance_create_windows.png
-    private_login_img.png
-    select_arrow.png
-    sett_team_cpu_graph.png
-    sett_team_dis_graph.png
-    sett_team_mem_graph.png
-    ubuntu_icon_cian.png
-    ubuntu_icon.pnge;
-    /*
-      border-top: 5px solid #00afb4;
-      border-right: 5px solid transparent;
-      border-left: 5px solid transparent;
-    */
+  float: right;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-left: 10px;
+  vertical-align: middle;
+    border: none;
+/*
+  border-top: 5px solid #00afb4;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+*/
 }
 
 .user-arrow{
-    margin-top: 49px;
+   margin-top: 49px;
     cursor: pointer;
 }
 
@@ -478,7 +447,7 @@ button.creat-instance-big{
     cursor: pointer;
     margin-left: 43px;
     width: 60px;
-    height: 35px;
+	height: 35px;
     margin-top: 52px;
 }
 
@@ -496,7 +465,7 @@ button.creat-instance-big{
 .tab-title{
     font-size: 16px;
     color: #6f6f6f;
-    padding: 5px 5px 5px 0px;
+    padding: 5px 5px 5px 0px; 
     display: block;
 }
 
@@ -542,25 +511,25 @@ div.border-bottom{
 /*btn*/
 
 .btn {
-    display: inline-block;
-    padding: 6px 12px;
-    margin-bottom: 0;
-    font-size: 18px;
-    font-weight: normal;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    border-radius: 3px;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
 }
 .btn:focus,
 .btn:active:focus,
@@ -568,45 +537,45 @@ div.border-bottom{
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
-    outline: thin dotted;
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
 }
 .btn:hover,
 .btn:focus,
 .btn.focus {
-    color: #333;
-    text-decoration: none;
+  color: #333;
+  text-decoration: none;
 }
 .btn:active,
 .btn.active {
-    background-image: none;
-    outline: 0;
-    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
-    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
 }
 .btn.disabled,
 .btn[disabled],
 fieldset[disabled] .btn {
-    pointer-events: none;
-    cursor: not-allowed;
-    filter: alpha(opacity=65);
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    opacity: .65;
+  pointer-events: none;
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  opacity: .65;
 }
 
 /* ========== 지앤클라우드 생성 버튼 'default' ========== */
 .btn-default {
-    color: #7d7d7d;
-    background-color: #fff;
-    border: 2px solid rgba(215,215,215,.5);
+  color: #7d7d7d;
+  background-color: #fff;
+  border: 2px solid rgba(215,215,215,.5);
 }
 
 .type-box{
     width: 135px;
-    height: 135px;
-    margin: 0px 10px 10px 0px;
+    height: 135px; 
+    margin: 0px 10px 10px 0px; 
 }
 
 .dropdown-toggle{
@@ -619,18 +588,18 @@ fieldset[disabled] .btn {
 .btn-default:active,
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
-    color: rgb(0,175,180);
-    background-color: rgba(247,252,252,.5);
-    border: 2px solid rgba(88,196,198, .5);
-    color: #7d7d7d;
-    background-color: rgba(215,215,215,.2);
-    border: 2px solid rgba(215,215,215,.5);
+  color: rgb(0,175,180);
+  background-color: rgba(247,252,252,.5);
+  border: 2px solid rgba(88,196,198, .5);
+  color: #7d7d7d;
+  background-color: rgba(215,215,215,.2);
+  border: 2px solid rgba(215,215,215,.5);    
 }
 .btn-default:active,
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
-    background-image: none;
-
+  background-image: none;
+    
 }
 .btn-default.disabled,
 .btn-default[disabled],
@@ -650,22 +619,22 @@ fieldset[disabled] .btn-default:active,
 .btn-default.disabled.active,
 .btn-default[disabled].active,
 fieldset[disabled] .btn-default.active {
-    color: #00afb4;
-    background-color: rgba(247,252,252,.5);
-    border-color: #58c4c6;
+  color: #00afb4;
+  background-color: rgba(247,252,252,.5);
+  border-color: #58c4c6;
 }
 .btn-default .badge {
-    color: #fff;
-    background-color: #333;
+  color: #fff;
+  background-color: #333;
 }
 
 /* ========== 지앤클라우드 서브 버튼 'primary' ========== */
 .btn-primary {
-    color: #7d7d7d;
+  color: #7d7d7d;
     font-size: 14px;
     font-weight: normal;
-    background-color: rgba(215,215,215,.5);
-    /*  border-color: #2e6da4;*/
+  background-color: rgba(215,215,215,.5);
+/*  border-color: #2e6da4;*/
 }
 
 
@@ -676,20 +645,20 @@ fieldset[disabled] .btn-default.active {
 .btn-primary:active,
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
-    color: #6f6f6f;
-    background-color: rgba(215,215,215,1);
+  color: #6f6f6f;
+  background-color: rgba(215,215,215,1);
     -webkit-transition: all .3s ease;
     -moz-transition: all .3s ease;
     -ms-transition: all .3s ease;
     -o-transition: all .3s ease;
-    transition: all .3s ease;
-
-    border-color: rgba(215,215,215,1);
+    transition: all .3s ease;    
+    
+  border-color: rgba(215,215,215,1);
 }
 .btn-primary:active,
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
-    background-image: none;
+  background-image: none;
 }
 .btn-primary.disabled,
 .btn-primary[disabled],
@@ -709,16 +678,16 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-    background-color: #337ab7;
-    border-color: #2e6da4;
+  background-color: #337ab7;
+  border-color: #2e6da4;
 }
 .btn-primary .badge {
-    color: #337ab7;
-    background-color: #fff;
+  color: #337ab7;
+  background-color: #fff;
 }
 .btn-success {
-    color: #fff;
-    background-color: #15cd72;
+  color: #fff;
+  background-color: #15cd72;
 }
 .btn-success:hover,
 .btn-success:focus,
@@ -726,13 +695,13 @@ fieldset[disabled] .btn-primary.active {
 .btn-success:active,
 .btn-success.active,
 .open > .dropdown-toggle.btn-success {
-    color: #fff;
-    background-color: #00a252;
+  color: #fff;
+  background-color: #00a252;
 }
 .btn-success:active,
 .btn-success.active,
 .open > .dropdown-toggle.btn-success {
-    background-image: none;
+  background-image: none;
 }
 .btn-success.disabled,
 .btn-success[disabled],
@@ -752,11 +721,11 @@ fieldset[disabled] .btn-success:active,
 .btn-success.disabled.active,
 .btn-success[disabled].active,
 fieldset[disabled] .btn-success.active {
-    background-color: #15cd72;
+  background-color: #15cd72;
 }
 .btn-success .badge {
-    color: #5cb85c;
-    background-color: #fff;
+  color: #5cb85c;
+  background-color: #fff;
 }
 
 .type-box div.img-box{
@@ -814,38 +783,38 @@ input.inp-box{
 }*/
 
 .buttons > label.label-box{
-    padding: 12px 12px;
-    margin-bottom: 0;
-    font-size: 18px;
-    font-weight: normal;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-
-    display:block;
-    float:left;
-    width:135px;
-    height:135px;
-    text-align:center;
-    box-sizing:border-box;
-    border: 2px solid rgba(215,215,215,.5);
+  padding: 12px 12px;
+  margin-bottom: 0;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+    
+    display:block; 
+    float:left; 
+    width:135px; 
+    height:135px; 
+    text-align:center; 
+    box-sizing:border-box; 
+    border: 2px solid rgba(215,215,215,.5); 
     border-radius: 3px;
-    background-color: #ffffff;
+    background-color: #ffffff; 
     color: #6f6f6f;
     width: 135px;
     height: 135px;
-    margin: 0px 10px 10px 0px;
-
+    margin: 0px 10px 10px 0px; 
+    
 }
 
 .buttons > label > img.img-icon{
@@ -853,9 +822,9 @@ input.inp-box{
 }
 
 .buttons > label:hover{
-    color: #7d7d7d;
-    background-color: rgba(215,215,215,.2);
-    border: 2px solid rgba(215,215,215,.5);
+  color: #7d7d7d;
+  background-color: rgba(215,215,215,.2);
+  border: 2px solid rgba(215,215,215,.5);      
 }
 
 
@@ -895,7 +864,7 @@ input:nth-of-type(5):checked~ .buttons >label:nth-of-type(5){
 
 .create-tab{
     width: 100%;
-
+    
 }
 
 /*인스턴스 생성페이지 > 스냅샷 */
@@ -911,7 +880,7 @@ div.snap-box{
 .snap-name:hover{
     border: 2px solid rgba(88,196,198,.5);
     background-color: rgba(88,196,198,.1);
-    color: rgba(88,196,198,1);
+    color: rgba(88,196,198,1);   
 }
 
 .snap-name:nth-child(1){
@@ -952,15 +921,15 @@ button.snap-name:nth-child(9){
     margin-bottom: 10px;
 }
 
-p.ellipsis{
-    white-space: nowrap;
-    overflow: hidden;
+p.ellipsis{   
+    white-space: nowrap; 
+    overflow: hidden; 
     text-overflow: ellipsis;
 }
 
 img.elli-img-icon{
     margin-right: 10px;
-
+    
 }
 
 /*----*/
@@ -974,7 +943,7 @@ input.input-ssh-name{
 }
 th{
     font-size: 16px;
-    color: #6f6f6f;
+    color: #6f6f6f;        
 }
 
 td.td-style{
@@ -1008,117 +977,117 @@ img.img-icon{
     display: block;
     margin: auto;
     margin-bottom: 5px;
-
+    
 }
 
 /*tooltip*/
 
 .tooltip {
-    position: absolute;
-    z-index: 1070;
-    display: block;
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1.4;
-    visibility: visible;
-    filter: alpha(opacity=0);
-    opacity: 0;
+  position: absolute;
+  z-index: 1070;
+  display: block;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.4;
+  visibility: visible;
+  filter: alpha(opacity=0);
+  opacity: 0;
 }
 .tooltip.in {
-    filter: alpha(opacity=90);
-    opacity: .9;
+  filter: alpha(opacity=90);
+  opacity: .9;
 }
 .tooltip.top {
-    padding: 5px 0;
-    margin-top: -3px;
+  padding: 5px 0;
+  margin-top: -3px;
 }
 .tooltip.right {
-    padding: 0 5px;
-    margin-left: 3px;
+  padding: 0 5px;
+  margin-left: 3px;
 }
 .tooltip.bottom {
-    padding: 5px 0;
-    margin-top: 3px;
+  padding: 5px 0;
+  margin-top: 3px;
 }
 .tooltip.left {
-    padding: 0 5px;
-    margin-left: -3px;
+  padding: 0 5px;
+  margin-left: -3px;
 }
 .tooltip-inner {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-    max-height: 50px;
-    padding: 5px 10px;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    background-color: #6f6f6f;
-    border-radius: 3px;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;    
+  max-width: 200px;
+  max-height: 50px;
+  padding: 5px 10px;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  background-color: #6f6f6f;
+  border-radius: 3px;
 }
 .tooltip-arrow {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-color: transparent;
-    border-style: solid;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
 }
 .tooltip.top .tooltip-arrow {
-    bottom: 0;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px 5px 0;
-    border-top-color: #6f6f6f;
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #6f6f6f;
 }
 .tooltip.top-left .tooltip-arrow {
-    right: 5px;
-    bottom: 0;
-    margin-bottom: -5px;
-    border-width: 5px 5px 0;
-    border-top-color: #6f6f6f;
+  right: 5px;
+  bottom: 0;
+  margin-bottom: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #6f6f6f;
 }
 .tooltip.top-right .tooltip-arrow {
-    bottom: 0;
-    left: 5px;
-    margin-bottom: -5px;
-    border-width: 5px 5px 0;
-    border-top-color: #6f6f6f;
+  bottom: 0;
+  left: 5px;
+  margin-bottom: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #6f6f6f;
 }
 .tooltip.right .tooltip-arrow {
-    top: 50%;
-    left: 0;
-    margin-top: -5px;
-    border-width: 5px 5px 5px 0;
-    border-right-color: #6f6f6f;
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  border-width: 5px 5px 5px 0;
+  border-right-color: #6f6f6f;
 }
 .tooltip.left .tooltip-arrow {
-    top: 50%;
-    right: 0;
-    margin-top: -5px;
-    border-width: 5px 0 5px 5px;
-    border-left-color: #6f6f6f;
+  top: 50%;
+  right: 0;
+  margin-top: -5px;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #6f6f6f;
 }
 .tooltip.bottom .tooltip-arrow {
-    top: 0;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 0 5px 5px;
-    border-bottom-color: #6f6f6f;
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #6f6f6f;
 }
 .tooltip.bottom-left .tooltip-arrow {
-    top: 0;
-    right: 5px;
-    margin-top: -5px;
-    border-width: 0 5px 5px;
-    border-bottom-color: #6f6f6f;
+  top: 0;
+  right: 5px;
+  margin-top: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #6f6f6f;
 }
 .tooltip.bottom-right .tooltip-arrow {
-    top: 0;
-    left: 5px;
-    margin-top: -5px;
-    border-width: 0 5px 5px;
-    border-bottom-color: #6f6f6f;
+  top: 0;
+  left: 5px;
+  margin-top: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #6f6f6f;
 }
 
 
@@ -1139,7 +1108,7 @@ h1.h1_regular{
     margin-bottom: 0px;
     color: #505050;
     font-weight: normal;
-    font-size: 30px;
+    font-size: 30px;    
 }
 
 span.detail-h1-name{
@@ -1150,13 +1119,13 @@ span.detail-h1-name{
 ul.li-style > li{
     list-style: none;
     float: left;
-}
+} 
 
 div.detail-spec{
     /*width: 100%;*/
     display: inline-block;
     margin-left: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 15px;    
 }
 
 .spec-group{
@@ -1172,7 +1141,7 @@ div.detail-spec>ul>li{
 div.detail-tag{
     /*width: 100%;*/
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 10px; 
 
 }
 
@@ -1186,7 +1155,7 @@ ul.tag-group>li{
     font-weight: 300;
     color : #58c4c6;
     background-color: rgba(238,238,238,.5);
-    border-radius: 3px;
+    border-radius: 3px; 
     padding: 3px;
     margin: 0px 5px;
 }
@@ -1204,39 +1173,39 @@ div.detail-cpu{
     width: 94%;
     margin: auto;
     margin-top: 70px;
-    margin-bottom: 100px;
+   margin-bottom: 100px; 
 }
 
 .cpu-graph{
-    width: 80%;
+    width: 80%;    
 }
 .cpu-graph img{
-    width: 100%;
+    width: 100%;    
 } /*추후 이미지 대신 그래프로 교체되면 img대신 지정할 것*/
 
 div.detail-memory{
     width: 94%;
-    margin: auto;
+    margin: auto;    
     margin-bottom: 100px;
 }
 
 .memory-graph{
-    width: 80%;
+    width: 80%;    
 }
 
 .memory-graph img{
-    width: 100%;
+    width: 100%;    
 } /*추후 이미지 대신 그래프로 교체되면 img대신 지정할 것*/
 
 div.detail-disk{
     width: 94%;
-    margin: auto;
+    margin: auto;    
     margin-bottom: 70px;
 }
 
 /*DISK 막대 그래프*/
 div.disk-right-box{
-    width: 80%;
+    width: 80%; 
 }
 
 .disk-graph{
@@ -1246,7 +1215,7 @@ div.disk-right-box{
 
 .marg-bot10{
     display: inline-block;
-    margin-bottom: 10px;
+    margin-bottom: 10px;    
 }
 
 .progress{
@@ -1277,7 +1246,7 @@ div.disk-right-box{
 }
 
 .detail-empty-box{
-    line-height: 20px;
+    line-height: 20px;   
 }
 
 .empty-box-sm{
@@ -1297,7 +1266,7 @@ div.detail-delete{
     width: 94%;
     margin: auto;
     margin-top: 50px;
-    margin-bottom: 50px;
+   margin-bottom: 50px;     
 }
 
 /*삭제버튼*/
@@ -1314,7 +1283,7 @@ div.detail-delete{
     background-color: #ffffff;
     color: #E60202;
     border: 1px solid #E60202;
-    border-radius: 3px;
+    border-radius: 3px; 
 }
 
 .btn-link:hover,
@@ -1326,10 +1295,10 @@ div.detail-delete{
     -moz-transition: all .3s ease;
     -ms-transition: all .3s ease;
     -o-transition: all .3s ease;
-    transition: all .3s ease;
+    transition: all .3s ease;    
     color: #E60202;
     border: 1px solid #E60202;
-    border-radius: 3px;
+    border-radius: 3px; 
     text-decoration: none;
 }
 
@@ -1338,7 +1307,7 @@ div.detail-delete{
     background-color: #ffffff;
     color: #E60202;
     border: 1px solid #E60202;
-    border-radius: 3px;
+    border-radius: 3px; 
 }
 
 
@@ -1357,7 +1326,7 @@ li.active > a h2.h2-image-tab{
 
 /*h2 tab > box tab*/
 .small-tabs{
-    margin: 29px 0;
+    margin: 29px 0;       
 }
 
 a.tab-sm-box{
@@ -1369,7 +1338,7 @@ a.tab-sm-box{
     text-align: center;
     font-size: 16px;
     color: #6f6f6f;
-    padding: 5px;
+    padding: 5px; 
     display: block;
 }
 
@@ -1380,7 +1349,7 @@ a.tab-sm-box:hover{
 li.active > .tab-sm-box{
     font-size: 16px;
     color: #ffffff;
-    background-color: #58c4c6 !important;
+    background-color: #58c4c6 !important; 
     border: 1px solid #58c4c6 !important;
 }
 
@@ -1393,7 +1362,7 @@ li.active > .tab-title{
 
 /*이미지 > 가상머신 > 스냅샷*/
 .snap-sel{
-    margin-bottom: 30px;
+    margin-bottom: 30px;    
 }
 
 
@@ -1445,11 +1414,11 @@ select {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-
-    -webkit-appearance: none; /* 네이티브 외형 감추기 */
-    -moz-appearance: none;
-    appearance: none;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s; 
+    
+  -webkit-appearance: none; /* 네이티브 외형 감추기 */
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .snap-key{
@@ -1461,7 +1430,7 @@ select {
 /*이미지 > 컨테이너 > 목록*/
 
 .marg-top29{
-    margin-top: 29px;
+    margin-top: 29px;    
 }
 
 /*container width box*/
@@ -1471,10 +1440,10 @@ select {
 }
 
 
-.refresh{
+.refresh{ 
 
     cursor: pointer;
-    display: inline-block;
+display: inline-block;
     width: 0;
     height: 0;
     margin-left: 2px;
@@ -1497,7 +1466,7 @@ select {
     width: 100%;
     font-weight: bold;
     font-size: 24px;
-    color: #505050;
+    color: #505050;  
     margin-bottom: 10px;
 }
 
@@ -1507,7 +1476,7 @@ select {
 
 .left-menu > li.left-name > a{
     display: block;
-    font-size: 20px;
+    font-size: 20px; 
     color: #6f6f6f;
     background-color: transparent;
     padding: 0;
@@ -1519,7 +1488,7 @@ select {
     background-color: transparent;
     -webkit-transition: all .2s ease-in-out;
     -o-transition: all .2s ease-in-out;
-    transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;    
 }
 
 .left-menu > li.active > a{
@@ -1529,7 +1498,7 @@ select {
 /*컨테이너 오른쪽 박스 영역*/
 .right-box{
     width : 85%;
-    /*border: 1px solid #aadd34;*/
+    /*border: 1px solid #aadd34;*/    
 }
 
 /*컨테이너 오른쪽 박스 공통*/
@@ -1537,7 +1506,7 @@ select {
     width: 10%;
     color: #6f6f6f;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 600; 
     padding: 2px 0;
 }
 
@@ -1602,23 +1571,23 @@ select {
 }
 
 .modal-header {
-    min-height: 16.42857143px;
-    padding: 15px;
-    border-bottom: none;
+  min-height: 16.42857143px;
+  padding: 15px;
+  border-bottom: none;
 }
 
 .modal-header .close {
-    margin-top: -2px;
+  margin-top: -2px;
 }
 
 .cont-box-modal{
     margin: 5px auto 20px auto;
-    width: 90%;
-
+    width: 90%; 
+    
 }
 
 .modal-title{
-
+    
 }
 
 .cont-box-modal > ul{
@@ -1629,7 +1598,7 @@ select {
     width: 30%;
     color: #6f6f6f;
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 400; 
     padding: 4px 0;
 }
 .sett-txt-modal{
@@ -1647,7 +1616,7 @@ div.modal-line{
 div.mod-txt{
     color: #6f6f6f;
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 400; 
     height: 47px;
     line-height: 47px;
     margin-right: 10px;
@@ -1681,12 +1650,12 @@ input.input-mod-name-ep{
     font-size: 15px;
     font-weight:400;
     margin: 5px 0;
-    float: right;
+    float: right; 
     margin-left: 10px;
 }
 
 a.btn-modal-delete:hover{
-    color: #E60202 !important;
+    color: #E60202 !important;  
     font-weight: 600;
 }
 
@@ -1701,7 +1670,7 @@ a.btn-modal-delete:hover{
 
 /*프로필 팀 정보*/
 #profile > .profile-team{
-
+    
 }
 
 .team-ul{
@@ -1713,7 +1682,7 @@ a.btn-modal-delete:hover{
 }
 
 ul-sett-right{
-
+        
 }
 
 /*table-responsive에 들어간 padding-bottom : 100 px reset*/
@@ -1742,14 +1711,14 @@ ul.team-graph-mem{
 
 ul.team-graph-dis{
     width: 33%;
-    height: auto;
+    height: auto;  
 }
 
 /*그래프*/
 .sett-title-graph{
     color: #6f6f6f;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 600; 
     padding: 2px 0;
     text-align: center;
     display: block;
@@ -1758,7 +1727,7 @@ ul.team-graph-dis{
 /*팀 > 프로필 > 그래프 이미지 -> 차트.js로 교체*/
 .team-graph-box{
     text-align: center;
-    display: block;
+    display: block; 
     margin: 15px auto;
 }
 
@@ -1777,11 +1746,11 @@ ul.team-graph-dis{
     font-weight: 300;
     padding: 2px 0;
     text-align: center;
-    display: block;
+    display: block;    
 }
 
 .cpu-per{
-    color: #FFA716;
+   color: #FFA716; 
 }
 
 .mem-per{
@@ -1966,7 +1935,7 @@ select.form-control-clus{
     color: #505050;
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;    
 }
 
 .open > .dropdown-img-icon-cont,
@@ -1995,7 +1964,7 @@ select.form-control-clus{
     border-radius: 3px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    /* overflow: visible; */
+    /* overflow: visible; */    
 }
 
 .dropdown-img-icon-cont{
@@ -2019,7 +1988,7 @@ select.form-control-clus{
     border-radius: 3px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-    /* overflow: visible; */
+    /* overflow: visible; */    
 }
 
 .dropdown-img-icon-cont > li > a,
@@ -2166,27 +2135,27 @@ label.label-id{
 
 /* 지앤클라우드 체크박스 스타일*/
 .btn-id{
-    position:relative;
-    margin-top:10px;
-    text-align:left;
-    cursor:pointer;
+    position:relative; 
+    margin-top:10px; 
+    text-align:left; 
+    cursor:pointer; 
     overflow:hidden;
 
 }
 .btn-id input.form-inputPop {
-    position:absolute;
-    top:0;
-    left:0;
-    opacity:0;
-    cursor:pointer;
+    position:absolute; 
+    top:0; 
+    left:0; 
+    opacity:0; 
+    cursor:pointer; 
     z-index:5;
 }
 
 .btn-id i {
-    float:left;
+    float:left; 
     display:block;
-    width:18px;
-    height:18px;
+    width:18px; 
+    height:18px; 
     background:url(../gn_images/checkbox_arrow.png)no-repeat left top;
     z-index:3;
 }
@@ -2200,26 +2169,26 @@ label.label-id{
 .error-message{
     width: 100%;
     height: 20px;
-    float:left;
+    float:left; 
     /*margin-left:10px;*/
-    font-size:12px;
+    font-size:12px; 
     text-align: left;
-    font-weight: 400;
+    font-weight: 400; 
     color: #E60202;
-    /* margin-top: 10px;
-     margin-bottom: 10px;*/
+   /* margin-top: 10px; 
+    margin-bottom: 10px;*/
 }
 
 .log-join-btn{
     width: 100%;
     height: 20px;
-    float:left;
-    font-size:12px;
+    float:left; 
+    font-size:12px; 
     text-align: center;
-    font-weight: 400;
+    font-weight: 400; 
     color: #58c4c6;
     margin-top: 10px;
-
+    
 }
 
 a.log-join-btn:hover,
@@ -2234,9 +2203,9 @@ a.log-join-btn:focus{
 
 /*지앤클라우드 로그인버튼 <btn-info> STYLE*/
 .btn-info {
-    color: #fff;
-    background-color: #58c4c6;
-    border-color: #58c4c6;
+  color: #fff;
+  background-color: #58c4c6;
+  border-color: #58c4c6;
 }
 .btn-info:hover,
 .btn-info:focus,
@@ -2244,14 +2213,14 @@ a.log-join-btn:focus{
 .btn-info:active,
 .btn-info.active,
 .open > .dropdown-toggle.btn-info {
-    color: #fff;
-    background-color: #58c4c6;
-    border-color: #58c4c6;
+  color: #fff;
+  background-color: #58c4c6;
+  border-color: #58c4c6;
 }
 .btn-info:active,
 .btn-info.active,
 .open > .dropdown-toggle.btn-info {
-    background-image: none;
+  background-image: none;
 }
 .btn-info.disabled,
 .btn-info[disabled],
@@ -2271,19 +2240,19 @@ fieldset[disabled] .btn-info:active,
 .btn-info.disabled.active,
 .btn-info[disabled].active,
 fieldset[disabled] .btn-info.active {
-    background-color: #58c4c6;
-    border-color: #58c4c6;
+  background-color: #58c4c6;
+  border-color: #58c4c6;
 }
 .btn-info .badge {
-    color: #58c4c6;
-    background-color: #fff;
+  color: #58c4c6;
+  background-color: #fff;
 }
 
-.btn-info:hover,
-.btn-info:focus,
-.btn-info.focus,
-.btn-info:active,
-.btn-info.active,
+.btn-info:hover, 
+.btn-info:focus, 
+.btn-info.focus, 
+.btn-info:active, 
+.btn-info.active, 
 .open > .dropdown-toggle.btn-info {
     color: #fff;
     background-color: #00afb4;
@@ -2318,7 +2287,7 @@ fieldset[disabled] .btn-info.active {
 .begin-box{
     width: 37%;
     margin: auto;
-    margin-bottom: 100px;
+    margin-bottom: 100px;    
 }
 
 .begin-sel-box{
@@ -2342,7 +2311,7 @@ fieldset[disabled] .btn-info.active {
 
 .btn-begin{
     height: 40px;
-    width: 33%;
+    width: 33%; 
     color: #00AFB4;
     font-size: 16px;
 }
@@ -2442,13 +2411,13 @@ h2.h2-bold{
     font-weight: 400;
     color: #6f6f6f;
     margin-bottom: 5%;
-    /*    border-bottom: 1px solid rgba(215,215,215,.5); */
+/*    border-bottom: 1px solid rgba(215,215,215,.5); */
 }
 
 .dd-right-reso{
     font-size: 20px;
     font-weight: 400;
-    color: #6f6f6f;
+    color: #6f6f6f; 
     vertical-align: bottom;
 }
 
@@ -2503,11 +2472,11 @@ h2.h2-bold{
 /*박스 왼쪽*/
 
 .dd-left-cont{
-    width: 100%;
+    width: 100%;   
 }
 
 .cont-ul{
-    position: relative;
+position: relative;    
 }
 
 .dd-left-cont img{
@@ -2536,3 +2505,16 @@ h2.h2-bold{
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
