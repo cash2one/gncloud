@@ -76,7 +76,13 @@ button.creat-instance{
     cursor: pointer;
 }
 
-
+.user{
+    cursor: pointer;
+    margin-left: 20px;
+    width: 60px;
+	height: 19px;
+    padding: 5px
+}
 
 .td-first img{
     margin-right: 10px
