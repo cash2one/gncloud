@@ -15,7 +15,18 @@
 
 	- 1.12.4 버전
 
+    docker 1.12 버전 이상 설치
+    - /etc/yum.repos.d/docker.repo 편집
+        [dockerrepo]
+        name=Docker Repository
+        baseurl=https://yum.dockerproject.org/repo/main/centos/7/
+        enabled=1
+        gpgcheck=1
+        gpgkey=https://yum.dockerproject.org/gpg
 
+    - yum install docker-engine
+    - systemctl enable docker.service
+    - systemctl start docker.service 
 <span></span>
 2. controller
 -------------
