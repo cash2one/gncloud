@@ -13,17 +13,18 @@
 
 - docker 설치
 
-	- 1.12.4 버전
-
-    docker 1.12 버전 이상 설치
-    - /etc/yum.repos.d/docker.repo 편집
+    - docker 1.12 버전 이상 설치
+        
+        /etc/yum.repos.d/docker.repo 편집
+    ```
         [dockerrepo]
         name=Docker Repository
         baseurl=https://yum.dockerproject.org/repo/main/centos/7/
         enabled=1
         gpgcheck=1
         gpgkey=https://yum.dockerproject.org/gpg
-
+    ```
+    
     - yum install docker-engine
     - systemctl enable docker.service
     - systemctl start docker.service 
@@ -34,6 +35,20 @@
 - python 설치
 
 	- 2.7.12 버전 설치
+
+- pip 설치
+
+    - EPEL (Extra Packages for Enterprise Linux) : Fedora Project 에서 제공하는 저장소
+    
+    CentOS 7
+
+    ```
+    $ rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    ```
+
+    ```
+    $ yum install python-pip
+    ```
 
 - python package
 
@@ -101,15 +116,20 @@
 
     - /etc/docker-registry.yml 편집
 
-    	* line 19
+    	* line 19 docker registry가 사용할 DB에 sqlalchemy를 통해 접근
         ```
         search_backend: _env:SEARCH_BACKEND:sqlalchemy
         ```
 
-    	* line 21
+    	* line 21 sqlalchemy (sqlite) 에서 사용할 index 저장소 정의
 		```
     	sqlalchemy_index_database: _env:SQLALCHEMY_INDEX_DATABASE:
     	sqlite:////home/fastcat/docker-registry/docker-registry.db
+        ```
+
+        * line 74 local에 이미지를 저장할 폴더 지정
+        ```
+        storage_path: _env:STORAGE_PATH:/home/fastcat/docker-registry
         ```
 
     - 폴더 생성
@@ -119,7 +139,9 @@
 
     - /etc/sysconfig/docker-registry 편집
 
-    	* line 11
+    	* line 11 docker registry 포트 지정
         ```
         REGISTRY_PORT=5555
         ```
+    - systemctl enable docker-registry
+    - systemctl start docker-registry

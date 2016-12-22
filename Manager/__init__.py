@@ -277,9 +277,10 @@ if __name__ == '__main__':
 
     # 로그 설정
     formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
-    handler = RotatingFileHandler('manager.log', maxBytes=2000000, backupCount=5)
+    handler = RotatingFileHandler('./manager.log', maxBytes=2000000, backupCount=5)
     handler.setFormatter(formatter)
     handler.setLevel(logging.WARNING)
+    app.logger.addHandler(handler)
 
     app.run(port=8081)
     #http_server = WSGIServer(('', 8080), app)
