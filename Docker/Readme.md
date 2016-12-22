@@ -195,7 +195,7 @@
     sed -i 's/\/var\/lib\/docker-registry/\/home\/gncloud\/docker-registry/g' \
             /etc/docker-registry.yml
 
-    > /home/gncloud/docker-registry
+    mkdir /home/gncloud/docker-registry
     systemctl enable docker-registry
     systemctl start docker-registry
     ```
