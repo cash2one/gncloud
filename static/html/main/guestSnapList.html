@@ -33,7 +33,7 @@
                             <tbody>
                             <tr ng-repeat="base in base_list">
                                 <td class="td-style td-first" >
-                                    <img src="gn_images/image_container_windows_icon.png" alt="windows">
+                                    <img src="../../gn_images/image_container_{{base.os}}_icon.png" alt="windows">
                                     <a href="#">{{base.os}}</a>
                                 </td>
                                 <td class="td-style cnt">{{base.os_ver}}{{base.os_subver}}</td>
@@ -85,7 +85,7 @@
                                 <tbody>
                                 <tr ng-repeat="snap in snap_list">
                                     <td class="td-style td-first">
-                                        <img src="gn_images/image_container_ubuntu_icon.png" alt="postgres">
+                                        <img src="../../gn_images/image_container_{{snap.os}}_icon.png" alt="postgres">
                                         <a href="#">{{snap.name}}</a>
                                     </td>
                                     <td class="td-style cnt">{{snap.os}}{{snap.os_ver}}</td>
@@ -126,7 +126,7 @@
                     <tbody>
                     <tr ng-repeat="con in contain_list">
                         <td class="td-style td-first">
-                            <img src="gn_images/image_container_postgress_icon.png" alt="postgres">
+                            <img src="../../gn_images/image_container_postgress_icon.png" alt="postgres">
                             <a href="#">{{con.name}}</a>
                         </td>
                         <td class="td-style cnt">9.6.0</td>

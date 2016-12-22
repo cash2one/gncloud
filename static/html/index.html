@@ -35,7 +35,21 @@
                     headers: {'Content-Type': 'application/json; charset=utf-8'},
                     success:function(data) {
                         if (data.status == true) {
-                            location.href="/main/#/dashboard"
+                            if (data.test == 'yes') {
+                                alert(data.message);
+                                location.href="/main/#/dashboard"
+                            }else if(data.test =='no'){
+                                alert(data.message);
+                                location.href="/main/#/guestSelectTeam"
+                            }
+                            else if(data.status ==false) {
+                                alert(data.message);
+                                window.location.reload();
+                            }
+                            else if(data.test =='noyes') {
+                                alert(data.message);
+                                location.href="/main/#/guestReadyTeam"
+                            }
                         }else{
                             alert(data.message);
                         }
@@ -87,184 +101,7 @@
 <!-- --------- 로그인 container ----------END -->
 
 
-<!-- --------- 회원가입 페이지 ---------- -->
-<div class="log-body-gray">
-    <div class="container log">
-        <a href="login.html" class="logo-a">
-            <h1 class="log-logo">지앤클라우드 프라이빗</h1>
-            <img src="/gn_images/private_login_img.png" alt="지앤클라우드 프라이빗">
-        </a>
 
-        <div class="login-box">
-            <h2 class="log-h2">회원가입</h2>
-            <input type="text" class="inp-login" placeholder="이름을 입력해주세요.">
-            <input type="text" class="inp-login" placeholder="아이디를 입력해주세요.">
-            <input type="password" class="inp-login" placeholder="비밀번호를 입력해주세요.">
-            <input type="password" class="inp-login" placeholder="비밀번호를 다시 입력해주세요.">
-
-            <!--이미 등록된 아이디를 적었을 때 출력-->
-            <div class="error-message">이미 등록된 아이디입니다.</div>
-            <button type="submit" class="btn btn-info btn-block">회원가입</button>
-        </div> <!--class="login-box"-->
-
-    </div> <!-- 회원가입 container -->
-</div>
-<!-- --------- 회원가입 container ----------END -->
-
-
-<!-- --------- 로그인 초기 페이지 ---------- -->
-<div class="log-body-white">
-    <!-- HEADER -->
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <!--지앤클라우드 로고-->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#"><img src="/gn_images/gncloud_private_header_logo.png" alt="지앤클라우드 프라이빗 홈"></a>
-            </div> <!--class="navbar-header"-->
-            <div id="navbar" class="navbar-collapse collapse">
-                <!--왼쪽 메뉴-->
-                <!--<ul class="nav navbar-nav">
-                  <li class="h4 h4-menu"><a href="index_dashboard.html">대시보드</a></li>
-                  <li class="h4 h4-menu active"><a href="index_instance_list.html">인스턴스</a></li>
-                  <li class="h4 h4-menu"><a href="index_image.html">이미지</a></li>
-                </ul>--> <!--class="nav navbar-nav"-->
-                <!--오른쪽 메뉴-->
-                <ul class="nav navbar-nav navbar-right">
-                    <!--<li class="create-btn">
-                        <a href="index_instance_create.html">
-                             Indicates a successful or positive action
-                            <button type="submit" value="submit" class="btn btn-success creat-instance">인스턴스 생성</button>
-                        </a>
-                    </li>-->
-                    <li>
-                    <li class="dropdown">
-                        <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <a href="#" class="user h4" >홍길동 </a>
-                            <span class="caret user-arrow"></span>
-                        </div>
-                        <ul class="dropdown-menu" role="menu">
-                            <!--<li class="dropdown-header">Nav header</li>-->
-                            <li><a href="index_setting_user.html">개인설정</a></li>
-                            <li><a href="#">로그아웃</a></li>
-                        </ul>
-                    </li> <!--class="dropdown"-->
-                    </li>
-                </ul> <!--class="nav navbar-nav navbar-right"-->
-            </div><!--/.nav-collapse -->
-        </div> <!--class="container"-->
-    </nav> <!--class="navbar navbar-default navbar-fixed-top"-->
-    <!--HEADER END-->
-
-    <div class="container log">
-        <div class="log-begin-title">지앤 클라우드 프라이빗 서비스에 오신것을 환영 합니다.</div>
-        <div class="begin-box">
-            <span class="begin-box-title">계속해서 팀에 가입해주세요.</span>
-            <div class="begin-sel-box clearfix">
-                <span class="begin-team-name fl">팀</span>
-                <select class="begin-select fl">
-                    <option selected>선택</option>
-                    <option>연구1</option>
-                    <option>연구2</option>
-                    <option>연구3</option>
-                    <option>연구4</option>
-                </select>
-
-                <button type="submit" value="submit" class="btn btn-primary btn-begin fr">신청하기</button>
-            </div>
-            <span class="begin-box-title">나의 팀을 찾을 수 없나요? 관리자라면 <a href="" class="log-create-team">팀을 만들어</a> 주세요.</span>
-        </div> <!--class="login-box"-->
-
-    </div> <!-- 로그인 초기 container -->
-</div>
-<!-- --------- 로그인 초기 container ----------END -->
-
-<!-- --------- 가입 승인 대기 페이지 ---------- -->
-<div class="log-body-white">
-    <!-- HEADER -->
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <!--지앤클라우드 로고-->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index_instance.html"><img src="/gn_images/gncloud_private_header_logo.png" alt="지앤클라우드 프라이빗 홈"></a>
-            </div> <!--class="navbar-header"-->
-            <div id="navbar" class="navbar-collapse collapse">
-                <!--왼쪽 메뉴-->
-                <!--<ul class="nav navbar-nav">
-                  <li class="h4 h4-menu"><a href="index_dashboard.html">대시보드</a></li>
-                  <li class="h4 h4-menu active"><a href="index_instance_list.html">인스턴스</a></li>
-                  <li class="h4 h4-menu"><a href="index_image.html">이미지</a></li>
-                </ul>--> <!--class="nav navbar-nav"-->
-                <!--오른쪽 메뉴-->
-                <ul class="nav navbar-nav navbar-right">
-                    <!--<li class="create-btn">
-                        <a href="index_instance_create.html">
-                             Indicates a successful or positive action
-                            <button type="submit" value="submit" class="btn btn-success creat-instance">인스턴스 생성</button>
-                        </a>
-                    </li>-->
-                    <li>
-                    <li class="dropdown">
-                        <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <a href="#" class="user h4" >홍길동 </a>
-                            <span class="caret user-arrow"></span>
-                        </div>
-                        <ul class="dropdown-menu" role="menu">
-                            <!--<li class="dropdown-header">Nav header</li>-->
-                            <li><a href="index_setting_user.html">개인설정</a></li>
-                            <li><a href="#">로그아웃</a></li>
-                        </ul>
-                    </li> <!--class="dropdown"-->
-                    </li>
-                </ul> <!--class="nav navbar-nav navbar-right"-->
-            </div><!--/.nav-collapse -->
-        </div> <!--class="container"-->
-    </nav> <!--class="navbar navbar-default navbar-fixed-top"-->
-    <!--HEADER END-->
-
-    <div class="container log">
-        <div class="log-begin-title">
-            <strong>연구 1팀</strong>&nbsp;가입 승인 대기중 입니다.
-            <br>
-            <span class="begin-apply-title">신청일 2016-12-01</span>
-        </div>
-
-        <span class="begin-box-title">나의 팀을 찾을 수 없나요? 관리자라면 <a href="" class="log-delete-team">가입을 취소</a> 주세요.</span>
-    </div> <!-- 가입 승인 대기 container -->
-</div>
-<!-- --------- 가입 승인 대기  container ----------END -->
-
-
-<!-- --------- 팀 생성 페이지 ---------- -->
-<div class="log-body-gray">
-    <div class="container log">
-        <a href="index_login.html" class="logo-a">
-            <h1 class="log-logo">지앤클라우드 프라이빗</h1>
-            <img src="/gn_images/private_login_img.png" alt="지앤클라우드 프라이빗">
-        </a>
-
-        <div class="login-box">
-            <h2 class="log-h2">팀 만들기</h2>
-            <input type="text" class="inp-login" placeholder="팀명을 입력해주세요.">
-            <input type="text" class="inp-login" placeholder="팀 코드를 입력해주세요.">
-
-            <button type="submit" class="btn btn-info btn-block marg-20">팀 만들기</button>
-        </div> <!--class="login-box"-->
-
-    </div> <!-- 팀 생성 container -->
-</div> <!--class="log-body"-->
-<!-- --------- 팀 생성 container ----------END -->
 
 
 

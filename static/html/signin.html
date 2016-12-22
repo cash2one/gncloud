@@ -26,16 +26,16 @@
     <link rel="stylesheet" href="/gn_css/style_instance.css" />
     <script>
         $(document).ready(function() {
-            $('#login_btn').click(function() {
-                var formData = '{"login_id":"'+$("#login_id").val()+'","login_pw":"'+$("#login_pw").val()+'"}';
+            $('#sigin_btn').click(function() {
+                var formData = '{"user_name":"'+$("#user_name").val()+'","user_id":"'+$("#user_id").val()+'","password":"'+$("#password").val()+'","password_re":"'+$("#password_re").val()+'"}';
                 $.ajax({
                     type: "POST",
                     data: formData,
-                    url: '/api/manager/vm/account',
+                    url: '/api/manager/vm/account/users',
                     headers: {'Content-Type': 'application/json; charset=utf-8'},
                     success:function(data) {
                         if (data.status == true) {
-                            location.href="/main/#/dashboard"
+                            location.href="/index.html"
                         }else{
                             alert(data.message);
                         }
@@ -58,14 +58,14 @@
 
         <div class="login-box">
             <h2 class="log-h2">회원가입</h2>
-            <input type="text" class="inp-login" placeholder="이름을 입력해주세요.">
-            <input type="text" class="inp-login" placeholder="아이디를 입력해주세요.">
-            <input type="password" class="inp-login" placeholder="비밀번호를 입력해주세요.">
-            <input type="password" class="inp-login" placeholder="비밀번호를 다시 입력해주세요.">
+            <input type="text" class="inp-login" id="user_name" placeholder="이름을 입력해주세요.">
+            <input type="text" class="inp-login" id="user_id" placeholder="아이디를 입력해주세요.">
+            <input type="password" class="inp-login" id="password" placeholder="비밀번호를 입력해주세요.">
+            <input type="password" class="inp-login" id="password_re" placeholder="비밀번호를 다시 입력해주세요.">
 
             <!--이미 등록된 아이디를 적었을 때 출력-->
             <div class="error-message">이미 등록된 아이디입니다.</div>
-            <button type="submit" class="btn btn-info btn-block">회원가입</button>
+            <button type="submit" class="btn btn-info btn-block" id="sigin_btn">회원가입</button>
         </div> <!--class="login-box"-->
 
     </div> <!-- 회원가입 container -->
