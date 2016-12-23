@@ -10,7 +10,7 @@ from Manager.util.hash import random_string
 
 
 def vm_list(sql_session):
-    list = sql_session.query(GnVmMachines).order_by(GnVmMachines.create_time.desc()).all()
+    list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -146,12 +146,27 @@ def getQuotaOfTeam(team_code, sql_session):
     vm_docker_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "docker").one()
     team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
-    cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
-    memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
-    disk_per_info = [int((current_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info.sum_disk/limit_quota.disk_quota)*100))]
-    cpu_cnt_info = [int(current_info.sum_cpu), limit_quota.cpu_quota]
-    mem_cnt_info = [int(current_info.sum_mem), limit_quota.mem_quota]
-    disk_cnt_info = [int(current_info.sum_disk), limit_quota.disk_quota]
+    if current_info.sum_cpu is None:
+        cpu_per_info = [0,100]
+        cpu_cnt_info = [0,limit_quota.cpu_quota]
+    else:
+        cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
+        cpu_cnt_info = [int(current_info.sum_cpu), limit_quota.cpu_quota]
+
+    if current_info.sum_cpu is None:
+        memory_per_info = [0,100]
+        mem_cnt_info = [0, limit_quota.mem_quota]
+    else:
+        memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
+        mem_cnt_info = [int(current_info.sum_mem), limit_quota.mem_quota]
+
+    if current_info.sum_cpu is None:
+        disk_per_info = [0,100]
+        disk_cnt_info = [0, limit_quota.disk_quota]
+    else:
+        disk_per_info = [int((current_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info.sum_disk/limit_quota.disk_quota)*100))]
+        disk_cnt_info = [int(current_info.sum_disk), limit_quota.disk_quota]
+
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
     docker_info = vm_docker_count.count
