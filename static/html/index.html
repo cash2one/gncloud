@@ -22,8 +22,7 @@
     <!-- 합쳐지고 최소화된 최신 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <!-- css -->
-    <link rel="stylesheet" href="/gn_css/bootstrap.css" />
-    <link rel="stylesheet" href="/gn_css/style_instance.css" />
+    <link rel="stylesheet" href="/gn_css/bootstrap_gn_theme.css" />
     <script>
         $(document).ready(function() {
             $('#login_btn').click(function() {
@@ -70,8 +69,7 @@
             <img src="/gn_images/private_login_img.png" alt="지앤클라우드 프라이빗">
         </a>
 
-        <div class="login-box">
-            <form id="loginForm" method="post">
+        <div class="col-xs-4 col-xs-offset-4 login-box">
             <h2 class="log-h2">로그인</h2>
             <input type="text" name="login_id" id="login_id" class="inp-login" placeholder="아이디를 입력해주세요." value="yhkwak@gnclouds.com">
             <input type="password" name="login_pw" id="login_pw" class="inp-login" placeholder="비밀번호를 입력해주세요." value="11111111">
@@ -85,13 +83,12 @@
             <!--아이디, 비밀번호가 틀렸을 때 출력(아니라면 가려짐)-->
             <div class="error-message">아이디, 또는 비밀번호가 잘못되었습니다</div>
                 <input type="button" class="btn btn-info btn-block" id="login_btn" value="로그인"/>
-            </form>
             <!--처음이시면 회원가입을 해주세요 링크-->
             <a href="/signin.html" class="log-join-btn">처음이시면 회원가입을 해주세요</a>
         </div> <!--class="login-box"-->
 
 
-        <div class="footer-log">
+        <div class="col-ms-6 col-ms-offset-3 footer-log">
             가상머신 컨테이너 통합 클라우드 플랫폼 Ver 1.0<br>
             &copy; COPYRIGHT 지앤클라우드 ALL RIGHT RESERVED
         </div>

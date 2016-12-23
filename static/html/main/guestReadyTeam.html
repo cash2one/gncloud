@@ -6,10 +6,10 @@
             <div class="log-begin-title">
                 <strong>{{team_list.team_name}}</strong>&nbsp;가입 승인 대기중 입니다.
                 <br>
-                <span class="begin-apply-title" ng-repeat="list in sh_list">신청일 {{list.apply_date}}</span>
+                <span class="begin-apply-title">신청일 {{team_list.apply_date}}</span>
             </div>
 
-            <span class="begin-box-title">나의 팀을 찾을 수 없나요? 관리자라면 <a class="log-delete-team" ng-click="delete(list.user_id, team_list.team_code)">가입을 취소</a> 주세요.</span>
+            <span class="begin-box-title">나의 팀을 찾을 수 없나요? 관리자라면 <a class="log-delete-team" ng-click="delete(team_list.user_id, team_list.team_code)">가입을 취소</a> 주세요.</span>
         </div> <!-- 가입 승인 대기 container -->
     </div>
     <!-- --------- 가입 승인 대기  container ----------END -->

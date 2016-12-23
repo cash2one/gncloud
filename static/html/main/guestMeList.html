@@ -1,6 +1,6 @@
 <h1>설정</h1>
 <!--왼쪽 메뉴-->
-<ul class="nav nav-pills left-menu fl">
+<ul class="nav nav-pills col-sm-2">
     <li class="left-title">개인</li>
     <li class="left-name active"><a data-toggle="pill" ng-click="click('profile')">프로필</a></li>
     <li class="left-name"><a data-toggle="pill" ng-click="click('key-sett')">키 관리</a></li>
@@ -11,7 +11,7 @@
     <li class="left-name"><a data-toggle="pill" ng-click="click('team-group')">팀원</a></li>
 </ul>
 
-<div class="tab-content right-box fl">
+<div class="tab-content col-sm-10 ">
     <!--프로필-->
     <div id="profile" class="">
         <div class="border-box profile-user">
@@ -24,70 +24,128 @@
 
                         <!-- Modal -->
                         <div class="modal fade" id="myModal" role="dialog">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
+                            <div class="modal-dialog form-horizontal">
+                                <div class="modal-content col-sm-10 col-sm-offset-1">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                         <h4 class="modal-title">프로필 수정</h4>
                                     </div>
-                                    <div class="cont-box-modal">
-                                        <ul>
-                                            <li class="sett-title-modal fl">이름</li>
-                                            <li class="sett-txt-modal">{{te_list.user_name}}</li>
-                                            <li class="sett-title-modal fl">아이디</li>
-                                            <li class="sett-txt-modal">{{te_list.user_id}}</li>
-                                        </ul>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal">
+
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label jnt">이름</label>
+
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{te_list.user_name}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label jnt">아이디</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{te_list.user_id}}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="inputPassword" class="col-sm-4 control-label jnt">현재 비밀번호</label>
+                                                <div class="col-sm-8">
+                                                    <input type="password" class="form-control" ng-model="data.password" placeholder="Password">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputPassword" class="col-sm-3 control-label jnt">새 비밀번호</label>
+                                                <div class="col-sm-offset-1 col-sm-8">
+                                                    <input type="password" class="form-control" ing-model="data.password_new" placeholder="Password">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputPassword" class="col-sm-4 control-label jnt">새 비밀번호 확인</label>
+                                                <div class="col-sm-8">
+                                                    <input type="password" class="form-control" ng-model="data.password_re" placeholder="Password">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputPassword" class="col-sm-4 control-label jnt">연락처</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" ng-model="data.tel" placeholder="{{te_list.tel}}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputPassword" class="col-sm-4 control-label jnt">이메일</label>
+                                                <div class="col-sm-8">
+                                                    <input type="email" class="form-control" ng-model="data.email" placeholder="{{te_list.email}}">
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div> <!--modal-body-->
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" ng-click="submit()">저장</button>
+                                 </div>
+                        </div>
+                    </div>
+                    </div>
+                  </div><!-- 수정버튼 END -->
+                </h2>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label jnt">아이디</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static">{{te_list.user_id}}</p>
+                        </div>
+                    <label class="col-sm-2 control-label jnt">연락처</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">{{te_list.tel}}</p>
+                    </div>
+                    <label class="col-sm-2 control-label jnt">이메일</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">{{te_list.email}}</p>
+                    </div>
+                </div> <!--class="cont-box" 사용자 이름-->
+            </form>
+            </div>
+            </div><!--class="border-box profile-user"-->
+        </div><!--id="profile" class="tab-pane fade in active"-->
+
+<!--SSH 키 관리-->
+
+    <div id="key-sett" class="">
+        <div class="border-box">
+            <div class="cont-box">
+                <h2>SSH Keys
+
+                    <!--SSH 수정버튼-->
+                    <div class="clearfix fr">
+                        <button type="button" class="btn btn-primary btn-lg ssh-key fl" data-toggle="modal" data-target="#modi">등록</button>
+
+                        <!-- SSH Modal -->
+                        <div class="modal fade" id="modi" role="dialog">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">SSH 키 등록</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="modal-line">
-                                            <div class="mod-txt fl">현재 비밀번호</div><input type="password" class="input-mod-name" ng-model="data.password" placeholder="****" required />
-                                        </div>
-                                        <div class="modal-line">
-                                            <div class="mod-txt fl">새 비밀번호</div>
-                                            <input type="password" class="input-mod-name" ng-model="data.password_new"  placeholder="****" required />
-                                        </div>
-                                        <div class="modal-line">
-                                            <div class="mod-txt fl">비밀번호 확인</div>
-                                            <input type="password" class="input-mod-name" ng-model="data.password_ret"  placeholder="****" required />
-                                        </div>
-                                        <div class="modal-line">
-                                            <div class="mod-txt fl">연락처</div>
-                                            <input type="text" class="input-mod-name" ng-model="data.tel" placeholder="{{te_list.tel}}">
-                                        </div>
-                                        <div class="modal-line">
-                                            <div class="mod-txt fl">이메일</div>
-                                            <input type="text" class="input-mod-name" ng-model="data.email" placeholder="{{te_list.email}}">
-                                        </div>
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <input type="text" class="form-control" id="inputPassword" placeholder="key 입력">
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary ssh-create-key marg-top29" data-dismiss="modal" ng-click="submit()">저장</button>
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal">생성</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> <!--SSH 수정버튼 END-->
+
                 </h2>
-
-                <ul >
-                    <li class="sett-title fl">아이디</li>
-                    <li class="sett-txt">{{te_list.user_id}}</li>
-                    <li class="sett-title fl">연락처</li>
-                    <li class="sett-txt">{{te_list.tel}}</li>
-                    <li class="sett-title fl">이메일</li>
-                    <li class="sett-txt">{{te_list.email}}</li>
-                </ul>
-            </div> <!--class="cont-box" 사용자 이름-->
-        </div>  <!--class="border-box profile-user"-->
-
-    </div> <!--id="profile" class="tab-pane fade in active"
-
-<!--SSH 키 관리-->
-    <div id="key-sett" class="">
-        <div class="border-box">
-            <div class="cont-box">
-                <h2>SSH Keys</h2>
-
-                <div class="table-responsive table-reset">
+                <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -107,6 +165,7 @@
                                 <ul class="dropdown-menu-table" role="menu">
                                     <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
                                     <li><a ng-click="download(data.id)">키 내려받기</a></li>
+                                    <li><a ng-click="" class="bth-modal-delete">삭제</a></li>
                                 </ul>
                             </td>
                         </tr>
@@ -118,7 +177,7 @@
         </div>
     </div> <!--id="key-sett" class="tab-pane fade"-->
 
-    <!--팀 > 프로필-->
+    <!--팀 > 리소스-->
 
     <div id="team-reso"  class="">
         <div class="border-box profile-team">
@@ -164,7 +223,7 @@
             <div class="cont-box">
                 <h2>{{teamname.team_name}}</h2>
 
-                <div class="table-responsive table-reset">
+                <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
                         <tr>
@@ -269,10 +328,11 @@
             </div> <!--class="cont-box"-->
         </div> <!--class="border-box profile-team"-->
     </div> <!--id="profile-team"  class="tab-pane fade"-->
+    <!--팀 > 프로필 -->
     <div id="profile-team"  class="">
         <div class="border-box profile-team">
             <div class="cont-box">
-                <h2>{{teamname.team_name}}</h2>
+                <h2>{{teamname.team_name}}
                 <!--팀 수정버튼-->
                 <div class="clearfix fr">
                     <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#modal-modi">수정</button>
@@ -285,42 +345,59 @@
                                     <h4 class="modal-title">팀 수정</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="modal-line">
-                                        <div class="mod-txt fl">팀명</div><input type="text" class="input-mod-name" ng-model="data.team_name" placeholder="{{teamname.team_name}}">
-                                    </div>
-                                    <ul>
-                                        <li class="sett-title-modal fl">팀 코드</li>
-                                        <li class="sett-title-modal fl">{{teamname.team_code}}</li>
-                                    </ul>
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label jnt">팀 코드</label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static">{{teamname.team_code}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label jnt">팀명</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" ng-model="data.team_name" placeholder="{{teamname.team_name}}"">
+                                            </div>
+                                        </div>
+                                    </form>
+
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal" ng-click="change()">저장</button>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" ng-click="change()">저장</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="team-ul">
-                    <ul class="ul-sett-left" ><span ng-repeat="team in team_list">
-                        <li class="sett-title fl">팀 코드</li>
-                        <li class="sett-txt">{{team[1].team_code}}</li>
-                        <li class="sett-title fl">팀장</li>
-                        <li class="sett-txt">
-                            <span class="team-master">{{team[0].user_name}}</span>|
-                            <!--<span class="team-master">OOO</span>|-->
-                            <span class="team-master">{{team[0].tel}}</span>|
-                            <span class="team-master">{{team[0].email}}</span></li>
-                        </span>
-                        <li class="sett-title fl">총원</li>
-                        <li class="sett-txt" ng-repeat="won in won_list">{{won[0].total}}</li>
-                        <li class="sett-title fl">팀 생성일</li>
-                        <li class="sett-txt">{{teamname.create_date}}</li>
-                    </ul>
-                </div>
+                </h2>
+                <form class="form-horizontal">
+                    <div class="form-group" ng-repeat="team in team_list">
+                        <label class="col-sm-2 control-label jnt">팀 코드</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">{{team[1].team_code}}</p>
+                                </div>
+                                <label class="col-sm-2 control-label jnt">팀장</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">
+                                        <span class="team-master">{{team[0].user_name}}</span>|
+                                        <!--<span class="team-master">{{team[0].author_id}}</span>|-->
+                                        <span class="team-master">{{team[0].tel}}</span>|
+                                        <span class="team-master">{{team[0].email}}</span>
+                                    </p>
+                                </div>
+                                <label class="col-sm-2 control-label jnt">팀 생성일</label>
+                                <div class="col-sm-10">
+                                    <p class="form-control-static">{{teamname.create_date}}</p>
+                                </div>
+                                <label class="col-sm-2 control-label jnt">총원</label>
+                                <div class="col-sm-10" ng-repeat="won in won_list">
+                                    <p class="form-control-static">{{won[0].total}}</p>
+                                </div>
+
+
+                    </div>
+                </form>
                 </div> <!--class="team-ul"-->
-
-
-                         <!--class="cont-box"-->
+            <!--class="cont-box"-->
         </div> <!--class="border-box profile-team"-->
     </div>
 

@@ -1,11 +1,13 @@
 <div class="container log">
     <div class="log-begin-title">지앤 클라우드 프라이빗 서비스에 오신것을 환영 합니다.</div>
-    <div class="begin-box">
+    <div class="col-xs-8 col-xs-offset-2">
         <span class="begin-box-title">계속해서 팀에 가입해주세요.</span>
-        <div class="begin-sel-box clearfix">
+        <div class="col-xs-10 col-xs-offset-1">
             <span class="begin-team-name fl">팀</span>
-            <select class="begin-select fl" ng-model="guset_image" ng-options="list.team_name for list in list" ng-change="update_image(guset_image)">
-                <option selected>선택</option>
+            <select class="begin-select fl" ng-model="guset_image"
+                    ng-options="list.team_name for list in list"
+                    ng-change="update_image(guset_image)">
+                <option value="">선택</option>
             </select>
 
             <button type="submit" value="submit" class="btn btn-primary btn-begin fr" ng-click="submit()">신청하기</button>

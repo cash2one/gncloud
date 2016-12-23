@@ -218,6 +218,7 @@ def approve_set(user_id,code,type,user_name):
     if(type == 'approve'):
         list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id==user_id).filter(GnUserTeam.team_code == code).one()
         list.comfirm = "Y"
+        list.team_owner='user'
         db_session.commit()
         return True
     if(type == 'change'):
@@ -248,10 +249,11 @@ def signup_team(team_code,user_id):
 
 def comfirm_list(user_id, sql_session):
     team =sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
+    team.apply_date = team.apply_date.strftime('%Y-%m-%d')
     if(team.comfirm != 'Y'):
         list =sql_session.query(GnTeam).filter(GnTeam.team_code ==team.team_code).one()
-        return list
-
+        team_info = {'user_id' : user_id, 'apply_date': team.apply_date, 'team_name':list.team_name, 'team_code': team.team_code}
+    return team_info
 
 
 def createteam_list(team_name, team_code, author_id):
