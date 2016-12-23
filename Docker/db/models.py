@@ -55,6 +55,7 @@ class GnDockerServices(Base):
     tag = Column(String(100), nullable=True, default='')
     internal_id = Column(String(100), nullable=True, default='')
     internal_name = Column(String(100), nullable=True, default='')
+    image = Column(String(50), nullable=True, default='')
     cpu = Column(Integer, nullable=True, default='')
     memory = Column(Integer, nullable=True, default='')
     volume = Column(String(8), nullable=True, default='')
@@ -68,7 +69,7 @@ class GnDockerServices(Base):
     def __init__(
         self,
         id, name, tag, internal_id, internal_name,
-        cpu, memory, volume, team_code,
+        image, cpu, memory, volume, team_code,
         author_id, create_time, start_time=create_time, stop_time=create_time, status=''
     ):
         self.id = id
@@ -76,6 +77,7 @@ class GnDockerServices(Base):
         self.tag = tag
         self.internal_id = internal_id
         self.internal_name = internal_name
+        self.image = image,
         self.cpu = cpu
         self.memory = memory
         self.volume = volume
@@ -91,9 +93,10 @@ class GnDockerServices(Base):
 
     def to_json(self):
         return dict(id=self.id, name=self.name, tag=self.tag, internal_id=self.internal_id,
-                    internal_name=self.internal_name, cpu=self.cpu, memory=self.memory, volume=self.volume,
-                    team_code=self.team_code, author_id=self.author_id, create_time=self.create_time,
-                    start_time=self.start_time, stop_time=self.stop_time, status=self.status)
+                    internal_name=self.internal_name, image=self.image, cpu=self.cpu, memory=self.memory,
+                    volume=self.volume, team_code=self.team_code, author_id=self.author_id,
+                    create_time=self.create_time, start_time=self.start_time,
+                    stop_time=self.stop_time, status=self.status)
 
 
 class GnDockerContainers(Base):
@@ -101,7 +104,7 @@ class GnDockerContainers(Base):
     service_id = Column(String(8), primary_key=True, nullable=False, default='')
     internal_id = Column(String(100), primary_key=True, nullable=True, default='')
     internal_name = Column(String(100), primary_key=True, nullable=True, default='')
-    host_id = Column(String(100), nullable=False, default='')
+    host_id = Column(Integer, nullable=False, default='')
     status = Column(String(10), nullable=True, default='')
 
     def __init__(self, service_id, internal_id, internal_name, host_id, status=""):
@@ -112,7 +115,7 @@ class GnDockerContainers(Base):
         self.status = status
 
     def __repr__(self):
-        return "<GnDockerContainers %r_%r_%r>" % (self.service_id, self.internal_id, self.internal_name)
+        return "<GnDockerContainers %r>" % self.internal_id
 
     def to_json(self):
         return dict(service_id=self.service_id, internal_id=self.internal_id,
@@ -122,65 +125,93 @@ class GnDockerContainers(Base):
 class GnDockerVolumes(Base):
     __tablename__ = 'GN_DOCKER_VOLUMES'
     service_id = Column(String(8), primary_key=True, nullable=False, default='')
-    name = Column(String(200), primary_key=True, nullable=False, default='')
-    path = Column(String(200), nullable=False, default='')
+    name = Column(String(200), nullable=False, default='')
+    source_path = Column(String(200), nullable=False, default='')
+    destination_path = Column(String(200), nullable=False, default='')
     status = Column(String(10), nullable=True, default='')
 
-    def __init__(self, service_id, name, path, status=""):
+    def __init__(self, service_id, name, source_path, destination_path, status=""):
         self.service_id = service_id
         self.name = name
-        self.path = path
+        self.source_path = source_path
+        self.destination_path = destination_path
         self.status = status
 
     def __repr__(self):
         return "<GnDockerVolumes %r_%r>" % (self.service_id, self.name)
 
     def to_json(self):
-        return dict(id=self.id, name=self.name, mountpoint=self.mountpoint, status=self.status)
+        return dict(service_id=self.service_id, name=self.name, source_path=self.source_path,
+                    destination_path=self.destination_path, status=self.status)
+
+
+class GnDockerPorts(Base):
+    __tablename__ = 'GN_DOCKER_PORTS'
+    service_id = Column(String(8), primary_key=True, nullable=False, default='')
+    protocol = Column(String(10), primary_key=True, nullable=False, default='')
+    target_port = Column(String(5), primary_key=True, nullable=False, default='0')
+    published_port = Column(String(5), primary_key=True, nullable=False, default='0')
+
+    def __init__(self, service_id, protocol, target_port, published_port):
+        self.service_id = service_id
+        self.protocol = protocol
+        self.target_port = target_port
+        self.published_port = published_port
+
+    def __repr__(self):
+        return "<GnDockerPorts %r_%r_%r_%r>" % (self.service_id, self.protocol, self.target_port, self.published_port)
+
+    def to_json(self):
+        return dict(service_id=self.service_id, protocol=self.protocol, target_port=self.target_port, published_port=self.published_port)
 
 
 class GnDockerImage(Base):
     __tablename__ = 'GN_DOCKER_IMAGES'
     id = Column(String(8), primary_key=True, nullable=False, default='')
     name = Column(String(50), nullable=False, default='')
-    filename = Column(String(100), nullable=True, default='')
+    sub_type = Column(String(10), nullable=False, default='')
     team_code = Column(String(10), nullable=True, default='')
     author_id = Column(String(15), nullable=True, default='')
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default='')
 
-    def __init__(self, id, name, filename, team_code, author_id, create_time, status):
+    def __init__(self, id, name, sub_type, team_code, author_id, create_time, status):
         self.id = id
         self.name = name
-        self.filename = filename
+        self.sub_type = sub_type
         self.team_code = team_code
         self.author_id = author_id
         self.create_time = create_time
         self.status = status
 
     def __repr__(self):
-        return "<GnDockerImage %r>" % self
+        return "<GnDockerImage %r>" % self.id
 
     def to_json(self):
-        return dict(id=self.id, name=self.name, filename=self.filename, team_code=self.team_code,
+        return dict(id=self.id, name=self.name, sub_type=self.sub_type, team_code=self.team_code,
                     author_id=self.author_id, create_time=self.create_time, status=self.status)
 
 
 class GnDockerImageDetail(Base):
     __tablename__ = 'GN_DOCKER_IMAGES_DETAIL'
     id = Column(String(8), primary_key=True, nullable=False, default='')
-    arg_type = Column(String(10), primary_key=True, nullable=False, default='')
-    argument = Column(String(200), primary_key=True, nullable=False, default='')
+    image_id = Column(String(8), primary_key=True, nullable=False, default='')
+    arg_type = Column(String(10), nullable=False, default='')
+    argument = Column(String(200), nullable=False, default='')
     description = Column(String(300), nullable=True, default='')
+    status = Column(String(10), nullable=True, default='')
 
-    def __init__(self, id, arg_type, argument, description):
+    def __init__(self, id, image_id, arg_type, argument, description, status):
         self.id = id
+        self.image_id = image_id
         self.arg_type = arg_type
         self.argument = argument
         self.description = description
+        self.status = status
 
     def __repr__(self):
-        return "<GnDockerImageDetail %r_%r_%r)>" % (self.id, self.arg_type, self.argument)
+        return "<GnDockerImageDetail %r_%r)>" % (self.id, self.image_id)
 
     def to_json(self):
-        return dict(id=self.id, arg_type=self.arg_type, argument=self.argument, description=self.description)
+        return dict(id=self.id, image_id=self.image_id, arg_type=self.arg_type,
+                    argument=self.argument, description=self.description, status=self.status)

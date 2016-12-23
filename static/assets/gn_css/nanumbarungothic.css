@@ -31,7 +31,7 @@
   font-family: 'Nanum Barun Gothic';
   font-style: normal;
   font-weight: 400;
-  src: url(../fonts/NanumBarunGothic.eot);
+  src: url(../gn_fonts/NanumBarunGothic.eot);
   src: local('Nanum Barun Gothic'),
        local('NanumBarunGothic'),
        url(../gn_fonts/NanumBarunGothic.eot?#iefix) format('embedded-opentype'),
