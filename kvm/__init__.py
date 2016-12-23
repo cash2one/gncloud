@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import logging
-from logging.handlers import RotatingFileHandler
+import traceback
 
 from apscheduler.scheduler import Scheduler
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta
 from gevent.pywsgi import WSGIServer
 import datetime
@@ -34,18 +33,22 @@ def job_function():
 
 ####login check start####
 
-# @app.before_request
-# def before_request():
-#     if ('userId' not in session) \
-#             and request.endpoint != 'guestLogout' \
-#             and request.endpoint != 'account':
-#         return make_response(jsonify(status=False),401)
+@app.before_request
+def before_request():
+    if ('userId' not in session) \
+            and request.endpoint != 'guestLogout' \
+            and request.endpoint != 'account':
+        return make_response(jsonify(status=False),401)
 
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
+@app.errorhandler(500)
+def internal_error(error):
+    print(traceback.format_exc())
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 #####common function end#####
 
@@ -142,9 +145,10 @@ def download_sshKey(id):
 if __name__ == '__main__':
     # 로그 설정
     formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
-    handler = RotatingFileHandler('kvm.log', maxBytes=2000000, backupCount=5)
+    handler = RotatingFileHandler('./manager.log', maxBytes=2000000, backupCount=5)
     handler.setFormatter(formatter)
     handler.setLevel(logging.WARNING)
+    app.logger.addHandler(handler)
 
     cron = Scheduler(daemon=True)
     cron.add_interval_job(job_function, seconds=60) #minites=1)

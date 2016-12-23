@@ -2,8 +2,8 @@ angular
     .module('gncloud')
     .controller('guestDetailCtrl', function ($scope, $http, $routeParams, $sce) {
 
-        $scope.cpu_url = $sce.trustAsResourceUrl("/cpu.html?id="+$routeParams.id);
-        $scope.mem_url = $sce.trustAsResourceUrl("/memory.html?id="+$routeParams.id);
+        $scope.cpu_url = $sce.trustAsResourceUrl("cpu.html?id="+$routeParams.id);
+        $scope.mem_url = $sce.trustAsResourceUrl("memory.html?id="+$routeParams.id);
         $scope.modify_data = {};
 
         $http({

@@ -13,7 +13,7 @@ import time
 from flask import request, jsonify
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines, GnVmImages, GnImagesPool
+from db.models import GnVmMachines, GnVmImages, GnImagesPool, GnMonitor
 
 from util.config import config
 from util.hash import random_string
@@ -74,18 +74,20 @@ def hvm_create():
                 get_ip_count = get_ip_count + 1
                 get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
             elif get_ip_count > 20:
-                return jsonify(status = False, massage = "VM 생성 실패")
+                return jsonify(status=False, massage="VM 생성 실패")
             else:
                 get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
                 break
 
-        print get_vm_ip
+        # print get_vm_ip
         # 생성된 VM의 ip 정보를 고정한다
-        try: #예외처리하였음
+
+        try: #예외처리하였음 request에 대한 response timeout
             set_vm_ip = ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
         except:
             # 새로 생성된 가상머신 데이터를 DB에 저장한다.
-            vm = GnVmMachines(random_string(config.SALT, 8), name, '', 'hyperv', start_vm['VMId'],
+            vmid = random_string(config.SALT, 8)
+            vm = GnVmMachines(vmid, name, '', 'hyperv', start_vm['VMId'],
                               name,
                               '1', get_vm_ip, int(cpu), int(memory), int(hdd),
                               os
@@ -98,12 +100,17 @@ def hvm_create():
                                   "win_icon", os, os_ver, os_sub_ver, os_bit, "",
                                   author_id, datetime.datetime.now(), "")
 
+            #  생성시 GN_Monitor에 값을 insert 해야한다
+            #  최초 usage 값을 받아 insert 한다.
+
+            insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+
             db_session.add(vm_image)
+            db_session.add(insert_monitor)
             db_session.add(vm)
             db_session.commit()
         finally:
             return jsonify(status=True, massage="VM 생성 성공")
-
     else:
         return jsonify(status=False, massage="VM 생성 실패")
 
@@ -359,3 +366,8 @@ def hvm_image_list(type):
 # todo REST. VM 이미지 정보
 def hvm_image():
     return jsonify(status=False, message="미구현")
+
+
+# 모니터링을 위한 스크립트 전송 함수
+def vm_monitor():
+    return jsonify(status=True, message="성공")

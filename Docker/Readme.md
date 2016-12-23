@@ -5,6 +5,7 @@
 3. manager
 4. worker
 5. registry
+6. example shell
 
 
 <span></span>
@@ -145,3 +146,56 @@
         ```
     - systemctl enable docker-registry
     - systemctl start docker-registry
+
+<span></span>
+6. example shell
+-------------
+- docker-install.sh
+    ```
+    #!/bin/bash
+    > /etc/yum.repos.d/docker.repo
+    echo '[dockerrepo]' >> docker.repo
+    echo 'name=Docker Repository' >> docker.repo
+    echo 'baseurl=https://yum.dockerproject.org/repo/main/centos/7/' >> docker.repo
+    echo 'enabled=1' >> docker.repo
+    echo 'gpgcheck=1' >> docker.repo
+    echo 'gpgkey=https://yum.dockerproject.org/gpg' >> docker.repo
+
+    yum -y install docker-engine
+
+    sed -i 's/ExecStart=\/usr\/bin\/dockerd/ExecStart=\/usr\/bin\/dockerd \
+            -H tcp:\/\/0.0.0.0:2375 -H unix:\/\/\/var\/run\/docker.sock \
+            --insecure-registry 192.168.0.20:5000/g' \
+            /usr/lib/systemd/system/docker.service
+
+    systemctl enable docker
+    systemctl start docker
+    ```
+
+- python-install.sh
+    ```
+    #!/bin/bash
+    rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    yum -y update
+    yum -y install python-pip
+    pip install flask
+    pip install sqlalchemy
+    pip install pexpect
+    pip install ConfigParser
+    pip install mysqldb
+    ```
+
+- docker-registry-install.sh
+    ```
+    yum -y install docker-registry
+    sed -i 's/starch_backend: _env:SEARCH_BACKEND/search_backend: _env:SEARCH_BACKEND:sqlalchemy/g' \
+            /etc/docker-registry.yml
+    sed -i 's/sqlite:\/\/\/\/tmp\/docker-registry.db/sqlite:\/\/\/\/home\/gncloud\/docker-registry\/docker-registry.db/g' \
+            /etc/docker-registry.yml
+    sed -i 's/\/var\/lib\/docker-registry/\/home\/gncloud\/docker-registry/g' \
+            /etc/docker-registry.yml
+
+    mkdir /home/gncloud/docker-registry
+    systemctl enable docker-registry
+    systemctl start docker-registry
+    ```

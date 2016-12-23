@@ -10,8 +10,8 @@ from util.config import config
 from util.hash import random_string
 
 
-# service 생성 및 실행
-# 실행은 따로 구현하지 않아도 될 듯.. 하나?
+# Docker Service 생성 및 실행
+# 서비스 생성 시에는 실행은 자동이다.
 def doc_create():
     id = random_string(config.SALT, 8)
     # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
@@ -60,7 +60,7 @@ def doc_create():
             )
             db_session.add(container)
         # 생성된 volume 정보를 DB에 저장한다.
-        service_volume_list = ds.get_service_volumes(docker_service[0]['ID'])
+        service_volume_list = ds.get_service_volumes(service.internal_id)
         for service_volume in service_volume_list:
             volume = GnDockerVolumes(
                 service_id=id,
@@ -73,19 +73,37 @@ def doc_create():
         return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
 
 
-# todo. Container 상태변경
+# todo. Docker Service 상태변경
 def doc_state(id):
-    # todo doc_state Start 1. commit된 내용을 가지고 서비스 생성.
+    type = request.json["type"]
+    count = request.json["count"]
+    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # todo doc_state if. 이미 서비스가 돌아가는 상태인 경우는 아무 것도 안하고 끝낸다.
-    # todo doc_state Start 2. 변경된 내용을 DB에 Update
-    # todo doc_state Restart 1. 컨테이너 커밋
-    # todo doc_state Restart 2. 서비스 삭제
-    # todo doc_state Restart 3. commit된 내용을 가지고 온다.
-    # todo doc_state Restart 4. 변경된 내용을 DB에 Update
-    # todo doc_state Stop 1. commit된 내용을 가지고 서비스 생성.
-    # todo doc_state Stop 2. 서비스 삭제
-    # todo doc_state Stop 3. DB에 상태 업데이트
-    return jsonify(status=False, message="미구현")
+    if type == "start":
+        # todo doc_state Start 1. commit된 내용을 가지고 서비스 생성.
+        # todo doc_state Start 2. 변경된 내용을 DB에 Update
+        return jsonify(status=False, message="미구현")
+    elif type == "stop":
+        # todo doc_state Stop 1. commit된 내용을 가지고 서비스 생성.
+        # todo. 각 노드의 컨테이너를 commit하여 이미지로 저장 (양 노드에 액션을 취해줘야 함)
+        # 그렇기에 우선 각 컨테이너 값을 가지고 와야 한다.
+        hosts = []
+        containers = GnDockerContainers.query.filter_by(service_id=id).all()
+        for container in containers:
+            hosts.append(GnHostDocker.query.filter_by(id=container.host_id).first())
+        # todo. 각 노드의 컨테이너를 commit하여 저장
+        commit_result = ds.commit_containers(id)
+        # todo doc_state Stop 2. 서비스 삭제
+        # todo doc_state Stop 3. 변경된 내용을 DB에 Update
+        return jsonify(status=False, message="구현중", commit_result=commit_result)
+    elif type == "restart":
+        # todo doc_state Restart 1. 컨테이너 커밋
+        # todo doc_state Restart 2. 서비스 삭제
+        # todo doc_state Restart 3. commit된 내용을 가지고 온다.
+        # todo doc_state Restart 4. 변경된 내용을 DB에 Update
+        return jsonify(status=False, message="미구현")
+    else:
+        return jsonify(status=False, message="미구현")
 
 
 # Container 삭제
@@ -120,16 +138,45 @@ def doc_delete(id):
 
 # Docker Service 정보
 def doc_vm(id):
-    user_id = request.json["user_id"]
-    service = GnDockerServices(author_id=user_id, internal_id=id).first()
-    return jsonify(status=True, message="컨테이너 정보를 가져왔습니다.", result=service)
+    user_id = request.args.get("user_id")
+    team_code = request.args.get("team_code")
+    if team_code is None:
+        service = db_session.query(GnDockerServices).filter(
+            GnDockerServices.author_id == user_id, GnDockerServices.id == id, GnDockerServices.status != "deleted"
+        ).first()
+    else:
+        service = db_session.query(GnDockerServices).filter(
+            GnDockerServices.team_code == team_code, GnDockerServices.id == id, GnDockerServices.status != "deleted"
+        ).first()
+        service = GnDockerServices.query.filter_by(team_code=team_code, id=id).first()
+    if service is None:
+        return jsonify(status=False, message="서비스 정보를 가져올 수 없습니다.")
+    else:
+        return jsonify(status=True, message="서비스 정보를 가져왔습니다.", result=service.to_json())
 
 
-# Docker 리스트
+# Docker Service 리스트
 def doc_vm_list():
-    user_id = request.json["user_id"]
-    service = GnDockerServices(author_id=user_id).all()
-    return jsonify(status=False, message="미구현", result=service)
+    user_id = request.args["user_id"]
+    if "team_code" in request.args:
+        team_code = request.args["team_code"]
+    else:
+        team_code = None
+    if team_code == "" or team_code is None:
+        services = db_session.query(GnDockerServices).filter(
+            GnDockerServices.author_id == user_id, GnDockerServices.status != "deleted"
+        ).all()
+    else:
+        services = db_session.query(GnDockerServices).filter(
+            GnDockerServices.team_code == team_code, GnDockerServices.status != "deleted"
+        ).all()
+    if services is None:
+        return jsonify(status=False, message="서비스 정보를 가져올 수 없습니다.")
+    else:
+        result = []
+        for service in services:
+            result.append(service.to_json())
+        return jsonify(status=True, message="서비스 정보를 가져왔습니다.", result=result)
 
 
 # Container 이미지 생성 및 업로드

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import logging
-from logging.handlers import RotatingFileHandler
-
-from flask import Flask, jsonify, request, session, escape
+import traceback
+from flask import Flask, jsonify, request, session, escape, make_response
 from datetime import timedelta
 
 from Manager.db.database import db_session
@@ -22,17 +20,19 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 #####common function start#####
 
 
-# @app.before_request
-# def before_request():
-#     if ('userId' not in session) \
-#             and request.endpoint != 'guestLogout' \
-#             and request.endpoint != 'account':
-#         return make_response(jsonify(status=False),401)
+@app.before_request
+def before_request():
+    if ('userId' not in session) and request.path != '/vm/guestLogout' and request.path != '/vm/account':
+        return make_response(jsonify(status=False),401)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
+@app.errorhandler(500)
+def internal_error(error):
+    print(traceback.format_exc())
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 #####common function end#####
 
@@ -57,16 +57,6 @@ def guest_info(id):
 def guest_info_graph(id):
     return jsonify(status=True, message="success", info=vm_info_graph(db_session, id))
 
-@app.route('/vm/account/users', methods=['POST'])
-def signup_list():
-    user_name = request.json['user_name']
-    user_id = request.json['user_id']
-    password = request.json['password']
-    password_re = request.json['password_re']
-    if(sign_up(user_name,user_id,password,password_re)!=None):
-        return  jsonify(status=True, message="success")
-    else:
-        return jsonify(status = False, message = "false")
 
 @app.route('/vm/account', methods=['POST'])
 def login():
@@ -274,14 +264,6 @@ def maketeam():
 
 
 if __name__ == '__main__':
-
-    # 로그 설정
-    formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
-    handler = RotatingFileHandler('./manager.log', maxBytes=2000000, backupCount=5)
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.WARNING)
-    app.logger.addHandler(handler)
-
     app.run(port=8081)
     #http_server = WSGIServer(('', 8080), app)
     #http_server.serve_forever()

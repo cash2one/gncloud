@@ -9,23 +9,23 @@ from util.config import config
 app = Flask(__name__)
 
 # --- VM 함수 --- #
-# service 생성 및 실행
+# Docker Service 생성 및 실행
 app.add_url_rule("/container/services", view_func=doc_create, methods=['POST'])
-# Container 상태변경
+# Docker Service 상태변경
 app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
-# Container 삭제
+# Docker Service 삭제
 app.add_url_rule("/container/services/<id>", view_func=doc_delete, methods=['DELETE'])
-# Container 리스트
+# Docker Service 리스트
 app.add_url_rule("/container/services", view_func=doc_vm_list, methods=['GET'])
-# Container 이미지 생성 및 업로드
+# Docker 이미지 생성 및 업로드
 app.add_url_rule("/container/images", view_func=doc_new_image, methods=['POST'])
-# Container 이미지 세부정보 입력
+# Docker 이미지 세부정보 입력
 app.add_url_rule("/container/images/detail", view_func=doc_new_image_detail, methods=['POST'])
-# Container 이미지 수정
+# Docker 이미지 수정
 app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
-# Container 이미지 삭제
+# Docker 이미지 삭제
 app.add_url_rule("/container/images/<id>", view_func=doc_delete_image, methods=['DELETE'])
-# Container 이미지 리스트
+# Docker 이미지 리스트
 app.add_url_rule("/container/images", view_func=doc_image_list, methods=['GET'])
 
 

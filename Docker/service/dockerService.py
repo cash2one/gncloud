@@ -82,32 +82,57 @@ class DockerService(object):
         return container_list
 
     # Docker 서비스의 볼륨 정보를 가져온다.
+    # 매개변수의 internal_id는
     def get_service_volumes(self, internal_id):
         command = "docker service inspect %s" % internal_id
         result = self.send_command_return_json(command)
         return result[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
 
-    #
+    # Docker Service의 Containers Commit
+    # 매개변수의 id는 서비스 DB id
+    # commit된 이미지의 이름은 서비스 DB id, tag는 backup으로 하자.
+    def commit_containers(self, id):
+        # Service internal id 가지고 오기
+        service = GnDockerServices.query.filter_by(id=id).first()
+        # 서비스의 Container 목록 가지고 오기
+        containers = self.get_service_containers(service.internal_id)
+        # 각 컨테이너를 commit하기
+        # docker -H {ip}:2375 commit
+        # $(docker -H {ip}:2375 ps --filter label=com.docker.swarm.service.name={internal_name} -q)
+        # {id}:stop
+        result_list = []
+        for container in containers:
+            node = GnHostDocker.query.filter_by(id=container.host_id).first()
+            ip = node.ip
+            name = container.name
+            command = "docker -H %s:2375 commit " \
+                      "$(docker -H %s:2375 ps --filter label=com.docker.swarm.service.name=%s -q) " \
+                      "%s:backup" % (ip, ip, name, id)
+            result = self.send_command(command)
+            result_list.append(result)
+        return result_list
+
+    # command 전달 후 결과값 상단 한줄 받아오기
     def send_command(self, command):
         self.cmd.sendline(command)
         self.cmd.prompt()
         result = self.cmd.before.split("\r\n", 1)[1]
         return result.replace("\r\n", "")
 
-    #
+    # command 전달 후 결과값을 Line 기준 List로 받아오기
     def send_command_return_all_line(self, command):
         self.cmd.sendline(command)
         self.cmd.prompt()
         return self.cmd.before.split("\r\n")
 
-    #
+    # command 전달 후 결과값을 json 객체로 받아오기
     def send_command_return_json(self, command):
         self.cmd.sendline(command)
         self.cmd.prompt()
         result = self.cmd.before.split("\r\n", 1)[1]
         return json.loads(result.replace("\r\n", ""))
 
-    #
+    # 내부에서 REST API 호출용 함수
     def send(self, address, port, method, uri, data={}):
         url = "http://" + address
         url += ":"
