@@ -56,12 +56,12 @@ def internal_error(error):
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
-    team_code = "1"  # session
-    user_id = "2"  # session
+    team_code = session['teamCode']
+    user_id = session['userId']
     name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')#request.json['name']
     cpu = request.json['cpu']
     memory = request.json['memory']
-    disk = request.json['hdd']
+    disk = 10#request.json['hdd']
     image_id = request.json['id']
     sshkeys = request.json['sshkeys']
     tag =request.json['tag']
@@ -84,8 +84,8 @@ def delete_vm(id):
 
 @app.route('/vm/machine/snapshots', methods=['POST'])
 def create_snap():
-    user_id = "yhkwak"  # session
-    team_code = "001"  # session
+    user_id = session['userId'] # session
+    team_code = session['teamCode']  # session
     ord_id = request.json['ord_id']
     name = request.json['name']
     server_create_snapshot(ord_id, name, user_id, team_code)
@@ -100,7 +100,7 @@ def delete_vm_image(id):
 
 @app.route('/account/keys', methods=['POST'])
 def add_sshKey():
-    team_code = 1
+    team_code = session['teamCode']
     name = request.json['name']
     add_user_sshkey(team_code, name)
     return jsonify(status=True, message="success")
@@ -108,14 +108,14 @@ def add_sshKey():
 
 @app.route('/account/keys/<id>', methods=['DELETE'])
 def delete_sshKey(id):
-    team_code = 1
+    team_code = session['teamCode']
     delete_user_sshkey(id)
     return jsonify(status=True, message="success")
 
 
 @app.route('/account/keys', methods=['GET'])
 def list_sshKey():
-    team_code = 1
+    team_code = session['teamCode']
     return jsonify(status=True, message="success", list=list_user_sshkey(team_code, db_session))
 
 
@@ -144,15 +144,9 @@ def download_sshKey(id):
 
 if __name__ == '__main__':
     # 로그 설정
-    formatter = logging.Formatter('[%(asctime)s %(levelname)s] (%(filename)s:%(lineno)s) %(message)s')
-    handler = RotatingFileHandler('./manager.log', maxBytes=2000000, backupCount=5)
-    handler.setFormatter(formatter)
-    handler.setLevel(logging.WARNING)
-    app.logger.addHandler(handler)
-
     cron = Scheduler(daemon=True)
     cron.add_interval_job(job_function, seconds=60) #minites=1)
     cron.start()
     #app.run(debug=True)
-    http_server = WSGIServer(('', 8080), app)
+    http_server = WSGIServer(('', 8081), app)
     http_server.serve_forever()
