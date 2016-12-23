@@ -23,7 +23,7 @@ class DockerService(object):
         dockerimage = GnDockerImage.query.filter_by(name=image).first()
         if dockerimage is None:
             return None
-        image_detail = GnDockerImageDetail.query.filter_by(id=dockerimage.id).all()
+        image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
         command = "docker service create"
         # command += " --name %s" % name
         command += " --limit-cpu %s" % cpu
@@ -85,8 +85,11 @@ class DockerService(object):
     # 매개변수의 internal_id는
     def get_service_volumes(self, internal_id):
         command = "docker service inspect %s" % internal_id
-        result = self.send_command_return_json(command)
-        return result[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
+        # 서비스
+        service = self.send_command_return_json(command)
+        # service.Source
+        volume = self.send_command_return_json(command)
+        return service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
 
     # Docker Service의 Containers Commit
     # 매개변수의 id는 서비스 DB id

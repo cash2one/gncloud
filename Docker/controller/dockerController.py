@@ -65,7 +65,8 @@ def doc_create():
             volume = GnDockerVolumes(
                 service_id=id,
                 name=service_volume['Source'],
-                path=service_volume['Target']
+                source_path="",
+                destination_path=service_volume['Target']
             )
             db_session.add(volume)
         db_session.add(service)
@@ -82,7 +83,7 @@ def doc_state(id):
     if type == "start":
         # todo doc_state Start 1. commit된 내용을 가지고 서비스 생성.
         # todo doc_state Start 2. 변경된 내용을 DB에 Update
-        return jsonify(status=False, message="미구현")
+        return jsonify(status=True, message="start 미구현")
     elif type == "stop":
         # todo doc_state Stop 1. commit된 내용을 가지고 서비스 생성.
         # todo. 각 노드의 컨테이너를 commit하여 이미지로 저장 (양 노드에 액션을 취해줘야 함)
@@ -95,13 +96,13 @@ def doc_state(id):
         commit_result = ds.commit_containers(id)
         # todo doc_state Stop 2. 서비스 삭제
         # todo doc_state Stop 3. 변경된 내용을 DB에 Update
-        return jsonify(status=False, message="구현중", commit_result=commit_result)
+        return jsonify(status=True, message="stop 구현중", commit_result=commit_result)
     elif type == "restart":
         # todo doc_state Restart 1. 컨테이너 커밋
         # todo doc_state Restart 2. 서비스 삭제
         # todo doc_state Restart 3. commit된 내용을 가지고 온다.
         # todo doc_state Restart 4. 변경된 내용을 DB에 Update
-        return jsonify(status=False, message="미구현")
+        return jsonify(status=True, message="restart 미구현")
     else:
         return jsonify(status=False, message="미구현")
 
@@ -114,8 +115,10 @@ def doc_delete(id):
     containers = GnDockerContainers.query.filter_by(service_id=id).all()
     volumes = GnDockerVolumes.query.filter_by(service_id=id).all()
     volume_delete_success = True
+    # 서비스 삭제 (서비스 및 컨테이너가 삭제된다)
     result = ds.docker_service_rm(service.internal_id)
     for container in containers:
+        # 각 컨테이너 노드 별로 존재하는 볼륨 삭제
         result2 = ds.docker_volume_rm(container.host_id, id)
         if result2 != id:
             volume_delete_success = False
@@ -130,7 +133,7 @@ def doc_delete(id):
         for volume in volumes:
             volume.status = "deleted"
         db_session.commit()
-    if result == service.internal_id and volume_delete_success:
+    if result == str(service.internal_id) and volume_delete_success:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")
     else:
         return jsonify(status=False, message=result)
@@ -205,22 +208,26 @@ def doc_new_image():
     return jsonify(status=True, message="이미지 추가 완료", result=image.to_json())
 
 
-# Container 이미지 세부정보 입력
-def doc_new_image_detail():
-    id = request.json["id"]
+# todo. Container 이미지 수정
+def doc_modify_image():
+    return jsonify(status=False, message="미구현")
+
+
+# Docker 이미지 세부정보 입력
+def doc_new_image_detail(image_id):
+    id = random_string(config.SALT, 8)
+    # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
+    while len(GnDockerImageDetail.query.filter_by(id=id).all()) != 0:
+        id = random_string(config.SALT, 8)
     arg_type = request.json["arg_type"]
     argument = request.json["argument"]
     description = request.json["description"]
-    image_detail = GnDockerImageDetail.query.filter_by(id=id, arg_type=arg_type).first()
+    image_detail = GnDockerImageDetail.query.filter_by(id=id, image_id=image_id).first()
     try:
-        if image_detail is not None:
-            image_detail.argument = argument
-            image_detail.description = description
-        else:
-            image_detail = GnDockerImageDetail(
-                id=id, arg_type=arg_type, argument=argument, description=description
-            )
-            db_session.add(image_detail)
+        image_detail = GnDockerImageDetail(
+            id=id, image_id=image_id, arg_type=arg_type, argument=argument, description=description
+        )
+        db_session.add(image_detail)
     except:
         db_session.rollback()
     finally:
@@ -228,9 +235,39 @@ def doc_new_image_detail():
     return jsonify(status=True, message="이미지 세부정보 입력 완료", result=image_detail.to_json())
 
 
-# todo. Container 이미지 수정
-def doc_modify_image():
-    return jsonify(status=False, message="미구현")
+# Docker 이미지 세부정보 수정
+def doc_update_image_detail(image_id, id):
+    arg_type = request.json["arg_type"]
+    argument = request.json["argument"]
+    description = request.json["description"]
+    image_detail = GnDockerImageDetail.query.filter_by(id=id, image_id=image_id).first()
+    try:
+        if image_detail is None:
+            return jsonify(status=False, message="존재하지 않는 세부정보입니다.")
+        else:
+            image_detail.arg_type = arg_type
+            image_detail.argument = argument
+            image_detail.description = description
+    except:
+        db_session.rollback()
+    finally:
+        db_session.commit()
+    return jsonify(status=True, message="이미지 세부정보 수정 완료", result=image_detail.to_json())
+
+
+# Docker 이미지 세부정보 삭제
+def doc_delete_image_detail(image_id, id):
+    image_detail = GnDockerImageDetail.query.filter_by(id=id, image_id=image_id).first()
+    try:
+        if image_detail is None:
+            return jsonify(status=False, message="존재하지 않는 이미지 세부정보입니다.")
+        else:
+            db_session.delete(image_detail)
+    except:
+        db_session.rollback()
+    finally:
+        db_session.commit()
+    return jsonify(status=True, message="이미지 세부정보 입력 완료", result=image_detail.to_json())
 
 
 # Container 이미지 삭제
