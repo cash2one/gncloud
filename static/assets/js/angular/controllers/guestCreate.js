@@ -82,13 +82,15 @@ angular
                     }
                 });
         };
-        $scope.imageshow = function(){
-            $("#image").show();
-            $("#snap").hide();
-        }
-        $scope.snapshow = function(){
-            $("#image").hide();
-            $("#snap").show();
+        $scope.imageshow = function(ty){
+            if(ty == 'image' ){
+                $("#image").show();
+                $("#snap").hide();
+            }
+            else if(ty =='snap'){
+                $("#image").hide();
+                $("#snap").show();
+            }
         }
         $scope.data = {};
         $scope.update_image = function (data) {
@@ -109,7 +111,7 @@ angular
             $scope.data.tag = $("#tag").val();
             $http({
                 method  : 'POST',
-                url: '/api/kvm/vm/machine',
+                url: '/api/hyperv/vm/machine',
                 data: $scope.data,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'

@@ -27,25 +27,7 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
-        $scope.sh_list = {};
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/account/users',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    $scope.sh_list = data.list;
 
-
-                } else {
-                    alert(data.message);
-                }
-
-            })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
         $scope.delete= function(id, code, $location){
             $http({
                 method : 'DELETE',

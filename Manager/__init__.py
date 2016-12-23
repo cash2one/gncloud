@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import traceback
+
 from flask import Flask, jsonify, request, session, escape, make_response
 from datetime import timedelta
 
@@ -160,6 +161,16 @@ def team():
     if session.get('userId', None):
         return jsonify(status=True, message="success", list=team_list(session['userId'],db_session))
 
+@app.route('/vm/account/users', methods=['POST'])
+def signup_list():
+    user_name = request.json['user_name']
+    user_id = request.json['user_id']
+    password = request.json['password']
+    password_re = request.json['password_re']
+    if(sign_up(user_name,user_id,password,password_re)!=None):
+        return  jsonify(status=True, message="success")
+    else:
+        return jsonify(status = False, message = "false")
 
 @app.route('/vm/account/team', methods=['GET'])
 def my_list():
@@ -195,8 +206,7 @@ def approve(id,code):
 
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['DELETE'])
-def delete(id,code):
-    id = session['userId']
+def delete(id, code):
     team_delete(id, code)
     return jsonify(status=True, message="success")
 

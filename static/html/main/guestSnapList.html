@@ -18,7 +18,7 @@
             </ul> <!-- class="nav nav-tabs"-->
             <div class="tab-content clearfix">
                 <!--가상머신 > 이미지 -->
-                <div id="image" class="border-box snap-sel">
+                <div id="image" class="border-box">
                     <div class="table-responsive cont-box">
                         <h2>목록</h2>
                         <table class="table table-striped">
@@ -33,7 +33,7 @@
                             <tbody>
                             <tr ng-repeat="base in base_list">
                                 <td class="td-style td-first" >
-                                    <img src="../../gn_images/image_container_{{base.os}}_icon.png" alt="windows">
+                                    <img src="../../gn_images/image_container_{{base.os}}_icon.png" alt="{{base.os}}">
                                     <a href="#">{{base.os}}</a>
                                 </td>
                                 <td class="td-style cnt">{{base.os_ver}}{{base.os_subver}}</td>
