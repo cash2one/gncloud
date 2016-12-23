@@ -23,3 +23,10 @@ __author__ = 'jhjeon'
 # timestr = "2016-12-15T11:58:27.5428889Z"
 # time = datetime.datetime.strptime(timestr[:-2], "%Y-%m-%dT%H:%M:%S.%f")
 # print time
+
+from db.database import db_session
+from db.models import GnDockerContainers
+
+container = GnDockerContainers(service_id=u"11111111", internal_id=u"2312341", internal_name=u"ana123n", host_id=u"1")
+db_session.add(container)
+db_session.commit()

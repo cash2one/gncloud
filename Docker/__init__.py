@@ -19,14 +19,18 @@ app.add_url_rule("/container/services/<id>", view_func=doc_delete, methods=['DEL
 app.add_url_rule("/container/services", view_func=doc_vm_list, methods=['GET'])
 # Docker 이미지 생성 및 업로드
 app.add_url_rule("/container/images", view_func=doc_new_image, methods=['POST'])
-# Docker 이미지 세부정보 입력
-app.add_url_rule("/container/images/detail", view_func=doc_new_image_detail, methods=['POST'])
 # Docker 이미지 수정
 app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
 # Docker 이미지 삭제
 app.add_url_rule("/container/images/<id>", view_func=doc_delete_image, methods=['DELETE'])
 # Docker 이미지 리스트
 app.add_url_rule("/container/images", view_func=doc_image_list, methods=['GET'])
+# Docker 이미지 세부정보 입력
+app.add_url_rule("/container/images/detail/<image_id>", view_func=doc_new_image_detail, methods=['POST'])
+# Docker 이미지 세부정보 수정
+app.add_url_rule("/container/images/detail/<image_id>/<id>", view_func=doc_update_image_detail, methods=['PUT'])
+# Docker 이미지 세부정보 삭제
+app.add_url_rule("/container/images/detail/<image_id>/<id>", view_func=doc_delete_image_detail, methods=['DELETE'])
 
 
 # Controller 상태 확인
