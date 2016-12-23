@@ -4,7 +4,7 @@ __author__ = 'jhjeon'
 import json
 import requests
 from pexpect import pxssh
-from db.models import GnDockerServices, GnDockerImage, GnDockerImageDetail, GnHostDocker
+from db.models import GnDockerServices, GnDockerContainers, GnDockerImage, GnDockerImageDetail, GnHostDocker
 from util.config import config
 
 
@@ -40,6 +40,34 @@ class DockerService(object):
             else:
                 command += " %s" % detail.argument
         command += " %s" % dockerimage.name
+        service_id = self.send_command(command)
+        if service_id[:5] == "Error":
+            return service_id
+        else:
+            return self.docker_service_ps(service_id)
+
+    # Docker 서비스 다시 시작 (실제로는 commit된 이미지로 서비스 생성)
+    def docker_service_start(self, id, replicas, image, backup_image, cpu, memory):
+        dockerimage = GnDockerImage.query.filter_by(name=image).first()
+        if dockerimage is None:
+            return None
+        image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
+        command = "docker service create"
+        # command += " --name %s" % name
+        command += " --limit-cpu %s" % cpu
+        command += " --limit-memory %s" % memory
+        # command += " --replicas %s" % config.REPLICAS
+        command += " --replicas %s" % replicas
+        command += " --constraint 'node.hostname != manager'"
+        command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
+        # type=volume,source=jhjeon_mytomcat,destination=/usr/local/tomcat
+        # command += " --mount type=volume,source=%s,destination%s" % config.RESTART_MAX_ATTEMPTS
+        for detail in image_detail:
+            if detail.arg_type == "mount":
+                command += " " + (detail.argument % id)
+            else:
+                command += " %s" % detail.argument
+        command += " %s" % backup_image
         service_id = self.send_command(command)
         if service_id[:5] == "Error":
             return service_id
@@ -97,8 +125,10 @@ class DockerService(object):
     def commit_containers(self, id):
         # Service internal id 가지고 오기
         service = GnDockerServices.query.filter_by(id=id).first()
+        service_internal_name = service.internal_name
         # 서비스의 Container 목록 가지고 오기
-        containers = self.get_service_containers(service.internal_id)
+        # containers = self.get_service_containers(service.internal_id)
+        containers = GnDockerContainers.query.filter_by(service_id=service.id).all()
         # 각 컨테이너를 commit하기
         # docker -H {ip}:2375 commit
         # $(docker -H {ip}:2375 ps --filter label=com.docker.swarm.service.name={internal_name} -q)
@@ -107,10 +137,9 @@ class DockerService(object):
         for container in containers:
             node = GnHostDocker.query.filter_by(id=container.host_id).first()
             ip = node.ip
-            name = container.name
             command = "docker -H %s:2375 commit " \
                       "$(docker -H %s:2375 ps --filter label=com.docker.swarm.service.name=%s -q) " \
-                      "%s:backup" % (ip, ip, name, id)
+                      "%s:backup" % (ip, ip, service_internal_name, id)
             result = self.send_command(command)
             result_list.append(result)
         return result_list

@@ -55,6 +55,7 @@ class GnDockerServices(Base):
     tag = Column(String(100), nullable=True, default='')
     internal_id = Column(String(100), nullable=True, default='')
     internal_name = Column(String(100), nullable=True, default='')
+    image = Column(String(50), nullable=True, default='')
     cpu = Column(Integer, nullable=True, default='')
     memory = Column(Integer, nullable=True, default='')
     volume = Column(String(8), nullable=True, default='')
@@ -68,7 +69,7 @@ class GnDockerServices(Base):
     def __init__(
         self,
         id, name, tag, internal_id, internal_name,
-        cpu, memory, volume, team_code,
+        image, cpu, memory, volume, team_code,
         author_id, create_time, start_time=create_time, stop_time=create_time, status=''
     ):
         self.id = id
@@ -76,6 +77,7 @@ class GnDockerServices(Base):
         self.tag = tag
         self.internal_id = internal_id
         self.internal_name = internal_name
+        self.image = image,
         self.cpu = cpu
         self.memory = memory
         self.volume = volume
@@ -91,9 +93,10 @@ class GnDockerServices(Base):
 
     def to_json(self):
         return dict(id=self.id, name=self.name, tag=self.tag, internal_id=self.internal_id,
-                    internal_name=self.internal_name, cpu=self.cpu, memory=self.memory, volume=self.volume,
-                    team_code=self.team_code, author_id=self.author_id, create_time=self.create_time,
-                    start_time=self.start_time, stop_time=self.stop_time, status=self.status)
+                    internal_name=self.internal_name, image=self.image, cpu=self.cpu, memory=self.memory,
+                    volume=self.volume, team_code=self.team_code, author_id=self.author_id,
+                    create_time=self.create_time, start_time=self.start_time,
+                    stop_time=self.stop_time, status=self.status)
 
 
 class GnDockerContainers(Base):
