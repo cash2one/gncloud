@@ -74,6 +74,19 @@ class DockerService(object):
         else:
             return self.docker_service_ps(service_id)
 
+    # 서비스 정지 (라 해 놓고 서비스 내 컨테이너 백업 후 서비스 삭제)
+    def docker_service_stop(self, service):
+        # 컨테이너를 commit하여 저장
+        # commit_result = ds.commit_containers(id)
+        self.commit_containers(service.id)
+        # 서비스 삭제
+        # service_delete_result = ds.docker_service_rm(service.internal_id)
+        self.docker_service_rm(service.internal_id)
+        # 서비스 상태 변경 (DB에 Update)
+        # check value
+        # print "commit_result: %s" % commit_result
+        # print "service_delete_result: %s" % service_delete_result
+
     # Docker 서비스 정보를 가지고 온다.
     def docker_service_ps(self, internal_id):
         command = "docker service inspect %s" % internal_id
@@ -143,6 +156,8 @@ class DockerService(object):
             result = self.send_command(command)
             result_list.append(result)
         return result_list
+
+    # --- 여기서부터는 Docker 커맨드 실행 && Docker REST API 사용 관련 함수 ---
 
     # command 전달 후 결과값 상단 한줄 받아오기
     def send_command(self, command):

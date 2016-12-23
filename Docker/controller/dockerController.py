@@ -75,20 +75,21 @@ def doc_create():
         return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
 
 
-# todo. Docker Service 상태변경
+# Docker Service 상태변경
 def doc_state(id):
     type = request.json["type"]
-    count = request.json["count"]
+    # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # 서비스 DB 데이터 가져오기
     service = GnDockerServices.query.filter_by(id=id).first()
     # -- 시작 (start)
+    # service
     if type == "start":
         # 이미 서비스가 돌아가는 상태인 경우는 아무 것도 안하고 끝낸다.
         if service.status == "running":
             return jsonify(status=False, message="서비스가 이미 실행중입니다.", result=service.to_json())
-        # commit된 내용을 가지고 서비스 생성.
         else:
+            # commit된 내용을 가지고 서비스 생성.
             # image = "%s:backup" % service.internal_name
             image = "%s:backup" % service.id
             restart_service = ds.docker_service_start(
@@ -115,29 +116,42 @@ def doc_state(id):
         if service.status != "running":
             return jsonify(status=False, message="서비스가 실행중이 아닙니다.", result=service.to_json())
         else:
-            # 컨테이너를 commit하여 저장
-            # commit_result = ds.commit_containers(id)
-            ds.commit_containers(id)
-            # 서비스 삭제
-            # service_delete_result = ds.docker_service_rm(service.internal_id)
-            ds.docker_service_rm(service.internal_id)
-            # 서비스 상태 변경 (DB에 Update)
+            ds.docker_service_stop(service)
             service.stop_time = datetime.now()
             service.status = "stop"
             db_session.commit()
-            # check value
-            # print "commit_result: %s" % commit_result
-            # print "service_delete_result: %s" % service_delete_result
             return jsonify(status=True, message="서비스가 정지되었습니다.", result=service.to_json())
     # -- 재시작 (restart)
     elif type == "restart":
-        # todo doc_state Restart 1. 컨테이너 커밋
-        # todo doc_state Restart 2. 서비스 삭제
-        # todo doc_state Restart 3. commit된 내용을 가지고 온다.
-        # todo doc_state Restart 4. 변경된 내용을 DB에 Update
-        return jsonify(status=True, message="restart 미구현")
+        if service.status == "running":
+            ds.docker_service_stop(service)
+            service.stop_time = datetime.now()
+            service.status = "stop"
+            db_session.commit()
+            # commit된 내용을 가지고 서비스 생성.
+            # image = "%s:backup" % service.internal_name
+        image = "%s:backup" % service.id
+        restart_service = ds.docker_service_start(
+            id=id, replicas=2, image=service.image, backup_image=image,
+            cpu=service.cpu, memory="%sMB" % (service.memory/1024))
+        # 변경된 내용을 DB에 Update
+        # 서비스쪽 데이터 수정
+        service.internal_id = restart_service[0]["ID"]
+        service.internal_name = restart_service[0]['Spec']['Name']
+        service.start_time = datetime.strptime(restart_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+        service.status = "running"
+        # 컨테이너 데이터 수정
+        service_container_list = ds.get_service_containers(service.internal_id)
+        for service_container in service_container_list:
+            node = GnHostDocker.query.filter_by(name=service_container['host_name']).first()
+            container = GnDockerContainers.query.filter_by(service_id=id, host_id=node.id).first()
+            container.internal_id = service_container['internal_id']
+            container.internal_name = service_container['internal_name']
+        # 볼륨은 변경사항이 없기에 수정 X..? (이미지 세부사항 추가 시의 경우를 생각해 둘 필요성은 있음)
+        db_session.commit()
+        return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
     else:
-        return jsonify(status=False, message="미구현")
+        return jsonify(status=False, message="정의된 상태값이 아닙니다.")
 
 
 # Docker 서비스 삭제
