@@ -25,11 +25,13 @@ var serviceAddModules = [
             var data_month = date.substring(5,7);
             var data_day = date.substring(8,10);
             var data_time = date.substring(11,13);
+            var data_mins= date.substring(14,16);
             var date = new Date();
             var year  = date.getFullYear();
             var month = date.getMonth() + 1; // 0부터 시작하므로 1더함 더함
             var day   = date.getDate();
             var time   = date.getHours();
+            var min = date.getMinutes();
             var dateDiff = "";
             if(data_year != year){
                 dateDiff = (year-data_year)+"년 전";
@@ -39,12 +41,15 @@ var serviceAddModules = [
                 dateDiff = (day-data_day)+"일 전";
             }else if(data_time != time){
                 dateDiff = (time-data_time)+"시간 전";
+            }else if(data_mins != min){
+                dateDiff = (min-data_mins) +"분 전";
+            }else{
+                dateDiff = "1분 전";
             }
             return dateDiff
         };
     });
 })();
-
 
 
 
