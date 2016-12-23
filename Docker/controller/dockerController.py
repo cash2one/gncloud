@@ -5,7 +5,8 @@ from flask import jsonify, request
 from datetime import datetime
 from service.dockerService import DockerService
 from db.database import db_session
-from db.models import GnDockerServices, GnDockerContainers, GnDockerVolumes, GnDockerImage, GnDockerImageDetail, GnHostDocker
+from db.models import GnDockerServices, GnDockerContainers, GnDockerVolumes, \
+    GnDockerImage, GnDockerImageDetail, GnHostDocker, GnDockerPorts
 from util.config import config
 from util.hash import random_string
 
@@ -66,11 +67,16 @@ def doc_create():
             volume = GnDockerVolumes(
                 service_id=id,
                 name=service_volume['Source'],
-                source_path="",
+                source_path=service_volume['Mountpoint'],
                 destination_path=service_volume['Target']
             )
             db_session.add(volume)
         db_session.add(service)
+        # 생성된 접속 포트 정보를 DB에 저장한다.
+        ports = docker_service[0]['Endpoint']['Ports']
+        for port in ports:
+            set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
+            db_session.add(set_port)
         db_session.commit()
         return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
 
@@ -109,6 +115,14 @@ def doc_state(id):
                 container.internal_id = service_container['internal_id']
                 container.internal_name = service_container['internal_name']
             # 볼륨은 변경사항이 없기에 수정 X..? (이미지 세부사항 추가 시의 경우를 생각해 둘 필요성은 있음)
+            # 포트 정보 수정
+            ports = restart_service[0]['Endpoint']['Ports']
+            for port in ports:
+                getports = GnDockerPorts.query.filter_by(protocol=port['Protocol'], target_port=port['TargetPort']).all()
+                for getport in getports:
+                    db_session.delete(getport)
+                set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
+                db_session.add(set_port)
             db_session.commit()
             return jsonify(status=True, message="서비스가 시작되었습니다.", result=service.to_json())
     # -- 정지 (stop)
@@ -148,6 +162,14 @@ def doc_state(id):
             container.internal_id = service_container['internal_id']
             container.internal_name = service_container['internal_name']
         # 볼륨은 변경사항이 없기에 수정 X..? (이미지 세부사항 추가 시의 경우를 생각해 둘 필요성은 있음)
+        # 포트 정보 수정
+        ports = restart_service[0]['Endpoint']['Ports']
+        for port in ports:
+            getports = GnDockerPorts.query.filter_by(protocol=port['Protocol'], target_port=port['TargetPort']).all()
+            for getport in getports:
+                db_session.delete(getport)
+            set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
+            db_session.add(set_port)
         db_session.commit()
         return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
     else:
@@ -241,13 +263,13 @@ def doc_new_image():
     # 이미지 Tag 중복 체크 중복되는 값이 존재할 경우 False 리턴 후 종료.
     if len(GnDockerImage.query.filter_by(name=name).all()) != 0:
         return jsonify(status=False, message="이미 존재하는 이미지입니다.")
-    filename = ""
+    sub_type = "base"
     team_code = request.json["team_code"]
     author_id = request.json["author_id"]
     create_time = datetime.strptime(request.json["create_time"][:-2], '%Y-%m-%dT%H:%M:%S.%f')
     status = ""
     image = GnDockerImage(
-        id=id, name=name, filename=filename, team_code=team_code,
+        id=id, name=name, sub_type=sub_type, team_code=team_code,
         author_id=author_id, create_time=create_time, status=status
     )
     db_session.add(image)

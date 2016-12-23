@@ -126,11 +126,18 @@ class DockerService(object):
     # 매개변수의 internal_id는
     def get_service_volumes(self, internal_id):
         command = "docker service inspect %s" % internal_id
-        # 서비스
+        # 서비스 내의 Mounts 정보 가져오기
         service = self.send_command_return_json(command)
-        # service.Source
-        volume = self.send_command_return_json(command)
-        return service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
+        mounts = service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
+        # 볼륨의 목적지를 확인한다. 모든 노드의 볼륨이 동일하다는 전제 하에 첫 번째 worker 노드에서 볼륨 값을 가져온다.
+        host = GnHostDocker.query.filter_by(type="worker").first()
+        for mount in mounts:
+            command = "docker -H %s:2375 volume inspect %s" % (host.ip, mount["Source"])
+            volume = ""
+            while type(volume) is not list:
+                volume = self.send_command_return_json(command)
+            mount['Mountpoint'] = volume[0]['Mountpoint']
+        return mounts
 
     # Docker Service의 Containers Commit
     # 매개변수의 id는 서비스 DB id
@@ -174,10 +181,14 @@ class DockerService(object):
 
     # command 전달 후 결과값을 json 객체로 받아오기
     def send_command_return_json(self, command):
-        self.cmd.sendline(command)
-        self.cmd.prompt()
-        result = self.cmd.before.split("\r\n", 1)[1]
-        return json.loads(result.replace("\r\n", ""))
+        try:
+            self.cmd.sendline(command)
+            self.cmd.prompt()
+            result = self.cmd.before.split("\r\n", 1)[1]
+            result = json.loads(result.replace("\r\n", ""))
+        except ValueError as e:
+            return "ValueError %s" % e
+        return result
 
     # 내부에서 REST API 호출용 함수
     def send(self, address, port, method, uri, data={}):
