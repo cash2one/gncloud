@@ -151,7 +151,7 @@ def repair_list():
 
 @app.route('/useinfo', methods=['GET'])
 def quota_info():
-    team_code = "004"
+    team_code = session['teamCode']
     return jsonify(status=True, message = 'success',list=getQuotaOfTeam(team_code, db_session))
 
 
@@ -186,8 +186,8 @@ def my_list():
 
 @app.route('/vm/acoount/teamlist', methods=['GET'])
 def tea_list():
-    session_id = ''
-    team_id = "002"
+    session_id = session['userId']
+    team_id = session['teamCode']
     return jsonify(status=True, message="success", list=tea(session_id, team_id, db_session))
 
 
@@ -199,7 +199,7 @@ def container_list():
 @app.route('/vm/account/teamset',methods=['GET'])
 def teamwon():
     user_id = session['userId']
-    team_code = "002"
+    team_code = session['teamCode']
     return jsonify(status=True, message="success", list=teamset(user_id, team_code, db_session))
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['PUT'])
