@@ -2,19 +2,24 @@
 <div> <!--main 영역-->
     <h1>인스턴스</h1>
 <div class="container-type">
+
     <h2>타입 선택</h2>
-    <div class="btn-group" role="group" aria-label="..." >
-        <button type="button" class="btn btn-default type-box box1" ng-click="selectType('hyperv')" required>
-            <img src="/gn_images/instance_create_windows.png" alt="" class="img-icon">Hyper-V</button>
-    </div>
-    <div class="btn-group" role="group" aria-label="...">
-        <button type="button" class="btn btn-default type-box box1" ng-click="selectType('kvm')" required>
-            <img src="/gn_images/instance_create_KVM.png" alt="" class="img-icon">KVM</button>
-    </div>
-    <div class="btn-group" role="group" aria-label="...">
-        <button type="button" class="btn btn-default type-box box1" ng-click="selectType('docker')" required>
-            <img src="/gn_images/instance_create_docker.png" alt="" class="img-icon">docker</button>
-    </div>
+    <input type="radio" id="hyper-v" class="inp-box-type" name="inp-box-type" />
+    <input type="radio" id="kvm" class="inp-box-type" name="inp-box-type"/>
+    <input type="radio" id="docker" class="inp-box-type" name="inp-box-type"/>
+    <div class="buttons">
+        <label class="label-box-type" for="hyper-v" ng-click="selectType('hyperv')">
+            <span class="sprite-img sprite-hyp"></span>
+            Hyper-V
+        </label>
+        <label class="label-box-type" for="kvm" ng-click="selectType('kvm')">
+            <span class="sprite-img sprite-kvm"></span>
+            KVM
+        </label>
+        <label class="label-box-type" for="docker" ng-click="selectType('docker')">
+            <span class="sprite-img sprite-doc"></span>
+            docker
+        </label>
 </div>
 
     <br>
@@ -127,7 +132,7 @@
     <br>
     <br>
 
-    < class="container-ssh">
+    <div class="container-ssh">
         <div id="ssh">
         <h2>SSH 키 설정</h2>
         <div class="clearfix" >
@@ -185,3 +190,4 @@
     <button type="submit" id="submit" value="생성" class="btn btn-success btn-block btn-lg" ng-click="submit()">인스턴스 생성</button>
 
 
+</div></div></div></div></div>
