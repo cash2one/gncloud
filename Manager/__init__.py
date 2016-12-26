@@ -280,5 +280,4 @@ def maketeam():
 
 if __name__ == '__main__':
     app.run(port=8080)
-    #http_server = WSGIServer(('', 8080), app)
-    #http_server.serve_forever()
+

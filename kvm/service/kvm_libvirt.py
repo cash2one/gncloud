@@ -15,7 +15,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     try:
         s = pxssh.pxssh()
         s.login(host_ip, USER)
-        s.sendline("/var/lib/libvirt/initcloud/sshkey_copy.sh " + name)
+        s.sendline(config.SCRIPT_PATH + "sshkey_copy.sh " + name)
         s.logout()
 
         url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
@@ -30,7 +30,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
                 , disk=disk
             )
 
-            ptr_POOL = conn.storagePoolLookupByName("default")
+            ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
             defaultVol = ptr_POOL.storageVolLookupByName(base_name)
             ptr_POOL.createXMLFrom(vol, defaultVol, 0)
             ptr_POOL.storageVolLookupByName(name + ".img").resize(gigaToByte(int(disk)))
@@ -73,14 +73,14 @@ def kvm_vm_delete(guest_name, host_ip):
     conn = libvirt.open(url)
     ptr_VM = conn.lookupByName(guest_name)
     ptr_VM.destroy()
-    ptr_POOL = conn.storagePoolLookupByName("default")
+    ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
     ptr_POOL.storageVolLookupByName(guest_name + ".img").delete()
     conn.close()
 
 
 def kvm_image_list():
     conn = libvirt.open(config.LIBVIRT_REMOTE_URL)
-    ptr_POOL = conn.storagePoolLookupByName("default")
+    ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
     list = ptr_POOL.listVolumes()
     conn.close()
     return list
@@ -88,14 +88,14 @@ def kvm_image_list():
 
 def kvm_image_delete(name):
     conn = libvirt.open(config.LIBVIRT_REMOTE_URL)
-    ptr_POOL = conn.storagePoolLookupByName("default")
+    ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
     ptr_POOL.storageVolLookupByName(name).delete()
     conn.close()
 
 
 def kvm_image_copy(name_volume, name_snap, host_ip):
     conn = libvirt.open(config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1))
-    ptr_POOL = conn.storagePoolLookupByName("default")
+    ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
     org_vol = ptr_POOL.storageVolLookupByName(name_volume + ".img")
     info = org_vol.info()
     save_vol = render_template(
