@@ -114,15 +114,16 @@ def repair(user_id, password, password_new, password_re, tel, email):
     return 2
 
 def server_image_list(type, sub_type, sql_session, team_code):
-    if(sub_type == ""):
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
-        return list
-    elif(sub_type != ""):
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).filter(GnVmImages.team_code==team_code).all()
-        return list
-
-def server_image_list(type, sub_type, sql_session, team_code):
-    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).filter(GnVmImages.team_code==team_code).all()
+    if type == "base":
+        if sub_type != "":
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+        else:
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all()
+    else:
+        if sub_type != "":
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).filter(GnVmImages.team_code==team_code).all()
+        else:
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all()
     return list
 
 

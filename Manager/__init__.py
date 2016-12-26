@@ -7,7 +7,7 @@ from datetime import timedelta
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
-                            , vm_update_info, vm_info_graph, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
+                            , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put, team_table \
                             , pathimage
 from db.database import db_session
@@ -219,9 +219,10 @@ def delete(id, code):
     return jsonify(status=True, message="success")
 
 
-@app.route('/vm/images/<sub_type>', methods=['GET'])
-def list_subtype_volume(sub_type):
-    return jsonify(status=True, message="success", list=server_image_list(sub_type,db_session))
+@app.route('/vm/images/<type>', methods=['GET'])
+def list_subtype_volume(type):
+    team_code = request.json['team_code']
+    return jsonify(status=True, message="success", list=server_image_list(type,"",db_session,team_code))
 
 
 @app.route('/vm/machines/<id>/<type>', methods=['PUT'])
