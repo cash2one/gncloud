@@ -49,7 +49,7 @@ def hvm_create():
     # 새 머신을 만든다. (New-VM)
     # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     SWITCHNAME = "out"
-    new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(memory), Path="C:\images",
+    new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(memory), Path=config.DISK_DRIVE+"\images",
                        SwitchName=SWITCHNAME)
 
 
@@ -60,9 +60,9 @@ def hvm_create():
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # todo. CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
-        CONVERT_VHD_DESTINATIONPATH = "C:/images/vhdx/base/"+internal_name+".vhdx"
+        CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+"/images/vhdx/base/"+internal_name+".vhdx"
         #CONVERT_VHD_PATH = "C:/images/vhdx/original/"
-        CONVERT_VHD_PATH = "C:/images/vhdx/original/" + base_image  #원본이미지로부터
+        CONVERT_VHD_PATH = config.DISK_DRIVE +"/images/vhdx/original/" + base_image  #원본이미지로부터
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
@@ -90,6 +90,7 @@ def hvm_create():
 
         try: #예외처리하였음 request에 대한 response timeout까지 기다리다 에러뜸, 접속의 종료로 인한 예외
             set_vm_ip = ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
+            print set_vm_ip
         except:
             # 새로 생성된 가상머신 데이터를 DB에 저장한다.
             vmid = random_string(config.SALT, 8)
@@ -101,24 +102,14 @@ def hvm_create():
                               author_id, datetime.datetime.now(),
                               datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
 
-            # 새로 생성된 가상머신의 base 이미지를 DB에 저장한다
-            '''
-            vm_image = GnVmImages(random_string(config.SALT, 8), name, internal_name+".vhdx", "hyperV", "base",
-                                  "win_icon", os, os_ver, os_sub_ver, os_bit, "",
-                                  author_id, datetime.datetime.now(), "")
-            '''
-
-            #  생성시 GN_Monitor에 값을 insert 해야한다
-            #  최초 usage 값을 받아 insert 한다.
-
             insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
 
             #db_session.add(vm_image)
             db_session.add(insert_monitor)
             db_session.add(vm)
-            db_session.commit()
-        finally:
             return jsonify(status=True, massage="VM 생성 성공")
+        finally:
+            db_session.commit()
     else:
         return jsonify(status=False, massage="VM 생성 실패")
 
