@@ -15,7 +15,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     try:
         s = pxssh.pxssh()
         s.login(host_ip, USER)
-        s.sendline("/var/lib/libvirt/initcloud/sshkey_copy.sh " + name)
+        s.sendline(config.SCRIPT_PATH + "sshkey_copy.sh " + name)
         s.logout()
 
         url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
