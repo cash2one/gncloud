@@ -102,7 +102,7 @@ def setStaticIpAddress(ip, host_ip, ssh_id):
     try:
         s = pxssh.pxssh()
         s.login(host_ip, USER)
-        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh %s %s" % (ip, ssh_id))
+        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh "+ip+" "+ssh_id)
         s.logout()
     except pxssh.TIMEOUT:
         print("==timeout==")

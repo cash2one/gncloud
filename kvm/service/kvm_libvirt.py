@@ -21,7 +21,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
         url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
         conn = libvirt.open(url)
 
-        # 스냅샷 기반 유무에 따른 생성 로직 분기
+        # 스냅샷 기반 유무에 따른 생성 set_vm_ip.sh로직 분기
         if base_sub_type == "base":
             # guest 생성 정보 xml 템플릿 생성
             vol = render_template(
