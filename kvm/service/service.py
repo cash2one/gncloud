@@ -91,9 +91,9 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
 def getIpAddress(name, host_ip):
     s = pxssh.pxssh()
     s.login(host_ip, USER)
-    s.sendline(config.SCRIPT_PATH+"get_ipadress.sh " + name)
+    s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
     s.prompt()
-    ip = s.before.replace(config.SCRIPT_PATH+"get_ipadress.sh " + name + "\r\n", "")
+    ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
     s.logout()
     return ip
 
@@ -102,7 +102,7 @@ def setStaticIpAddress(ip, host_ip, ssh_id):
     try:
         s = pxssh.pxssh()
         s.login(host_ip, USER)
-        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh "+ip+" "+ssh_id)
+        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh %s %s" % (ip, ssh_id))
         s.logout()
     except pxssh.TIMEOUT:
         print("==timeout==")
