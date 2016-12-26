@@ -30,12 +30,15 @@ angular
                                 var owner_name = data.list[i].user_list[j][1].user_name;
 
                             } // user 부분 태그 필요
-                            //else{
-                            //    var user_id = data.list[i].user_list[j][1].user_id;
-                            //    var user_name = data.list[i].user_list[j][1].user_name;
-                            //}
+                            else{
+                                var user_id = data.list[i].user_list[j][1].user_id;
+                                var user_name = data.list[i].user_list[j][1].user_name;
+                            }
                             data.list[i].team_info.owner_id = owner_id;
                             data.list[i].team_info.owner_name = owner_name;
+                            data.list[i].team_info.user_id = user_id;
+                            data.list[i].team_info.user_name= user_name;
+                            user_id = undefined; user_name=undefined;
                         }
                         newArr.push(data.list[i].team_info);
                     }

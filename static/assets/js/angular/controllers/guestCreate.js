@@ -18,6 +18,13 @@ angular
                     if (data) {
                         $scope.type = type;
                         $scope.image_list = data.list;
+                        if(ty=='hyperv'){
+                            $("#windows").show();
+                            $("#ssh").hide();
+                        }else if(ty =='kvm'){
+                            $("#windows").hide();
+                            $("#ssh").show();
+                        }
                     }
                     else {
                     }
