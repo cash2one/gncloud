@@ -128,18 +128,6 @@ def download_sshKey(id):
 
 #### rest end ####
 
-#### error handler start####
-
-# @app.errorhandler(Exception)
-# def internal_error(error):
-#     app.logger.error(error)
-#     logger.error('%s -- 500 ERROR', error)
-#     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
-
-
-#### error handler end####
-
-
 
 if __name__ == '__main__':
     # 로그 설정

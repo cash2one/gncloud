@@ -49,7 +49,7 @@ def hvm_create():
     # 새 머신을 만든다. (New-VM)
     # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     SWITCHNAME = "out"
-    new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(memory), Path=config.DISK_DRIVE+"\images",
+    new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(memory), Path=config.DISK_DRIVE+config.HYPERV_PATH,
                        SwitchName=SWITCHNAME)
 
 
@@ -60,9 +60,9 @@ def hvm_create():
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # todo. CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
-        CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+"/images/vhdx/base/"+internal_name+".vhdx"
+        CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
         #CONVERT_VHD_PATH = "C:/images/vhdx/original/"
-        CONVERT_VHD_PATH = config.DISK_DRIVE +"/images/vhdx/original/" + base_image  #원본이미지로부터
+        CONVERT_VHD_PATH = config.DISK_DRIVE +config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
@@ -87,31 +87,64 @@ def hvm_create():
         # print get_vm_ip
         # 생성된 VM의 ip 정보를 고정한다
 
+        dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
 
-        try: #예외처리하였음 request에 대한 response timeout까지 기다리다 에러뜸, 접속의 종료로 인한 예외
-            set_vm_ip = ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
-            print set_vm_ip
-        except:
-            # 새로 생성된 가상머신 데이터를 DB에 저장한다.
-            vmid = random_string(config.SALT, 8)
-            vm = GnVmMachines(vmid, name, '', 'hyperv', start_vm['VMId'],
-                              internal_name,
-                              '1', get_vm_ip, cpu, memory, hdd,
-                              os
-                              , os_ver, os_sub_ver, os_bit, "",
-                              author_id, datetime.datetime.now(),
-                              datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
+        while True:
+            if dhcp_ip_address is True:
+                try:
+                    ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
+                except:
+                    ps.get_ip_address_type(get_vm_ip)
+                finally:
+                    dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
+            else:
+                try:
+                    vmid = random_string(config.SALT, 8)
+                    vm = GnVmMachines(vmid, name, '', 'hyperv', start_vm['VMId'],
+                                      internal_name,
+                                      '1', get_vm_ip, cpu, memory, hdd,
+                                      os
+                                      , os_ver, os_sub_ver, os_bit, "",
+                                      author_id, datetime.datetime.now(),
+                                      datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
 
-            insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+                    insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+                    db_session.add(insert_monitor)
+                    db_session.add(vm)
+                    return jsonify(status=True,massage = "create vm success")
 
-            #db_session.add(vm_image)
-            db_session.add(insert_monitor)
-            db_session.add(vm)
-            return jsonify(status=True, massage="VM 생성 성공")
-        finally:
-            db_session.commit()
+                except:
+                    db_session.rollback()
+                    return jsonify(status=False, massage="DB insert fail")
+                finally:
+                    db_session.commit()
     else:
         return jsonify(status=False, massage="VM 생성 실패")
+
+    '''
+       try: #예외처리하였음 request에 대한 response timeout까지 기다리다 에러뜸, 접속의 종료로 인한 예외
+           set_vm_ip = ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
+           print set_vm_ip
+       except:
+           # 새로 생성된 가상머신 데이터를 DB에 저장한다.
+           vmid = random_string(config.SALT, 8)
+           vm = GnVmMachines(vmid, name, '', 'hyperv', start_vm['VMId'],
+                             internal_name,
+                             '1', get_vm_ip, cpu, memory, hdd,
+                             os
+                             , os_ver, os_sub_ver, os_bit, "",
+                             author_id, datetime.datetime.now(),
+                             datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
+
+           insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+
+           #db_session.add(vm_image)
+           db_session.add(insert_monitor)
+           db_session.add(vm)
+           return jsonify(status=True, massage="VM 생성 성공")
+       finally:
+           db_session.commit()
+'''
 
 
 #  REST. VM 스냅샷 생성
@@ -203,6 +236,7 @@ def hvm_state(id):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
+    print vmid.internal_id
     #    vm = GnVmMachines.query.filter_by().first
     if type == "start":
         # VM 시작
@@ -328,14 +362,14 @@ def hvm_new_image():
                                     author_id, datetime.datetime.now())
     db_session.add(insert_image_query)
     db_session.commit()
-    # todo 1. 한글입력시 글자깨짐현상 해결해야함
-    # todo 2. 정상 입력되었는지 확인후에 메시지 출력
+
     return jsonify(status=True, message="success")
 
 
 # tdo REST. VM 이미지 수정
 def hvm_modify_image(id):
-    # todo null 값이 들어오면 수정 하지 않는 기능으로 구현 .....
+    # null 값이 들어오면 수정 하지 않는 기능으로 구현 .....
+    # db값은 frontend 에서 수정함.....
     return jsonify(status=False, message="미구현")
 
 

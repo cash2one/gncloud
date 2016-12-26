@@ -9,8 +9,8 @@ from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
 
-def vm_list(sql_session):
-    list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").order_by(GnVmMachines.create_time.desc()).all()
+def vm_list(sql_session, team_code):
+    list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -113,38 +113,44 @@ def repair(user_id, password, password_new, password_re, tel, email):
     db_session.commit()
     return 2
 
-def server_image_list(type, sub_type, sql_session):
-    if(sub_type == ""):
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
-        return list
-    elif(sub_type != ""):
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
-        return list
-def server_image_list(type, sub_type, sql_session):
-    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+def server_image_list(type, sub_type, sql_session, team_code):
+    if type == "base":
+        if sub_type != "":
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+        else:
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all()
+    else:
+        if sub_type != "":
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).filter(GnVmImages.team_code==team_code).all()
+        else:
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all()
     return list
 
 
-def server_image(type, sql_session):
-    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+def server_image(type, sql_session, team_code):
+    if type == "base":
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+    else:
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all();
+
     return list
 
 def getQuotaOfTeam(team_code, sql_session):
     current_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
                         func.sum(GnVmMachines.memory).label("sum_mem"),
                         func.sum(GnVmMachines.disk).label("sum_disk")
-                        ).filter(GnVmMachines.team_code == team_code).one()
+                        ).filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
     limit_quota = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
     vm_run_count = sql_session.query(func.count(GnVmMachines.id).label("count"))\
-                   .filter(GnVmMachines.team_code == team_code and GnVmMachines.status == "running").one()
+                   .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
     vm_stop_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code and GnVmMachines.status == "stop").one()
+        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status == "stop").one()
     vm_kvm_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "kvm").one()
+        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "kvm").one()
     vm_hyperv_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "hyperv").one()
+        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "hyperv").one()
     vm_docker_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type == "docker").one()
+        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "docker").one()
     team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
     if current_info.sum_cpu is None:
         cpu_per_info = [0,100]

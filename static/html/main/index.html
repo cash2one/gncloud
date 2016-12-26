@@ -125,8 +125,12 @@
             url: '/api/manager/vm/logincheck',
             headers: {'Content-Type': 'application/json; charset=utf-8'},
             success:function(data) {
-                if (data.status == 1) {
+                if (data.status == true) {
                     $("#name").html(data.message);
+                }else{
+                    if(data.message != null) {
+                        alert(data.message)
+                    }
                 }
 
             }

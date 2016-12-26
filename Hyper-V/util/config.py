@@ -20,6 +20,7 @@ class Config:
     DISK_DRIVE = None
     MASK_BIT = None
     GATE_WAY = None
+    HYPERV_PATH = None
 
     def __init__(self, path="../conf/config.conf"):
         # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
@@ -50,6 +51,7 @@ class Config:
         self.DISK_DRIVE = parser.get(config_section, "DISK_DRIVE")
         self.MASK_BIT = parser.get(config_section, "MASK_BIT")
         self.GATE_WAY = parser.get(config_section, "GATE_WAY")
+        self.HYPERV_PATH = parser.get(config_section,"HYPERV_PATH")
 
 
 # 전역 공통사용 객체이다.
