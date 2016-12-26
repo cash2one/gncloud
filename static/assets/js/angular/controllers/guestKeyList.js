@@ -16,10 +16,13 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
-                    if (data) {
+                    if (data.status == true) {
                         $scope.data_list = data.list;
                     }
                     else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function (data, status, headers, config) {

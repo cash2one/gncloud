@@ -9,8 +9,8 @@ from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
 
-def vm_list(sql_session):
-    list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").order_by(GnVmMachines.create_time.desc()).all()
+def vm_list(sql_session, team_code):
+    list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -113,20 +113,25 @@ def repair(user_id, password, password_new, password_re, tel, email):
     db_session.commit()
     return 2
 
-def server_image_list(type, sub_type, sql_session):
+def server_image_list(type, sub_type, sql_session, team_code):
     if(sub_type == ""):
         list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
         return list
     elif(sub_type != ""):
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).filter(GnVmImages.team_code==team_code).all()
         return list
-def server_image_list(type, sub_type, sql_session):
-    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+
+def server_image_list(type, sub_type, sql_session, team_code):
+    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).filter(GnVmImages.team_code==team_code).all()
     return list
 
 
-def server_image(type, sql_session):
-    list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+def server_image(type, sql_session, team_code):
+    if type == "base":
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
+    else:
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all();
+
     return list
 
 def getQuotaOfTeam(team_code, sql_session):

@@ -39,7 +39,9 @@ angular
                     $scope.tot_cnt = data.list.vm_count[0] + data.list.vm_count[1];
                 }
                 else {
-                    alert(data.message)
+                    if(data.message != null) {
+                        alert(data.message)
+                    }
                 }
             })
             .error(function (data, status, headers, config) {

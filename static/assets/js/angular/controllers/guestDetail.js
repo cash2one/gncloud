@@ -42,7 +42,9 @@ angular
                         $scope.vm_data.name = $("#vm_name").val();
                     }
                     else {
-                        alert(data.message)
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -67,7 +69,9 @@ angular
                         $scope.tag_list = $("#vm_tag").val().split(",");
                     }
                     else {
-                        alert(data.message)
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -87,7 +91,9 @@ angular
                        window.location.href = '#/guestList';
                     }
                     else {
-                        alert(data.message)
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function (data, status, headers, config) {

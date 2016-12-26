@@ -46,7 +46,8 @@ def index():
 
 @app.route('/vm/machines', methods=['GET'])
 def guest_list():
-    return jsonify(status=True, message="success", list=vm_list(db_session))
+    team_code = session['teamCode']
+    return jsonify(status=True, message="success", list=vm_list(db_session, team_code))
 
 
 @app.route('/vm/machines/<id>', methods=['GET'])
@@ -162,12 +163,14 @@ def list():
 
 @app.route('/vm/images/<type>/<sub_type>', methods=['GET'])
 def list_volume(type, sub_type):
-    return jsonify(status=True, message="success", list=server_image_list(type, sub_type, db_session))
+    team_code = session['teamCode']
+    return jsonify(status=True, message="success", list=server_image_list(type, sub_type, db_session, team_code))
 
 
 @app.route('/vm/images/<type>', methods=['GET'])
 def volume(type):
-    return jsonify(status=True, message="success", list=server_image(type, db_session))
+    team_code = session['teamCode']
+    return jsonify(status=True, message="success", list=server_image(type, db_session, team_code))
 
 
 @app.route('/vm/account/users/list', methods=['GET'])

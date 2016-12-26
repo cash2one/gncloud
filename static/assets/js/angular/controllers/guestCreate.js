@@ -28,6 +28,9 @@ angular
                         }
                     }
                     else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -40,11 +43,14 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
-                    if (data) {
+                    if (data.status == true) {
                         $scope.snap_list = data.list;
                         $("#snap").hide();
                     }
                     else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -60,10 +66,13 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
-                    if (data) {
+                    if (data.status == true) {
                         $scope.sshkey_list = data.list;
                     }
                     else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -87,7 +96,9 @@ angular
                         alert("SSH key 추가되었습니다");
                         $scope.getkeys();
                     } else {
-                        alert(data.message)
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 });
         };
@@ -131,7 +142,9 @@ angular
                         alert("인스턴스가 생성되었습니다");
                         window.location.href = '#/guestList';
                     } else {
-                        alert(data.message)
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 });
         };
