@@ -17,6 +17,13 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.image_list = data.list;
+                        if(ty=='hyperv'){
+                            $("#windows").show();
+                            $("#ssh").hide();
+                        }else if(ty =='kvm'){
+                            $("#windows").hide();
+                            $("#ssh").show();
+                        }
                     }
                     else {
                     }
