@@ -23,7 +23,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 @app.before_request
 def before_request():
-    if ('userId' not in session) and request.path != '/vm/guestLogout' and request.path != '/vm/account':
+    if ('userId' not in session) and request.path != '/vm/guestLogout' and request.path != '/vm/account' and (request.path!= 'vm/account/users' and request.method !='POST'):
         return make_response(jsonify(status=False),401)
 
 @app.teardown_appcontext
@@ -68,20 +68,34 @@ def login():
     if(user_info != None and team_info == None ):
         session['userId'] = user_info.user_id
         session['userName'] = user_info.user_name
-        return jsonify(status=True, message="login as "+user_id, test='no')
+        return jsonify(status=True, test='no')
     elif(user_info != None and team_info.comfirm == "Y"):
         session['userId'] = user_info.user_id
         session['userName'] = user_info.user_name
         session['teamCode'] = team_info.team_code
-        return jsonify(status=True, message="login as "+user_id, test='yes')
+        session['teamOwner'] = team_info.team_owner
+        return jsonify(status=True, test='yes')
 
     elif(user_info != None and team_info.comfirm == "N" ):
         session['userId'] = user_info.user_id
         session['userName'] = user_info.user_name
-        return jsonify(status=True, message="login as "+user_id, test='noyes')
+        return jsonify(status=True, test='noyes')
     else:
-        return jsonify(status=False, message="정보가 잘못되었습니다")
+        return jsonify(status=True, test='noo')
 
+@app.route('/vm/account/users', methods=['POST'])
+def signup_list():
+    user_name = request.json['user_name']
+    user_id = request.json['user_id']
+    password = request.json['password']
+    password_re = request.json['password_re']
+    check=sign_up(user_name,user_id,password,password_re)
+    if(check == 'success'):
+        return  jsonify(status=True, test='success' )
+    elif(check == 'password'):
+        return jsonify(status=True, test='password')
+    elif(check =='user_id'):
+        return jsonify(status=True, test='user_id')
 
 @app.route('/vm/guestLogout', methods=['GET'])
 def logout():
@@ -161,16 +175,7 @@ def team():
     if session.get('userId', None):
         return jsonify(status=True, message="success", list=team_list(session['userId'],db_session))
 
-@app.route('/vm/account/users', methods=['POST'])
-def signup_list():
-    user_name = request.json['user_name']
-    user_id = request.json['user_id']
-    password = request.json['password']
-    password_re = request.json['password_re']
-    if(sign_up(user_name,user_id,password,password_re)!=None):
-        return  jsonify(status=True, message="success")
-    else:
-        return jsonify(status = False, message = "false")
+
 
 @app.route('/vm/account/team', methods=['GET'])
 def my_list():

@@ -126,20 +126,9 @@
             headers: {'Content-Type': 'application/json; charset=utf-8'},
             success:function(data) {
                 if (data.status == 1) {
-                    $("#in").hide();
                     $("#name").html(data.message);
                 }
-                else {
-                    $("#out").hide();
-                    $("#report").hide();
-                    $("#inst").hide();
-                    $("#make").hide();
-                    $("#snap").hide();
-                    $("#monitor").hide();
-                    $("#setting").hide();
-                    $("#profile").hide();
-                    $("#help").hide();
-                }
+
             }
         })
         function logout()
