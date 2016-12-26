@@ -60,7 +60,7 @@ def create_vm():
     name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')#request.json['name']
     cpu = request.json['cpu']
     memory = request.json['memory']
-    disk = 10#request.json['hdd']
+    disk = request.json['hdd']
     image_id = request.json['id']
     sshkeys = request.json['sshkeys']
     tag =request.json['tag']
@@ -127,18 +127,6 @@ def download_sshKey(id):
     return make_response((body, headers))
 
 #### rest end ####
-
-#### error handler start####
-
-# @app.errorhandler(Exception)
-# def internal_error(error):
-#     app.logger.error(error)
-#     logger.error('%s -- 500 ERROR', error)
-#     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
-
-
-#### error handler end####
-
 
 
 if __name__ == '__main__':
