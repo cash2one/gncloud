@@ -3,7 +3,9 @@ __author__ = 'jhjeon'
 
 import json
 import requests
+from flask import jsonify
 from pexpect import pxssh
+from datetime import datetime
 from db.models import GnDockerServices, GnDockerContainers, GnDockerImage, GnDockerImageDetail, GnHostDocker
 from util.config import config
 
@@ -163,6 +165,43 @@ class DockerService(object):
             result = self.send_command(command)
             result_list.append(result)
         return result_list
+
+    # Docker Service의 Containers Commit (다만 스냅샷이므로 커밋하는 이미지는 하나만으로)
+    # 매개변수의 id는 서비스 DB id
+    # commit된 이미지의 이름은 서비스 DB id, tag는 backup으로 하자.
+    def snap_containers(self, id):
+        sub_type = "snap"
+        # Service internal id 가지고 오기
+        service = GnDockerServices.query.filter_by(id=id).first()
+        service_internal_name = service.internal_name
+        # 서비스의 Container 목록 가지고 오기
+        # containers = self.get_service_containers(service.internal_id)
+        container = GnDockerContainers.query.filter_by(service_id=service.id).first()
+        # 각 컨테이너를 commit하기
+        # docker -H {ip}:2375 commit
+        # $(docker -H {ip}:2375 ps --filter label=com.docker.swarm.service.name={internal_name} -q)
+        # {id}:stop
+        first_worker = GnHostDocker.query.filter_by(id=container.host_id).first()
+        registry = GnHostDocker.query.filter_by(type="registry").first()
+        # 스냅샷 이미지 이름에 넣기 위한 현재 시각 저장
+        snaptime = datetime.now().strftime('%Y%m%d%H%M%S')
+        # 스냅샷 이미지 이름 정의
+        snap_image_name = "%s:5000/%s_%s:%s" % (registry.ip, service.name, snaptime, sub_type)
+        # 스냅샷 이미지 커밋
+        commit_command = "docker -H %s:2375 commit " \
+                  "$(docker -H %s:2375 ps --filter label=com.docker.swarm.service.name=%s -q) " \
+                  "%s" % (first_worker.ip, first_worker.ip, service_internal_name, snap_image_name)
+        commit_result = self.send_command_return_all_line(commit_command)
+        # 스냅샷 이미지 레지스트리에 저장
+        push_command = "docker -H %s:2375 push %s" % (first_worker.ip, snap_image_name)
+        push_result = self.send_command_return_all_line(push_command)
+        return {
+            "status": True,
+            "commit_result": commit_result,
+            "push_result": push_result,
+            "name": snap_image_name,
+            "sub_type": sub_type
+        }
 
     # --- 여기서부터는 Docker 커맨드 실행 && Docker REST API 사용 관련 함수 ---
 

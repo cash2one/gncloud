@@ -84,6 +84,8 @@ def doc_create():
 # Docker Service 상태변경
 def doc_state(id):
     type = request.json["type"]
+    team_code = request.json["team_code"]
+    author_id = request.json["author_id"]
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # 서비스 DB 데이터 가져오기
@@ -168,10 +170,35 @@ def doc_state(id):
             getports = GnDockerPorts.query.filter_by(protocol=port['Protocol'], target_port=port['TargetPort']).all()
             for getport in getports:
                 db_session.delete(getport)
-            set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
+            set_port = GnDockerPorts(
+                service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
             db_session.add(set_port)
         db_session.commit()
         return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
+    # -- 재시작 (restart)
+    elif type == "snap":
+        # 이미지 커밋 및 레지스트리에 스냅샷 이미지 저장
+        snapshot = ds.snap_containers(id)
+        # todo snap 2. 저장된 스냅샷 정보를 DB에 저장
+        # Docker Image 정보 입력
+        image_id = random_string(config.SALT, 8)
+        # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
+        while len(GnDockerImage.query.filter_by(id=id).all()) != 0:
+            image_id = random_string(config.SALT, 8)
+        name = snapshot["name"]
+        # 이미지 Tag 중복 체크 중복되는 값이 존재할 경우 False 리턴 후 종료.
+        if len(GnDockerImage.query.filter_by(name=name).all()) != 0:
+            return jsonify(status=False, message="이미 존재하는 이미지입니다.")
+        sub_type = snapshot["sub_type"]
+        create_time = datetime.now()
+        status = ""
+        image = GnDockerImage(
+            id=image_id, name=name, sub_type=sub_type, team_code=team_code,
+            author_id=author_id, create_time=create_time, status=status
+        )
+        db_session.add(image)
+        db_session.commit()
+        return jsonify(status=True, message="스냅샷 추가 완료", result=image.to_json())
     else:
         return jsonify(status=False, message="정의된 상태값이 아닙니다.")
 
@@ -344,18 +371,20 @@ def doc_delete_image(id):
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     version = "v1"
     repositories = "repositories"
-    tags = "tags"
+    namespace = "library"
+    # 레지스트리 노드 정보 가지고 오기
+    registry = GnHostDocker.query.filter_by(type="registry").first()
+    # 삭제할 이미지 정보 저장
     image = GnDockerImage.query.filter_by(id=id).first()
     if image is None:
         return jsonify(status=False, message="존재하지 않는 이미지입니다.")
     image_name = image.name.split("/")[1].split(":")[0]
-    image_tag = image.name.split("/")[1].split(":")[1]
     # Docker Registry 이미지 삭제
     result = ds.send(
-        address="192.168.22.23",
+        address=registry.ip,
         port="5000",
         method="DELETE",
-        uri="/" + version + "/" + repositories + "/" + image_name + "/" + tags + "/" + image_tag
+        uri="/" + version + "/" + repositories + "/" + namespace + "/" + image_name
     )
     # 삭제된 상태를 이미지 및 이미지 상세 테이블에 적용
     if result:
