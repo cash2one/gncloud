@@ -1,8 +1,0 @@
-.idea/
-.vs/
-obj/
-bin/
-Debug/
-Release/
-*.iml
-*.pyc
