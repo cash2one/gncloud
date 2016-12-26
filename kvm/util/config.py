@@ -14,6 +14,7 @@ class Config:
     SSHKEY_PATH = ""
     LIVERT_IMAGE_PATH = ""
     LIVERT_IMAGE_BACKUP_PATH = ""
+    POOL_NAME = ""
 
     def __init__(self, path="../conf/config.conf"):
         config_section = "DEFAULT"
@@ -36,6 +37,7 @@ class Config:
         self.SSHKEY_PATH = parser.get(config_section, "SSHKEY_PATH")
         self.LIVERT_IMAGE_PATH = parser.get(config_section, "LIVERT_IMAGE_PATH")
         self.LIVERT_IMAGE_BACKUP_PATH = parser.get(config_section, "LIVERT_IMAGE_BACKUP_PATH")
+        self.POOL_NAME = parser.get(config_section, "POOL_NAME")
 
 # 전역 공통사용 객체이다.
 local_custom_file = os.environ.get('CONFIG_FILE_PATH')
