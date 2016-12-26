@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="/gn_css/bootstrap_gn_theme.css" />
     <script>
         $(document).ready(function() {
+            $('#i').hide();
+            $('#p').hide();
             $('#sigin_btn').click(function() {
                 var formData = '{"user_name":"'+$("#user_name").val()+'","user_id":"'+$("#user_id").val()+'","password":"'+$("#password").val()+'","password_re":"'+$("#password_re").val()+'"}';
                 $.ajax({
@@ -33,10 +35,14 @@
                     url: '/api/manager/vm/account/users',
                     headers: {'Content-Type': 'application/json; charset=utf-8'},
                     success:function(data) {
-                        if (data.status == true) {
+                        if (data.test == 'success') {
                             location.href="/index.html"
-                        }else{
-                            alert(data.message);
+                        }else if(data.test =='user_id'){
+                            $('#i').show();
+                            $('#p').hide();
+                        }else if(data.test == 'password'){
+                            $('#p').show();
+                            $('#i').hide();
                         }
                     }
                 })
@@ -63,7 +69,8 @@
             <input type="password" class="inp-login" id="password_re" placeholder="비밀번호를 다시 입력해주세요.">
 
             <!--이미 등록된 아이디를 적었을 때 출력-->
-            <div class="error-message">이미 등록된 아이디입니다.</div>
+            <div class="error-message" id="i">이미 등록된 아이디입니다.</div>
+            <div class="error-message" id="p">입력된 비밀번호가 일치하지 않습니다.</div>
             <button type="submit" class="btn btn-info btn-block" id="sigin_btn">회원가입</button>
         </div> <!--class="login-box"-->
 
