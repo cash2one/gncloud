@@ -169,15 +169,17 @@ class GnDockerImage(Base):
     __tablename__ = 'GN_DOCKER_IMAGES'
     id = Column(String(8), primary_key=True, nullable=False, default='')
     name = Column(String(50), nullable=False, default='')
+    registry_name = Column(String(200), nullable=False, default='')
     sub_type = Column(String(10), nullable=False, default='')
     team_code = Column(String(10), nullable=True, default='')
     author_id = Column(String(15), nullable=True, default='')
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default='')
 
-    def __init__(self, id, name, sub_type, team_code, author_id, create_time, status):
+    def __init__(self, id, name, registry_name, sub_type, team_code, author_id, create_time, status):
         self.id = id
         self.name = name
+        self.registry_name = registry_name
         self.sub_type = sub_type
         self.team_code = team_code
         self.author_id = author_id
@@ -188,7 +190,8 @@ class GnDockerImage(Base):
         return "<GnDockerImage %r>" % self.id
 
     def to_json(self):
-        return dict(id=self.id, name=self.name, sub_type=self.sub_type, team_code=self.team_code,
+        return dict(id=self.id, name=self.name, registry_name=self.registry_name,
+                    sub_type=self.sub_type, team_code=self.team_code,
                     author_id=self.author_id, create_time=self.create_time, status=self.status)
 
 
