@@ -6,7 +6,7 @@ if [ $1 = "cpu" ]; then
 elif [ $1 = "mem" ]; then  
  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null centos@${ip} free | grep Mem | awk '{ print(100 - ($4/$2 * 100.0)) }'
 elif [ $1 = "disk" ]; then
- ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null centos@${ip} df -P | grep -v ^Filesystem | awk '{sum += $3} END { print sum/1024}'
+   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null centos@${ip} df -P | grep -v ^Filesystem | awk '{sum += $3} END { print sum/1024}'
 elif [ $1 = "net" ]; then
  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null centos@${ip} netstat -i | grep eth0 | awk '{print $3}'
 fi

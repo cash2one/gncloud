@@ -21,10 +21,10 @@ class MonitorService(object):
             response = self.client.stats(container, stream=None)
             cont = self.client.inspect_container(container)
             id = cont['Id']
-            print 'URL = ' + self.client.base_url + ', Name : ' + cont['Name'] + ', Status : ' + cont['State']['Status'] + ', ID : ' + id
-            print "cpu_user : " + str(response['cpu_stats']['cpu_usage']['usage_in_usermode']) + ', total :' + str(response['cpu_stats']['cpu_usage']['total_usage']) + ', kernel : ' + str(response['cpu_stats']['cpu_usage']['usage_in_kernelmode'])
-            print "memory_user : " + str(response['memory_stats']['usage']) + ', memory_limit : ' + str(response['memory_stats']['limit'])
-            cmd='docker exec ' + id + ' /bin/df -h | grep docker | awk \'{print $2, $3, $4, $5}\''
+            # print 'URL = ' + self.client.base_url + ', Name : ' + cont['Name'] + ', Status : ' + cont['State']['Status'] + ', ID : ' + id
+            # print "cpu_user : " + str(response['cpu_stats']['cpu_usage']['usage_in_usermode']) + ', total :' + str(response['cpu_stats']['cpu_usage']['total_usage']) + ', kernel : ' + str(response['cpu_stats']['cpu_usage']['usage_in_kernelmode'])
+            # print "memory_user : " + str(response['memory_stats']['usage']) + ', memory_limit : ' + str(response['memory_stats']['limit'])
+            cmd = 'docker exec ' + id + ' /bin/df -h | grep docker | awk \'{print $2, $3, $4, $5}\''
             self.ssh.sendline(cmd)
             self.ssh.prompt()
             print self.ssh.before
@@ -39,7 +39,7 @@ mservice.node_monitoring()
 mservice.close()
 
 
-    #
+
     # try:
     #     lists = GnHostMachines.query.filter_by(type="docker_w").all()
     #     for list in lists:

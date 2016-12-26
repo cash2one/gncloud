@@ -88,26 +88,18 @@ class PowerShell(object):
         #self.send(script)
         return self.send_new_vm(script, ip)
 
+    #ip address의 타입을 받기위한 ex) dhcp or static, static은 false로 리턴받음
+    def get_ip_address_type(self, ip):
+        script = '$wmi = Get-WmiObject win32_networkadapterconfiguration -filter "ipenabled =\'true\'";'
+        script += '$wmi.DHCPEnabled | ConvertTo-Json -Compress;'
+        return self.send_get_vm_info(script, ip)
+
     #vm들이 사용하고 있는 자원들의 정보를 받아온다. 모니터링을 위한 메소드
     def get_vm_usage_info(self, ip):
         script = ""
         return self.send_get_vm_info(script, ip)
 
-    def send_get_vm_info(self, script, ip):
-        address = self.address
-        port = str(self.port)
-        uri = self.uri
-        url = "http://" + address
-        url += ":"
-        url += port
-        url += "/"
-        url += uri
-        # todo send. 나중에 이 부분은 agent에서 데이터 값을 받아 처리하도록 수정이 끝나면 지울 것
-        url += "?script=" + script
-        # todo send. 추후 스크립트를 URL에 포함시켜 보내지 않고 Post data로 전달받을 수 있도록 agent 수정 필요
-        data = {'script': script}
-        response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
-        return json.loads(response.json())
+
 
 
     # VHD 파일을 복사
@@ -211,8 +203,8 @@ class PowerShell(object):
     def delete_vm_Image(self, vhd_File_Name, type,computer_name):
         #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
         script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
-        script += "Move-Item -Path "+config.DISK_DRIVE+"/images/vhdx/"+type+"/" + vhd_File_Name
-        script += " -Destination "+config.DISK_DRIVE+"/images/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
+        script += "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+"/" + vhd_File_Name
+        script += " -Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
         print script
         return self.send(script)
 
@@ -223,8 +215,8 @@ class PowerShell(object):
         script += "$vm = Get-VM -Id "+vmId+";"
         script += "$vmn = $vm.Name;"
         script += "Remove-VM -VM $vm -Force;"
-        script += "Move-Item -Path "+config.DISK_DRIVE+"/images/vhdx/"+type+'/$vmn".vhdx" '
-        script += "-Destination "+config.DISK_DRIVE+"/images/vhdx/backup/ | ConvertTo-Json }"
+        script += "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+'/$vmn".vhdx" '
+        script += "-Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/ | ConvertTo-Json }"
         print script
         return self.send(script)
 
@@ -243,11 +235,11 @@ class PowerShell(object):
         script += vm_Id + ';'
         script += '$VMname = $vm.Name;'
         script += '$CloneVMname = "' +snapshot_id+'";'
-        script += 'Export-VM -Name $VMname -Path '+config.DISK_DRIVE+'/images/$VMname"clone"/ '+';'
-        script += 'Move-Item '+config.DISK_DRIVE+'/images/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
-        script += '-Destination '+config.DISK_DRIVE+'/images/vhdx/snap/$VMName$CloneVMname".vhdx";'
-        script += 'Remove-Item -Path '+config.DISK_DRIVE+'/images/$VMname"clone" -Recurse ;'
-        script += 'Get-ChildItem -Path '+config.DISK_DRIVE+'/images/vhdx/snap/$VMName'
+        script += 'Export-VM -Name $VMname -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/$VMname"clone"/ '+';'
+        script += 'Move-Item '+config.DISK_DRIVE+config.HYPERV_PATH+'/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
+        script += '-Destination '+config.DISK_DRIVE+config.HYPERV_PATH+'/vhdx/snap/$VMName$CloneVMname".vhdx";'
+        script += 'Remove-Item -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/$VMname"clone" -Recurse ;'
+        script += 'Get-ChildItem -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/vhdx/snap/$VMName'
         script += '"' + snapshot_id
         script += '.vhdx" | ConvertTo-Json -Compress}'
         print script
@@ -271,7 +263,22 @@ class PowerShell(object):
         response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
 
-    # 새로 생성된 agent에 전달
+    #새로 생성된 agent에 전달, timeout은 그대로
+    def send_get_vm_info(self, script, address):
+        port = str(self.port)
+        uri = self.uri
+        url = "http://" + address
+        url += ":"
+        url += port
+        url += "/"
+        url += uri
+        url += "?script=" + script
+        data = {'script': script}
+        response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
+        return json.loads(response.json())
+
+
+    # 새로 생성된 agent에 전달, setting을 위해 timeout이 작은값을 넣는다
     def send_new_vm(self, script, address):
         port = str(self.port)
         uri = self.uri
@@ -284,6 +291,9 @@ class PowerShell(object):
         data = {'script': script}
         response = requests.post(url, data=json.dumps(data), timeout=10)
         return json.loads(response.json())
+
+
+
 
     def get_state_string(self, state):
         if state is 1:

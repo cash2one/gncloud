@@ -7,7 +7,7 @@ from datetime import timedelta
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
-                            , vm_update_info, vm_info_graph, server_image_list, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
+                            , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put, team_table \
                             , pathimage
 from db.database import db_session
@@ -23,7 +23,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 @app.before_request
 def before_request():
-    if ('userId' not in session) and request.path != '/vm/guestLogout' and request.path != '/vm/account' and (request.path!= 'vm/account/users' and request.method !='POST'):
+    if ('userId' not in session) and request.path != '/vm/guestLogout' and request.path != '/vm/account' and (request.path!= 'vm/account/users' and request.method !='POST') and  request.path != '/vm/account/testtest':
         return make_response(jsonify(status=False),401)
 
 @app.teardown_appcontext
@@ -46,7 +46,8 @@ def index():
 
 @app.route('/vm/machines', methods=['GET'])
 def guest_list():
-    return jsonify(status=True, message="success", list=vm_list(db_session))
+    team_code = session['teamCode']
+    return jsonify(status=True, message="success", list=vm_list(db_session, team_code))
 
 
 @app.route('/vm/machines/<id>', methods=['GET'])
@@ -162,12 +163,14 @@ def list():
 
 @app.route('/vm/images/<type>/<sub_type>', methods=['GET'])
 def list_volume(type, sub_type):
-    return jsonify(status=True, message="success", list=server_image_list(type, sub_type, db_session))
+    team_code = session['teamCode']
+    return jsonify(status=True, message="success", list=server_image_list(type, sub_type, db_session, team_code))
 
 
 @app.route('/vm/images/<type>', methods=['GET'])
 def volume(type):
-    return jsonify(status=True, message="success", list=server_image(type, db_session))
+    team_code = session['teamCode']
+    return jsonify(status=True, message="success", list=server_image(type, db_session, team_code))
 
 
 @app.route('/vm/account/users/list', methods=['GET'])
@@ -216,9 +219,10 @@ def delete(id, code):
     return jsonify(status=True, message="success")
 
 
-@app.route('/vm/images/<sub_type>', methods=['GET'])
-def list_subtype_volume(sub_type):
-    return jsonify(status=True, message="success", list=server_image_list(sub_type,db_session))
+@app.route('/vm/images/<type>', methods=['GET'])
+def list_subtype_volume(type):
+    team_code = request.json['team_code']
+    return jsonify(status=True, message="success", list=server_image_list(type,"",db_session,team_code))
 
 
 @app.route('/vm/machines/<id>/<type>', methods=['PUT'])
@@ -249,10 +253,18 @@ def comfirm():
 
 @app.route('/vm/account/createteam', methods=['POST'])
 def createteam():
+    user_id = session['userId']
     team_name = request.json['team_name']
     team_code = request.json['team_code']
     author_id = session['userName']
-    return jsonify(status=True, message="success", list=createteam_list(team_name, team_code, author_id))
+    session['teamCode']=team_code
+    teamnamecheck=createteam_list(user_id, team_name, team_code, author_id, db_session)
+    if(teamnamecheck=='success'):
+        return jsonify(status=True, test='success')
+    elif(teamnamecheck=='team_code'):
+        return jsonify(status=True, test='id')
+    elif(teamnamecheck=='team_name'):
+        return jsonify(status=True, test='team')
 
 @app.route('/vm/account/teamname', methods=['GET'])
 def teamname():
@@ -275,6 +287,7 @@ def systembase():
 def maketeam():
 
     return jsonify(status=True, message="success")
+
 #### rest end ####
 
 
