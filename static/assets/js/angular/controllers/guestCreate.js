@@ -28,7 +28,7 @@ angular
 
             $http({
                 method: 'GET',
-                url: '/api/manager/vm/images/snap/' + ty,
+                url: '/api/manager/vm/images/snap/' + type,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
