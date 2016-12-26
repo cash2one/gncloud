@@ -145,30 +145,50 @@ class GnDockerVolumes(Base):
                     destination_path=self.destination_path, status=self.status)
 
 
+class GnDockerPorts(Base):
+    __tablename__ = 'GN_DOCKER_PORTS'
+    service_id = Column(String(8), primary_key=True, nullable=False, default='')
+    protocol = Column(String(10), primary_key=True, nullable=False, default='')
+    target_port = Column(String(5), primary_key=True, nullable=False, default='0')
+    published_port = Column(String(5), primary_key=True, nullable=False, default='0')
+
+    def __init__(self, service_id, protocol, target_port, published_port):
+        self.service_id = service_id
+        self.protocol = protocol
+        self.target_port = target_port
+        self.published_port = published_port
+
+    def __repr__(self):
+        return "<GnDockerPorts %r_%r_%r_%r>" % (self.service_id, self.protocol, self.target_port, self.published_port)
+
+    def to_json(self):
+        return dict(service_id=self.service_id, protocol=self.protocol, target_port=self.target_port, published_port=self.published_port)
+
+
 class GnDockerImage(Base):
     __tablename__ = 'GN_DOCKER_IMAGES'
     id = Column(String(8), primary_key=True, nullable=False, default='')
     name = Column(String(50), nullable=False, default='')
-    filename = Column(String(100), nullable=True, default='')
+    sub_type = Column(String(10), nullable=False, default='')
     team_code = Column(String(10), nullable=True, default='')
     author_id = Column(String(15), nullable=True, default='')
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default='')
 
-    def __init__(self, id, name, filename, team_code, author_id, create_time, status):
+    def __init__(self, id, name, sub_type, team_code, author_id, create_time, status):
         self.id = id
         self.name = name
-        self.filename = filename
+        self.sub_type = sub_type
         self.team_code = team_code
         self.author_id = author_id
         self.create_time = create_time
         self.status = status
 
     def __repr__(self):
-        return "<GnDockerImage %r>" % self
+        return "<GnDockerImage %r>" % self.id
 
     def to_json(self):
-        return dict(id=self.id, name=self.name, filename=self.filename, team_code=self.team_code,
+        return dict(id=self.id, name=self.name, sub_type=self.sub_type, team_code=self.team_code,
                     author_id=self.author_id, create_time=self.create_time, status=self.status)
 
 

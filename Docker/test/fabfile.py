@@ -22,9 +22,7 @@ def docker_manager():
 
 def docker_service_create(name, connect_port, in_port, image, environmant=""):
     command = "docker service create"
-    # todo. 이름 중복체크
     command += " --name %s" % name
-    # todo. 포트
     command += " -p %s:%s" % (connect_port, in_port)
     if len(environmant) != 0:
         command += " -e %s" % environmant

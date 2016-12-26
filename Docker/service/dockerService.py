@@ -74,6 +74,19 @@ class DockerService(object):
         else:
             return self.docker_service_ps(service_id)
 
+    # 서비스 정지 (라 해 놓고 서비스 내 컨테이너 백업 후 서비스 삭제)
+    def docker_service_stop(self, service):
+        # 컨테이너를 commit하여 저장
+        # commit_result = ds.commit_containers(id)
+        self.commit_containers(service.id)
+        # 서비스 삭제
+        # service_delete_result = ds.docker_service_rm(service.internal_id)
+        self.docker_service_rm(service.internal_id)
+        # 서비스 상태 변경 (DB에 Update)
+        # check value
+        # print "commit_result: %s" % commit_result
+        # print "service_delete_result: %s" % service_delete_result
+
     # Docker 서비스 정보를 가지고 온다.
     def docker_service_ps(self, internal_id):
         command = "docker service inspect %s" % internal_id
@@ -113,11 +126,18 @@ class DockerService(object):
     # 매개변수의 internal_id는
     def get_service_volumes(self, internal_id):
         command = "docker service inspect %s" % internal_id
-        # 서비스
+        # 서비스 내의 Mounts 정보 가져오기
         service = self.send_command_return_json(command)
-        # service.Source
-        volume = self.send_command_return_json(command)
-        return service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
+        mounts = service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
+        # 볼륨의 목적지를 확인한다. 모든 노드의 볼륨이 동일하다는 전제 하에 첫 번째 worker 노드에서 볼륨 값을 가져온다.
+        host = GnHostDocker.query.filter_by(type="worker").first()
+        for mount in mounts:
+            command = "docker -H %s:2375 volume inspect %s" % (host.ip, mount["Source"])
+            volume = ""
+            while type(volume) is not list:
+                volume = self.send_command_return_json(command)
+            mount['Mountpoint'] = volume[0]['Mountpoint']
+        return mounts
 
     # Docker Service의 Containers Commit
     # 매개변수의 id는 서비스 DB id
@@ -144,6 +164,8 @@ class DockerService(object):
             result_list.append(result)
         return result_list
 
+    # --- 여기서부터는 Docker 커맨드 실행 && Docker REST API 사용 관련 함수 ---
+
     # command 전달 후 결과값 상단 한줄 받아오기
     def send_command(self, command):
         self.cmd.sendline(command)
@@ -159,10 +181,14 @@ class DockerService(object):
 
     # command 전달 후 결과값을 json 객체로 받아오기
     def send_command_return_json(self, command):
-        self.cmd.sendline(command)
-        self.cmd.prompt()
-        result = self.cmd.before.split("\r\n", 1)[1]
-        return json.loads(result.replace("\r\n", ""))
+        try:
+            self.cmd.sendline(command)
+            self.cmd.prompt()
+            result = self.cmd.before.split("\r\n", 1)[1]
+            result = json.loads(result.replace("\r\n", ""))
+        except ValueError as e:
+            return "ValueError %s" % e
+        return result
 
     # 내부에서 REST API 호출용 함수
     def send(self, address, port, method, uri, data={}):

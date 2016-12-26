@@ -6,6 +6,7 @@ PowerShell 스크립트를 전달할 함수들을 가지고 있는 PowerShell �
 다른 결과가 나오지만 같은 명령어를 사용하여 함수명이 겹칠 경우, 함수명 뒤에 _(역할)로 추가적으로 함수명을 구분해준다.
 """
 import datetime
+from util.config import config
 
 __author__ = 'jhjeon'
 
@@ -70,8 +71,8 @@ class PowerShell(object):
 
     def set_vm_ip_address(self, ip, dns_address, dns_sub_address):
         script = '$IP = "'+ip+'";'
-        script += '$MaskBits = 24;'
-        script += '$Gateway = "192.168.0.1";'
+        script += '$MaskBits = '+config.MASK_BIT+';'
+        script += '$Gateway = "'+config.GATE_WAY+'";'
         script += '$DNS = "' + dns_address + '";'
         script += '$S_DNS = "'+ dns_sub_address +'";'
         script += '$IPType = "IPv4";'
@@ -210,8 +211,8 @@ class PowerShell(object):
     def delete_vm_Image(self, vhd_File_Name, type,computer_name):
         #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
         script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
-        script += "Move-Item -Path C:/images/vhdx/"+type+"/" + vhd_File_Name
-        script += " -Destination C:/images/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
+        script += "Move-Item -Path "+config.DISK_DRIVE+"/images/vhdx/"+type+"/" + vhd_File_Name
+        script += " -Destination "+config.DISK_DRIVE+"/images/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
         print script
         return self.send(script)
 
@@ -222,8 +223,8 @@ class PowerShell(object):
         script += "$vm = Get-VM -Id "+vmId+";"
         script += "$vmn = $vm.Name;"
         script += "Remove-VM -VM $vm -Force;"
-        script += "Move-Item -Path C:/images/vhdx/"+type+'/$vmn".vhdx" '
-        script += "-Destination C:/images/vhdx/backup/ | ConvertTo-Json }"
+        script += "Move-Item -Path "+config.DISK_DRIVE+"/images/vhdx/"+type+'/$vmn".vhdx" '
+        script += "-Destination "+config.DISK_DRIVE+"/images/vhdx/backup/ | ConvertTo-Json }"
         print script
         return self.send(script)
 
@@ -242,11 +243,11 @@ class PowerShell(object):
         script += vm_Id + ';'
         script += '$VMname = $vm.Name;'
         script += '$CloneVMname = "' +snapshot_id+'";'
-        script += 'Export-VM -Name $VMname -Path ' +'C:/images/$VMname"clone"/ '+';'
-        script += 'Move-Item '+'C:/images/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
-        script += '-Destination C:/images/vhdx/snap/$VMName$CloneVMname".vhdx";'
-        script += 'Remove-Item -Path C:/images/$VMname"clone" -Recurse ;'
-        script += 'Get-ChildItem -Path C:/images/vhdx/snap/$VMName'
+        script += 'Export-VM -Name $VMname -Path '+config.DISK_DRIVE+'/images/$VMname"clone"/ '+';'
+        script += 'Move-Item '+config.DISK_DRIVE+'/images/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
+        script += '-Destination '+config.DISK_DRIVE+'/images/vhdx/snap/$VMName$CloneVMname".vhdx";'
+        script += 'Remove-Item -Path '+config.DISK_DRIVE+'/images/$VMname"clone" -Recurse ;'
+        script += 'Get-ChildItem -Path '+config.DISK_DRIVE+'/images/vhdx/snap/$VMName'
         script += '"' + snapshot_id
         script += '.vhdx" | ConvertTo-Json -Compress}'
         print script
@@ -281,7 +282,7 @@ class PowerShell(object):
         url += uri
         url += "?script=" + script
         data = {'script': script}
-        response = requests.post(url, data=json.dumps(data), timeout=5)
+        response = requests.post(url, data=json.dumps(data), timeout=10)
         return json.loads(response.json())
 
     def get_state_string(self, state):

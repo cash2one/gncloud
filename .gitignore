@@ -5,3 +5,6 @@
 *.log
 .gitignore
 controller/test/
+Hyper-V/agent/.vs/
+bin/
+obj/

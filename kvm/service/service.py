@@ -26,7 +26,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
                                             func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
                                             func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
-                                            ).filter(GnVmMachines.host_id == host_info.id).one_or_none()
+                                            ).filter(GnVmMachines.host_id == host_info.id).filter(GnVmMachines.status != "Removed").one_or_none()
             rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
             rest_mem = host_info.max_mem - use_sum_info.sum_mem
             rest_disk = host_info.max_disk - use_sum_info.sum_disk
