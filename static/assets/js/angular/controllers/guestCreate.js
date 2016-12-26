@@ -7,16 +7,25 @@ angular
         $('ul.nav-sidebar a').filter(function () {
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
-
-        $scope.hyper = function(ty){
+        $("#windows").hide();
+        $("#ssh").hide();
+        $scope.selectType = function(type){
             $http({
                 method: 'GET',
-                url: '/api/manager/vm/images/base/' + ty,
+                url: '/api/manager/vm/images/base/' + type,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
                     if (data) {
+                        $scope.type = type;
                         $scope.image_list = data.list;
+                        if(type=='hyperv'){
+                            $("#windows").show();
+                            $("#ssh").hide();
+                        }else if(type =='kvm'){
+                            $("#windows").hide();
+                            $("#ssh").show();
+                        }
                     }
                     else {
                     }
@@ -27,7 +36,7 @@ angular
 
             $http({
                 method: 'GET',
-                url: '/api/manager/vm/images/snap/' + ty,
+                url: '/api/manager/vm/images/snap/' + type,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
@@ -111,7 +120,7 @@ angular
             $scope.data.tag = $("#tag").val();
             $http({
                 method  : 'POST',
-                url: '/api/hyperv/vm/machine',
+                url: '/api/'+$scope.type+'/vm/machine',
                 data: $scope.data,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'

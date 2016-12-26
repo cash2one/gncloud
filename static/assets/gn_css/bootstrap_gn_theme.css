@@ -10,6 +10,7 @@ body{
     color: #6f6f6f;
 }
 
+
 /*commend*/
 h1{margin: 0; margin-bottom: 55px; line-height: 1;}
 h2{margin: 0; margin-bottom: 20px; line-height: 1;}
@@ -309,7 +310,7 @@ button.creat-instance{
 /*최초 등록 시 출력되는 버튼*/
 .ssh-key{
     width: 135px;
-    margin-right: 20px;
+    /*margin-right: 20px;  기존엔 인스턴스 생성버튼에 필요하여 넣었으나 설정페이지 버튼들에서 문제가 생김*/
 }
 
 /*등록 후 출력되는 버튼 : 리눅스의 경우*/
@@ -1661,13 +1662,14 @@ li.active > a{
 
 .modal-sett {
     position: fixed;
-    top: -200px;
+    top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     z-index: 1040;
     display: none;
-    /* overflow: hidden; */
+    overflow-y: scroll;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     outline: 0;
 }
@@ -2011,6 +2013,10 @@ select.form-control-clus{
     float: right;
 }
 
+.img-info{
+    font-weight: 200;
+}
+
 .img-mod-txt{
     height: 37px;
     width: 85.1%;
@@ -2035,40 +2041,34 @@ select.form-control-clus{
 }
 
 .img-icon-sett{
+    background: url(../gn_images/cloud_private_icon.png);
     border-radius: 3px;
     cursor: pointer;
     float: left;
-    margin-left: 15px;
-    margin-top: 15px;
     width: 100px;
     height: 100px;
     border: 2px solid rgba(215,215,215,.5);
     background-color: #ffffff;
+    position: relative;
 }
 
 .img-icon-sett:hover{
-    border: 3px solid rgba(88, 196, 198, 0.68);
     background-color: rgba(100,100,100,.5);
-    -webkit-transition: all .1s ease-in-out;
-    -o-transition: all .1s ease-in-out;
-    transition: all .1s ease-in-out;
     box-sizing: border-box;
 }
 
 .hov-img-txt{
     opacity: 0;
-    display: block;
-    vertical-align: middle;
     text-align: center;
-    margin: 30% auto;
+    margin: 0 auto;
+    width: 100px !important;
+    height: 100px !important;
 }
 
 .img-icon-sett:hover .hov-img-txt{
     opacity: 1;
-    color: #505050;
-    -webkit-transition: all .3s ease-in-out;
-    -o-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;    
+    color: #ffffff;
+    padding-top: 65px;    
 }
 
 .open > .dropdown-img-icon-cont,
@@ -2078,8 +2078,8 @@ select.form-control-clus{
 
 .dropdown-img-icon{
     position: absolute;
-    top: 22%;
-    left: 175px;
+    top: 34%;
+    left: 100px;
     z-index: 1000;
     display: none;
     float: left;
@@ -2442,8 +2442,17 @@ fieldset[disabled] .btn-info.active {
     margin: 0;
 }
 
-btn-lg{
-    
+.btn-lg{
+    border-radius: 3px;
+}
+
+.col-sm-2.control-label,
+.col-sm-3.control-label{
+    padding-right: 0;
+}
+
+.col-sm-2.btn-sm2{
+    padding-left: 0;   
 }
 
 .btn-begin{
@@ -2634,8 +2643,47 @@ position: relative;
     margin-bottom: 0px;
 }
 
+/*input=type 폼필드 디자인*/
+.filebox label {
+  display: inline-block;
+  padding: .5em .75em;
+  color: #999;
+  font-size: inherit;
+  line-height: normal;
+  vertical-align: middle;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  border-bottom-color: none;
+  border-radius: 0;
+}
 
+.filebox input[type="file"] {  /* 파일 필드 숨기기 */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip:rect(0,0,0,0);
+  border: 0;
+}
 
+/*이미지 등록 후 변경/수정 해야할 때 버튼*/
+.drop-img{
+    position: absolute;
+    bottom: 0;
+    left: 100px;
+}
+
+.link-color{
+    color: #58c4c6;
+    font-weight: 400; 
+}
+
+.link-color:hover{
+    color: #00afb4; 
+}
 
 
 

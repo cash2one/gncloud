@@ -10,7 +10,6 @@ from Manager.util.logger import logger
 
 class Config:
 
-    LIBVIRT_REMOTE_URL = ""
     DB_URL = ""
 
     def __init__(self, path="../conf/config.conf"):
@@ -28,7 +27,6 @@ class Config:
         parser = ConfigParser.ConfigParser()
         logger.info("Default Conf file path : %s", os.path.abspath(config_file))
         result = parser.read(config_file)
-        self.LIBVIRT_REMOTE_URL = parser.get(config_section, "LIBVIRT_REMOTE_URL")
         self.DB_URL = parser.get(config_section, "DB_URL")
 
 local_custom_file = os.environ.get('CONFIG_FILE_PATH')

@@ -4,7 +4,6 @@ import traceback
 from apscheduler.scheduler import Scheduler
 from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta
-from gevent.pywsgi import WSGIServer
 import datetime
 
 from db.database import db_session
@@ -147,6 +146,5 @@ if __name__ == '__main__':
     cron = Scheduler(daemon=True)
     cron.add_interval_job(job_function, seconds=60) #minites=1)
     cron.start()
-    #app.run(debug=True)
-    http_server = WSGIServer(('', 8081), app)
-    http_server.serve_forever()
+    app.run(port=8081)
+

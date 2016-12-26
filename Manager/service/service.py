@@ -47,7 +47,7 @@ def vm_info_graph(sql_session, id):
 
 def login_list(user_id, password, sql_session):
     password = random_string(password)
-    list = sql_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
+    list = sql_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
     return list
 
 
@@ -87,11 +87,11 @@ def sign_up(user_name, user_id, password, password_re):
             sign_up_info = GnUser(user_id = user_id, password = password_sha,user_name = user_name,start_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
             db_session.add(sign_up_info)
             db_session.commit()
-            return True
+            return 'success'
         else:
-            return None
+            return 'user_id'
     else:
-        return None
+        return 'password'
 
 def repair(user_id, password, password_new, password_re, tel, email):
     test = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
@@ -108,7 +108,7 @@ def repair(user_id, password, password_new, password_re, tel, email):
         test.tel = tel
 
     if email != "":
-        test.eamil = email
+        test.email = email
 
     db_session.commit()
     return 2
