@@ -7,7 +7,8 @@ angular
         $('ul.nav-sidebar a').filter(function () {
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
-
+        $("#windows").hide();
+        $("#ssh").hide();
         $scope.selectType = function(type){
             $http({
                 method: 'GET',
@@ -21,7 +22,7 @@ angular
                         if(type=='hyperv'){
                             $("#windows").show();
                             $("#ssh").hide();
-                        }else if(ty =='kvm'){
+                        }else if(type =='kvm'){
                             $("#windows").hide();
                             $("#ssh").show();
                         }
