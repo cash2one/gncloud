@@ -60,7 +60,7 @@ def create_vm():
     name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')#request.json['name']
     cpu = request.json['cpu']
     memory = request.json['memory']
-    disk = 10#request.json['hdd']
+    disk = request.json['hdd']
     image_id = request.json['id']
     sshkeys = request.json['sshkeys']
     tag =request.json['tag']

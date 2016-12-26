@@ -23,7 +23,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 @app.before_request
 def before_request():
-    if ('userId' not in session) and request.path != '/vm/guestLogout' and request.path != '/vm/account' and (request.path!= 'vm/account/users' and request.method !='POST'):
+    if ('userId' not in session) and request.path != '/vm/guestLogout' and request.path != '/vm/account' and (request.path!= 'vm/account/users' and request.method !='POST') and  request.path != '/vm/account/testtest':
         return make_response(jsonify(status=False),401)
 
 @app.teardown_appcontext
@@ -249,10 +249,18 @@ def comfirm():
 
 @app.route('/vm/account/createteam', methods=['POST'])
 def createteam():
+    user_id = session['userId']
     team_name = request.json['team_name']
     team_code = request.json['team_code']
     author_id = session['userName']
-    return jsonify(status=True, message="success", list=createteam_list(team_name, team_code, author_id))
+    session['teamCode']=team_code
+    teamnamecheck=createteam_list(user_id, team_name, team_code, author_id, db_session)
+    if(teamnamecheck=='success'):
+        return jsonify(status=True, test='success')
+    elif(teamnamecheck=='team_code'):
+        return jsonify(status=True, test='id')
+    elif(teamnamecheck=='team_name'):
+        return jsonify(status=True, test='team')
 
 @app.route('/vm/account/teamname', methods=['GET'])
 def teamname():
@@ -275,6 +283,7 @@ def systembase():
 def maketeam():
 
     return jsonify(status=True, message="success")
+
 #### rest end ####
 
 

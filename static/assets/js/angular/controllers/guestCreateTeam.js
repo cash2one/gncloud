@@ -7,7 +7,8 @@ angular
         $('ul.nav-sidebar a').filter(function () {
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
-
+        $("#i").hide();
+        $("#t").hide();
         $scope.submit = function() {
             $http({
                 method  : 'POST',
@@ -18,10 +19,15 @@ angular
                 }
             })
                 .success(function(data) {
-                    if (data.message == "ok") {
+                    if (data.test == 'success') {
                         alert("팀생성이 완료되었습니다.");
-                    } else {
-                        alert(data.message)
+                        window.location="/main/#/dashboard"
+                    } else if(data.test == 'id'){
+                        $("#i").hide();
+                        $("#t").show();
+                    }else if(data.test == 'team'){
+                        $("#i").show();
+                        $("#t").hide();
                     }
                 });
         };

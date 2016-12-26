@@ -8,7 +8,7 @@ angular
         $('ul.nav-sidebar a').filter(function () {
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
-
+        $("#container").hide();
         $("#team-sett").hide();
         $("#cluster-sett").hide();
         $("#image-sett").hide();
@@ -24,22 +24,40 @@ angular
                     var newArr = new Array();
                     for (var i = 0; i < data.list.length; i++) {
                         data.list[i].team_info.create_time_diff = dateModifyService.modifyDate(data.list[i].team_info.create_date); // 날짜 설정
+
+                        var owner_id = "";
+                        var owner_name = "";
+                        var users = "";
+                        var usersfirst ="";
+                        var usersfirstid ="";
                         for (var j = 0; j < data.list[i].user_list.length; j++) {
                             if (data.list[i].user_list[j][0].team_owner == 'owner') { //팀장찾는 곳
-                                var owner_id = data.list[i].user_list[j][1].user_id;
-                                var owner_name = data.list[i].user_list[j][1].user_name;
+                                owner_id = data.list[i].user_list[j][1].user_id;
+                                owner_name = data.list[i].user_list[j][1].user_name;
 
-                            } // user 부분 태그 필요
-                            else{
-                                var user_id = data.list[i].user_list[j][1].user_id;
-                                var user_name = data.list[i].user_list[j][1].user_name;
+                            }else if(j==1){
+                                usersfirst = data.list[i].user_list[j][1].user_name;
+                                usersfirstid="("+data.list[i].user_list[j][1].user_id+")";
+                            }else{
+                                users +=data.list[i].user_list[j][1].user_name+"("+data.list[i].user_list[j][1].user_id+")/";
                             }
-                            data.list[i].team_info.owner_id = owner_id;
-                            data.list[i].team_info.owner_name = owner_name;
-                            data.list[i].team_info.user_id = user_id;
-                            data.list[i].team_info.user_name= user_name;
-                            user_id = undefined; user_name=undefined;
+
                         }
+                        data.list[i].team_info.userslen = users.split('/').length-1;
+                        data.list[i].team_info.usersfirstid = usersfirstid;
+                        data.list[i].team_info.usersfirst = usersfirst;
+                        data.list[i].team_info.users = users;
+                        data.list[i].team_info.owner_id = owner_id;
+                        data.list[i].team_info.owner_name = owner_name;
+                        data.list[i].team_info.cpu_use_per = data.list[i].quto_info.cpu_per[0];
+                        data.list[i].team_info.cpu_use_cnt = data.list[i].quto_info.cpu_cnt[0];
+                        data.list[i].team_info.cpu_tot_cnt = data.list[i].quto_info.cpu_cnt[1];
+                        data.list[i].team_info.mem_use_per = data.list[i].quto_info.mem_per[0];
+                        data.list[i].team_info.mem_use_cnt = data.list[i].quto_info.mem_cnt[0];
+                        data.list[i].team_info.mem_tot_cnt = data.list[i].quto_info.mem_cnt[1];
+                        data.list[i].team_info.disk_use_per = data.list[i].quto_info.disk_per[0];
+                        data.list[i].team_info.disk_use_cnt = data.list[i].quto_info.disk_cnt[0];
+                        data.list[i].team_info.disk_tot_cnt = data.list[i].quto_info.disk_cnt[1];
                         newArr.push(data.list[i].team_info);
                     }
 

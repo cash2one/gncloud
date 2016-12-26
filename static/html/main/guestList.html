@@ -17,7 +17,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="list in guest_list" >
-                <td class="td-first"><img src="/gn_images/image_container_{{list.os}}_icon.png" alt="ubuntu"><a href="#/guestDetail?id={{list.id}}"> {{ list.name }}</a></td>
+                <td class="td-first"><img src="/gn_images/gn_icon_{{list.os}}.png" alt="ubuntu"><a href="#/guestDetail?id={{list.id}}"> {{ list.name }}</a></td>
                 <td class="cnt">{{ list.cpu }} CPU /{{ list.memory }}MB Memory/{{ list.disk }}GB Disk</td>
                 <td class="cnt">{{ list.type }}</td>
                 <td class="cnt">{{ list.ip }}</td>
