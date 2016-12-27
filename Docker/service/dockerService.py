@@ -50,7 +50,7 @@ class DockerService(object):
 
     # Docker 서비스 다시 시작 (실제로는 commit된 이미지로 서비스 생성)
     def docker_service_start(self, id, replicas, image, backup_image, cpu, memory):
-        dockerimage = GnDockerImage.query.filter_by(name=image).first()
+        dockerimage = GnDockerImages.query.filter_by(name=image).first()
         if dockerimage is None:
             return None
         image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
