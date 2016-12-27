@@ -26,7 +26,7 @@ app.add_url_rule("/vm/machines/<id>", view_func=doc_delete, methods=['DELETE'])
 app.add_url_rule("/vm/machines", view_func=doc_vm_list, methods=['GET'])
 # Docker 이미지 생성 및 업로드
 app.add_url_rule("/vm/images", view_func=doc_new_image, methods=['POST'])
-# # Docker 이미지 수정
+# Docker 이미지 수정
 # app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
 # ----- 스냅샷은 따로 나눌 필요 있음 --------
 # @app.route('/vm/machine/snapshots', methods=['POST'])
