@@ -245,31 +245,26 @@ class GnHostMonitor(Base):
                % (self.vm_id, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
 
 
-class GnMonitorHist(Base):
-    __tablename__ = "GN_MONITOR_HIST"
-    seq = Column(Integer, primary_key=True, nullable=False)
-    id = Column(String(8), primary_key=False, nullable=False)
-    type = Column(String(6), primary_key=False, nullable=False)
-    cur_time = Column(DateTime, primary_key=False, nullable=False)
-    cpu_usage = Column(Numeric, primary_key=False, nullable=False)
-    mem_usage = Column(Numeric, primary_key=False, nullable=False)
-    disk_usage = Column(Numeric, primary_key=False, nullable=False)
-    net_usage = Column(Numeric, primary_key=False, nullable=False)
+class GnHostMonitorHist(Base):
+    __tablename__ = 'GN_HOST_MONITOR_HIST'
+    vm_id = Column(String(100), primary_key=True, nullable=False)
+    time_stamp = Column(DateTime, primary_key=True, nullable=False, default=datetime.datetime.utcnow)
+    cpu_usage = Column(DECIMAL(11, 4), nullable=True, default=None)
+    mem_usage = Column(DECIMAL(11, 4), nullable=True, default=None)
+    disk_usage = Column(DECIMAL(11, 4), nullable=True, default=None)
+    net_usage = Column(DECIMAL(11, 4), nullable=True, default=None)
 
-    def __init__(self, id=id, type=type, cur_time = None, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
-        self.id = id
-        self.type = type
-        self.cur_time = cur_time
+    def __init__(self, vm_id, time_stamp, cpu_usage, mem_usage, disk_usage, net_usage):
+        self.vm_id = vm_id
+        self.time_stamp = time_stamp
         self.cpu_usage = cpu_usage
         self.mem_usage = mem_usage
         self.disk_usage = disk_usage
         self.net_usage = net_usage
 
     def __repr__(self):
-        return "<GnMonitorHist(id='%r',type='%r', cur_time='%r',cpu_usage='%r', mem_usage='%r', disk_usage='%r'," \
-               "net_usage='%r'" \
-               % (self.id, self.type, self.cur_time, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
-
+        return "<GnHostMonitorHist(vm_id='%r', time_stamp='%r', cpu_usage='%r', mem_usage='%r', disk_usage='%r', net_usage='%r')>" \
+               % (self.vm_id, self.time_stamp, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
 
 
 class GnUsers(Base):
@@ -454,18 +449,19 @@ class GnMonitorHist(Base):
     disk_usage = Column(Numeric, primary_key=False, nullable=False)
     net_usage = Column(Numeric, primary_key=False, nullable=False)
 
-    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+    def __init__(self, id=id, type=type, cur_time = None, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
         self.id = id
         self.type = type
+        self.cur_time = cur_time
         self.cpu_usage = cpu_usage
         self.mem_usage = mem_usage
         self.disk_usage = disk_usage
         self.net_usage = net_usage
 
     def __repr__(self):
-        return "<GnMonitorHist(id='%r',type='%r', cpu_usage='%r', mem_usage='%r', disk_usage='%r'," \
+        return "<GnMonitorHist(id='%r',type='%r', cur_time='%r',cpu_usage='%r', mem_usage='%r', disk_usage='%r'," \
                "net_usage='%r'" \
-               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.mem_usage)
+               % (self.id, self.type, self.cur_time, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
 
 
 # GN_VM_MONITOR 아직 작업 못함

@@ -6,7 +6,6 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 import json
 
 from util.json_encoder import AlchemyEncoder
-from Manager.db.models import GnImagePool
 
 __author__ = 'jhjeon'
 
@@ -15,7 +14,7 @@ import time
 from flask import request, jsonify, session
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist
+from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist, GnImagesPool
 
 from util.config import config
 from util.hash import random_string
