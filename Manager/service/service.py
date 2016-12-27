@@ -145,7 +145,7 @@ def getQuotaOfTeam(team_code, sql_session):
     vm_run_count = sql_session.query(func.count(GnVmMachines.id).label("count"))\
                    .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
     vm_stop_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status == "stop").one()
+        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "running").one()
     vm_kvm_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "kvm").one()
     vm_hyperv_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \

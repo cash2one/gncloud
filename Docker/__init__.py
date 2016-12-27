@@ -1,26 +1,30 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
+from datetime import timedelta
 from flask import Flask, redirect, url_for, jsonify
 from controller.dockerController import *
 from util.config import config
 
 
 app = Flask(__name__)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 # --- VM 함수 --- #
 # Docker Service 생성 및 실행
 app.add_url_rule("/container/services", view_func=doc_create, methods=['POST'])
 # Docker Service 상태변경
-app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
+# app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
+app.add_url_rule("/api/docker/vm/machines/<id>", view_func=doc_state, methods=['PUT'])
 # Docker Service 삭제
 app.add_url_rule("/container/services/<id>", view_func=doc_delete, methods=['DELETE'])
 # Docker Service 리스트
 app.add_url_rule("/container/services", view_func=doc_vm_list, methods=['GET'])
 # Docker 이미지 생성 및 업로드
 app.add_url_rule("/container/images", view_func=doc_new_image, methods=['POST'])
-# Docker 이미지 수정
-app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
+# # Docker 이미지 수정
+# app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
 # Docker 이미지 삭제
 app.add_url_rule("/container/images/<id>", view_func=doc_delete_image, methods=['DELETE'])
 # Docker 이미지 리스트

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
-from flask import jsonify, request
+from flask import jsonify, request, session
 from datetime import datetime
 
 from service.dockerService import DockerService
@@ -15,91 +15,123 @@ from util.hash import random_string
 # Docker Service 생성 및 실행
 # 서비스 생성 시에는 실행은 자동이다.
 def doc_create():
-    id = random_string(config.SALT, 8)
-    # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
-    while len(GnVmMachines.query.filter_by(id=id).all()) != 0:
+    sql_session = db_session
+    try:
         id = random_string(config.SALT, 8)
-    author_id = request.json["author_id"]
-    team_code = request.json["team_code"]
-    name = request.json["name"]
-    tag = request.json["tag"]
-    cpu = request.json["cpu"]
-    memory = request.json["memory"]
-    image = request.json["image"]
-    # 컨테이너의 도커 서비스 초기화
-    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-    # Docker Swarm Service를 생성한다.
-    docker_service = ds.docker_service_create(id=id, replicas=2, image=image, cpu=cpu, memory=memory)
-    # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
-    if docker_service is None:
-        return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
-    if type(docker_service) is not list:
-        return jsonify(status=False, message=docker_service)
-    else:
-        # Service 정보를 DB에 저장한다.
-        service_image = GnDockerServices(service_id=id, image=image)
-        base_image = GnDockerImages.query.filter_by(name=image).first()
-        db_session.add(service_image)
-        service = GnVmMachines(
-            id=id,
-            name=name,
-            type="docker",
-            internal_id=docker_service[0]['ID'],
-            internal_name=docker_service[0]['Spec']['Name'],
-            cpu=cpu,
-            memory=docker_service[0]['Spec']['TaskTemplate']['Resources']['Limits']['MemoryBytes']/1024,
-            disk=0,
-            host_id=0,
-            os=base_image.os,
-            os_ver=base_image.os_ver,
-            team_code=team_code,
-            author_id=author_id,
-            create_time=datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f'),
-            tag=tag,
-            status="running")
-        # 생성된 Service의 Container 정보를 DB에 저장한다.
-        service_container_list = ds.get_service_containers(docker_service[0]['ID'])
-        for service_container in service_container_list:
-            node = GnHostMachines.query.filter_by(name=service_container['host_name']).first()
-            container = GnDockerContainers(
-                service_id=id,
-                internal_id=service_container['internal_id'],
-                internal_name=service_container['internal_name'],
-                host_id=node.id
-            )
-            db_session.add(container)
-        # 생성된 volume 정보를 DB에 저장한다.
-        service_volume_list = ds.get_service_volumes(service.internal_id)
-        for service_volume in service_volume_list:
-            volume = GnDockerVolumes(
-                service_id=id,
-                name=service_volume['Source'],
-                source_path=service_volume['Mountpoint'],
-                destination_path=service_volume['Target']
-            )
-            db_session.add(volume)
-        # 생성된 접속 포트 정보를 DB에 저장한다.
-        ports = docker_service[0]['Endpoint']['Ports']
-        for port in ports:
-            set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
-            db_session.add(set_port)
-        db_session.add(service)
-        db_session.commit()
-        return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
+        # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
+        while len(GnVmMachines.query.filter_by(id=id).all()) != 0:
+            id = random_string(config.SALT, 8)
+        # 유저 네임을 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
+        if request.json["author_id"] is not None:
+            author_id = request.json["author_id"]
+        else:
+            author_id = session["author_id"]
+        # 팀 코드를 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
+        if request.json["team_code"] is not None:
+            team_code = request.json["team_code"]
+        else:
+            team_code = session['teamCode']
+        name = request.json["name"]
+        tag = request.json["tag"]
+        cpu = request.json["cpu"]
+        disk = request.json["disk"]
+        memory = request.json["memory"]
+        image = request.json["image"]
+        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        # Docker Swarm manager 값을 가져온다.
+        dsmanager = GnHostMachines.query.filter_by(type="docker_m").one()
+        # Docker Swarm Service를 생성한다.
+        docker_service = ds.docker_service_create(id=id, replicas=2, image=image, cpu=cpu, memory=memory)
+        # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
+        if docker_service is None:
+            return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
+        if type(docker_service) is not list:
+            return jsonify(status=False, message=docker_service)
+        else:
+            # Service 정보를 DB에 저장한다.
+            service_image = GnDockerServices(service_id=id, image=image)
+            base_image = GnDockerImages.query.filter_by(name=image).first()
+            sql_session.add(service_image)
+            service = GnVmMachines(
+                id=id,
+                name=name,
+                type="docker",
+                internal_id=docker_service[0]['ID'],
+                internal_name=docker_service[0]['Spec']['Name'],
+                cpu=cpu,
+                memory=docker_service[0]['Spec']['TaskTemplate']['Resources']['Limits']['MemoryBytes']/1024/1024,
+                disk=disk,
+                ip=dsmanager.ip,
+                host_id=dsmanager.id,
+                os="docker",
+                os_ver=base_image.os + ":" + base_image.os_ver,
+                team_code=team_code,
+                author_id=author_id,
+                create_time=datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f'),
+                tag=tag,
+                status="Running")
+            # os=base_image.os,
+            # os_ver=base_image.os_ver,
+            # 생성된 Service의 Container 정보를 DB에 저장한다.
+            service_container_list = ds.get_service_containers(docker_service[0]['ID'])
+            for service_container in service_container_list:
+                node = GnHostMachines.query.filter_by(name=service_container['host_name']).first()
+                container = GnDockerContainers(
+                    service_id=id,
+                    internal_id=service_container['internal_id'],
+                    internal_name=service_container['internal_name'],
+                    host_id=node.id
+                )
+                sql_session.add(container)
+            # 생성된 volume 정보를 DB에 저장한다.
+            service_volume_list = ds.get_service_volumes(service.internal_id)
+            for service_volume in service_volume_list:
+                volume = GnDockerVolumes(
+                    service_id=id,
+                    name=service_volume['Source'],
+                    source_path=service_volume['Mountpoint'],
+                    destination_path=service_volume['Target']
+                )
+                sql_session.add(volume)
+            # 생성된 접속 포트 정보를 DB에 저장한다.
+            ports = docker_service[0]['Endpoint']['Ports']
+            for port in ports:
+                set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
+                sql_session.add(set_port)
+            service.ip += ":%s" % ports[0]['PublishedPort']
+            sql_session.add(service)
+    except:
+        sql_session.rollback()
+    finally:
+        sql_session.commit()
+    return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
 
 
 # Docker Service 상태변경
+# {name: '시작', type: 'resume'},
+# {name: '정지', type: 'suspend'},
+# {name: '재시작', type: 'reboot'}
 def doc_state(id):
+    sql_session = db_session
+    name = request.json["type"]
     type = request.json["type"]
-    team_code = request.json["team_code"]
-    author_id = request.json["author_id"]
+    # 유저 네임을 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
+    if request.json["author_id"] is not None:
+        author_id = request.json["author_id"]
+    else:
+        author_id = session["author_id"]
+    # 팀 코드를 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
+    if request.json["team_code"] is not None:
+        team_code = request.json["team_code"]
+    else:
+        team_code = session['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # 서비스 DB 데이터 가져오기
     service = GnVmMachines.query.filter_by(id=id, type="docker").first()
     # -- 시작 (start)
     # service
-    if type == "start":
+    if type == "resume":
         # 이미 서비스가 돌아가는 상태인 경우는 아무 것도 안하고 끝낸다.
         if service.status == "Running":
             return jsonify(status=False, message="서비스가 이미 실행중입니다.", result=service.to_json())
@@ -129,28 +161,28 @@ def doc_state(id):
             for port in ports:
                 getports = GnDockerPorts.query.filter_by(protocol=port['Protocol'], target_port=port['TargetPort']).all()
                 for getport in getports:
-                    db_session.delete(getport)
+                    sql_session.delete(getport)
                 set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
-                db_session.add(set_port)
-            db_session.commit()
+                sql_session.add(set_port)
+            sql_session.commit()
             return jsonify(status=True, message="서비스가 시작되었습니다.", result=service.to_json())
     # -- 정지 (stop)
-    elif type == "stop":
+    elif type == "suspend":
         if service.status != "Running":
             return jsonify(status=False, message="서비스가 실행중이 아닙니다.", result=service.to_json())
         else:
             ds.docker_service_stop(service)
             service.stop_time = datetime.now()
             service.status = "Stop"
-            db_session.commit()
+            sql_session.commit()
             return jsonify(status=True, message="서비스가 정지되었습니다.", result=service.to_json())
     # -- 재시작 (restart)
-    elif type == "restart":
+    elif type == "reboot":
         if service.status == "Running":
             ds.docker_service_stop(service)
             service.stop_time = datetime.now()
             service.status = "Stop"
-            db_session.commit()
+            sql_session.commit()
             # commit된 내용을 가지고 서비스 생성.
             # image = "%s:backup" % service.internal_name
         image = "%s:backup" % service.id
@@ -176,13 +208,13 @@ def doc_state(id):
         for port in ports:
             getports = GnDockerPorts.query.filter_by(protocol=port['Protocol'], target_port=port['TargetPort']).all()
             for getport in getports:
-                db_session.delete(getport)
+                sql_session.delete(getport)
             set_port = GnDockerPorts(
                 service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
-            db_session.add(set_port)
-        db_session.commit()
+            sql_session.add(set_port)
+        sql_session.commit()
         return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
-    # -- 재시작 (restart)
+    # -- 스냅샷 (snap)
     elif type == "snap":
         service = GnDockerServices.query.filter_by(service_id=id).first()
         baseimage = GnDockerImages.query.filter_by(name=service.image).first()
@@ -204,8 +236,8 @@ def doc_state(id):
             id=image_id, name=name, tag=baseimage.tag, os=baseimage.os, os_ver=baseimage.os_ver,
             sub_type=sub_type, team_code=team_code, author_id=author_id, create_time=create_time, status=status
         )
-        db_session.add(image)
-        db_session.commit()
+        sql_session.add(image)
+        sql_session.commit()
         return jsonify(status=True, message="스냅샷 추가 완료", result=image.to_json())
     else:
         return jsonify(status=False, message="정의된 상태값이 아닙니다.")
@@ -213,6 +245,7 @@ def doc_state(id):
 
 # Docker 서비스 삭제
 def doc_delete(id):
+    sql_session = db_session
     # 지정된 Docker 서비스를 삭제한다.
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     service = GnVmMachines.query.filter_by(id=id, type="docker").first()
@@ -231,7 +264,7 @@ def doc_delete(id):
         # 볼륨 상태 수정
         for volume in service.gnDockerVolumes:
             volume.status = "Removed"
-        db_session.commit()
+        sql_session.commit()
     if result == service.internal_id:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")
     else:
@@ -240,14 +273,15 @@ def doc_delete(id):
 
 # Docker Service 정보
 def doc_vm(id):
+    sql_session = db_session
     user_id = request.args.get("user_id")
     team_code = request.args.get("team_code")
     if team_code is None:
-        service = db_session.query(GnVmMachines).filter(
+        service = sql_session.query(GnVmMachines).filter(
             GnVmMachines.author_id == user_id, GnVmMachines.id == id, GnVmMachines.status != "Removed"
         ).first()
     else:
-        service = db_session.query(GnVmMachines).filter(
+        service = sql_session.query(GnVmMachines).filter(
             GnVmMachines.team_code == team_code, GnVmMachines.id == id, GnVmMachines.status != "Removed"
         ).first()
         service = GnVmMachines.query.filter_by(team_code=team_code, id=id).first()
@@ -259,17 +293,18 @@ def doc_vm(id):
 
 # Docker Service 리스트
 def doc_vm_list():
+    sql_session = db_session
     user_id = request.args["user_id"]
     if "team_code" in request.args:
         team_code = request.args["team_code"]
     else:
         team_code = None
     if team_code == "" or team_code is None:
-        services = db_session.query(GnVmMachines).filter(
+        services = sql_session.query(GnVmMachines).filter(
             GnVmMachines.author_id == user_id, GnVmMachines.status != "Removed"
         ).all()
     else:
-        services = db_session.query(GnVmMachines).filter(
+        services = sql_session.query(GnVmMachines).filter(
             GnVmMachines.team_code == team_code, GnVmMachines.status != "Removed"
         ).all()
     if services is None:
@@ -284,6 +319,7 @@ def doc_vm_list():
 # Container 이미지 생성 및 업로드
 # 1차에서는 이미지 정보를 입력받는 정도로만 하자.
 def doc_new_image():
+    sql_session = db_session
     # Docker Image 정보 입력
     id = random_string(config.SALT, 8)
     # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
@@ -305,8 +341,8 @@ def doc_new_image():
         id=id, name=name, tag=tag, os=os, os_ver=os_ver, sub_type=sub_type, team_code=team_code,
         author_id=author_id, create_time=create_time, status=status
     )
-    db_session.add(image)
-    db_session.commit()
+    sql_session.add(image)
+    sql_session.commit()
     return jsonify(status=True, message="이미지 추가 완료", result=image.to_json())
 
 
@@ -317,6 +353,7 @@ def doc_modify_image():
 
 # Docker 이미지 세부정보 입력
 def doc_new_image_detail(image_id):
+    sql_session = db_session
     id = random_string(config.SALT, 8)
     # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
     while len(GnDockerImageDetail.query.filter_by(id=id).all()) != 0:
@@ -329,16 +366,17 @@ def doc_new_image_detail(image_id):
         image_detail = GnDockerImageDetail(
             id=id, image_id=image_id, arg_type=arg_type, argument=argument, description=description
         )
-        db_session.add(image_detail)
+        sql_session.add(image_detail)
     except:
-        db_session.rollback()
+        sql_session.rollback()
     finally:
-        db_session.commit()
+        sql_session.commit()
     return jsonify(status=True, message="이미지 세부정보 입력 완료", result=image_detail.to_json())
 
 
 # Docker 이미지 세부정보 수정
 def doc_update_image_detail(image_id, id):
+    sql_session = db_session
     arg_type = request.json["arg_type"]
     argument = request.json["argument"]
     description = request.json["description"]
@@ -351,29 +389,31 @@ def doc_update_image_detail(image_id, id):
             image_detail.argument = argument
             image_detail.description = description
     except:
-        db_session.rollback()
+        sql_session.rollback()
     finally:
-        db_session.commit()
+        sql_session.commit()
     return jsonify(status=True, message="이미지 세부정보 수정 완료", result=image_detail.to_json())
 
 
 # Docker 이미지 세부정보 삭제
 def doc_delete_image_detail(image_id, id):
+    sql_session = db_session
     image_detail = GnDockerImageDetail.query.filter_by(id=id, image_id=image_id).first()
     try:
         if image_detail is None:
             return jsonify(status=False, message="존재하지 않는 이미지 세부정보입니다.")
         else:
-            db_session.delete(image_detail)
+            sql_session.delete(image_detail)
     except:
-        db_session.rollback()
+        sql_session.rollback()
     finally:
-        db_session.commit()
+        sql_session.commit()
     return jsonify(status=True, message="이미지 세부정보 입력 완료", result=image_detail.to_json())
 
 
 # Container 이미지 삭제
 def doc_delete_image(id):
+    sql_session = db_session
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     version = "v1"
     repositories = "repositories"
@@ -398,9 +438,9 @@ def doc_delete_image(id):
             image.status = "Removed"
             image_detail = GnDockerImageDetail.query.filter_by(id=id).delete()
         except:
-            db_session.rollback()
+            sql_session.rollback()
         finally:
-            db_session.commit()
+            sql_session.commit()
         return jsonify(status=True, message="이미지 삭제 완료")
     else:
         return jsonify(status=False, message="이미지 삭제 실패")

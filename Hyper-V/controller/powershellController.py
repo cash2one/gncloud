@@ -109,7 +109,7 @@ def hvm_create():
                     hostid = db_session.query(GnImagePool).filter(GnImagePool.type == "hyperv").first()
 
                     vmid = random_string(config.SALT, 8)
-                    vm = GnVmMachines(vmid, internal_name, tag, 'hyperv', start_vm['VMId'],
+                    vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
                                       internal_name,
                                       hostid.host_id, get_vm_ip, cpu, memory, hdd,
                                       os
@@ -281,7 +281,6 @@ def hvm_state(id):
             return jsonify(status=True, message="가상머신이 재시작되었습니다.")
         else:
             return jsonify(status=True, message="정상적인 결과값이 아닙니다.")
-        return jsonify(status=False, message="")
     elif type == "powerdown":
         return jsonify(status=False, message="상태 미완성")
     else:
@@ -367,7 +366,7 @@ def hvm_delete_image(id):
     json_obj = json.dumps(image_delete)
     json_size = len(json_obj)
     if json_size <= 2: #json 크기는 '{}' 포함
-        delete_vm = db_session.query(GnVmImages).filter(GnVmImages.id == id).update({"status": "delete"})
+        delete_vm = db_session.query(GnVmImages).filter(GnVmImages.id == id).update({"status": "Removed"})
         db_session.commit()
         #update 완료시 리턴값은 1
         if delete_vm == 1:

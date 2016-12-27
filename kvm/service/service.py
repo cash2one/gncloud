@@ -47,12 +47,13 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         image_info = db_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
 
         # vm 생성
-        intern_id = kvm_create(name, cpu, memory, disk, image_info.filename, image_info.sub_type, host_ip)
+        internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        intern_id = kvm_create(internal_name, cpu, memory, disk, image_info.filename, image_info.sub_type, host_ip)
 
         #ip 세팅
         ip = ""
         while len(ip) == 0:
-            ip = getIpAddress(name, host_ip)
+            ip = getIpAddress(internal_name, host_ip)
 
         if len(ip) != 0:
              setStaticIpAddress(ip, host_ip, image_info.ssh_id)
@@ -78,7 +79,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
                 break
 
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
-                                  , type='kvm', internal_id=intern_id, internal_name=name, ip=ip, host_id=host_id, os=image_info.os
+                                  , type='kvm', internal_id=intern_id, internal_name=internal_name, ip=ip, host_id=host_id, os=image_info.os
                                   , os_ver=image_info.os_ver, os_sub_ver=image_info.os_subver, os_bit=image_info.os_bit
                                   , team_code=team_code, author_id=user_id,status='running', tag=tag)
         db_session.add(vm_machine)
@@ -142,6 +143,8 @@ def server_image_delete(id, sql_session):
 def server_change_status(id, status, sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     kvm_change_status(guest_info.internal_name, status, guest_info.gnHostMachines.ip)
+    if status == "resume":
+        status = "running"
     guest_info.status = status
     sql_session.commit()
 
