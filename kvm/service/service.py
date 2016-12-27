@@ -36,6 +36,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             if rest_cpu >= int(cpu) and rest_mem >= int(memory) and rest_disk >= int(disk):
                 host_ip = host_info.ip
                 host_id = host_info.id
+                break;
 
 
         if(host_ip is None):
@@ -165,6 +166,7 @@ def server_create_snapshot(id, name, user_id, team_code):
                                 , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
                                 , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id)
         db_session.add(guest_snap)
+        db_session.commit();
 
 
 def server_monitor(sql_session):

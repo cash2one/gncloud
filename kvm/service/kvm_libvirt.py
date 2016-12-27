@@ -30,7 +30,6 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
             )
 
             ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
-            ptr_POOL.refresh()
             defaultVol = ptr_POOL.storageVolLookupByName(base_name)
             ptr_POOL.createXMLFrom(vol, defaultVol, 0)
             ptr_POOL.storageVolLookupByName(name + ".img").resize(gigaToByte(int(disk)))

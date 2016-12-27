@@ -107,11 +107,13 @@ class GnVmImages(Base):
     create_time = Column(DateTime, default=datetime.datetime.now())
     ssh_id = Column(String(10), primary_key=False, nullable=True)
     status = Column(String(10), primary_key=False, nullable=True)
+    pool_id = Column(String(8), primary_key=False, nullable=True)
 
 
     def __init__(self,id=None, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
-                 , os_bit=None, team_code=None, author_id=None, ssh_id=None, status=None):
+                 , os_bit=None, team_code=None, author_id=None, ssh_id=None, status=None
+                 , pool_id=None):
         self.id = id
         self.name = name
         self.filename = filename
@@ -126,6 +128,7 @@ class GnVmImages(Base):
         self.author_id = author_id
         self.ssh_id = ssh_id
         self.status = status
+        self.pool_id = pool_id
 
 
 
