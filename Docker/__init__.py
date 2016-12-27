@@ -15,7 +15,8 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 # Docker Service 생성 및 실행
 app.add_url_rule("/container/services", view_func=doc_create, methods=['POST'])
 # Docker Service 상태변경
-app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
+# app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
+app.add_url_rule("/api/docker/vm/machines/<id>", view_func=doc_state, methods=['PUT'])
 # Docker Service 삭제
 app.add_url_rule("/container/services/<id>", view_func=doc_delete, methods=['DELETE'])
 # Docker Service 리스트
