@@ -32,12 +32,12 @@ def job_function():
 
 ####login check start####
 
-@app.before_request
-def before_request():
-    if ('userId' not in session) \
-            and request.endpoint != 'guestLogout' \
-            and request.endpoint != 'account':
-        return make_response(jsonify(status=False),401)
+# @app.before_request
+# def before_request():
+#     if ('userId' not in session) \
+#             and request.endpoint != 'guestLogout' \
+#             and request.endpoint != 'account':
+#         return make_response(jsonify(status=False),401)
 
 
 @app.teardown_appcontext
@@ -126,13 +126,17 @@ def download_sshKey(id):
         body = f.read()
     return make_response((body, headers))
 
+@app.route('/test', methods=['GET'])
+def test():
+    server_monitor(db_session)
+
 #### rest end ####
 
 
 if __name__ == '__main__':
     # 로그 설정
-    cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=60) #minites=1)
-    cron.start()
+    # cron = Scheduler(daemon=True)
+    # cron.add_interval_job(job_function, seconds=60) #minites=1)
+    # cron.start()
     app.run(port=8081)
 

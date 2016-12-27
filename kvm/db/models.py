@@ -74,7 +74,7 @@ class GnVmMachines(Base):
         self.os_ver = os_ver
         self.os_sub_ver = os_sub_ver
         self.os_bit = os_bit
-        self.team_ = team_code
+        self.team_code = team_code
         self.author_id = author_id
         self.status = status
         self.tag = tag
@@ -93,25 +93,26 @@ class GnVmMachines(Base):
 class GnVmImages(Base):
     __tablename__ = 'GN_VM_IMAGES'
     id = Column(String(100), primary_key=True, nullable=False)
-    name = Column(String(50), primary_key=False, nullable=False)
-    filename = Column(String(100), primary_key=False, nullable=False)
+    name = Column(String(50), primary_key=False, nullable=True)
+    filename = Column(String(100), primary_key=False, nullable=True)
     type = Column(String(10), primary_key=False, nullable=False)
-    sub_type = Column(String(10), primary_key=False, nullable=False)
-    icon = Column(String(100), primary_key=False, nullable=False)
-    os = Column(String(10), primary_key=False, nullable=False)
-    os_ver = Column(String(20), primary_key=False, nullable=False)
-    os_subver = Column(String(20), primary_key=False, nullable=False)
-    os_bit = Column(String(2), primary_key=False, nullable=False)
+    sub_type = Column(String(10), primary_key=False, nullable=True)
+    icon = Column(String(100), primary_key=False, nullable=True)
+    os = Column(String(10), primary_key=False, nullable=True)
+    os_ver = Column(String(20), primary_key=False, nullable=True)
+    os_subver = Column(String(20), primary_key=False, nullable=True)
+    os_bit = Column(String(2), primary_key=False, nullable=True)
     team_code = Column(String(10), primary_key=False, nullable=False)
     author_id = Column(String(15), primary_key=False, nullable=False)
     create_time = Column(DateTime, default=datetime.datetime.now())
-    ssh_id = Column(String(10), primary_key=False, nullable=False)
-    status = Column(String(10), primary_key=False, nullable=False)
+    ssh_id = Column(String(10), primary_key=False, nullable=True)
+    status = Column(String(10), primary_key=False, nullable=True)
 
 
-    def __init__(self, name=None, filename=None, type=None
+    def __init__(self,id=None, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
                  , os_bit=None, team_code=None, author_id=None, ssh_id=None, status=None):
+        self.id = id
         self.name = name
         self.filename = filename
         self.type = type
@@ -138,6 +139,23 @@ class GnVmImages(Base):
         return ['id', 'name', 'filename', 'type', 'sub_type'
             , 'icon', 'os', 'os_ver', 'os_subver', 'os_bit'
             , 'team_code', 'author_id', 'create_time', 'ssh_id', 'status']
+
+
+class GnImagesPool(Base):
+    __tablename__ = 'GN_IMAGES_POOL'
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(10), primary_key=False, nullable=False)
+    image_path = Column(String(200), primary_key=False, nullable=False)
+    host_id = Column(String(8), primary_key=False, nullable=False)
+
+    def __init__(self,id=None, type=None, image_path=None, host_id=None):
+        self.id = id
+        self.type = type
+        self.image_path = image_path
+        self.host_id = host_id
+
+
+
 
 
 class GnMonitor(Base):
