@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
+from datetime import datetime
 from flask import Flask, redirect, url_for, jsonify
 from controller.dockerController import *
 from util.config import config
@@ -19,8 +20,8 @@ app.add_url_rule("/container/services/<id>", view_func=doc_delete, methods=['DEL
 app.add_url_rule("/container/services", view_func=doc_vm_list, methods=['GET'])
 # Docker 이미지 생성 및 업로드
 app.add_url_rule("/container/images", view_func=doc_new_image, methods=['POST'])
-# Docker 이미지 수정
-app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
+# # Docker 이미지 수정
+# app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
 # Docker 이미지 삭제
 app.add_url_rule("/container/images/<id>", view_func=doc_delete_image, methods=['DELETE'])
 # Docker 이미지 리스트
@@ -47,4 +48,6 @@ def index():
 
 if __name__ == '__main__':
     app.config['DEBUG'] = False
+    app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=60)
+    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
