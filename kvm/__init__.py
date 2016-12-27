@@ -57,7 +57,8 @@ def internal_error(error):
 def create_vm():
     team_code = session['teamCode']
     user_id = session['userId']
-    name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')#request.json['name']
+    name = request.json['vm_name']
+
     cpu = request.json['cpu']
     memory = request.json['memory']
     disk = request.json['hdd']

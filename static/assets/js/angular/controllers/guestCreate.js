@@ -114,6 +114,7 @@ angular
         $scope.data = {};
         $scope.update_image = function (data) {
             if (data != null){
+                alert(data.id);
                 $scope.data.id = data.id;
             }
         };

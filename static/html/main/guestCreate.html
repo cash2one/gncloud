@@ -1,8 +1,14 @@
 <!-- Main component for a primary marketing message or call to action -->
 <div> <!--main 영역-->
     <h1>인스턴스</h1>
-<div class="container-type">
 
+    <div class="container-type">
+    <h2>인스턴스명</h2>
+    <input type="input" class="form-control" ng-model="data.vm_name" placeholder="인스턴스명">
+    </div>
+
+
+    <div class="container-type">
     <h2>타입 선택</h2>
     <input type="radio" id="hyper-v" class="inp-box-type" name="inp-box-type" />
     <input type="radio" id="kvm" class="inp-box-type" name="inp-box-type"/>
@@ -38,27 +44,27 @@
         <!--탭메뉴1 : 이미지 -->
         <div id="image">
             <div id="image">
-                <input type="radio" id="Windows" class="inp-box-image" name="inp-box-image" />
-                <input type="radio" id="FreeBSD" class="inp-box-image" name="inp-box-image"/>
-                <input type="radio" id="fedora" class="inp-box-image" name="inp-box-image"/>
-                <input type="radio" id="Debian" class="inp-box-image" name="inp-box-image"/>
-                <input type="radio" id="wordpress" class="inp-box-image" name="inp-box-image"/>
-                <div class="buttons">
-                    <label class="label-box-image" for="Windows" ng-repeat="list in image_list">
-                        <span class="sprite-img sprite-hyp" ng-click="update_image(list)"></span>
-                        {{list.os}}
-                        <span class="windows-small">{{list.name}}</span>
-                    </label>
-                </div>
-                <!--<span ng-repeat="list in image_list">-->
-                <!--<div class="btn-group" role="group" aria-label="..." >-->
-                    <!--<ng-button type="button" name="" class="btn btn-default type-box box2" ng-click="update_image(list)" required>-->
-                        <!--<img src="/gn_images/instance_create_windows.png" alt="" class="img-icon">-->
+                <!--<input type="radio" id="Windows" class="inp-box-image" name="inp-box-image" />-->
+                <!--<input type="radio" id="FreeBSD" class="inp-box-image" name="inp-box-image"/>-->
+                <!--<input type="radio" id="fedora" class="inp-box-image" name="inp-box-image"/>-->
+                <!--<input type="radio" id="Debian" class="inp-box-image" name="inp-box-image"/>-->
+                <!--<input type="radio" id="wordpress" class="inp-box-image" name="inp-box-image"/>-->
+                <!--<div class="buttons">-->
+                    <!--<label class="label-box-image" for="Windows" ng-repeat="list in image_list">-->
+                        <!--<span class="sprite-img sprite-hyp" ng-click="update_image(list)"></span>-->
                         <!--{{list.os}}-->
                         <!--<span class="windows-small">{{list.name}}</span>-->
-                    <!--</ng-button>-->
+                    <!--</label>-->
                 <!--</div>-->
-            <!--</span>-->
+                <span ng-repeat="list in image_list">
+                <div class="btn-group" role="group" aria-label="..." >
+                    <ng-button type="button" name="" class="btn btn-default type-box box2" ng-click="update_image(list)" required>
+                        <img src="/gn_images/instance_create_windows.png" alt="" class="img-icon">
+                        {{list.os}}
+                        <span class="windows-small">{{list.name}}</span>
+                    </ng-button>
+                </div>
+            </span>
         </div> <!--id="image" class="tab-pane fade in active"-->
         <!--탭메뉴2 : 스냅샷-->
         <div id="snap">
@@ -70,7 +76,7 @@
             <input type="radio" id="snap-name6" class="inp-box-snap" name="inp-box-snap"/>
             <input type="radio" id="snap-name7" class="inp-box-snap" name="inp-box-snap"/>
             <div class="buttons">
-                <label class="btn btn-default snap-name fl" for="snap-name1" ng-repeat="snap in snap_list">
+                <label class="btn btn-default snap-name fl" for="snap-name1" ng-repeat="snap in '">
                     <p class="ellipsis">
                         <img src="images/ubuntu_icon.png" alt="" class="elli-img-icon">{{snap.name}}</p>
                 </label>
