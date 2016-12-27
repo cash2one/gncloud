@@ -100,11 +100,12 @@ def doc_create():
                 sql_session.add(set_port)
             service.ip += ":%s" % ports[0]['PublishedPort']
             sql_session.add(service)
-    except:
+            sql_session.commit()
+            return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
+    except Exception as e:
         sql_session.rollback()
-    finally:
-        sql_session.commit()
-    return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
+        return jsonify(status=False, message="서비스 생성 실패: %s" % e)
+
 
 
 # Docker Service 상태변경
@@ -140,7 +141,7 @@ def doc_state(id):
             # image = "%s:backup" % service.internal_name
             image = "%s:backup" % service.id
             restart_service = ds.docker_service_start(
-                id=id, replicas=2, image=service.image, backup_image=image,
+                id=id, replicas=2, image=service.gnDockerServices[0].image, backup_image=image,
                 cpu=service.cpu, memory="%sMB" % (service.memory/1024))
             # 변경된 내용을 DB에 Update
             # 서비스쪽 데이터 수정
@@ -162,6 +163,7 @@ def doc_state(id):
                 getports = GnDockerPorts.query.filter_by(protocol=port['Protocol'], target_port=port['TargetPort']).all()
                 for getport in getports:
                     sql_session.delete(getport)
+                sql_session.commit()
                 set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
                 sql_session.add(set_port)
             sql_session.commit()
