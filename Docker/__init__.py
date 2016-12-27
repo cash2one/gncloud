@@ -2,10 +2,10 @@
 __author__ = 'jhjeon'
 
 from datetime import timedelta
-from flask import Flask, redirect, url_for, jsonify
+from flask import Flask, redirect, url_for
+
 from controller.dockerController import *
 from util.config import config
-
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -16,7 +16,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.add_url_rule("/container/services", view_func=doc_create, methods=['POST'])
 # Docker Service 상태변경
 # app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
-app.add_url_rule("/api/docker/vm/machines/<id>", view_func=doc_state, methods=['PUT'])
+app.add_url_rule("/vm/machines/<id>", view_func=doc_state, methods=['PUT'])
 # Docker Service 삭제
 app.add_url_rule("/container/services/<id>", view_func=doc_delete, methods=['DELETE'])
 # Docker Service 리스트

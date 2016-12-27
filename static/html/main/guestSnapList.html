@@ -125,11 +125,11 @@
                     <tbody>
                     <tr ng-repeat="con in contain_list">
                         <td class="td-style td-first">
-                            <img src="../../gn_images/image_container_postgress_icon.png" alt="postgres">
+                            <img src="../../gn_images/gn_icon_postgres.png" alt="postgres">
                             <a href="#">{{con.name}}</a>
                         </td>
-                        <td class="td-style cnt">9.6.0</td>
-                        <td class="td-style cnt"><span class="tag">latest</span></td>
+                        <td class="td-style cnt">{{con.os_ver}}</td>
+                        <td class="td-style cnt"><span class="tag">{{con.tag}}</span></td>
                         <td class="td-style cnt"></td>
                     </tr>
 
