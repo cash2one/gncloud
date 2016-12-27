@@ -115,19 +115,19 @@ def setStaticIpAddress(ip, host_ip, ssh_id):
         pass
 
 def server_delete(id,sql_session):
-    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one();
+    image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one();
 
     # backup image
-    s = pxssh.pxssh()
-    s.login(guest_info.gnHostMachines.ip, USER)
-    s.sendline("cp "+config.LIVERT_IMAGE_PATH+guest_info.internal_name+".img "+config.LIVERT_IMAGE_BACKUP_PATH+guest_info.internal_name+".img")
-    s.close()
+    # s = pxssh.pxssh()
+    # s.login(guest_info.gnHostMachines.ip, USER)
+    # s.sendline("cp "+config.LIVERT_IMAGE_PATH+guest_info.internal_name+".img "+config.LIVERT_IMAGE_BACKUP_PATH+guest_info.internal_name+".img")
+    # s.close()
 
     # vm 삭제
-    kvm_vm_delete(guest_info.internal_name, guest_info.gnHostMachines.ip);
+    # kvm_vm_delete(guest_info.internal_name, guest_info.gnHostMachines.ip);
 
     # db 저장
-    guest_info.status = "Removed"
+    image_info.status = "Removed"
     sql_session.commit()
 
 
@@ -143,6 +143,8 @@ def server_image_delete(id, sql_session):
 def server_change_status(id, status, sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     kvm_change_status(guest_info.internal_name, status, guest_info.gnHostMachines.ip)
+    if status == "resume":
+        status = "running"
     guest_info.status = status
     sql_session.commit()
 

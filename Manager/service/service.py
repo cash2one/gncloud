@@ -115,14 +115,14 @@ def repair(user_id, password, password_new, password_re, tel, email, sql_session
 def server_image_list(type, sub_type, sql_session, team_code):
     if type == "base":
         if sub_type != "":
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).filter(GnVmImages.status != "Removed").all()
         else:
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.status != "Removed").all()
     else:
         if sub_type != "":
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).filter(GnVmImages.team_code==team_code).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).filter(GnVmImages.team_code==team_code).filter(GnVmImages.status != "Removed").all()
         else:
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).filter(GnVmImages.status != "Removed").all()
     return list
 
 
@@ -130,7 +130,9 @@ def server_image(type, sql_session, team_code):
     if type == "base":
         list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     else:
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all();
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code == team_code).filter(GnVmImages.status == None).all()
+        for vm in list:
+            vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
     return list
 
@@ -143,7 +145,7 @@ def getQuotaOfTeam(team_code, sql_session):
     vm_run_count = sql_session.query(func.count(GnVmMachines.id).label("count"))\
                    .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
     vm_stop_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status == "stop").one()
+        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "running").one()
     vm_kvm_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "kvm").one()
     vm_hyperv_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \

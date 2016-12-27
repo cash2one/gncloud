@@ -135,9 +135,9 @@ def test():
 
 
 if __name__ == '__main__':
-    # 로그 설정
-    # cron = Scheduler(daemon=True)
-    # cron.add_interval_job(job_function, seconds=60) #minites=1)
-    # cron.start()
+    #로그 설정
+    cron = Scheduler(daemon=True)
+    cron.add_interval_job(job_function, seconds=180) #minites=1)
+    cron.start()
     app.run(port=8081)
 

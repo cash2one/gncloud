@@ -90,13 +90,13 @@
                                     <td class="td-style cnt">{{snap.os}}{{snap.os_ver}}</td>
                                     <td class="td-style cnt">20 GB Disk</td>
                                     <td class="td-style cnt">{{snap.type}}</td>
-                                    <td class="td-style cnt">4시간전</td>
+                                    <td class="td-style cnt">{{snap.create_time_diff}}</td>
                                     <td class="td-style cnt dropdown">더보기
                                         <!--더보기>드롭다운-->
                                         <span class="caret" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
                                         <ul class="dropdown-menu-table" role="menu">
                                             <!--<li class="dropdown-header">더보기</li>-->
-                                            <li ng-repeat="sel in actions"><a ng-click="update(snap.id,sel,$index)">{{sel.name}}</a></li>
+                                            <li ng-repeat="sel in actions"><a ng-click="update(snap.id,sel,snap.type,$index)">{{sel.name}}</a></li>
                                         </ul>
                                     </td>
                                 </tr>
