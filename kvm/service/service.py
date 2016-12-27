@@ -2,10 +2,12 @@
 __author__ = 'yhk'
 
 import subprocess
+
 import datetime
 from pexpect import pxssh
 from sqlalchemy import func
-from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys, GnId
+
+from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys, GnId, GnImagesPool
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
 from kvm.util.hash import random_string
@@ -34,6 +36,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             if rest_cpu >= int(cpu) and rest_mem >= int(memory) and rest_disk >= int(disk):
                 host_ip = host_info.ip
                 host_id = host_info.id
+                break;
 
 
         if(host_ip is None):
@@ -144,12 +147,11 @@ def server_change_status(id, status, sql_session):
 
 
 def server_create_snapshot(id, name, user_id, team_code):
-    try:
         guest_info = GnVmMachines.query.filter(GnVmMachines.id == id).one();
+        pool_info = GnImagesPool.query.filter(GnImagesPool.host_id == guest_info.gnHostMachines.id).one();
 
         # 네이밍
         new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-
         # 디스크 복사
         kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
 
@@ -162,17 +164,14 @@ def server_create_snapshot(id, name, user_id, team_code):
 
         guest_snap = GnVmImages(id=id, name=name, type="kvm", sub_type="snap", filename=new_image_name + ".img"
                                 , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                                , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id)
+                                , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id)
         db_session.add(guest_snap)
-    except:
-        db_session.rollback()
-    finally:
-        db_session.commit()
+        db_session.commit();
 
 
 def server_monitor(sql_session):
     try:
-        lists = sql_session.query(GnVmMachines).filter(GnVmMachines.type == "kvm").all()
+        lists = sql_session.query(GnVmMachines).filter(GnVmMachines.type == "kvm").filter(GnVmMachines.status == "running").all()
         for list in lists:
             host_ip = list.gnHostMachines.ip
             s = pxssh.pxssh()
@@ -214,7 +213,7 @@ def server_monitor(sql_session):
 def add_user_sshkey(team_code, name):
     try:
         now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        path = config.SSHKEY_PATH+now
+        path = config.SSHKEY_PATH+ now
 
         result = subprocess.check_output ("ssh-keygen -f "+ path +" -P ''", shell=True)
         fingerprint = result.split("\n")[4].split(" ")[0]

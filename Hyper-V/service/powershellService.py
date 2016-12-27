@@ -6,6 +6,7 @@ PowerShell 스크립트를 전달할 함수들을 가지고 있는 PowerShell �
 다른 결과가 나오지만 같은 명령어를 사용하여 함수명이 겹칠 경우, 함수명 뒤에 _(역할)로 추가적으로 함수명을 구분해준다.
 """
 import datetime
+
 from util.config import config
 
 __author__ = 'jhjeon'
@@ -37,7 +38,7 @@ class PowerShell(object):
         script = "New-VM"
         for option, value in kwargs.items():
             if option == "Path":
-                script += " -" + option + " '" + value + "'"
+                script += " -" + option + " " + value + ""
             elif option == "MemoryStartupBytes":
                 script += " -" + option + " " + value + "MB"
             else:
@@ -45,6 +46,7 @@ class PowerShell(object):
         #script += " -Generation " + str(self.GENERATION_TYPE_2)
         script += " -Generation " + str(self.GENERATION_TYPE_1) #1세대 통일하여 생성
         script += self.CONVERTTO_JSON
+        print script
         return self.send(script)
 
     # 가상머신 설정
@@ -61,6 +63,7 @@ class PowerShell(object):
                 script += " -" + option + " " + value
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
+        print vmscript + script
         return self.send(vmscript + script)
 
     def get_vm_ip_address(self, vmid):
@@ -74,7 +77,7 @@ class PowerShell(object):
         script += '$MaskBits = '+config.MASK_BIT+';'
         script += '$Gateway = "'+config.GATE_WAY+'";'
         script += '$DNS = "' + dns_address + '";'
-        script += '$S_DNS = "'+ dns_sub_address +'";'
+        script += '$S_DNS = "'+dns_sub_address+'";'
         script += '$IPType = "IPv4";'
         script += '$adapter = Get-NetAdapter | ? {$_.Status -eq "up"};'
         script += 'If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress) {'
@@ -100,8 +103,6 @@ class PowerShell(object):
         return self.send_get_vm_info(script, ip)
 
 
-
-
     # VHD 파일을 복사
     # example) Convert-VHD -DestinationPath C:\images\2_testvm\disk.vhdx
     # / -Path C:\images\windows10.vhdx -Verbose -Passthru | ConvertTo-Json
@@ -110,11 +111,11 @@ class PowerShell(object):
         script = "Convert-VHD"
         for option, value in kwargs.items():
             if option == "Path" or option == "DestinationPath":
-                script += " -" + option + " '" + value + "'"
+                script += " -" + option + " " + value + " "
             elif option == "BlockSizeBytes":
                 script += " -" + option + " " + value + "GB"
             else:
-                script += " -" + option + " '" + value + "'"
+                script += " -" + option + " " + value + " "
         script += self.VERBOSE
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
@@ -131,11 +132,12 @@ class PowerShell(object):
             if option == "VMId":
                 vmscript = "$vm = Get-VM -Id " + value + "; "
             elif option == "Path":
-                script += " -" + option + " '" + value + "'"
+                script += " -" + option + " " + value + " "
             else:
                 script += " -" + option + " " + value
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
+        print vmscript + script
         return self.send(vmscript + script)
 
     # 가상머신을 시작한다.

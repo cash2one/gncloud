@@ -46,10 +46,10 @@ angular
             {name: '재시작', type: 'reboot'}
         ];
 
-        $scope.update = function (id, action, index) {
+        $scope.update = function (id, action, sh, index) {
             $http({
                 method: "PUT",
-                url: "/api/kvm/vm/machines/" + id,
+                url: "/api/"+ sh +"/vm/machines/" + id,
                 data: action,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })

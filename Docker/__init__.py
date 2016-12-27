@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
-from datetime import datetime
+from datetime import timedelta
 from flask import Flask, redirect, url_for, jsonify
 from controller.dockerController import *
 from util.config import config
 
 
 app = Flask(__name__)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 # --- VM 함수 --- #
 # Docker Service 생성 및 실행
@@ -48,6 +50,4 @@ def index():
 
 if __name__ == '__main__':
     app.config['DEBUG'] = False
-    app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=60)
-    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
     app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)

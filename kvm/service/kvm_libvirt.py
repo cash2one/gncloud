@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from xml.etree import ElementTree
 
 __author__ = 'yhk'
 
 import libvirt
-from kvm.util.config import config
 from flask import  render_template
 from pexpect import pxssh
 
+from kvm.util.config import config
 
 USER = "root"
 
@@ -31,7 +30,6 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
             )
 
             ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
-            ptr_POOL.refresh()
             defaultVol = ptr_POOL.storageVolLookupByName(base_name)
             ptr_POOL.createXMLFrom(vol, defaultVol, 0)
             ptr_POOL.storageVolLookupByName(name + ".img").resize(gigaToByte(int(disk)))
@@ -102,7 +100,7 @@ def kvm_image_copy(name_volume, name_snap, host_ip):
     save_vol = render_template(
         "volume.xml"
         , guest_name=name_snap
-        , hdd=byteToGiga(info[1])
+        , disk=byteToGiga(info[1])
     )
     ptr_POOL.createXMLFrom(save_vol, org_vol, 0)
     conn.close()

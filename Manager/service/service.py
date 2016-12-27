@@ -93,11 +93,10 @@ def sign_up(user_name, user_id, password, password_re):
     else:
         return 'password'
 
-def repair(user_id, password, password_new, password_re, tel, email):
-    test = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
+def repair(user_id, password, password_new, password_re, tel, email, sql_session):
     if password != "":
         password = random_string(password)
-        test = db_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
+        test = sql_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
         if (test != None and password_re == password_new):
               test.password = random_string(password_re)
         else:
