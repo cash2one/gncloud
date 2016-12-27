@@ -20,7 +20,6 @@ angular
                         if (data) {
                             $scope.type = type;
                             $scope.image_list = data.list;
-
                         }
                         else {
                             if(data.message != null) {
@@ -31,7 +30,7 @@ angular
                     .error(function (data, status, headers, config) {
                         console.log(status);
                     });
-            }else {
+            }else if(type == 'hyperv' || type=='kvm'){
                 $http({
                     method: 'GET',
                     url: '/api/manager/vm/images/base/' + type,
@@ -41,16 +40,16 @@ angular
                         if (data) {
                             $scope.type = type;
                             $scope.image_list = data.list;
-                            if (type == 'hyperv') {
+                            if(type=='hyperv'){
                                 $("#windows").show();
                                 $("#ssh").hide();
-                            } else if (type == 'kvm') {
+                            }else if(type =='kvm'){
                                 $("#windows").hide();
                                 $("#ssh").show();
                             }
                         }
                         else {
-                            if (data.message != null) {
+                            if(data.message != null) {
                                 alert(data.message)
                             }
                         }
@@ -70,7 +69,7 @@ angular
                             $("#snap").hide();
                         }
                         else {
-                            if (data.message != null) {
+                            if(data.message != null) {
                                 alert(data.message)
                             }
                         }
@@ -79,6 +78,7 @@ angular
                         console.log(status);
                     });
             }
+
         }
         $scope.sshkeys = [];
         $scope.getkeys = function () {
