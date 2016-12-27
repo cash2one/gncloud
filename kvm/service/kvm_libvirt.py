@@ -85,8 +85,8 @@ def kvm_image_list():
     return list
 
 
-def kvm_image_delete(name):
-    conn = libvirt.open(config.LIBVIRT_REMOTE_URL)
+def kvm_image_delete(name,host_ip):
+    conn = libvirt.open(config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1))
     ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
     ptr_POOL.storageVolLookupByName(name).delete()
     conn.close()

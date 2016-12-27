@@ -130,7 +130,7 @@ def server_image(type, sql_session, team_code):
     if type == "base":
         list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     else:
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code == team_code).filter(GnVmImages.status == None).all()
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code == team_code).filter(GnVmImages.status != "Removed").all()
         for vm in list:
             vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -143,9 +143,9 @@ def getQuotaOfTeam(team_code, sql_session):
                         ).filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
     limit_quota = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
     vm_run_count = sql_session.query(func.count(GnVmMachines.id).label("count"))\
-                   .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
+                   .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type != "docker").one()
     vm_stop_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "running").one()
+        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "running").filter(GnVmMachines.type != "docker").one()
     vm_kvm_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "kvm").one()
     vm_hyperv_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \

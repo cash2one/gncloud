@@ -135,7 +135,7 @@ def server_image_delete(id, sql_session):
 
     image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
     # 물리적 이미지 삭제하지 않고 데이터만 삭제된걸로 수정
-    kvm_image_delete(image_info.filename)
+    kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
     image_info.status = "Removed"
     sql_session.commit()
 
@@ -167,7 +167,7 @@ def server_create_snapshot(id, name, user_id, team_code):
 
         guest_snap = GnVmImages(id=id, name=name, type="kvm", sub_type="snap", filename=new_image_name + ".img"
                                 , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                                , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="running")
+                                , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="running", host_id=guest_info.gnHostMachines.id)
         db_session.add(guest_snap)
         db_session.commit();
 
