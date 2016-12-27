@@ -10,52 +10,75 @@ angular
         $("#windows").hide();
         $("#ssh").hide();
         $scope.selectType = function(type){
-            $http({
-                method: 'GET',
-                url: '/api/manager/vm/images/base/' + type,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data) {
-                        $scope.type = type;
-                        $scope.image_list = data.list;
-                        if(type=='hyperv'){
-                            $("#windows").show();
-                            $("#ssh").hide();
-                        }else if(type =='kvm'){
-                            $("#windows").hide();
-                            $("#ssh").show();
-                        }
-                    }
-                    else {
-                        if(data.message != null) {
-                            alert(data.message)
-                        }
-                    }
+            if(type == 'docker'){
+                $http({
+                    method: 'GET',
+                    url: '/api/manager/vm/container/services',
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                });
+                    .success(function (data, status, headers, config) {
+                        if (data) {
+                            $scope.type = type;
+                            $scope.image_list = data.list;
+                        }
+                        else {
+                            if(data.message != null) {
+                                alert(data.message)
+                            }
+                        }
+                    })
+                    .error(function (data, status, headers, config) {
+                        console.log(status);
+                    });
+            }else if(type == 'hyperv' || type=='kvm'){
+                $http({
+                    method: 'GET',
+                    url: '/api/manager/vm/images/base/' + type,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
+                })
+                    .success(function (data, status, headers, config) {
+                        if (data) {
+                            $scope.type = type;
+                            $scope.image_list = data.list;
+                            if(type=='hyperv'){
+                                $("#windows").show();
+                                $("#ssh").hide();
+                            }else if(type =='kvm'){
+                                $("#windows").hide();
+                                $("#ssh").show();
+                            }
+                        }
+                        else {
+                            if(data.message != null) {
+                                alert(data.message)
+                            }
+                        }
+                    })
+                    .error(function (data, status, headers, config) {
+                        console.log(status);
+                    });
 
-            $http({
-                method: 'GET',
-                url: '/api/manager/vm/images/snap/' + type,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data.status == true) {
-                        $scope.snap_list = data.list;
-                        $("#snap").hide();
-                    }
-                    else {
-                        if(data.message != null) {
-                            alert(data.message)
-                        }
-                    }
+                $http({
+                    method: 'GET',
+                    url: '/api/manager/vm/images/snap/' + type,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                });
+                    .success(function (data, status, headers, config) {
+                        if (data.status == true) {
+                            $scope.snap_list = data.list;
+                            $("#snap").hide();
+                        }
+                        else {
+                            if(data.message != null) {
+                                alert(data.message)
+                            }
+                        }
+                    })
+                    .error(function (data, status, headers, config) {
+                        console.log(status);
+                    });
+            }
+
         }
         $scope.sshkeys = [];
         $scope.getkeys = function () {

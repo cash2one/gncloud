@@ -21,8 +21,8 @@ class DockerService(object):
             pass
 
     # Docker 서비스를 생성한다.
-    def docker_service_create(self, id, replicas, image, cpu, memory):
-        dockerimage = GnDockerImages.query.filter_by(name=image).first()
+    def docker_service_create(self, id, replicas, image_id, cpu, memory):
+        dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
         if dockerimage is None:
             return None
         image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()

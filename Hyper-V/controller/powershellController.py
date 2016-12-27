@@ -64,7 +64,7 @@ def hvm_create():
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
         set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(cpu))
-        print set_vm
+        #print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
@@ -107,7 +107,7 @@ def hvm_create():
                     dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
             else:
                 try:
-                    hostid = db_session.query(GnImagePool).filter(GnImagePool.type == "hyperv").first()
+                    hostid = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
 
                     vmid = random_string(config.SALT, 8)
                     vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
@@ -148,7 +148,7 @@ def hvm_snapshot():
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
         create_snap = ps.create_snap(org_id.internal_id, config.COMPUTER_NAME)
-        print create_snap
+       # print create_snap
         if create_snap['Name'] is not None:
             base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
@@ -226,13 +226,13 @@ def hvm_state(id):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
-    print vmid.internal_id
+  #  print vmid.internal_id
     #    vm = GnVmMachines.query.filter_by().first
     if type == "start":
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start_vm = ps.start_vm(vmid.internal_id)
-        print start_vm
+       # print start_vm
         # print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
         if start_vm['State'] is 2:
@@ -424,9 +424,9 @@ def vm_monitor():
                 #hdd_free_per = hdd/float(vm_ip_info[i].disk)
 
                 if cpu >= 1.0:
-                    cpu = 1.0000
-                elif cpu <= 0:
                     cpu = 0.0000
+                elif cpu <= 0:
+                    cpu = 1.0000
                 else:
                     cpu = round(1-result[0], 4)
                 monitor_insert = GnMonitorHist(vm_ip_info[i].id, "hyperv", datetime.datetime.now(),
@@ -438,11 +438,11 @@ def vm_monitor():
                 print message
                 db_session.rollback()
             finally:
-                print result
+               # print result
                 db_session.commit()
 
         elif vm_ip_info[i].status != "Removed": #단순히 db만 업데이트
-            print "stop status"
+           # print "stop status"
             try:
                 vm_info = db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).first()
 
@@ -451,7 +451,7 @@ def vm_monitor():
                 db_session.add(monitor_insert)
                 db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
                     {"cpu_usage": 0.0000, "mem_usage": 0.0000})
-                print "insert success"
+               # print "insert success"
             except Exception as message:
                 print message
                 db_session.rollback()
