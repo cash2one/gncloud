@@ -103,8 +103,6 @@ class PowerShell(object):
         return self.send_get_vm_info(script, ip)
 
 
-
-
     # VHD 파일을 복사
     # example) Convert-VHD -DestinationPath C:\images\2_testvm\disk.vhdx
     # / -Path C:\images\windows10.vhdx -Verbose -Passthru | ConvertTo-Json

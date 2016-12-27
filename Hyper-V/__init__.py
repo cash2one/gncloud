@@ -14,7 +14,7 @@ app.add_url_rule("/manual", view_func=manual, methods=['GET'])
 # VM 생성 및 실행
 app.add_url_rule("/vm/machine", view_func=hvm_create, methods=['POST'])
 # VM 스냅샷 생성
-app.add_url_rule("/vm/machine/snapshot", view_func=hvm_snapshot, methods=['POST'])
+app.add_url_rule("/vm/machine/snapshots", view_func=hvm_snapshot, methods=['POST'])
 # VM 상태변경
 app.add_url_rule("/vm/machines/<id>", view_func=hvm_state, methods=['PUT'])
 # VM 삭제

@@ -160,7 +160,7 @@ def hvm_snapshot():
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     # 지금은 internal_id 받아야한다
     #org_id = request.json['org_id'] #원본 이미지 아이디
-    org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['org_id']).first()
+    org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
 
     print org_id.internal_id
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
