@@ -4,7 +4,9 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 각 Rest 함수들의 이름은 hvm_(Action을 대표하는 영단어 소문자)로 표기한다.
 """
 import json
+
 from util.json_encoder import AlchemyEncoder
+from Manager.db.models import GnImagePool
 
 __author__ = 'jhjeon'
 
@@ -13,7 +15,7 @@ import time
 from flask import request, jsonify, session
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines, GnVmImages, GnImagesPool, GnMonitor
+from db.models import GnVmMachines, GnVmImages, GnMonitor
 
 from util.config import config
 from util.hash import random_string
@@ -34,6 +36,7 @@ def hvm_create():
 
     base_image = base_image_info.filename
     name = request.json['name']
+    tag = request.json['tag']
     memory = request.json['memory']
     cpu = request.json['cpu']
     hdd = request.json['hdd']
@@ -41,15 +44,16 @@ def hvm_create():
     os_ver = base_image_info.os_ver
     os_sub_ver = base_image_info.os_subver
     os_bit = base_image_info.os_bit
-    print session.get('teamCode')
-    team_code = session.get('teamCode')
-    author_id = "hyperv"
+#    print session['teamCode']
+#    team_code = session.get('teamCode')
+    team_code = session['teamCode']
+    author_id = session['userName']
 
     #vm에 대한 명명규칙
     internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
     # 새 머신을 만든다. (New-VM)
-    # todo hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
+    # hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     SWITCHNAME = "out"
     new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(memory), Path=config.DISK_DRIVE+config.HYPERV_PATH,
                        SwitchName=SWITCHNAME)
@@ -101,10 +105,12 @@ def hvm_create():
                     dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
             else:
                 try:
+                    hostid = db_session.query(GnImagePool).filter(GnImagePool.type == "hyperv").firse()
+
                     vmid = random_string(config.SALT, 8)
-                    vm = GnVmMachines(vmid, internal_name, '', 'hyperv', start_vm['VMId'],
+                    vm = GnVmMachines(vmid, internal_name, tag, 'hyperv', start_vm['VMId'],
                                       internal_name,
-                                      '1', get_vm_ip, cpu, memory, hdd,
+                                      hostid.host_id, get_vm_ip, cpu, memory, hdd,
                                       os
                                       , os_ver, os_sub_ver, os_bit, team_code,
                                       author_id, datetime.datetime.now(),
@@ -123,31 +129,6 @@ def hvm_create():
     else:
         return jsonify(status=False, massage="VM 생성 실패")
 
-    '''
-       try: #예외처리하였음 request에 대한 response timeout까지 기다리다 에러뜸, 접속의 종료로 인한 예외
-           set_vm_ip = ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
-           print set_vm_ip
-       except:
-           # 새로 생성된 가상머신 데이터를 DB에 저장한다.
-           vmid = random_string(config.SALT, 8)
-           vm = GnVmMachines(vmid, name, '', 'hyperv', start_vm['VMId'],
-                             internal_name,
-                             '1', get_vm_ip, cpu, memory, hdd,
-                             os
-                             , os_ver, os_sub_ver, os_bit, "",
-                             author_id, datetime.datetime.now(),
-                             datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
-
-           insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
-
-           #db_session.add(vm_image)
-           db_session.add(insert_monitor)
-           db_session.add(vm)
-           return jsonify(status=True, massage="VM 생성 성공")
-       finally:
-           db_session.commit()
-'''
-
 
 #  REST. VM 스냅샷 생성
 #  hvm_snapshot 1. VM 정지 (Stop-VM)
@@ -159,9 +140,8 @@ def hvm_snapshot():
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     # 지금은 internal_id 받아야한다
     #org_id = request.json['org_id'] #원본 이미지 아이디
-    org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['org_id']).first()
+    org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
 
-    print org_id.internal_id
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
         create_snap = ps.create_snap(org_id.internal_id, config.COMPUTER_NAME)
@@ -172,18 +152,18 @@ def hvm_snapshot():
             name = request.json['name'] #request name 으로 저장해야한다.
 
             filename = create_snap['Name']
-            icon = 'Windows_icon'
+            icon = 'icon_path'
             os = base_image_info.os
             os_ver = base_image_info.os_ver
             os_subver = base_image_info.os_sub_ver
             subtype = 'snap'
             type = request.json['type']
-            author_id = "ahn"
+            author_id = session['userName']
             #author_id = request.json['author_id']
 
             os_bit = base_image_info.os_bit
             #team_code = request.json['team_code']
-            team_code = "1"
+            team_code = session['teamCode']
 
             insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
                                             icon, os, os_ver, os_subver, os_bit, team_code,

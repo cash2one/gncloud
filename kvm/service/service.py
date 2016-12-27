@@ -2,9 +2,11 @@
 __author__ = 'yhk'
 
 import subprocess
+
 import datetime
 from pexpect import pxssh
 from sqlalchemy import func
+
 from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys, GnId, GnImagesPool
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
@@ -211,7 +213,7 @@ def server_monitor(sql_session):
 def add_user_sshkey(team_code, name):
     try:
         now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        path = config.SSHKEY_PATH+now
+        path = config.SSHKEY_PATH+ now
 
         result = subprocess.check_output ("ssh-keygen -f "+ path +" -P ''", shell=True)
         fingerprint = result.split("\n")[4].split(" ")[0]

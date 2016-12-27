@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from xml.etree import ElementTree
 
 __author__ = 'yhk'
 
 import libvirt
-from kvm.util.config import config
 from flask import  render_template
 from pexpect import pxssh
 
+from kvm.util.config import config
 
 USER = "root"
 

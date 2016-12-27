@@ -6,6 +6,7 @@ PowerShell 스크립트를 전달할 함수들을 가지고 있는 PowerShell �
 다른 결과가 나오지만 같은 명령어를 사용하여 함수명이 겹칠 경우, 함수명 뒤에 _(역할)로 추가적으로 함수명을 구분해준다.
 """
 import datetime
+
 from util.config import config
 
 __author__ = 'jhjeon'
@@ -100,8 +101,6 @@ class PowerShell(object):
     def get_vm_usage_info(self, ip):
         script = ""
         return self.send_get_vm_info(script, ip)
-
-
 
 
     # VHD 파일을 복사
