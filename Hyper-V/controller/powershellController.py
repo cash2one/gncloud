@@ -11,7 +11,7 @@ __author__ = 'jhjeon'
 
 import datetime
 import time
-from flask import request, jsonify
+from flask import request, jsonify, session
 from service.powershellService import PowerShell
 from db.database import db_session
 from db.models import GnVmMachines, GnVmImages, GnMonitor
@@ -42,6 +42,8 @@ def hvm_create():
     os_ver = base_image_info.os_ver
     os_sub_ver = base_image_info.os_subver
     os_bit = base_image_info.os_bit
+    print session.get('teamCode')
+    team_code = session.get('teamCode')
     author_id = "hyperv"
 
     #vm에 대한 명명규칙
@@ -58,12 +60,12 @@ def hvm_create():
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
         set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(cpu))
+        print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
-        # todo. CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
+        # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
         CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
-        #CONVERT_VHD_PATH = "C:/images/vhdx/original/"
-        CONVERT_VHD_PATH = config.DISK_DRIVE +config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
+        CONVERT_VHD_PATH = config.DISK_DRIVE+ config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
@@ -101,11 +103,11 @@ def hvm_create():
             else:
                 try:
                     vmid = random_string(config.SALT, 8)
-                    vm = GnVmMachines(vmid, name, '', 'hyperv', start_vm['VMId'],
+                    vm = GnVmMachines(vmid, internal_name, '', 'hyperv', start_vm['VMId'],
                                       internal_name,
                                       '1', get_vm_ip, cpu, memory, hdd,
                                       os
-                                      , os_ver, os_sub_ver, os_bit, "",
+                                      , os_ver, os_sub_ver, os_bit, team_code,
                                       author_id, datetime.datetime.now(),
                                       datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
 

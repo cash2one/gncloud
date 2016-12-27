@@ -38,7 +38,7 @@ class PowerShell(object):
         script = "New-VM"
         for option, value in kwargs.items():
             if option == "Path":
-                script += " -" + option + " '" + value + "'"
+                script += " -" + option + " " + value + ""
             elif option == "MemoryStartupBytes":
                 script += " -" + option + " " + value + "MB"
             else:
@@ -46,6 +46,7 @@ class PowerShell(object):
         #script += " -Generation " + str(self.GENERATION_TYPE_2)
         script += " -Generation " + str(self.GENERATION_TYPE_1) #1세대 통일하여 생성
         script += self.CONVERTTO_JSON
+        print script
         return self.send(script)
 
     # 가상머신 설정
@@ -62,6 +63,7 @@ class PowerShell(object):
                 script += " -" + option + " " + value
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
+        print vmscript + script
         return self.send(vmscript + script)
 
     def get_vm_ip_address(self, vmid):
@@ -75,7 +77,7 @@ class PowerShell(object):
         script += '$MaskBits = '+config.MASK_BIT+';'
         script += '$Gateway = "'+config.GATE_WAY+'";'
         script += '$DNS = "' + dns_address + '";'
-        script += '$S_DNS = "'+ dns_sub_address +'";'
+        script += '$S_DNS = "'+dns_sub_address+'";'
         script += '$IPType = "IPv4";'
         script += '$adapter = Get-NetAdapter | ? {$_.Status -eq "up"};'
         script += 'If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress) {'
@@ -111,11 +113,11 @@ class PowerShell(object):
         script = "Convert-VHD"
         for option, value in kwargs.items():
             if option == "Path" or option == "DestinationPath":
-                script += " -" + option + " '" + value + "'"
+                script += " -" + option + " " + value + " "
             elif option == "BlockSizeBytes":
                 script += " -" + option + " " + value + "GB"
             else:
-                script += " -" + option + " '" + value + "'"
+                script += " -" + option + " " + value + " "
         script += self.VERBOSE
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
@@ -132,11 +134,12 @@ class PowerShell(object):
             if option == "VMId":
                 vmscript = "$vm = Get-VM -Id " + value + "; "
             elif option == "Path":
-                script += " -" + option + " '" + value + "'"
+                script += " -" + option + " " + value + " "
             else:
                 script += " -" + option + " " + value
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
+        print vmscript + script
         return self.send(vmscript + script)
 
     # 가상머신을 시작한다.

@@ -2,12 +2,11 @@
 __author__ = 'jhjeon'
 
 import json
-
 import requests
+from flask import jsonify
 from pexpect import pxssh
 from datetime import datetime
-
-from db.models import GnDockerServices, GnDockerContainers, GnDockerImage, GnDockerImageDetail, GnHostDocker
+from db.models import GnDockerContainers, GnDockerImages, GnDockerImageDetail, GnHostMachines, GnVmMachines, GnDockerVolumes
 from util.config import config
 
 
@@ -23,7 +22,7 @@ class DockerService(object):
 
     # Docker 서비스를 생성한다.
     def docker_service_create(self, id, replicas, image, cpu, memory):
-        dockerimage = GnDockerImage.query.filter_by(name=image).first()
+        dockerimage = GnDockerImages.query.filter_by(name=image).first()
         if dockerimage is None:
             return None
         image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
@@ -101,9 +100,12 @@ class DockerService(object):
         return self.send_command(command)
 
     # Docker 볼륨을 삭제한다.
-    def docker_volume_rm(self, host_id, internal_id):
-        node = GnHostDocker.query.filter_by(id=host_id).first()
-        command = "docker -H %s:2375 volume rm %s" % (node.ip, internal_id)
+    def docker_volume_rm(self, host_id, volumes):
+        node = GnHostMachines.query.filter_by(id=host_id).first()
+        volume_list = ""
+        for volume in volumes:
+            volume_list += "%s " % volume.name
+        command = "docker -H %s:2375 volume rm %s" % (node.ip, volume_list)
         return self.send_command(command)
 
     # Docker 서비스의 컨테이너를 가져온다.
@@ -133,7 +135,7 @@ class DockerService(object):
         service = self.send_command_return_json(command)
         mounts = service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
         # 볼륨의 목적지를 확인한다. 모든 노드의 볼륨이 동일하다는 전제 하에 첫 번째 worker 노드에서 볼륨 값을 가져온다.
-        host = GnHostDocker.query.filter_by(type="worker").first()
+        host = GnHostMachines.query.filter_by(type="docker_w").first()
         for mount in mounts:
             command = "docker -H %s:2375 volume inspect %s" % (host.ip, mount["Source"])
             volume = ""
@@ -147,7 +149,7 @@ class DockerService(object):
     # commit된 이미지의 이름은 서비스 DB id, tag는 backup으로 하자.
     def commit_containers(self, id):
         # Service internal id 가지고 오기
-        service = GnDockerServices.query.filter_by(id=id).first()
+        service = GnVmMachines.query.filter_by(id=id).first()
         service_internal_name = service.internal_name
         # 서비스의 Container 목록 가지고 오기
         # containers = self.get_service_containers(service.internal_id)
@@ -158,7 +160,7 @@ class DockerService(object):
         # {id}:stop
         result_list = []
         for container in containers:
-            node = GnHostDocker.query.filter_by(id=container.host_id).first()
+            node = GnHostMachines.query.filter_by(id=container.host_id).first()
             ip = node.ip
             command = "docker -H %s:2375 commit " \
                       "$(docker -H %s:2375 ps --filter label=com.docker.swarm.service.name=%s -q) " \
@@ -173,7 +175,7 @@ class DockerService(object):
     def snap_containers(self, id):
         sub_type = "snap"
         # Service internal id 가지고 오기
-        service = GnDockerServices.query.filter_by(id=id).first()
+        service = GnVmMachines.query.filter_by(id=id, type="docker").first()
         service_internal_name = service.internal_name
         # 서비스의 Container 목록 가지고 오기
         # containers = self.get_service_containers(service.internal_id)
@@ -182,8 +184,8 @@ class DockerService(object):
         # docker -H {ip}:2375 commit
         # $(docker -H {ip}:2375 ps --filter label=com.docker.swarm.service.name={internal_name} -q)
         # {id}:stop
-        first_worker = GnHostDocker.query.filter_by(id=container.host_id).first()
-        registry = GnHostDocker.query.filter_by(type="registry").first()
+        first_worker = GnHostMachines.query.filter_by(id=container.host_id).first()
+        registry = GnHostMachines.query.filter_by(type="docker_r").first()
         # 스냅샷 이미지 이름에 넣기 위한 현재 시각 저장
         snaptime = datetime.now().strftime('%Y%m%d%H%M%S')
         # 스냅샷 이미지 이름 정의
