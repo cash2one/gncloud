@@ -143,6 +143,6 @@ class MonitorService(object):
         self.client.close()
 
 
-mservice = MonitorService(db_session, "http://192.168.22.21:2375", "root", "docker")
-mservice.node_monitoring()
-mservice.close()
+# mservice = MonitorService(db_session, "http://192.168.0.201:2375", "root", "docker")
+# mservice.node_monitoring()
+# mservice.close()

@@ -285,7 +285,6 @@ def systembase():
 
 @app.route('/vm/account/maketeam', methods=['POST'])
 def maketeam():
-
     return jsonify(status=True, message="success")
 
 #### rest end ####

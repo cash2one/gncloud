@@ -242,33 +242,35 @@ class GnSshKeys(Base):
 
 
 
-class GnContanierImage(Base):
-    __tablename__="GN_CONTAINER_IMAGES"
+class GnDockerImages(Base):
+    __tablename__="GN_DOCKER_IMAGES"
     id = Column(String(8), primary_key=True, nullable=False, default='')
     name = Column(String(50), nullable=False, default='')
-    icon = Column(String(100), nullable=True, default='')
-    internal_id = Column(String(100), nullable=True, default='')
-    internal_name = Column(String(100), nullable=True, default='')
+    tag = Column(String(200), nullable=True, default='')
+    os = Column(String(50), nullable=True, default='')
+    os_ver = Column(String(45), nullable=True, default='')
     team_code = Column(String(10), nullable=True, default='')
-    author_id = Column(String(15), nullable=True, default='')
+    author_id = Column(String(10), nullable=True, default='')
     create_time = Column( nullable=False, default=datetime.datetime.now())
+    status = Column(String(10), primary_key=False, nullable=False)
 
-    def __init__(self, id=id, name= None, icon=None, internal_id=None, internal_name=None, team_code=None, author_id =None, create_time=None):
+    def __init__(self, id=id, name= None, tag=None, os=None, os_ver=None, team_code=None, author_id =None, create_time=None, status=None):
         self.id= id
         self.name =name
-        self.icon = icon
-        self.internal_id= internal_id
-        self.internal_name = internal_name
+        self.tag = tag
+        self.os= os
+        self.os_ver = os_ver
         self.team_code = team_code
         self.author_id =author_id
         self.create_time = create_time
+        self.status = status
 
     def __repr__(self):
-        return '<ID %r / Name %r / Team_code %r / create_time %r / >'\
-            % (self.id, self.name, self.team_code, self.create_time)
+        return '<ID %r / Name %r / Tag %r / Os %r / Os_ver %r /Team_code %r / create_time %r / Status %r/>'\
+            % (self.id, self.name, self.tag, self.os, self.os_ver, self.team_code, self.create_time, self.Status)
 
     def __json__(self):
-        return ['id', 'name', 'team_code', 'create_time']
+        return ['id', 'name','tag' ,'os','os_ver','team_code', 'create_time','status']
 
 class GnMonitor(Base):
     __tablename__ = "GN_MONITOR"
