@@ -41,16 +41,16 @@ def doc_create():
         # Docker Swarm manager 값을 가져온다.
         dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
         # Docker Swarm Service를 생성한다.
-        docker_service = ds.docker_service_create(id=id, replicas=2, image=image_id, cpu=cpu, memory=memory)
+        docker_service = ds.docker_service_create(id=id, replicas=2, image_id=image_id, cpu=cpu, memory=memory)
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
         if docker_service is None:
             return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
         if type(docker_service) is not list:
             return jsonify(status=False, message=docker_service)
         else:
+            base_image = GnDockerImages.query.filter_by(id=image_id).first()
             # Service 정보를 DB에 저장한다.
-            service_image = GnDockerServices(service_id=id, image=image)
-            base_image = GnDockerImages.query.filter_by(name=image).first()
+            service_image = GnDockerServices(service_id=id, image=base_image.name)
             sql_session.add(service_image)
             service = GnVmMachines(
                 id=id,
