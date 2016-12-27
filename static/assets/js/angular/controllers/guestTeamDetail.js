@@ -14,23 +14,6 @@ angular
         $("#team-group").hide();
         $http({
             method: 'GET',
-            url: '/api/manager/vm/account/users/list',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    $scope.te_list = data.list; // 유저 부분 리스트
-
-                } else {
-                    alert(data.message);
-                }
-
-            })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
-        $http({
-            method: 'GET',
             url: '/api/manager/vm/account/teamname',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
@@ -65,21 +48,6 @@ angular
                 console.log(status);
             });
 
-        $http({
-            method: 'GET',
-            url: '/api/kvm/account/keys',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.data_list = data.list; //ssh키에 대한 정보
-                }
-                else {
-                }
-            })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
 
         $scope.won_list ={};
         $http({
@@ -112,28 +80,7 @@ angular
                 console.log(status);
             });
 
-        $scope.submit = function() {
-            $http({
-                method  : 'PUT',
-                url: '/api/manager/vm/account/users/list',
-                data: $scope.data,
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8' // 개인설정 비밀번호 변경등
-                }
-            })
-                .success(function(data) {
-                    if (data.status == 2) {
-                        alert("success");
 
-                    }
-                    else if(data.status == 1){
-                        alert("비밀번호가 틀렸습니다");
-                    }
-                    else {
-                        alert(data.message)
-                    }
-                });
-        };
         $scope.actions = [
             {name: '승인', type: 'approve'},
             {name: '등급변경', type: 'change'},
@@ -185,28 +132,7 @@ angular
                     }
                 });
         }
-        $scope.download = function (id) { //ssh키의 다운로드
-            $http({
-                method: 'GET',
-                url: "/api/kvm/account/keys/download/"+id,
-                data: $scope.data,
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                }
-            })
-                .success(function (data, status, headers, config) {
-                    var header = headers(); // We set Content-disposition with filename in Controller.
-                    var fileName = header['content-disposition'].split("=")[1].replace(/\"/gi,'');
-                    var blob = new Blob([data],
-                        {type : 'application/octet-stream;charset=UTF-8'});
-                    var objectUrl = (window.URL || window.webkitURL).createObjectURL(blob);
-                    var link = angular.element('<a/>');
-                    link.attr({
-                        href : objectUrl,
-                        download : "sshkey"
-                    })[0].click();
-                });
-        };
+
 
         //**********리소스*************//
         $http({

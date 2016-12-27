@@ -1,144 +1,155 @@
-<div id="team-reso"  class="">
-    <div class="border-box profile-team">
-        <div class="cont-box">
-            <h2>리소스</h2>
+<h1>시스템 설정</h1>
+<!--왼쪽 메뉴-->
+<ul class="nav nav-pills col-sm-2">
+    <li class="left-title">시스템</li>
+    <li class="left-name active"><a data-toggle="pill" ng-click="click('profile-system')">프로필</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('team-sett')">팀 관리</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('cluster-sett')">클러스터 관리</a></li>
+    <li class="left-name"><a data-toggle="pill" ng-click="click('image-sett')">이미지 관리</a></li>
+</ul>
+<div class="tab-content col-sm-10">
+    <div id="team-reso"  class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h2>{{teamname.team_name}}</h2>
 
-            <!--팀 그래프-->
-            <div class="team-graph clearfix">
-                <ul class="team-graph-cpu fl">
-                    <li class="sett-title-graph">CPU</li>
-                    <li class="team-graph-box">
-                        <canvas id="cpu_chart" height="150"></canvas>
-                    </li>
-                    <li class="sett-txt-mid-graph cpu-per"><span id="cpu_per"></span>% 사용중</li>
-                    <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li>
-                </ul>
-
-                <ul class="team-graph-mem fl">
-                    <li class="sett-title-graph">MEMORY</li>
-                    <li class="team-graph-box">
-                        <canvas id="memory_chart" height="150"></canvas>
-                    </li>
-                    <li class="sett-txt-mid-graph mem-per"><span id="mem_per"></span>% 사용중</li>
-                    <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span> MB</li>
-                </ul>
-
-                <ul class="team-graph-dis fl">
-                    <li class="sett-title-graph">DISK</li>
-                    <li class="team-graph-box">
-                        <canvas id="disk_chart" height="150"></canvas>
-                    </li>
-                    <li class="sett-txt-mid-graph dis-per"><span id="disk_per"></span>% 사용중</li>
-                    <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span> GB</li>
-                </ul>
-            </div><!-- class="team-graph clearfix" -->
-
-        </div> <!--class="cont-box"-->
-    </div> <!--class="border-box profile-team"-->
-</div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
-<div id="team-group"  class="">
-    <div class="border-box profile-team">
-        <div class="cont-box">
-            <h2>{{teamname.team_name}}</h2>
-
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>등급<div class="refresh"></div></th>
-                        <th>이름<div class="refresh"></div></th>
-                        <th>아이디</th>
-                        <th>연락처</th>
-                        <th>이메일</th>
-                        <th>신청일</th>
-                        <th>승인일</th>
-                        <!-----여기서부터 팀장 로그인 시 보이는 영역----->
-                        <th>상태<div class="refresh"></div></th>
-                        <th><!--더보기--></th>
-                    </tr>
-                    </thead>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="won in won_list">
-                        <td class="td-style cnt">{{$index+1}}</td>
-                        <td class="td-style cnt">{{won[1].team_owner}}</td>
-                        <td class="td-style cnt">{{won[0].user_name}}</td>
-                        <td class="td-style cnt" ng-model="data.user_id">{{won[0].user_id}}</td>
-                        <td class="td-style cnt">{{won[0].tel}}</td>
-                        <td class="td-style cnt">{{won[0].email}}</td>
-                        <td class="td-style cnt">{{won[1].create_time_diff}}</td><p data-toggle="tooltip" title='{{won[1].apply_date}}'></p></td>
-                        <td class="td-style cnt">{{won[1].create_time_diff1}}</td><p data-toggle="tooltip" title='{{won[1].approve_date}}'></p></td>
-                        <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                        <td class="td-style cnt">{{won[1].comf}}</td>
-                        <td class="td-style cnt dropdown td-more">
-                            <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                더보기
-                                <span class="caret" ></span>
-                            </div>
-                            <!--더보기>드롭다운-->
-                            <ul class="dropdown-menu-table" role="menu">
-                                <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
-                                <li ng-repeat="ac in actions"><a href ng-click="update(won[0].user_id, won[1].team_code, ac)">{{ac.name}}</a></li>
-
-                            </ul>
-                        </td>
-                    </tr>
-                    <!--<tr class="tr-on-me"> &lt;!&ndash;class="tr-on-me" 로그인 한 사람이 나일 때&ndash;&gt;-->
-                    <!--<td class="td-style cnt">2</td>-->
-                    <!--<td class="td-style cnt">팀원</td>-->
-                    <!--<td class="td-style cnt">홍길동<br><span>(you)</span></td>-->
-                    <!--<td class="td-style cnt">홍대리</td>-->
-                    <!--<td class="td-style cnt">010-1234-5678</td>-->
-                    <!--<td class="td-style cnt">1234@naver.com</td>-->
-                    <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">6일전</p></td>-->
-                    <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">6일전</p></td>-->
-                    <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;여기서부터 팀장 로그인 시 보이는 영역-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
-                    <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
-                    <!--<td class="td-style cnt">승인</td>-->
-                    <!--<td class="td-style cnt dropdown td-more">-->
-                    <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
-                    <!--더보기-->
-                    <!--<span class="caret" ></span>-->
-                    <!--</div>-->
-                    <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
-                    <!--<ul class="dropdown-menu-table" role="menu">-->
-                    <!--<li><a href="#">승인</a></li>-->
-                    <!--<li><a href="#">등급 변경</a></li>-->
-                    <!--<li><a href="#">비밀번호 초기화</a></li>-->
-                    <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
-                    <!--</ul>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr class="tr-on-wait"> &lt;!&ndash;class="tr-on-road" 대기상태인 경우&ndash;&gt;-->
-                    <!--<td class="td-style cnt">1</td>-->
-                    <!--<td class="td-style cnt">팀원</td>-->
-                    <!--<td class="td-style cnt">김나리</td>-->
-                    <!--<td class="td-style cnt">나리김</td>-->
-                    <!--<td class="td-style cnt">010-9857-2222</td>-->
-                    <!--<td class="td-style cnt">-</td>-->
-                    <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">오늘</p></td>-->
-                    <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">오늘</p></td>-->
-                    <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;여기서부터 팀장 로그인 시 보이는 영역-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
-                    <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
-                    <!--<td class="td-style cnt">대기</td>-->
-                    <!--<td class="td-style cnt dropdown td-more">-->
-                    <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
-                    <!--더보기-->
-                    <!--<span class="caret" ></span>-->
-                    <!--</div>-->
-                    <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
-                    <!--<ul class="dropdown-menu-table" role="menu">-->
-                    <!--&lt;!&ndash;<li class="dropdown-header">더보기</li> 삭제합니다&ndash;&gt;-->
-                    <!--<li><a href="#">승인</a></li>-->
-                    <!--<li><a href="#">등급 변경</a></li>-->
-                    <!--<li><a href="#">비밀번호 초기화</a></li>-->
-                    <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
+                <!--팀 그래프-->
+                <div class="team-graph clearfix">
+                    <ul class="team-graph-cpu fl">
+                        <li class="sett-title-graph">CPU</li>
+                        <li class="team-graph-box">
+                            <canvas id="cpu_chart" height="150"></canvas>
+                        </li>
+                        <li class="sett-txt-mid-graph cpu-per"><span id="cpu_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li>
                     </ul>
-                    </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!--class="table-responsive table-reset"-->
+
+                    <ul class="team-graph-mem fl">
+                        <li class="sett-title-graph">MEMORY</li>
+                        <li class="team-graph-box">
+                            <canvas id="memory_chart" height="150"></canvas>
+                        </li>
+                        <li class="sett-txt-mid-graph mem-per"><span id="mem_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span> MB</li>
+                    </ul>
+
+                    <ul class="team-graph-dis fl">
+                        <li class="sett-title-graph">DISK</li>
+                        <li class="team-graph-box">
+                            <canvas id="disk_chart" height="150"></canvas>
+                        </li>
+                        <li class="sett-txt-mid-graph dis-per"><span id="disk_per"></span>% 사용중</li>
+                        <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span> GB</li>
+                    </ul>
+                </div><!-- class="team-graph clearfix" -->
+
+            </div> <!--class="cont-box"-->
+        </div> <!--class="border-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
+    <div id="team-group"  class="">
+        <div class="border-box profile-team">
+            <div class="cont-box">
+                <h2></h2>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>등급<div class="refresh"></div></th>
+                            <th>이름<div class="refresh"></div></th>
+                            <th>아이디</th>
+                            <th>연락처</th>
+                            <th>이메일</th>
+                            <th>신청일</th>
+                            <th>승인일</th>
+                            <!-----여기서부터 팀장 로그인 시 보이는 영역----->
+                            <th>상태<div class="refresh"></div></th>
+                            <th><!--더보기--></th>
+                        </tr>
+                        </thead>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="won in won_list">
+                            <td class="td-style cnt">{{$index+1}}</td>
+                            <td class="td-style cnt">{{won[1].team_owner}}</td>
+                            <td class="td-style cnt">{{won[0].user_name}}</td>
+                            <td class="td-style cnt" ng-model="data.user_id">{{won[0].user_id}}</td>
+                            <td class="td-style cnt">{{won[0].tel}}</td>
+                            <td class="td-style cnt">{{won[0].email}}</td>
+                            <td class="td-style cnt">{{won[1].create_time_diff}}</td><p data-toggle="tooltip" title='{{won[1].apply_date}}'></p></td>
+                            <td class="td-style cnt">{{won[1].create_time_diff1}}</td><p data-toggle="tooltip" title='{{won[1].approve_date}}'></p></td>
+                            <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
+                            <td class="td-style cnt">{{won[1].comf}}</td>
+                            <td class="td-style cnt dropdown td-more">
+                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    더보기
+                                    <span class="caret" ></span>
+                                </div>
+                                <!--더보기>드롭다운-->
+                                <ul class="dropdown-menu-table" role="menu">
+                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                    <li ng-repeat="ac in actions"><a href ng-click="update(won[0].user_id, won[1].team_code, ac)">{{ac.name}}</a></li>
+
+                                </ul>
+                            </td>
+                        </tr>
+                        <!--<tr class="tr-on-me"> &lt;!&ndash;class="tr-on-me" 로그인 한 사람이 나일 때&ndash;&gt;-->
+                        <!--<td class="td-style cnt">2</td>-->
+                        <!--<td class="td-style cnt">팀원</td>-->
+                        <!--<td class="td-style cnt">홍길동<br><span>(you)</span></td>-->
+                        <!--<td class="td-style cnt">홍대리</td>-->
+                        <!--<td class="td-style cnt">010-1234-5678</td>-->
+                        <!--<td class="td-style cnt">1234@naver.com</td>-->
+                        <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">6일전</p></td>-->
+                        <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">6일전</p></td>-->
+                        <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;여기서부터 팀장 로그인 시 보이는 영역-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+                        <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
+                        <!--<td class="td-style cnt">승인</td>-->
+                        <!--<td class="td-style cnt dropdown td-more">-->
+                        <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
+                        <!--더보기-->
+                        <!--<span class="caret" ></span>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
+                        <!--<ul class="dropdown-menu-table" role="menu">-->
+                        <!--<li><a href="#">승인</a></li>-->
+                        <!--<li><a href="#">등급 변경</a></li>-->
+                        <!--<li><a href="#">비밀번호 초기화</a></li>-->
+                        <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
+                        <!--</ul>-->
+                        <!--</td>-->
+                        <!--</tr>-->
+                        <!--<tr class="tr-on-wait"> &lt;!&ndash;class="tr-on-road" 대기상태인 경우&ndash;&gt;-->
+                        <!--<td class="td-style cnt">1</td>-->
+                        <!--<td class="td-style cnt">팀원</td>-->
+                        <!--<td class="td-style cnt">김나리</td>-->
+                        <!--<td class="td-style cnt">나리김</td>-->
+                        <!--<td class="td-style cnt">010-9857-2222</td>-->
+                        <!--<td class="td-style cnt">-</td>-->
+                        <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">오늘</p></td>-->
+                        <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">오늘</p></td>-->
+                        <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;여기서부터 팀장 로그인 시 보이는 영역-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+                        <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
+                        <!--<td class="td-style cnt">대기</td>-->
+                        <!--<td class="td-style cnt dropdown td-more">-->
+                        <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
+                        <!--더보기-->
+                        <!--<span class="caret" ></span>-->
+                        <!--</div>-->
+                        <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
+                        <!--<ul class="dropdown-menu-table" role="menu">-->
+                        <!--&lt;!&ndash;<li class="dropdown-header">더보기</li> 삭제합니다&ndash;&gt;-->
+                        <!--<li><a href="#">승인</a></li>-->
+                        <!--<li><a href="#">등급 변경</a></li>-->
+                        <!--<li><a href="#">비밀번호 초기화</a></li>-->
+                        <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
+                        </ul>
+                        </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!--class="table-responsive table-reset"-->
+                </div></div></div></div>
