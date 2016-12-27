@@ -100,11 +100,12 @@ def doc_create():
                 sql_session.add(set_port)
             service.ip += ":%s" % ports[0]['PublishedPort']
             sql_session.add(service)
-    except:
+            sql_session.commit()
+            return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
+    except Exception as e:
         sql_session.rollback()
-    finally:
-        sql_session.commit()
-    return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
+        return jsonify(status=False, message="서비스 생성 실패: %s" % e)
+
 
 
 # Docker Service 상태변경
