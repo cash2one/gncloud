@@ -99,13 +99,14 @@ def hvm_create():
             if dhcp_ip_address is True:
                 try:
                     ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
-                except:
+                except Exception as message:
+                    print message
                     ps.get_ip_address_type(get_vm_ip)
                 finally:
                     dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
             else:
                 try:
-                    hostid = db_session.query(GnImagePool).filter(GnImagePool.type == "hyperv").firse()
+                    hostid = db_session.query(GnImagePool).filter(GnImagePool.type == "hyperv").first()
 
                     vmid = random_string(config.SALT, 8)
                     vm = GnVmMachines(vmid, internal_name, tag, 'hyperv', start_vm['VMId'],
@@ -121,7 +122,8 @@ def hvm_create():
                     db_session.add(vm)
                     return jsonify(status=True,massage = "create vm success")
 
-                except:
+                except Exception as message:
+                    print message
                     db_session.rollback()
                     return jsonify(status=False, massage="DB insert fail")
                 finally:
