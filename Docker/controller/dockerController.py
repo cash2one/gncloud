@@ -25,7 +25,7 @@ def doc_create():
         if request.json["author_id"] is not None:
             author_id = request.json["author_id"]
         else:
-            author_id = session["author_id"]
+            author_id = session["userName"]
         # 팀 코드를 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
         if request.json["team_code"] is not None:
             team_code = request.json["team_code"]
@@ -34,7 +34,7 @@ def doc_create():
         name = request.json["name"]
         tag = request.json["tag"]
         cpu = request.json["cpu"]
-        disk = request.json["disk"]
+        disk = request.json["hdd"]
         memory = request.json["memory"]
         image = request.json["image"]
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)

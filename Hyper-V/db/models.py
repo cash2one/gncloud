@@ -2,8 +2,8 @@
 __author__ = 'gncloud'
 
 import datetime
-from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Boolean, ForeignKey, Text, Numeric
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Numeric
+
 from db.database import Base
 
 
