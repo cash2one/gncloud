@@ -22,26 +22,26 @@ def doc_create():
         while len(GnVmMachines.query.filter_by(id=id).all()) != 0:
             id = random_string(config.SALT, 8)
         # 유저 네임을 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
-        if request.json["author_id"] is not None:
-            author_id = request.json["author_id"]
+        if request.json['author_id'] is not None:
+            author_id = request.json['author_id']
         else:
-            author_id = session["userName"]
+            author_id = session['author_id']
         # 팀 코드를 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
-        if request.json["team_code"] is not None:
-            team_code = request.json["team_code"]
+        if request.json['team_code'] is not None:
+            team_code = request.json['team_code']
         else:
             team_code = session['teamCode']
-        name = request.json["name"]
-        tag = request.json["tag"]
-        cpu = request.json["cpu"]
-        disk = request.json["hdd"]
-        memory = request.json["memory"]
-        image = request.json["image"]
+        image_id = request.json['id']
+        name = request.json['name']
+        tag = request.json['tag']
+        cpu = request.json['cpu']
+        disk = request.json['hdd']
+        memory = request.json['memory']
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
         # Docker Swarm manager 값을 가져온다.
-        dsmanager = GnHostMachines.query.filter_by(type="docker_m").one()
+        dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
         # Docker Swarm Service를 생성한다.
-        docker_service = ds.docker_service_create(id=id, replicas=2, image=image, cpu=cpu, memory=memory)
+        docker_service = ds.docker_service_create(id=id, replicas=2, image=image_id, cpu=cpu, memory=memory)
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
         if docker_service is None:
             return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
@@ -331,6 +331,7 @@ def doc_new_image():
     # 이미지 Tag 중복 체크 중복되는 값이 존재할 경우 False 리턴 후 종료.
     if len(GnDockerImages.query.filter_by(name=name).all()) != 0:
         return jsonify(status=False, message="이미 존재하는 이미지입니다.")
+    view_name = request.json["view_name"]
     tag = request.json["tag"]
     os = request.json["os"]
     os_ver = request.json["os_ver"]
@@ -340,7 +341,7 @@ def doc_new_image():
     create_time = datetime.strptime(request.json["create_time"][:-2], '%Y-%m-%dT%H:%M:%S.%f')
     status = ""
     image = GnDockerImages(
-        id=id, name=name, tag=tag, os=os, os_ver=os_ver, sub_type=sub_type, team_code=team_code,
+        id=id, name=name, view_name=view_name, tag=tag, os=os, os_ver=os_ver, sub_type=sub_type, team_code=team_code,
         author_id=author_id, create_time=create_time, status=status
     )
     sql_session.add(image)

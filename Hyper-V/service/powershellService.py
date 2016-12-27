@@ -46,7 +46,7 @@ class PowerShell(object):
         #script += " -Generation " + str(self.GENERATION_TYPE_2)
         script += " -Generation " + str(self.GENERATION_TYPE_1) #1세대 통일하여 생성
         script += self.CONVERTTO_JSON
-        print script
+       # print script
         return self.send(script)
 
     # 가상머신 설정
@@ -63,7 +63,7 @@ class PowerShell(object):
                 script += " -" + option + " " + value
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
-        print vmscript + script
+        #print vmscript + script
         return self.send(vmscript + script)
 
     def get_vm_ip_address(self, vmid):
@@ -137,7 +137,7 @@ class PowerShell(object):
                 script += " -" + option + " " + value
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
-        print vmscript + script
+        #print vmscript + script
         return self.send(vmscript + script)
 
     # 가상머신을 시작한다.
@@ -207,7 +207,7 @@ class PowerShell(object):
         script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
         script += "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+"/" + vhd_File_Name
         script += " -Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
-        print script
+        #print script
         return self.send(script)
 
 
@@ -219,7 +219,7 @@ class PowerShell(object):
         script += "Remove-VM -VM $vm -Force;"
         script += "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+'/$vmn".vhdx" '
         script += "-Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/ | ConvertTo-Json }"
-        print script
+        #print script
         return self.send(script)
 
 
@@ -244,7 +244,7 @@ class PowerShell(object):
         script += 'Get-ChildItem -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/vhdx/snap/$VMName'
         script += '"' + snapshot_id
         script += '.vhdx" | ConvertTo-Json -Compress}'
-        print script
+       # print script
         return self.send(script)
 
 

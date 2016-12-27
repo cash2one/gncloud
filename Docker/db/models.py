@@ -224,8 +224,9 @@ class GnDockerContainers(Base):
     service_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'), primary_key=True, nullable=False)
     internal_id = Column(String(100), primary_key=True, nullable=True, default='')
     internal_name = Column(String(100), primary_key=True, nullable=True, default='')
-    host_id = Column(Integer, nullable=False, default='')
+    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'), nullable=False, default='')
     status = Column(String(10), nullable=True, default='')
+    gnHostMachines = relationship('GnHostMachines')
 
     def __init__(self, service_id, internal_id, internal_name, host_id, status=""):
         self.service_id = service_id
