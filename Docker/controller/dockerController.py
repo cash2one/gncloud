@@ -36,7 +36,7 @@ def doc_create():
         tag = request.json['tag']
         cpu = request.json['cpu']
         disk = request.json['hdd']
-        memory = request.json['memory']
+        memory = "%sMB" % request.json['memory']
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
         # Docker Swarm manager 값을 가져온다.
         dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
