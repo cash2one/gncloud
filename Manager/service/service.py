@@ -130,7 +130,9 @@ def server_image(type, sql_session, team_code):
     if type == "base":
         list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     else:
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all();
+        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code == team_code).filter(GnVmImages.status == None).all()
+        for vm in list:
+            vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
     return list
 
