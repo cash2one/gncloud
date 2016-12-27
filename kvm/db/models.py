@@ -108,12 +108,13 @@ class GnVmImages(Base):
     ssh_id = Column(String(10), primary_key=False, nullable=True)
     status = Column(String(10), primary_key=False, nullable=True)
     pool_id = Column(String(8), primary_key=False, nullable=True)
-
+    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'))
+    gnHostMachines = relationship('GnHostMachines')
 
     def __init__(self,id=None, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
                  , os_bit=None, team_code=None, author_id=None, ssh_id=None, status=None
-                 , pool_id=None):
+                 , pool_id=None, host_id=None):
         self.id = id
         self.name = name
         self.filename = filename
@@ -129,6 +130,7 @@ class GnVmImages(Base):
         self.ssh_id = ssh_id
         self.status = status
         self.pool_id = pool_id
+        self.host_id = host_id
 
 
 

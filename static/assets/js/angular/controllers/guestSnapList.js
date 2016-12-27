@@ -115,8 +115,8 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert(name + " guest의 상태가 변경되었습니다");
-                        $scope.guest_list.splice(index, 1);
+                        alert(name + "상태가 변경되었습니다");
+                        $scope.snap_list.splice(index, 1);
                     } else {
                         alert(data.message);
                     }
