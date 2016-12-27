@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestSnapListCtrl', function ($scope, $http) {
+    .controller('guestSnapListCtrl', function ($scope, $http, dateModifyService) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -62,6 +62,11 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.snap_list = data.list;
+                        for(var i = 0 ; i < data.list.length ; i++){
+                            $scope.snap_list[i].create_time_diff = dateModifyService.modifyDate(data.list[i].create_time);
+                        }
+
+
                     }
                     else {
                     }
@@ -96,12 +101,10 @@ angular
             {name: '재시작', type: 'reboot'},
             {name: '삭제', type: 'delete'}
         ];
-        $scope.update = function (id, action, index) {
-            var url = '/api/kvm/vm/machines/' + id;
-            var method = "PUT";
+        $scope.update = function (id, action, ty,index) {
             if (action.type == "delete") {
-                url = '/api/kvm/vm/machines/' + id;
-                method = 'DELETE';
+                 var  url = '/api/'+ty+'/vm/images/' + id;
+                 var  method = 'DELETE';
             }
 
             $http({

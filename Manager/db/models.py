@@ -188,11 +188,12 @@ class GnVmImages(Base):
     author_id = Column(String(15), primary_key=False, nullable=False)
     create_time = Column(DateTime, default=datetime.datetime.now())
     pool_id = Column(String(8), primary_key=False, nullable=False)
+    status = Column(String(10), primary_key=False, nullable=False)
 
 
     def __init__(self, name=None, filename=None, type=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
-                 , os_bit=None, team_code=None, author_id=None, pool_id= None):
+                 , os_bit=None, team_code=None, author_id=None, pool_id= None, create_time= None, status=None):
         self.name = name
         self.filename = filename
         self.type = type
@@ -205,14 +206,16 @@ class GnVmImages(Base):
         self.team_code = team_code
         self.author_id = author_id
         self.pool_id = pool_id
+        self.create_time = create_time
+        self.status = status
 
 
 
     def __repr__(self):
         return '< ID %r / Name %r / Filename %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_Ver %r / Os_subVer %r / Os_bit %r / Team_code %r / Author_id %r / Create_time %r / Pool_id %r/>'\
-                % (self.id, self.name, self.filename, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time, self.pool_id)
+                % (self.id, self.name, self.filename, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time, self.pool_id, self.status)
     def __json__(self):
-        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id']
+        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id', 'status']
 
 class GnSshKeys(Base):
     __tablename__ = "GN_SSH_KEYS"
