@@ -168,14 +168,14 @@ def doc_state(id):
                 sql_session.add(set_port)
             sql_session.commit()
             return jsonify(status=True, message="서비스가 시작되었습니다.", result=service.to_json())
-    # -- 정지 (stop)
+    # -- 정지 (suspend)
     elif type == "suspend":
         if service.status != "Running":
             return jsonify(status=False, message="서비스가 실행중이 아닙니다.", result=service.to_json())
         else:
             ds.docker_service_stop(service)
             service.stop_time = datetime.now()
-            service.status = "Stop"
+            service.status = "suspend"
             sql_session.commit()
             return jsonify(status=True, message="서비스가 정지되었습니다.", result=service.to_json())
     # -- 재시작 (restart)
@@ -183,13 +183,13 @@ def doc_state(id):
         if service.status == "Running":
             ds.docker_service_stop(service)
             service.stop_time = datetime.now()
-            service.status = "Stop"
+            service.status = "suspend"
             sql_session.commit()
             # commit된 내용을 가지고 서비스 생성.
             # image = "%s:backup" % service.internal_name
         image = "%s:backup" % service.id
         restart_service = ds.docker_service_start(
-            id=id, replicas=2, image=service.image, backup_image=image,
+            id=id, replicas=2, image=service.gnDockerServices[0].image, backup_image=image,
             cpu=service.cpu, memory="%sMB" % (service.memory/1024))
         # 변경된 내용을 DB에 Update
         # 서비스쪽 데이터 수정
@@ -219,7 +219,7 @@ def doc_state(id):
     # -- 스냅샷 (snap)
     elif type == "snap":
         service = GnDockerServices.query.filter_by(service_id=id).first()
-        baseimage = GnDockerImages.query.filter_by(name=service.image).first()
+        baseimage = GnDockerImages.query.filter_by(name=service.gnDockerServices[0].image).first()
         # 이미지 커밋 및 레지스트리에 스냅샷 이미지 저장
         snapshot = ds.snap_containers(id)
         # Docker Image 정보 입력
