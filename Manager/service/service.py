@@ -262,12 +262,19 @@ def comfirm_list(user_id, sql_session):
     return team_info
 
 
-def createteam_list(team_name, team_code, author_id):
-    vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id)
-    db_session.add(vm)
-    db_session.commit()
-    return True
-
+def createteam_list(user_id,team_name, team_code, author_id, sql_session):
+    if(sql_session.query(GnTeam).filter(GnTeam.team_name == team_name).one_or_none() == None):
+        if(sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one_or_none() == None):
+            vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+            tm = GnUserTeam(user_id=user_id, team_code=team_code, comfirm='Y', apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),approve_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), team_owner='owner')
+            db_session.add(vm)
+            db_session.add(tm)
+            db_session.commit()
+            return 'success'
+        else:
+            return 'team_code'
+    else:
+        return 'team_name'
 def select(sql_session ):
     return sql_session.query(GnTeam).all()
 
@@ -286,7 +293,50 @@ def team_table(sql_sesseion):
     for team_info in list:
         team_info.create_date = team_info.create_date.strftime('%Y-%m-%d %H:%M:%S')
         user_list = sql_sesseion.query(GnUserTeam, GnUser).join(GnUser, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_info.team_code).all()
-        team_table = {"team_info":team_info, "user_list":user_list}
+        current_info = sql_sesseion.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
+                                         func.sum(GnVmMachines.memory).label("sum_mem"),
+                                         func.sum(GnVmMachines.disk).label("sum_disk")
+                                         ).filter(GnVmMachines.team_code == team_info.team_code).one()
+        limit_quota = sql_sesseion.query(GnTeam).filter(GnTeam.team_code == team_info.team_code).one()
+        vm_run_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code and GnVmMachines.status == "running").one()
+        vm_stop_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code and GnVmMachines.status == "stop").one()
+        vm_kvm_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type == "kvm").one()
+        vm_hyperv_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type == "hyperv").one()
+        vm_docker_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type == "docker").one()
+        team_info = sql_sesseion.query(GnTeam).filter(GnTeam.team_code == team_info.team_code).one()
+        if current_info.sum_cpu is None:
+            cpu_per_info = [0,100]
+            cpu_cnt_info = [0,limit_quota.cpu_quota]
+        else:
+            cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
+            cpu_cnt_info = [int(current_info.sum_cpu), limit_quota.cpu_quota]
+
+        if current_info.sum_cpu is None:
+            memory_per_info = [0,100]
+            mem_cnt_info = [0, limit_quota.mem_quota]
+        else:
+            memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
+            mem_cnt_info = [int(current_info.sum_mem), limit_quota.mem_quota]
+
+        if current_info.sum_cpu is None:
+            disk_per_info = [0,100]
+            disk_cnt_info = [0, limit_quota.disk_quota]
+        else:
+            disk_per_info = [int((current_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info.sum_disk/limit_quota.disk_quota)*100))]
+            disk_cnt_info = [int(current_info.sum_disk), limit_quota.disk_quota]
+
+        count_info = [vm_run_count.count,vm_stop_count.count]
+        type_info = [vm_kvm_count.count,vm_hyperv_count.count]
+        docker_info = vm_docker_count.count
+        quato_info = {'team_name':team_info.team_name, 'cpu_per':cpu_per_info, 'mem_per':memory_per_info, 'disk_per':disk_per_info
+            , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
+            , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info};
+        team_table = {"team_info":team_info, "user_list":user_list, "quto_info":quato_info}
         result.append(team_table);
 
     return result
@@ -296,3 +346,4 @@ def pathimage(sql_session):
     for data in list:
         data[1].create_time = data[1].create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
+

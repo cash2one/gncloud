@@ -57,7 +57,6 @@ angular
                     console.log(status);
                 });
         }
-
         $scope.sshkeys = [];
         $scope.getkeys = function () {
             $http({
@@ -179,4 +178,5 @@ angular
                 });
             }
         }
+
     });
