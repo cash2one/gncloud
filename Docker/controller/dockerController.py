@@ -114,18 +114,11 @@ def doc_create():
 # {name: '재시작', type: 'reboot'}
 def doc_state(id):
     sql_session = db_session
-    name = request.json["type"]
     type = request.json["type"]
-    # 유저 네임을 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
-    # if request.json["author_id"] is not None:
-    #     author_id = request.json["author_id"]
-    # else:
     author_id = session["userName"]
-    # 팀 코드를 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
-    # if request.json["team_code"] is not None:
-    #     team_code = request.json["team_code"]
-    # else:
+    # author_id = request.json["author_id"]
     team_code = session['teamCode']
+    # team_code = request.json["team_code"]
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # 서비스 DB 데이터 가져오기
@@ -142,7 +135,7 @@ def doc_state(id):
             image = "%s:backup" % service.id
             restart_service = ds.docker_service_start(
                 id=id, replicas=2, image=service.gnDockerServices[0].image, backup_image=image,
-                cpu=service.cpu, memory="%sMB" % (service.memory/1024))
+                cpu=service.cpu, memory=str(service.memory)+"MB")
             # 변경된 내용을 DB에 Update
             # 서비스쪽 데이터 수정
             service.internal_id = restart_service[0]["ID"]
@@ -190,7 +183,7 @@ def doc_state(id):
         image = "%s:backup" % service.id
         restart_service = ds.docker_service_start(
             id=id, replicas=2, image=service.gnDockerServices[0].image, backup_image=image,
-            cpu=service.cpu, memory=service.memory + "MB")
+            cpu=service.cpu, memory=str(service.memory) + "MB")
         # 변경된 내용을 DB에 Update
         # 서비스쪽 데이터 수정
         service.internal_id = restart_service[0]["ID"]
