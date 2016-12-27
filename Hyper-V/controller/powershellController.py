@@ -42,7 +42,7 @@ def hvm_create():
     os_ver = base_image_info.os_ver
     os_sub_ver = base_image_info.os_subver
     os_bit = base_image_info.os_bit
-    print session.get('teamCode')
+    print session['teamCode']
     team_code = session.get('teamCode')
     author_id = "hyperv"
 
@@ -160,7 +160,7 @@ def hvm_snapshot():
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
     # 지금은 internal_id 받아야한다
     #org_id = request.json['org_id'] #원본 이미지 아이디
-    org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['org_id']).first()
+    org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
 
     print org_id.internal_id
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
@@ -184,7 +184,7 @@ def hvm_snapshot():
 
             os_bit = base_image_info.os_bit
             #team_code = request.json['team_code']
-            team_code = "1"
+            team_code = session.get('teamCode')
 
             insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
                                             icon, os, os_ver, os_subver, os_bit, team_code,

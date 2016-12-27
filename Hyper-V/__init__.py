@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
-from flask import Flask, redirect, url_for, jsonify
+from flask import Flask, redirect, url_for
+from datetime import timedelta
+
 from controller.powershellController import *
 from util.config import config
 
-
 app = Flask(__name__)
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
 app.add_url_rule("/manual", view_func=manual, methods=['GET'])
@@ -14,7 +17,7 @@ app.add_url_rule("/manual", view_func=manual, methods=['GET'])
 # VM 생성 및 실행
 app.add_url_rule("/vm/machine", view_func=hvm_create, methods=['POST'])
 # VM 스냅샷 생성
-app.add_url_rule("/vm/machine/snapshot", view_func=hvm_snapshot, methods=['POST'])
+app.add_url_rule("/vm/machine/snapshots", view_func=hvm_snapshot, methods=['POST'])
 # VM 상태변경
 app.add_url_rule("/vm/machines/<id>", view_func=hvm_state, methods=['PUT'])
 # VM 삭제
@@ -35,10 +38,18 @@ app.add_url_rule("/vm/images/<type>", view_func=hvm_image_list, methods=['GET'])
 # VM 이미지 정보
 app.add_url_rule("/vm/images/<type>/<id>", view_func=hvm_image, methods=['GET'])
 
-@app.route('/test', methods=['POST'])
-def test():
-    request.json['type']
-    return jsonify(status=True, message="success")
+# @app.route('/test', methods=['POST'])
+# def test():
+#     request.json['type']
+#     return jsonify(status=True, message="success")
+
+# @app.route("/vm/machines/<id>", methods=['PUT'])
+# def test1(id):
+#     id =id
+#     type=request.json['type']
+#     team_code = session['teamCode']
+#     hvm_state(id, type, team_code)
+#     return jsonify(status= True, message="success")
 
 
 # Controller 상태 확인
