@@ -266,7 +266,7 @@ class GnDockerVolumes(Base):
 
 class GnDockerPorts(Base):
     __tablename__ = 'GN_DOCKER_PORTS'
-    service_id = Column(String(8), primary_key=True, nullable=False, default='')
+    service_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'), primary_key=True, nullable=False, default='')
     protocol = Column(String(10), primary_key=True, nullable=False, default='')
     target_port = Column(String(5), primary_key=True, nullable=False, default='0')
     published_port = Column(String(5), primary_key=True, nullable=False, default='0')
