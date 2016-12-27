@@ -130,7 +130,7 @@ class GnVmMachines(Base):
         self.os_ver = os_ver
         self.os_sub_ver = os_sub_ver
         self.os_bit = os_bit
-        self.team_ = team_code
+        self.team_code = team_code
         self.author_id = author_id
         self.status = status
         self.tag = tag
