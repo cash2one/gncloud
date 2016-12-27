@@ -31,7 +31,7 @@ def doc_create():
             team_code = request.json['team_code']
         else:
             team_code = session['teamCode']
-        image = request.json['id']
+        image_id = request.json['id']
         name = request.json['name']
         tag = request.json['tag']
         cpu = request.json['cpu']
@@ -41,7 +41,7 @@ def doc_create():
         # Docker Swarm manager 값을 가져온다.
         dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
         # Docker Swarm Service를 생성한다.
-        docker_service = ds.docker_service_create(id=id, replicas=2, image=image, cpu=cpu, memory=memory)
+        docker_service = ds.docker_service_create(id=id, replicas=2, image=image_id, cpu=cpu, memory=memory)
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
         if docker_service is None:
             return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
