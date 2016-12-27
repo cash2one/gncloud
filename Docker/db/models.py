@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 __author__ = 'gncloud'
 
-import json
 import datetime
-from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Boolean, ForeignKey, Text
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy import Column, Integer, String, DateTime
+
 from db.database import Base
 
 

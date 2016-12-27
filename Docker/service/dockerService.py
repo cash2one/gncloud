@@ -2,10 +2,11 @@
 __author__ = 'jhjeon'
 
 import json
+
 import requests
-from flask import jsonify
 from pexpect import pxssh
 from datetime import datetime
+
 from db.models import GnDockerServices, GnDockerContainers, GnDockerImage, GnDockerImageDetail, GnHostDocker
 from util.config import config
 

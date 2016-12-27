@@ -4,6 +4,7 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 각 Rest 함수들의 이름은 hvm_(Action을 대표하는 영단어 소문자)로 표기한다.
 """
 import json
+
 from util.json_encoder import AlchemyEncoder
 
 __author__ = 'jhjeon'
@@ -13,7 +14,7 @@ import time
 from flask import request, jsonify
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines, GnVmImages, GnImagesPool, GnMonitor
+from db.models import GnVmMachines, GnVmImages, GnMonitor
 
 from util.config import config
 from util.hash import random_string
