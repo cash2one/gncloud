@@ -37,6 +37,7 @@ angular
                     $scope.run_cnt = data.list.vm_count[0];
                     $scope.stop_cnt = data.list.vm_count[1];
                     $scope.tot_cnt = data.list.vm_count[0] + data.list.vm_count[1];
+                    $scope.team_user_count = data.list.team_user_count;
                 }
                 else {
                     if(data.message != null) {

@@ -115,12 +115,12 @@ def repair(user_id, password, password_new, password_re, tel, email, sql_session
 def server_image_list(type, sub_type, sql_session, team_code):
     if type == "base":
         if sub_type != "":
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).all()
         else:
             list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all()
     else:
         if sub_type != "":
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type==sub_type).filter(GnVmImages.team_code==team_code).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).filter(GnVmImages.team_code==team_code).all()
         else:
             list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all()
     return list
@@ -175,9 +175,12 @@ def getQuotaOfTeam(team_code, sql_session):
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
     docker_info = vm_docker_count.count
+    team_user_cnt = sql_session.query(func.count(GnUserTeam.user_id).label("count")).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.comfirm == "Y").one()
+
     quato_info = {'team_name':team_info.team_name, 'cpu_per':cpu_per_info, 'mem_per':memory_per_info, 'disk_per':disk_per_info
                  , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
-                 , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info};
+                 , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info
+                 , 'team_user_count':team_user_cnt};
 
     return quato_info
 
