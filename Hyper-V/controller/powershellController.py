@@ -15,10 +15,12 @@ import time
 from flask import request, jsonify, session
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines, GnVmImages, GnMonitor
+from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist
 
 from util.config import config
 from util.hash import random_string
+
+
 
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
@@ -173,7 +175,12 @@ def hvm_snapshot():
             db_session.add(insert_image_query)
             db_session.commit()
 
-            return jsonify(status=True, message="성공")
+            start_state = ps.start_vm(org_id.internal_id)
+
+            if start_state['State'] is 2:
+                return jsonify(status=True, message="성공")
+            else:
+                return jsonify(status=False, message="VM시작을 하지 못하였습니다")
         else:
             return jsonify(status=False, message="실패")
     else:
@@ -392,4 +399,63 @@ def hvm_image():
 
 # 모니터링을 위한 스크립트 전송 함수
 def vm_monitor():
-    return jsonify(status=True, message="성공")
+    vm_ip_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == "hyperv").all()
+    for i in range(0, len(vm_ip_info)):
+        if vm_ip_info[i].status == "Running":
+            ps = PowerShell(vm_ip_info[i].ip, config.AGENT_PORT, config.AGENT_REST_URI)
+            script = "$freemem = Get-WmiObject -Class Win32_OperatingSystem;"
+            script += "$mem = $freemem.FreePhysicalMemory / $freemem.TotalVirtualMemorySize;"
+            script += "$idle = Get-Counter '\Process(idle)\% Processor Time' | "
+            script += "Select-Object -ExpandProperty countersamples | "
+            script += "Select-Object -Property instancename, cookedvalue| "
+            script += "Sort-Object -Property cookedvalue -Descending;"
+            script += "$total = Get-Counter '\Process(_total)\% Processor Time' | "
+            script += "Select-Object -ExpandProperty countersamples |"
+            script += "Select-Object -Property instancename, cookedvalue| "
+            script += "Sort-Object -Property cookedvalue -Descending;"
+            script += "$res = (($idle.CookedValue/$total.CookedValue)) ;"
+            script += "$hdd = Get-PSDrive C |Select-Object Free;"
+            script += "$hdd = $hdd.Free /1024 /1024/ 1024;"
+            script += "$res, $mem, $hdd | ConvertTo-Json -Compress;"
+            try:
+                result = json.loads(json.dumps(ps.send_get_vm_info(script, vm_ip_info[i].ip)))
+                cpu = round(1 - result[0], 4)  #점유량 ex) 0.3~~
+                mem = round(1 - result[1], 4)
+                hdd = round(1 - (result[2]/float(vm_ip_info[i].disk)), 4)
+                #hdd_free_per = hdd/float(vm_ip_info[i].disk)
+
+                if cpu >= 1.0:
+                    cpu = 1.0000
+                elif cpu <= 0:
+                    cpu = 0.0000
+                else:
+                    cpu = round(1-result[0], 4)
+                monitor_insert = GnMonitorHist(vm_ip_info[i].id, "hyperv", datetime.datetime.now(),
+                                               cpu, mem*100, hdd, 0.0000)
+                db_session.add(monitor_insert)
+                db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
+                    {"cpu_usage": cpu, "mem_usage": mem*100, "disk_usage":hdd} )
+            except Exception as message:
+                print message
+                db_session.rollback()
+            finally:
+                print result
+                db_session.commit()
+
+        elif vm_ip_info[i].status != "Removed": #단순히 db만 업데이트
+            print "stop status"
+            try:
+                vm_info = db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).first()
+
+                monitor_insert = GnMonitorHist(vm_ip_info[i].id, "hyperv", datetime.datetime.now(),
+                                               0.0000, 0.0000, vm_info.disk_usage, 0.0000)
+                db_session.add(monitor_insert)
+                db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
+                    {"cpu_usage": 0.0000, "mem_usage": 0.0000})
+                print "insert success"
+            except Exception as message:
+                print message
+                db_session.rollback()
+            finally:
+                db_session.commit()
+
