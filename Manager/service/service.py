@@ -115,14 +115,14 @@ def repair(user_id, password, password_new, password_re, tel, email, sql_session
 def server_image_list(type, sub_type, sql_session, team_code):
     if type == "base":
         if sub_type != "":
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).filter(GnVmImages.status != "Removed").all()
         else:
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.status != "Removed").all()
     else:
         if sub_type != "":
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).filter(GnVmImages.team_code==team_code).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.type == sub_type).filter(GnVmImages.team_code==team_code).filter(GnVmImages.status != "Removed").all()
         else:
-            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).all()
+            list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code==team_code).filter(GnVmImages.status != "Removed").all()
     return list
 
 
