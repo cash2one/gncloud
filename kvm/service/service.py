@@ -167,7 +167,7 @@ def server_create_snapshot(id, name, user_id, team_code):
 
         guest_snap = GnVmImages(id=id, name=name, type="kvm", sub_type="snap", filename=new_image_name + ".img"
                                 , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                                , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id)
+                                , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="running")
         db_session.add(guest_snap)
         db_session.commit();
 

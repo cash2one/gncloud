@@ -6,7 +6,6 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 import json
 
 from util.json_encoder import AlchemyEncoder
-from Manager.db.models import GnImagePool
 
 __author__ = 'jhjeon'
 
@@ -15,10 +14,12 @@ import time
 from flask import request, jsonify, session
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines, GnVmImages, GnMonitor
+from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist, GnImagesPool
 
 from util.config import config
 from util.hash import random_string
+
+
 
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
@@ -63,7 +64,7 @@ def hvm_create():
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
         set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(cpu))
-        print set_vm
+        #print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
@@ -106,7 +107,7 @@ def hvm_create():
                     dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
             else:
                 try:
-                    hostid = db_session.query(GnImagePool).filter(GnImagePool.type == "hyperv").first()
+                    hostid = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
 
                     vmid = random_string(config.SALT, 8)
                     vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
@@ -147,7 +148,7 @@ def hvm_snapshot():
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
         create_snap = ps.create_snap(org_id.internal_id, config.COMPUTER_NAME)
-        print create_snap
+       # print create_snap
         if create_snap['Name'] is not None:
             base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
@@ -173,7 +174,12 @@ def hvm_snapshot():
             db_session.add(insert_image_query)
             db_session.commit()
 
-            return jsonify(status=True, message="성공")
+            start_state = ps.start_vm(org_id.internal_id)
+
+            if start_state['State'] is 2:
+                return jsonify(status=True, message="성공")
+            else:
+                return jsonify(status=False, message="VM시작을 하지 못하였습니다")
         else:
             return jsonify(status=False, message="실패")
     else:
@@ -220,13 +226,13 @@ def hvm_state(id):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
-    print vmid.internal_id
+  #  print vmid.internal_id
     #    vm = GnVmMachines.query.filter_by().first
     if type == "start":
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start_vm = ps.start_vm(vmid.internal_id)
-        print start_vm
+       # print start_vm
         # print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
         if start_vm['State'] is 2:
@@ -392,4 +398,63 @@ def hvm_image():
 
 # 모니터링을 위한 스크립트 전송 함수
 def vm_monitor():
-    return jsonify(status=True, message="성공")
+    vm_ip_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == "hyperv").all()
+    for i in range(0, len(vm_ip_info)):
+        if vm_ip_info[i].status == "Running":
+            ps = PowerShell(vm_ip_info[i].ip, config.AGENT_PORT, config.AGENT_REST_URI)
+            script = "$freemem = Get-WmiObject -Class Win32_OperatingSystem;"
+            script += "$mem = $freemem.FreePhysicalMemory / $freemem.TotalVirtualMemorySize;"
+            script += "$idle = Get-Counter '\Process(idle)\% Processor Time' | "
+            script += "Select-Object -ExpandProperty countersamples | "
+            script += "Select-Object -Property instancename, cookedvalue| "
+            script += "Sort-Object -Property cookedvalue -Descending;"
+            script += "$total = Get-Counter '\Process(_total)\% Processor Time' | "
+            script += "Select-Object -ExpandProperty countersamples |"
+            script += "Select-Object -Property instancename, cookedvalue| "
+            script += "Sort-Object -Property cookedvalue -Descending;"
+            script += "$res = (($idle.CookedValue/$total.CookedValue)) ;"
+            script += "$hdd = Get-PSDrive C |Select-Object Free;"
+            script += "$hdd = $hdd.Free /1024 /1024/ 1024;"
+            script += "$res, $mem, $hdd | ConvertTo-Json -Compress;"
+            try:
+                result = json.loads(json.dumps(ps.send_get_vm_info(script, vm_ip_info[i].ip)))
+                cpu = round(1 - result[0], 4)  #점유량 ex) 0.3~~
+                mem = round(1 - result[1], 4)
+                hdd = round(1 - (result[2]/float(vm_ip_info[i].disk)), 4)
+                #hdd_free_per = hdd/float(vm_ip_info[i].disk)
+
+                if cpu >= 1.0:
+                    cpu = 0.0000
+                elif cpu <= 0:
+                    cpu = 1.0000
+                else:
+                    cpu = round(1-result[0], 4)
+                monitor_insert = GnMonitorHist(vm_ip_info[i].id, "hyperv", datetime.datetime.now(),
+                                               cpu, mem*100, hdd, 0.0000)
+                db_session.add(monitor_insert)
+                db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
+                    {"cpu_usage": cpu, "mem_usage": mem*100, "disk_usage":hdd} )
+            except Exception as message:
+                print message
+                db_session.rollback()
+            finally:
+               # print result
+                db_session.commit()
+
+        elif vm_ip_info[i].status != "Removed": #단순히 db만 업데이트
+           # print "stop status"
+            try:
+                vm_info = db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).first()
+
+                monitor_insert = GnMonitorHist(vm_ip_info[i].id, "hyperv", datetime.datetime.now(),
+                                               0.0000, 0.0000, vm_info.disk_usage, 0.0000)
+                db_session.add(monitor_insert)
+                db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
+                    {"cpu_usage": 0.0000, "mem_usage": 0.0000})
+               # print "insert success"
+            except Exception as message:
+                print message
+                db_session.rollback()
+            finally:
+                db_session.commit()
+

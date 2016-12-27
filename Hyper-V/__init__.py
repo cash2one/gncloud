@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import threading
+
 __author__ = 'jhjeon'
 
 from flask import Flask, redirect, url_for
@@ -10,6 +12,16 @@ from util.config import config
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
+
+
+def monitor_thread():
+    while True:
+        time.sleep(180)
+        vm_monitor()
+
+thread = threading.Thread(name='monitor_thread', target=monitor_thread)
+thread.setDaemon(True)
+thread.start()
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
 app.add_url_rule("/manual", view_func=manual, methods=['GET'])

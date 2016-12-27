@@ -449,18 +449,19 @@ class GnMonitorHist(Base):
     disk_usage = Column(Numeric, primary_key=False, nullable=False)
     net_usage = Column(Numeric, primary_key=False, nullable=False)
 
-    def __init__(self, id=id, type=type, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
+    def __init__(self, id=id, type=type, cur_time = None, cpu_usage=None, mem_usage=None, disk_usage=None, net_usage=None):
         self.id = id
         self.type = type
+        self.cur_time = cur_time
         self.cpu_usage = cpu_usage
         self.mem_usage = mem_usage
         self.disk_usage = disk_usage
         self.net_usage = net_usage
 
     def __repr__(self):
-        return "<GnMonitorHist(id='%r',type='%r', cpu_usage='%r', mem_usage='%r', disk_usage='%r'," \
+        return "<GnMonitorHist(id='%r',type='%r', cur_time='%r',cpu_usage='%r', mem_usage='%r', disk_usage='%r'," \
                "net_usage='%r'" \
-               % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.mem_usage)
+               % (self.id, self.type, self.cur_time, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
 
 
 # GN_VM_MONITOR 아직 작업 못함
