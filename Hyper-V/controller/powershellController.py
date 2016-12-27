@@ -170,7 +170,7 @@ def hvm_snapshot():
 
             insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
                                             icon, os, os_ver, os_subver, os_bit, team_code,
-                                            author_id, datetime.datetime.now(), None, None)
+                                            author_id, datetime.datetime.now(), 'Running', None)
             db_session.add(insert_image_query)
             db_session.commit()
 
