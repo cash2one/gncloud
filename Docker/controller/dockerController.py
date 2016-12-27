@@ -117,15 +117,15 @@ def doc_state(id):
     name = request.json["type"]
     type = request.json["type"]
     # 유저 네임을 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
-    if request.json["author_id"] is not None:
-        author_id = request.json["author_id"]
-    else:
-        author_id = session["author_id"]
+    # if request.json["author_id"] is not None:
+    #     author_id = request.json["author_id"]
+    # else:
+    author_id = session["userName"]
     # 팀 코드를 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
-    if request.json["team_code"] is not None:
-        team_code = request.json["team_code"]
-    else:
-        team_code = session['teamCode']
+    # if request.json["team_code"] is not None:
+    #     team_code = request.json["team_code"]
+    # else:
+    team_code = session['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # 서비스 DB 데이터 가져오기

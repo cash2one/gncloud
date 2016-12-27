@@ -2,10 +2,10 @@
 __author__ = 'jhjeon'
 
 from datetime import timedelta
-from flask import Flask, redirect, url_for, jsonify
+from flask import Flask, redirect, url_for
+
 from controller.dockerController import *
 from util.config import config
-
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)

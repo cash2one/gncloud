@@ -34,7 +34,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
             ptr_POOL.createXMLFrom(vol, defaultVol, 0)
             ptr_POOL.storageVolLookupByName(name + ".img").resize(gigaToByte(int(disk)))
         else:
-            kvm_image_copy(base_name, name)
+            kvm_image_copy(base_name.split(".")[0], name, host_ip)
 
         # vm 생성
         guest = render_template(

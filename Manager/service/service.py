@@ -4,7 +4,7 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnContanierImage, GnImagePool
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages
 from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
@@ -210,7 +210,7 @@ def team_list(user_id, sql_sesssion):
     return list
 
 def container(sql_sesssion):
-    list = sql_sesssion.query(GnContanierImage).all()
+    list = sql_sesssion.query(GnDockerImages).all()
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list

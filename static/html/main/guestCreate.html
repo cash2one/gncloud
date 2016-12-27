@@ -42,7 +42,6 @@
     <br>
     <div class="tab-content clearfix">
         <!--탭메뉴1 : 이미지 -->
-        <div id="image">
             <div id="image">
                 <!--<input type="radio" id="Windows" class="inp-box-image" name="inp-box-image" />-->
                 <!--<input type="radio" id="FreeBSD" class="inp-box-image" name="inp-box-image"/>-->
@@ -68,26 +67,29 @@
         </div> <!--id="image" class="tab-pane fade in active"-->
         <!--탭메뉴2 : 스냅샷-->
         <div id="snap">
-            <input type="radio" id="snap-name1" class="inp-box-snap" name="inp-box-snap" checked="checked"/>
-            <input type="radio" id="snap-name2" class="inp-box-snap" name="inp-box-snap"/>
-            <input type="radio" id="snap-name3" class="inp-box-snap" name="inp-box-snap"/>
-            <input type="radio" id="snap-name4" class="inp-box-snap" name="inp-box-snap"/>
-            <input type="radio" id="snap-name5" class="inp-box-snap" name="inp-box-snap"/>
-            <input type="radio" id="snap-name6" class="inp-box-snap" name="inp-box-snap"/>
-            <input type="radio" id="snap-name7" class="inp-box-snap" name="inp-box-snap"/>
-            <div class="buttons">
-                <label class="btn btn-default snap-name fl" for="snap-name1" ng-repeat="snap in '">
-                    <p class="ellipsis">
-                        <img src="images/ubuntu_icon.png" alt="" class="elli-img-icon">{{snap.name}}</p>
-                </label>
-            </div>
-
-            <!--<div class="snap-box" >-->
-                     <!--<button type="button" name="" class="btn btn-default snap-name fl" ng-repeat="snap in snap_list" required>-->
-                         <!--<p class="ellipsis">-->
-                             <!--<img src="/gn_images/ubuntu_icon.png" alt="" class="elli-img-icon">{{snap.name}}</p>-->
-                     <!--</button>-->
+            <!--<input type="radio" id="snap-name1" class="inp-box-snap" name="inp-box-snap" checked="checked"/>-->
+            <!--<input type="radio" id="snap-name2" class="inp-box-snap" name="inp-box-snap"/>-->
+            <!--<input type="radio" id="snap-name3" class="inp-box-snap" name="inp-box-snap"/>-->
+            <!--<input type="radio" id="snap-name4" class="inp-box-snap" name="inp-box-snap"/>-->
+            <!--<input type="radio" id="snap-name5" class="inp-box-snap" name="inp-box-snap"/>-->
+            <!--<input type="radio" id="snap-name6" class="inp-box-snap" name="inp-box-snap"/>-->
+            <!--<input type="radio" id="snap-name7" class="inp-box-snap" name="inp-box-snap"/>-->
+            <!--<span ng-repeat="list in snap_list">-->
+            <!--<div class="buttons">-->
+                <!--<label class="btn btn-default snap-name fl">-->
+                    <!--<p class="ellipsis">-->
+                        <!--<img src="images/ubuntu_icon.png" alt="" class="elli-img-icon">{{list.name}}</p>-->
+                <!--</label>-->
             <!--</div>-->
+            <!--</span>-->
+            <span ng-repeat="list in snap_list">
+                <div class="btn-group" role="group" aria-label="..." >
+                    <ng-button type="button" name="" class="btn btn-default type-box box2" ng-click="update_image(list)" required>
+                        <img src="/gn_images/instance_create_windows.png" alt="" class="img-icon">
+                        {{list.os}}
+                        <span class="windows-small">{{list.name}}</span>
+                    </ng-button>
+                </div>
         </div>
     </div>
     <!--class="tab-content"-->
