@@ -117,7 +117,7 @@ def list_sshKey():
     return jsonify(status=True, message="success", list=list_user_sshkey(team_code, db_session))
 
 
-@app.route('/user/sshkey/download/<id>', methods=['GET'])
+@app.route('/account/keys/download/<id>', methods=['GET'])
 def download_sshKey(id):
     headers = {"Content-Disposition": "attachment; filename=sshkey"}
     sshkey_path = getsshkey_info(id)
