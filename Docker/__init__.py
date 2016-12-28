@@ -24,6 +24,8 @@ app.add_url_rule("/vm/machine", view_func=doc_create, methods=['POST'])
 # change_status
 # app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
 app.add_url_rule("/vm/machines/<id>", view_func=doc_state, methods=['PUT'])
+# Docker Service 스냅샷 저장
+app.add_url_rule('/vm/machine/snapshots', view_func=doc_snap, methods=['POST'])
 # Docker Service 삭제
 # delete_vm
 app.add_url_rule("/vm/machines/<id>", view_func=doc_delete, methods=['DELETE'])
@@ -33,9 +35,6 @@ app.add_url_rule("/vm/machines", view_func=doc_vm_list, methods=['GET'])
 app.add_url_rule("/vm/images", view_func=doc_new_image, methods=['POST'])
 # Docker 이미지 수정
 # app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
-# ----- 스냅샷은 따로 나눌 필요 있음 --------
-# @app.route('/vm/machine/snapshots', methods=['POST'])
-# ------------------------------------
 # Docker 이미지 삭제
 app.add_url_rule("/vm/images/<id>", view_func=doc_delete_image, methods=['DELETE'])
 # Docker 이미지 리스트
@@ -51,14 +50,14 @@ app.add_url_rule("/vm/images/detail/<image_id>/<id>", view_func=doc_delete_image
 # Controller 상태 확인
 @app.route("/service/isAlive")
 def is_alive():
-    logger.debug("%s 접근 체크" % "/service/isAlive")
+    logger.debug("%s Connection Check" % "/service/isAlive")
     return jsonify(status=True, message='서비스 정상 작동')
 
 
 # 페이지 리스트
 @app.route("/")
 def index():
-    logger.debug("%s 접근 체크" % "/service/isAlive")
+    logger.debug("%s Connection Check" % "/service/isAlive")
     return redirect(url_for("is_alive"))
 
 

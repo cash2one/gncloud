@@ -3,45 +3,45 @@ __author__ = 'jhjeon'
 
 import json
 import requests
-from flask import jsonify
 from pexpect import pxssh
 from datetime import datetime
 from db.models import GnDockerContainers, GnDockerImages, GnDockerImageDetail, GnHostMachines, GnVmMachines, GnDockerVolumes
 from util.config import config
+from util.logger import logger
 
 
 class DockerService(object):
 
     def __init__(self, addr, id, passwd):
         self.cmd = pxssh.pxssh()
-        login_check = self.cmd.login(addr, id, passwd)
-        if not login_check:
-            # throw exception
-            print "SSH 로그인 에러"
-            pass
+        self.login_check = self.cmd.login(addr, id, passwd)
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
 
     # Docker 서비스를 생성한다.
-    def docker_service_create(self, id, replicas, image_id, cpu, memory):
+    def docker_service_create(self, id, image_id, cpu, memory):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
         if dockerimage is None:
             return None
         image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
+        # --- Docker Service 생성 커맨드 작성 ---
         command = "docker service create"
-        # command += " --name %s" % name
         command += " --limit-cpu %s" % cpu
         command += " --limit-memory %s" % memory
-        # command += " --replicas %s" % config.REPLICAS
-        command += " --replicas %s" % replicas
+        command += " --replicas %s" % config.REPLICAS
         command += " --constraint 'node.hostname != manager'"
         command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
-        # type=volume,source=jhjeon_mytomcat,destination=/usr/local/tomcat
-        # command += " --mount type=volume,source=%s,destination%s" % config.RESTART_MAX_ATTEMPTS
         for detail in image_detail:
             if detail.arg_type == "mount":
                 command += " " + (detail.argument % id)
             else:
                 command += " %s" % detail.argument
         command += " %s" % dockerimage.name
+        logger.debug("Docker Service Created: %s", command)
+        # --- //Docker Service 생성 커맨드 작성 ---
         service_id = self.send_command(command)
         if service_id[:5] == "Error":
             return service_id
@@ -49,21 +49,21 @@ class DockerService(object):
             return self.docker_service_ps(service_id)
 
     # Docker 서비스 다시 시작 (실제로는 commit된 이미지로 서비스 생성)
-    def docker_service_start(self, id, replicas, image, backup_image, cpu, memory):
+    def docker_service_start(self, id, image, backup_image, cpu, memory):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         dockerimage = GnDockerImages.query.filter_by(name=image).first()
         if dockerimage is None:
             return None
         image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
+        # --- Docker Service 생성 커맨드 작성 ---
         command = "docker service create"
-        # command += " --name %s" % name
         command += " --limit-cpu %s" % cpu
         command += " --limit-memory %s" % memory
-        # command += " --replicas %s" % config.REPLICAS
-        command += " --replicas %s" % replicas
+        command += " --replicas %s" % config.REPLICAS
         command += " --constraint 'node.hostname != manager'"
         command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
-        # type=volume,source=jhjeon_mytomcat,destination=/usr/local/tomcat
-        # command += " --mount type=volume,source=%s,destination%s" % config.RESTART_MAX_ATTEMPTS
         for detail in image_detail:
             if detail.arg_type == "mount":
                 command += " " + (detail.argument % id)
@@ -71,6 +71,7 @@ class DockerService(object):
                 command += " %s" % detail.argument
         command += " %s" % backup_image
         service_id = self.send_command(command)
+        # --- //Docker Service 생성 커맨드 작성 ---
         if service_id[:5] == "Error":
             return service_id
         else:
@@ -78,6 +79,9 @@ class DockerService(object):
 
     # 서비스 정지 (라 해 놓고 서비스 내 컨테이너 백업 후 서비스 삭제)
     def docker_service_stop(self, service):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         # 컨테이너를 commit하여 저장
         # commit_result = ds.commit_containers(id)
         self.commit_containers(service.id)
@@ -87,16 +91,25 @@ class DockerService(object):
 
     # Docker 서비스 정보를 가지고 온다.
     def docker_service_ps(self, internal_id):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         command = "docker service inspect %s" % internal_id
         return self.send_command_return_json(command)
 
     # Docker 서비스를 삭제한다.
     def docker_service_rm(self, internal_id):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         command = "docker service rm %s" % internal_id
         return self.send_command(command)
 
     # Docker 볼륨을 삭제한다.
     def docker_volume_rm(self, host_id, volumes):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         node = GnHostMachines.query.filter_by(id=host_id).first()
         volume_list = ""
         for volume in volumes:
@@ -106,6 +119,9 @@ class DockerService(object):
 
     # Docker 서비스의 컨테이너를 가져온다.
     def get_service_containers(self, internal_id):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         container_list = []
         command = "docker service ps %s" % internal_id
         result = self.send_command_return_all_line(command)
@@ -126,6 +142,9 @@ class DockerService(object):
     # Docker 서비스의 볼륨 정보를 가져온다.
     # 매개변수의 internal_id는
     def get_service_volumes(self, internal_id):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         command = "docker service inspect %s" % internal_id
         # 서비스 내의 Mounts 정보 가져오기
         service = self.send_command_return_json(command)
@@ -144,6 +163,9 @@ class DockerService(object):
     # 매개변수의 id는 서비스 DB id
     # commit된 이미지의 이름은 서비스 DB id, tag는 backup으로 하자.
     def commit_containers(self, id):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         # Service internal id 가지고 오기
         service = GnVmMachines.query.filter_by(id=id).first()
         service_internal_name = service.internal_name
@@ -169,6 +191,9 @@ class DockerService(object):
     # 매개변수의 id는 서비스 DB id
     # commit된 이미지의 이름은 서비스 DB id, tag는 backup으로 하자.
     def snap_containers(self, id):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         sub_type = "snap"
         # Service internal id 가지고 오기
         service = GnVmMachines.query.filter_by(id=id, type="docker").first()
@@ -206,6 +231,9 @@ class DockerService(object):
 
     # command 전달 후 결과값 상단 한줄 받아오기
     def send_command(self, command):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         self.cmd.sendline(command)
         self.cmd.prompt()
         result = self.cmd.before.split("\r\n", 1)[1]
@@ -213,12 +241,18 @@ class DockerService(object):
 
     # command 전달 후 결과값을 Line 기준 List로 받아오기
     def send_command_return_all_line(self, command):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         self.cmd.sendline(command)
         self.cmd.prompt()
         return self.cmd.before.split("\r\n")
 
     # command 전달 후 결과값을 json 객체로 받아오기
     def send_command_return_json(self, command):
+        if not self.login_check:
+            logger.error("SSH 로그인 에러")
+            return "SSH 로그인 에러"
         try:
             self.cmd.sendline(command)
             self.cmd.prompt()
