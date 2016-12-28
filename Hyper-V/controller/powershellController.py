@@ -46,8 +46,8 @@ def hvm_create():
     os_bit = base_image_info.os_bit
     #    print session['teamCode']
     #    team_code = session.get('teamCode')
-    team_code = request.json['teamCode']
-    author_id = request.json['userName']
+    team_code = session['teamCode']
+    author_id = session['userName']
 
     #vm에 대한 명명규칙
     internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
@@ -63,7 +63,7 @@ def hvm_create():
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
         set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(cpu))
-        print set_vm
+        #print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
