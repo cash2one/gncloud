@@ -77,6 +77,11 @@
     ```
     $ pip install mysqldb
     ```
+    
+    - apscheduler (2.1.2)
+    ```
+    pip install apscheduler==2.1.2
+    ```
 
 <span></span>
 3. manager
