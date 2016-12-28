@@ -124,29 +124,6 @@ angular
                 .error(function(data, status, headers, config) {
                     console.log(status);
                 });
-
-        }
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/machines',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.list = data.list;
-                }
-                else {
-                }
-            })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
-        $scope.data = {};
-        $scope.update_image = function (data) {
-            if (data != null) {
-                $scope.data.ord_id = data.id;
-                $scope.data.type = data.type;
-            }
         };
         $scope.submit = function () {
             var url = "/api/" + $scope.data.type + "/vm/machine/snapshots";
