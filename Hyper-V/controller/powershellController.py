@@ -63,16 +63,22 @@ def hvm_create():
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
         set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(cpu))
-        print set_vm
+        #print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
-        CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
-        CONVERT_VHD_PATH = config.DISK_DRIVE+ config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
-        convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
+        #CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
+        #CONVERT_VHD_PATH = config.DISK_DRIVE+ config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
+        #convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
-        add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
+        #add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
         # VM을 시작한다.
+
+        CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/base/"+internal_name+".vhdx"
+        CONVERT_VHD_PATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/pool/"+os_sub_ver
+
+        ps.move_vhd(CONVERT_VHD_PATH, CONVERT_VHD_DESTINATIONPATH, new_vm['VMId'])
+
         start_vm = ps.start_vm(new_vm['VMId'])
         # 생성된 VM의 ip 정보를 가지고 온다
 
@@ -81,14 +87,14 @@ def hvm_create():
 
         while True:
             if len(get_vm_ip) <= 2 and get_ip_count <= 20:
-                print get_ip_count
-                time.sleep(20)
+                print get_vm_ip
+                time.sleep(40)
                 get_ip_count = get_ip_count + 1
                 get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
             elif get_ip_count > 20:
                 return jsonify(status=False, massage="VM에 ip를 할당할 수 없습니다.")
             elif get_vm_ip[:2] == "16":
-                time.sleep(20)
+                time.sleep(40)
                 get_ip_count = get_ip_count + 1
                 get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
             else:
@@ -97,39 +103,28 @@ def hvm_create():
         # print get_vm_ip
         # 생성된 VM의 ip 정보를 고정한다
 
-        dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
-
         while True:
-            if dhcp_ip_address is True:
-                try:
-                    ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
-                except:
-                    ps.get_ip_address_type(get_vm_ip)
-                finally:
-                    dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
-            else:
-                try:
-                    hostid = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
+            try:
+                hostid = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
+                vmid = random_string(config.SALT, 8)
+                vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
+                                  internal_name,
+                                  hostid.host_id, get_vm_ip, cpu, memory, hdd,
+                                  os
+                                  , os_ver, os_sub_ver, os_bit, team_code,
+                                  author_id, datetime.datetime.now(),
+                                  datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
 
-                    vmid = random_string(config.SALT, 8)
-                    vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
-                                      internal_name,
-                                      hostid.host_id, get_vm_ip, cpu, memory, hdd,
-                                      os
-                                      , os_ver, os_sub_ver, os_bit, team_code,
-                                      author_id, datetime.datetime.now(),
-                                      datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
-
-                    insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
-                    db_session.add(insert_monitor)
-                    db_session.add(vm)
-                    return jsonify(status=True,massage = "create vm success")
-
-                except:
-                    db_session.rollback()
-                    return jsonify(status=False, massage="DB insert fail")
-                finally:
-                    db_session.commit()
+                insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+                db_session.add(insert_monitor)
+                db_session.add(vm)
+                db_session.commit()
+                return jsonify(status=True, massage="create vm success")
+            except:
+                db_session.rollback()
+                return jsonify(status=False, massage="DB insert fail")
+            finally:
+                db_session.commit()
     else:
         return jsonify(status=False, massage="VM 생성 실패")
 
@@ -254,7 +249,7 @@ def hvm_state(id):
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
             # return jsonify(status=False, message="상태 미완성")
-    elif type == "restart":
+    elif type == "reboot":
         restart = ps.restart_vm(vmid.internal_id)
         # resume 1. 가상머신을 재시작한다. (Restart-VM)
         if restart['State'] is 2:

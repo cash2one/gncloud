@@ -32,12 +32,10 @@ def job_function():
 
 ####login check start####
 
-# @app.before_request
-# def before_request():
-#     if ('userId' not in session) \
-#             and request.endpoint != 'guestLogout' \
-#             and request.endpoint != 'account':
-#         return make_response(jsonify(status=False),401)
+@app.before_request
+def before_request():
+    if ('userId' not in session):
+        return make_response(jsonify(status=False),401)
 
 
 @app.teardown_appcontext
@@ -119,7 +117,7 @@ def list_sshKey():
     return jsonify(status=True, message="success", list=list_user_sshkey(team_code, db_session))
 
 
-@app.route('/user/sshkey/download/<id>', methods=['GET'])
+@app.route('/account/keys/download/<id>', methods=['GET'])
 def download_sshKey(id):
     headers = {"Content-Disposition": "attachment; filename=sshkey"}
     sshkey_path = getsshkey_info(id)
