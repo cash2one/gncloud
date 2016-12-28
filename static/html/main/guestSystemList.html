@@ -1,6 +1,6 @@
 <h1>시스템 설정</h1>
 <!--왼쪽 메뉴-->
-<ul class="nav nav-pills col-sm-2">
+<ul class="nav nav-pills gn-left-menu col-sm-2">
     <li class="left-title">시스템</li>
     <li class="left-name active"><a data-toggle="pill" ng-click="click('profile-system')">프로필</a></li>
     <li class="left-name"><a data-toggle="pill" ng-click="click('team-sett')">팀 관리</a></li>
@@ -9,36 +9,37 @@
 </ul>
 <div class="tab-content col-sm-10">
     <!--시스템 > 프로필-->
-
-    <div id="profile-system"  class="">
+    <div id="profile-system" class="">
         <div class="border-box profile-team">
             <div class="cont-box">
                 <h1>지앤 클라우드 프라이빗</h1>
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label jnt">버전</label>
-                        <div class="col-sm-10">
+                        <label class="control-label gn-control-label">버전</label>
+                        <div class="col-sm-10">  
                             <p class="form-control-static">Ver.9 (Build 9.30.56)</p>
                         </div>
-                        <label class="col-sm-2 control-label jnt">날짜</label>
+                        <label class="control-label gn-control-label">날짜</label>
                         <div class="col-sm-10">
                             <p class="form-control-static">2016.12.27</p>
                         </div>
-                        <label class="col-sm-2 control-label jnt">저작권</label>
-                        <div class="col-sm-10">
-                            <p class="form-control-static">&copy;&nbsp;COPYRIGHT&nbsp;&nbsp;지앤클라우드
-                                &nbsp;&nbsp;ALL&nbsp;&nbsp;RIGHT&nbsp;&nbsp;RESERVED.</p>
-                        </div>
-                        <label class="col-sm-2 control-label jnt">홈페이지</label>
+                        <label class="col-sm-2 control-label gn-control-label">저작권</label>
                         <div class="col-sm-10">
                             <p class="form-control-static">
-                                <a href="http://www.gnclouds.com" class="gn-url">www.gnclouds.com</a>
+                            &copy;&nbsp;COPYRIGHT&nbsp;&nbsp;지앤클라우드
+                            &nbsp;&nbsp;ALL&nbsp;&nbsp;RIGHT&nbsp;&nbsp;RESERVED.
                             </p>
                         </div>
-                        <label class="col-sm-2 control-label jnt">문의메일</label>
+                        <label class="control-label gn-control-label">홈페이지</label>
                         <div class="col-sm-10">
                             <p class="form-control-static">
-                                <a href="mailto:cnh@gnclouds.com" class="gn-url">cnh@gnclouds.com</a>
+                                <a href="http://www.gnclouds.com">www.gnclouds.com</a>
+                            </p>
+                        </div>
+                        <label class="control-label gn-control-label">문의메일</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static">
+                                <a href="mailto:cnh@gnclouds.com">cnh@gnclouds.com</a>
                             </p>
                         </div>
                     </div>
@@ -50,314 +51,320 @@
 
     <!--시스템 > 팀 관리-->
     <div id="team-sett" class="">
-        <div class="border-box profile-team">
-            <div class="cont-box">
-                <h2>팀 관리</h2>
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>팀 관리</h2>
 
-                <!--팀 관리 목록-->
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>팀명</th>
-                            <th>팀 코드</th>
-                            <th>팀장</th>
-                            <th>팀원</th>
-                            <th>생성일<div class="refresh" ng-click="refresh()"></div></th>
-                            <th>CPU</th>
-                            <th>MEMORY</th>
-                            <th>DISK</th>
-                            <th><!--더보기--></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="select in table">
-                            <td class="td-style cnt">{{select.team_name}}</td>
-                            <td class="td-style cnt">{{select.team_code}}</td>
-                            <td class="td-style cnt">{{select.owner_name}}<br><span>({{select.owner_id}})</span></td>
-                            <td class="td-style cnt">
-                                <div class="name-tag-box clearfix">
-                                    <div class="team-name-box fl">
-                                        {{select.usersfirst}}
+                    <!--팀 관리 목록-->
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table table-striped gn-table">
+                            <thead>
+                            <tr>
+                                <th>팀명</th>
+                                <th>팀 코드</th>
+                                <th>팀장</th>
+                                <th>팀원</th>
+                                <th>생성일<div class="refresh" ng-click="refresh()"></div></th>
+                                <th>CPU</th>
+                                <th>MEMORY</th>
+                                <th>DISK</th>
+                                <th><!--더보기--></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="select in table">
+                                    <td>{{select.team_name}}</td>
+                                    <td>{{select.team_code}}</td>
+                                    <td>{{select.owner_name}}
                                         <br>
-                                        {{select.usersfirstid}}
-                                    </div>
-                                    <div class="tag-box fl">
-                                        <span class="tag" data-toggle="tooltip" title="{{select.users}}">{{select.userslen}}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{select.create_time_diff}}</p></td>
-                            <td class="td-style cnt">{{select.cpu_use_per}}%사용중<br>{{select.cpu_use_cnt}}/{{select.cpu_tot_cnt}}CORE</td>
-                            <td class="td-style cnt">{{select.mem_use_per}}%사용중<br>{{select.mem_use_cnt}}/{{select.mem_tot_cnt}}MB</td>
-                            <td class="td-style cnt">{{select.disk_use_per}}%사용중<br>{{select.disk_use_cnt}}/{{select.disk_tot_cnt}}GB</td>
-                            <td class="td-style cnt dropdown td-more">
-                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    더보기
-                                    <span class="caret" ></span>
-                                </div>
-                                <!--더보기>드롭다운-->
-                                <ul class="dropdown-menu-table" role="menu">
-                                    <li><a href="#/guestTeamDetail?id={{select.team_code}}">상세보기</a></li>
-                                    <li><a href="#" class="btn-modal-delete">삭제</a></li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                        </tr>
-                        </tbody>
-                    </table>
-                </div> <!--class="table-responsive table-reset"-->
-
-            </div> <!--class="cont-box"-->
+                                        <span>({{select.owner_id}})</span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <div>
+                                                {{select.usersfirst}}
+                                                <span class="tag" data-toggle="tooltip" title="{{select.users}}">{{select.userslen}}</span>
+                                                <br>
+                                                <span>{{select.usersfirstid}}</span>      
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{select.create_time_diff}}</p></td>
+                                    <td>{{select.cpu_use_per}}%사용중<br>{{select.cpu_use_cnt}}/{{select.cpu_tot_cnt}}CORE</td>
+                                    <td>{{select.mem_use_per}}%사용중<br>{{select.mem_use_cnt}}/{{select.mem_tot_cnt}}MB</td>
+                                    <td>{{select.disk_use_per}}%사용중<br>{{select.disk_use_cnt}}/{{select.disk_tot_cnt}}GB</td>
+                                    
+                                    <td class="dropdown">
+                                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            더보기<span class="gn-gn-caret-table-table"></span>
+                                        </div>    
+                                        <!--더보기>드롭다운-->    
+                                        <ul class="dropdown-menu gn-dropdown" role="menu">
+                                            <li><a href="#/guestTeamDetail?id={{select.team_code}}">상세보기</a></li>
+                                            <li><a href="#" >삭제</a></li>
+                                        </ul>
+                                    </td>                                     
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> <!--class="table-responsive table-reset"-->
+                </div> <!--class="container-fluid"-->
+            </div> <!--class="gn-sett-margin-box"-->
         </div> <!--class="border-box profile-team"-->
     </div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
 
     <!--시스템 > 클러스터 관리-->
     <div id="cluster-sett" class="">
-        <div class="border-box profile-team">
-            <div class="cont-box">
-                <h2>클러스터 관리
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">               
+                    <h2>클러스터 관리</h2>
+                    <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#cluster">등록</button>
+                </div>        
+                <!-- 클러스터 Modal -->
+                <div class="modal fade" id="cluster" role="dialog">
+                    <div class="modal-dialog form-horizontal">
+                        <div class="modal-content">
+                            <div class="modal-header gn-modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">클러스터 등록</h4>
+                            </div>
 
-                    <!--클러스터 등록 버튼-->
-                    <div class="clearfix fr">
-                        <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#cluster">등록</button>
+                            <div class="modal-body gn-modal-body">
 
-                        <!-- 클러스터 Modal -->
-                        <div class="modal fade" id="cluster" role="dialog">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">클러스터 등록</h4>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <div class="label-box">
-                                            <label class="radio-inline mod-input-name"><input type="radio" name="optradio">Hyper-V</label>
-                                            <label class="radio-inline mod-input-name"><input type="radio" name="optradio">KVM</label>
-                                            <label class="radio-inline mod-input-name"><input type="radio" name="optradio">Docker</label>
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label gn-control-label">타입</label>
+                                        <div class="col-sm-9">
+                                            <label class="radio-inline mod-input-name">
+                                                <input type="radio" name="optradio">Hyper-V
+                                            </label>
+                                            <label class="radio-inline mod-input-name">
+                                                <input type="radio" name="optradio">KVM
+                                            </label>
+                                            <label class="radio-inline mod-input-name">
+                                                <input type="radio" name="optradio">Docker
+                                            </label>
                                         </div>
-                                        <div class="modal-line clearfix">
-                                            <div class="mod-txt fl">엔드 포인트</div>
-                                            <input type="text" class="input-mod-name-ep" id="exampleInputPassword3" placeholder="192.168.0.30:9090">
+                                    </div> 
+                                    <div class="form-group">
+                                        <label for="inputtext" class="col-sm-3 control-label gn-control-label">엔드 포인트</label>
+                                        <div class="col-sm-9">
+                                          <input type="text" class="form-control" id="exampleInputPassword3" id="inputtext" placeholder="192.168.0.30:9090">
                                         </div>
-                                        <div class="modal-line clearfix">
-                                            <div class="mod-txt fl">노드</div>
-                                            <button type="submit" class="btn btn-primary ssh-create-key input-mod-btn">추가</button>
-                                            <input type="text" class="input-mod-name" id="exampleInputPassword3" placeholder="192.168.0.100">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputtext" class="col-sm-3 control-label gn-control-label">노드</label>
+                                        <div class="col-sm-7">
+                                          <input type="text" class="form-control" id="exampleInputPassword3" placeholder="192.168.0.100">
                                         </div>
-                                        <!--추가된 노드-->
-                                        <select multiple class="form-control-clus fr">
-                                            <option>192.168.0.100</option>
-                                            <option>192.168.0.100</option>
-                                            <option>192.168.0.100</option>
-                                        </select>
+                                        <div class="col-sm-2 btn-sm2">      
+                                            <button type="submit" class="btn btn-gn-sub btn-block" >추가</button>
+                                        </div>
                                     </div>
-
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary ssh-create-key" data-dismiss="modal">저장</button>
-                                    </div>
-                                </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-9">
+                                            <textarea class="form-control" rows="3"></textarea>  
+                                        </div>      
+                                    </div>                                                
+                                </form>                                              
+                            </div>        
+                            <div class="modal-footer gn-modal-footer">
+                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">저장</button>
                             </div>
                         </div>
-                    </div> <!--클러스터 등록버튼 END-->
+                    </div>
+                </div> <!--클러스터 modal END-->
 
-                </h2>
+                <div class="container-fluid">
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table table-striped gn-table">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">타입</th>
+                                <th class="col-sm-3">엔드 포인트</th>
+                                <th class="col-sm-3">노드</th>
+                                <th class="col-sm-2">생성일<div class="refresh" ng-click="refresh()"></div></th>
+                                <th class="col-sm-2"><!--더보기--></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>KVM</td>
+                                    <td>192.168.0.30:9090</td>
+                                    <td>
+                                        <span>192.168.0.30</span>
+                                        <span>192.168.0.30</span>
+                                        <span>192.168.0.30</span>
+                                        <span>192.168.0.30</span>
+                                    </td>
+                                    <td>1일전</td>
 
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th style="width:15%;">타입</th>
-                            <th style="width:25%;">엔드 포인트</th>
-                            <th style="width:25%;">노드</th>
-                            <th style="width:15%;">생성일<div class="refresh"></div></th>
-                            <th ><!--더보기--></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="td-style cnt">KVM</td>
-                            <td class="td-style cnt">192.168.0.30:9090</td>
-                            <td class="td-style cnt">
-                                <span class="td-node">192.168.0.30</span>
-                                <span class="td-node">192.168.0.30</span>
-                                <span class="td-node">192.168.0.30</span>
-                                <span class="td-node">192.168.0.30</span>
-                            </td>
-                            <td class="td-style cnt">1일전</td>
-                            <td class="td-style cnt dropdown td-more">
-                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    더보기
-                                    <span class="caret" ></span>
-                                </div>
-                                <!--더보기>드롭다운-->
-                                <ul class="dropdown-menu-table" role="menu">
-                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
-                                    <li><a href="#">수정</a></li>
-                                    <li><a href="#" class="btn-modal-delete">삭제</a></li>
-                                </ul>
-                            </td>
-                        </tr>
+                                    <td class="dropdown">
+                                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            더보기<span class="gn-caret-table"></span>
+                                        </div>    
+                                        <!--더보기>드롭다운-->    
+                                        <ul class="dropdown-menu gn-dropdown" role="menu">
+                                            <li><a href="#">수정</a></li>
+                                            <li><a href="#">삭제</a></li>
+                                        </ul>
+                                    </td>                                 
+                                </tr>
 
-                        </ul>
-                        </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div> <!--class="table-responsive table-reset"-->
-
+                            </tbody>
+                        </table>
+                    </div> <!--class="table-responsive table-reset"-->
+                </div> <!--class="container-fluid"-->
             </div> <!--class="cont-box"-->
         </div> <!--class="border-box profile-team"-->
     </div> <!--id="profile-team"  class="tab-pane fade"-->
 
     <!--시스템 > 이미지 관리-->
     <div id="image-sett" class="">
-        <div class="border-box profile-team">
-            <div class="cont-box pos-rel">
-                <h2>이미지 관리</h2>
-
-
-                <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" class="" ng-click="imageset('machine')"><h2 class="h2-image-tab-system">가상머신</h2></a></li>
-                    <li><a data-toggle="tab" class="" ng-click="imageset('container')"><h2 class="h2-image-tab-system">컨테이너</h2></a></li>
-                </ul> <!-- class="nav nav-tabs"-->
-
-                <!--시스템 > 이미지 관리 > 가상머신/컨테이너-->
-                <div class="tab-content clearfix">
-
-                    <!--탭메뉴1 : 가상머신 -->
-                    <div id="machine" class="tab-pane fade in active marg-top29">
-
-                        <!--이미지 등록 버튼 > 가상머신-->
-                        <div class="btn-img-position clearfix fr">
-                            <button type="button" class="btn btn-primary btn-lg ssh-key" data-toggle="modal" data-target="#image">등록</button>
-
-                            <!-- 이미지 Modal -->
-                            <div class="modal-sett fade" id="image" role="dialog">
-                                <div class="modal-dialog modal-img-inp">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">이미지 등록</h4>
-                                        </div>
-
-                                        <div class="modal-body">
-
-                                            <form class="form-horizontal">
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">아이콘</label>
-                                                    <div class="col-sm-10">
-                                                        <!--초기 이미지 등록 박스-->
-                                                        <div class="img-icon-sett filebox">
-                                                            <label class="hov-img-txt" for="img-file">이미지 등록</label>
-                                                            <input type="file" id="img-file">
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">  
+                <div class="container-fluid">
+                    <h2>이미지 관리</h2>
+                    <ul class="nav nav-tabs gn-nav-tabs">
+                        <li class="active"><a data-toggle="tab" class="" ng-click="imageset('machine')"><h2 class="h2-image-tab-system">가상머신</h2></a></li>
+                        <li><a data-toggle="tab" class="" ng-click="imageset('container')"><h2 class="h2-image-tab-system">컨테이너</h2></a></li>
+                    </ul> <!-- class="nav nav-tabs"-->
+                            
+                    <!--시스템 > 이미지 관리 > 가상머신/컨테이너-->
+                    <div class="tab-content">
+                    
+                        <!--탭메뉴1 : 가상머신 -->
+                        <div id="machine" class="">
+                            <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn" data-toggle="modal" data-target="#image">등록</button>
+                               
+                                <!-- 이미지 Modal -->
+                                <div class="modal-sett fade" id="image" role="dialog">
+                                    <div class="modal-dialog form-horizontal">
+                                        <div class="modal-content">
+                                            <div class="modal-header gn-modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">이미지 등록</h4>
+                                            </div>
+                    
+                                            <div class="modal-body gn-modal-body">
+                    
+                                                <form class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
+                                                        <div class="col-sm-10">
+                                                            <!--초기 이미지 등록 박스-->
+                                                            <div class="img-icon-sett filebox">
+                                                                <label class="hov-img-txt" for="img-file">이미지 등록</label>
+                                                                <input type="file" id="img-file">
+                                                            </div>
+                                                            <!--이미지 등록 후 변경,삭제해야 할 때 드롭박스-->
+                                                            <div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>
+                                                            <!--더보기>드롭다운-->
+                                                            <ul class="dropdown-img-icon" role="menu">
+                                                                <li><a href="#">이미지 변경</a></li>
+                                                                <li><a href="#" >이미지 삭제</a></li>
+                                                            </ul>
                                                         </div>
-                                                        <!--이미지 등록 후 변경,삭제해야 할 때 드롭박스-->
-                                                        <div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>
-                                                        <!--더보기>드롭다운-->
-                                                        <ul class="dropdown-img-icon" role="menu">
-                                                            <li><a href="#">이미지 변경</a></li>
-                                                            <li><a href="#" class="btn-modal-delete">이미지 삭제</a></li>
-                                                        </ul>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label jnt">타입</label>
-                                                    <div class="col-sm-10">
-                                                        <label class="radio-inline mod-input-name">
-                                                            <input type="radio" name="optradio">Hyper-V
-                                                        </label>
-                                                        <label class="radio-inline mod-input-name">
-                                                            <input type="radio" name="optradio">KVM
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label gn-control-label">타입</label>
+                                                        <div class="col-sm-10">
+                                                            <label class="radio-inline mod-input-name">
+                                                                <input type="radio" name="optradio">Hyper-V
+                                                            </label>
+                                                            <label class="radio-inline mod-input-name">
+                                                                <input type="radio" name="optradio">KVM
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">OS</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="inputtext" placeholder="windows">
+                                                    <div class="form-group">
+                                                        <label for="inputtext" class="col-sm-2 control-label gn-control-label">OS</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control" id="inputtext" placeholder="windows">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">버전</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="inputtext" placeholder="10">
+                                                    <div class="form-group">
+                                                        <label for="inputtext" class="col-sm-2 control-label gn-control-label">버전</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control" id="inputtext" placeholder="10">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">BIT</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="inputtext" placeholder="64">
+                                                    <div class="form-group">
+                                                        <label for="inputtext" class="col-sm-2 control-label gn-control-label">BIT</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control" id="inputtext" placeholder="64">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">PATH</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="inputtext" placeholder="/data/images/windows/windows_10_pro_x86.vhdx">
+                                                    <div class="form-group">
+                                                        <label for="inputtext" class="col-sm-2 control-label gn-control-label">PATH</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" class="form-control" id="inputtext" placeholder="/data/images/windows/windows_10_pro_x86.vhdx">
+                                                        </div>
+                                                        <div class="col-sm-2 btn-sm2">
+                                                            <button type="file" class="btn btn-primary btn-block">업로드</button>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-2 btn-sm2">
-                                                        <button type="file" class="btn btn-primary btn-block">업로드</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div> <!--class="modal-body"-->
-
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal">저장</button>
+                                                </form>
+                                            </div> <!--class="modal-body"-->
+                    
+                                            <div class="modal-footer gn-footer">
+                                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">저장</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div> <!--이미지 등록버튼 END-->
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>OS</th>
-                                    <th>버전</th>
-                                    <th>BIT</th>
-                                    <th>타입</th>
-                                    <th>PATH</th>
-                                    <th>생성일<div class="refresh"></div></th>
-                                    <th><!--더보기--></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr ng-repeat="path in paths">
-                                    <td class="td-style cnt">
-                                        <img src="../gn_images/gn_icon_{{path.os}}.png" alt="">
-                                        {{path.os}}
-                                    </td>
-                                    <td class="td-style cnt">{{path.os}}{{path.os_ver}}</td>
-                                    <td class="td-style cnt">{{path.os_bit}}</td>
-                                    <td class="td-style cnt">{{path.type}}</td>
-                                    <td class="td-style cnt">{{path.image_path}}</td>
-                                    <td class="td-style cnt">{{path.create_time_diff}}</td>
-                                    <td class="td-style cnt dropdown td-more">
-                                        <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                            더보기
-                                            <span class="caret" ></span>
-                                        </div>
-                                        <!--더보기>드롭다운-->
-                                        <ul class="dropdown-menu-table" role="menu">
-                                            <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
-                                            <li><a href="#">수정</a></li>
-                                            <li><a href="#" class="btn-modal-delete">삭제</a></li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div> <!--class="table-responsive table-reset"-->
-
-                    </div> <!--id="image" class="tab-pane fade in active"-->
-
-
-                    <!--시스템 > 이미지 관리 > 탭메뉴2 : 컨테이너-->
-                    <div id="container" class="marg-top29">
-
+                            </div> <!--이미지 등록버튼 END-->
+                            <div class="container-fluid">
+                                <div class="table-responsive gn-table-responsive">
+                                    <table class="table table-striped gn-table">
+                                        <thead>
+                                        <tr>
+                                            <th>OS</th>
+                                            <th>버전</th>
+                                            <th>BIT</th>
+                                            <th>타입</th>
+                                            <th>PATH</th>
+                                            <th>생성일<div class="refresh"></div></th>
+                                            <th><!--더보기--></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="gn-tdody">
+                                        <tr ng-repeat="path in paths">
+                                            <td>
+                                                <img src="../gn_images/gn_icon_{{path.os}}.png" alt="">
+                                                {{path.os}}
+                                            </td>
+                                            <td>{{path.os}}{{path.os_ver}}</td>
+                                            <td>{{path.os_bit}}</td>
+                                            <td>{{path.type}}</td>
+                                            <td>{{path.image_path}}</td>
+                                            <td>{{path.create_time_diff}}</td>
+                                            <td class="td-style cnt dropdown td-more">
+                                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                    더보기
+                                                    <span class="gn-caret-table" ></span>
+                                                </div>
+                                                <!--더보기>드롭다운-->
+                                                <ul class="dropdown-menu gn-dropdown" role="menu">
+                                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
+                                                    <li><a href="#">수정</a></li>
+                                                    <li><a href="#">삭제</a></li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div> <!--class="table-responsive table-reset"--></div>
+                    
+                        </div> <!--id="image" class="tab-pane fade in active"-->
+                    
+                    
+                        <!--시스템 > 이미지 관리 > 탭메뉴2 : 컨테이너-->
+                        <div id="container" class="">
+                    
                         <!--이미지 등록 버튼 > 컨테이너-->
                         <div class="btn-img-position clearfix fr">
                             <button type="button" class="btn btn-primary btn-lg ssh-key" data-toggle="modal" data-target="#img-cont">등록</button>
@@ -366,21 +373,21 @@
                             <div class="modal-sett fade" id="img-cont" role="dialog">
                                 <div class="modal-dialog modal-img-inp">
                                     <div class="modal-content">
-                                        <div class="modal-header">
+                                        <div class="modal-header gn-modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             <h4 class="modal-title">이미지 등록</h4>
-                                          <span class="img-info">
+                                            <span class="gn-lead">
                                               도커 이미지 정보는 <a href="" class="link-color">http://hub.docker.com/explore/</a>에서 확인 가능 합니다.
                                               특히, EXPOSEPORT 를 확인하여야 도커 컨테이너와 부모 시스템 간에 맵핑을 할 수 있습니다.
                                               HA Proxy에 세팅을 할 때, 부모 시스템의 빈 포트 중 랜덤하게 연결 할 수 있습니다.
-                                          </span>
+                                            </span>
                                         </div>
 
-                                        <div class="modal-body">
+                                        <div class="modal-body gn-modal-body">
 
                                             <form class="form-horizontal">
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">아이콘</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
                                                     <div class="col-sm-10">
                                                         <!--초기 이미지 등록 박스-->
                                                         <div class="img-icon-sett filebox">
@@ -392,58 +399,55 @@
                                                         <!--더보기>드롭다운-->
                                                         <ul class="dropdown-img-icon" role="menu">
                                                             <li><a href="#">이미지 변경</a></li>
-                                                            <li><a href="#" class="btn-modal-delete">이미지 삭제</a></li>
+                                                            <li><a href="#" >이미지 삭제</a></li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">이름</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">이름</label>
                                                     <div class="col-sm-10">
                                                         <input type="text" class="form-control" id="inputtext" placeholder="postgres">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">버전</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">버전</label>
                                                     <div class="col-sm-10">
                                                         <input type="text" class="form-control" id="inputtext" placeholder="16.04.1">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">태그</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">태그</label>
                                                     <div class="col-sm-10">
                                                         <input type="text" class="form-control" id="inputtext" placeholder="태그와 태그는 쉼표로 구분 됩니다.">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">포트</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">포트</label>
                                                     <div class="col-sm-10">
                                                         <textarea class="form-control" rows="2"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">환경변수</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">환경변수</label>
                                                     <div class="col-sm-10">
                                                         <textarea class="form-control" rows="2"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">볼륨</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">볼륨</label>
                                                     <div class="col-sm-10">
                                                         <textarea class="form-control" rows="2"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label jnt">설명</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">설명</label>
                                                     <div class="col-sm-10">
                                                         <textarea class="form-control" rows="2"></textarea>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div> <!--class="modal-body"-->
-
-
-
-                                        <div class="modal-footer">
+                                        <div class="modal-footer gn-modal-footer">
                                             <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal">저장</button>
                                         </div>
                                     </div>
@@ -463,34 +467,34 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="contain in contain_list">
-                                    <td class="td-style cnt">
+                                    <td>
                                         <img src="../gn_images/gn_icon_postgres_icon.png" alt="">
                                         {{contain.name}}
                                     </td>
-                                    <td class="td-style cnt">{{contain.os_ver}}</td>
-                                    <td class="td-style cnt">{{contain.tag}}</td>
-                                    <td class="td-style cnt">{{contain.create_time_diff}}</td>
-                                    <td class="td-style cnt dropdown td-more">
-                                        <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    <td>{{contain.os_ver}}</td>
+                                    <td>{{contain.tag}}</td>
+                                    <td>{{contain.create_time_diff}}</td>
+                                    <td class="dropdown">
+                                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                             더보기
-                                            <span class="caret" ></span>
+                                            <span class="gn-caret-table" ></span>
                                         </div>
                                         <!--더보기>드롭다운-->
-                                        <ul class="dropdown-menu-table" role="menu">
+                                        <ul class="dropdown-menu gn-dropdown" role="menu">
                                             <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
                                             <li><a href="#">수정</a></li>
-                                            <li><a href="#" class="btn-modal-delete">삭제</a></li>
+                                            <li><a href="#" >삭제</a></li>
                                         </ul>
                                     </td>
                                 </tr>
-
-
                                 </tbody>
                             </table>
                         </div> <!--class="table-responsive table-reset"-->
-                    </div>
-                    </div>
-                </div>
+                    </div> <!--id="container" class="marg-top29"-->
+                    
+                    </div> <!--class="tab-content clearfix"-->
+                </div> <!--class="container-fluid"-->
             </div>
-        </div>
-</div>
+        </div> <!--class="gn-sett-margin-box"-->
+    </div><!--class="gn-box"-->
+</div> <!--class="tab-content col-sm-10"-->
