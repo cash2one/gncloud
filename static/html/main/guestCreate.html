@@ -1,203 +1,185 @@
 <!-- Main component for a primary marketing message or call to action -->
-<div> <!--main 영역-->
-        <h1>인스턴스</h1>
+<h1>인스턴스</h1>
 
-        <div class="container-type">
-            <h2>인스턴스명</h2>
-            <input type="input" class="form-control" ng-model="data.vm_name" placeholder="인스턴스명">
-
-
-
-            <div class="container-type">
-                <h2>타입 선택</h2>
-                <input type="radio" id="hyper-v" class="inp-box-type" name="inp-box-type" />
-                <input type="radio" id="kvm" class="inp-box-type" name="inp-box-type"/>
-                <input type="radio" id="docker" class="inp-box-type" name="inp-box-type"/>
-                <div class="buttons">
-                    <label class="label-box-type" for="hyper-v" ng-click="selectType('hyperv')">
-                        <span class="sprite-img sprite-hyp"></span>
-                        Hyper-V
-                    </label>
-                    <label class="label-box-type" for="kvm" ng-click="selectType('kvm')">
-                        <span class="sprite-img sprite-kvm"></span>
-                        KVM
-                    </label>
-                    <label class="label-box-type" for="docker" ng-click="selectType('docker')">
-                        <span class="sprite-img sprite-doc"></span>
-                        docker
-                    </label>
-                </div>
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>인스턴스 이름</h2>
+        <div class="row">
+            <div class="col-sm-3">
+                <input type="text" class="form-control gn-form-control" ng-model="vm_name" placeholder="이름을 입력하여주세요.">
             </div>
-            <br>
-            <br>
-            <br>
-            <br>
+        </div>
+    </div>
+</div>
 
-            <h2>이미지 선택</h2>
-            <!--탭메뉴-->
-            <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" class="tab-title" ng-click="imageshow('image')">이미지</a></li>
-                <li><a data-toggle="tab" class="tab-title" ng-click="imageshow('snap')">스냅샷</a></li>
-            </ul> <!-- class="nav nav-tabs"-->
-            <br>
-            <div class="tab-content clearfix">
-                <!--탭메뉴1 : 이미지 -->
-                <div id="image">
-                        <!--<input type="radio" id="Windows" class="inp-box-image" name="inp-box-image" />-->
-                        <!--<input type="radio" id="FreeBSD" class="inp-box-image" name="inp-box-image"/>-->
-                        <!--<input type="radio" id="fedora" class="inp-box-image" name="inp-box-image"/>-->
-                        <!--<input type="radio" id="Debian" class="inp-box-image" name="inp-box-image"/>-->
-                        <!--<input type="radio" id="wordpress" class="inp-box-image" name="inp-box-image"/>-->
-                        <!--<div class="buttons">-->
-                            <!--<label class="label-box-image" for="Windows" ng-repeat="list in image_list">-->
-                                <!--<span class="sprite-img sprite-hyp" ng-click="update_image(list)"></span>-->
-                                <!--{{list.os}}-->
-                                <!--<span class="windows-small">{{list.name}}</span>-->
-                            <!--</label>-->
-                        <!--</div>-->
-                        <span ng-repeat="list in image_list">
-                        <div class="btn-group" role="group" aria-label="..." >
-                            <ng-button type="button" name="" class="btn btn-default type-box box2" ng-click="update_image(list)" required>
-                                <img src="/gn_images/instance_create_windows.png" alt="" class="img-icon">
-                                {{list.os}}
-                                <span class="windows-small">{{list.name}}</span>
-                            </ng-button>
-                        </div>
-                    </span>
-                </div> <!--id="image" class="tab-pane fade in active"-->
-                <!--탭메뉴2 : 스냅샷-->
-                <div id="snap">
-                    <!--<input type="radio" id="snap-name1" class="inp-box-snap" name="inp-box-snap" checked="checked"/>-->
-                    <!--<input type="radio" id="snap-name2" class="inp-box-snap" name="inp-box-snap"/>-->
-                    <!--<input type="radio" id="snap-name3" class="inp-box-snap" name="inp-box-snap"/>-->
-                    <!--<input type="radio" id="snap-name4" class="inp-box-snap" name="inp-box-snap"/>-->
-                    <!--<input type="radio" id="snap-name5" class="inp-box-snap" name="inp-box-snap"/>-->
-                    <!--<input type="radio" id="snap-name6" class="inp-box-snap" name="inp-box-snap"/>-->
-                    <!--<input type="radio" id="snap-name7" class="inp-box-snap" name="inp-box-snap"/>-->
-                    <!--<span ng-repeat="list in snap_list">-->
-                    <!--<div class="buttons">-->
-                        <!--<label class="btn btn-default snap-name fl">-->
-                            <!--<p class="ellipsis">-->
-                                <!--<img src="images/ubuntu_icon.png" alt="" class="elli-img-icon">{{list.name}}</p>-->
-                        <!--</label>-->
-                    <!--</div>-->
-                    <!--</span>-->
-                    <span ng-repeat="list in snap_list">
-                        <div class="btn-group" role="group" aria-label="..." >
-                            <ng-button type="button" name="" class="btn btn-default type-box box2" ng-click="update_image(list)" required>
-                                <img src="/gn_images/instance_create_windows.png" alt="" class="img-icon">
-                                {{list.os}}
-                                <span class="windows-small">{{list.name}}</span>
-                            </ng-button>
-                        </div>
-                    </span>
-                </div>
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>타입 선택</h2>
+        <form >
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('hyperv')">
+                    <input name="" value="" type="radio">
+                    <span class="sprite-img sprite-hyp"></span>
+                    Hyper-V
+                </label>
+                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('kvm')">
+                    <input name="" value="" type="radio">
+                    <span class="sprite-img sprite-kvm"></span>
+                    KVM
+                </label>
+                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('docker')">
+                    <input name="" value="" class="active" type="radio">
+                    <span class="sprite-img sprite-doc"></span>
+                    docker
+                </label>
             </div>
-            <!--class="tab-content"-->
+        </form>
+    </div>
+</div>
 
-            <br>
-            <br>
-            <br>
-            <div class="container-size cl">
-                <h2>사이즈 선택</h2>
-                <input type="radio" id="size1" class="inp-box-size" name="inp-box-size" checked="checked"/>
-                <input type="radio" id="size2" class="inp-box-size" name="inp-box-size"/>
-                <input type="radio" id="size3" class="inp-box-size" name="inp-box-size"/>
-                <input type="radio" id="size4" class="inp-box-size" name="inp-box-size"/>
-                <input type="radio" id="size5" class="inp-box-size" name="inp-box-size"/>
-                <div class="buttons">
-                    <label class="label-box-size" for="size1" ng-click="func(1,512,20)">
-                        <div class="size-info">1 CPU</div>
-                        <div class="border-bottom"></div>
-                        <div class="size-info" >512 MB</div>
-                        <div class="border-bottom"></div>
-                        <div class="size-info3">20 GB</div>
-                    </label>
-                    <label class="label-box-size" for="size2" ng-click="func(1,1024,20)">
-                        <div class="size-info">1 CPU</div>
-                        <div class="border-bottom"></div>
-                        <div class="size-info" >1024 MB</div>
-                        <div class="border-bottom"></div>
-                        <div class="size-info3">20 GB</div>
-                    </label>
-                    <label class="label-box-size" for="size3" ng-click="func(2,512,20)">
-                        <div class="size-info">2 CPU</div>
-                        <div class="border-bottom"></div>
-                        <div class="size-info" >512 MB</div>
-                        <div class="border-bottom"></div>
-                        <div class="size-info3">20 GB</div>
-                    </label>
-                    <label class="label-box-size" for="size4" ng-click="func(2,1024,20)">
-                        <div class="size-info">2 CPU</div>
-                        <div class="border-bottom"></div>
-                        <div class="size-info" >1024 MB</div>
-                        <div class="border-bottom"></div>
-                        <div class="size-info3">20 GB</div>
-                    </label>
-                </div>
+
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>이미지 선택</h2>
+        <!--탭메뉴-->
+        <ul class="nav nav-tabs gn-nav-tabs">
+            <li class="active"><a data-toggle="tab" class="tab-title" ng-click="imageshow('image')">이미지</a></li>
+            <li><a data-toggle="tab" class="tab-title" ng-click="imageshow('snap')">스냅샷</a></li>
+        </ul> <!-- class="nav nav-tabs"-->
+        <br>
+        <div class="tab-content gn-tab-content">
+            <!--탭메뉴1 : 이미지 -->
+            <div id="image">
+
+                <form>
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default gn-btn-default inp-box-image" ng-repeat="list in image_list">
+                            <input name="" value="" type="radio">
+                            <span class="sprite-img sprite-hyp"></span>
+                            {{list.os}}
+                            <span class="windows-small">{{list.name}}</span>
+                        </label>
+                    </div>
+                </form>
+            </div> <!--id="image" class="tab-pane fade in active"-->
+
+            <!--탭메뉴2 : 스냅샷-->
+            <div id="snap">
+
+                <form >
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default gn-btn-snap" ng-repeat="list in snap_list">
+                            <input name="" value="" type="radio">
+                            <p class="ellipsis" ng-click="update_image(list)">
+                                <img src="gn_images/{{list.os}}_icon.png" alt="" class="elli-img-icon"></p>
+                        </label>
+                    </div>
+                </form>
             </div>
-            <br>
-            <br>
-            <br>
-            <br>
-
-            <div class="container-ssh">
-                <div id="ssh">
-                <h2>SSH 키 설정</h2>
-                    <div class="clearfix" >
-                        <!--최초 등록 시 출력되는 버튼-->
-                    <button  type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#myModal">SSH 키 생성</button>
-                        <!-- ****체크박스 대신 select box로 변경되었습니다**** -->
-                        <select class="col-md-3" ng-model="guest_item" ng-options="item.name for item in sshkey_list">
-                            <option value="">SSH 키 선택</option>
-                        </select>
+        </div>
+    </div>  <!--class="tab-content"-->
+</div>
 
 
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>사이즈 선택</h2>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="myModal" role="dialog">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">SSH 키 생성</h4>
-                                    </div>
-                                    <!--<span ng-repeat="item in sshkey_list">-->
-                                    <div class="modal-body">
-                                        <input type="text" ng-model="data.name"  placeholder="이름" class="input-ssh-name">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" ng-click="save()"  class="btn btn-primary ssh-create-key" data-dismiss="modal">생성</button>
-                                    </div>
-                                    <!--</span>                        -->
-                                </div>
-                            </div>
-                        </div>
+        <form>
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default gn-btn-default inp-box-size" ng-click="func(1,512,20)">
+                    <input name="" value="1" type="radio">
+                    <div class="size-info">1 CPU</div>
+                    <div class="border-bottom"></div>
+                    <div class="size-info">512 MB</div>
+                    <div class="border-bottom"></div>
+                    <div class="size-info">20 GB</div>
+                </label>
+                <label class="btn btn-default gn-btn-default inp-box-size" ng-click="func(1,1024,20)">
+                    <input name="" value="2" type="radio">
+                    <div class="size-info">1 CPU</div>
+                    <div class="border-bottom"></div>
+                    <div class="size-info">1024 MB</div>
+                    <div class="border-bottom"></div>
+                    <div class="size-info">20 GB</div>
+                </label>
+                <label class="btn btn-default gn-btn-default inp-box-size" ng-click="func(2,512,20)">
+                    <input name="" value="2" type="radio">
+                    <div class="size-info">2 CPU</div>
+                    <div class="border-bottom"></div>
+                    <div class="size-info">512 MB</div>
+                    <div class="border-bottom"></div>
+                    <div class="size-info">20 GB</div>
+                </label>
+                <label class="btn btn-default gn-btn-default inp-box-size" ng-click="func(2,1024,20)">
+                    <input name="" value="2" type="radio">
+                    <div class="size-info">2 CPU</div>
+                    <div class="border-bottom"></div>
+                    <div class="size-info">1024 MB</div>
+                    <div class="border-bottom"></div>
+                    <div class="size-info">20 GB</div>
+                </label>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>SSH 키 설정</h2>
+
+        <div class="row gn-margin-bott10">
+            <!--최초 등록 시 출력되는 버튼-->
+            <button type="button" class="btn btn-gn-sub btn-lg col-md-2" data-toggle="modal" data-target="#myModal">SSH 키 생성</button>
+
+            <!-- ****체크박스 대신 select box로 변경되었습니다**** -->
+            <div class="col-md-3">
+                <select class="gn-select form-control gn-form-control" ng-model="guest_item" ng-options="item.name for item in sshkey_list">
+                    <option value="">SSH 키 선택</option>
+                </select>
+            </div>
+        </div>
+
+        <!--윈도우의 경우-->
+        <div class="form-group row">
+            <div class="col-sm-2 gn-input-pw" >Administrator 비밀번호</div>
+            <div class="col-sm-3">
+                <input type="password" class="form-control gn-form-control" ng-model="data.password" placeholder="비밀번호 입력">
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content ">
+                    <div class="modal-header gn-modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">SSH 키 생성</h4>
+                    </div>
+                    <div class="modal-body gn-modal-body">
+                        <input type="text" ng-model="data.name"  placeholder="이름" class="from-control gn-form-control">
+                    </div>
+                    <div class="modal-footer gn-modal-footer">
+                        <button type="submit" ng-click="save()"  class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal">생성</button>
                     </div>
                 </div>
             </div>
-                <!--윈도우의 경우-->
-                <div id="windows" class="form-password cl">
-                    <div class="form-password-name fl">Administrator 비밀번호</div>
-                    <input type="password" class="form-control" ng-model="data.password" placeholder="비밀번호 입력">
-                </div>
+        </div>
 
-            <br>
-            <br>
-            <br>
-            <br>
-
-
-            <h2>태그입력</h2>
-            <div class="form-group">
-                <label for="comment" class="label-comment">태그와 태그는 쉼표로 구분됩니다.</label>
-                <textarea class="form-control" id="tag" rows="5" id="comment" placeholder="ex)패스트캣, 개발, 512MB"></textarea>
-            </div>
-            <br>
-            <br>
-            <br>
-            <br>
-
-            <button type="submit" id="submit" value="생성" class="btn btn-success btn-block btn-lg" ng-click="submit()">인스턴스 생성</button>
     </div>
 </div>
+
+
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>태그입력</h2>
+        <div class="form-group">
+            <label for="comment" class="gn-lead">태그와 태그는 쉼표로 구분됩니다.</label>
+            <textarea class="form-control gn-form-control" id="tag" rows="5" id="comment" placeholder="ex)패스트캣, 개발, 512MB"></textarea>
+        </div>
+    </div>
+</div>
+
+
+<button type="submit" value="submit" class="btn btn-success btn-block btn-lg" ng-click="submit()">인스턴스 생성</button>
