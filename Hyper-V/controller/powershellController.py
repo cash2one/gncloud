@@ -254,7 +254,7 @@ def hvm_state(id):
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
             # return jsonify(status=False, message="상태 미완성")
-    elif type == "restart":
+    elif type == "reboot":
         restart = ps.restart_vm(vmid.internal_id)
         # resume 1. 가상머신을 재시작한다. (Restart-VM)
         if restart['State'] is 2:
