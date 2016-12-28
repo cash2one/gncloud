@@ -66,19 +66,20 @@ def hvm_create():
         #print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
-        #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
-        #CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
-        #CONVERT_VHD_PATH = config.DISK_DRIVE+ config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
-        #convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
+        image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
+        CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
+        CONVERT_VHD_PATH = config.DISK_DRIVE+ config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
+        convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
-        #add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
-        # VM을 시작한다.
+        add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
 
+        '''
         CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/base/"+internal_name+".vhdx"
         CONVERT_VHD_PATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/pool/"+os_sub_ver
-
         ps.move_vhd(CONVERT_VHD_PATH, CONVERT_VHD_DESTINATIONPATH, new_vm['VMId'])
+        '''
 
+        # VM을 시작한다.
         start_vm = ps.start_vm(new_vm['VMId'])
         # 생성된 VM의 ip 정보를 가지고 온다
 
@@ -120,7 +121,8 @@ def hvm_create():
                 db_session.add(vm)
                 db_session.commit()
                 return jsonify(status=True, massage="create vm success")
-            except:
+            except Exception as message:
+                print message
                 db_session.rollback()
                 return jsonify(status=False, massage="DB insert fail")
             finally:
@@ -170,7 +172,11 @@ def hvm_snapshot():
             db_session.add(insert_image_query)
             db_session.commit()
 
-            return jsonify(status=True, message="성공")
+            start_vm = ps.start_vm(org_id.internal_id)
+            if start_vm['State'] is 2:
+                return jsonify(status=True, message="성공")
+            else:
+                return jsonify(status=False, message="실패")
         else:
             return jsonify(status=False, message="실패")
     else:
@@ -253,6 +259,9 @@ def hvm_state(id):
         restart = ps.restart_vm(vmid.internal_id)
         # resume 1. 가상머신을 재시작한다. (Restart-VM)
         if restart['State'] is 2:
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id']).update(
+                {"start_time": datetime.datetime.now(),"stop_time": datetime.datetime.now()})
+            db_session.commit()
             return jsonify(status=True, message="VM Restart")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
