@@ -50,24 +50,16 @@
         <div class="tab-content gn-tab-content">
             <!--탭메뉴1 : 이미지 -->
             <div id="image">
-                     <span ng-repeat="list in image_list">
-                <div class="btn-group" role="group" aria-label="..." >
-                    <ng-button type="button" name="" class="btn btn-default type-box box2" ng-click="update_image(list)" required>
-                        <img src="/gn_images/instance_create_{{list.os}}.png" alt="" class="img-icon">
-                        {{list.os}}
-                        <span class="windows-small">{{list.name}}</span>
-                    </ng-button>
-                </div></span>
-                <!--<form>-->
-                    <!--<div class="btn-group" data-toggle="buttons">-->
-                        <!--<label class="btn btn-default gn-btn-default inp-box-image" ng-repeat="list in image_list">-->
-                            <!--<input name="" value="" type="radio" ng-model="data.id">-->
-                            <!--<span class="sprite-img sprite-hyp"></span>-->
-                            <!--{{list.os}}-->
-                            <!--<span class="windows-small">{{list.name}}</span>-->
-                        <!--</label>-->
-                    <!--</div>-->
-                <!--</form>-->
+                <form>
+                    <div class="btn-group" data-toggle="buttons">
+                        <button class="btn btn-default gn-btn-default inp-box-image" ng-repeat="list in image_list">
+                            <input name="" value="" type="radio">
+                            <span class="sprite-img sprite-hyp" ng-click="update_image(list)"></span>
+                            {{list.os}}
+                            <span class="windows-small">{{list.name}}</span>
+                        </button>
+                    </div>
+                </form>
             </div> <!--id="image" class="tab-pane fade in active"-->
 
             <!--탭메뉴2 : 스냅샷-->
