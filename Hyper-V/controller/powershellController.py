@@ -6,6 +6,7 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 import json
 
 from util.json_encoder import AlchemyEncoder
+from db.models import GnImagesPool, GnMonitorHist
 
 __author__ = 'jhjeon'
 
@@ -14,12 +15,10 @@ import time
 from flask import request, jsonify, session
 from service.powershellService import PowerShell
 from db.database import db_session
-from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist, GnImagesPool
+from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist
 
 from util.config import config
 from util.hash import random_string
-
-
 
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
@@ -36,7 +35,7 @@ def hvm_create():
     base_image_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['id']).first()
 
     base_image = base_image_info.filename
-    name = request.json['vm_name']
+    name = request.json['name']
     tag = request.json['tag']
     memory = request.json['memory']
     cpu = request.json['cpu']
@@ -45,8 +44,8 @@ def hvm_create():
     os_ver = base_image_info.os_ver
     os_sub_ver = base_image_info.os_subver
     os_bit = base_image_info.os_bit
-#    print session['teamCode']
-#    team_code = session.get('teamCode')
+    #    print session['teamCode']
+    #    team_code = session.get('teamCode')
     team_code = session['teamCode']
     author_id = session['userName']
 
@@ -64,7 +63,7 @@ def hvm_create():
     if new_vm is not None:
         # 새 머신에서 추가적인 설정을 한다 (Set-VM)
         set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(cpu))
-        #print set_vm
+        print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
         #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
@@ -82,13 +81,17 @@ def hvm_create():
 
         while True:
             if len(get_vm_ip) <= 2 and get_ip_count <= 20:
+                print get_ip_count
                 time.sleep(20)
                 get_ip_count = get_ip_count + 1
                 get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
             elif get_ip_count > 20:
-                return jsonify(status=False, massage="VM 생성 실패")
-            else:
+                return jsonify(status=False, massage="VM에 ip를 할당할 수 없습니다.")
+            elif get_vm_ip[:2] == "16":
+                time.sleep(20)
+                get_ip_count = get_ip_count + 1
                 get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
+            else:
                 break
 
         # print get_vm_ip
@@ -100,8 +103,7 @@ def hvm_create():
             if dhcp_ip_address is True:
                 try:
                     ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
-                except Exception as message:
-                    print message
+                except:
                     ps.get_ip_address_type(get_vm_ip)
                 finally:
                     dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
@@ -121,14 +123,13 @@ def hvm_create():
                     insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
                     db_session.add(insert_monitor)
                     db_session.add(vm)
+                    return jsonify(status=True,massage = "create vm success")
 
-                except Exception as message:
-                    print message
+                except:
                     db_session.rollback()
                     return jsonify(status=False, massage="DB insert fail")
                 finally:
                     db_session.commit()
-                return jsonify(status=True,massage = "create vm success")
     else:
         return jsonify(status=False, massage="VM 생성 실패")
 
@@ -148,7 +149,7 @@ def hvm_snapshot():
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
         create_snap = ps.create_snap(org_id.internal_id, config.COMPUTER_NAME)
-       # print create_snap
+        print create_snap
         if create_snap['Name'] is not None:
             base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
@@ -170,16 +171,11 @@ def hvm_snapshot():
 
             insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
                                             icon, os, os_ver, os_subver, os_bit, team_code,
-                                            author_id, datetime.datetime.now(), 'Running', None)
+                                            author_id, datetime.datetime.now(), None, None)
             db_session.add(insert_image_query)
             db_session.commit()
 
-            start_state = ps.start_vm(org_id.internal_id)
-
-            if start_state['State'] is 2:
-                return jsonify(status=True, message="성공")
-            else:
-                return jsonify(status=False, message="VM시작을 하지 못하였습니다")
+            return jsonify(status=True, message="성공")
         else:
             return jsonify(status=False, message="실패")
     else:
@@ -226,13 +222,13 @@ def hvm_state(id):
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, config.AGENT_REST_URI)
 
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
-  #  print vmid.internal_id
+    print vmid.internal_id
     #    vm = GnVmMachines.query.filter_by().first
     if type == "start":
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start_vm = ps.start_vm(vmid.internal_id)
-       # print start_vm
+        print start_vm
         # print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
         if start_vm['State'] is 2:
@@ -286,7 +282,8 @@ def hvm_state(id):
             db_session.commit()
             return jsonify(status=True, message="가상머신이 재시작되었습니다.")
         else:
-            return jsonify(status=True, message="정상적인 결과값이 아닙니다.")
+            return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
+        return jsonify(status=False, message="")
     elif type == "powerdown":
         return jsonify(status=False, message="상태 미완성")
     else:
@@ -396,6 +393,7 @@ def hvm_image():
     return jsonify(status=False, message="미구현")
 
 
+
 # 모니터링을 위한 스크립트 전송 함수
 def vm_monitor():
     vm_ip_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == "hyperv").all()
@@ -418,17 +416,24 @@ def vm_monitor():
             script += "$res, $mem, $hdd | ConvertTo-Json -Compress;"
             try:
                 result = json.loads(json.dumps(ps.send_get_vm_info(script, vm_ip_info[i].ip)))
-                cpu = round(1 - result[0], 4)  #점유량 ex) 0.3~~
-                mem = round(1 - result[1], 4)
-                hdd = round(1 - (result[2]/float(vm_ip_info[i].disk)), 4)
-                #hdd_free_per = hdd/float(vm_ip_info[i].disk)
+            except Exception as message:
+                print message
+            finally:
+                print result
 
-                if cpu >= 1.0:
-                    cpu = 0.0000
-                elif cpu <= 0:
-                    cpu = 1.0000
-                else:
-                    cpu = round(1-result[0], 4)
+            cpu = round(1 - result[0], 4)  #점유량 ex) 0.3~~
+            mem = round(1 - result[1], 4)
+            hdd = round(1 - (result[2]/float(vm_ip_info[i].disk)), 4)
+            #hdd_free_per = hdd/float(vm_ip_info[i].disk)
+
+            if cpu >= 1.0:
+                cpu = 1.0000
+            elif cpu <= 0:
+                cpu = 0.0000
+            else:
+                cpu = round(1-result[0], 4)
+
+            try:
                 monitor_insert = GnMonitorHist(vm_ip_info[i].id, "hyperv", datetime.datetime.now(),
                                                cpu, mem*100, hdd, 0.0000)
                 db_session.add(monitor_insert)
@@ -438,11 +443,10 @@ def vm_monitor():
                 print message
                 db_session.rollback()
             finally:
-               # print result
                 db_session.commit()
-
+                print "Running status"
         elif vm_ip_info[i].status != "Removed": #단순히 db만 업데이트
-           # print "stop status"
+            print "stop status"
             try:
                 vm_info = db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).first()
 
@@ -451,7 +455,7 @@ def vm_monitor():
                 db_session.add(monitor_insert)
                 db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
                     {"cpu_usage": 0.0000, "mem_usage": 0.0000})
-               # print "insert success"
+                print "insert success"
             except Exception as message:
                 print message
                 db_session.rollback()

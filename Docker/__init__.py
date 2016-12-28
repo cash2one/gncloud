@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
-
+import traceback
 from datetime import timedelta
 from flask import Flask, redirect, url_for
-
-from controller.dockerController import *
+from apscheduler.scheduler import Scheduler
 from util.config import config
+from util.logger import logger
+from util.json_encoder import AlchemyEncoder
+from controller.dockerController import *
+from db.database import db_session
+from service.monitorService import service_monitoring
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
+app.json_encoder = AlchemyEncoder
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 # --- VM 함수 --- #
@@ -55,6 +60,27 @@ def index():
     return redirect(url_for("isAlive"))
 
 
+def interval_status_update():
+    try:
+        service_monitoring(db_session)
+    except:
+        logger.error("에러 발생")
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    print(traceback.format_exc())
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세요")
+
+
 if __name__ == '__main__':
+    cron = Scheduler(daemon=True)
+    cron.add_interval_job(interval_status_update, seconds=180)
+    cron.start()
     app.config['DEBUG'] = False
     app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
