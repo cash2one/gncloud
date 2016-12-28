@@ -94,23 +94,22 @@ def sign_up(user_name, user_id, password, password_re):
         return 'password'
 
 def repair(user_id, password, password_new, password_re, tel, email, sql_session):
+    test = db_session.query(GnUser).filter(GnUser.user_id == user_id).one()
     if password != "":
         password = random_string(password)
-        test = sql_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
-        if (test != None and password_re == password_new):
-              test.password = random_string(password_re)
+        list = db_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
+        if (list != None and password_re == password_new):
+              list.password = random_string(password_re)
         else:
                 return 1
-
-
-    if tel != "":
+    if tel!="":
         test.tel = tel
 
     if email != "":
         test.email = email
-
     db_session.commit()
     return 2
+
 
 def server_image_list(type, sub_type, sql_session, team_code):
     if type == "base":
