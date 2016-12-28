@@ -305,8 +305,6 @@ class PowerShell(object):
         return json.loads(response.json())
 
 
-
-
     def get_state_string(self, state):
         if state is 1:
             return "Other"
