@@ -12,20 +12,20 @@ angular
         $("#snap").hide();
         $scope.snap =function(data){
             if(data == 'mac'){
-                $("#tab").show();
-                $("#sab").show();
+                $("#tab").fadeIn();
+                $("#sab").fadeIn();
                 $("#snap").hide();
-                $("#image").show();
+                $("#image").fadeIn();
                 $("#container").hide();
             }
             if(data == 'snap'){
-                $("#snap").show();
+                $("#snap").fadeIn();
                 $("#image").hide();
                 $("#container").hide();
             }
             if(data == 'image') {
                 $("#snap").hide();
-                $("#image").show();
+                $("#image").fadeIn();
                 $("#container").hide();
             }
             if(data == 'container'){
@@ -33,7 +33,7 @@ angular
                 $("#sab").hide();
                 $("#snap").hide();
                 $("#image").hide();
-                $("#container").show();
+                $("#container").fadeIn();
             }
         }
         $http({
