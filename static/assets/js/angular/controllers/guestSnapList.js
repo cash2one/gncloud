@@ -125,7 +125,7 @@ angular
                     console.log(status);
                 });
 
-        }
+        };
         $http({
             method: 'GET',
             url: '/api/manager/vm/machines',
