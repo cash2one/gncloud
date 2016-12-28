@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
     <meta name="keywords" content="">
     <meta name="description" content="">
     <!--FAVICON-->
@@ -13,7 +13,6 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/gn_css/bootstrap_gn_theme.css" />
-    <link rel="stylesheet" href="/gn_css/nanumbarungothic.css"/>
     <!--<link href='https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css' rel='stylesheet' type='text/css'>-->
     <!--<link href="/chart/css/style.css" rel="stylesheet">-->
     <!--<link href="/css/bootstrap.min.css" rel="stylesheet">-->
@@ -60,9 +59,9 @@
     <script type="text/javascript" src="/js/angular/controllers/guestTeamDetail.js"></script>
 </head>
 
-<body landing-scrollspy>
+<body>
 
-<nav class="navbar navbar-default">
+    <nav class="navbar navbar-default gn-header">
     <div class="container">
         <!--지앤클라우드 로고-->
         <div class="navbar-header">
@@ -72,40 +71,42 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#dashboard"><img src="/gn_images/gncloud_private_header_logo.png" alt="지앤클라우드 프라이빗 홈"></a>
-        </div>
+            <a class="navbar-brand" href="#dashboard">
+                <img src="/gn_images/gncloud_private_header_logo.png" alt="지앤클라우드 프라이빗 홈">
+            </a>
+        </div><!--class="navbar-header"-->
 
-        <div id="navbar" class="navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse gn-header-collapsed">
             <!--왼쪽메뉴-->
             <ul class="nav navbar-nav">
-                <li class="h4 h4-menu"><a href="#dashboard">대시보드</a></li>
-                <li class="h4 h4-menu"><a href="#/guestList">인스턴스</a></li>
-                <li class="h4 h4-menu"><a href="#guestSnapList/">이미지</a></li>
-            </ul>
+                <li class="nav-link"><a href="#dashboard">대시보드</a></li>
+                <li class="nav-link"><a href="#/guestList">인스턴스</a></li>
+                <li class="nav-link"><a href="#guestSnapList/">이미지</a></li>
+            </ul><!--class="nav navbar-nav"-->
             <ul class="nav navbar-nav navbar-right">
                 <li class="create-btn">
                     <a href="#/guestCreate">
-                        <button type="submit" value="submit" class="btn btn-success creat-instance">인스턴스 생성</button>
+                        <button type="submit" value="submit" class="btn btn-success">인스턴스 생성</button>
                     </a>
                 </li>
                 <li>
-                <li class="dropdown">
-                    <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                        <a class="user h4" id="name"></a>
-                        <span class="caret user-arrow" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"></span>
+                <li class="dropdown head-dropdown">
+                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <a id="name"></a>
+                        <span class="gn-caret"></span>
                     </div>
-                    <ul class="dropdown-menu" role="menu">
-                        <!--<li class="dropdown-headr">Nav header</li>-->
-                        <li><a href="#/account/users/list">프로필 설정</a></li>
+                    <ul class="dropdown-menu gn-head-drop" role="menu">
+                        <li><a href="#/account/users/list">개인설정</a></li>
                         <li><a href="#/guestSystemList" id="system">시스템 설정</a></li>
                         <li><a href=javascript:logout();>로그아웃</a></li>
                     </ul>
+                </li><!--class="dropdown"-->
                 </li>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+            </ul><!--class="nav navbar-nav navbar-right"-->
+        </div><!--/.nav-collapse -->
+    </div><!--class="container"-->
+</nav><!--class="navbar navbar-default navbar-fixed-top"-->
+<!--HEADER END-->
 
 <div class="container">
     <ng-view></ng-view>

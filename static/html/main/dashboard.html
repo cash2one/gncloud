@@ -2,127 +2,134 @@
 <h2>{{team_name}}</h2>
 
 <!--CPU  |  MEMORY  |  DISK-->
-<div class="container-body clearfix">
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box clearfix">
-            <h2 class="h2-bold">CPU</h2>
-            <ul class="clearfix">
-                <li class="dd-left fl">
-                    <canvas id="cpu_chart" height="250"></canvas>
-                </li>
-                <li class="dd-right fr">
-                    <div class="dd-right-per"><span class="cpu-per">{{cpu_use_per}}</span>%</div>
-                    <div class="dd-right-use-txt">사용중</div>
-                    <div class="dd-right-reso"><span class="cpu-per">{{cpu_use_cnt}}</span>/{{cpu_tot_cnt}}&nbsp;CORE</div>
-                </li>
-            </ul>
+<div class="container-fluid dash-body">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>CPU</h3>
+                    <div class="col-sm-6">
+                        <canvas id="cpu_chart" height="250"></canvas>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="dd-right-per"><span class="cpu-per">{{cpu_use_per}}</span>%</div>
+                        <div class="dd-right-use-txt">사용중</div>
+                        <div class="dd-right-reso"><span class="cpu-per">{{cpu_use_cnt}}</span>/{{cpu_tot_cnt}}&nbsp;CORE</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box clearfix">
-            <h2 class="h2-bold">MEMEORY</h2>
-            <ul class="clearfix">
-                <li class="dd-left fl">
-                    <canvas id="mem_chart" height="250"></canvas>
-                </li>
-                <li class="dd-right fr">
-                    <div class="dd-right-per"><span class="mem-per">{{mem_use_per}}</span>%</div>
-                    <div class="dd-right-use-txt">사용중</div>
-                    <div class="dd-right-reso"><span class="mem-per">{{mem_use_cnt}}</span>/{{mem_tot_cnt}}&nbsp;MB</div>
-                </li>
-            </ul>
+
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>MEMORY</h3>
+                    <div class="col-sm-6">
+                        <canvas id="mem_chart" height="250"></canvas>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="dd-right-per"><span class="mem-per">{{mem_use_per}}</span>%</div>
+                        <div class="dd-right-use-txt">사용중</div>
+                        <div class="dd-right-reso"><span class="mem-per">{{mem_use_cnt}}</span>/{{mem_tot_cnt}}&nbsp;MB</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box clearfix">
-            <h2 class="h2-bold">DISK</h2>
-            <ul class="clearfix">
-                <li class="dd-left fl">
-                    <canvas id="disk_chart" height="250"></canvas>
-                </li>
-                <li class="dd-right fr">
-                    <div class="dd-right-per"><span class="dis-per">{{disk_use_per}}</span>%</div>
-                    <div class="dd-right-use-txt">사용중</div>
-                    <div class="dd-right-reso"><span class="dis-per">{{disk_use_cnt}}</span>/{{disk_tot_cnt}}&nbsp;GB</div>
-                </li>
-            </ul>
+
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>DISK</h3>
+                    <div class="col-sm-6">
+                        <canvas id="disk_chart" height="250"></canvas>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="dd-right-per"><span class="dis-per">{{disk_use_per}}</span>%</div>
+                        <div class="dd-right-use-txt">사용중</div>
+                        <div class="dd-right-reso"><span class="dis-per">{{disk_use_cnt}}</span>/{{disk_tot_cnt}}&nbsp;GB</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>  <!-- container-body clearfix  -->
+
+    </div> <!--class="row" -->
+</div>  <!-- container-body  -->
 
 
 <!--가상머신 개수  |  하이퍼바이저 종류  |  컨테이너 개수-->
-<div class="container-body clearfix">
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box clearfix">
-            <h2 class="h2-bold">가상머신 개수</h2>
-            <ul class="clearfix">
-                <li class="dd-left fl">
-                    <canvas id="status_chart" height="250"></canvas>
-                </li>
-                <li class="dd-right fr">
-                    <div class="dd-right-per"><span class="mac-per">{{tot_cnt}}</span>개</div>
-                    <div class="dd-right-use-txt">전체</div>
+<div class="container-fluid dash-body">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>가상머신 개수</h3>
+                    <div class="col-sm-6">
+                        <canvas id="status_chart" height="250"></canvas>
+                    </div>
+                    <div class="col-sm-6 gn-dash-vm-right">
+                        <div><span class="vm-color">{{tot_cnt}}</span>개</div>
+                        <div>전체</div>
 
-                    <ul class="dd-sm-block clearfix">
-                        <li class="sm-block-pl fl"></li>
-                        <li class="sm-block-txt fl">실행중</li>
-                        <li class="cpu-per fl">{{run_cnt}}개</li>
-                    </ul>
-                    <ul class="dd-sm-block clearfix">
-                        <li class="sm-block-st fl"></li>
-                        <li class="sm-block-txt fl">정지중</li>
-                        <li class="mac-per fl">{{stop_cnt}}개</li>
-                    </ul>
-                </li>
-            </ul>
+                        <ul class="vm-play">
+                            <li class="vm-box"></li>
+                            <li>실행중</li>
+                            <li class="on-color">{{run_cnt}}개</li>
+                        </ul>
+                        <ul class="vm-stop">
+                            <li class="vm-box"></li>
+                            <li>정지중</li>
+                            <li class="vm-color">{{stop_cnt}}개</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>하이퍼 바이저 종류</h3>
+                    <div class="col-sm-6">
+                        <canvas id="type_chart" height="250"></canvas>
+                    </div>
+                    <div class="col-sm-6 gn-dash-hyp-right">
+                        <ul>
+                            <li class="hyp-color">Hyper-V</li>
+                            <li>{{hyperv_cnt}}개(<span>75</span>%)</li>
+                        </ul>
+                        <ul>
+                            <li class="memo-color">KVM</li>
+                            <li>{{kvm_cnt}}개(<span>25</span>%)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>컨테이너 개수</h3>
+                    <div class="col-sm-12 dash-box-6">
+                        <img src="/gn_images/dash-container-icon.png" alt="">
+                        <div>{{docker_cnt}}개</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box clearfix">
-            <h2 class="h2-bold">하이퍼 바이저 종류</h2>
-            <ul class="clearfix">
-                <li class="dd-left fl">
-                    <canvas id="type_chart" height="250"></canvas>
-                </li>
-                <li class="dd-right fr">
-
-                    <ul class="dd-right-ul">
-                        <li class="dd-right-tit hyp-per">Hyper-V</li>
-                        <li class="dd-right-info">{{hyperv_cnt}}개(<span>75</span>%)</li>
-                    </ul>
-
-                    <ul>
-                        <li class="dd-right-tit mem-per">KVM</li>
-                        <li class="dd-right-info">{{kvm_cnt}}개(<span>25</span>%)</li>
-                    </ul>
-
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box clearfix">
-            <h2 class="h2-bold">컨테이너 개수</h2>
-            <ul class="cont-ul clearfix">
-
-                <li class="dd-left-cont fl">
-                    <img src="/gn_images/dash-container-icon.png" alt="">
-                    <div class="dd-right-per use-txt-posi">{{docker_cnt}}개</div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div> <!-- container-body clearfix  -->
+</div> <!-- container-body   -->
 
 
 <!--사용자별 가상머신 수  |  가상머신 종류  |  총 사용자 수-->
-<div class="container-body clearfix">
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box-dash clearfix">
-            <h2 class="h2-bold">사용자별 가상머신 수</h2>
+<div class="container-fluid dash-body">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>사용자별 가상머신 수</h3>
 
-            <div class="table-responsive table-dash">
+            <div class="table-responsive>
                 <table class="table table-striped table-dash">
                     <thead>
                     <tr>
@@ -137,65 +144,71 @@
                         <td class="td-style cnt">{{list.user_id}}</td>
                         <td class="td-style cnt">{{list.cnt}}개</td>
                     </tr>
+                     
                     </tbody>
                 </table>
             </div> <!--class="table-responsive"  -->
 
-        </div> <!--class="cont-box clearfix"-->
-    </div> <!--class="border-box dashboard-box fl"-->
+                </div> <!--class="dash-margin-box"-->
+            </div>  <!--class="gn-box"-->
+        </div> <!--class="gn-box"-->
 
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box-dash clearfix">
-            <h2 class="h2-bold">가상머신 종류</h2>
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>가상머신 종류</h3>
 
-            <div class="table-responsive table-dash">
-                <table class="table table-striped table-dash">
-                    <thead>
-                    <tr>
-                        <th style="width:60%">이름</th>
-                        <th style="width:40%">개수</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td class="td-style">windows2016_Hyper-v</td>
-                        <td class="td-style cnt">10개</td>
-                    </tr>
-                    <tr>
-                        <td class="td-style">windows2016_KVM</td>
-                        <td class="td-style cnt">5개</td>
-                    </tr>
-                    <tr>
-                        <td class="td-style">windows106_Hyper-v</td>
-                        <td class="td-style cnt">4개</td>
-                    </tr>
-                    <tr>
-                        <td class="td-style">windows2016_Hyper-v</td>
-                        <td class="td-style cnt">3개</td>
-                    </tr>
-                    <tr>
-                        <td class="td-style">ubumtu10.04_Hyper-v</td>
-                        <td class="td-style cnt">1개</td>
-                    </tr>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-dash">
+                            <thead>
+                            <tr>
+                                <th style="width:80%">이름</th>
+                                <th style="width:20%">개수</th>
+                            </tr>
+                            </thead>
+                            <tbody class="gn-tdody">
+                            <tr>
+                                <td>windows2016_Hyper-v</td>
+                                <td>10개</td>
+                            </tr>
+                            <tr>
+                                <td>windows2016_KVM</td>
+                                <td>5개</td>
+                            </tr>
+                            <tr>
+                                <td>windows106_Hyper-v</td>
+                                <td>4개</td>
+                            </tr>
+                            <tr>
+                                <td>windows2016_Hyper-v</td>
+                                <td>3개</td>
+                            </tr>
+                            <tr>
+                                <td>ubumtu10.04_Hyper-v</td>
+                                <td>1개</td>
+                            </tr>
 
-                    </tbody>
-                </table>
-            </div> <!--class="table-responsive"  -->
-        </div> <!--class="cont-box clearfix"-->
-    </div> <!--class="border-box dashboard-box fl"-->
+                            </tbody>
+                        </table>
+                    </div> <!--class="table-responsive"  -->
+                </div> <!--class="dash-margin-box"-->
+            </div>  <!--class="gn-box"-->
+        </div> <!--class="col-sm-4"-->
 
-    <div class="border-box dashboard-box fl">
-        <div class="cont-box clearfix">
-            <h2 class="h2-bold">총 사용자 수</h2>
-            <ul class="cont-ul clearfix">
+        <div class="col-sm-4">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>컨테이너 개수</h3>
+                    <div class="col-sm-12 dash-box-6">
+                        <img src="/gn_images/dash-total-user.png" alt="총 사용자 수">
+                        <div><span ng-bind="team_user_count"></span>명</div>
+                    </div>
+                </div>
+            </div>  <!--class="gn-box"-->
+        </div> <!--class="col-sm-4"-->
 
-                <li class="dd-left-cont fl">
-                    <img src="/gn_images/dash-total-user.png" alt="총 사용자 수">
-                    <div class="dd-right-per use-txt-posi"><spna ng-bind="team_user_count"></spna>명</div>
-                </li>
-            </ul>
-        </div>
-    </div> <!--class="border-box dashboard-box fl"  -->
-</div> <!-- container-body clearfix  -->
+    </div> <!--class="row"-->
+</div> <!-- class="container-fluid dash-body"  -->
+
 
 

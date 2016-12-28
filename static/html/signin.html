@@ -54,28 +54,32 @@
 <body>
 
 <!-- --------- 회원가입 페이지 ---------- -->
-<div class="log-body-gray">
-    <div class="container log">
-        <a href="index.html" class="logo-a">
-            <h1 class="log-logo">지앤클라우드 프라이빗</h1>
-            <img src="/gn_images/private_login_img.png" alt="지앤클라우드 프라이빗">
-        </a>
+    <div class="body-gray">
+        <div class="container container-login">
+            <div class="col-md-offset-4 col-md-4">
+                <a href="index_login.html" class="logo">
+                    <h1>지앤클라우드 프라이빗</h1>
+                    <img src="gn_images/private_login_img.png" alt="지앤클라우드 프라이빗">
+                </a> 
+            </div> <!--class="col-md-offset-4 col-md-4"-->
+                    
+            <div class="col-md-offset-4 col-md-4 login-box">
+                <div class="form-group">
+                    <h3>회원가입</h3>       
+                    <input type="text" class="form-control gn-input" id="user_name" placeholder="이름을 입력해주세요.">
+                    <input type="text" class="form-control gn-input" id="user_id" placeholder="아이디를 입력해주세요.">
+                    <input type="password" class="form-control gn-input" id="password" placeholder="비밀번호를 입력해주세요.">
+                    <input type="password" class="form-control gn-input" id="password_re" placeholder="비밀번호를 다시 입력해주세요.">  
+                    
+                    <!--이미 등록된 아이디를 적었을 때 출력-->
+                    <div class="error-message" id="i">이미 등록된 아이디입니다.</div>
+                    <div class="error-message" id="p">입력된 비밀번호가 일치하지 않습니다.</div>
+                    <button type="submit" class="btn btn-gn-login btn-lg btn-block" id="sigin_btn">회원가입</button>
+                </div>    
+            </div> <!--class="login-box"-->
 
-        <div class="col-xs-4 col-xs-offset-4 login-box">
-            <h2 class="log-h2">회원가입</h2>
-            <input type="text" class="inp-login" id="user_name" placeholder="이름을 입력해주세요.">
-            <input type="text" class="inp-login" id="user_id" placeholder="아이디를 입력해주세요.">
-            <input type="password" class="inp-login" id="password" placeholder="비밀번호를 입력해주세요.">
-            <input type="password" class="inp-login" id="password_re" placeholder="비밀번호를 다시 입력해주세요.">
-
-            <!--이미 등록된 아이디를 적었을 때 출력-->
-            <div class="error-message" id="i">이미 등록된 아이디입니다.</div>
-            <div class="error-message" id="p">입력된 비밀번호가 일치하지 않습니다.</div>
-            <button type="submit" class="btn btn-info btn-block" id="sigin_btn">회원가입</button>
-        </div> <!--class="login-box"-->
-
-    </div> <!-- 회원가입 container -->
-</div>
+        </div> <!-- 회원가입 container -->
+    </div>
 <!-- --------- 회원가입 container ----------END -->
 
 
