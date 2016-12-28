@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
 # from pexpect import pxssh
@@ -24,9 +25,15 @@ __author__ = 'jhjeon'
 # time = datetime.datetime.strptime(timestr[:-2], "%Y-%m-%dT%H:%M:%S.%f")
 # print time
 
+#
 # from db.database import db_session
 # from db.models import GnDockerContainers
 #
 # container = GnDockerContainers(service_id=u"11111111", internal_id=u"2312341", internal_name=u"ana123n", host_id=u"1")
 # db_session.add(container)
 # db_session.commit()
+
+'''로그 테스트'''
+# from util.logger import logger
+#
+# logger.debug("도커 서비스 상태 업데이트 완료")

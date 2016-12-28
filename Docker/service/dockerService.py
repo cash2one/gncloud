@@ -84,10 +84,6 @@ class DockerService(object):
         # 서비스 삭제
         # service_delete_result = ds.docker_service_rm(service.internal_id)
         self.docker_service_rm(service.internal_id)
-        # 서비스 상태 변경 (DB에 Update)
-        # check value
-        # print "commit_result: %s" % commit_result
-        # print "service_delete_result: %s" % service_delete_result
 
     # Docker 서비스 정보를 가지고 온다.
     def docker_service_ps(self, internal_id):

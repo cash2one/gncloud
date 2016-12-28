@@ -95,9 +95,11 @@ def doc_create():
             service.ip += ":%s" % ports[0]['PublishedPort']
             sql_session.add(service)
             sql_session.commit()
+            sql_session.remove()
             return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
     except Exception as e:
         sql_session.rollback()
+        sql_session.remove()
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
 

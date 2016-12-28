@@ -50,21 +50,20 @@ app.add_url_rule("/vm/images/detail/<image_id>/<id>", view_func=doc_delete_image
 
 # Controller 상태 확인
 @app.route("/service/isAlive")
-def isAlive():
+def is_alive():
+    logger.debug("%s 접근 체크" % "/service/isAlive")
     return jsonify(status=True, message='서비스 정상 작동')
 
 
 # 페이지 리스트
 @app.route("/")
 def index():
-    return redirect(url_for("isAlive"))
+    logger.debug("%s 접근 체크" % "/service/isAlive")
+    return redirect(url_for("is_alive"))
 
 
 def interval_status_update():
-    try:
-        service_monitoring(db_session)
-    except:
-        logger.error("에러 발생")
+    service_monitoring(db_session)
 
 
 @app.teardown_appcontext
