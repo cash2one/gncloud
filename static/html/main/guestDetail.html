@@ -1,129 +1,149 @@
-<div class="title">
-    <div class="detail-icon fl">
-        <img src="/gn_images/ubuntu_icon_cian.png" alt="아이콘" class="fl">
-    </div>
-    <h1 class="h1_regular">
-        <span class="detail-h1-name" data-toggle="modal" data-target="#name-Modal"><spna ng-bind="vm_data.name"></spna> </span>
+<div class="col-sm-1 gn-detail-icon">
+    <img src="/gn_images/gn_icon_{{vm_data.os}}_on.png" alt="아이콘" class="fl">
+</div>
+<div class="col-sm-11 gn-detail-title">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2 data-toggle="modal" data-target="#name-Modal" class="click"><span ng-bind="vm_data.name"></span></h2>
 
-        <!-- Modal : 이름 수정 -->
-        <div class="modal fade" id="name-Modal" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">이름 수정</h4>
-                    </div>
-                    <div class="modal-body">
-                        <input type="textarea" id="vm_name" placeholder="Ubuntu-512mb-sgp1-01" class="input-ssh-name" ng-required="true">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" ng-click="change_name()">저장</button>
-                    </div>
-                </div> <!--class="modal-content"-->
-            </div> <!--class="modal-dialog modal-sm"-->
-        </div> <!--class="modal fade" id="myModal" role="dialog"-->
-    </h1>
-
-    <div class="detail-spec">
-        <ul class="spec-group li-style">
-            <li><spna ng-bind="vm_data.cpu"></spna> CPU</li>
-            <li>/</li>
-            <li><spna ng-bind="vm_data.memory"></spna> MB Memory</li>
-            <li>/</li>
-            <li><spna ng-bind="vm_data.disk"></spna> GB Disk</li>
-            <li>/</li>
-            <li><spna ng-bind="vm_data.os"></spna></li>
-            <li>/</li>
-            <li data-toggle="modal" data-target="#ip-Modal"><spna ng-bind="vm_data.ip"></spna></li>
-
-            <!-- Modal : IP 수정 -->
-            <div class="modal fade" id="ip-Modal" role="dialog">
+            <!-- Modal : 이름 수정 -->
+            <div class="modal fade" id="name-Modal" role="dialog">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header gn-modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">IP 관리</h4>
+                            <h4 class="modal-title">이름 수정</h4>
                         </div>
-                        <div class="modal-body">
-                            <input type="textarea" placeholder="128.199.88.190" class="input-ssh-name">
+                        <div class="modal-body gn-modal-body">
+                            <input type="text" placeholder="Ubuntu-512mb-sgp1-01" id="vm_name" class="form-control gn-form-control" ng-required="true">
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal">저장</button>
+                        <div class="modal-footer gn-modal-footer">
+                            <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal" ng-click="change_name()">저장</button>
                         </div>
                     </div> <!--class="modal-content"-->
                 </div> <!--class="modal-dialog modal-sm"-->
             </div> <!--class="modal fade" id="myModal" role="dialog"-->
-        </ul>
-    </div> <!--class="detail-spec"-->
+        </div><!-- class="col-sm-12"-->
+    </div> <!--class="row"-->
+    <div class="row">
+        <div class="col-sm-12">
+            <ul class="gn-spec-group">
+                <li><span ng-bind="vm_data.cpu"></span> CPU</li>
+                <li>/</li>
+                <li><span ng-bind="vm_data.memory"></span> MB Memory</li>
+                <li>/</li>
+                <li><span ng-bind="vm_data.disk"></span> GB Disk</li>
+                <li>/</li>
+                <li><span ng-bind="vm_data.os"></span></li>
+                <li>/</li>
+                <li data-toggle="modal" data-target="#ip-Modal" class="click"><spna ng-bind="vm_data.ip"></spna></li>
 
-    <!--태그-->
-    <div class="detail-tag">
-        <img src="/gn_images/detail_tag_pencil.png" alt="태그 수정" class="fl tag-pencil" data-toggle="modal" data-target="#tag-modal">
+                <!-- Modal : IP 수정 -->
+                <div class="modal fade" id="ip-Modal" role="dialog">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-header gn-modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">IP 관리</h4>
+                            </div>
+                            <div class="modal-body gn-modal-body">
+                                <input type="text" placeholder="128.199.88.190" class="form-control gn-form-control">
+                            </div>
+                            <div class="modal-footer gn-modal-footer">
+                                <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal">저장</button>
+                            </div>
+                        </div> <!--class="modal-content"-->
+                    </div> <!--class="modal-dialog modal-sm"-->
+                </div> <!--class="modal fade" id="myModal" role="dialog"-->
+            </ul> <!--class="gn-spec-group"   -->
+        </div><!-- class="col-sm-12"-->
+    </div> <!--class="row"-->
+</div> <!--class="col-sm-11"-->
 
-        <!-- Modal : 태그 수정 -->
-        <div class="modal fade" id="tag-modal" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">태그 수정</h4>
-                        <span>태그와 태그는 쉼표로 구분됩니다.</span>
-                    </div>
-                    <div class="modal-body">
-                        <input type="input" placeholder="{{vm_data.tag}}" class="input-ssh-name" id="vm_tag">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" ng-click="change_tag()">저장</button>
-                    </div>
-                </div> <!--class="modal-content"-->
-            </div> <!--class="modal-dialog modal-sm"-->
-        </div> <!--class="modal fade" id="myModal" role="dialog"-->
-        <!--태그 list-->
-        <ul class="tag-group li-style">
-            <li ng-repeat="item in tag_list track by $index">#{{ item }}</li>
-        </ul><!-- class="tag-group li-style"-->
-    </div> <!--class="detail-tag"-->
-</div> <!--class="title" END-->
+<!--태그-->
+<div class="row">
+    <!--태그 list-->
+    <ul class="col-sm-offset-1 col-sm-11 gn-tag-group">
+        <li>
+            <img src="/gn_images/detail_tag_pencil.png" alt="태그 수정" data-toggle="modal" data-target="#tag-modal">
+        </li>
+        <li ng-repeat="item in tag_list track by $index">#{{ item }}</li>
+    </ul><!-- class="tag-group li-style"-->
 
-<div class="detail-main border-box">
+    <!-- Modal : 태그 수정 -->
+    <div class="modal fade" id="tag-modal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header gn-modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">태그 수정</h4>
+                    <span class="gn-lead">태그와 태그는 쉼표로 구분됩니다.</span>
+                </div>
+                <div class="modal-body gn-modal-body">
+                    <input type="text" placeholder="{{vm_data.tag}}" class="form-control gn-form-control" id="vm_tag">
+                </div>
+                <div class="modal-footer gn-modal-footer">
+                    <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal" ng-click="change_tag()">저장</button>
+                </div>
+            </div> <!--class="modal-content"-->
+        </div> <!--class="modal-dialog modal-sm"-->
+    </div> <!--class="modal fade" id="myModal" role="dialog"-->
+
+</div>  <!--div.row-->
+
+<!--상세 페이지 메인-->
+<div class="gn-box gn-detail-main">
     <!--CPU-->
-    <div class="detail-cpu clearfix">
-        <h2 class="fl">CPU</h2>
-        <div class="cpu-graph fr">
+    <div class="gn-margin-box">
+        <div class="col-sm-2">
+            <h2>CPU</h2>
+        </div>
+        <div class="col-sm-10 gn-graph">
             <iframe src="{{cpu_url}}" width="100%" height="30%" scrolling='no' frameborder='0' id="if_cpu"></iframe>
         </div>
-    </div> <!--class="detail-cpu"-->
+    </div> <!--class="gn-box detail-main"-->
 
     <!--MEMORY-->
-    <div class="detail-memory clearfix">
-        <h2 class="fl">MEMORY</h2>
-        <div class="memory-graph fr">
+    <div class="gn-margin-box">
+        <div class="col-sm-2">
+            <h2>MEMORY</h2>
+        </div>
+        <div class="col-sm-10 gn-graph">
             <iframe src="{{mem_url}}" width="100%" height="30%" scrolling='no' frameborder='0' id="if_mem"></iframe>
         </div>
-    </div> <!--class="detail-memory"-->
+    </div> <!--class="gn-margin-box"  -->
 
     <!--DISK-->
-    <div class="detail-disk clearfix">
-        <h2 class="fl">DISK</h2>
-        <div class="disk-right-box fr">
-            <spna ng-bind="disk_data.rest_disk"></spna>GB 사용가능 (총 <spna ng-bind="disk_data.total"></spna>GB)</span>
-            <div class="progress disk-graph fr">
+    <div class="gn-margin-box">
+        <div class="col-sm-2">
+            <h2>DISK</h2>
+        </div>
+        <div class="col-sm-10 gn-graph">
+            <span ng-bind="disk_data.rest_disk"></span>GB 사용가능 (총 <span ng-bind="disk_data.total"></span>GB)</span>
+            <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': disk_data.disk_per_info + '%' }">
-                    <spna ng-bind="disk_data.disk_per_info"></spna>%
+                    <span ng-bind="disk_data.disk_per_info"></span>%
                 </div>
             </div>
-            <div class="detail-use-box fl"><div class="use-box-sm fl"></div>사용량</div>
-            <div class="detail-empty-box"><div class="empty-box-sm fl"></div>남은용량</div>
+            <div class="row graph-sm-box">
+                <div class="col-sm-2"><i></i>사용량</div>
+                <div class="col-sm-2"><i></i>남은용량</div>
+            </div>
         </div>
-    </div><!-- class="detail-disk"-->
+    </div> <!--class="gn-margin-box"-->
 
-</div> <!--class="detail-main"-->
+</div>
 
-<div class="detail-delete border-box clearfix">
-    <div class="delete-box">
+<!--상세 페이지 삭제-->
+<div class="gn-box">
+    <div class="gn-margin-box">
         <h2>삭제</h2>
-        <h4 class="h4-txt">해당 인스턴스 및 관련된 모든 백업이 삭제되며, 모든 데이터는 복구할 수 없습니다.<br>정말 삭제 하시겠습니까?</h4>
-        <button type="button" class="btn btn-link btn-lg" ng-click="delete()">삭제</button>
+        <p class="gn-lead">해당 인스턴스 및 관련된 모든 백업이 삭제되며, 모든 데이터는 복구할 수 없습니다.<br>정말 삭제 하시겠습니까?</p>
+        <button type="button" class="btn btn-delete btn-lg" ng-click="delete()">삭제</button>
     </div>
-</div> <!--class="detail-delete" -->
-</div> <!-- /container -->
+</div>
+
+
+
+
+
