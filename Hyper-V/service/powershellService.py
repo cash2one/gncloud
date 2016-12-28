@@ -121,6 +121,16 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
+    def move_vhd(self, pool, base, vmid):
+        script = "$imagename = Get-ChildItem -Path "+pool+" | Select-Object -Index 0;"
+        script += "$orimage = $imagename.Name;"
+        script += '$ori_Path = "'+pool+'";'
+        script += 'Move-Item -Path $ori_Path"/"$orimage -Destination '+base+';'
+        script += '$vm = Get-VM -id  '+vmid+';'
+        script += 'Add-VMHardDiskDrive $vm -Path '+base+';'
+        return self.send(script)
+
+
     # VM 하드디스크 추가
     # example) $vm = Get-VM -Id E6CE3D4E-1152-494B-9445-CBD38549CFF4;
     # / Add-VMHardDiskDrive -VM $vm -Path C:\images\2_testvm\disk.vhdx
