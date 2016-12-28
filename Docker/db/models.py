@@ -155,7 +155,8 @@ class GnVmMachines(Base):
 class GnDockerServices(Base):
     __tablename__ = 'GN_DOCKER_SERVICES'
     service_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'), primary_key=True, nullable=False)
-    image = Column(String(100), nullable=True, default='')
+    image = Column(String(100), ForeignKey('GN_DOCKER_IMAGES.name'), nullable=True, default='')
+    gnDockerImages = relationship('GnDockerImages')
 
     def __init__(self, service_id, image):
         self.service_id = service_id

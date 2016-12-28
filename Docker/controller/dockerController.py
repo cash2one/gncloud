@@ -3,7 +3,7 @@ __author__ = 'jhjeon'
 
 from flask import jsonify, request, session
 from datetime import datetime
-
+from util.logger import logger
 from service.dockerService import DockerService
 from db.database import db_session
 from db.models import GnDockerContainers, GnDockerVolumes, GnDockerImageDetail, \
@@ -17,32 +17,44 @@ from util.hash import random_string
 def doc_create():
     sql_session = db_session
     try:
+        # --- 파라미터 정리 ---
+        # id 생성 (8자로 랜덤 생성)
         id = random_string(config.SALT, 8)
         # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
         while len(GnVmMachines.query.filter_by(id=id).all()) != 0:
             id = random_string(config.SALT, 8)
-        author_id = session['userName']
-        team_code = session['teamCode']
-        # author_id = request.json['userName']
-        # team_code = request.json['teamCode']
+        # request 파라미터 중 userName과 teamCode 값이 별도로 오지 않으면 세션에 저장된 값을 입력한다.
+        if 'userName' in request.json:
+            author_id = request.json['userName']
+        else:
+            author_id = session['userName']
+        if 'teamCode' in request.json:
+            team_code = request.json['teamCode']
+        else:
+            team_code = session['teamCode']
         image_id = request.json['id']
         name = request.json['name']
         tag = request.json['tag']
         cpu = request.json['cpu']
         disk = request.json['hdd']
         memory = "%sMB" % request.json['memory']
+        logger.debug("id: %s, image_id: %s, name: %s, tag: %s, cpu: %s, disk: %s, memory: %s" %
+                     (id, image_id, name, tag, cpu, disk, memory))
+        # --- //파라미터 정리 ---
+        # --- Docker Service (밖에서 보기엔 컨테이너 생성) 생성 ---
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
         # Docker Swarm manager 값을 가져온다.
         dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
         # Docker Swarm Service를 생성한다.
-        docker_service = ds.docker_service_create(id=id, replicas=2, image_id=image_id, cpu=cpu, memory=memory)
+        # docker_service_create: Docker Service 생성
+        docker_service = ds.docker_service_create(id=id, image_id=image_id, cpu=cpu, memory=memory)
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
         if docker_service is None:
-                return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
+            return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
         if type(docker_service) is not list:
             return jsonify(status=False, message=docker_service)
         else:
-            base_image = GnDockerImages.query.filter_by(id=image_id).first()
+            base_image = GnDockerImages.query.filter_by(id=image_id).one()
             # Service 정보를 DB에 저장한다.
             service_image = GnDockerServices(service_id=id, image=base_image.name)
             sql_session.add(service_image)
@@ -53,12 +65,13 @@ def doc_create():
                 internal_id=docker_service[0]['ID'],
                 internal_name=docker_service[0]['Spec']['Name'],
                 cpu=cpu,
-                memory=docker_service[0]['Spec']['TaskTemplate']['Resources']['Limits']['MemoryBytes']/1024/1024,
+                memory=request.json['memory'],
                 disk=disk,
                 ip=dsmanager.ip,
                 host_id=dsmanager.id,
                 os="docker",
-                os_ver=base_image.os + ":" + base_image.os_ver,
+                os_ver=base_image.os,
+                os_sub_ver=base_image.os_ver,
                 team_code=team_code,
                 author_id=author_id,
                 create_time=datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f'),
@@ -110,10 +123,14 @@ def doc_create():
 def doc_state(id):
     sql_session = db_session
     type = request.json["type"]
-    author_id = session['userName']
-    team_code = session['teamCode']
-    # author_id = request.json['userName']
-    # team_code = request.json['teamCode']
+    if 'userName' in request.json:
+        author_id = request.json['userName']
+    else:
+        author_id = session['userName']
+    if 'teamCode' in request.json:
+        team_code = request.json['teamCode']
+    else:
+        team_code = session['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # 서비스 DB 데이터 가져오기
@@ -129,7 +146,7 @@ def doc_state(id):
             # image = "%s:backup" % service.internal_name
             image = "%s:backup" % service.id
             restart_service = ds.docker_service_start(
-                id=id, replicas=2, image=service.gnDockerServices[0].image, backup_image=image,
+                id=id, image=service.gnDockerServices[0].image, backup_image=image,
                 cpu=service.cpu, memory=str(service.memory)+"MB")
             # 변경된 내용을 DB에 Update
             # 서비스쪽 데이터 수정
@@ -177,7 +194,7 @@ def doc_state(id):
             # image = "%s:backup" % service.internal_name
         image = "%s:backup" % service.id
         restart_service = ds.docker_service_start(
-            id=id, replicas=2, image=service.gnDockerServices[0].image, backup_image=image,
+            id=id, image=service.gnDockerServices[0].image, backup_image=image,
             cpu=service.cpu, memory=str(service.memory) + "MB")
         # 변경된 내용을 DB에 Update
         # 서비스쪽 데이터 수정
@@ -204,33 +221,46 @@ def doc_state(id):
             sql_session.add(set_port)
         sql_session.commit()
         return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
-    # -- 스냅샷 (snap)
-    elif type == "snap":
-        service = GnDockerServices.query.filter_by(service_id=id).first()
-        baseimage = GnDockerImages.query.filter_by(name=service.gnDockerServices[0].image).first()
-        # 이미지 커밋 및 레지스트리에 스냅샷 이미지 저장
-        snapshot = ds.snap_containers(id)
-        # Docker Image 정보 입력
-        image_id = random_string(config.SALT, 8)
-        # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
-        while len(GnDockerImages.query.filter_by(id=id).all()) != 0:
-            image_id = random_string(config.SALT, 8)
-        name = snapshot["name"]
-        # 이미지 Tag 중복 체크 중복되는 값이 존재할 경우 False 리턴 후 종료.
-        if len(GnDockerImages.query.filter_by(name=name).all()) != 0:
-            return jsonify(status=False, message="이미 존재하는 이미지입니다.")
-        sub_type = snapshot["sub_type"]
-        create_time = datetime.now()
-        status = ""
-        image = GnDockerImages(
-            id=image_id, name=name, tag=baseimage.tag, os=baseimage.os, os_ver=baseimage.os_ver,
-            sub_type=sub_type, team_code=team_code, author_id=author_id, create_time=create_time, status=status
-        )
-        sql_session.add(image)
-        sql_session.commit()
-        return jsonify(status=True, message="스냅샷 추가 완료", result=image.to_json())
     else:
         return jsonify(status=False, message="정의된 상태값이 아닙니다.")
+
+
+# Docker Service 스냅샷 저장
+def doc_snap():
+    sql_session = db_session
+    if 'userId' in request.json:
+        user_id = request.json['userId']
+    else:
+        user_id = session['userId']
+    if 'teamCode' in request.json:
+        team_code = request.json['teamCode']
+    else:
+        team_code = session['teamCode']
+    ord_id = request.json['ord_id']
+    name = request.json['name']
+    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+    # ds.docker_create_snapshot(ord_id, name, user_id, team_code)
+    # -- 스냅샷
+    service = GnDockerServices.query.filter_by(service_id=ord_id).first()
+    baseimage = GnDockerImages.query.filter_by(name=service.gnDockerServices[0].image).first()
+    # 이미지 커밋 및 레지스트리에 스냅샷 이미지 저장
+    snapshot = ds.snap_containers(ord_id)
+    # Docker Image 정보 입력
+    image_id = random_string(config.SALT, 8)
+    # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
+    while len(GnDockerImages.query.filter_by(id=ord_id).all()) != 0:
+        image_id = random_string(config.SALT, 8)
+    # 이미지 Tag 중복 체크 중복되는 값이 존재할 경우 False 리턴 후 종료.
+    if len(GnDockerImages.query.filter_by(name=snapshot["name"]).all()) != 0:
+        return jsonify(status=False, message="이미 존재하는 이미지입니다.")
+    image = GnDockerImages(
+        id=image_id, name=snapshot["name"], view_name=name, tag=baseimage.tag, os=baseimage.os, os_ver=baseimage.os_ver,
+        sub_type=snapshot["sub_type"], team_code=team_code, author_id=user_id, create_time=datetime.now(), status="Running"
+    )
+    sql_session.add(image)
+    sql_session.commit()
+    sql_session.remove()
+    return jsonify(status=True, message="Success", result=image.to_json())
 
 
 # Docker 서비스 삭제
@@ -327,7 +357,7 @@ def doc_new_image():
     team_code = request.json["team_code"]
     author_id = request.json["author_id"]
     create_time = datetime.strptime(request.json["create_time"][:-2], '%Y-%m-%dT%H:%M:%S.%f')
-    status = ""
+    status = "Running"
     image = GnDockerImages(
         id=id, name=name, view_name=view_name, tag=tag, os=os, os_ver=os_ver, sub_type=sub_type, team_code=team_code,
         author_id=author_id, create_time=create_time, status=status
