@@ -66,18 +66,19 @@ def hvm_create():
         #print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
-        #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
-        #CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
-        #CONVERT_VHD_PATH = config.DISK_DRIVE+ config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
-        #convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
+        image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
+        CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
+        CONVERT_VHD_PATH = config.DISK_DRIVE+ config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
+        convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
-        #add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
-        # VM을 시작한다.
+        add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
 
+        # VM을 시작한다.
+        '''
         CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/base/"+internal_name+".vhdx"
         CONVERT_VHD_PATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/pool/"+os_sub_ver
-
         ps.move_vhd(CONVERT_VHD_PATH, CONVERT_VHD_DESTINATIONPATH, new_vm['VMId'])
+        '''
 
         start_vm = ps.start_vm(new_vm['VMId'])
         # 생성된 VM의 ip 정보를 가지고 온다
