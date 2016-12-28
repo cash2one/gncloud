@@ -36,7 +36,7 @@ def hvm_create():
     base_image_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['id']).first()
 
     base_image = base_image_info.filename
-    name = request.json['name']
+    name = request.json['vm_name']
     tag = request.json['tag']
     memory = request.json['memory']
     cpu = request.json['cpu']
