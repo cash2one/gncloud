@@ -259,6 +259,9 @@ def hvm_state(id):
         restart = ps.restart_vm(vmid.internal_id)
         # resume 1. 가상머신을 재시작한다. (Restart-VM)
         if restart['State'] is 2:
+            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id']).update(
+                {"start_time": datetime.datetime.now(),"stop_time": datetime.datetime.now()})
+            db_session.commit()
             return jsonify(status=True, message="VM Restart")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
