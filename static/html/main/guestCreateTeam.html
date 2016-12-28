@@ -7,15 +7,19 @@
             <img src="/gn_images/private_login_img.png" alt="지앤클라우드 프라이빗">
         </a>
 
-        <div class="col-xs-4 col-xs-offset-4 login-box">
-            <h2 class="log-h2">팀 만들기</h2>
-            <input type="text" class="inp-login" ng-model="data.team_name" placeholder="팀명을 입력해주세요.">
-            <div class="error-message" id="i">이미 등록된 팀명입니다.</div>
-            <input type="text" class="inp-login" ng-model="data.team_code" placeholder="팀 코드를 입력해주세요.">
-            <div class="error-message" id="t">이미 등록된 팀코드입니다.</div>
+        <div class="col-md-offset-4 col-md-4 login-box">
 
-            <button type="submit" class="btn btn-info btn-block marg-20" ng-click="submit()">팀 만들기</button>
-        </div> <!--class="login-box"-->
+            <div class="form-group">
+                <h3>팀 만들기</h3>       
+                <input type="text" class="form-control gn-input" ng-model="data.team_name" placeholder="팀명을 입력해주세요.">
+                <div class="error-message" id="i">이미 등록된 팀명입니다.</div>
+                <input type="text" class="form-control gn-input" ng-model="data.team_code" placeholder="팀 코드를 입력해주세요."> 
+                <div class="error-message" id="t">이미 등록된 팀코드입니다.</div>
+
+                <button type="submit" class="btn btn-gn-login btn-lg btn-block" ng-click="submit()">팀 만들기</button>
+            </div> <!-- class="form-group"-->
+
+        </div> <!--class="col-md-offset-4 col-md-4 login-box"-->
     </div> <!-- 팀 생성 container -->
 </div> <!--class="log-body"-->
 <!-- --------- 팀 생성 container ----------END -->

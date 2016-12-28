@@ -1,273 +1,269 @@
 <h1>설정</h1>
-<!--왼쪽 메뉴-->
-<ul class="nav nav-pills col-sm-2">
-    <li class="left-title">개인</li>
-    <li class="left-name active"><a data-toggle="pill" ng-click="click('profile')">프로필</a></li>
-    <li class="left-name"><a data-toggle="pill" ng-click="click('key-sett')">키 관리</a></li>
 
-    <li class="left-title marg-top29">팀</li>
-    <li class="left-name"><a data-toggle="pill" ng-click="click('profile-team')">프로필</a></li>
-    <li class="left-name"><a data-toggle="pill" ng-click="click('team-reso')">리소스</a></li>
-    <li class="left-name"><a data-toggle="pill" ng-click="click('team-group')">팀원</a></li>
+<!--왼쪽 메뉴-->
+<ul class="nav nav-pills gn-left-menu col-sm-1">
+    <li class="left-title">개인</li>
+    <li class="active"><a data-toggle="pill" ng-click="click('profile')">프로필</a></li>
+    <li class=""><a data-toggle="pill" ng-click="click('key-sett')">키 관리</a></li>
+
+    <li class="left-title gn-top">팀</li>
+    <li class=""><a data-toggle="pill" ng-click="click('profile-team')">프로필</a></li>
+    <li class=""><a data-toggle="pill" ng-click="click('team-reso')">리소스</a></li>
+    <li class=""><a data-toggle="pill" ng-click="click('team-group')">팀원</a></li>
 </ul>
 
-<div class="tab-content col-sm-10 ">
+<div class="tab-content col-sm-11">
     <!--프로필-->
     <div id="profile" class="">
-        <div class="border-box profile-user">
-            <div class="cont-box">
-                <h2>{{te_list.user_name}}
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>{{te_list.user_name}}</h2>
+                    <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn" data-toggle="modal" data-target="#myModal">수정</button>
 
-                    <!--수정버튼-->
-                    <div class="clearfix fr">
-                        <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#myModal">수정</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog form-horizontal">
+                            <div class="modal-content col-sm-10 col-sm-offset-1">
+                                <div class="modal-header gn-modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">프로필 수정</h4>
+                                </div>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="myModal" role="dialog">
-                            <div class="modal-dialog form-horizontal">
-                                <div class="modal-content col-sm-10 col-sm-offset-1">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">프로필 수정</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form class="form-horizontal">
+                                <div class="modal-body gn-modal-body">
 
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label jnt">이름</label>
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label gn-control-label">이름</label>
+                                            <div class="col-sm-8">
+                                                <p class="form-control-static">{{te_list.user_name}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label gn-control-label">아이디</label>
+                                            <div class="col-sm-8">
+                                                <p class="form-control-static">{{te_list.user_id}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPassword" class="col-sm-4 control-label gn-control-label">현재 비밀번호</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control gn-form-control" ng-model="data.password" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPassword" class="col-sm-3 control-label gn-control-label">새 비밀번호</label>
+                                            <div class="col-sm-offset-1 col-sm-8">
+                                                <input type="password" class="form-control gn-form-control" ng-model="data.password_new" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPassword" class="col-sm-4 control-label gn-control-label">새 비밀번호 확인</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control gn-form-control" ng-model="data.password_ret" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPassword" class="col-sm-4 control-label gn-control-label">연락처</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control gn-form-control" ng-model="data.tel" placeholder="{{te_list.tel}}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputPassword" class="col-sm-4 control-label gn-control-label">이메일</label>
+                                            <div class="col-sm-8">
+                                                <input type="email" class="form-control gn-form-control" ng-model="data.email" placeholder="{{te_list.email}}">
+                                            </div>
+                                        </div>
+                                    </form>
 
-                                                <div class="col-sm-8">
-                                                    <p class="form-control-static">{{te_list.user_name}}</p>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label jnt">아이디</label>
-                                                <div class="col-sm-8">
-                                                    <p class="form-control-static">{{te_list.user_id}}</p>
-                                                </div>
-                                            </div>
+                                </div> <!--modal-body-->
+                                <div class="modal-footer gn-modal-footer">
+                                    <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="submit()">저장</button>
+                                </div>
+                            </div> <!--class="modal-content"-->
+                        </div> <!--class="modal-dialog modal-sm"-->
+                    </div> <!--class="modal fade" id="myModal" role="dialog" -->
+                </div>
 
-                                            <div class="form-group">
-                                                <label for="inputPassword" class="col-sm-4 control-label jnt">현재 비밀번호</label>
-                                                <div class="col-sm-8">
-                                                    <input type="password" class="form-control" ng-model="data.password" placeholder="Password">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="inputPassword" class="col-sm-3 control-label jnt">새 비밀번호</label>
-                                                <div class="col-sm-offset-1 col-sm-8">
-                                                    <input type="password" class="form-control" ng-model="data.password_new" placeholder="Password">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="inputPassword" class="col-sm-4 control-label jnt">새 비밀번호 확인</label>
-                                                <div class="col-sm-8">
-                                                    <input type="password" class="form-control" ng-model="data.password_ret" placeholder="Password">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="inputPassword" class="col-sm-4 control-label jnt">연락처</label>
-                                                <div class="col-sm-8">
-                                                    <input type="text" class="form-control" ng-model="data.tel" placeholder="{{te_list.tel}}">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="inputPassword" class="col-sm-4 control-label jnt">이메일</label>
-                                                <div class="col-sm-8">
-                                                    <input type="email" class="form-control" ng-model="data.email" placeholder="{{te_list.email}}">
-
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div> <!--modal-body-->
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" ng-click="submit()">저장</button>
-                                 </div>
+                <div class="container-fluid">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label gn-control-label">아이디</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{te_list.user_id}}</p>
+                            </div>
+                            <label class="col-sm-2 control-label gn-control-label">연락처</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{te_list.tel}}</p>
+                            </div>
+                            <label class="col-sm-2 control-label gn-control-label">이메일</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{te_list.email}}</p>
+                            </div>
                         </div>
-                    </div>
-                    </div>
-                  </div><!-- 수정버튼 END -->
-                </h2>
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label jnt">아이디</label>
-                        <div class="col-sm-10">
-                            <p class="form-control-static">{{te_list.user_id}}</p>
-                        </div>
-                    <label class="col-sm-2 control-label jnt">연락처</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static">{{te_list.tel}}</p>
-                    </div>
-                    <label class="col-sm-2 control-label jnt">이메일</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static">{{te_list.email}}</p>
-                    </div>
-                </div> <!--class="cont-box" 사용자 이름-->
-            </form>
-            </div>
-            </div><!--class="border-box profile-user"-->
-        </div><!--id="profile" class="tab-pane fade in active"-->
+                    </form>
+                </div>
+            </div> <!--class="gn-sett-margin-box" 사용자 이름-->
+        </div>  <!--class="gn-box profile-user"-->
 
-<!--SSH 키 관리-->
+    </div> <!--id="profile" class="tab-pane fade in active"-->
 
+    <!--SSH 키 관리-->
     <div id="key-sett" class="">
-        <div class="border-box">
-            <div class="cont-box">
-                <h2>SSH Keys
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>SSH Keys</h2>
+                    <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn" data-toggle="modal" data-target="#modi">등록</button>
 
-                    <!--SSH 수정버튼-->
-                    <div class="clearfix fr">
-                        <button type="button" class="btn btn-primary btn-lg ssh-key fl" data-toggle="modal" data-target="#modi">등록</button>
-
-                        <!-- SSH Modal -->
-                        <div class="modal fade" id="modi" role="dialog">
-                            <div class="modal-dialog modal-sm">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">SSH 키 등록</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form class="form-horizontal">
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <input type="text" class="form-control" id="inputPassword" placeholder="key 입력">
-                                                </div>
+                    <!-- SSH Modal -->
+                    <div class="modal fade" id="modi" role="dialog">
+                        <div class="modal-dialog form-horizontal">
+                            <div class="modal-content col-sm-10 col-sm-offset-1">
+                                <div class="modal-header gn-modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">SSH 키 등록</h4>
+                                </div>
+                                <div class="modal-body gn-modal-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control gn-form-control" ng-model="data.name" placeholder="key 입력">
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal">생성</button>
-                                    </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer gn-modal-footer">
+                                    <button type="submit" class="btn btn-gn-sub btn-block" ng-click="save()" data-dismiss="modal">생성</button>
                                 </div>
                             </div>
                         </div>
-                    </div> <!--SSH 수정버튼 END-->
+                    </div>
+                </div> <!--class="container-fluid" -->
 
-                </h2>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>이름</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="data in data_list">
-                            <td class="td-style td-first">{{data.name}}</td>
-                            <td class="td-style cnt dropdown td-more">
-                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    더보기
-                                    <span class="caret" ></span>
-                                </div>
-                                <!--더보기>드롭다운-->
-                                <ul class="dropdown-menu-table" role="menu">
-                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
-                                    <li><a ng-click="download(data.id)">키 내려받기</a></li>
-                                    <li><a ng-click="" class="bth-modal-delete">삭제</a></li>
-                                </ul>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div> <!--class="table-responsive table-reset"-->
-
+                <div class="container-fluid">
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table table-striped gn-table">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-11">이름</th>
+                                <th class="col-sm-1"></th>
+                            </tr>
+                            </thead>
+                            <tbody class="gn-tdody">
+                            <tr ng-repeat="data in data_list">
+                                <td>{{data.name}}</td>
+                                <td class="dropdown">
+                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        더보기
+                                        <span class="gn-caret-table"></span>
+                                    </div>
+                                    <!--더보기>드롭다운-->
+                                    <ul class="dropdown-menu gn-dropdown" role="menu">
+                                        <li><a ng-click="download(data.id)">키 내려받기</a></li>
+                                        <li><a href="#">삭제</a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div> <!--class="table-responsiv"-->
+                </div>
             </div>
         </div>
     </div> <!--id="key-sett" class="tab-pane fade"-->
 
+
+
     <!--팀 > 리소스-->
-
     <div id="team-reso"  class="">
-        <div class="border-box profile-team">
-            <div class="cont-box">
-                <h2>리소스</h2>
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>리소스</h2>
 
-                <!--팀 그래프-->
-                <div class="team-graph clearfix">
-                    <ul class="team-graph-cpu fl">
-                        <li class="sett-title-graph">CPU</li>
-                        <li class="team-graph-box">
-                            <canvas id="cpu_chart" height="150"></canvas>
-                        </li>
-                        <li class="sett-txt-mid-graph cpu-per"><span id="cpu_per"></span>% 사용중</li>
-                        <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li>
-                    </ul>
+                    <!--팀 그래프-->
+                    <div class="row">
+                        <ul class="col-sm-4 gn-sett-graph">
+                            <li>CPU</li>
+                            <li><canvas id="cpu_chart" height="150"></canvas></li>
+                            <li class="cpu-color"><span id="cpu_per"></span>% 사용중</li>
+                            <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li></li>
+                            <li>35 / 50 CORE</li>
+                        </ul>
 
-                    <ul class="team-graph-mem fl">
-                        <li class="sett-title-graph">MEMORY</li>
-                        <li class="team-graph-box">
-                            <canvas id="memory_chart" height="150"></canvas>
-                        </li>
-                        <li class="sett-txt-mid-graph mem-per"><span id="mem_per"></span>% 사용중</li>
-                        <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span> MB</li>
-                    </ul>
+                        <ul class="col-sm-4 gn-sett-graph">
+                            <li>MEMORY</li>
+                            <li> <canvas id="memory_chart" height="150"></canvas><li>
+                            <li class="memo-color"><span id="mem_per"></span>% 사용중</li>
+                            <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span> MB</li></li>
+                            <li>64 / 128 GB</li>
+                        </ul>
 
-                    <ul class="team-graph-dis fl">
-                        <li class="sett-title-graph">DISK</li>
-                        <li class="team-graph-box">
-                            <canvas id="disk_chart" height="150"></canvas>
-                        </li>
-                        <li class="sett-txt-mid-graph dis-per"><span id="disk_per"></span>% 사용중</li>
-                        <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span> GB</li>
-                    </ul>
-                </div><!-- class="team-graph clearfix" -->
-
-            </div> <!--class="cont-box"-->
-        </div> <!--class="border-box profile-team"-->
+                        <ul class="col-sm-4 gn-sett-graph">
+                            <li>DISK</li>
+                            <li><canvas id="disk_chart" height="150"></canvas></li>
+                            <li class="disk-color"><span id="disk_per"></span>% 사용중</li>
+                            <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span> GB</li></li>
+                            <li>0.6 / 3 TB</li>
+                        </ul>
+                    </div><!-- class="team-graph clearfix" -->
+                </div> <!--<div class="container-fluid">-->
+            </div> <!--class="gn-sett-margin-box"-->
+        </div> <!--class="gn-box profile-team"-->
     </div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
+
     <!--팀 > 팀원-->
     <div id="team-group"  class="">
-        <div class="border-box profile-team">
-            <div class="cont-box">
-                <h2>{{teamname.team_name}}</h2>
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>{{teamname.team_name}}</h2>
 
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>등급<div class="refresh"></div></th>
-                            <th>이름<div class="refresh"></div></th>
-                            <th>아이디</th>
-                            <th>연락처</th>
-                            <th>이메일</th>
-                            <th>신청일</th>
-                            <th>승인일</th>
-                            <!-----여기서부터 팀장 로그인 시 보이는 영역----->
-                            <th>상태<div class="refresh"></div></th>
-                            <th><!--더보기--></th>
-                        </tr>
-                        </thead>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="won in won_list">
-                            <td class="td-style cnt">{{$index+1}}</td>
-                            <td class="td-style cnt">{{won[1].team_owner}}</td>
-                            <td class="td-style cnt">{{won[0].user_name}}</td>
-                            <td class="td-style cnt" ng-model="data.user_id">{{won[0].user_id}}</td>
-                            <td class="td-style cnt">{{won[0].tel}}</td>
-                            <td class="td-style cnt">{{won[0].email}}</td>
-                            <td class="td-style cnt">{{won[1].create_time_diff}}</td><p data-toggle="tooltip" title='{{won[1].apply_date}}'></p></td>
-                            <td class="td-style cnt">{{won[1].create_time_diff1}}</td><p data-toggle="tooltip" title='{{won[1].approve_date}}'></p></td>
-                            <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                            <td class="td-style cnt">{{won[1].comf}}</td>
-                            <td class="td-style cnt dropdown td-more">
-                                <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    더보기
-                                    <span class="caret" ></span>
-                                </div>
-                                <!--더보기>드롭다운-->
-                                <ul class="dropdown-menu-table" role="menu">
-                                    <!--<li class="dropdown-header">더보기</li> 삭제합니다-->
-                                    <li ng-repeat="ac in actions"><a href ng-click="update(won[0].user_id, won[1].team_code, ac)">{{ac.name}}</a></li>
-
-                                </ul>
-                            </td>
-                        </tr>
-                        <!--<tr class="tr-on-me"> &lt;!&ndash;class="tr-on-me" 로그인 한 사람이 나일 때&ndash;&gt;-->
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table table-striped gn-table">
+                            <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>등급<div class="refresh"></div></th>
+                                <th>이름<div class="refresh"></div></th>
+                                <th>아이디</th>
+                                <th>연락처</th>
+                                <th>이메일</th>
+                                <th>신청일</th>
+                                <th>승인일</th>
+                                <!-----여기서부터 팀장 로그인 시 보이는 영역----->
+                                <th>탈퇴일</th>
+                                <th>상태<div class="refresh"></div></th>
+                                <th><!--더보기--></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="won in won_list">
+                                <td class="">{{$index+1}}</td>
+                                <td class="">{{won[1].team_owner}}</td>
+                                <td class="">{{won[0].user_name}}</td>
+                                <td class="" ng-model="data.user_id">{{won[0].user_id}}</td>
+                                <td class="">{{won[0].tel}}</td>
+                                <td class="">{{won[0].email}}</td>
+                                <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{won[1].create_time_diff}}</p></td>
+                                <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{won[1].create_time_diff1}}</p></td>
+                                <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
+                                <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>
+                                <td class="">{{won[1].comf}}</td>
+                                <td class="dropdown">
+                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        더보기
+                                        <span class="gn-caret-table"></span>
+                                    </div>
+                                    <!--더보기>드롭다운-->
+                                    <ul class="dropdown-menu gn-dropdown" role="menu">
+                                        <li ng-repeat="ac in actions"><a href ng-click="update(won[0].user_id, won[1].team_code, ac)">{{ac.name}}</a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <!--<tr class="tr-on-me"> &lt;!&ndash;class="tr-on-me" 로그인 한 사람이 나일 때&ndash;&gt;-->
                             <!--<td class="td-style cnt">2</td>-->
                             <!--<td class="td-style cnt">팀원</td>-->
                             <!--<td class="td-style cnt">홍길동<br><span>(you)</span></td>-->
@@ -280,20 +276,20 @@
                             <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
                             <!--<td class="td-style cnt">승인</td>-->
                             <!--<td class="td-style cnt dropdown td-more">-->
-                                <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
-                                    <!--더보기-->
-                                    <!--<span class="caret" ></span>-->
-                                <!--</div>-->
-                                <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
-                                <!--<ul class="dropdown-menu-table" role="menu">-->
-                                    <!--<li><a href="#">승인</a></li>-->
-                                    <!--<li><a href="#">등급 변경</a></li>-->
-                                    <!--<li><a href="#">비밀번호 초기화</a></li>-->
-                                    <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
-                                <!--</ul>-->
+                            <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
+                            <!--더보기-->
+                            <!--<span class="caret" ></span>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
+                            <!--<ul class="dropdown-menu-table" role="menu">-->
+                            <!--<li><a href="#">승인</a></li>-->
+                            <!--<li><a href="#">등급 변경</a></li>-->
+                            <!--<li><a href="#">비밀번호 초기화</a></li>-->
+                            <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
+                            <!--</ul>-->
                             <!--</td>-->
-                        <!--</tr>-->
-                        <!--<tr class="tr-on-wait"> &lt;!&ndash;class="tr-on-road" 대기상태인 경우&ndash;&gt;-->
+                            <!--</tr>-->
+                            <!--<tr class="tr-on-wait"> &lt;!&ndash;class="tr-on-road" 대기상태인 경우&ndash;&gt;-->
                             <!--<td class="td-style cnt">1</td>-->
                             <!--<td class="td-style cnt">팀원</td>-->
                             <!--<td class="td-style cnt">김나리</td>-->
@@ -306,108 +302,98 @@
                             <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
                             <!--<td class="td-style cnt">대기</td>-->
                             <!--<td class="td-style cnt dropdown td-more">-->
-                                <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
-                                    <!--더보기-->
-                                    <!--<span class="caret" ></span>-->
-                                <!--</div>-->
-                                <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
-                                <!--<ul class="dropdown-menu-table" role="menu">-->
-                                    <!--&lt;!&ndash;<li class="dropdown-header">더보기</li> 삭제합니다&ndash;&gt;-->
-                                    <!--<li><a href="#">승인</a></li>-->
-                                    <!--<li><a href="#">등급 변경</a></li>-->
-                                    <!--<li><a href="#">비밀번호 초기화</a></li>-->
-                                    <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
-                                </ul>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                            <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
+                            <!--더보기-->
+                            <!--<span class="caret" ></span>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
+                            <!--<ul class="dropdown-menu-table" role="menu">-->
+                            <!--&lt;!&ndash;<li class="dropdown-header">더보기</li> 삭제합니다&ndash;&gt;-->
+                            <!--<li><a href="#">승인</a></li>-->
+                            <!--<li><a href="#">등급 변경</a></li>-->
+                            <!--<li><a href="#">비밀번호 초기화</a></li>-->
+                            <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
+                            </tbody>
+                        </table>
+                    </div> <!--class="table-responsiv"-->
                 </div>
-                        <!--class="table-responsive table-reset"-->
-
-            </div> <!--class="cont-box"-->
-        </div> <!--class="border-box profile-team"-->
+            </div> <!--class="gn-sett-margin-box"-->
+        </div> <!--class="gn-box profile-team"-->
     </div> <!--id="profile-team"  class="tab-pane fade"-->
-    <!--팀 > 프로필 -->
+    <!--팀 > 프로필-->
     <div id="profile-team"  class="">
-        <div class="border-box profile-team">
-            <div class="cont-box">
-                <h2>{{teamname.team_name}}
-                <!--팀 수정버튼-->
-                <div class="clearfix fr">
-                    <button type="button" class="btn btn-primary ssh-key fl" data-toggle="modal" data-target="#modal-modi">수정</button>
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>{{teamname.team_name}}</h2>
+                    <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn" data-toggle="modal" data-target="#modal-modi">수정</button>
+
                     <!-- 팀 Modal -->
                     <div class="modal fade" id="modal-modi" role="dialog">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class="modal-header">
+                        <div class="modal-dialog form-horizontal">
+                            <div class="modal-content col-sm-10 col-sm-offset-1">
+                                <div class="modal-header gn-modal-header">
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h4 class="modal-title">팀 수정</h4>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body gn-modal-body">
+
                                     <form class="form-horizontal">
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label jnt">팀 코드</label>
+                                            <label class="col-sm-3 control-label gn-control-label">팀 코드</label>
                                             <div class="col-sm-9">
                                                 <p class="form-control-static">{{teamname.team_code}}</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label jnt">팀명</label>
+                                            <label class="col-sm-3 control-label gn-control-label">팀명</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" ng-model="data.team_name" placeholder="{{teamname.team_name}}"">
+                                                <input type="text" class="form-control gn-form-control" ng-model="data.team_name" placeholder="{{teamname.team_name}}">
                                             </div>
                                         </div>
                                     </form>
 
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block" data-dismiss="modal" ng-click="change()">저장</button>
+                                <div class="modal-footer gn-modal-footer">
+                                    <button type="submit" class="btn btn-gn-sub btn-block" ng-click="change()" data-dismiss="modal">저장</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div> <!--<div class="container-fluid">-->
+
+                <div class="container-fluid" ng-repeat="team in team_list">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label gn-control-label">팀 코드</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{team[1].team_code}}</p>
+                            </div>
+                            <label class="col-sm-2 control-label gn-control-label">팀장</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">
+                                    <span class="team-master">{{team[0].user_name}}</span>|
+                                    <span class="team-master">OOO</span>|
+                                    <span class="team-master">{{team[0].tel}}</span>|
+                                    <span class="team-master">{{team[0].email}}</span>
+                                </p>
+                            </div>
+                            <label class="col-sm-2 control-label gn-control-label">팀 생성일</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{teamname.create_date}}</p>
+                            </div>
+                            <label class="col-sm-2 control-label gn-control-label">총원</label>
+                            <div class="col-sm-10" ng-repeat="won in won_list">
+                                <p class="form-control-static">{{won[0].total}}</p>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                </h2>
-                <form class="form-horizontal">
-                    <div class="form-group" ng-repeat="team in team_list">
-                        <label class="col-sm-2 control-label jnt">팀 코드</label>
-                                <div class="col-sm-10">
-                                    <p class="form-control-static">{{team[1].team_code}}</p>
-                                </div>
-                                <label class="col-sm-2 control-label jnt">팀장</label>
-                                <div class="col-sm-10">
-                                    <p class="form-control-static">
-                                        <span class="team-master">{{team[0].user_name}}</span>|
-                                        <!--<span class="team-master">{{team[0].author_id}}</span>|-->
-                                        <span class="team-master">{{team[0].tel}}</span>|
-                                        <span class="team-master">{{team[0].email}}</span>
-                                    </p>
-                                </div>
-                                <label class="col-sm-2 control-label jnt">팀 생성일</label>
-                                <div class="col-sm-10">
-                                    <p class="form-control-static">{{teamname.create_date}}</p>
-                                </div>
-                                <label class="col-sm-2 control-label jnt">총원</label>
-                                <div class="col-sm-10" ng-repeat="won in won_list">
-                                    <p class="form-control-static">{{won[0].total}}</p>
-                                </div>
+
+            </div> <!--class="gn-sett-margin-box"-->
+        </div> <!--class="gn-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade"-->
 
 
-                    </div>
-                </form>
-                </div> <!--class="team-ul"-->
-            <!--class="cont-box"-->
-        </div> <!--class="border-box profile-team"-->
-    </div>
-
-
-
-
-
-
-                    </div> <!--스냅샷-->
-                </div> <!--가상머신 class="tab-content clearfix"--><!--id="profile-team"  class="tab-pane fade"-->
 </div> <!--class="tab-content right-box fl" -->
-
 
