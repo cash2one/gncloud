@@ -153,6 +153,14 @@ def getQuotaOfTeam(team_code, sql_session):
     vm_docker_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
         .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "docker").one()
     team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+    team_user_cnt = sql_session.query(func.count(GnUserTeam.user_id).label("count")).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.comfirm == "Y").one()
+    user_list = sql_session.query(GnVmMachines.author_id,GnUser.user_name,func.count().label("count"))\
+                .outerjoin(GnUser, GnVmMachines.author_id == GnUser.user_id)\
+                .filter(GnVmMachines.team_code == team_code)\
+                .filter(GnVmMachines.status != "Removed") \
+                .filter(GnVmMachines.type != "docker")\
+                .group_by(GnVmMachines.author_id).all()
+
     if current_info.sum_cpu is None:
         cpu_per_info = [0,100]
         cpu_cnt_info = [0,limit_quota.cpu_quota]
@@ -177,12 +185,11 @@ def getQuotaOfTeam(team_code, sql_session):
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
     docker_info = vm_docker_count.count
-    team_user_cnt = sql_session.query(func.count(GnUserTeam.user_id).label("count")).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.comfirm == "Y").one()
 
     quato_info = {'team_name':team_info.team_name, 'cpu_per':cpu_per_info, 'mem_per':memory_per_info, 'disk_per':disk_per_info
                  , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
                  , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info
-                 , 'team_user_count':team_user_cnt};
+                 , 'team_user_count':team_user_cnt, 'user_list':user_list};
 
     return quato_info
 

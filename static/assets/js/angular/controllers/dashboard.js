@@ -16,9 +16,9 @@ angular
         })
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
-                    new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "quota"));
-                    new Chart(document.getElementById("mem_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "quota"));
-                    new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "quota"));
+                    new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "cpu"));
+                    new Chart(document.getElementById("mem_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "mem"));
+                    new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "disk"));
                     new Chart(document.getElementById("status_chart").getContext("2d"), $scope.getConfig(data.list.vm_count, "status"));
                     new Chart(document.getElementById("type_chart").getContext("2d"), $scope.getConfig(data.list.vm_type, "type"));
                     $scope.team_name = data.list.team_name;
@@ -38,6 +38,13 @@ angular
                     $scope.stop_cnt = data.list.vm_count[1];
                     $scope.tot_cnt = data.list.vm_count[0] + data.list.vm_count[1];
                     $scope.team_user_count = data.list.team_user_count;
+                    $scope.user_list=data.list.user_list;
+                    for (var i = 0; i < data.list.user_list.length; i++) {
+                        $scope.user_list[i].user_id = data.list.user_list[i][0];
+                        $scope.user_list[i].user_name = data.list.user_list[i][1];
+                        $scope.user_list[i].cnt = data.list.user_list[i][2];
+                    }
+
                 }
                 else {
                     if(data.message != null) {
@@ -51,15 +58,26 @@ angular
 
         $scope.getConfig = function (data, type) {
             var config = null;
-            if (type == 'quota') {
+            var rgb1 = null;
+            var rgb2 = "rgb(204, 204, 204)";
+            if(type == 'cpu'){
+                rgb1 = "rgb(255, 167, 22)"
+            }else if(type == 'mem'){
+                rgb1 = "rgb(83, 200, 173)"
+            }else if(type == 'disk'){
+                rgb1 = "rgb(87, 161, 246)"
+            }
+
+
+            if (type == 'cpu' || type == 'mem' || type == 'disk' ) {
                 config = {
                     type: 'doughnut',
                     data: {
                         datasets: [{
                             data: data,
                             backgroundColor: [
-                                "rgb(233, 30, 99)",
-                                "rgb(204, 204, 204)"
+                                rgb1,
+                                rgb2
                             ],
                         }],
                         labels: [
@@ -79,8 +97,8 @@ angular
                         datasets: [{
                             data: data,
                             backgroundColor: [
-                                "rgb(233, 30, 99)",
-                                "rgb(255, 193, 7)"
+                                "rgb(252, 204, 112)",
+                                "rgb(226, 117, 96)"
                             ],
                         }],
                         labels: [
@@ -100,8 +118,8 @@ angular
                         datasets: [{
                             data: data,
                             backgroundColor: [
-                                "rgb(233, 30, 99)",
-                                "rgb(255, 193, 7)"
+                                "rgb(83, 200, 173)",
+                                "rgb(59, 92, 145)"
                             ],
                         }],
                         labels: [
