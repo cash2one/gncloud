@@ -21,16 +21,10 @@ def doc_create():
         # id 중복 체크 (랜덤값 중 우연히 기존에 있는 id와 같은 값이 나올 수도 있음...)
         while len(GnVmMachines.query.filter_by(id=id).all()) != 0:
             id = random_string(config.SALT, 8)
-        # 유저 네임을 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
-        # if request.json['author_id'] is not None:
-        #     author_id = request.json['author_id']
-        # else:
         author_id = session['userName']
-        # 팀 코드를 파라미터로 넣어줄 경우에는 세션을 통해 값을 받지 않는다 (컨트롤러 테스트용)
-        # if request.json['team_code'] is not None:
-        #     team_code = request.json['team_code']
-        # else:
         team_code = session['teamCode']
+        # author_id = request.json['userName']
+        # team_code = request.json['teamCode']
         image_id = request.json['id']
         name = request.json['name']
         tag = request.json['tag']
@@ -44,7 +38,7 @@ def doc_create():
         docker_service = ds.docker_service_create(id=id, replicas=2, image_id=image_id, cpu=cpu, memory=memory)
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
         if docker_service is None:
-            return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
+                return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
         if type(docker_service) is not list:
             return jsonify(status=False, message=docker_service)
         else:
@@ -107,7 +101,6 @@ def doc_create():
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
 
-
 # Docker Service 상태변경
 # {name: '시작', type: 'resume'},
 # {name: '정지', type: 'suspend'},
@@ -115,10 +108,10 @@ def doc_create():
 def doc_state(id):
     sql_session = db_session
     type = request.json["type"]
-    author_id = session["userName"]
-    # author_id = request.json["author_id"]
+    author_id = session['userName']
     team_code = session['teamCode']
-    # team_code = request.json["team_code"]
+    # author_id = request.json['userName']
+    # team_code = request.json['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # 서비스 DB 데이터 가져오기
@@ -289,14 +282,14 @@ def doc_vm(id):
 # Docker Service 리스트
 def doc_vm_list():
     sql_session = db_session
-    user_id = request.args["user_id"]
+    type = request.args["type"]
     if "team_code" in request.args:
         team_code = request.args["team_code"]
     else:
         team_code = None
     if team_code == "" or team_code is None:
         services = sql_session.query(GnVmMachines).filter(
-            GnVmMachines.author_id == user_id, GnVmMachines.status != "Removed"
+            GnVmMachines.type == type, GnVmMachines.status != "Removed"
         ).all()
     else:
         services = sql_session.query(GnVmMachines).filter(

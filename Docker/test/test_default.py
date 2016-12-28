@@ -24,9 +24,9 @@ __author__ = 'jhjeon'
 # time = datetime.datetime.strptime(timestr[:-2], "%Y-%m-%dT%H:%M:%S.%f")
 # print time
 
-from db.database import db_session
-from db.models import GnDockerContainers
-
-container = GnDockerContainers(service_id=u"11111111", internal_id=u"2312341", internal_name=u"ana123n", host_id=u"1")
-db_session.add(container)
-db_session.commit()
+# from db.database import db_session
+# from db.models import GnDockerContainers
+#
+# container = GnDockerContainers(service_id=u"11111111", internal_id=u"2312341", internal_name=u"ana123n", host_id=u"1")
+# db_session.add(container)
+# db_session.commit()
