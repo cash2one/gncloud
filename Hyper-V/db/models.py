@@ -30,15 +30,17 @@ class GnImagesPool(Base):
     id = Column(String(8), primary_key=True, nullable=False, unique=True)
     type = Column(String(10), nullable=True, default=None)
     image_path = Column(String(200), nullable=True, default=None)
+    host_id = Column(String(8), nullable=True, default=None)
 
-    def __init__(self,id,type,image_path):
+    def __init__(self,id ,type ,image_path, host_id):
         self.id = id
         self.type = type
         self.image_path = image_path
+        self.host_id = host_id
 
     def __repr__(self):
-        return "<GnImagesPool(id='%r', type='%r', image_path='%r')>" \
-               % (self.id, self.type, self.image_path)
+        return "<GnImagesPool(id='%r', type='%r', image_path='%r', host_id = '%r')>" \
+               % (self.id, self.type, self.image_path, self.host_id)
 
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'
