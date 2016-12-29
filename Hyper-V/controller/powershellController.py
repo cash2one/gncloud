@@ -45,7 +45,7 @@ def hvm_create():
     #host machine 선택
     host_ip = None
     host_id = None
-    host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "hyperv").all()
+    host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "hyper_V").all()
     for host_info in host_list:
         use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
                                         func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
@@ -199,7 +199,7 @@ def hvm_snapshot():
 
             insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
                                             icon, os, os_ver, os_subver, os_bit, team_code,
-                                            author_id, datetime.datetime.now(), None, org_id.host_id)
+                                            author_id, datetime.datetime.now(), "running", "", "", org_id.host_id)
             db_session.add(insert_image_query)
             db_session.commit()
 
