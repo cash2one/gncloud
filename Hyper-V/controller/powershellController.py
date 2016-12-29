@@ -45,7 +45,7 @@ def hvm_create():
     #host machine 선택
     host_ip = None
     host_id = None
-    host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "hyperv").all()
+    host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "hyper_V").all()
     for host_info in host_list:
         use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
                                         func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
