@@ -1,20 +1,10 @@
 angular
     .module('gncloud')
-    .controller('guestTeamDetailCtrl', function ($scope, $http, dateModifyService) {
+    .controller('guestTeamDetailCtrl', function ($scope, $http, $routeParams, dateModifyService) {
 
-        //탭이동
-        $('.nav-sidebar li').removeClass('active');
-        var url = window.location;
-        $('ul.nav-sidebar a').filter(function () {
-            return this.href.indexOf(url.hash) != -1;
-        }).parent().addClass('active');
-        $("#key-sett").hide();
-        $("#profile-team").hide();
-        $("#team-reso").hide();
-        $("#team-group").hide();
         $http({
             method: 'GET',
-            url: '/api/manager/vm/account/teamname',
+            url: '/api/manager/vm/account/teamname/'+$routeParams.code,
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -29,30 +19,10 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
-        $scope.team_list = {};
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/account/team',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    $scope.team_list = data.list; // 팀원들에 대한 정보
-
-                } else {
-                    alert(data.message);
-                }
-
-            })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
-
-
         $scope.won_list ={};
         $http({
             method: 'GET',
-            url: '/api/manager/vm/account/teamset',
+            url: '/api/manager/vm/account/teamset/'+$routeParams.code,
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {
@@ -137,7 +107,7 @@ angular
         //**********리소스*************//
         $http({
             method: 'GET',
-            url: '/api/manager/useinfo',
+            url: '/api/manager/useinfo/'+$routeParams.code,
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })
             .success(function (data, status, headers, config) {

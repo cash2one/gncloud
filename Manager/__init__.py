@@ -9,7 +9,7 @@ from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put, team_table \
-                            , pathimage
+                            , pathimage, select_info
 from db.database import db_session
 
 app = Flask(__name__)
@@ -155,6 +155,9 @@ def quota_info():
     team_code = session['teamCode']
     return jsonify(status=True, message = 'success',list=getQuotaOfTeam(team_code, db_session))
 
+@app.route('/useinfo/<code>', methods=['GET'])
+def quota(code):
+    return jsonify(status=True, message = 'success',list=getQuotaOfTeam(code, db_session))
 
 @app.route('/vm/machines', methods=['GET'])
 def list():
@@ -201,9 +204,12 @@ def container_list():
 
 @app.route('/vm/account/teamset',methods=['GET'])
 def teamwon():
-    user_id = session['userId']
     team_code = session['teamCode']
-    return jsonify(status=True, message="success", list=teamset(user_id, team_code, db_session))
+    return jsonify(status=True, message="success", list=teamset(team_code, db_session))
+
+@app.route('/vm/account/teamset/<code>',methods=['GET'])
+def teamwon1(code):
+    return jsonify(status=True, message="success", list=teamset(code, db_session))
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['PUT'])
 def approve(id,code):
@@ -269,6 +275,10 @@ def createteam():
 @app.route('/vm/account/teamname', methods=['GET'])
 def teamname():
     return jsonify(status=True, message="success", list=select_list(session['teamCode'],db_session))
+
+@app.route('/vm/account/teamname/<code>', methods=['GET'])
+def teamnamecode(code):
+    return jsonify(status=True, message="success", list=select_info(code,db_session))
 
 @app.route('/vm/account/teamname', methods=['PUT'])
 def changeteamname():
