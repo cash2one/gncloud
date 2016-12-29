@@ -138,27 +138,45 @@ def hvm_create():
 
         while True:
             try:
-                hostid = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
-                vmid = random_string(config.SALT, 8)
-                vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
-                                  internal_name,
-                                  hostid.host_id, get_vm_ip, cpu, memory, hdd,
-                                  os
-                                  , os_ver, os_sub_ver, os_bit, team_code,
-                                  author_id, datetime.datetime.now(),
-                                  datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
+                time.sleep(20)
+                dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
 
-                insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
-                db_session.add(insert_monitor)
-                db_session.add(vm)
-                db_session.commit()
-                return jsonify(status=True, massage="create vm success")
+                if dhcp_ip_address is True:
+                    try:
+                        time.sleep(20)
+                        ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
+                    except Exception as message:
+                        print message
+                        ps.get_ip_address_type(get_vm_ip)
+                        continue
+                else:
+                    try:
+                        vmid = random_string(config.SALT, 8)
+                        vm = GnVmMachines(vmid, internal_name, '', 'hyperv', start_vm['VMId'],
+                                          internal_name,
+                                          '1', get_vm_ip, cpu, memory, hdd,
+                                          os
+                                          , os_ver, os_sub_ver, os_bit, team_code,
+                                          author_id, datetime.datetime.now(),
+                                          datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
+
+                        insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+                        db_session.add(insert_monitor)
+                        db_session.add(vm)
+                        db_session.commit()
+                        return jsonify(status=True,massage = "create vm success")
+
+                    except:
+                        db_session.rollback()
+                        return jsonify(status=False, massage="DB insert fail")
+                    finally:
+                        db_session.commit()
             except Exception as message:
                 print message
-                db_session.rollback()
-                return jsonify(status=False, massage="DB insert fail")
+                continue
             finally:
-                db_session.commit()
+                print message
+
     else:
         return jsonify(status=False, massage="VM 생성 실패")
 
