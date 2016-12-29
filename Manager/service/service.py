@@ -184,11 +184,21 @@ def getQuotaOfTeam(team_code, sql_session):
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
     docker_info = vm_docker_count.count
+    vm_kvm_per = 0;
+    vm_hyperv_per = 0;
+    vm_total_cnt = vm_kvm_count + vm_hyperv_count
+    if vm_kvm_count.count != 0:
+        vm_kvm_per = (vm_kvm_count.count*100)/(vm_kvm_count.count+vm_hyperv_count.count)
+    if vm_kvm_count.count != 0:
+        vm_hyperv_per = (vm_hyperv_count.count*100)/(vm_kvm_count.count+vm_hyperv_count.count)
+
+
 
     quato_info = {'team_name':team_info.team_name, 'cpu_per':cpu_per_info, 'mem_per':memory_per_info, 'disk_per':disk_per_info
                  , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
                  , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info
-                 , 'team_user_count':team_user_cnt, 'user_list':user_list};
+                 , 'team_user_count':team_user_cnt, 'user_list':user_list
+                 , 'vm_kvm_per':vm_kvm_per, 'vm_hyperv_per':vm_hyperv_per};
 
     return quato_info
 
