@@ -284,7 +284,7 @@ def comfirm_list(user_id, sql_session):
 def createteam_list(user_id,team_name, team_code, author_id, sql_session):
     if(sql_session.query(GnTeam).filter(GnTeam.team_name == team_name).one_or_none() == None):
         if(sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one_or_none() == None):
-            vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+            vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id,cpu_quota=30,mem_quota=20000,disk_quota= 100, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
             tm = GnUserTeam(user_id=user_id, team_code=team_code, comfirm='Y', apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),approve_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), team_owner='owner')
             db_session.add(vm)
             db_session.add(tm)
