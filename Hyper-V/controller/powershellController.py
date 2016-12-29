@@ -140,7 +140,6 @@ def hvm_create():
             try:
                 time.sleep(20)
                 dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
-
                 if dhcp_ip_address is True:
                     try:
                         time.sleep(20)
@@ -152,7 +151,7 @@ def hvm_create():
                 else:
                     try:
                         vmid = random_string(config.SALT, 8)
-                        vm = GnVmMachines(vmid, internal_name, '', 'hyperv', start_vm['VMId'],
+                        vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
                                           internal_name,
                                           '1', get_vm_ip, cpu, memory, hdd,
                                           os
@@ -164,13 +163,11 @@ def hvm_create():
                         db_session.add(insert_monitor)
                         db_session.add(vm)
                         db_session.commit()
-                        return jsonify(status=True,massage = "create vm success")
+                        return jsonify(status=True, massage="create vm success")
 
                     except:
                         db_session.rollback()
                         return jsonify(status=False, massage="DB insert fail")
-                    finally:
-                        db_session.commit()
             except Exception as message:
                 print message
                 continue
