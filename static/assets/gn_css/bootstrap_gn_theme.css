@@ -1088,13 +1088,13 @@ p.ellipsis{
     height: 55px;
     overflow: hidden;    
 }
-.sprite-hyp{
+.sprite-hyperv{
     background: url(../gn_images/instance_create_windows-s.png)no-repeat;}
 
 .sprite-kvm{
     background: url(../gn_images/instance_create_KVM-s.png)no-repeat;}
 
-.sprite-doc{
+.sprite-docker{
     background: url(../gn_images/instance_create_docker-s.png)no-repeat;}
 
 .gn-btn-default.active .sprite-hyp,
@@ -1491,6 +1491,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
     }
     
 }
+
 
 
 

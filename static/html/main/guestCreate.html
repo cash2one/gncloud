@@ -6,7 +6,7 @@
         <h2>인스턴스 이름</h2>
         <div class="row">
             <div class="col-sm-3">
-                <input type="text" class="form-control gn-form-control" ng-model="data.vm_name" placeholder="이름을 입력하여주세요.">
+                <input type="text" class="form-control gn-form-control" ng-model="data.vm_name" placeholder="이름을 입력하여주세요." id="vm_name">
             </div>
         </div>
     </div>
@@ -19,7 +19,7 @@
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('hyperv')">
                     <input name="" value="" type="radio">
-                    <span class="sprite-img sprite-hyp"></span>
+                    <span class="sprite-img sprite-hyperv"></span>
                     Hyper-V
                 </label>
                 <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('kvm')">
@@ -29,7 +29,7 @@
                 </label>
                 <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('docker')">
                     <input name="" value="" class="active" type="radio">
-                    <span class="sprite-img sprite-doc"></span>
+                    <span class="sprite-img sprite-docker"></span>
                     docker
                 </label>
             </div>
@@ -38,7 +38,7 @@
 </div>
 
 
-<div class="container-fluid gn-container">
+<div class="container-fluid gn-container" id="vm_image">
     <div class="row">
         <h2>이미지 선택</h2>
         <!--탭메뉴-->
@@ -50,37 +50,33 @@
         <div class="tab-content gn-tab-content">
             <!--탭메뉴1 : 이미지 -->
             <div id="image">
-                <form>
-                    <div class="btn-group" data-toggle="buttons">
-                        <button class="btn btn-default gn-btn-default inp-box-image" ng-repeat="list in image_list">
-                            <input name="" value="" type="radio">
-                            <span class="sprite-img sprite-hyp" ng-click="update_image(list)"></span>
-                            {{list.os}}
-                            <span class="windows-small">{{list.name}}</span>
-                        </button>
-                    </div>
-                </form>
-            </div> <!--id="image" class="tab-pane fade in active"-->
+                <div class="btn-group" data-toggle="buttons">
+                    <label  ng-repeat="list in image_list" class="btn btn-default gn-btn-default inp-box-size" ng-click="update_image(list)">
+                        <input name="" value="1" type="radio">
+                        <span class="sprite-img sprite-{{list.type}}"></span>
+                        {{list.name}}
+                    </label>
+                </div>
+            </div>
 
             <!--탭메뉴2 : 스냅샷-->
             <div id="snap">
-
-                <form >
                     <div class="btn-group" data-toggle="buttons">
                         <label class="btn btn-default gn-btn-snap" ng-repeat="list in snap_list">
-                            <input name="" value="" type="radio">
-                            <p class="ellipsis" ng-click="update_image(list)">
-                                <img src="gn_images/{{list.os}}_icon.png" alt="" class="elli-img-icon"></p>
+                            <label class="btn btn-default gn-btn-snap">
+                                <input name="" value="" type="radio">
+                                <p class="ellipsis">
+                                    <img src="/gn_images/{{list.os}}_icon.png" alt="" class="elli-img-icon">{{list.name}}</p>
+                            </label>
                         </label>
                     </div>
-                </form>
             </div>
         </div>
     </div>  <!--class="tab-content"-->
 </div>
 
 
-<div class="container-fluid gn-container">
+<div class="container-fluid gn-container" id="vm_size">
     <div class="row">
         <h2>사이즈 선택</h2>
 
