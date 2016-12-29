@@ -315,12 +315,12 @@ class GnDockerImages(Base):
         self.status = status
 
     def __repr__(self):
-        return "<GnDockerImage %r>" % self.id
+        return "<GnDockerImages %r_%r_%r>" % (self.id, self.name, self.view_name)
 
     def to_json(self):
-        return dict(id=self.id, name=self.name, view_name=self.view_name, tag=self.tag, os=self.os, os_ver=self.os_ver,
-                    sub_type=self.sub_type, team_code=self.team_code, author_id=self.author_id,
-                    create_time=self.create_time, status=self.status)
+        return dict(id=self.id, name=self.name, view_name=self.view_name, tag=self.tag, os=self.os,
+                    os_ver=self.os_ver, sub_type=self.sub_type, team_code=self.team_code,
+                    author_id=self.author_id, create_time=self.create_time, status=self.status)
 
 
 class GnVmImages(Base):
