@@ -32,7 +32,7 @@ def manual():
 # VM 생성 및 실행
 def hvm_create():
 
-    name = request.json['name']
+    name = request.json['vm_name']
     tag = request.json['tag']
     memory = request.json['memory']
     cpu = request.json['cpu']
@@ -62,10 +62,10 @@ def hvm_create():
 
     if host_ip is None:
         result = {"status":False, "message":"HOST 머신 리소스가 부족합니다"}
-        return result
+        return jsonify(status=result["status"], message=result["message"])
 
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
-    image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == host_id).first()
+    image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == host_id).first()
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
 
@@ -153,7 +153,7 @@ def hvm_create():
                         vmid = random_string(config.SALT, 8)
                         vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
                                           internal_name,
-                                          '1', get_vm_ip, cpu, memory, hdd,
+                                          host_id, get_vm_ip, cpu, memory, hdd,
                                           os
                                           , os_ver, os_sub_ver, os_bit, team_code,
                                           author_id, datetime.datetime.now(),
@@ -347,7 +347,7 @@ def hvm_state(id):
 # REST. VM 삭제
 def hvm_delete(id):
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
-    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vmid.id).first()
+    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vmid.host_id).first()
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
     vm_info =ps.get_vm_one(vmid.internal_id)

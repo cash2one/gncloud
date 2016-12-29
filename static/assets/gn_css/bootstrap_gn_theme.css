@@ -1028,6 +1028,10 @@ ul.gn-tag-group > li{
 
 
 /* ========== 인스턴스 > 생성 HTML ========== */
+#image > form > .btn-group{
+    width: 100%;    
+}   
+
 .gn-btn-default{
     padding: 12px 12px;
     font-size: 18px; 
@@ -1075,7 +1079,7 @@ ul.gn-tag-group > li{
     margin-bottom: 10px;
 }
 
-p.ellipsis{   
+.ellipsis{   
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis;
@@ -1105,7 +1109,14 @@ p.ellipsis{
 .gn-btn-default.active .sprite-doc
 {background-position: 0px -55px;}
 
-span.windows-small{
+.gn-name-ellip{
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    margin-bottom: 0;    
+}
+
+.windows-small{
     font-size: 0.5em;
     display: block;
     width: 100%;
@@ -1120,12 +1131,12 @@ img.elli-img-icon{
     margin-right: 10px;  
 }
 
-div.size-info{
+.size-info{
     margin:  auto;
     padding: 5px;
 }
 
-div.border-bottom{
+.border-bottom{
     width: 50px;
     margin: auto;
     border-bottom: 1px solid rgba(215,215,215,.5);
@@ -1139,6 +1150,7 @@ div.border-bottom{
     line-height: 37px;
     font-size: 16px;
     font-weight: 300;
+    /*padding: 0px 5px 0px 5px;*/
 }
 .gn-margin-bott10{
     margin-bottom: 10px;
