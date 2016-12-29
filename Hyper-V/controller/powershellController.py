@@ -140,12 +140,13 @@ def hvm_create():
 #  hvm_snapshot 4. 생성된 스냅샷 이미지 이름 를 지정된 폴더에 옮긴다. (테스트 때에는 C:\images 로 한다.)
 #  hvm_snapshot 5. 생성된 스냅샷의 정보를 데이터베이스에 저장한다.
 def hvm_snapshot():
-    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.name == 'hyperv').first()
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
 
     # 지금은 internal_id 받아야한다
     #org_id = request.json['org_id'] #원본 이미지 아이디
     org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
+
+    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == org_id.host_id).first()
+    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
 
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
@@ -172,7 +173,7 @@ def hvm_snapshot():
 
             insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
                                             icon, os, os_ver, os_subver, os_bit, team_code,
-                                            author_id, datetime.datetime.now(), None, None)
+                                            author_id, datetime.datetime.now(), None, org_id.host_id)
             db_session.add(insert_image_query)
             db_session.commit()
 
@@ -223,12 +224,12 @@ def hvm_snapshot():
 # -------------------------------------------------------
 def hvm_state(id):
 
-    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.name == 'hyperv').first()
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
+    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vmid.host_id).first()
+    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
 
     type = request.json['type']
-    print vmid.internal_id
+    #print vmid.internal_id
     #    vm = GnVmMachines.query.filter_by().first
     if type == "start":
         # VM 시작
@@ -298,10 +299,11 @@ def hvm_state(id):
         return jsonify(status=False, message="정상적인 상태 정보를 받지 못했습니다.")
 
 
-# todo REST. VM 삭제
+# REST. VM 삭제
 def hvm_delete(id):
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
-    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.name == 'hyperv').first()
+    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vmid.id).first()
+
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
     vm_info =ps.get_vm_one(vmid.internal_id)
     #  REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
@@ -374,9 +376,11 @@ def hvm_modify_image(id):
 # 이미지를 백업 폴더로 옮긴다
 # 이미지 따로 관리
 def hvm_delete_image(id):
-    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.name == 'hyperv').first()
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
     vhd_Name = db_session.query(GnVmImages).filter(GnVmImages.id == id).first()
+
+    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vhd_Name.host_id).first()
+    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
+
     image_delete = ps.delete_vm_Image(vhd_Name.filename, vhd_Name.sub_type, config.COMPUTER_NAME)
     json_obj = json.dumps(image_delete)
     json_size = len(json_obj)

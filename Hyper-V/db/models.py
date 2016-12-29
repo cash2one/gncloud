@@ -315,12 +315,14 @@ class GnVmImages(Base):
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default=None)
     ssh_id = Column(String(10), nullable=True, default=None)
+    pool_id = Column(String(8), nullable=True, default=None)
+    host_id = Column(String(8), nullable=True, default=None)
 
     def __init__(self, id='', image_name='', filename='',
                  type='', sub_type='', icon=None,
                  os=None, os_ver=None, os_subver=None, os_bit=None,
                  team_code=None, author_id=None, create_time=datetime.datetime.now(),
-                 status=None, ssh_id=None):
+                 status=None, ssh_id=None,pool_id=None,host_id=None):
         self.id = id
         self.name = image_name
         self.filename = filename
@@ -336,15 +338,17 @@ class GnVmImages(Base):
         self.create_time = create_time
         self.status = status
         self.ssh_id = ssh_id
+        self.pool_id = pool_id
+        self.host_id = host_id
 
     def __repr__(self):
         return "<GnVmImages(" \
                "id='%r', name='%r', filename='%r', " \
                "type='%r', sub_type='%r', icon='%r', " \
-               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r', status='%r', ssh_id='%r)>" \
+               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r', status='%r', ssh_id='%r', pool_id='%r', host_id='%r')>" \
                % (self.id, self.name, self.filename, self.type,
                   self.sub_type, self.icon, self.os, self.os_ver, self.os_sub_ver,
-                  self.os_bit, self.team_code, self.author_id, self.create_time, self.status, self.ssh_id)
+                  self.os_bit, self.team_code, self.author_id, self.create_time, self.status, self.ssh_id, self.pool_id, self.host_id)
 
 '''
     def __json__(self):
