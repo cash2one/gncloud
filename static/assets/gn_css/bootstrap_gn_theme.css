@@ -68,6 +68,7 @@ li{
 
 .container:after,
 .container-fluid:after,
+.container-login:after,
 .gn-container:after
 { content:""; clear:both; display:block; }
 
@@ -545,12 +546,11 @@ li.nav-link > a{
 /*-----모달 공통 end-----*/
 
 /* ========== 로그인 HTML ========== */
-.body-white{background-color: #ffffff;}
-.body-gray{background-color: #f6f6f6;}
+.body-white{background-color: #ffffff; min-height: 100%; border-bottom: 1px solid #dddddd;}
+.body-gray{background-color: #f6f6f6; min-height: 100%; border-bottom: 1px solid #dddddd;}
 
 .container-login{
     text-align: center;
-    border-bottom: 1px solid #dddddd;
 }
 
 .logo{
@@ -644,6 +644,7 @@ a.log-join-btn:focus{
 .gn-title-login span{
     font-size: 43px;
     font-weight: 200;
+    transition: all .3s ease;     
 }
 
 .gn-title-login span p{
@@ -660,6 +661,7 @@ a.log-join-btn:focus{
 
 .gn-box-login>span{
     padding: 10px 0;
+    display: inline-block;
 }
 
 .begin-box{
@@ -945,7 +947,8 @@ a.log-join-btn:focus{
     list-style: none;
     float: left;
     font-size: 16px;
-    font-weight: 300;    
+    font-weight: 300;
+    margin: 0 px 3px;
 }
 
 ul.gn-tag-group{
@@ -1037,7 +1040,7 @@ ul.gn-tag-group > li{
 }
 
 .gn-btn-snap{
-    width: 100%;
+    width: 32.7%;
     padding: 14px 14px;
     font-size: 16px; 
     color: #6f6f6f;
@@ -1088,13 +1091,13 @@ p.ellipsis{
     height: 55px;
     overflow: hidden;    
 }
-.sprite-hyperv{
+.sprite-hyp{
     background: url(../gn_images/instance_create_windows-s.png)no-repeat;}
 
 .sprite-kvm{
     background: url(../gn_images/instance_create_KVM-s.png)no-repeat;}
 
-.sprite-docker{
+.sprite-doc{
     background: url(../gn_images/instance_create_docker-s.png)no-repeat;}
 
 .gn-btn-default.active .sprite-hyp,
@@ -1234,6 +1237,12 @@ li.left-title:nth-of-type(2){
 .gn-sett-btn{
     float: right;
     margin-top: -45px;
+}
+
+.gn-sett-btn2{
+    float: right;
+    margin-top: -45px;
+    margin-right: 85px; 
 }
 
 .gn-control-label{
@@ -1441,24 +1450,40 @@ ul.gn-sett-graph > li:nth-of-type(3){
 
 
 /* ================================ 반응형 ================================ */
+@media screen and (max-width: 991px){
+   
+    /* ======== gncloud 로그인 ======== */
+    .gn-title-login span{
+        font-size: 32px;
+        transition: all .3s ease;        
+    }
+    .gn-select{
+        width: 155px;
+    }    
+    
+}
+
+
 
 @media screen and (max-width: 767px){
+    
+    /* ======== gncloud 공통 ======== */    
+    .gn-table-responsive {
+        border: none;
+    } 
+    
+    .gn-table-responsive > .gn-table thead tr th{
+        text-align: center;
+        font-size: 12px;
+        width: 100%;
+        overflow: hidden;
+    }    
+    
+    
+    /* ======== gncloud HEADER ======== */    
     .nav-link{
         float: left;
         text-align: center;
-    }
-    
-    .create-btn > a > button.btn-success{
-        width: 90%;
-        margin: auto;
-    }
-    
-    .gn-table-responsive {
-        border: none;
-    }
-    
-    .dropdown{
-        margin-right: 45px;
     }
     
     .navbar-collapse.gn-header-collapsed{
@@ -1473,25 +1498,68 @@ ul.gn-sett-graph > li:nth-of-type(3){
         position: absolute;
         bottom: 72px;
         right: 0;
-    } 
+    }
+    
+    .dropdown{
+        margin-right: 45px;
+    }     
     
     .dropdown-menu.gn-head-drop{
         z-index: 1000;
-    }
-    
-    .gn-table-responsive > .gn-table thead tr th{
-        text-align: center;
-        font-size: 12px;
-        width: 100%;
-        overflow: hidden;
-    }
-    
+    }    
+
     .gn-header .navbar-header .navbar-toggle{
         margin-top: 20px;
+    }    
+    
+    
+    
+    
+    /* ======== gncloud 버튼 ======== */
+    .create-btn > a > button.btn-success{
+        width: 90%;
+        margin: auto;
     }
     
-}
+    /* ======== gncloud 로그인 ======== */
+    .gn-title-login span{
+        font-size: 25px;
+    }
+    .gn-select{
+        width: 155px;
+    }
+    
+    /* ======== gncloud 대시보드 ======== */
+    .dash-margin-box div img{
+        width: 50%:
+    }    
+    
+    /* ======== gncloud 인스턴스 리스트 ======== */
+    
+    
+    /* ======== gncloud 인스터스 상세 ======== */
+    
+    
+    /* ======== gncloud 인스턴스 생성 ======== */
+    
+    
+    /* ======== gncloud 이미지 ======== */
+    
+    
+    /* ======== gncloud 설정 ======== */
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+}
 
 
 
