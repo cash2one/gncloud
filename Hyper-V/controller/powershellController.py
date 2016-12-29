@@ -16,6 +16,7 @@ from flask import request, jsonify, session
 from service.powershellService import PowerShell
 from db.database import db_session
 from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist
+from sqlalchemy import func
 
 from util.config import config
 from util.hash import random_string
@@ -31,25 +32,50 @@ def manual():
 # VM 생성 및 실행
 def hvm_create():
 
-    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.name == 'hyperv').first()
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
-
-    base_image_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['id']).first()
-
-    base_image = base_image_info.filename
     name = request.json['name']
     tag = request.json['tag']
     memory = request.json['memory']
     cpu = request.json['cpu']
     hdd = request.json['hdd']
+
+    team_code = session['teamCode']
+    author_id = session['userName']
+
+
+    #host machine 선택
+    host_ip = None
+    host_id = None
+    host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "hyperv").all()
+    for host_info in host_list:
+        use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
+                                        func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
+                                        func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
+                                        ).filter(GnVmMachines.host_id == host_info.id).filter(GnVmMachines.status != "Removed").one_or_none()
+        rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
+        rest_mem = host_info.max_mem - use_sum_info.sum_mem
+        rest_disk = host_info.max_disk - use_sum_info.sum_disk
+
+        if rest_cpu >= int(cpu) and rest_mem >= int(memory) and rest_disk >= int(hdd):
+            host_ip = host_info.ip
+            host_id = host_info.id
+            break
+
+    if host_ip is None:
+        result = {"status":False, "message":"HOST 머신 리소스가 부족합니다"}
+        return result
+
+    host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
+    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
+
+    base_image_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['id']).first()
+
+    base_image = base_image_info.filename
     os = base_image_info.os
     os_ver = base_image_info.os_ver
     os_sub_ver = base_image_info.os_subver
     os_bit = base_image_info.os_bit
     #    print session['teamCode']
     #    team_code = session.get('teamCode')
-    team_code = session['teamCode']
-    author_id = session['userName']
 
     #vm에 대한 명명규칙
     internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
