@@ -116,7 +116,7 @@ def hvm_create():
 
         while True:
             if len(get_vm_ip) <= 2 and get_ip_count <= 20:
-                print get_vm_ip
+                #print get_vm_ip
                 time.sleep(40)
                 get_ip_count = get_ip_count + 1
                 get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
@@ -177,7 +177,7 @@ def hvm_snapshot():
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
         create_snap = ps.create_snap(org_id.internal_id, config.COMPUTER_NAME)
-        print create_snap
+        #print create_snap
         if create_snap['Name'] is not None:
             base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
@@ -261,7 +261,7 @@ def hvm_state(id):
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start_vm = ps.start_vm(vmid.internal_id)
-        print start_vm
+        # start_vm
         # print id
         # 2. 가상머신 상태를 체크한다. (Get-VM)
         if start_vm['State'] is 2:
@@ -460,8 +460,8 @@ def vm_monitor():
                 result = json.loads(json.dumps(ps.send_get_vm_info(script, vm_ip_info[i].ip)))
             except Exception as message:
                 print message
-            finally:
-                print result
+            # finally:
+            #     print result
 
             cpu = round(1 - result[0], 4)  #점유량 ex) 0.3~~
             mem = round(1 - result[1], 4)
@@ -486,9 +486,9 @@ def vm_monitor():
                 db_session.rollback()
             finally:
                 db_session.commit()
-                print "Running status"
+                #print "Running status"
         elif vm_ip_info[i].status != "Removed": #단순히 db만 업데이트
-            print "stop status"
+            #print "stop status"
             try:
                 vm_info = db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).first()
 
@@ -497,7 +497,7 @@ def vm_monitor():
                 db_session.add(monitor_insert)
                 db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
                     {"cpu_usage": 0.0000, "mem_usage": 0.0000})
-                print "insert success"
+                #print "insert success"
             except Exception as message:
                 print message
                 db_session.rollback()
