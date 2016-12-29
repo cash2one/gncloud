@@ -46,7 +46,7 @@ class PowerShell(object):
         #script += " -Generation " + str(self.GENERATION_TYPE_2)
         script += " -Generation " + str(self.GENERATION_TYPE_1) #1세대 통일하여 생성
         script += self.CONVERTTO_JSON
-       # print script
+        # print script
         return self.send(script)
 
     # 가상머신 설정
@@ -254,7 +254,7 @@ class PowerShell(object):
         script += 'Get-ChildItem -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/vhdx/snap/$VMName'
         script += '"' + snapshot_id
         script += '.vhdx" | ConvertTo-Json -Compress}'
-       # print script
+        # print script
         return self.send(script)
 
 
