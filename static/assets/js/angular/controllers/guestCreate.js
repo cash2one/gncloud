@@ -9,6 +9,7 @@ angular
         }).parent().addClass('active');
         $("#windows").hide();
         $("#ssh").hide();
+        $("#snap").hide();
         $scope.selectType = function(type){
             if(type == 'docker'){
                 $http({
