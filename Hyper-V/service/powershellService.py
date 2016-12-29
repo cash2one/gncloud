@@ -214,21 +214,21 @@ class PowerShell(object):
     #VM 이미지 삭제
     def delete_vm_Image(self, vhd_File_Name, type,computer_name):
         #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
-        #script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
-        script = "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+"/" + vhd_File_Name
-        script += " -Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json -Compress;"
+        script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
+        script += "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+"/" + vhd_File_Name
+        script += " -Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
         #print script
         return self.send(script)
 
 
     #VM 삭제
     def delete_vm(self, vmId, type, computer_name):
-        #script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
-        script = "$vm = Get-VM -Id "+vmId+";"
+        script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
+        script += "$vm = Get-VM -Id "+vmId+";"
         script += "$vmn = $vm.Name;"
         script += "Remove-VM -VM $vm -Force;"
         script += "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+'/$vmn".vhdx" '
-        script += "-Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/ | ConvertTo-Json -Compress;"
+        script += "-Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/ | ConvertTo-Json }"
         #print script
         return self.send(script)
 
@@ -242,8 +242,8 @@ class PowerShell(object):
     #스냅샷 생성
     def create_snap(self, vm_Id, computer_name):
         snapshot_id = "_"+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        #script = 'Invoke-Command -ComputerName '+computer_name+' -ScriptBlock {'
-        script = '$vm = Get-VM -Id '
+        script = 'Invoke-Command -ComputerName '+computer_name+' -ScriptBlock {'
+        script += '$vm = Get-VM -Id '
         script += vm_Id + ';'
         script += '$VMname = $vm.Name;'
         script += '$CloneVMname = "' +snapshot_id+'";'
@@ -253,7 +253,7 @@ class PowerShell(object):
         script += 'Remove-Item -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/$VMname"clone" -Recurse ;'
         script += 'Get-ChildItem -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/vhdx/snap/$VMName'
         script += '"' + snapshot_id
-        script += '.vhdx" | ConvertTo-Json -Compress;'
+        script += '.vhdx" | ConvertTo-Json -Compress}'
         # print script
         return self.send(script)
 
