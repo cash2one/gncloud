@@ -267,7 +267,7 @@ def team_delete(id ,code):
     return True
 
 def signup_team(team_code,user_id):
-    vm = GnUserTeam(user_id= user_id, team_code= team_code, comfirm = 'N',apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    vm = GnUserTeam(user_id= user_id, team_code= team_code, comfirm = 'N',apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),team_owner='user')
     db_session.add(vm)
     db_session.commit()
     return True
