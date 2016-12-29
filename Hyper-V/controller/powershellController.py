@@ -65,6 +65,8 @@ def hvm_create():
         return result
 
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
+    image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == host_id).first()
+
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
 
     base_image_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['id']).first()
@@ -83,7 +85,7 @@ def hvm_create():
     # 새 머신을 만든다. (New-VM)
     # hvm_create test value 1. Path 및 SwitchName은 추후 DB에서 불러올 값들이다.
     SWITCHNAME = "out"
-    new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(memory), Path=config.DISK_DRIVE+config.HYPERV_PATH,
+    new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(memory), Path=image_pool.image_path,
                        SwitchName=SWITCHNAME)
 
 
@@ -94,9 +96,11 @@ def hvm_create():
         #print set_vm
         # 정해진 OS Type에 맞는 디스크(VHD 또는 VHDX)를 가져온다. (Convert-VHD)
         # CONVERT_VHD_PATH 및 SwitchName은 추후 DB에서 불러올 값들이다.
-        image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.type == "hyperv").first()
-        CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
-        CONVERT_VHD_PATH = config.DISK_DRIVE+ config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
+        CONVERT_VHD_DESTINATIONPATH = image_pool.image_path+"/vhdx/base/"+internal_name+".vhdx"
+        CONVERT_VHD_PATH = image_pool.image_path+"/vhdx/original/" + base_image  #원본이미지로부터
+        # CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
+        # CONVERT_VHD_PATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
+
         convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
