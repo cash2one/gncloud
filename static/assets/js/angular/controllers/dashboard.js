@@ -82,7 +82,7 @@ angular
                         }],
                         labels: [
                             "사용중",
-                            "미사"
+                            "미사용"
                         ]
                     },
                     options: {
