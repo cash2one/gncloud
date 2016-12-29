@@ -198,32 +198,35 @@ class GnDepts(Base):
 
 class GnHostMachines(Base):
     __tablename__ = 'GN_HOST_MACHINES'
-    host_id = Column(String(100), primary_key=True, nullable=False)
-    host_name = Column(String(100), nullable=True, default='')
-    host_ip = Column(String(100), nullable=True, default='')
-    host_type = Column(String(10), nullable=True, default='')
+    id = Column(String(100), primary_key=True, nullable=False)
+    name = Column(String(100), nullable=True, default='')
+    ip = Column(String(100), nullable=True, default='')
+    type = Column(String(10), nullable=True, default='')
     cpu = Column(Integer, nullable=True, default=None)
     mem = Column(Integer, nullable=True, default=None)
     disk = Column(Integer, nullable=True, default=None)
     max_cpu = Column(Integer, nullable=True, default=None)
     max_mem = Column(Integer, nullable=True, default=None)
     max_disk = Column(Integer, nullable=True, default=None)
+    host_agent_port = Column(Integer, nullable=True, default=None)
 
-    def __init__(self, host_id, host_name='', host_ip='', host_type='', cpu=None, mem=None, disk=None, max_cpu=None, max_mem=None, max_disk=None):
-        self.host_id = host_id
-        self.host_name = host_name
-        self.host_ip = host_ip
-        self.host_type = host_type
+
+    def __init__(self, id, name='', ip='', type='', cpu=None, mem=None, disk=None, max_cpu=None, max_mem=None, max_disk=None, host_agent_port=None):
+        self.id = id
+        self.name = name
+        self.ip = ip
+        self.type = type
         self.cpu = cpu
         self.mem = mem
         self.disk = disk
         self.max_cpu = max_cpu
         self.max_mem = max_mem
         self.max_disk = max_disk
+        self.host_agent_port = host_agent_port
 
     def __repr__(self):
-        return "<GnHostMachines(host_id='%r', host_name='%r', host_ip='%r', host_type='%r', cpu='%r', mem='%r', disk='%r', max_cpu='%r', max_mem='%r', max_disk='%r')>" \
-               % (self.host_id, self.host_name, self.host_ip, self.host_type, self.cpu, self.mem, self.disk, self.max_cpu, self.max_mem, self.max_disk)
+        return "<GnHostMachines(id='%r', name='%r', ip='%r', type='%r', cpu='%r', mem='%r', disk='%r', max_cpu='%r', max_mem='%r', max_disk='%r',host_agent_port='%r')>" \
+               % (self.id, self.name, self.ip, self.type, self.cpu, self.mem, self.disk, self.max_cpu, self.max_mem, self.max_disk, self.host_agent_port)
 
 
 class GnHostMonitor(Base):
@@ -312,12 +315,14 @@ class GnVmImages(Base):
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default=None)
     ssh_id = Column(String(10), nullable=True, default=None)
+    pool_id = Column(String(8), nullable=True, default=None)
+    host_id = Column(String(8), nullable=True, default=None)
 
     def __init__(self, id='', image_name='', filename='',
                  type='', sub_type='', icon=None,
                  os=None, os_ver=None, os_subver=None, os_bit=None,
                  team_code=None, author_id=None, create_time=datetime.datetime.now(),
-                 status=None, ssh_id=None):
+                 status=None, ssh_id=None,pool_id=None,host_id=None):
         self.id = id
         self.name = image_name
         self.filename = filename
@@ -333,15 +338,17 @@ class GnVmImages(Base):
         self.create_time = create_time
         self.status = status
         self.ssh_id = ssh_id
+        self.pool_id = pool_id
+        self.host_id = host_id
 
     def __repr__(self):
         return "<GnVmImages(" \
                "id='%r', name='%r', filename='%r', " \
                "type='%r', sub_type='%r', icon='%r', " \
-               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r', status='%r', ssh_id='%r)>" \
+               "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r', status='%r', ssh_id='%r', pool_id='%r', host_id='%r')>" \
                % (self.id, self.name, self.filename, self.type,
                   self.sub_type, self.icon, self.os, self.os_ver, self.os_sub_ver,
-                  self.os_bit, self.team_code, self.author_id, self.create_time, self.status, self.ssh_id)
+                  self.os_bit, self.team_code, self.author_id, self.create_time, self.status, self.ssh_id, self.pool_id, self.host_id)
 
 '''
     def __json__(self):
