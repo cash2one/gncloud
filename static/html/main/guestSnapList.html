@@ -59,7 +59,7 @@
                                 <input type="text" class="form-control gn-form-control" ng-model="data.name" placeholder="스냅샷 이름">
                             </div>
                             <div class="col-sm-2">
-                                <button type="submit" value="submit" class="btn btn-gn-sub" ng-click="submit()">스냅샷 생성</button>
+                                <button type="submit" value="submit" class="btn btn-gn-sub btn-block" ng-click="submit()">스냅샷 생성</button>
                             </div>
                         </div>
                         <div class="gn-lead">
@@ -79,7 +79,6 @@
                             <tr>
                                 <th class="col-sm-4">이름</th>
                                 <th class="col-sm-2">OS</th>
-                                <th class="col-sm-2">사이즈</th>
                                 <th class="col-sm-2">타입</th>
                                 <th class="col-sm-1">생성일<div class="refresh"></div></th>
                                 <th class="col-sm-1"><!--더보기--></th>
@@ -92,7 +91,6 @@
                                     <a href="#">{{snap.name}}</a>
                                 </td>
                                 <td>{{snap.os}}{{snap.os_ver}}</td>
-                                <td>20 GB Disk</td>
                                 <td>{{snap.type}}</td>
                                 <td>{{snap.create_time_diff}}</td>
                                 <td class="dropdown">

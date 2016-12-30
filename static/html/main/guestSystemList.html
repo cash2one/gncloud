@@ -3,7 +3,7 @@
 <!--왼쪽 메뉴-->
 <ul class="nav nav-pills gn-left-menu col-sm-2">
     <li class="left-title gn-top">시스템</li>
-    <li class="active"><a data-toggle="pill" ng-click="click('profile-system')">프로필</a></li>
+    <li><a data-toggle="pill" ng-click="click('profile-system')">프로필</a></li>
     <li><a data-toggle="pill" ng-click="click('team-sett')">팀 관리</a></li>
     <li><a data-toggle="pill" ng-click="click('cluster-sett')">클러스터 관리</a></li>
     <li><a data-toggle="pill" ng-click="click('image-sett')">이미지 관리</a></li>
@@ -85,12 +85,14 @@
                                     <span>({{select.owner_id}})</span>
                                 </td>
                                 <td>
-                                    <div class="">
-                                        <div class="">
-                                            {{select.usersfirst}}
-                                            <span class="tag" data-toggle="tooltip" title="{{select.users}}">{{select.userslen}}</span>
+
+                                    <div>
+                                        <div>
+                                            <span>{{select.usersfirst}}
                                             <br>
-                                            <span>{{select.usersfirstid}}</span>
+                                            {{select.usersfirstid}}<span class="tag" data-toggle="tooltip" title="{{select.users}}">{{select.userslen}}</span>
+                                            </span>
+
                                         </div>
                                     </div>
                                 </td>
@@ -104,7 +106,7 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li><a href="#">상세보기</a></li>
+                                        <li><a href="#/guestTeamDetail?code={{select.team_code}}">상세보기</a></li>
                                         <li><a href="#">삭제</a></li>
                                     </ul>
                                 </td>

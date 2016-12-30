@@ -207,6 +207,23 @@ angular
                     })[0].click();
                 });
         };
+        $scope.sshkey_delete = function (id,index) { //ssh키의 다운로드
+            $http({
+                method: 'DELETE',
+                url: "/api/kvm//account/keys/"+id,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                }
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        alert(name + "상태가 변경되었습니다");
+                        $scope.data_list.splice(index, 1);
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        };
         $scope.click =function(ty){
             if(ty == 'profile'){
                 $("#profile").fadeIn();

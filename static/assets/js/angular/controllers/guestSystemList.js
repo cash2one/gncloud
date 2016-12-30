@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestSystemListCtrl', function ($scope, $http, dateModifyService) {
+    .controller('guestSystemListCtrl', function ($scope, $http, dateModifyService,$routeParams) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -152,6 +152,8 @@ angular
                 $("#image-sett").fadeIn();
             }
         }
+
+        $scope.click($routeParams.id);
 
 
 

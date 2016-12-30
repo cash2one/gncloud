@@ -9,6 +9,7 @@ angular
         }).parent().addClass('active');
         $("#windows").hide();
         $("#ssh").hide();
+        $("#snap").hide();
         $scope.selectType = function(type){
             if(type == 'docker'){
                 $http({
@@ -137,7 +138,6 @@ angular
         $scope.data = {};
         $scope.update_image = function (data) {
             if (data != null){
-                alert(data.id);
                 $scope.data.id = data.id;
             }
         };
@@ -150,6 +150,27 @@ angular
         }
 
         $scope.submit = function() {
+
+            if($scope.data.vm_name == "" || $scope.data.vm_name == null){
+                alert("인스턴스명을 입력해 주세요");
+                $('#vm_name').focus();
+                return false;
+            }
+
+            if($scope.data.id == "" || $scope.data.id == null){
+                alert("이미지를 선택해 주세요");
+                var offset = $("#vm_image").offset();
+                $('html, body').animate({scrollTop : offset.top}, 400);
+                return false;
+            }
+
+            if($scope.data.cpu == "" || $scope.data.cpu == null){
+                alert("사이즈를 선택해주세요");
+                var offset = $("#vm_size").offset();
+                $('html, body').animate({scrollTop : offset.top}, 400);
+                return false;
+            }
+
             $scope.data.sshkeys = $scope.sshkeys;
             $scope.data.tag = $("#tag").val();
             $http({

@@ -34,6 +34,8 @@ angular
                     $scope.docker_cnt = data.list.docker_info;
                     $scope.hyperv_cnt = data.list.vm_type[1];
                     $scope.kvm_cnt = data.list.vm_type[0];
+                    $scope.kvm_per = data.list.vm_kvm_per;
+                    $scope.hyperv_per = data.list.vm_hyperv_per;
                     $scope.run_cnt = data.list.vm_count[0];
                     $scope.stop_cnt = data.list.vm_count[1];
                     $scope.tot_cnt = data.list.vm_count[0] + data.list.vm_count[1];
@@ -82,7 +84,7 @@ angular
                         }],
                         labels: [
                             "사용중",
-                            "미사"
+                            "미사용"
                         ]
                     },
                     options: {

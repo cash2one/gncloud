@@ -184,11 +184,20 @@ def getQuotaOfTeam(team_code, sql_session):
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
     docker_info = vm_docker_count.count
+    vm_kvm_per = 0;
+    vm_hyperv_per = 0;
+    if vm_kvm_count.count != 0:
+        vm_kvm_per = (vm_kvm_count.count*100)/(vm_kvm_count.count+vm_hyperv_count.count)
+    if vm_hyperv_count.count != 0:
+        vm_hyperv_per = (vm_hyperv_count.count*100)/(vm_kvm_count.count+vm_hyperv_count.count)
+
+
 
     quato_info = {'team_name':team_info.team_name, 'cpu_per':cpu_per_info, 'mem_per':memory_per_info, 'disk_per':disk_per_info
                  , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
                  , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info
-                 , 'team_user_count':team_user_cnt, 'user_list':user_list};
+                 , 'team_user_count':team_user_cnt, 'user_list':user_list
+                 , 'vm_kvm_per':vm_kvm_per, 'vm_hyperv_per':vm_hyperv_per};
 
     return quato_info
 
@@ -221,7 +230,7 @@ def container(sql_sesssion):
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
-def teamset(user_id, team_code, sql_session):
+def teamset(team_code, sql_session):
     list = sql_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).all()
     for vm in list:
         vm[0].start_date = vm[0].start_date.strftime('%Y-%m-%d %H:%M:%S')
@@ -258,7 +267,7 @@ def team_delete(id ,code):
     return True
 
 def signup_team(team_code,user_id):
-    vm = GnUserTeam(user_id= user_id, team_code= team_code, comfirm = 'N',apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    vm = GnUserTeam(user_id= user_id, team_code= team_code, comfirm = 'N',apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),team_owner='user')
     db_session.add(vm)
     db_session.commit()
     return True
@@ -275,7 +284,7 @@ def comfirm_list(user_id, sql_session):
 def createteam_list(user_id,team_name, team_code, author_id, sql_session):
     if(sql_session.query(GnTeam).filter(GnTeam.team_name == team_name).one_or_none() == None):
         if(sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one_or_none() == None):
-            vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+            vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id,cpu_quota=30,mem_quota=20000,disk_quota= 100, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
             tm = GnUserTeam(user_id=user_id, team_code=team_code, comfirm='Y', apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),approve_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), team_owner='owner')
             db_session.add(vm)
             db_session.add(tm)
@@ -289,6 +298,9 @@ def select(sql_session ):
     return sql_session.query(GnTeam).all()
 
 def select_list(team_code, sql_session):
+    return sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+
+def select_info(team_code, sql_session):
     return sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
 
 def select_put(team_name, team_code):
@@ -306,12 +318,12 @@ def team_table(sql_sesseion):
         current_info = sql_sesseion.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
                                          func.sum(GnVmMachines.memory).label("sum_mem"),
                                          func.sum(GnVmMachines.disk).label("sum_disk")
-                                         ).filter(GnVmMachines.team_code == team_info.team_code).one()
+                                         ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Running").one()
         limit_quota = sql_sesseion.query(GnTeam).filter(GnTeam.team_code == team_info.team_code).one()
         vm_run_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
-            .filter(GnVmMachines.team_code == team_info.team_code and GnVmMachines.status == "running").one()
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Running").one()
         vm_stop_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
-            .filter(GnVmMachines.team_code == team_info.team_code and GnVmMachines.status == "stop").one()
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Suspend").one()
         vm_kvm_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
             .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type == "kvm").one()
         vm_hyperv_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
@@ -348,7 +360,6 @@ def team_table(sql_sesseion):
             , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info};
         team_table = {"team_info":team_info, "user_list":user_list, "quto_info":quato_info}
         result.append(team_table);
-
     return result
 
 def pathimage(sql_session):

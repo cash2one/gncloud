@@ -7,9 +7,7 @@
             <div class="col-md-offset-2 col-md-8">
                 <div class="row gn-select-box">
                     <span class="col-md-offset-2 col-md-1" >팀</span>
-                    <select class="gn-select col-md-5" ng-model="guset_image"
-                ng-options="list.team_name for list in list"
-                ng-change="update_image(guset_image)">
+                    <select class="gn-select col-md-5" ng-model="guset_image" ng-options="list.team_name for list in list" ng-change="update_image(guset_image)">
                         <option value="">선택</option>
                     </select>
                     <button type="submit" value="submit" class="btn btn-gn-login col-md-2" ng-click="submit()">신청하기</button>

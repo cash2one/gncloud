@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import threading
+from apscheduler.scheduler import Scheduler
 
 __author__ = 'jhjeon'
+
+
 
 from flask import Flask, redirect, url_for
 from datetime import timedelta
@@ -14,14 +17,9 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 
-def monitor_thread():
-    while True:
-        time.sleep(180)
-        vm_monitor()
+def monitor():
+    vm_monitor()
 
-thread = threading.Thread(name='monitor_thread', target=monitor_thread)
-thread.setDaemon(True)
-thread.start()
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
 app.add_url_rule("/manual", view_func=manual, methods=['GET'])
@@ -78,4 +76,8 @@ def index():
 
 if __name__ == '__main__':
     app.config['DEBUG'] = False
-    app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
+    cron = Scheduler(daemon=True)
+    cron.add_interval_job(monitor, seconds=180)
+    cron.start()
+    app.run(port=config.CONTROLLER_PORT)
+    #app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
