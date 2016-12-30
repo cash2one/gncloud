@@ -185,7 +185,7 @@ textarea.gn-form-control{
   border-color: rgba(215,215,215,1);
 }
 
-
+.modal-open{padding-right: 15px;}
 
 /* ==================== HEADER STYLE ==================== */
 .gn-header{
@@ -704,11 +704,9 @@ a.log-join-btn:focus{
 .gn-select{
     height: 37px;
     padding: 6px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(215,215,215,1);
     background: url(../gn_images/select_arrow.png) no-repeat center right; /* 네이티브 화살표 대체 */  
     border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     -webkit-appearance: none; /* 네이티브 외형 감추기 */
     -moz-appearance: none;
     appearance: none;
@@ -878,6 +876,12 @@ a.log-join-btn:focus{
     background-color: #e27560;
 }
 
+.gn-dash-vm-right ul{
+    padding: 0;
+    margin: auto;
+    display: inline-block;
+}
+
 /*하이퍼 바이저 종류*/
 .gn-dash-hyp-right ul{
     padding: 0;
@@ -902,7 +906,7 @@ a.log-join-btn:focus{
 }
 
 .dash-box-6 img{
-    height: 142px;
+    /*height: 142px;*/
     max-height: 100%;
     max-width: 100%;
 }
@@ -1104,9 +1108,9 @@ ul.gn-tag-group > li{
 .sprite-docker{
     background: url(../gn_images/instance_create_docker-s.png)no-repeat;}
 
-.gn-btn-default.active .sprite-hyp,
+.gn-btn-default.active .sprite-hyperv,
 .gn-btn-default.active .sprite-kvm,
-.gn-btn-default.active .sprite-doc
+.gn-btn-default.active .sprite-docker
 {background-position: 0px -55px;}
 
 .gn-name-ellip{
@@ -1171,7 +1175,8 @@ a.tab-sm-box{
     height: 35px;
     line-height: 35px;
     background-color: #ffffff;
-    border: 1px solid #d7d7d7;
+    border: 2px solid rgba(215,215,215,.5);
+    box-sizing: border-box;
     float: left;
     text-align: center;
     font-size: 16px;
@@ -1190,7 +1195,7 @@ li.active > .tab-sm-box{
     border: 1px solid #58c4c6 !important;
 }
 
-
+.gn-margin-box > .row.gn-margin-bott10 > div{margin-bottom: 10px;}
 
 
 
@@ -1400,10 +1405,6 @@ ul.gn-sett-graph > li:nth-of-type(3){
 .dropdown-img-icon > li > a:hover, .dropdown-img-icon > li > a:focus {
     color: #58c4c6;
     text-decoration: none;
-    -webkit-transition: all .3s ease;
-    -moz-transition: all .3s ease;
-    -ms-transition: all .3s ease;
-    -o-transition: all .3s ease;
     transition: all .3s ease;
 }
 
@@ -1463,6 +1464,16 @@ ul.gn-sett-graph > li:nth-of-type(3){
 
 /* ================================ 반응형 ================================ */
 @media screen and (max-width: 991px){
+    
+    /* ======== gncloud HEADER ======== */
+    li.nav-link:nth-of-type(1){
+        margin-left: 15px;
+        transition: all .8s ease;
+    }
+    li.nav-link{
+        margin-left: 25px;
+        transition: all .8s ease;
+    }    
    
     /* ======== gncloud 로그인 ======== */
     .gn-title-login span{
@@ -1470,8 +1481,62 @@ ul.gn-sett-graph > li:nth-of-type(3){
         transition: all .3s ease;        
     }
     .gn-select{
-        width: 155px;
+        /*width: 155px;*/
+    }
+    
+    /* ======== gncloud 대시보드 ======== */
+
+    /*가상머신 개수*/
+    .dash-margin-box > div.col-sm-6:nth-of-type(2) > div:nth-of-type(1){
+        font-size: 20px; 
+        font-weight: 600;
+        letter-spacing: 2px;
     }    
+    .dash-margin-box > div.col-sm-6:nth-of-type(2) > div:nth-of-type(2){
+        font-size: 14px; 
+    }
+    .gn-dash-vm-right ul li{
+        font-size: 10px;
+        font-weight: 400;
+        display: block;
+        margin: auto;  
+        float: left;
+        padding: 0px 3px;
+    }
+    .vm-box{
+        border-radius: 3px;
+        margin-right: 10px; 
+        width: 10px;
+        height: 10px;
+    }
+    
+    /*하이퍼바이저 종류*/
+    .gn-dash-hyp-right ul{
+        margin: 0;
+    } 
+    
+    .gn-dash-hyp-right ul:nth-of-type(1){
+        margin-bottom: 10px;
+    } 
+    
+    .gn-dash-hyp-right ul li{
+        font-size: 10px;
+    }
+    .gn-dash-hyp-right.col-sm-6{
+        padding: 0px 10px 0px 10px;
+    }     
+    .gn-dash-hyp-right ul li.memo-color,
+    .gn-dash-hyp-right ul li.hyp-color{
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    /*사용자*/
+    .dash-box-6 div{
+        top: 23px; 
+        transition: all .3s ease; 
+    }
+    
     
 }
 
@@ -1482,6 +1547,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
     /* ======== gncloud 공통 ======== */    
     .gn-table-responsive {
         border: none;
+        width: auto;
     } 
     
     .gn-table-responsive > .gn-table thead tr th{
@@ -1493,13 +1559,15 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
     
     /* ======== gncloud HEADER ======== */    
-    .nav-link{
+    li.nav-link{
+        margin-top: 20px;
         float: left;
         text-align: center;
     }
     
     .navbar-collapse.gn-header-collapsed{
-        background-color: #eeeeee;   
+        background-color: #eeeeee;  
+        /*padding-bottom: 4px;*/
     }
     
     .navbar-right{
@@ -1509,11 +1577,11 @@ ul.gn-sett-graph > li:nth-of-type(3){
     .navbar-right li.dropdown{
         position: absolute;
         bottom: 72px;
-        right: 0;
+        right: 15px;
     }
     
     .dropdown{
-        margin-right: 45px;
+        /*margin-right: 45px;*/
     }     
     
     .dropdown-menu.gn-head-drop{
@@ -1524,12 +1592,17 @@ ul.gn-sett-graph > li:nth-of-type(3){
         margin-top: 20px;
     }    
     
-    
-    
-    
+    .navbar-nav > .open > .dropdown-menu.gn-head-drop{
+        position: absolute;
+        top: 105%;
+        left: -80px;
+        z-index: 1000;
+        background-color: white;
+    }    
+
     /* ======== gncloud 버튼 ======== */
     .create-btn > a > button.btn-success{
-        width: 90%;
+        width: 95%;
         margin: auto;
     }
     
@@ -1538,12 +1611,23 @@ ul.gn-sett-graph > li:nth-of-type(3){
         font-size: 25px;
     }
     .gn-select{
-        width: 155px;
+        /*width: 155px;*/
     }
     
     /* ======== gncloud 대시보드 ======== */
-    .dash-margin-box div img{
-        width: 50%:
+    .dash-margin-box > div.col-sm-6:nth-of-type(1){
+        border-right: none;    
+    }
+    
+    .dash-margin-box > div.col-sm-6:nth-of-type(1) img{
+        width: 30%;
+        margin-bottom: 10px;
+    } 
+    
+    /*사용자*/
+    .dash-box-6 div{
+        top: 50px; 
+        transition: all .3s ease; 
     }    
     
     /* ======== gncloud 인스턴스 리스트 ======== */
@@ -1556,7 +1640,9 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
     
     /* ======== gncloud 이미지 ======== */
-    
+    .row.gn-margin-bott10 > div.col-sm-2 > button.btn-gn-sub{
+        margin-bottom: 10px;
+    }    
     
     /* ======== gncloud 설정 ======== */
 
