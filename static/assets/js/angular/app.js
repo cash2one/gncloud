@@ -17,6 +17,34 @@ var serviceAddModules = [
         };
     });
 
+    /*app.factory('UserService', function() {
+        var age = 10;
+        var
+        $.ajax({
+            type: "GET",
+            url: '/api/manager/vm/logincheck',
+            headers: {'Content-Type': 'application/json; charset=utf-8'},
+            success:function(data) {
+                if (data.status == true) {
+                    $("#name").html(data.message);
+                }else{
+                    if(data.message != null) {
+                        alert(data.message)
+                    }
+                }
+
+            }
+        })
+
+        return {
+            name : 'tom',
+            age: function (val) {
+                if (val) age = val;
+                else return age;
+            }
+        };
+    });*/
+
     app.service('dateModifyService', function()
     {
         this.modifyDate = function(date)

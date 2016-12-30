@@ -3,6 +3,7 @@ __author__ = 'jhjeon'
 
 import json
 import requests
+import time
 from pexpect import pxssh
 from datetime import datetime
 from db.models import GnDockerContainers, GnDockerImages, GnDockerImageDetail, GnHostMachines, GnVmMachines, GnDockerVolumes
@@ -126,6 +127,7 @@ class DockerService(object):
         command = "docker service ps %s" % internal_id
         result = self.send_command_return_all_line(command)
         for line in result:
+            logger.debug("get_service_containers result line: %s" % line)
             container_info = line.split()
             if len(container_info) == 0:
                 pass
@@ -136,6 +138,10 @@ class DockerService(object):
                 container['internal_id'] = container_info[0]
                 container['internal_name'] = container_info[1]
                 container['host_name'] = container_info[3]
+                # 호스트 네임이 DB에 존재하지 않는 값이 나온다면 None을 리턴, 컨트롤러에서는 이 함수를 다시 호출하게 한다.
+                node = GnHostMachines.query.filter_by(name=container['host_name']).one_or_none()
+                if node is None:
+                    return None
                 container_list.append(container)
         return container_list
 
