@@ -133,9 +133,27 @@ def hvm_create():
             else:
                 break
 
+        vmid = random_string(config.SALT, 8)
+        vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
+                          internal_name,
+                          host_id, get_vm_ip, cpu, memory, hdd,
+                          os
+                          , os_ver, os_sub_ver, os_bit, team_code,
+                          author_id, datetime.datetime.now(),
+                          datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
+
+        insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+        db_session.add(insert_monitor)
+        db_session.add(vm)
+        db_session.commit()
+        return jsonify(status=True, massage="create vm success")
+
+
+    else:
+        return jsonify(status=False, massage="VM 생성 실패")
         # print get_vm_ip
         # 생성된 VM의 ip 정보를 고정한다
-
+'''
         while True:
             try:
                 time.sleep(20)
@@ -173,9 +191,9 @@ def hvm_create():
                 continue
             finally:
                 print message
+'''
 
-    else:
-        return jsonify(status=False, massage="VM 생성 실패")
+
 
 
 #  REST. VM 스냅샷 생성
