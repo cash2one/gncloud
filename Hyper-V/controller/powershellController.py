@@ -38,11 +38,11 @@ def hvm_create():
     cpu = request.json['cpu']
     hdd = request.json['hdd']
 
-    # team_code = session['teamCode']
-    # author_id = session['userName']
-    #
-    team_code = request.json['teamCode']
-    author_id = request.json['userName']
+    team_code = session['teamCode']
+    author_id = session['userName']
+
+    # team_code = request.json['teamCode']
+    # author_id = request.json['userName']
 
 
     #host machine 선택
@@ -139,20 +139,14 @@ def hvm_create():
         # print get_vm_ip
         # 생성된 VM의 ip 정보를 고정한다
 
-        while True:
-            if len(get_vm_ip) <= 2 and get_ip_count <= 20:
-                #print get_vm_ip
-                time.sleep(40)
-                get_ip_count = get_ip_count + 1
-                get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
-            elif get_ip_count > 20:
-                return jsonify(status=False, massage="VM에 ip를 할당할 수 없습니다.")
-            elif get_vm_ip[:2] == "16":
-                time.sleep(40)
-                get_ip_count = get_ip_count + 1
-                get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
-            else:
-                break
+
+        # powershell service 쪽 추가해야할 스크립트
+        # def change_vm_pwd2(adminname, password):
+        #     ps = PowerShell("192.168.1.39", config.AGENT_PORT, config.AGENT_REST_URI)
+        #     script = '$user=[adsi]"WinNT://$env:computerName/'+adminname+'";'
+        #     script += '$user.setPassword("'+password+'"); '
+        #     script += '$user:USERNAME | ConvertTo-Json'
+        #     print str(ps.send(script))
 
         vmid = random_string(config.SALT, 8)
         vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
