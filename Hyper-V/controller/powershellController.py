@@ -38,8 +38,11 @@ def hvm_create():
     cpu = request.json['cpu']
     hdd = request.json['hdd']
 
-    team_code = session['teamCode']
-    author_id = session['userName']
+    # team_code = session['teamCode']
+    # author_id = session['userName']
+    #
+    team_code = request.json['teamCode']
+    author_id = request.json['userName']
 
 
     #host machine 선택
@@ -133,6 +136,24 @@ def hvm_create():
             else:
                 break
 
+        # print get_vm_ip
+        # 생성된 VM의 ip 정보를 고정한다
+
+        while True:
+            if len(get_vm_ip) <= 2 and get_ip_count <= 20:
+                #print get_vm_ip
+                time.sleep(40)
+                get_ip_count = get_ip_count + 1
+                get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
+            elif get_ip_count > 20:
+                return jsonify(status=False, massage="VM에 ip를 할당할 수 없습니다.")
+            elif get_vm_ip[:2] == "16":
+                time.sleep(40)
+                get_ip_count = get_ip_count + 1
+                get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
+            else:
+                break
+
         vmid = random_string(config.SALT, 8)
         vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
                           internal_name,
@@ -149,53 +170,6 @@ def hvm_create():
         return jsonify(status=True, massage="create vm success")
 
 
-    else:
-        return jsonify(status=False, massage="VM 생성 실패")
-        # print get_vm_ip
-        # 생성된 VM의 ip 정보를 고정한다
-'''
-        while True:
-            try:
-                time.sleep(20)
-                dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
-                if dhcp_ip_address is True:
-                    try:
-                        time.sleep(20)
-                        ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
-                    except Exception as message:
-                        print message
-                        ps.get_ip_address_type(get_vm_ip)
-                        continue
-                else:
-                    try:
-                        vmid = random_string(config.SALT, 8)
-                        vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
-                                          internal_name,
-                                          host_id, get_vm_ip, cpu, memory, hdd,
-                                          os
-                                          , os_ver, os_sub_ver, os_bit, team_code,
-                                          author_id, datetime.datetime.now(),
-                                          datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
-
-                        insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
-                        db_session.add(insert_monitor)
-                        db_session.add(vm)
-                        db_session.commit()
-                        return jsonify(status=True, massage="create vm success")
-
-                    except:
-                        db_session.rollback()
-                        return jsonify(status=False, massage="DB insert fail")
-            except Exception as message:
-                print message
-                continue
-            finally:
-                print message
-'''
-
-
-
-
 #  REST. VM 스냅샷 생성
 #  hvm_snapshot 1. VM 정지 (Stop-VM)
 #  hvm_snapshot 2. 스냅샷을 생성한다.
@@ -209,11 +183,13 @@ def hvm_snapshot():
     org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
 
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == org_id.host_id).first()
+    image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == org_id.host_id).first()
+
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
 
     stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
     if stop_vm['State'] is 3:
-        create_snap = ps.create_snap(org_id.internal_id, config.COMPUTER_NAME)
+        create_snap = ps.create_snap(org_id.internal_id, image_pool.image_path)
         #print create_snap
         if create_snap['Name'] is not None:
             base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
@@ -227,12 +203,12 @@ def hvm_snapshot():
             os_subver = base_image_info.os_sub_ver
             subtype = 'snap'
             type = request.json['type']
-            author_id = session['userName']
-            #author_id = request.json['author_id']
+            #author_id = session['userName']
+            author_id = request.json['userName']
 
             os_bit = base_image_info.os_bit
-            #team_code = request.json['team_code']
-            team_code = session['teamCode']
+            team_code = request.json['team_code']
+            #team_code = session['teamCode']
 
             insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
                                             icon, os, os_ver, os_subver, os_bit, team_code,
@@ -258,7 +234,7 @@ def hvm_snapshot():
 '''
 
 
-
+# -------------------------------------------------------
 # REST. VM 상태변경
 # -------------------------------------------------------
 # VM 상태 "start", "stop", "resume", "shutdown", "restart", "powerdown"
@@ -366,13 +342,14 @@ def hvm_state(id):
 def hvm_delete(id):
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vmid.host_id).first()
+    image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == vmid.host_id).first()
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
     vm_info =ps.get_vm_one(vmid.internal_id)
     #  REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
     stop_vm = ps.stop_vm(vmid.internal_id)
     if stop_vm['State'] is 3:
-        delete_vm = ps.delete_vm(vmid.internal_id, "base", config.COMPUTER_NAME)
+        delete_vm = ps.delete_vm(vmid.internal_id, "base", image_pool.image_path)
         update_vm_machines = db_session.query(GnVmMachines).filter(GnVmMachines.id
                                                                    == id).update({"status" : "Removed"})
         db_session.commit()
@@ -440,11 +417,12 @@ def hvm_modify_image(id):
 # 이미지 따로 관리
 def hvm_delete_image(id):
     vhd_Name = db_session.query(GnVmImages).filter(GnVmImages.id == id).first()
-
+    image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == vhd_Name.host_id).first()
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vhd_Name.host_id).first()
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
 
-    image_delete = ps.delete_vm_Image(vhd_Name.filename, vhd_Name.sub_type, config.COMPUTER_NAME)
+    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, config.AGENT_REST_URI)
+    image_delete = ps.delete_vm_Image(vhd_Name.filename, vhd_Name.sub_type, image_pool.image_path)
+
     json_obj = json.dumps(image_delete)
     json_size = len(json_obj)
     if json_size <= 2: #json 크기는 '{}' 포함

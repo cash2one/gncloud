@@ -102,7 +102,6 @@ class PowerShell(object):
         script = ""
         return self.send_get_vm_info(script, ip)
 
-
     # VHD 파일을 복사
     # example) Convert-VHD -DestinationPath C:\images\2_testvm\disk.vhdx
     # / -Path C:\images\windows10.vhdx -Verbose -Passthru | ConvertTo-Json
@@ -129,7 +128,6 @@ class PowerShell(object):
         script += '$vm = Get-VM -id  '+vmid+';'
         script += 'Add-VMHardDiskDrive $vm -Path '+base+';'
         return self.send(script)
-
 
     # VM 하드디스크 추가
     # example) $vm = Get-VM -Id E6CE3D4E-1152-494B-9445-CBD38549CFF4;
@@ -167,7 +165,6 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-
     #가상머신을 재부팅 한다
     def restart_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
@@ -175,7 +172,6 @@ class PowerShell(object):
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         return self.send(script)
-
 
     #가상머신을 일시정지상태로 돌린다. 리턴 state = 9
     def suspend_vm(self, vm_Id):
@@ -185,7 +181,6 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-
         #일시정지된 가상머신을 다시 시작한다. 리턴 state = 2
     def resume_vm(self, vm_Id):
         script = "$vm = Get-VM -Id " + vm_Id + "; "
@@ -194,14 +189,12 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-
     # 가상머신 하나의 정보를 가져온다.
     # example) $vm = Get-VM -Id 8102C1F1-6A15-4BDC-8BF1-C8ECBE9D94E2 | Convertto-Json
     def get_vm_one(self, vm_name):
         script = "Get-VM -Id " + vm_name
         script += self.CONVERTTO_JSON
         return self.send(script)
-
 
     # 서버 내의 모든 가상머신 리스트 정보를 가져온다.
     # example) Get-VM
@@ -210,53 +203,46 @@ class PowerShell(object):
         script += self.CONVERTTO_JSON
         return self.send(script)
 
-
     #VM 이미지 삭제
-    def delete_vm_Image(self, vhd_File_Name, type,computer_name):
+    def delete_vm_Image(self, vhd_File_Name, type, path):
         #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
-        script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
-        script += "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+"/" + vhd_File_Name
-        script += " -Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json}"
+        script = "Move-Item -Path "+path+"/vhdx/"+type+"/" + vhd_File_Name
+        script += " -Destination "+path+"/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json -Compress;"
         #print script
         return self.send(script)
-
 
     #VM 삭제
-    def delete_vm(self, vmId, type, computer_name):
-        script = "Invoke-Command -ComputerName "+computer_name+" -ScriptBlock {"
-        script += "$vm = Get-VM -Id "+vmId+";"
+    def delete_vm(self, vmId, type, path):
+        script = "$vm = Get-VM -Id "+vmId+";"
         script += "$vmn = $vm.Name;"
         script += "Remove-VM -VM $vm -Force;"
-        script += "Move-Item -Path "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/"+type+'/$vmn".vhdx" '
-        script += "-Destination "+config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/backup/ | ConvertTo-Json }"
+        script += "Move-Item -Path "+path+"/vhdx/"+type+'/$vmn".vhdx" '
+        script += "-Destination "+path+"/vhdx/backup/ | ConvertTo-Json -Compress"
         #print script
         return self.send(script)
-
 
     # 모니터링을 위한 스크립트
     def monitor(self, vm_ip):
         script = ""
         return self.send(script)
 
-
     #스냅샷 생성
-    def create_snap(self, vm_Id, computer_name):
+    def create_snap(self, vm_Id, path):
         snapshot_id = "_"+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        script = 'Invoke-Command -ComputerName '+computer_name+' -ScriptBlock {'
-        script += '$vm = Get-VM -Id '
+        #script = 'Invoke-Command -ComputerName '+computer_name+' -ScriptBlock {'
+        script = '$vm = Get-VM -Id '
         script += vm_Id + ';'
         script += '$VMname = $vm.Name;'
         script += '$CloneVMname = "' +snapshot_id+'";'
-        script += 'Export-VM -Name $VMname -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/$VMname"clone"/ '+';'
-        script += 'Move-Item '+config.DISK_DRIVE+config.HYPERV_PATH+'/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
-        script += '-Destination '+config.DISK_DRIVE+config.HYPERV_PATH+'/vhdx/snap/$VMName$CloneVMname".vhdx";'
-        script += 'Remove-Item -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/$VMname"clone" -Recurse ;'
-        script += 'Get-ChildItem -Path '+config.DISK_DRIVE+config.HYPERV_PATH+'/vhdx/snap/$VMName'
+        script += 'Export-VM -Name $VMname -Path '+path+'/$VMname"clone"/ '+';'
+        script += 'Move-Item '+path+'/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
+        script += '-Destination '+path+'/vhdx/snap/$VMName$CloneVMname".vhdx";'
+        script += 'Remove-Item -Path '+path+'/$VMname"clone" -Recurse ;'
+        script += 'Get-ChildItem -Path '+path+'/vhdx/snap/$VMName'
         script += '"' + snapshot_id
-        script += '.vhdx" | ConvertTo-Json -Compress}'
+        script += '.vhdx" | ConvertTo-Json -Compress'
         # print script
         return self.send(script)
-
 
     # agent 모듈에 파워쉘 스크립트를 전달하여 실행하고 결과를 받아온다.
     def send(self, script):
@@ -289,7 +275,6 @@ class PowerShell(object):
         response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
 
-
     # 새로 생성된 agent에 전달, setting을 위해 timeout이 작은값을 넣는다
     def send_new_vm(self, script, address):
         port = str(self.port)
@@ -303,7 +288,6 @@ class PowerShell(object):
         data = {'script': script}
         response = requests.post(url, data=json.dumps(data), timeout=10)
         return json.loads(response.json())
-
 
     def get_state_string(self, state):
         if state is 1:
