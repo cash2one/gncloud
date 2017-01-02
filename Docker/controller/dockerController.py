@@ -81,17 +81,23 @@ def doc_create():
             # os_ver=base_image.os_ver,
             # 생성된 Service의 Container 정보를 DB에 저장한다.
             service_container_list = ds.get_service_containers(docker_service[0]['ID'])
+            while service_container_list is None:
+                service_container_list = ds.get_service_containers(docker_service[0]['ID'])
+            logger.debug("service_container_list: %s" % service_container_list)
             for service_container in service_container_list:
-                node = GnHostMachines.query.filter_by(name=service_container['host_name']).first()
+                node = GnHostMachines.query.filter_by(name=service_container['host_name']).one()
+                logger.debug("container node: %s" % node)
                 container = GnDockerContainers(
                     service_id=id,
                     internal_id=service_container['internal_id'],
                     internal_name=service_container['internal_name'],
                     host_id=node.id
                 )
+                logger.debug("container: %s" % container)
                 sql_session.add(container)
             # 생성된 volume 정보를 DB에 저장한다.
             service_volume_list = ds.get_service_volumes(service.internal_id)
+            logger.debug("service_volume_list: %s" % service_volume_list)
             for service_volume in service_volume_list:
                 volume = GnDockerVolumes(
                     service_id=id,
@@ -102,17 +108,17 @@ def doc_create():
                 sql_session.add(volume)
             # 생성된 접속 포트 정보를 DB에 저장한다.
             ports = docker_service[0]['Endpoint']['Ports']
+            logger.debug("ports: %s" % ports)
             for port in ports:
                 set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
                 sql_session.add(set_port)
             service.ip += ":%s" % ports[0]['PublishedPort']
             sql_session.add(service)
             sql_session.commit()
-            sql_session.remove()
             return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
     except Exception as e:
         sql_session.rollback()
-        sql_session.remove()
+        logger.error(e)
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
 

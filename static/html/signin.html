@@ -66,14 +66,15 @@
             <div class="col-md-offset-4 col-md-4 login-box">
                 <div class="form-group">
                     <h3>회원가입</h3>       
-                    <input type="text" class="form-control gn-input" id="user_name" placeholder="이름을 입력해주세요.">
+                    <input type="text" class="form-control gn-input" id="user_name" placeholder="이름을 입력해주세요." minlength="2" maxlength="20" title="최소 2자리이상 20자리 미만으로 입력해주세요."/>
                     <input type="text" class="form-control gn-input" id="user_id" placeholder="아이디를 입력해주세요.">
+                    <div class="error-message" id="i">이미 등록된 아이디입니다.</div>
                     <input type="password" class="form-control gn-input" id="password" placeholder="비밀번호를 입력해주세요.">
                     <input type="password" class="form-control gn-input" id="password_re" placeholder="비밀번호를 다시 입력해주세요.">  
                     
                     <!--이미 등록된 아이디를 적었을 때 출력-->
-                    <div class="error-message" id="i">이미 등록된 아이디입니다.</div>
                     <div class="error-message" id="p">입력된 비밀번호가 일치하지 않습니다.</div>
+
                     <button type="submit" class="btn btn-gn-login btn-lg btn-block" id="sigin_btn">회원가입</button>
                 </div>    
             </div> <!--class="login-box"-->

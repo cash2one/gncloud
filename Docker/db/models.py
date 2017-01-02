@@ -225,7 +225,7 @@ class GnDockerContainers(Base):
     service_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'), primary_key=True, nullable=False)
     internal_id = Column(String(100), primary_key=True, nullable=True, default='')
     internal_name = Column(String(100), primary_key=True, nullable=True, default='')
-    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'), nullable=False, default='')
+    host_id = Column(String(8), ForeignKey('GN_HOST_MACHINES.id'), nullable=False, default='')
     status = Column(String(10), nullable=True, default='')
     gnHostMachines = relationship('GnHostMachines')
 
@@ -290,8 +290,8 @@ class GnDockerPorts(Base):
 class GnDockerImages(Base):
     __tablename__ = 'GN_DOCKER_IMAGES'
     id = Column(String(8), primary_key=True, nullable=False)
-    name = Column(String(50), nullable=False, default='')
-    view_name = Column(String(50), nullable=False, default='')
+    name = Column(String(200), nullable=False, default='')
+    view_name = Column(String(200), nullable=False, default='')
     tag = Column(String(200), nullable=False, default='')
     os = Column(String(50), nullable=False, default='')
     os_ver = Column(String(45), nullable=False, default='')
