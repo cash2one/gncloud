@@ -139,8 +139,55 @@ def hvm_create():
         # print get_vm_ip
         # 생성된 VM의 ip 정보를 고정한다
 
+        # ip 고정 부분 , 서버에 올릴시 몇시간정도 서버측에서 접근 거부 에러 발생하여 주석처리
+        # 일정시간 지난 후에 다시 생성하면 고정이 가능
+        # 만약 같은에러가 계속 발생시
+        # try 문으로 set_vm_ip_address() 메소드로 할당은 가능하다. (고정하는 순간 response 없이 무한 대기, timeout 10으로 설정)
+        #
+        # while True:
+        #     try:
+        #         time.sleep(20)
+        #         dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
+        #         if dhcp_ip_address is True:
+        #             try:
+        #                 time.sleep(20)
+        #                 ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
+        #             except Exception as message:
+        #                 print message
+        #                 ps.get_ip_address_type(get_vm_ip)
+        #                 continue
+        #         else:
+        #             try:
+        #                 vmid = random_string(config.SALT, 8)
+        #                 vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
+        #                                   internal_name,
+        #                                   host_id, get_vm_ip, cpu, memory, hdd,
+        #                                   os
+        #                                   , os_ver, os_sub_ver, os_bit, team_code,
+        #                                   author_id, datetime.datetime.now(),
+        #                                   datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
+        #
+        #                 insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+        #                 db_session.add(insert_monitor)
+        #                 db_session.add(vm)
+        #                 db_session.commit()
+        #                 return jsonify(status=True, massage="create vm success")
+        #
+        #             except:
+        #                 db_session.rollback()
+        #                 return jsonify(status=False, massage="DB insert fail")
+        #     except Exception as message:
+        #         print message
+        #         continue
+        #     finally:
+        #         print message
 
-        # powershell service 쪽 추가해야할 스크립트
+
+        # powershell service 쪽 추가해야할 스크립트 패스워드 관련
+        # todo 1. windows server 2012 r2 는 패스워드를 영문, 숫자, 기호를 혼합하여 입력하도록 강제합니다.
+        # todo 2. adminname은 원본 이미지의 user name이다. windows server2012는 디폴드 값이 Administrator 이다.
+        #         server 에 맞춰서 Administrator 이라는 계정명으로 통일을 해야 될 것 같습니다.
+
         # def change_vm_pwd2(adminname, password):
         #     ps = PowerShell("192.168.1.39", config.AGENT_PORT, config.AGENT_REST_URI)
         #     script = '$user=[adsi]"WinNT://$env:computerName/'+adminname+'";'
