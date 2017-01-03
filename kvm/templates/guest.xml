@@ -13,7 +13,7 @@
     <on_crash>restart</on_crash>
     <devices>
         <disk type='file' device='disk'>
-            <source file='/var/lib/libvirt/images/{{ guest_name }}.img'/>
+            <source file='/mnt/kvm/images/{{ guest_name }}.img'/>
             <target dev='hda' bus='virtio'/>
             <driver name='qemu' type='raw'/>
             </disk>

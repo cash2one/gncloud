@@ -50,6 +50,21 @@ def guest_list():
     return jsonify(status=True, message="success", list=vm_list(db_session, team_code))
 
 
+# @app.route('/vm/machine', methods=['POST'])
+# def create_vm():
+#     team_code = session['teamCode']
+#     user_id = session['userId']
+#     name = request.json['vm_name']
+#     cpu = request.json['cpu']
+#     memory = request.json['memory']
+#     disk = request.json['hdd']
+#     image_id = request.json['id']
+#     sshkeys = request.json['sshkeys']
+#     tag =request.json['tag']
+#     result = server_create(name ,cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag)
+#     return jsonify(status=result["status"], message=result["message"])
+
+
 @app.route('/vm/machines/<id>', methods=['GET'])
 def guest_info(id):
     return jsonify(status=True, message="success", info=vm_info(db_session, id))

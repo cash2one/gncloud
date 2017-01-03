@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestCreateCtrl', function ($scope, $http) {
+    .controller('guestCreateCtrl', function ($scope, $http, $timeout) {
         //탭이동
         $('.nav-sidebar li').removeClass('active');
         var url = window.location;
@@ -149,7 +149,12 @@ angular
 
         }
 
+
         $scope.submit = function() {
+
+            $timeout(function () {
+                window.location.href = '#/guestList';
+            }, 1000 /* 1000ms 뒤에 지연된 작업이 수행된다. */, true );
 
             if($scope.data.vm_name == "" || $scope.data.vm_name == null){
                 alert("인스턴스명을 입력해 주세요");
@@ -177,19 +182,19 @@ angular
                 method  : 'POST',
                 url: '/api/'+$scope.type+'/vm/machine',
                 data: $scope.data,
+                async:   true,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
             })
                 .success(function(data) {
-                    if (data.status == true) {
-                        alert("인스턴스가 생성되었습니다");
+                    /*if (data.status == true) {
                         window.location.href = '#/guestList';
                     } else {
                         if(data.message != null) {
                             alert(data.message)
                         }
-                    }
+                    }*/
                 });
         };
 
