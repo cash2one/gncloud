@@ -37,18 +37,28 @@
 
 	- 2.7.12 버전 설치
 
-- pip 설치
+- pip 설치(CentOs7 기준, root 권한 실행)
 
     - EPEL (Extra Packages for Enterprise Linux) : Fedora Project 에서 제공하는 저장소
     
-    CentOS 7
-
     ```
     $ rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     ```
 
     ```
     $ yum install python-pip
+    ```
+
+    ```
+    $ pip install --upgrade pip
+    ``` 
+
+    ```
+    $ yum install python-devel
+    ```
+
+    ```
+    $ yum install MySQL-python
     ```
 
 - python package
@@ -159,18 +169,18 @@
     ```
     #!/bin/bash
     > /etc/yum.repos.d/docker.repo
-    echo '[dockerrepo]' >> docker.repo
-    echo 'name=Docker Repository' >> docker.repo
-    echo 'baseurl=https://yum.dockerproject.org/repo/main/centos/7/' >> docker.repo
-    echo 'enabled=1' >> docker.repo
-    echo 'gpgcheck=1' >> docker.repo
-    echo 'gpgkey=https://yum.dockerproject.org/gpg' >> docker.repo
+    echo '[dockerrepo]' >> /etc/yum.repos.d/docker.repo
+    echo 'name=Docker Repository' >> /etc/yum.repos.d/docker.repo
+    echo 'baseurl=https://yum.dockerproject.org/repo/main/centos/7/' >> /etc/yum.repos.d/docker.repo
+    echo 'enabled=1' >> /etc/yum.repos.d/docker.repo
+    echo 'gpgcheck=1' >> /etc/yum.repos.d/docker.repo
+    echo 'gpgkey=https://yum.dockerproject.org/gpg' >> /etc/yum.repos.d/docker.repo
 
     yum -y install docker-engine
 
     sed -i 's/ExecStart=\/usr\/bin\/dockerd/ExecStart=\/usr\/bin\/dockerd \
             -H tcp:\/\/0.0.0.0:2375 -H unix:\/\/\/var\/run\/docker.sock \
-            --insecure-registry 192.168.0.20:5000/g' \
+            --insecure-registry 192.168.1.204:5000/g' \
             /usr/lib/systemd/system/docker.service
 
     systemctl enable docker
