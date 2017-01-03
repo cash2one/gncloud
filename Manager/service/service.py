@@ -141,7 +141,7 @@ def getQuotaOfTeam(team_code, sql_session):
                               .filter(GnVmMachines.team_code == team_code)\
                               .filter(GnVmMachines.status != "Removed").one()
 
-    current_disk_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_disk"))\
+    current_disk_info = sql_session.query(func.sum(GnVmMachines.disk).label("sum_disk"))\
                                    .filter(GnVmMachines.team_code == team_code)\
                                    .filter(GnVmMachines.status != "Removed") \
                                    .filter(GnVmMachines.type != "docker").one()

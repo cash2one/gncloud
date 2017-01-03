@@ -282,7 +282,7 @@ def teamnamecode(code):
 
 @app.route('/vm/account/teamname', methods=['PUT'])
 def changeteamname():
-    team_name = request.json['team_name']
+    team_name=request.json['team_name']
     return jsonify(status=True, message="success", list=select_put(team_name,session['teamCode']))
 
 @app.route('/vm/account/teamtable', methods=['GET'])
