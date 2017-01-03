@@ -3,7 +3,14 @@ var serviceAddModules = [
 ];
 
 (function () {
-    var app = angular.module('gncloud', serviceAddModules);
+    var app = angular.module('gncloud', serviceAddModules)
+        .directive('navbar', function (){
+            return{
+                restrict: 'E',
+                templateUrl:'/main/navbar.html',
+                controller:'navbarCtrl'
+            }
+        });
 
     app.factory('serviceLogger', function ($location) {
         return {
@@ -15,6 +22,10 @@ var serviceAddModules = [
                 return response;
             },
         };
+    });
+
+    app.factory('getLoginInfo', function ($location) {
+        return {'level':'owner'};
     });
 
     /*app.factory('UserService', function() {

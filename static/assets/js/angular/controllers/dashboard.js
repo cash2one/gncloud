@@ -1,14 +1,6 @@
 angular
     .module('gncloud')
     .controller('dashboardCtrl', function ($scope, $http) {
-
-        //탭이동
-        $('.nav-sidebar li').removeClass('active');
-        var url = window.location;
-        $('ul.nav-sidebar a').filter(function () {
-            return this.href.indexOf(url.hash) != -1;
-        }).parent().addClass('active');
-
         $http({
             method: 'GET',
             url: '/api/manager/useinfo',
@@ -45,6 +37,11 @@ angular
                         $scope.user_list[i].user_id = data.list.user_list[i][0];
                         $scope.user_list[i].user_name = data.list.user_list[i][1];
                         $scope.user_list[i].cnt = data.list.user_list[i][2];
+                    }
+                    $scope.image_type_list=data.list.image_type_list;
+                    for (var i = 0; i < data.list.image_type_list.length; i++) {
+                        $scope.image_type_list[i].name = data.list.image_type_list[i][0];
+                        $scope.image_type_list[i].cnt = data.list.image_type_list[i][1];
                     }
 
                 }

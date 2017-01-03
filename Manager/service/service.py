@@ -137,28 +137,62 @@ def server_image(type, sql_session, team_code):
 
 def getQuotaOfTeam(team_code, sql_session):
     current_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
-                        func.sum(GnVmMachines.memory).label("sum_mem"),
-                        func.sum(GnVmMachines.disk).label("sum_disk")
-                        ).filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
-    limit_quota = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+                                     func.sum(GnVmMachines.memory).label("sum_mem"))\
+                              .filter(GnVmMachines.team_code == team_code)\
+                              .filter(GnVmMachines.status != "Removed").one()
+
+    current_disk_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_disk"))\
+                                   .filter(GnVmMachines.team_code == team_code)\
+                                   .filter(GnVmMachines.status != "Removed") \
+                                   .filter(GnVmMachines.type != "docker").one()
+
+    limit_quota = sql_session.query(GnTeam)\
+                             .filter(GnTeam.team_code == team_code).one()
+
     vm_run_count = sql_session.query(func.count(GnVmMachines.id).label("count"))\
-                   .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type != "docker").one()
+                              .filter(GnVmMachines.team_code == team_code)\
+                              .filter(GnVmMachines.status != "Removed")\
+                              .filter(GnVmMachines.type != "docker").one()
+
     vm_stop_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "running").filter(GnVmMachines.type != "docker").one()
+                               .filter(GnVmMachines.team_code == team_code)\
+                               .filter(GnVmMachines.status != "Removed")\
+                               .filter(GnVmMachines.status != "running")\
+                               .filter(GnVmMachines.type != "docker").one()
+
     vm_kvm_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "kvm").one()
+                              .filter(GnVmMachines.team_code == team_code)\
+                              .filter(GnVmMachines.status != "Removed")\
+                              .filter(GnVmMachines.type == "kvm").one()
+
     vm_hyperv_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "hyperv").one()
+                                 .filter(GnVmMachines.team_code == team_code)\
+                                 .filter(GnVmMachines.status != "Removed")\
+                                 .filter(GnVmMachines.type == "hyperv").one()
+
     vm_docker_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-        .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type == "docker").one()
-    team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
-    team_user_cnt = sql_session.query(func.count(GnUserTeam.user_id).label("count")).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.comfirm == "Y").one()
+                                  .filter(GnVmMachines.team_code == team_code)\
+                                  .filter(GnVmMachines.status != "Removed")\
+                                  .filter(GnVmMachines.type == "docker").one()
+
+    team_info = sql_session.query(GnTeam)\
+                           .filter(GnTeam.team_code == team_code).one()
+
+    team_user_cnt = sql_session.query(func.count(GnUserTeam.user_id).label("count"))\
+                               .filter(GnUserTeam.team_code == team_code)\
+                               .filter(GnUserTeam.comfirm == "Y").one()
+
     user_list = sql_session.query(GnVmMachines.author_id,GnUser.user_name,func.count().label("count"))\
-                .outerjoin(GnUser, GnVmMachines.author_id == GnUser.user_id)\
-                .filter(GnVmMachines.team_code == team_code)\
-                .filter(GnVmMachines.status != "Removed") \
-                .filter(GnVmMachines.type != "docker")\
-                .group_by(GnVmMachines.author_id).all()
+                           .outerjoin(GnUser, GnVmMachines.author_id == GnUser.user_id)\
+                           .filter(GnVmMachines.team_code == team_code)\
+                           .filter(GnVmMachines.status != "Removed") \
+                           .filter(GnVmMachines.type != "docker")\
+                           .group_by(GnVmMachines.author_id).all()
+
+    image_type_list = sql_session.query(GnVmImages.name, func.count().label("count")) \
+                                 .join(GnVmMachines,  GnVmImages.id == GnVmMachines.image_id) \
+                                 .filter(GnVmImages.type == "kvm") \
+                                 .group_by(GnVmImages.id).all()
 
     if current_info.sum_cpu is None:
         cpu_per_info = [0,100]
@@ -178,8 +212,8 @@ def getQuotaOfTeam(team_code, sql_session):
         disk_per_info = [0,100]
         disk_cnt_info = [0, limit_quota.disk_quota]
     else:
-        disk_per_info = [int((current_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info.sum_disk/limit_quota.disk_quota)*100))]
-        disk_cnt_info = [int(current_info.sum_disk), limit_quota.disk_quota]
+        disk_per_info = [int((current_disk_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_disk_info.sum_disk/limit_quota.disk_quota)*100))]
+        disk_cnt_info = [int(current_disk_info.sum_disk), limit_quota.disk_quota]
 
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
@@ -197,7 +231,8 @@ def getQuotaOfTeam(team_code, sql_session):
                  , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
                  , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info
                  , 'team_user_count':team_user_cnt, 'user_list':user_list
-                 , 'vm_kvm_per':vm_kvm_per, 'vm_hyperv_per':vm_hyperv_per};
+                 , 'vm_kvm_per':vm_kvm_per, 'vm_hyperv_per':vm_hyperv_per
+                 , "image_type_list":image_type_list};
 
     return quato_info
 

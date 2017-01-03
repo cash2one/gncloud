@@ -43,10 +43,12 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
             , current_memory=memory
             , vcpu=cpu
         )
-        conn.createXML(guest, 0)
-        uuid = conn.lookupByName(name).UUIDString()
+        dom = conn.defineXML(guest)
+        dom.create()
+        guest = conn.lookupByName(name)
+        guest.setAutostart(True)
         conn.close()
-        return uuid
+        return guest.UUIDString()
     except IOError as errmsg:
         print(str(errmsg))
 

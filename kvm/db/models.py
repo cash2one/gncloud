@@ -42,7 +42,7 @@ class GnVmMachines(Base):
     memory = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
     ip = Column(String(20), primary_key=False, nullable=False)
-    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'))
+    host_id = Column(String(8), ForeignKey('GN_HOST_MACHINES.id'))
     os = Column(String(10), primary_key=False, nullable=True)
     os_ver = Column(String(20), primary_key=False, nullable=True)
     os_sub_ver = Column(String(20), primary_key=False, nullable=True)
@@ -54,12 +54,13 @@ class GnVmMachines(Base):
     stop_time = Column(DateTime, default=datetime.datetime.now())
     status = Column(String(10), primary_key=False, nullable=False)
     tag = Column(String(100), primary_key=False, nullable=False)
+    image_id = Column(String(8), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
 
     def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None, cpu=None
                  , memory=None, disk=None, ip=None, host_id=None
                  , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
-                 , author_id=None, status=None, tag=None, create_time=None):
+                 , author_id=None, status=None, tag=None, image_id=None):
         self.id = id
         self.name = name
         self.type = type
@@ -78,7 +79,7 @@ class GnVmMachines(Base):
         self.author_id = author_id
         self.status = status
         self.tag = tag
-        self.create_time = create_time
+        self.image_id = image_id
 
 
     def __repr__(self):
