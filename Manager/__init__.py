@@ -280,10 +280,15 @@ def teamname():
 def teamnamecode(code):
     return jsonify(status=True, message="success", list=select_info(code,db_session))
 
-@app.route('/vm/account/teamname', methods=['PUT'])
+@app.route('/vm/account/teamname/', methods=['PUT'])
 def changeteamname():
     team_name=request.json['team_name']
     return jsonify(status=True, message="success", list=select_put(team_name,session['teamCode']))
+
+@app.route('/vm/account/teamname/<code>', methods=['PUT'])
+def changeteamnamesystem(code):
+    team_name=request.json['team_name']
+    return jsonify(status=True, message="success", list=select_put(team_name,code))
 
 @app.route('/vm/account/teamtable', methods=['GET'])
 def teamshow():
