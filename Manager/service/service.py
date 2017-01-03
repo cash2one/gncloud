@@ -143,7 +143,7 @@ def getQuotaOfTeam(team_code, sql_session):
                               .filter(GnVmMachines.team_code == team_code)\
                               .filter(GnVmMachines.status != "Removed").one()
 
-    current_disk_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_disk"))\
+    current_disk_info = sql_session.query(func.sum(GnVmMachines.disk).label("sum_disk"))\
                                    .filter(GnVmMachines.team_code == team_code)\
                                    .filter(GnVmMachines.status != "Removed") \
                                    .filter(GnVmMachines.type != "docker").one()
@@ -279,6 +279,8 @@ def teamset(team_code, sql_session):
 def approve_set(user_id,code,type,user_name):
     if(type == 'approve'):
         list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id==user_id).filter(GnUserTeam.team_code == code).one()
+        if(list.comfirm == 'Y'):
+            return False
         list.comfirm = "Y"
         list.team_owner='user'
         db_session.commit()

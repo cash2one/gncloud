@@ -1,17 +1,18 @@
 <!-- Main component for a primary marketing message or call to action -->
 <h1>인스턴스</h1>
-
+<form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
 <div class="container-fluid gn-container">
     <div class="row">
         <h2>인스턴스 이름</h2>
         <div class="row">
-            <div class="col-sm-3">
-                <input type="text" class="form-control gn-form-control" ng-model="data.vm_name" placeholder="이름을 입력하여주세요." id="vm_name">
+            <div class="col-sm-3" ng-class="{ 'has-error' : userForm.vm_name.$invalid && !userForm.vm_name.$pristine }">
+                <input type="text" class="form-control gn-form-control" name="vm_name" ng-model="data.vm_name" placeholder="이름을 입력하여주세요." id="vm_name" required>
+                <p ng-show="userForm.vm_name.$invalid && !userForm.vm_name.$pristine" class="help-block">이름을 입력해주세요.</p>
             </div>
         </div>
     </div>
 </div>
-
+</form>
 <div class="container-fluid gn-container">
     <div class="row">
         <h2>타입 선택</h2>
@@ -123,25 +124,23 @@
 
 <div class="container-fluid gn-container">
     <div class="row">
-        <h2>SSH 키 설정</h2>
-
-        <div class="row gn-margin-bott10">
+        <h2>SSH 키/비밀번호 설정</h2>
+        <div class="row gn-margin-bott10" id="ssh">
             <!--최초 등록 시 출력되는 버튼-->
             <button type="button" class="btn btn-gn-sub btn-lg col-md-2" data-toggle="modal" data-target="#myModal">SSH 키 생성</button>
 
             <!-- ****체크박스 대신 select box로 변경되었습니다**** -->
             <div class="col-md-3">
-                <select class="gn-select form-control gn-form-control" ng-model="guest_item" ng-options="item.name for item in sshkey_list">
+                <select class="gn-select form-control gn-form-control" name="ssh" ng-model="guest_item" ng-options="item.name for item in sshkey_list" required>
                     <option value="">SSH 키 선택</option>
                 </select>
             </div>
         </div>
-
         <!--윈도우의 경우-->
-        <div class="form-group row">
+        <div class="form-group row" id="windows">
             <div class="col-sm-2 gn-input-pw" >Administrator 비밀번호</div>
             <div class="col-sm-3">
-                <input type="password" class="form-control gn-form-control" ng-model="data.password" placeholder="비밀번호 입력">
+                <input type="password" class="form-control gn-form-control" ng-model="data.password" name="password" placeholder="비밀번호 입력" required>
             </div>
         </div>
 
@@ -177,6 +176,5 @@
     </div>
 </div>
 
-
-<button type="submit" value="submit" class="btn btn-success btn-block btn-lg" ng-click="submit()">인스턴스 생성</button>
+<button type="submit" value="submit" class="btn btn-success btn-block btn-lg" ng-click="submit()" ng-disabled="userForm.$invalid">인스턴스 생성</button>
 
