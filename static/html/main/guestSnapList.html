@@ -50,17 +50,20 @@
                 <div class="gn-box gn-container">
                     <div class="gn-margin-box">
                         <div class="row gn-margin-bott10">
+                            <form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
                             <div class="col-sm-4">
                                 <select class="gn-select form-control gn-form-control" ng-model="guest_image" ng-options="list.name for list in list" ng-change="update_image(guest_image)">
                                     <option value="">인스턴스 선택</option>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control gn-form-control" ng-model="data.name" placeholder="스냅샷 이름">
+                            <div class="col-sm-4" ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
+                                <input type="text" class="form-control gn-form-control"name="name" ng-model="data.name" placeholder="스냅샷 이름" required>
+                                <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">이름을 입력해 주세요</p>
                             </div>
                             <div class="col-sm-2">
-                                <button type="submit" value="submit" class="btn btn-gn-sub btn-block" ng-click="submit()">스냅샷 생성</button>
+                                <button type="submit" value="submit" class="btn btn-gn-sub btn-block" ng-click="submit()" ng-disabled="userForm.$invalid">스냅샷 생성</button>
                             </div>
+                            </form>
                         </div>
                         <div class="gn-lead">
                             스냅샷은 정지된 인스턴스만 가능합니다.<br>
