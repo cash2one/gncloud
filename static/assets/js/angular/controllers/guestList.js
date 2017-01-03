@@ -70,4 +70,15 @@ angular
         $scope.refresh = function(){
             $scope.guest_list = Array.prototype.slice.call($scope.guest_list).reverse();
         }
+    }).directive('tooltip', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs){
+                $(element).hover(function(){
+                    $(element).tooltip('show');
+                }, function(){
+                    $(element).tooltip('hide');
+                });
+            }
+        };
     });

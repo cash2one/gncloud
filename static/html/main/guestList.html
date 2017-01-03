@@ -19,30 +19,32 @@
                 </tr>
             </thead>
             <tbody class="gn-tdody">
-                <tr ng-repeat="list in guest_list">
-                    <td>
-                      <img src="/gn_images/gn_icon_{{list.os}}.png" alt="">
-                      <a href="#/guestDetail?id={{list.id}}"> {{ list.name }} </a>
-                    </td>
-                    <td>{{ list.cpu }} CPU /{{ list.memory }}MB Memory/{{ list.disk }}GB Disk</td>
-                    <td>{{ list.type }}</td>
-                    <td>{{ list.ip }}</td>
-                    <td><p data-toggle="tooltip" title="{{list.create_time}}">{{list.create_time_diff}}</p></td> <!--툴팁기본 p태그에 <p data-toggle="tooltip" title="2016-11-29 13:45:11"></p> -->
-                    <td >{{list.tagFirst}}<span class="tag" data-toggle="tooltip" title="{{list.tag}}">{{list.tagcount}}</span></td> <!--태그에 경우 span에 data-toggle="tooltip" title="2016-11-29 13:45:11" 추가--> 
-                    <td class="dropdown">
-                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                            더보기
-                            <span class="gn-caret-table"></span>
-                        </div>    
-                        <!--더보기>드롭다운-->    
-                        <ul class="dropdown-menu gn-dropdown" role="menu">
-                            <li ng-repeat="test in actions">
-                                <a href ng-click="update(list.id,test,list.type,$index)">{{test.name}}</a>
-                            </li>
-                        </ul>                    
-                    </td>
-                </tr>
-          </tbody>
+            <tr ng-repeat="list in guest_list">
+                <td>
+                    <img src="/gn_images/gn_icon_{{list.os}}.png" alt="">
+                    <a href="#/guestDetail?id={{list.id}}"> {{ list.name }} </a>
+                </td>
+                <td>{{ list.cpu }} CPU /{{ list.memory }}MB Memory/{{ list.disk }}GB Disk</td>
+                <td>{{ list.type }}</td>
+                <td>{{ list.ip }}</td>
+                <td><span data-toggle="tooltip" title="{{list.create_time}}" tooltip>{{list.create_time_diff}}</span></td>
+                <td >{{list.tagFirst}}
+                    <span ng-show="list.tag.length > 0" class="tag" data-toggle="tooltip" title="{{list.tag}}" tooltip>{{list.tagcount}}</span>
+                </td>
+                <td class="dropdown">
+                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                        더보기
+                        <span class="gn-caret-table"></span>
+                    </div>
+                    <!--더보기>드롭다운-->
+                    <ul class="dropdown-menu gn-dropdown" role="menu">
+                        <li ng-repeat="test in actions">
+                            <a href ng-click="update(list.id,test,list.type,$index)">{{test.name}}</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
         </table>
       </div>        
 

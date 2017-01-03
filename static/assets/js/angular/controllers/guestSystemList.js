@@ -39,11 +39,12 @@ angular
                                 usersfirst = data.list[i].user_list[j][1].user_name;
                                 usersfirstid="("+data.list[i].user_list[j][1].user_id+")";
                             }else{
-                                users +=data.list[i].user_list[j][1].user_name+"("+data.list[i].user_list[j][1].user_id+")/";
+                                users +=data.list[i].user_list[j][1].user_name+"("+data.list[i].user_list[j][1].user_id+")";
                             }
 
                         }
-                        data.list[i].team_info.userslen = users.split('/').length-1;
+
+                        data.list[i].team_info.userslen = data.list[i].user_list.length > 0 ? (data.list[i].user_list.length - 1):0;
                         data.list[i].team_info.usersfirstid = usersfirstid;
                         data.list[i].team_info.usersfirst = usersfirst;
                         data.list[i].team_info.users = users;
@@ -155,6 +156,15 @@ angular
 
         $scope.click($routeParams.id);
 
-
-
-});
+}).directive('tooltip', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs){
+                $(element).hover(function(){
+                    $(element).tooltip('show');
+                }, function(){
+                    $(element).tooltip('hide');
+                });
+            }
+        };
+    });
