@@ -277,9 +277,9 @@ angular
         })
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
-                    new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "quota"));
-                    new Chart(document.getElementById("memory_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "quota"));
-                    new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "quota"));
+                    new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "cpu"));
+                    new Chart(document.getElementById("memory_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "mem"));
+                    new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "disk"));
 
                     $("#cpu_per").html(data.list.cpu_per[0]);
                     $("#cpu_use_cnt").html(data.list.cpu_cnt[0]);
@@ -301,62 +301,31 @@ angular
 
         $scope.getConfig = function (data, type) {
             var config = null;
-            if (type == 'quota') {
+            var rgb1 = null;
+            var rgb2 = "rgb(204, 204, 204)";
+            if(type == 'cpu'){
+                rgb1 = "rgb(255, 167, 22)"
+            }else if(type == 'mem'){
+                rgb1 = "rgb(83, 200, 173)"
+            }else if(type == 'disk'){
+                rgb1 = "rgb(87, 161, 246)"
+            }
+
+
+            if (type == 'cpu' || type == 'mem' || type == 'disk' ) {
                 config = {
                     type: 'doughnut',
                     data: {
                         datasets: [{
                             data: data,
                             backgroundColor: [
-                                "rgb(233, 30, 99)",
-                                "rgb(204, 204, 204)"
+                                rgb1,
+                                rgb2
                             ],
                         }],
                         labels: [
                             "사용중",
                             "미사용"
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        legend: true
-                    }
-                }
-            }else if (type == 'status') {
-                config = {
-                    type: 'pie',
-                    data: {
-                        datasets: [{
-                            data: data,
-                            backgroundColor: [
-                                "rgb(233, 30, 99)",
-                                "rgb(255, 193, 7)"
-                            ],
-                        }],
-                        labels: [
-                            "실행",
-                            "정지"
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        legend: true
-                    }
-                }
-            }else if (type == 'type') {
-                config = {
-                    type: 'pie',
-                    data: {
-                        datasets: [{
-                            data: data,
-                            backgroundColor: [
-                                "rgb(233, 30, 99)",
-                                "rgb(255, 193, 7)"
-                            ],
-                        }],
-                        labels: [
-                            "kvm",
-                            "hiperv"
                         ]
                     },
                     options: {

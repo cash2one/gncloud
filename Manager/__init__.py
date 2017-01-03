@@ -90,14 +90,15 @@ def signup_list():
     user_id = request.json['user_id']
     password = request.json['password']
     password_re = request.json['password_re']
-    check=sign_up(user_name,user_id,password,password_re)
-    if(check == 'success'):
-        return  jsonify(status=True, test='success' )
-    elif(check == 'password'):
-        return jsonify(status=True, test='password')
-    elif(check =='user_id'):
-        return jsonify(status=True, test='user_id')
-
+    if(user_id != "" and user_name != "" and password != "" and password_re != ""):
+        check=sign_up(user_name,user_id,password,password_re)
+        if(check == 'success'):
+            return  jsonify(status=True, test='success')
+        elif(check == 'password'):
+            return jsonify(status=True, test='password')
+        elif(check =='user_id'):
+            return jsonify(status=True, test='user_id')
+    return jsonify(status=False, test='not')
 @app.route('/vm/guestLogout', methods=['GET'])
 def logout():
     session.clear()
@@ -106,16 +107,12 @@ def logout():
 
 @app.route('/vm/logincheck', methods=['GET'])
 def logincheck():
-    if session.get('userId',None):
-        return jsonify(status= 1, message=session['userName'])
-    else:
-        return jsonify(status= 2)
+    return jsonify(status= 1, message=session['userName'])
 
 
 @app.route('/vm/account/users', methods=['GET'])
 def teamcheck():
-    if session.get('userId',None):
-        return jsonify(status=True, message="success", list=teamcheck_list(session['userId'],db_session))
+    return jsonify(status=True, message="success", list=teamcheck_list(session['userId'],db_session))
 
 
 
@@ -178,16 +175,14 @@ def volume(type):
 
 @app.route('/vm/account/users/list', methods=['GET'])
 def team():
-    if session.get('userId', None):
-        return jsonify(status=True, message="success", list=team_list(session['userId'],db_session))
+    return jsonify(status=True, message="success", list=team_list(session['userId'],db_session))
 
 
 
 @app.route('/vm/account/team', methods=['GET'])
 def my_list():
     team_owner = 'owner'
-    if session.get('userId',None):
-        return jsonify(status=True, message="success", list=teamwon_list(session['userId'],session['teamCode'],team_owner ,db_session))
+    return jsonify(status=True, message="success", list=teamwon_list(session['userId'],session['teamCode'],team_owner ,db_session))
 
 
 @app.route('/vm/acoount/teamlist', methods=['GET'])

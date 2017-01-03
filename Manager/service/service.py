@@ -137,9 +137,10 @@ def server_image(type, sql_session, team_code):
 
 def getQuotaOfTeam(team_code, sql_session):
     current_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
-                        func.sum(GnVmMachines.memory).label("sum_mem"),
-                        func.sum(GnVmMachines.disk).label("sum_disk")
+                        func.sum(GnVmMachines.memory).label("sum_mem")
                         ).filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
+    current_infodisk = sql_session.query(func.sum(GnVmMachines.disk).label("sum_disk")
+                                          ).filter(GnVmMachines.type != "docker").filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one()
     limit_quota = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
     vm_run_count = sql_session.query(func.count(GnVmMachines.id).label("count"))\
                    .filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.type != "docker").one()
@@ -178,8 +179,8 @@ def getQuotaOfTeam(team_code, sql_session):
         disk_per_info = [0,100]
         disk_cnt_info = [0, limit_quota.disk_quota]
     else:
-        disk_per_info = [int((current_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info.sum_disk/limit_quota.disk_quota)*100))]
-        disk_cnt_info = [int(current_info.sum_disk), limit_quota.disk_quota]
+        disk_per_info = [int((current_infodisk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_infodisk.sum_disk/limit_quota.disk_quota)*100))]
+        disk_cnt_info = [int(current_infodisk.sum_disk), limit_quota.disk_quota]
 
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
@@ -316,9 +317,10 @@ def team_table(sql_sesseion):
         team_info.create_date = team_info.create_date.strftime('%Y-%m-%d %H:%M:%S')
         user_list = sql_sesseion.query(GnUserTeam, GnUser).join(GnUser, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_info.team_code).all()
         current_info = sql_sesseion.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
-                                         func.sum(GnVmMachines.memory).label("sum_mem"),
-                                         func.sum(GnVmMachines.disk).label("sum_disk")
-                                         ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Running").one()
+                                         func.sum(GnVmMachines.memory).label("sum_mem")
+                                         ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status != "Removed").one()
+        current_infodisk=sql_sesseion.query(func.sum(GnVmMachines.disk).label("sum_disk")
+                                            ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type != "docker").filter(GnVmMachines.status == "Running").one()
         limit_quota = sql_sesseion.query(GnTeam).filter(GnTeam.team_code == team_info.team_code).one()
         vm_run_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
             .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Running").one()
@@ -349,8 +351,8 @@ def team_table(sql_sesseion):
             disk_per_info = [0,100]
             disk_cnt_info = [0, limit_quota.disk_quota]
         else:
-            disk_per_info = [int((current_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info.sum_disk/limit_quota.disk_quota)*100))]
-            disk_cnt_info = [int(current_info.sum_disk), limit_quota.disk_quota]
+            disk_per_info = [int((current_infodisk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_infodisk.sum_disk/limit_quota.disk_quota)*100))]
+            disk_cnt_info = [int(current_infodisk.sum_disk), limit_quota.disk_quota]
 
         count_info = [vm_run_count.count,vm_stop_count.count]
         type_info = [vm_kvm_count.count,vm_hyperv_count.count]
