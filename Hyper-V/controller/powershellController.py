@@ -41,6 +41,8 @@ def hvm_create():
     team_code = session['teamCode']
     author_id = session['userName']
 
+    password = request['password']
+
     # team_code = request.json['teamCode']
     # author_id = request.json['userName']
 
@@ -48,7 +50,10 @@ def hvm_create():
     #host machine 선택
     host_ip = None
     host_id = None
+
+    #Gn_host_machines 테이블의 컬럼선택은 변경가능, type컬럼이 아닌 hyper-v 를 select 할 수 있는 컬럼을 선택하여도 된다.
     host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "hyper_V").all()
+
     for host_info in host_list:
         use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
                                         func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
@@ -64,7 +69,7 @@ def hvm_create():
             break
 
     if host_ip is None:
-        result = {"status":False, "message":"HOST 머신 리소스가 부족합니다"}
+        result = {"status":False, "message" : "HOST 머신 리소스가 부족합니다"}
         return jsonify(status=result["status"], message=result["message"])
 
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
@@ -108,7 +113,7 @@ def hvm_create():
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
 
-        '''
+        ''' 이미 생생된 이미지의 패스를 옮겨서 vm과 연결할 때 사용 가능한 스크립트.
         CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/base/"+internal_name+".vhdx"
         CONVERT_VHD_PATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/pool/"+os_sub_ver
         ps.move_vhd(CONVERT_VHD_PATH, CONVERT_VHD_DESTINATIONPATH, new_vm['VMId'])
@@ -187,6 +192,8 @@ def hvm_create():
         # todo 1. windows server 2012 r2 는 패스워드를 영문, 숫자, 기호를 혼합하여 입력하도록 강제합니다.
         # todo 2. adminname은 원본 이미지의 user name이다. windows server2012는 디폴드 값이 Administrator 이다.
         #         server 에 맞춰서 Administrator 이라는 계정명으로 통일을 해야 될 것 같습니다.
+
+        ps.set_password(get_vm_ip, password)
 
         # def change_vm_pwd2(adminname, password):
         #     ps = PowerShell("192.168.1.39", config.AGENT_PORT, config.AGENT_REST_URI)

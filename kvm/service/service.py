@@ -81,7 +81,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type='kvm', internal_id=intern_id, internal_name=internal_name, ip=ip, host_id=host_id, os=image_info.os
                                   , os_ver=image_info.os_ver, os_sub_ver=image_info.os_subver, os_bit=image_info.os_bit
-                                  , team_code=team_code, author_id=user_id,status='running', tag=tag)
+                                  , team_code=team_code, author_id=user_id,status='running', tag=tag, image_id = image_info.id)
         db_session.add(vm_machine)
         return result
     except IOError as errmsg:

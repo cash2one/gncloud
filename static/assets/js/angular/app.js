@@ -3,7 +3,14 @@ var serviceAddModules = [
 ];
 
 (function () {
-    var app = angular.module('gncloud', serviceAddModules);
+    var app = angular.module('gncloud', serviceAddModules)
+        .directive('navbar', function (){
+            return{
+                restrict: 'E',
+                templateUrl:'/main/navbar.html',
+                controller:'navbarCtrl'
+            }
+        });
 
     app.factory('serviceLogger', function ($location) {
         return {
@@ -16,7 +23,38 @@ var serviceAddModules = [
             },
         };
     });
-    app.factory('user', function(){})
+
+    app.factory('getLoginInfo', function ($location) {
+        return {'level':'owner'};
+    });
+
+    /*app.factory('UserService', function() {
+        var age = 10;
+        var
+        $.ajax({
+            type: "GET",
+            url: '/api/manager/vm/logincheck',
+            headers: {'Content-Type': 'application/json; charset=utf-8'},
+            success:function(data) {
+                if (data.status == true) {
+                    $("#name").html(data.message);
+                }else{
+                    if(data.message != null) {
+                        alert(data.message)
+                    }
+                }
+
+            }
+        })
+
+        return {
+            name : 'tom',
+            age: function (val) {
+                if (val) age = val;
+                else return age;
+            }
+        };
+    });*/
 
     app.service('dateModifyService', function()
     {

@@ -168,27 +168,10 @@
                             </tr>
                             </thead>
                             <tbody class="gn-tdody">
-                            <tr>
-                                <td>windows2016_Hyper-v</td>
-                                <td>10개</td>
+                            <tr ng-repeat="list in image_type_list">
+                                <td>{{list.name}}</td>
+                                <td>{{list.cnt}}개</td>
                             </tr>
-                            <tr>
-                                <td>windows2016_KVM</td>
-                                <td>5개</td>
-                            </tr>
-                            <tr>
-                                <td>windows106_Hyper-v</td>
-                                <td>4개</td>
-                            </tr>
-                            <tr>
-                                <td>windows2016_Hyper-v</td>
-                                <td>3개</td>
-                            </tr>
-                            <tr>
-                                <td>ubumtu10.04_Hyper-v</td>
-                                <td>1개</td>
-                            </tr>
-
                             </tbody>
                         </table>
                     </div> <!--class="table-responsive"  -->

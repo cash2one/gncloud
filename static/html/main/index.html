@@ -57,55 +57,42 @@
     <script type="text/javascript" src="/js/angular/controllers/guestCreateTeam.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestSystemList.js"></script>
     <script type="text/javascript" src="/js/angular/controllers/guestTeamDetail.js"></script>
+    <script type="text/javascript" src="/js/angular/controllers/navbar.js"></script>
+    <script language="javascript">
+        /*$.ajax({
+         type: "GET",
+         url: '/api/manager/vm/logincheck',
+         headers: {'Content-Type': 'application/json; charset=utf-8'},
+         success:function(data) {
+         if (data.status == true) {
+         $("#name").html(data.message);
+         }else{
+         if(data.message != null) {
+         alert(data.message)
+         }
+         }
+
+         }
+         })*/
+        function logout()
+        {
+            $.ajax({
+                type: "GET",
+                url: '/api/manager/vm/guestLogout',
+                headers: {'Content-Type': 'application/json; charset=utf-8'},
+                success: function () {
+                    alert("로그아웃 되었습니다");
+                    location.href="/";
+                }
+            })
+        }
+
+    </script>
 </head>
 
 <body>
+<navbar></navbar>
 
-    <nav class="navbar navbar-default gn-header">
-    <div class="container">
-        <!--지앤클라우드 로고-->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#dashboard">
-                <img src="/gn_images/gncloud_private_header_logo.png" alt="지앤클라우드 프라이빗 홈">
-            </a>
-        </div><!--class="navbar-header"-->
-
-        <div id="navbar" class="navbar-collapse collapse gn-header-collapsed">
-            <!--왼쪽메뉴-->
-            <ul class="nav navbar-nav">
-                <li class="nav-link"><a href="#dashboard">대시보드</a></li>
-                <li class="nav-link"><a href="#/guestList">인스턴스</a></li>
-                <li class="nav-link"><a href="#guestSnapList/">이미지</a></li>
-            </ul><!--class="nav navbar-nav"-->
-            <ul class="nav navbar-nav navbar-right">
-                <li class="create-btn">
-                    <a href="#/guestCreate">
-                        <button type="submit" value="submit" class="btn btn-success">인스턴스 생성</button>
-                    </a>
-                </li>
-                <li>
-                <li class="dropdown head-dropdown">
-                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                        <a id="name"></a>
-                        <span class="gn-caret"></span>
-                    </div>
-                    <ul class="dropdown-menu gn-head-drop" role="menu">
-                        <li><a href="#/account/users/list">개인설정</a></li>
-                        <li><a href="#/guestSystemList" id="system">시스템 설정</a></li>
-                        <li><a href=javascript:logout();>로그아웃</a></li>
-                    </ul>
-                </li><!--class="dropdown"-->
-                </li>
-            </ul><!--class="nav navbar-nav navbar-right"-->
-        </div><!--/.nav-collapse -->
-    </div><!--class="container"-->
-</nav><!--class="navbar navbar-default navbar-fixed-top"-->
 <!--HEADER END-->
 
 <div class="container">
@@ -121,35 +108,6 @@
     <script src="/js/holder.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/js/ie10-viewport-bug-workaround.js"></script>
-    <script language="javascript">
-        $.ajax({
-            type: "GET",
-            url: '/api/manager/vm/logincheck',
-            headers: {'Content-Type': 'application/json; charset=utf-8'},
-            success:function(data) {
-                if (data.status == true) {
-                    $("#name").html(data.message);
-                }else{
-                    if(data.message != null) {
-                        alert(data.message)
-                    }
-                }
-
-            }
-        })
-        function logout()
-        {
-            $.ajax({
-                type: "GET",
-                url: '/api/manager/vm/guestLogout',
-                headers: {'Content-Type': 'application/json; charset=utf-8'},
-                success: function () {
-                    alert("로그아웃 되었습니다");
-                    location.href="/";
-                }
-            })
-        }
-    </script>
 </div>
 </body>
 </html>
