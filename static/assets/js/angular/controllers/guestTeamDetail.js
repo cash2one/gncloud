@@ -19,6 +19,23 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
+        $http({
+            method: 'GET',
+            url: '/api/manager/vm/account/team/'+$routeParams.code,
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data.status == true) {
+                    $scope.team_list = data.list; // 팀원들에 대한 정보
+
+                } else {
+                    alert(data.message);
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
         $scope.won_list ={};
         $http({
             method: 'GET',
@@ -133,7 +150,24 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
+        $scope.delete=function(){
+            $http({
+                method: 'DELETE',
+                url:'/api/manager/vm/account/deleteteam/'+$routeParams.code,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function(data, status, headers, config) {
+                    if (data.status == true) {
+                        alert(name + "삭제되었습니다");
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    console.log(status);
+                });
 
+        };
         $scope.getConfig = function (data, type) {
             var config = null;
             var rgb1 = null;

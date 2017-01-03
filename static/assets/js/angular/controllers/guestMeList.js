@@ -12,40 +12,46 @@ angular
         $("#profile-team").hide();
         $("#team-reso").hide();
         $("#team-group").hide();
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/account/users/list',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    $scope.te_list = data.list; // 유저 부분 리스트
-
-                } else {
-                    alert(data.message);
-                }
-
+        $scope.profile=function(){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/account/users/list',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/account/teamname',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    $scope.teamname = data.list; //유저팀에 대한 정보
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        $scope.te_list = data.list; // 유저 부분 리스트
 
-                } else {
-                    alert(data.message);
-                }
+                    } else {
+                        alert(data.message);
+                    }
 
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+        $scope.profile();
+        $scope.team_profile=function(){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/account/teamname',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        $scope.teamname = data.list; //유저팀에 대한 정보
+
+                    } else {
+                        alert(data.message);
+                    }
+
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+        $scope.team_profile();
         $scope.team_list = {};
         $http({
             method: 'GET',
@@ -123,8 +129,8 @@ angular
             })
                 .success(function(data) {
                     if (data.status == 2) {
-                        alert("success");
-
+                        alert("변경되었습니다.");
+                        $scope.profile();
                     }
                     else if(data.status == 1){
                         alert("비밀번호가 틀렸습니다");
@@ -178,7 +184,8 @@ angular
             })
                 .success(function(data) {
                     if (data.status == true) {
-                        alert("변경되었습니다")
+                        alert("변경되었습니다");
+                        $scope.team_profile();
                     }
                     else {
                         alert(data.message)

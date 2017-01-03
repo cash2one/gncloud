@@ -8,8 +8,8 @@ from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_list, select_put, team_table \
-                            , pathimage, select_info
+                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
+                            , pathimage, select_info, delteam_list
 from db.database import db_session
 
 app = Flask(__name__)
@@ -179,11 +179,16 @@ def team():
 
 
 
-@app.route('/vm/account/team', methods=['GET'])
+@app.route('/vm/account/team', methods=['GET']) #팀 프로필
 def my_list():
     team_owner = 'owner'
     return jsonify(status=True, message="success", list=teamwon_list(session['userId'],session['teamCode'],team_owner ,db_session))
 
+@app.route('/vm/account/team/<code>', methods=['GET']) #시스템 팀 상세 프로필
+def mydetail_list(code):
+    team_owner = 'owner'
+    team_code = code
+    return jsonify(status=True, message="success", list=teamwon_list(session['userId'],team_code,team_owner ,db_session))
 
 @app.route('/vm/acoount/teamlist', methods=['GET'])
 def tea_list():
@@ -269,7 +274,7 @@ def createteam():
 
 @app.route('/vm/account/teamname', methods=['GET'])
 def teamname():
-    return jsonify(status=True, message="success", list=select_list(session['teamCode'],db_session))
+    return jsonify(status=True, message="success", list=select_info(session['teamCode'],db_session))
 
 @app.route('/vm/account/teamname/<code>', methods=['GET'])
 def teamnamecode(code):
@@ -292,6 +297,11 @@ def systembase():
 def maketeam():
     return jsonify(status=True, message="success")
 
+@app.route('/vm/account/deleteteam/<code>', methods=['DELETE'])
+def delteam(code):
+    team_code = code
+    delteam_list(team_code)
+    return jsonify(status=True, message="success")
 #### rest end ####
 
 
