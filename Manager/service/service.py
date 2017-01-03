@@ -76,7 +76,7 @@ def checkteam(user_id, sql_session):
 
 def teamcheck_list(user_id,sql_session):
     list = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
-    return sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).all()
+    return list
 
 
 def sign_up(user_name, user_id, password, password_re):
@@ -84,7 +84,7 @@ def sign_up(user_name, user_id, password, password_re):
     if(password == password_re):
         if(check == None):
             password_sha = random_string(password_re)
-            sign_up_info = GnUser(user_id = user_id, password = password_sha,user_name = user_name,start_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+            sign_up_info = GnUser(user_id = user_id, password = password_sha,user_name = user_name,tel="-",email="-",start_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
             db_session.add(sign_up_info)
             db_session.commit()
             return 'success'
@@ -332,28 +332,28 @@ def createteam_list(user_id,team_name, team_code, author_id, sql_session):
 def select(sql_session ):
     return sql_session.query(GnTeam).all()
 
-def select_list(team_code, sql_session):
-    return sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+def select_info(team_code, sql_session): #팀 프로필 팀생성일/ 이름 개인설정 팀프로필 팀 생성일 /이름
+    list =sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+    list.create_date = list.create_date.strftime('%Y-%m-%d %H:%M:%S')
+    return list
 
-def select_info(team_code, sql_session):
-    return sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
-
-def select_put(team_name, team_code):
+def select_put(team_name, team_code): #팀 생성 쿼리
     lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()
     lit.team_name = team_name
     db_session.commit()
     return True
 
-def team_table(sql_sesseion):
+def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소스
     list = sql_sesseion.query(GnTeam).all()
     result = []
     for team_info in list:
         team_info.create_date = team_info.create_date.strftime('%Y-%m-%d %H:%M:%S')
         user_list = sql_sesseion.query(GnUserTeam, GnUser).join(GnUser, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_info.team_code).all()
         current_info = sql_sesseion.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
-                                         func.sum(GnVmMachines.memory).label("sum_mem"),
-                                         func.sum(GnVmMachines.disk).label("sum_disk")
-                                         ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Running").one()
+                                         func.sum(GnVmMachines.memory).label("sum_mem")
+                                         ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status != "Removed").one()
+        current_infodisk=sql_sesseion.query(func.sum(GnVmMachines.disk).label("sum_disk")
+                                            ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type != "docker").filter(GnVmMachines.status == "Running").one()
         limit_quota = sql_sesseion.query(GnTeam).filter(GnTeam.team_code == team_info.team_code).one()
         vm_run_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
             .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Running").one()
@@ -384,8 +384,8 @@ def team_table(sql_sesseion):
             disk_per_info = [0,100]
             disk_cnt_info = [0, limit_quota.disk_quota]
         else:
-            disk_per_info = [int((current_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info.sum_disk/limit_quota.disk_quota)*100))]
-            disk_cnt_info = [int(current_info.sum_disk), limit_quota.disk_quota]
+            disk_per_info = [int((current_infodisk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_infodisk.sum_disk/limit_quota.disk_quota)*100))]
+            disk_cnt_info = [int(current_infodisk.sum_disk), limit_quota.disk_quota]
 
         count_info = [vm_run_count.count,vm_stop_count.count]
         type_info = [vm_kvm_count.count,vm_hyperv_count.count]
@@ -397,9 +397,14 @@ def team_table(sql_sesseion):
         result.append(team_table);
     return result
 
-def pathimage(sql_session):
+def pathimage(sql_session): #시스템 이미지 리스트 path 쿼리
     list = sql_session.query(GnImagePool, GnVmImages).join(GnVmImages, GnImagePool.id == GnVmImages.pool_id).all()
     for data in list:
         data[1].create_time = data[1].create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
+def delteam_list(team_code): #팀삭제 쿼리
+    db_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).delete()
+    db_session.query(GnTeam).filter(GnTeam.team_code==team_code).delete()
+    db_session.commit()
+    return True;

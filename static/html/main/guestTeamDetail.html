@@ -10,14 +10,84 @@
 </ul>
 
 <div class="tab-content col-sm-10">
+    <!--팀 > 프로필-->
+    <div id="profile-team"  class="">
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>{{teamname.team_name}}</h2>
+                    <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn" data-toggle="modal" data-target="#modal-modi">수정</button>
+
+                    <!-- 팀 Modal -->
+                    <div class="modal fade" id="modal-modi" role="dialog">
+                        <div class="modal-dialog form-horizontal">
+                            <div class="modal-content col-sm-10 col-sm-offset-1">
+                                <div class="modal-header gn-modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">팀 수정</h4>
+                                </div>
+                                <div class="modal-body gn-modal-body">
+
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label gn-control-label">팀 코드</label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static">{{teamname.team_code}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label gn-control-label">팀명</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control gn-form-control" ng-model="data.team_name" placeholder="{{teamname.team_name}}">
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                                <div class="modal-footer gn-modal-footer">
+                                    <button type="submit" class="btn btn-gn-sub btn-block" ng-click="change()" data-dismiss="modal">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!--<div class="container-fluid">-->
+
+                <div class="container-fluid" ng-repeat="team in team_list">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label gn-control-label">팀 코드</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{team[1].team_code}}</p>
+                            </div>
+                            <label class="col-sm-2 control-label gn-control-label">팀장</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">
+                                    <span class="team-master">{{team[0].user_name}}</span>|
+                                    <span class="team-master">{{team[0].user_id}}</span>|
+                                    <span class="team-master">{{team[0].tel}}</span>|
+                                    <span class="team-master">{{team[0].email}}</span>
+                                </p>
+                            </div>
+                            <label class="col-sm-2 control-label gn-control-label">팀 생성일</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{teamname.create_date}}</p>
+                            </div>
+                            <label class="col-sm-2 control-label gn-control-label">총원</label>
+                            <div class="col-sm-10" ng-repeat="won in won_list">
+                                <p class="form-control-static">{{won[0].total}}</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div> <!--class="gn-sett-margin-box"-->
+        </div> <!--class="gn-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade"-->
     <!--팀 그래프-->
                 <div id="team-reso"  class="gn-container">
                     <div class="gn-box">
                         <div class="gn-sett-margin-box">
                             <div class="container-fluid">
-                                <h2>{{teamname.team_name}}</h2>
-                                <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn2" data-toggle="modal" data-target="#modal-modi">수정</button>
-                                <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn">삭제</button>
 
                                 <!-- 팀 Modal -->
                                 <div class="modal fade" id="modal-modi" role="dialog">
@@ -59,15 +129,14 @@
                                         <li>CPU</li>
                                         <li><canvas id="cpu_chart" height="150"></canvas></li>
                                         <li class="cpu-color"><span id="cpu_per"></span>% 사용중</li>
-                                        <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li></li>
+                                        <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li>
                                         <li>35 / 50 CORE</li>
                                     </ul>
-
                                     <ul class="col-sm-4 gn-sett-graph">
                                         <li>MEMORY</li>
-                                        <li> <canvas id="memory_chart" height="150"></canvas><li>
+                                        <li><canvas id="memory_chart" height="150"></canvas></li>
                                         <li class="memo-color"><span id="mem_per"></span>% 사용중</li>
-                                        <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span> MB</li></li>
+                                        <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span> MB</li>
                                         <li>64 / 128 GB</li>
                                     </ul>
 
@@ -75,7 +144,7 @@
                                         <li>DISK</li>
                                         <li><canvas id="disk_chart" height="150"></canvas></li>
                                         <li class="disk-color"><span id="disk_per"></span>% 사용중</li>
-                                        <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span> GB</li></li>
+                                        <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span> GB</li>
                                         <li>0.6 / 3 TB</li>
                                     </ul>
                                 </div><!-- class="team-graph clearfix" -->
@@ -188,4 +257,14 @@
                 </div>
             </div> <!--class="gn-sett-margin-box"-->
         </div> <!--class="gn-box profile-team"-->
+        <div class="gn-box">
+            <div class="gn-margin-box">
+                <h2>삭제</h2>
+                <p class="gn-lead">해당 팀 및 관련된 모든 팀원들이 삭제되며, 모든 데이터는 복구할 수 없습니다.<br>정말 삭제 하시겠습니까?</p>
+                <button type="button" class="btn btn-delete btn-lg" ng-click="delete()">삭제</button>
+            </div>
+        </div>
+
+
     </div> <!--id="profile-team"  class="tab-pane fade"-->
+</div>

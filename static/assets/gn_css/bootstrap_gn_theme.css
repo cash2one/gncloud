@@ -1458,8 +1458,9 @@ ul.gn-sett-graph > li:nth-of-type(3){
 }
 
 
-
-
+.gn-inputs:invalid {
+    border-color:#f00;
+}
 
 
 /* ================================ 반응형 ================================ */

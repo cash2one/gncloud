@@ -41,6 +41,8 @@ def hvm_create():
     team_code = session['teamCode']
     author_id = session['userName']
 
+    password = request['password']
+
     # team_code = request.json['teamCode']
     # author_id = request.json['userName']
 
@@ -48,7 +50,10 @@ def hvm_create():
     #host machine 선택
     host_ip = None
     host_id = None
+
+    #Gn_host_machines 테이블의 컬럼선택은 변경가능, type컬럼이 아닌 hyper-v 를 select 할 수 있는 컬럼을 선택하여도 된다.
     host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "hyper_V").all()
+
     for host_info in host_list:
         use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
                                         func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
@@ -64,7 +69,7 @@ def hvm_create():
             break
 
     if host_ip is None:
-        result = {"status":False, "message":"HOST 머신 리소스가 부족합니다"}
+        result = {"status":False, "message" : "HOST 머신 리소스가 부족합니다"}
         return jsonify(status=result["status"], message=result["message"])
 
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
@@ -108,7 +113,7 @@ def hvm_create():
         # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
         add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
 
-        '''
+        ''' 이미 생생된 이미지의 패스를 옮겨서 vm과 연결할 때 사용 가능한 스크립트.
         CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/base/"+internal_name+".vhdx"
         CONVERT_VHD_PATH = config.DISK_DRIVE + config.HYPERV_PATH + "/vhdx/pool/"+os_sub_ver
         ps.move_vhd(CONVERT_VHD_PATH, CONVERT_VHD_DESTINATIONPATH, new_vm['VMId'])
@@ -139,8 +144,57 @@ def hvm_create():
         # print get_vm_ip
         # 생성된 VM의 ip 정보를 고정한다
 
+        # ip 고정 부분 , 서버에 올릴시 몇시간정도 서버측에서 접근 거부 에러 발생하여 주석처리
+        # 일정시간 지난 후에 다시 생성하면 고정이 가능
+        # 만약 같은에러가 계속 발생시
+        # try 문으로 set_vm_ip_address() 메소드로 할당은 가능하다. (고정하는 순간 response 없이 무한 대기, timeout 10으로 설정)
+        #
+        # while True:
+        #     try:
+        #         time.sleep(20)
+        #         dhcp_ip_address = ps.get_ip_address_type(get_vm_ip)
+        #         if dhcp_ip_address is True:
+        #             try:
+        #                 time.sleep(20)
+        #                 ps.set_vm_ip_address(get_vm_ip, config.DNS_ADDRESS, config.DNS_SUB_ADDRESS)
+        #             except Exception as message:
+        #                 print message
+        #                 ps.get_ip_address_type(get_vm_ip)
+        #                 continue
+        #         else:
+        #             try:
+        #                 vmid = random_string(config.SALT, 8)
+        #                 vm = GnVmMachines(vmid, name, tag, 'hyperv', start_vm['VMId'],
+        #                                   internal_name,
+        #                                   host_id, get_vm_ip, cpu, memory, hdd,
+        #                                   os
+        #                                   , os_ver, os_sub_ver, os_bit, team_code,
+        #                                   author_id, datetime.datetime.now(),
+        #                                   datetime.datetime.now(), None, ps.get_state_string(start_vm['State']))
+        #
+        #                 insert_monitor = GnMonitor(vmid, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
+        #                 db_session.add(insert_monitor)
+        #                 db_session.add(vm)
+        #                 db_session.commit()
+        #                 return jsonify(status=True, massage="create vm success")
+        #
+        #             except:
+        #                 db_session.rollback()
+        #                 return jsonify(status=False, massage="DB insert fail")
+        #     except Exception as message:
+        #         print message
+        #         continue
+        #     finally:
+        #         print message
 
-        # powershell service 쪽 추가해야할 스크립트
+
+        # powershell service 쪽 추가해야할 스크립트 패스워드 관련
+        # todo 1. windows server 2012 r2 는 패스워드를 영문, 숫자, 기호를 혼합하여 입력하도록 강제합니다.
+        # todo 2. adminname은 원본 이미지의 user name이다. windows server2012는 디폴드 값이 Administrator 이다.
+        #         server 에 맞춰서 Administrator 이라는 계정명으로 통일을 해야 될 것 같습니다.
+
+        ps.set_password(get_vm_ip, password)
+
         # def change_vm_pwd2(adminname, password):
         #     ps = PowerShell("192.168.1.39", config.AGENT_PORT, config.AGENT_REST_URI)
         #     script = '$user=[adsi]"WinNT://$env:computerName/'+adminname+'";'
