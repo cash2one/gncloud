@@ -104,6 +104,10 @@ class PowerShell(object):
         script += '$user:USERNAME | ConvertTo-Json -Compress ;'
         return self.send_new_vm(script, ip)
 
+    # Get-WmiObject win32_useraccount | Select-Object -Property Name | ConvertTo-Json
+    # user의 리스트를 받아온다. 리스트를 받아온 뒤 Admin 계정에 패스워드 설정 가능
+
+
     #vm들이 사용하고 있는 자원들의 정보를 받아온다. 모니터링을 위한 메소드
     def get_vm_usage_info(self, ip):
         script = ""
