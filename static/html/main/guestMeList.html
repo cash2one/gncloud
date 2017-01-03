@@ -242,16 +242,16 @@
                             <tbody>
                             <tr ng-repeat="won in won_list">
                                 <td class="">{{$index+1}}</td>
-                                <td class="">{{won[1].team_owner}}</td>
-                                <td class="">{{won[0].user_name}}</td>
-                                <td class="" ng-model="data.user_id">{{won[0].user_id}}</td>
-                                <td class="">{{won[0].tel}}</td>
-                                <td class="">{{won[0].email}}</td>
-                                <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{won[1].create_time_diff}}</p></td>
-                                <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{won[1].create_time_diff1}}</p></td>
+                                <td class="">{{won.team_owner}}</td>
+                                <td class="">{{won.user_name}}</td>
+                                <td class="" ng-model="data.user_id">{{won.user_id}}</td>
+                                <td class="">{{won.tel}}</td>
+                                <td class="">{{won.email}}</td>
+                                <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{won.create_time_diff}}</p></td>
+                                <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">{{won.create_time_diff1}}</p></td>
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
                                 <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>
-                                <td class="">{{won[1].comf}}</td>
+                                <td class="">{{won.comf}}</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         더보기
@@ -259,7 +259,7 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li ng-repeat="ac in actions"><a href ng-click="update(won[0].user_id, won[1].team_code, ac)">{{ac.name}}</a></li>
+                                        <li ng-repeat="ac in actions"><a href ng-click="update(won.user_id, won.team_code, ac)">{{ac.name}}</a></li>
                                     </ul>
                                 </td>
                             </tr>
@@ -362,29 +362,24 @@
                     </div>
                 </div> <!--<div class="container-fluid">-->
 
-                <div class="container-fluid" ng-repeat="team in team_list">
+                <div class="container-fluid">
                     <form class="form-horizontal">
                         <div class="form-group">
                             <label class="col-sm-2 control-label gn-control-label">팀 코드</label>
                             <div class="col-sm-10">
-                                <p class="form-control-static">{{team[1].team_code}}</p>
+                                <p class="form-control-static">{{teamname.team_code}}</p>
                             </div>
                             <label class="col-sm-2 control-label gn-control-label">팀장</label>
-                            <div class="col-sm-10">
-                                <p class="form-control-static">
-                                    <span class="team-master">{{team[0].user_name}}</span>|
-                                    <span class="team-master">{{team[0].user_id}}</span>|
-                                    <span class="team-master">{{team[0].tel}}</span>|
-                                    <span class="team-master">{{team[0].email}}</span>
-                                </p>
-                            </div>
+                            <ul class="col-sm-10">
+                                <li class="fons-16 ng-binding ng-scope" ng-repeat="team in team_list">{{team.user_id}}</li>
+                            </ul>
                             <label class="col-sm-2 control-label gn-control-label">팀 생성일</label>
                             <div class="col-sm-10">
                                 <p class="form-control-static">{{teamname.create_date}}</p>
                             </div>
                             <label class="col-sm-2 control-label gn-control-label">총원</label>
                             <div class="col-sm-10" ng-repeat="won in won_list">
-                                <p class="form-control-static">{{won[0].total}}</p>
+                                <p class="form-control-static">{{won.total}}명</p>
                             </div>
                         </div>
                     </form>

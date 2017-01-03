@@ -26,7 +26,18 @@ angular
         })
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
-                    $scope.team_list = data.list; // 팀원들에 대한 정보
+                    var newArr = new Array();
+                    var team_code="";
+                    var user_id="";
+                    for(var i = 0 ; i < data.list.length ; i++) {
+                        team_code = data.list[i][1].team_code;
+                        user_id = data.list[i][0].user_name +' | '+ data.list[i][0].user_id +' | '+data.list[i][0].tel +' | '+data.list[i][0].email;
+                        data.list[i].team_code =team_code;
+                        data.list[i].user_id = user_id;
+                        newArr.push(data.list[i]);
+                    }
+
+                    $scope.team_list = newArr; // 팀원들에 대한 정보
 
                 } else {
                     alert(data.message);
@@ -44,27 +55,34 @@ angular
         })
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
-                    $scope.won_list = data.list; //팀장 팀원에 대한 정보
-                    $scope.won_list[0][0].total = data.list.length;
-                    for(var i = 0 ; i < data.list.length ; i++) {
-                        $scope.won_list[i][1].comf = data.list[i][1].comfirm;
-                        if($scope.won_list[i][1].comf == 'Y'){
-                            var comfirm_re = '승인'
+                    var teamArr = new Array();
+                    for (var i = 0; i < data.list.length; i++) {
+                        if (data.list[i][1].comfirm == 'Y') {
+                            var comfirm_re = '승인';
                         } else {
-                            var comfirm_re = '비승인'
+                            var comfirm_re = '대기';
                         }//승인 한글화
-                        $scope.won_list[i][1].comf = comfirm_re;
+                        if (data.list[i][1].team_owner == 'owner') {
+                            var team_owner = '팀장';
+                        } else {
+                            var team_owner = '팀원';
+                        }
+                        data.list[i].user_id = data.list[i][0].user_id;
+                        data.list[i].user_name = data.list[i][0].user_name;
+                        data.list[i].tel = data.list[i][0].tel;
+                        data.list[i].email = data.list[i][0].email;
+                        data.list[i].comf = comfirm_re;
+                        data.list[i].team_owner = team_owner;
                         //날짜 카운팅
-                        $scope.won_list[i][1].create_time_diff = dateModifyService.modifyDate(data.list[i][1].apply_date);
-                        $scope.won_list[i][1].create_time_diff1 = dateModifyService.modifyDate(data.list[i][1].approve_date);
+                        data.list[i].create_time_diff = dateModifyService.modifyDate(data.list[i][1].apply_date);
+                        data.list[i].create_time_diff1 = dateModifyService.modifyDate(data.list[i][1].approve_date);
+                        teamArr.push(data.list[i])
                     }
+                    $scope.won_list = teamArr;
+                    $scope.won_list.total = data.list.length;
                 } else {
-                    alert(data.message);
+                    alert("error");
                 }
-
-            })
-            .error(function (data, status, headers, config) {
-                console.log(status);
             });
 
 

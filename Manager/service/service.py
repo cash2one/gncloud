@@ -243,6 +243,8 @@ def teamset(team_code, sql_session):
 def approve_set(user_id,code,type,user_name):
     if(type == 'approve'):
         list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id==user_id).filter(GnUserTeam.team_code == code).one()
+        if(list.comfirm == 'Y'):
+            return False
         list.comfirm = "Y"
         list.team_owner='user'
         db_session.commit()
