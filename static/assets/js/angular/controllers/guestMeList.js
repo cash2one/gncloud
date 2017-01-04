@@ -50,53 +50,56 @@ angular
                 .error(function (data, status, headers, config) {
                     console.log(status);
                 });
-        }
-        $scope.team_profile();
-        $scope.team_list = {};
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/account/team',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    var newArr = new Array();
-                    var team_code="";
-                    var user_id="";
-                    for(var i = 0 ; i < data.list.length ; i++) {
-                        team_code = data.list[i][1].team_code;
-                        user_id = data.list[i][0].user_name +' | '+ data.list[i][0].user_id +' | '+data.list[i][0].tel +' | '+data.list[i][0].email;
-                        data.list[i].team_code =team_code;
-                        data.list[i].user_id = user_id;
-                        newArr.push(data.list[i]);
+            $scope.team_list = {};
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/account/team',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        var newArr = new Array();
+                        var team_code="";
+                        var user_id="";
+                        for(var i = 0 ; i < data.list.length ; i++) {
+                            team_code = data.list[i][1].team_code;
+                            user_id = data.list[i][0].user_name +' | '+ data.list[i][0].user_id +' | '+data.list[i][0].tel +' | '+data.list[i][0].email;
+                            data.list[i].team_code =team_code;
+                            data.list[i].user_id = user_id;
+                            newArr.push(data.list[i]);
+                        }
+
+                        $scope.team_list = newArr; // 팀원들에 대한 정보
+
+                    } else {
+                        alert(data.message);
                     }
 
-                    $scope.team_list = newArr; // 팀원들에 대한 정보
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
 
-                } else {
-                    alert(data.message);
-                }
 
+        $scope.sshkey=function(){
+            $http({
+                method: 'GET',
+                url: '/api/kvm/account/keys',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.data_list = data.list; //ssh키에 대한 정보
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
 
-        $http({
-            method: 'GET',
-            url: '/api/kvm/account/keys',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.data_list = data.list; //ssh키에 대한 정보
-                }
-                else {
-                }
-            })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
 
         $scope.teamtable=function(){
             $scope.won_list ={};
@@ -140,7 +143,7 @@ angular
                     console.log(status);
                 });
         }
-        $scope.teamtable();
+
         $scope.submit = function() {
             $http({
                 method  : 'PUT',
@@ -270,7 +273,7 @@ angular
                 $("#profile-team").hide();
                 $("#team-reso").hide();
                 $("#team-group").hide();
-
+                $scope.sshkey();
             }
             else if(ty == 'profile-team'){
                 $("#profile").hide();
@@ -278,6 +281,7 @@ angular
                 $("#profile-team").fadeIn();
                 $("#team-reso").hide();
                 $("#team-group").hide();
+                $scope.team_profile();
 
             }
             else if(ty == 'team-reso'){
@@ -286,6 +290,7 @@ angular
                 $("#profile-team").hide();
                 $("#team-reso").fadeIn();
                 $("#team-group").hide();
+                $scope.reso();
 
             }
             else if(ty == 'team-group'){
@@ -294,77 +299,80 @@ angular
                 $("#profile-team").hide();
                 $("#team-reso").hide();
                 $("#team-group").fadeIn();
+                $scope.teamtable();
 
             }
 
         }
 
-
-        //**********리소스*************//
-        $http({
-            method: 'GET',
-            url: '/api/manager/useinfo',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "cpu"));
-                    new Chart(document.getElementById("memory_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "mem"));
-                    new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "disk"));
-
-                    $("#cpu_per").html(data.list.cpu_per[0]);
-                    $("#cpu_use_cnt").html(data.list.cpu_cnt[0]);
-                    $("#cpu_total_cnt").html(data.list.cpu_cnt[1]);
-                    $("#mem_per").html(data.list.mem_per[0]);
-                    $("#mem_use_cnt").html(data.list.mem_cnt[0]);
-                    $("#mem_total_cnt").html(data.list.mem_cnt[1]);
-                    $("#disk_per").html(data.list.disk_per[0]);
-                    $("#disk_use_cnt").html(data.list.disk_cnt[0]);
-                    $("#disk_total_cnt").html(data.list.disk_cnt[1]);
-                }
-                else {
-                    alert(data.message)
-                }
+        $scope.reso = function(){
+            //**********리소스*************//
+            $http({
+                method: 'GET',
+                url: '/api/manager/useinfo',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "cpu"));
+                        new Chart(document.getElementById("memory_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "mem"));
+                        new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "disk"));
 
-        $scope.getConfig = function (data, type) {
-            var config = null;
-            var rgb1 = null;
-            var rgb2 = "rgb(204, 204, 204)";
-            if(type == 'cpu'){
-                rgb1 = "rgb(255, 167, 22)"
-            }else if(type == 'mem'){
-                rgb1 = "rgb(83, 200, 173)"
-            }else if(type == 'disk'){
-                rgb1 = "rgb(87, 161, 246)"
-            }
+                        $("#cpu_per").html(data.list.cpu_per[0]);
+                        $("#cpu_use_cnt").html(data.list.cpu_cnt[0]);
+                        $("#cpu_total_cnt").html(data.list.cpu_cnt[1]);
+                        $("#mem_per").html(data.list.mem_per[0]);
+                        $("#mem_use_cnt").html(data.list.mem_cnt[0]);
+                        $("#mem_total_cnt").html(data.list.mem_cnt[1]);
+                        $("#disk_per").html(data.list.disk_per[0]);
+                        $("#disk_use_cnt").html(data.list.disk_cnt[0]);
+                        $("#disk_total_cnt").html(data.list.disk_cnt[1]);
+                    }
+                    else {
+                        alert(data.message)
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+
+            $scope.getConfig = function (data, type) {
+                var config = null;
+                var rgb1 = null;
+                var rgb2 = "rgb(204, 204, 204)";
+                if(type == 'cpu'){
+                    rgb1 = "rgb(255, 167, 22)"
+                }else if(type == 'mem'){
+                    rgb1 = "rgb(83, 200, 173)"
+                }else if(type == 'disk'){
+                    rgb1 = "rgb(87, 161, 246)"
+                }
 
 
-            if (type == 'cpu' || type == 'mem' || type == 'disk' ) {
-                config = {
-                    type: 'doughnut',
-                    data: {
-                        datasets: [{
-                            data: data,
-                            backgroundColor: [
-                                rgb1,
-                                rgb2
-                            ],
-                        }],
-                        labels: [
-                            "사용중",
-                            "미사용"
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        legend: true
+                if (type == 'cpu' || type == 'mem' || type == 'disk' ) {
+                    config = {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: data,
+                                backgroundColor: [
+                                    rgb1,
+                                    rgb2
+                                ],
+                            }],
+                            labels: [
+                                "사용중",
+                                "미사용"
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            legend: true
+                        }
                     }
                 }
+                return config;
             }
-            return config;
         }
+
     });

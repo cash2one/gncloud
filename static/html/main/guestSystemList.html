@@ -1,7 +1,7 @@
 <h1>설정</h1>
 
 <!--왼쪽 메뉴-->
-<ul class="nav nav-pills gn-left-menu col-sm-2">
+<ul class="nav nav-pills gn-left-menu col-xs-2">
     <li class="left-title gn-top">시스템</li>
     <li><a data-toggle="pill" ng-click="click('profile-system')">프로필</a></li>
     <li><a data-toggle="pill" ng-click="click('team-sett')">팀 관리</a></li>
@@ -10,7 +10,7 @@
 </ul>
 
 <!--오른쪽 메뉴-->
-<div class="tab-content col-sm-10">
+<div class="tab-content col-xs-10">
     <!--시스템 > 프로필-->
     <div id="profile-system"  class="">
         <div class="gn-box">
@@ -89,7 +89,7 @@
                                 </td>
                                 <td><span data-toggle="tooltip" title="{{select.create_date}}" tooltip>{{select.create_time_diff}}</span></td>
                                 <td>{{select.cpu_use_per}}%사용중<br>{{select.cpu_use_cnt}}/{{select.cpu_tot_cnt}}CORE</td>
-                                <td>{{select.mem_use_per}}%사용중<br>{{select.mem_use_cnt}}/{{select.mem_tot_cnt}}MB</td>
+                                <td>{{select.mem_use_per}}%사용중<br>{{select.mem_use_cnt}}/{{select.mem_tot_cnt}}</td>
                                 <td>{{select.disk_use_per}}%사용중<br>{{select.disk_use_cnt}}/{{select.disk_tot_cnt}}GB</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
