@@ -9,8 +9,6 @@ from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
 
-
-
 def vm_list(sql_session, team_code):
     list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
@@ -261,8 +259,8 @@ def team_list(user_id, sql_sesssion):
     list= sql_sesssion.query(GnUser).filter(GnUser.user_id ==user_id).one()
     return list
 
-def container(sql_sesssion):
-    list = sql_sesssion.query(GnDockerImages).all()
+def container(type, sql_sesssion):
+    list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).all()
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list

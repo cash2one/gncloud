@@ -212,9 +212,9 @@ def tea_list():
     return jsonify(status=True, message="success", list=tea(session_id, team_id, db_session))
 
 
-@app.route('/vm/container/services', methods=['GET'])
-def container_list():
-    return jsonify(status=True, message="success", list=container(db_session))
+@app.route('/vm/container/services/<type>', methods=['GET'])
+def container_list(type):
+    return jsonify(status=True, message="success", list=container(type,db_session))
 
 
 @app.route('/vm/account/teamset',methods=['GET'])

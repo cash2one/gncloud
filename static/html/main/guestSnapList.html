@@ -91,7 +91,7 @@
                             <tr ng-repeat="snap in snap_list">
                                 <td>
                                     <img src="/gn_images/gn_icon_{{snap.os}}.png" alt="ubuntu">
-                                    <a href="#">{{snap.name}}</a>
+                                    <a href="#">{{snap.view_name}}</a>
                                 </td>
                                 <td>{{snap.os}}{{snap.os_ver}}</td>
                                 <td>{{snap.type}}</td>
@@ -132,7 +132,7 @@
                 <tbody class="gn-tdody">
                 <tr ng-repeat="con in contain_list">
                     <td>
-                        <img src="/gn_images/gn_icon_{{con.name}}.png" alt="postgres">
+                        <img src="/gn_images/gn_icon_{{con.type}}.png" alt="postgres">
                         <a href="#">{{con.name}}</a>
                     </td>
                     <td>{{con.os_ver}}</td>
