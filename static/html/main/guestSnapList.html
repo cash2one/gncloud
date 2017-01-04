@@ -83,7 +83,7 @@
                                 <th class="col-sm-4">이름</th>
                                 <th class="col-sm-2">OS</th>
                                 <th class="col-sm-2">타입</th>
-                                <th class="col-sm-1">생성일<div class="refresh"></div></th>
+                                <th class="col-sm-1">생성일<div class="refresh" ng-click="refresh()"></div></th>
                                 <th class="col-sm-1"><!--더보기--></th>
                             </tr>
                             </thead>
@@ -91,7 +91,7 @@
                             <tr ng-repeat="snap in snap_list">
                                 <td>
                                     <img src="/gn_images/gn_icon_{{snap.os}}.png" alt="ubuntu">
-                                    <a href="#">{{snap.view_name}}</a>
+                                    <a href="#">{{snap.name}}</a>
                                 </td>
                                 <td>{{snap.os}}{{snap.os_ver}}</td>
                                 <td>{{snap.type}}</td>
@@ -132,8 +132,8 @@
                 <tbody class="gn-tdody">
                 <tr ng-repeat="con in contain_list">
                     <td>
-                        <img src="/gn_images/gn_icon_{{con.type}}.png" alt="postgres">
-                        <a href="#">{{con.name}}</a>
+                        <img src="/gn_images/gn_icon_{{con.os}}.png" alt="postgres">
+                        <a href="#">{{con.view_name}}</a>
                     </td>
                     <td>{{con.os_ver}}</td>
                     <td><span class="tag">{{con.tag}}</span></td>

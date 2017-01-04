@@ -1,0 +1,55 @@
+/* 
+ * Nanum Barun Gothic (Korean) http://hangeul.naver.com
+ */
+@font-face {
+  font-family: 'Nanum Barun Gothic';
+  font-style: normal;
+  font-weight: 200;
+  src: url(../gn_fonts/NanumBarunGothicUltraLight.eot);
+  src: local('Nanum Barun Gothic UltraLight'),
+       local('NanumBarunGothicUltraLight'),
+       url(../gn_fonts/NanumBarunGothicUltraLight.eot?#iefix) format('embedded-opentype'),
+       url(../gn_fonts/NanumBarunGothicUltraLight.woff2) format('woff2'),
+       url(../gn_fonts/NanumBarunGothicUltraLight.woff) format('woff'),
+       url(../gn_fonts/NanumBarunGothicUltraLight.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Nanum Barun Gothic';
+  font-style: normal;
+  font-weight: 300;
+  src: url(../gn_fonts/NanumBarunGothicLight.eot);
+  src: local('Nanum Barun Gothic Light'),
+       local('NanumBarunGothicLight'),
+       url(../gn_fonts/NanumBarunGothicLight.eot?#iefix) format('embedded-opentype'),
+       url(../gn_fonts/NanumBarunGothicLight.woff2) format('woff2'),
+       url(../gn_fonts/NanumBarunGothicLight.woff) format('woff'),
+       url(../gn_fonts/NanumBarunGothicLight.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Nanum Barun Gothic';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../gn_fonts/NanumBarunGothic.eot);
+  src: local('Nanum Barun Gothic'),
+       local('NanumBarunGothic'),
+       url(../gn_fonts/NanumBarunGothic.eot?#iefix) format('embedded-opentype'),
+       url(../gn_fonts/NanumBarunGothic.woff2) format('woff2'),
+       url(../gn_fonts/NanumBarunGothic.woff) format('woff'),
+       url(../gn_fonts/NanumBarunGothic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Nanum Barun Gothic';
+  font-style: normal;
+  font-weight: 700;
+  src: url(../gn_fonts/NanumBarunGothicBold.eot);
+  src: local('Nanum Barun Gothic Bold'),
+       local('NanumBarunGothicBold'),
+       url(../gn_fonts/NanumBarunGothicBold.eot?#iefix) format('embedded-opentype'),
+       url(../gn_fonts/NanumBarunGothicBold.woff2) format('woff2'),
+       url(../gn_fonts/NanumBarunGothicBold.woff) format('woff'),
+       url(../gn_fonts/NanumBarunGothicBold.ttf) format('truetype');
+}
+

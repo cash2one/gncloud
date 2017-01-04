@@ -232,4 +232,18 @@ angular
             }
             return config;
         }
+        $scope.refresh = function(){
+            $scope.won_list = Array.prototype.slice.call($scope.won_list).reverse();
+        }
+    }).directive('tooltip', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs){
+                $(element).hover(function(){
+                    $(element).tooltip('show');
+                }, function(){
+                    $(element).tooltip('hide');
+                });
+            }
+        };
     });

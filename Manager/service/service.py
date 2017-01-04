@@ -265,6 +265,12 @@ def container(type, sql_sesssion):
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
+def containers(sql_sesssion):
+    list = sql_sesssion.query(GnDockerImages).all()
+    for vm in list:
+        vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
+    return list
+
 def teamset(team_code, sql_session):
     list = sql_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).all()
     for vm in list:
