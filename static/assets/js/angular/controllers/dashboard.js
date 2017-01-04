@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('dashboardCtrl', function ($scope, $http) {
+    .controller('dashboardCtrl', function ($scope, $http, $rootScope) {
         $http({
             method: 'GET',
             url: '/api/manager/useinfo',

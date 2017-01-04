@@ -1,5 +1,5 @@
-<nav class="navbar navbar-default gn-header" ng-controller="menu">
-    <div class="container">
+<nav class="navbar navbar-default gn-header" ng-controller="navbarCtrl">
+    <div class="container" ng-show="user_info.team_code != '' ">
         <!--지앤클라우드 로고-->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -29,12 +29,12 @@
                 <li>
                 <li class="dropdown head-dropdown">
                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                        <a id="name"></a>
+                        <a id="name">{{user_info.name}}</a>
                         <span class="gn-caret"></span>
                     </div>
                     <ul class="dropdown-menu gn-head-drop" role="menu">
                         <li><a href="#/account/users/list">개인설정</a></li>
-                        <li><a href="#/guestSystemList" id="system">시스템 설정</a></li>
+                        <li ng-show="user_info.authority == 'sysowner' "><a href="#/guestSystemList" id="system">시스템 설정</a></li>
                         <li><a href=javascript:logout();>로그아웃</a></li>
                     </ul>
                 </li>

@@ -191,7 +191,7 @@ def getQuotaOfTeam(team_code, sql_session):
 
     image_type_list = sql_session.query(GnVmImages.name, func.count().label("count")) \
                                  .join(GnVmMachines,  GnVmImages.id == GnVmMachines.image_id) \
-                                 .filter(GnVmImages.type == "kvm") \
+                                 .filter(GnVmMachines.status != "Removed") \
                                  .group_by(GnVmImages.id).all()
 
     if current_info.sum_cpu is None:

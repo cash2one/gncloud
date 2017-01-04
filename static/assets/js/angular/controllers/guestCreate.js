@@ -1,12 +1,8 @@
 angular
     .module('gncloud')
-    .controller('guestCreateCtrl', function ($scope, $http, $timeout) {
-        //탭이동
-        $('.nav-sidebar li').removeClass('active');
-        var url = window.location;
-        $('ul.nav-sidebar a').filter(function () {
-            return this.href.indexOf(url.hash) != -1;
-        }).parent().addClass('active');
+    .controller('guestCreateCtrl', function ($scope, $http, $timeout, $rootScope) {
+        console.log($rootScope.authority);
+
         $("#windows").hide();
         $("#ssh").hide();
         $("#snap").hide();

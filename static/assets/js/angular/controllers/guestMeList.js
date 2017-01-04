@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestMeListCtrl', function ($scope, $http, dateModifyService) {
+    .controller('guestMeListCtrl', function ($scope, $http, dateModifyService, $rootScope) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -390,5 +390,10 @@ angular
                 });
             }
         };
+
+
+        $rootScope.$on('init', function () {
+            $scope.authority = "user";//$rootScope.authority;
+        });
 
     });
