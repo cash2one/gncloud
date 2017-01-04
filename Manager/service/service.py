@@ -390,7 +390,6 @@ def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소
         else:
             disk_per_info = [int((current_infodisk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_infodisk.sum_disk/limit_quota.disk_quota)*100))]
             disk_cnt_info = [int(current_infodisk.sum_disk), limit_quota.disk_quota]
-
         count_info = [vm_run_count.count,vm_stop_count.count]
         type_info = [vm_kvm_count.count,vm_hyperv_count.count]
         docker_info = vm_docker_count.count
