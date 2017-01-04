@@ -3,6 +3,7 @@ var serviceAddModules = [
 ];
 
 (function () {
+
     var app = angular.module('gncloud', serviceAddModules)
         .directive('navbar', function (){
             return{
@@ -11,6 +12,24 @@ var serviceAddModules = [
                 controller:'navbarCtrl'
             }
         });
+
+    app.run(function($rootScope,$http){
+
+        $http({
+            method: 'GET',
+            url: '/api/manager/vm/logincheck',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                $rootScope.user_info = data.info;
+                $rootScope.$emit('init');
+            })
+            .error(function (data, status, headers, config) {
+                console.log("checking success!!");
+            });
+
+
+    });
 
     app.factory('serviceLogger', function ($location) {
         return {
@@ -23,38 +42,6 @@ var serviceAddModules = [
             },
         };
     });
-
-    app.factory('getLoginInfo', function ($location) {
-        return {'level':'owner'};
-    });
-
-    /*app.factory('UserService', function() {
-        var age = 10;
-        var
-        $.ajax({
-            type: "GET",
-            url: '/api/manager/vm/logincheck',
-            headers: {'Content-Type': 'application/json; charset=utf-8'},
-            success:function(data) {
-                if (data.status == true) {
-                    $("#name").html(data.message);
-                }else{
-                    if(data.message != null) {
-                        alert(data.message)
-                    }
-                }
-
-            }
-        })
-
-        return {
-            name : 'tom',
-            age: function (val) {
-                if (val) age = val;
-                else return age;
-            }
-        };
-    });*/
 
     app.service('dateModifyService', function()
     {
