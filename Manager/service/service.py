@@ -9,6 +9,8 @@ from Manager.db.database import db_session
 from Manager.util.hash import random_string
 
 
+
+
 def vm_list(sql_session, team_code):
     list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:

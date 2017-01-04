@@ -156,7 +156,7 @@ def server_create_snapshot(id, name, user_id, team_code):
         # 네이밍
         new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         # 디스크 복사
-        kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
+        kvm_image_copy('aaa', new_image_name, guest_info.gnHostMachines.ip)
 
         #id 생성
         while True:
