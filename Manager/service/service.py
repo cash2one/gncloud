@@ -5,8 +5,7 @@ from sqlalchemy import func
 import datetime
 
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
-                                , GnTeamHist, GnUserTeamHist
-from Manager.db.models import GnHostMachines, GnVmMachines, GnId, GnUser, GnTeam, GnVmImages, GnSshKeysMapping, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages
+                                , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
 
@@ -463,7 +462,7 @@ def delteam_list(team_code, sql_session): #팀삭제 쿼리
     if((sql_session.query(GnVmMachines).filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one_or_none())==None):
         user_list =sql_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).all()
         while True:
-            del_code=delcode(8)
+            del_code=random_string(8)
             check = sql_session.query(GnTeamHist).filter(GnTeamHist.team_del_code == del_code).one_or_none()
             if(check == None):
                 break
