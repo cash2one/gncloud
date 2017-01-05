@@ -333,8 +333,12 @@ def maketeam():
 @app.route('/vm/account/deleteteam/<code>', methods=['DELETE'])
 def delteam(code):
     team_code = code
-    delteam_list(team_code)
-    return jsonify(status=True, message="success")
+    hist= delteam_list(team_code,db_session)
+    if(hist == 1):
+        return jsonify(status=True, message="팀이 삭제 되었습니다")
+    elif(hist ==2):
+        return jsonify(status=False, message="인스턴스가 남아있어 팀을 삭제 할 수 없습니다")
+
 #### rest end ####
 
 

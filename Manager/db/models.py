@@ -381,3 +381,60 @@ class GnId(Base):
     def __repr__(self):
         return '<Id %r / Type %r >' \
                % (self.id, self.type)
+
+class GnTeamHist(Base):
+    __tablename__="GN_TEAM_HIST"
+    team_code = Column(String(10), primary_key=True, nullable=False)
+    team_del_code = Column(String(8), primary_key=True,nullable=False )
+    team_name = Column(String(50), primary_key=False, nullable=False)
+    author_id = Column(String(50), primary_key=False, nullable=False)
+    cpu_quota = Column(Numeric, primary_key=False, nullable=False)
+    mem_quota = Column(Numeric, primary_key=False, nullable=False)
+    disk_quota = Column(Numeric, primary_key=False, nullable=False)
+    delete_date = Column(DateTime, primary_key=True, default=datetime.datetime.now())
+
+    def __init__(self, team_code=team_code, team_del_code= team_del_code, team_name=None, author_id= None, cpu_quota=None, mem_quota=None, disk_quota=None, delete_date=None):
+        self.team_code = team_code
+        self.team_del_code = team_del_code
+        self.team_name = team_name
+        self.author_id = author_id
+        self.cpu_quota = cpu_quota
+        self.mem_quota =mem_quota
+        self.disk_quota= disk_quota
+        self.delete_date = delete_date
+
+    def __repr__(self):
+        return '< Tema_code %r / Team_del_code %r / Team_name %r / Author_id %r / Cpu_quota %r / Mem_quota %r / Disk_quota %r / Delete_date %r />' \
+                % (self.team_code, self.team_del_code, self.team_name, self.author_id, self.cpu_quota, self.mem_quota, self.disk_quota, self.delete_date)
+
+    def __json__(self):
+        return ['team_code', 'team_del_code', 'team_name', 'author_id', 'cpu_quota', 'mem_quota', 'disk_quta', 'delete_date']
+
+
+class GnUserTeamHist(Base):
+    __tablename__='GN_USER_TEAMS_HIST'
+    user_id = Column(String(50), primary_key=True, nullable=False)
+    team_code= Column(String(0), primary_key=True, nullable=False)
+    team_del_code = Column(String(8), primary_key=True, nullable=False)
+    comfirm= Column(String(1), primary_key=False, nullable=False)
+    apply_date = Column(DateTime, primary_key=True, default=datetime.datetime.now())
+    approve_date = Column(DateTime, primary_key=True, default=datetime.datetime.now())
+    delete_date = Column(DateTime, primary_key=True, default=datetime.datetime.now())
+    team_owner = Column(String(10), primary_key=False, nullable=False)
+
+    def __init__(self, user_id=id, team_code=team_code, team_del_code = team_del_code, comfirm=None, apply_date=None, approve_date=None, delete_date=None, team_owner=None):
+        self.user_id =user_id
+        self.team_code = team_code
+        self.team_del_code = team_del_code
+        self.comfirm = comfirm
+        self.apply_date = apply_date
+        self.approve_date =approve_date
+        self.delete_date =delete_date
+        self.team_owner = team_owner
+
+    def __repr__(self):
+        return '< User_id %r / Team_code %r / Team_del_code %r / Comfirm %r / Apply_date %r / Approve_date %r / Delete_date %r / Team_owner %r />'\
+            %(self.user_id, self.team_code, self. team_del_code, self.comfirm, self.apply_date, self.approve_date, self.delete_date, self.team_owner)
+
+    def __json__(self):
+        return ['user_id', 'tema_code', 'team_del_code', 'comfirm', 'apply_date', 'approve_date', 'delete_date', 'team_owner']
