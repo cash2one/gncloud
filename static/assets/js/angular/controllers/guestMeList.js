@@ -376,6 +376,9 @@ angular
                 return config;
             }
         }
+        $rootScope.$on('init', function () {
+            $scope.authority = $rootScope.user_info.authority;
+        });
         $scope.refresh = function(){
             $scope.won_list = Array.prototype.slice.call($scope.won_list).reverse();
         }
@@ -392,8 +395,6 @@ angular
         };
 
 
-        $rootScope.$on('init', function () {
-            $scope.authority = "user";//$rootScope.authority;
-        });
+
 
     });
