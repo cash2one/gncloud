@@ -306,7 +306,13 @@ def team_list(user_id, sql_sesssion):
     list= sql_sesssion.query(GnUser).filter(GnUser.user_id ==user_id).one()
     return list
 
-def container(sql_sesssion):
+def container(type, sql_sesssion):
+    list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).all()
+    for vm in list:
+        vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
+    return list
+
+def containers(sql_sesssion):
     list = sql_sesssion.query(GnDockerImages).all()
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')

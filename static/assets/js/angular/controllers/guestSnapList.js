@@ -22,6 +22,7 @@ angular
                 $("#snap").fadeIn();
                 $("#image").hide();
                 $("#container").hide();
+                $scope.snapList();
             }
             if(data == 'image') {
                 $("#snap").hide();
@@ -34,6 +35,7 @@ angular
                 $("#snap").hide();
                 $("#image").hide();
                 $("#container").fadeIn();
+                $scope.container();
             }
         }
         $http({
@@ -74,26 +76,42 @@ angular
                 .error(function (data, status, headers, config) {
                     console.log(status);
                 });
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/machines',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.list = data.list;
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
         }
 
-        $scope.snapList();
 
-
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/container/services',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.contain_list = data.list;
-                }
-                else {
-                }
+        $scope.container=function(){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/container/services',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.contain_list = data.list;
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+
+        }
 
         $scope.actions = [
             {name: '삭제', type: 'delete'}
@@ -123,21 +141,7 @@ angular
                 });
 
         };
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/machines',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data) {
-                    $scope.list = data.list;
-                }
-                else {
-                }
-            })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+
         $scope.data = {};
         $scope.update_image = function (data) {
             if (data != null) {
@@ -164,7 +168,9 @@ angular
                     }
                 });
         };
-
+        $scope.refresh = function(){
+            $scope.snap_list = Array.prototype.slice.call($scope.snap_list).reverse();
+        }
 
 
     });

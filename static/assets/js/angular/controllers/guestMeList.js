@@ -128,6 +128,8 @@ angular
                             data.list[i].email = data.list[i][0].email;
                             data.list[i].comf = comfirm_re;
                             data.list[i].team_owner = team_owner;
+                            data.list[i].apply_date = data.list[i][1].apply_date;
+                            data.list[i].approve_date = data.list[i][1].approve_date;
                             //날짜 카운팅
                             data.list[i].create_time_diff = dateModifyService.modifyDate(data.list[i][1].apply_date);
                             data.list[i].create_time_diff1 = dateModifyService.modifyDate(data.list[i][1].approve_date);
@@ -374,6 +376,20 @@ angular
                 return config;
             }
         }
+        $scope.refresh = function(){
+            $scope.won_list = Array.prototype.slice.call($scope.won_list).reverse();
+        }
+    }).directive('tooltip', function(){
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs){
+                $(element).hover(function(){
+                    $(element).tooltip('show');
+                }, function(){
+                    $(element).tooltip('hide');
+                });
+            }
+        };
 
 
         $rootScope.$on('init', function () {

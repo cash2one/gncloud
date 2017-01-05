@@ -54,7 +54,7 @@
                 <div class="btn-group" data-toggle="buttons">
                     <label  ng-repeat="list in image_list" class="btn btn-default gn-btn-default inp-box-size" ng-click="update_image(list)">
                         <input name="" value="1" type="radio">
-                        <span class="sprite-img sprite-{{list.type}}"></span>
+                        <span class="sprite-img sprite-{{list.os}}"></span>
                         {{list.os}}
                         <span class="windows-small gn-name-ellip">{{list.name}}</span>
 
@@ -67,8 +67,8 @@
                     <div class="btn-group" data-toggle="buttons">
                         <label class="btn btn-default gn-btn-snap" ng-repeat="list in snap_list" ng-click="update_image(list)">
                             <input name="" value="" type="radio">
-                            <p class="ellipsis">
-                                <img src="/gn_images/gn_icon_{{list.os}}.png" alt="" class="elli-img-icon">{{list.name}}</p>
+                            <span class="sprite-snap-img snap-sprite sprite-snap-{{list.os}}"></span>
+                            <p class="ellipsis">{{list.name}}</p>
                         </label>
                     </div>
                 </form>

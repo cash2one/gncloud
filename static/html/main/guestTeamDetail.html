@@ -126,8 +126,8 @@
                             <thead>
                             <tr>
                                 <th>번호</th>
-                                <th>등급<div class="refresh"></div></th>
-                                <th>이름<div class="refresh"></div></th>
+                                <th>등급</th>
+                                <th>이름</th>
                                 <th>아이디</th>
                                 <th>연락처</th>
                                 <th>이메일</th>
@@ -135,7 +135,7 @@
                                 <th>승인일</th>
                                 <!-----여기서부터 팀장 로그인 시 보이는 영역----->
                                 <th>탈퇴일</th>
-                                <th>상태<div class="refresh"></div></th>
+                                <th>상태<div class="refresh" ng-click="refresh()"></div></th>
                                 <th><!--더보기--></th>
                             </tr>
                             </thead>
@@ -147,8 +147,8 @@
                                 <td class="" ng-model="data.user_id">{{won.user_id}}</td>
                                 <td class="">{{won.tel}}</td>
                                 <td class="">{{won.email}}</td>
-                                <td class=""><p data-toggle="tooltip" title="{{won.apply_date}}">{{won.create_time_diff}}</p></td>
-                                <td class=""><p data-toggle="tooltip" title="{{won.approve_date}}">{{won.create_time_diff1}}</p></td>
+                                <td class=""><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>
+                                <td class=""><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
                                 <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>
                                 <td class="">{{won.comf}}</td>

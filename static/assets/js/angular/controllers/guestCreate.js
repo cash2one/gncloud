@@ -9,13 +9,32 @@ angular
             if(type == 'docker'){
                 $http({
                     method: 'GET',
-                    url: '/api/manager/vm/container/services',
+                    url: '/api/manager/vm/container/services/base',
                     headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
                     .success(function (data, status, headers, config) {
                         if (data) {
                             $scope.type = type;
                             $scope.image_list = data.list;
+                        }
+                        else {
+                            if(data.message != null) {
+                                alert(data.message)
+                            }
+                        }
+                    })
+                    .error(function (data, status, headers, config) {
+                        console.log(status);
+                    });
+                $http({
+                    method: 'GET',
+                    url: '/api/manager/vm/container/services/snap',
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
+                })
+                    .success(function (data, status, headers, config) {
+                        if (data) {
+                            $scope.type = type;
+                            $scope.snap_list = data.list;
                         }
                         else {
                             if(data.message != null) {

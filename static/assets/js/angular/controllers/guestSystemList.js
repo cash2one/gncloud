@@ -121,9 +121,6 @@ angular
                 });
         }
 
-        $scope.refresh = function(){
-            $scope.table = Array.prototype.slice.call($scope.table).reverse();
-        }
         $scope.imageset = function(ty){
             if(ty == 'container'){
                 $("#machine").hide();
@@ -166,6 +163,16 @@ angular
         }
 
         $scope.click($routeParams.id);
+        $scope.refresh = function(type){
+            if(type == 'table'){
+                $scope.table = Array.prototype.slice.call($scope.table).reverse();
+            }else if(type =='contain'){
+                $scope.contain_list = Array.prototype.slice.call($scope.contain_list).reverse();
+            }else if(type == 'image'){
+                $scope.paths = Array.prototype.slice.call($scope.paths).reverse();
+            }
+
+        }
 
 }).directive('tooltip', function(){
         return {

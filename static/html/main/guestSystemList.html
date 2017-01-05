@@ -59,7 +59,7 @@
                                 <th>팀 코드</th>
                                 <th>팀장</th>
                                 <th>팀원</th>
-                                <th>생성일<div class="refresh"></div></th>
+                                <th>생성일<div class="refresh" ng-click="refresh('table')"></div></th>
                                 <th class="">CPU</th>
                                 <th class="">MEMORY</th>
                                 <th class="">DISK</th>
@@ -330,7 +330,7 @@
                                             <th>BIT</th>
                                             <th>타입</th>
                                             <th>PATH</th>
-                                            <th>생성일<div class="refresh"></div></th>
+                                            <th>생성일<div class="refresh" ng-click="refresh('image')"></div></th>
                                             <th><!--더보기--></th>
                                         </tr>
                                         </thead>
@@ -466,15 +466,15 @@
                                             <th class="col-sm-3">이름</th>
                                             <th class="col-sm-2">버전</th>
                                             <th class="col-sm-2">태그</th>
-                                            <th class="col-sm-2">생성일<div class="refresh"></div></th>
+                                            <th class="col-sm-2">생성일<div class="refresh" ng-click="refresh('contain')"></div></th>
                                             <th class="col-sm-1"><!--더보기--></th>
                                         </tr>
                                         </thead>
                                         <tbody class="gn-tdody">
                                         <tr ng-repeat="contain in contain_list">
-                                            <td >
-                                                <img src="gn_images/gn_icon_{{}}.png" alt="">
-                                                {{contain.name}}
+                                            <td>
+                                                <img src="/gn_images/gn_icon_{{contain.os}}.png" alt="">
+                                                {{contain.view_name}}
                                             </td>
                                             <td>{{contain.os_ver}}</td>
                                             <td>{{contain.tag}}</td>

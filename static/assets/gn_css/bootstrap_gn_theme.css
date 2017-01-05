@@ -1,11 +1,8 @@
 /*지앤클라우드 프라이빗 인스턴스 스타일시트*/
 
-
 /*나눔바른고딕 폰트*/
 @import url(nanumbarungothic.css);
-
-
-/* ========== 공통 STYLE ========== */
+/* ========== gncloud 공통 STYLE ========== */
 body{
     margin: 0; 
     padding: 0; 
@@ -112,7 +109,47 @@ textarea.gn-form-control{
     border-bottom: none;
 }
 
-/* ============================= BUTTON STYLE ============================= */
+/*tooltip*/
+.tooltip-inner {
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;    
+  max-width: 200px;
+  max-height: 50px;
+  padding: 5px 10px;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  background-color: #58c4c6;
+  border-radius: 3px;
+}
+
+.tooltip.top .tooltip-arrow {
+  border-top-color: #58c4c6;
+}
+.tooltip.top-left .tooltip-arrow {
+  border-top-color: #58c4c6;
+}
+.tooltip.top-right .tooltip-arrow {
+  border-top-color: #58c4c6;
+}
+.tooltip.right .tooltip-arrow {
+  border-right-color: #58c4c6;
+}
+.tooltip.left .tooltip-arrow {
+  border-left-color: #58c4c6;
+}
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: #58c4c6;
+}
+.tooltip.bottom-left .tooltip-arrow {
+  border-bottom-color: #58c4c6;
+}
+.tooltip.bottom-right .tooltip-arrow {
+  border-bottom-color: #58c4c6;
+}
+
+/* ============================= gncloud BUTTON STYLE ============================= */
 .btn-success {
     color: #fff;
     background-color: #15cd72;
@@ -187,12 +224,15 @@ textarea.gn-form-control{
 
 .modal-open{padding-right: 15px;}
 
-/* ==================== HEADER STYLE ==================== */
+/* ==================== gncloud HEADER STYLE ==================== */
 .gn-header{
     position: relative;
     height: 100px;
     margin-bottom: 10px;
+    z-index: 100;
 }
+
+.gn-header > .container{padding-bottom: 0;}
 
 .navbar-default.gn-header{
     background-color: #ffffff;
@@ -224,10 +264,14 @@ textarea.gn-form-control{
 }
 
 li.nav-link{
-    text-align: center;
+}
+
+li.nav-link > a{
+    color: #505050 !important;
     margin-left: 45px;
     margin-top: 32px;
     font-size: 16px;
+    font-weight: 500;
 }
 
 li.nav-link a:focus,
@@ -240,19 +284,13 @@ li.nav-link.active>a:hover,
 .navbar-default .navbar-nav>li.nav-link.active>a:hover,
 .navbar-default .navbar-nav>li.nav-link>a:focus, 
 .navbar-default .navbar-nav>li.nav-link>a:hover{
-    color: #58c4c6;
+    color: #58c4c6 !important;
     background-color: transparent;
     -webkit-transition: all .3s ease;
     -moz-transition: all .3s ease;
     -ms-transition: all .3s ease;
     -o-transition: all .3s ease;
     transition: all .3s ease;   
-}
-
-
-li.nav-link > a{
-    color: #505050;
-    background-color: transparent;
 }
 
 .gn-tab-content{
@@ -276,6 +314,10 @@ li.nav-link > a{
     margin-bottom: -1px;
 }
 
+.gn-nav-tabs{
+    border-bottom: 2px solid rgba(215,215,215,.5);
+}
+
 .gn-nav-tabs > li > a:hover{
     background-color: #ffffff;
 }
@@ -297,11 +339,6 @@ li.nav-link > a{
     font-size: 16px;
 }
 
-.gn-nav-tabs{
-    border-bottom: 2px solid rgba(215,215,215,.5);
-}
-
-
 /*HEADER 오른쪽*/
 /*인스턴스 생성 버튼*/
 .navbar-right li.create-btn{
@@ -313,9 +350,6 @@ li.nav-link > a{
 	height: 46px;   
 }
 
-
-
-/*----------------------*/
 /*drop style*/
 .gn-head-drop,
 .gn-dropdown{
@@ -344,11 +378,6 @@ li.nav-link > a{
     color: #E60202 !important;
 }
 
-.gn-head-drop > li:last-child,
-.gn-dropdown-table > li:last-child{
-    border-top: 1px solid #cccccc;
-}
-
 .gn-head-drop > li > a:hover,
 .gn-dropdown > li > a:focus {
   color: #58c4c6;
@@ -361,7 +390,7 @@ li.nav-link > a{
     width: 10px;
     height: 10px;
     margin-left: 5px;
-    margin-top: 35px;    
+    margin-top: 37px;    
 }
 
 .gn-lead{
@@ -374,6 +403,7 @@ li.nav-link > a{
 .user{
     position: relative;
     cursor: pointer;
+    float: right;
 }
 
 .user a{
@@ -383,9 +413,14 @@ li.nav-link > a{
     color: #505050;
 }
 
+.gn-table>.gn-tdody>tr>td > .user > .gn-more{display: block; float: left;}
+
 .head-dropdown .user{
     margin-left: 20px;
 }
+
+/* 모바일 드롭다운 메뉴 */
+.navbar-right > .mobile-head-dropdown{display: none;}
 
 /*GN TABLE STYLE*/
 .gn-caret-table{
@@ -395,14 +430,13 @@ li.nav-link > a{
     width: 10px;
     height: 10px;
     margin-left: 5px; 
-    /*margin-top: 5px;*/
+    margin-top: 5px;
 }
 
 .gn-table-responsive > .gn-table thead tr th{
     text-align: center;
     font-size: 14px;
     border: none;
-    overflow: hidden;
 }
 
 .gn-table-responsive > .gn-table tbody tr td{
@@ -453,7 +487,7 @@ li.nav-link > a{
 }
 
 .navbar-nav > li > .dropdown-menu {
-    margin-top: 0;
+    margin-top: 5px;;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 }
@@ -483,7 +517,7 @@ li.nav-link > a{
 
 .dropdown-menu > li:last-child,
 .dropdown-menu-table > li:last-child{
-    border-top: 1px solid #cccccc;
+    border-top: 1px solid #e9e9e9;
 }
 
 .dropdown-menu > li > a:hover,
@@ -545,7 +579,7 @@ li.nav-link > a{
 
 /*-----모달 공통 end-----*/
 
-/* ========== 로그인 HTML ========== */
+/* ========== gncloud 로그인 HTML ========== */
 .body-white{background-color: #ffffff; min-height: 100%; border-bottom: 1px solid #dddddd;}
 .body-gray{background-color: #f6f6f6; min-height: 100%; border-bottom: 1px solid #dddddd;}
 
@@ -722,7 +756,7 @@ a.log-join-btn:focus{
     font-weight: 400;
 }
 
-/* ========== 대시보드 HTML ========== */
+/* ========== gncloud 대시보드 HTML ========== */
 /*대시보드 TABLE STYLE*/
 .table-dash thead tr th{
     text-align: center;
@@ -922,11 +956,11 @@ a.log-join-btn:focus{
 }
 
 
-/* ========== 인스턴스 > 리스트 HTML ========== */
+/* ========== gncloud 인스턴스 > 리스트 HTML ========== */
 
 
 
-/* ========== 인스턴스 > 상세 HTML ========== */
+/* ========== gncloud 인스턴스 > 상세 HTML ========== */
 .col-sm-1.gn-detail-icon{
     padding-right: 0;    
 }
@@ -1031,8 +1065,8 @@ ul.gn-tag-group > li{
 }
 
 
-/* ========== 인스턴스 > 생성 HTML ========== */
-#image > form > .btn-group{
+/* ========== gncloud 인스턴스 > 생성 HTML ========== */
+#snap > form > .btn-group{
     width: 100%;    
 }   
 
@@ -1099,18 +1133,26 @@ ul.gn-tag-group > li{
     height: 55px;
     overflow: hidden;    
 }
-.sprite-hyperv{
-    background: url(../gn_images/instance_create_windows-s.png)no-repeat;}
 
-.sprite-kvm{
-    background: url(../gn_images/instance_create_KVM-s.png)no-repeat;}
+.sprite-hyperv{background: url(../gn_images/instance_create_windows-s.png)no-repeat;}
 
-.sprite-docker{
-    background: url(../gn_images/instance_create_docker-s.png)no-repeat;}
+.sprite-kvm{background: url(../gn_images/instance_create_KVM-s.png)no-repeat;}
+
+.sprite-docker{background: url(../gn_images/instance_create_docker-s.png)no-repeat;}
+
+/***  추가된 스프라이트 이미지  ***/
+.sprite-ubuntu{background: url(../gn_images/instance_create_ubuntu-s.png)no-repeat;}
+.sprite-centos{background: url(../gn_images/instance_create_centos-s.png)no-repeat;}
+.sprite-tomcat{background: url(../gn_images/instance_create_tomcat-s.png)no-repeat;}
+.sprite-windows{background: url(../gn_images/instance_create_windows-s.png)no-repeat;}
 
 .gn-btn-default.active .sprite-hyperv,
 .gn-btn-default.active .sprite-kvm,
-.gn-btn-default.active .sprite-docker
+.gn-btn-default.active .sprite-docker,
+.gn-btn-default.active .sprite-ubuntu,
+.gn-btn-default.active .sprite-centos,
+.gn-btn-default.active .sprite-tomcat,
+.gn-btn-default.active .sprite-windows
 {background-position: 0px -55px;}
 
 .gn-name-ellip{
@@ -1128,7 +1170,7 @@ ul.gn-tag-group > li{
     line-height: 1;
     white-space: normal;
     overflow: hidden;
-    margin-top: -3px;
+    margin-top: -3px;   
 }
 
 img.elli-img-icon{
@@ -1160,7 +1202,7 @@ img.elli-img-icon{
     margin-bottom: 10px;
 }
 
-/* ========== 이미지 HTML ========== */
+/* ========== gncloud 이미지 HTML ========== */
 #container.gn-box{
     margin-top: 30px;
 }
@@ -1184,6 +1226,9 @@ a.tab-sm-box{
     display: block;
 }
 
+/*li:nth-of-type(1) > a.tab-sm-box{border-right-color: #58c4c6;}
+li:nth-of-type(2) > a.tab-sm-box{border-left-color: #58c4c6;}*/
+
 a.tab-sm-box:hover{
     color: #505050;
 }
@@ -1199,7 +1244,9 @@ li.active > .tab-sm-box{
 
 
 
-/* ========== 설정 > 팀원/팀장 HTML ========== */
+/* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
+.fons-16{font-size: 16px;}
+
 .col-sm-11,
 .tab-content.col-sm-10{
     padding-right: 0;
@@ -1256,11 +1303,10 @@ li.left-title:nth-of-type(2){
     margin-top: -45px;
 }
 
-.gn-sett-btn2{
-    float: right;
-    margin-top: -45px;
-    margin-right: 85px; 
-}
+#machine > .gn-sett-btn,
+#container > .gn-sett-btn{
+    margin-top: -75px;
+} 
 
 .gn-control-label{
     font-size: 16px;
@@ -1298,7 +1344,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
 }
 
 
-/* ========== 설정 > 시스템 관리자 HTML ========== */
+/* ========== gncloud 설정 > 시스템 관리자 HTML ========== */
 .gn-sett-margin-box > .container-fluid > h1{
     margin-top: 0;
     margin-bottom: 20px;
@@ -1458,13 +1504,15 @@ ul.gn-sett-graph > li:nth-of-type(3){
 }
 
 
-.gn-inputs:invalid {
-    border-color:#f00;
-}
+
 
 
 /* ================================ 반응형 ================================ */
 @media screen and (max-width: 991px){
+    .gn-header .container{width: 100%;}
+    .container{
+        width: 95%;
+    }
     
     /* ======== gncloud HEADER ======== */
     li.nav-link:nth-of-type(1){
@@ -1474,7 +1522,14 @@ ul.gn-sett-graph > li:nth-of-type(3){
     li.nav-link{
         margin-left: 25px;
         transition: all .8s ease;
+    }
+    
+    li.nav-link > a{
+        margin-left: 25px;
+        transition: all .8s ease;
     }    
+   
+    
    
     /* ======== gncloud 로그인 ======== */
     .gn-title-login span{
@@ -1538,6 +1593,28 @@ ul.gn-sett-graph > li:nth-of-type(3){
         transition: all .3s ease; 
     }
     
+    /* ======== gncloud 인스턴스 리스트 ======== */ 
+    .gn-table>thead>tr>th:nth-of-type(2){display: none;}
+    .gn-table>.gn-tdody>tr>td:nth-of-type(2){display: none;}
+    .gn-table>.gn-tdody>tr>td > .user > .gn-more{display: none;}
+    
+    /* ======== gncloud 인스턴스 생성 ======== */
+    
+    
+    /* ======== gncloud 인스턴스 상세 ======== */
+    
+    /* ======== gncloud 이미지 ======== */
+    
+    /* ======== gncloud 설정 ======== */
+    .gn-table>thead>tr>th:nth-of-type(7){display: none;}
+    .gn-table>thead>tr>th:nth-of-type(8){display: none;}
+    .gn-table>thead>tr>th:nth-of-type(9){display: none;}
+    .gn-table>thead>tr>th:nth-of-type(10){display: none;}
+    
+    .gn-table>tbody>tr>td:nth-of-type(7){display: none;}
+    .gn-table>tbody>tr>td:nth-of-type(8){display: none;}
+    .gn-table>tbody>tr>td:nth-of-type(9){display: none;}
+    .gn-table>tbody>tr>td:nth-of-type(10){display: none;}    
     
 }
 
@@ -1551,56 +1628,45 @@ ul.gn-sett-graph > li:nth-of-type(3){
         width: auto;
     } 
     
-    .gn-table-responsive > .gn-table thead tr th{
-        text-align: center;
-        font-size: 12px;
-        width: 100%;
-        overflow: hidden;
-    }    
+    .gn-table-responsive > .gn-table thead tr th{font-size: 12px;}
     
-    
-    /* ======== gncloud HEADER ======== */    
-    li.nav-link{
-        margin-top: 20px;
-        float: left;
-        text-align: center;
-    }
-    
-    .navbar-collapse.gn-header-collapsed{
-        background-color: #eeeeee;  
-        /*padding-bottom: 4px;*/
-    }
-    
-    .navbar-right{
-        position: relative;
-    }
-    
-    .navbar-right li.dropdown{
-        position: absolute;
-        bottom: 72px;
-        right: 15px;
-    }
-    
-    .dropdown{
-        /*margin-right: 45px;*/
+    /* ======== gncloud HEADER ======== */ 
+    .gn-header > .container > .navbar-header > .navbar-toggle{
+        border-color: transparent;
+    } 
+    .gn-header > .container > .navbar-header > .navbar-toggle:hover{
+        background-color: transparent;
     }     
     
-    .dropdown-menu.gn-head-drop{
-        z-index: 1000;
-    }    
-
+    li.nav-link{margin-left: 0;}
+    li.nav-link:nth-of-type(1){margin-left: 0px;}    
+    li.nav-link a{margin-left: 0;}
+    
+    .navbar-collapse.gn-header-collapsed{
+        background-color: #f7f7f7;  
+    }
     .gn-header .navbar-header .navbar-toggle{
         margin-top: 20px;
     }    
     
-    .navbar-nav > .open > .dropdown-menu.gn-head-drop{
-        position: absolute;
-        top: 105%;
-        left: -80px;
-        z-index: 1000;
-        background-color: white;
-    }    
+    /*모바일 width:767px이하부터 display:none;되는 dropdown*/ 
+    .navbar-right > .head-dropdown{display: none;}
+    .navbar-right > .mobile-head-dropdown{display: block;}
+    .mobile-user{margin: 20px 0 0 18px;}
+    .mobile-user a{font-size: 16px; color: #505050;}
+    .gn-mobile-caret{
+        background: url(../gn_images/dd_arrow.png) no-repeat;
+        cursor: pointer;
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-left: 5px;
+        margin-top: 10px;        
+    }
+    .gn-head-drop{text-align: center;}
+    .gn-head-drop li{margin: 10px 0;}
 
+    
     /* ======== gncloud 버튼 ======== */
     .create-btn > a > button.btn-success{
         width: 95%;
@@ -1632,10 +1698,23 @@ ul.gn-sett-graph > li:nth-of-type(3){
     }    
     
     /* ======== gncloud 인스턴스 리스트 ======== */
+    .gn-table>thead>tr>th:nth-of-type(3){display: none;}
+    .gn-table>thead>tr>th:nth-of-type(4){display: none;}
+    .gn-table>thead>tr>th:nth-of-type(5){display: none;}
+    .gn-table>thead>tr>th:nth-of-type(6){display: none;}
     
+    .gn-table>.gn-tdody>tr>td:nth-of-type(3){display: none;}
+    .gn-table>.gn-tdody>tr>td:nth-of-type(4){display: none;}
+    .gn-table>.gn-tdody>tr>td:nth-of-type(5){display: none;}
+    .gn-table>.gn-tdody>tr>td:nth-of-type(6){display: none;}
     
     /* ======== gncloud 인스터스 상세 ======== */
+    .gn-detail-icon{display: none;}
+    .gn-detail-title > .row > .col-xs-12 > h2{font-size: 22px;}
+    .gn-spec-group li{font-size: 14px;}
+    .gn-tag-group{margin-left: 15px;}
     
+    .graph-sm-box > .col-sm-2{margin-bottom: 5px;}
     
     /* ======== gncloud 인스턴스 생성 ======== */
     
@@ -1645,35 +1724,46 @@ ul.gn-sett-graph > li:nth-of-type(3){
         margin-bottom: 10px;
     }    
     
-    /* ======== gncloud 설정 ======== */
-
+    /* ======== gncloud 설정 ======== */   
     
+    .gn-table>tbody>tr>td:nth-of-type(2){display: none;}
+    .gn-table>tbody>tr>td:nth-of-type(3){display: none;}
+    .gn-table>tbody>tr>td:nth-of-type(4){display: none;}
+    .gn-table>tbody>tr>td:nth-of-type(5){display: none;}
+    .gn-table>tbody>tr>td:nth-of-type(6){display: none;}     
 
+
+    .gn-table>tbody>tr>td:last-child{display: table-cell !important;}
     
-
+    .gn-left-menu > li{font-size: 15px;}
+    .gn-left-menu > li > a{font-size: 13px;}
     
-
+    /* ======== gncloud 시스템 설정 ======== */ 
+    .gn-sett-margin-box > .container-fluid > h1{font-size: 16px;}
+    .gn-control-label{font-size: 13px;}
+    p.form-control-static{font-size: 13px;}
+    .gn-more{display: none;}
+    .container-fluid > h2{font-size: 16px;}
+    .fons-16{font-size: 13px;}
     
+    .container-fluid > .gn-nav-tabs > li.active > a, 
+    .container-fluid > .gn-nav-tabs > li.active > a:hover, 
+    .container-fluid > .gn-nav-tabs > li.active > a:focus {
+        color: #58c4c6;
+        cursor: pointer;
+        background-color: #fff;
+        border: none;
+        border-bottom: 2px solid #58c4c6;
+        font-size: 12px;
+    }
 
-    
-
+    .container-fluid > .gn-nav-tabs > li > a {
+        border: none;
+        font-size: 12px;
+        padding-bottom: 5px;
+    }   
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
