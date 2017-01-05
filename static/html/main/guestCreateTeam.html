@@ -10,15 +10,21 @@
             </div>
         <div class="col-md-offset-4 col-md-4 login-box">
 
-            <div class="form-group">
-                <h3>팀 만들기</h3>       
-                <input type="text" class="form-control gn-input" ng-model="data.team_name" placeholder="팀명을 입력해주세요.">
+            <form name="userForm" class="form-group" ng-submit="submitForm(userForm.$valid)" novalidate>
+                <h3>팀 만들기</h3>
+                <div ng-class="{ 'has-error' : userForm.team_name.$invalid && !userForm.team_name.$pristine }">
+                <input type="text"  ng-pattern="/^[가-힣0-9]+$/" name="team_name" class="form-control gn-input" ng-model="data.team_name" placeholder="팀명을 입력해주세요." required>
+                <p ng-show="userForm.team_name.$invalid && !userForm.team_name.$pristine" class="help-block">한글과 숫자만 사용할수 있습니다.</p>
+                </div>
                 <div class="error-message" id="i">이미 등록된 팀명입니다.</div>
-                <input type="text" class="form-control gn-input" ng-model="data.team_code" placeholder="팀 코드를 입력해주세요."> 
+                <div ng-class="{ 'has-error' : userForm.team_code.$invalid && !userForm.team_code.$pristine }">
+                <input type="text" class="form-control gn-input"  name="team_code" ng-model="data.team_code" placeholder="팀 코드를 입력해주세요." required>
+                <p ng-show="userForm.team_code.$invalid && !userForm.team_code.$pristine" class="help-block">팀코드를 입력해주세요.</p>
+                </div>
                 <div class="error-message" id="t">이미 등록된 팀코드입니다.</div>
 
-                <button type="submit" class="btn btn-gn-login btn-lg btn-block" ng-click="submit()">팀 만들기</button>
-            </div> <!-- class="form-group"-->
+                <button type="submit" class="btn btn-gn-login btn-lg btn-block" ng-click="submit()" ng-disabled="userForm.$invalid">팀 만들기</button>
+            </form> <!-- class="form-group"-->
 
         </div> <!--class="col-md-offset-4 col-md-4 login-box"-->
     </div> <!-- 팀 생성 container -->
