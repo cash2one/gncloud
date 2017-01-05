@@ -185,7 +185,8 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert(name + "삭제되었습니다");
+                        alert(data.message);
+                        location.href="#/guestSystemList?id=team-sett";
                     } else {
                         alert(data.message);
                     }

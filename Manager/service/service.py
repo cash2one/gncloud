@@ -4,9 +4,10 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
+                                , GnTeamHist, GnUserTeamHist
 from Manager.db.database import db_session
-from Manager.util.hash import random_string
+from Manager.util.hash import random_string,delcode
 
 
 def vm_list(sql_session, team_code):
@@ -360,7 +361,7 @@ def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소
         current_info = sql_sesseion.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
                                          func.sum(GnVmMachines.memory).label("sum_mem")
                                          ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status != "Removed").one()
-        current_infodisk=sql_sesseion.query(func.sum(GnVmMachines.disk).label("sum_disk")
+        current_info_disk=sql_sesseion.query(func.sum(GnVmMachines.disk).label("sum_disk")
                                             ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type != "docker").filter(GnVmMachines.status == "Running").one()
         limit_quota = sql_sesseion.query(GnTeam).filter(GnTeam.team_code == team_info.team_code).one()
         vm_run_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
@@ -392,8 +393,8 @@ def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소
             disk_per_info = [0,100]
             disk_cnt_info = [0, limit_quota.disk_quota]
         else:
-            disk_per_info = [int((current_infodisk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_infodisk.sum_disk/limit_quota.disk_quota)*100))]
-            disk_cnt_info = [int(current_infodisk.sum_disk), limit_quota.disk_quota]
+            disk_per_info = [int((current_info_disk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info_disk.sum_disk/limit_quota.disk_quota)*100))]
+            disk_cnt_info = [int(current_info_disk.sum_disk), limit_quota.disk_quota]
         count_info = [vm_run_count.count,vm_stop_count.count]
         type_info = [vm_kvm_count.count,vm_hyperv_count.count]
         docker_info = vm_docker_count.count
@@ -410,8 +411,29 @@ def pathimage(sql_session): #시스템 이미지 리스트 path 쿼리
         data[1].create_time = data[1].create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
-def delteam_list(team_code): #팀삭제 쿼리
-    db_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).delete()
-    db_session.query(GnTeam).filter(GnTeam.team_code==team_code).delete()
-    db_session.commit()
-    return True;
+def delteam_list(team_code, sql_session): #팀삭제 쿼리
+    if((sql_session.query(GnVmMachines).filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != "Removed").one_or_none())==None):
+        user_list =sql_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).all()
+        while True:
+            del_code=delcode(8)
+            check = sql_session.query(GnTeamHist).filter(GnTeamHist.team_del_code == del_code).one_or_none()
+            if(check == None):
+                break
+
+        for user in user_list:
+            user_hist = GnUserTeamHist(user_id=user.user_id, team_code=user.team_code, comfirm=user.comfirm, apply_date=user.apply_date, approve_date=user.approve_date \
+                                   , team_owner=user.team_owner, team_del_code=del_code, delete_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S') )
+            sql_session.add(user_hist)
+            sql_session.commit()
+        team_info = sql_session.query(GnTeam).filter(GnTeam.team_code ==team_code).all()
+        for team in team_info:
+            team_hist = GnTeamHist(team_code=team.team_code, team_del_code= del_code, team_name=team.team_name, author_id=team.author_id, cpu_quota=team.cpu_quota \
+                                   , mem_quota=team.mem_quota, disk_quota=team.disk_quota, delete_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+            sql_session.add(team_hist)
+            sql_session.commit()
+        sql_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).delete()
+        sql_session.query(GnTeam).filter(GnTeam.team_code==team_code).delete()
+        sql_session.commit()
+        return 1
+    else:
+        return 2
