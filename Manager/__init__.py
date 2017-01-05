@@ -58,10 +58,10 @@ def create_vm():
     result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type,db_session)
     return jsonify(status=result["status"], value=result["value"])
 
-@app.route('/vm/machines', methods=['PUT'])
-def change_status(id):
+@app.route('/vm/machine', methods=['PUT'])
+def change_status():
     id = request.json['id']
-    status = request.json['type']
+    status = request.json['status']
     server_change_status(id, status, db_session)
     return jsonify(status=True, message="success")
 

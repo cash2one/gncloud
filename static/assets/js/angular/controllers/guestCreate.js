@@ -197,7 +197,7 @@ angular
             }, 1000 , true );
 
             $http({
-                method  : 'PUT',
+                method  : 'POST',
                 url: '/api/'+$scope.type+'/vm/machine',
                 data: '{"id":"'+id+'"}',
                 headers: {

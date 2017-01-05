@@ -50,7 +50,7 @@ def server_create(team_code, user_id, id, sql_session):
     vm_info.internal_name = internal_name
     vm_info.internal_id = intern_id
     vm_info.ip = ip
-    vm_info.status = "running"
+    vm_info.status = "Running"
     vm_info.os = image_info.os
     vm_info.os_ver = image_info.os_ver
     vm_info.os_sub_ver = image_info.os_subver

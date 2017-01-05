@@ -45,7 +45,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
 
     vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                               , type=type, team_code=team_code, author_id=user_id
-                              , status='starting', tag=tag, image_id=image_id
+                              , status='Starting', tag=tag, image_id=image_id
                               , host_id=host_id, ssh_key_id=sshkeys)
     sql_session.add(vm_machine)
     sql_session.commit()
@@ -61,8 +61,11 @@ def vm_list(sql_session, team_code):
     list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
+    retryCheck = False
+    if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
+        retryCheck = True
 
-    return list
+    return {"guest_list":list,"retryCheck":retryCheck}
 
 def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
@@ -94,7 +97,7 @@ def vm_info_graph(sql_session, id):
 
 
 def login_list(user_id, password, sql_session):
-    password = random_string(password)
+    password = convertToHashValue(password)
     list = sql_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
     return list
 
