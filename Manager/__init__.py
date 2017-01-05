@@ -9,7 +9,7 @@ from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
-                            , pathimage, select_info, delteam_list
+                            , pathimage, select_info, delteam_list, server_create, server_change_status
 from db.database import db_session
 
 app = Flask(__name__)
@@ -43,26 +43,32 @@ def internal_error(error):
 def index():
     return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
 
+@app.route('/vm/machine', methods=['POST'])
+def create_vm():
+    team_code = session['teamCode']
+    user_id = session['userId']
+    name = request.json['vm_name']
+    cpu = request.json['cpu']
+    memory = request.json['memory']
+    disk = request.json['hdd']
+    image_id = request.json['id']
+    sshkeys = request.json['sshkeys']
+    tag =request.json['tag']
+    type =request.json['type']
+    result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type,db_session)
+    return jsonify(status=result["status"], value=result["value"])
+
+@app.route('/vm/machines', methods=['PUT'])
+def change_status(id):
+    id = request.json['id']
+    status = request.json['type']
+    server_change_status(id, status, db_session)
+    return jsonify(status=True, message="success")
 
 @app.route('/vm/machines', methods=['GET'])
 def guest_list():
     team_code = session['teamCode']
     return jsonify(status=True, message="success", list=vm_list(db_session, team_code))
-
-
-# @app.route('/vm/machine', methods=['POST'])
-# def create_vm():
-#     team_code = session['teamCode']
-#     user_id = session['userId']
-#     name = request.json['vm_name']
-#     cpu = request.json['cpu']
-#     memory = request.json['memory']
-#     disk = request.json['hdd']
-#     image_id = request.json['id']
-#     sshkeys = request.json['sshkeys']
-#     tag =request.json['tag']
-#     result = server_create(name ,cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag)
-#     return jsonify(status=result["status"], message=result["message"])
 
 
 @app.route('/vm/machines/<id>', methods=['GET'])

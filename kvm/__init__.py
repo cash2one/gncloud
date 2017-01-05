@@ -4,7 +4,7 @@ import traceback
 from apscheduler.scheduler import Scheduler
 from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta
-import datetime
+from gevent.pywsgi import WSGIServer
 
 from db.database import db_session
 from service.service import server_create, server_change_status, server_monitor \
@@ -55,16 +55,9 @@ def internal_error(error):
 def create_vm():
     team_code = session['teamCode']
     user_id = session['userId']
-    name = request.json['vm_name']
-
-    cpu = request.json['cpu']
-    memory = request.json['memory']
-    disk = request.json['hdd']
-    image_id = request.json['id']
-    sshkeys = request.json['sshkeys']
-    tag =request.json['tag']
-    result = server_create(name ,cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag)
-    return jsonify(status=result["status"], message=result["message"])
+    id = request.json['id']
+    server_create(team_code, user_id, id, db_session)
+    return jsonify(status=True)
 
 
 @app.route('/vm/machines/<id>', methods=['PUT'])
@@ -134,8 +127,10 @@ def test():
 
 if __name__ == '__main__':
     #로그 설정
-    cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=180) #minites=1)
-    cron.start()
-    app.run(port=8081)
+    # cron = Scheduler(daemon=True)
+    # cron.add_interval_job(job_function, seconds=180) #minites=1)
+    # cron.start()
+    #app.run(port=8081)
+    http_server = WSGIServer(('', 8081), app)
+    http_server.serve_forever()
 

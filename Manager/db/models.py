@@ -45,25 +45,26 @@ class GnVmMachines(Base):
     memory = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
     ip = Column(String(20), primary_key=False, nullable=False)
-    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'))
+    host_id = Column(String(8), ForeignKey('GN_HOST_MACHINES.id'))
     os = Column(String(10), primary_key=False, nullable=True)
     os_ver = Column(String(20), primary_key=False, nullable=True)
     os_sub_ver = Column(String(20), primary_key=False, nullable=True)
     os_bit = Column(String(2), primary_key=False, nullable=True)
     team_code = Column(String(50), primary_key=False, nullable=True)
-    author_id = Column(String(15),primary_key=False, nullable=True)
+    author_id = Column(String(15), primary_key=False, nullable=False)
     create_time = Column(DateTime, default=datetime.datetime.now())
     start_time = Column(DateTime, default=datetime.datetime.now())
     stop_time = Column(DateTime, default=datetime.datetime.now())
     status = Column(String(10), primary_key=False, nullable=False)
     tag = Column(String(100), primary_key=False, nullable=False)
     image_id = Column(String(8), primary_key=False, nullable=False)
+    ssh_key_id = Column(Integer, primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
 
-    def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None, cpu=None
-                 , memory=None, disk=None, ip=None, host_id=None
+    def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None
+                 , cpu=None, memory=None, disk=None, ip=None, host_id=None
                  , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
-                 , author_id=None, status=None, tag=None, image_id=None):
+                 , author_id=None, status=None, tag=None, image_id=None, ssh_key_id=None):
         self.id = id
         self.name = name
         self.type = type
@@ -78,21 +79,24 @@ class GnVmMachines(Base):
         self.os_ver = os_ver
         self.os_sub_ver = os_sub_ver
         self.os_bit = os_bit
-        self.team_ = team_code
+        self.team_code = team_code
         self.author_id = author_id
         self.status = status
         self.tag = tag
         self.image_id = image_id
+        self.ssh_key_id = ssh_key_id
 
 
     def __repr__(self):
-        return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r / Tag %r / Create_time %r>' \
+        return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / ' \
+               'Cpu %r / Memory %r / Disk %r / Ip %r / Status %r / Tag %r / Create_time %r / ' \
+               'Ssh_key_id %r>' \
                % (self.id, self.name, self.type, self.internal_id, self.internal_name, self.cpu, self.memory, self.disk,
-                  self.ip, self.status, self.tag, self.create_time)
+                  self.ip, self.status, self.tag, self.create_time, self.ssh_key_id)
 
     def __json__(self):
-        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'os', 'tag', 'create_time']
-
+        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu'
+            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os']
 
 
 class GnUser(Base):
@@ -218,6 +222,7 @@ class GnVmImages(Base):
     def __json__(self):
         return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id', 'status']
 
+
 class GnSshKeys(Base):
     __tablename__ = "GN_SSH_KEYS"
     id = Column(Integer, primary_key=True, nullable=False)
@@ -241,6 +246,19 @@ class GnSshKeys(Base):
         return ['id', 'name', 'fingerprint', 'create_time']
 
 
+class GnSshKeysMapping(Base):
+    __tablename__ = "GN_SSH_KEYS_MAPPING"
+    id = Column(Integer, primary_key=True, nullable=False)
+    ssh_key_id = Column(Integer, primary_key=False, nullable=False)
+    vm_id = Column(String(8), primary_key=False, nullable=False)
+
+    def __init__(self, ssh_key_id=None, vm_id=None):
+        self.ssh_key_id = ssh_key_id
+        self.vm_id = vm_id
+
+    def __repr__(self):
+        return '<Ssh_key_id %r /Vm_id %r  >' \
+               % (self.ssh_key_id, self.vm_id)
 
 
 class GnDockerImages(Base):
@@ -344,3 +362,18 @@ class GnImagePool(Base):
 
     def __json__(self):
         return ['id', 'type', 'image_path', 'host_id']
+
+
+class GnId(Base):
+    __tablename__ = "GN_ID"
+    id = Column(String(8), primary_key=True, nullable=False)
+    type = Column(String(20), primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.now())
+
+    def __init__(self, id=None, type=None):
+        self.id = id
+        self.type = type
+
+    def __repr__(self):
+        return '<Id %r / Type %r >' \
+               % (self.id, self.type)

@@ -79,7 +79,31 @@ angular
                 });
         }
 
-        $scope.delete = function() {
+        $scope.statusUpdate = function() {
+            $http({
+                method  : 'PUT',
+                url: '/api/manager/vm/machine',
+                data: $scope.vm_data,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            })
+                .success(function(data) {
+                    if (data.status == true) {
+                        $scope.deleteInstance();
+                    } else {
+                        if(data.value != null) {
+                            alert(data.value)
+                        }
+                    }
+                });
+        }
+
+        $scope.deleteInstance = function(){
+            $timeout(function () {
+                window.location.href = '#/guestList';
+            }, 1000 , true );
+
             $http({
                 method: 'DELETE',
                 url: '/api/'+$scope.vm_data.type+'/vm/machines/' + $scope.vm_data.id,
@@ -87,13 +111,9 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                       alert("인스턴스가 삭제되었습니다");
-                       window.location.href = '#/guestList';
                     }
                     else {
-                        if(data.message != null) {
-                            alert(data.message)
-                        }
+
                     }
                 })
                 .error(function (data, status, headers, config) {

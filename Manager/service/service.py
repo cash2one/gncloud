@@ -4,12 +4,57 @@ __author__ = 'NaDa'
 from sqlalchemy import func
 import datetime
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages
+from Manager.db.models import GnHostMachines, GnVmMachines, GnId, GnUser, GnTeam, GnVmImages, GnSshKeysMapping, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages
 from Manager.db.database import db_session
-from Manager.util.hash import random_string
+from Manager.util.hash import random_string, convertToHashValue
 
 
+def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, sql_session):
 
+    # host 선택 룰
+    # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
+    host_id = None
+    host_list = sql_session.query(GnHostMachines).filter(GnHostMachines.type == "kvm").all()
+    for host_info in host_list:
+        use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
+                                        func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
+                                        func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
+                                        ).filter(GnVmMachines.host_id == host_info.id).filter(GnVmMachines.status != "Removed").one_or_none()
+        rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
+        rest_mem = host_info.max_mem - use_sum_info.sum_mem
+        rest_disk = host_info.max_disk - use_sum_info.sum_disk
+
+        if rest_cpu >= int(cpu) and rest_mem >= int(memory) and rest_disk >= int(disk):
+            host_id = host_info.id
+            break
+
+    if(host_id is None):
+        return {"status":False, "value":"HOST 머신 리소스가 부족합니다"}
+
+    #db 저장
+    #id 생성
+    while True:
+        id = random_string(8)
+        check_info = GnId.query.filter(GnId.id == id).first();
+        if not check_info:
+            id_info = GnId(id,'kvm')
+            sql_session.add(id_info)
+            sql_session.commit()
+            break
+
+    vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+                              , type=type, team_code=team_code, author_id=user_id
+                              , status='starting', tag=tag, image_id=image_id
+                              , host_id=host_id, ssh_key_id=sshkeys)
+    sql_session.add(vm_machine)
+    sql_session.commit()
+    return {"status":True, "value":id}
+
+def server_change_status(id, status, sql_session):
+    #vm 조회
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    vm_info.status = status
+    sql_session.commit()
 
 def vm_list(sql_session, team_code):
     list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
@@ -48,7 +93,7 @@ def vm_info_graph(sql_session, id):
 
 
 def login_list(user_id, password, sql_session):
-    password = random_string(password)
+    password = convertToHashValue(password)
     list = sql_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
     return list
 

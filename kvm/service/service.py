@@ -15,81 +15,47 @@ from kvm.util.config import config
 
 USER = "root"
 
-def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag):
-    result = {"status":True, "message":"sucess"}
+def server_create(team_code, user_id, id, sql_session):
 
-    try:
-        # host 선택 룰
-        # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
-        host_ip = None
-        host_id = None
-        host_list = db_session.query(GnHostMachines).filter(GnHostMachines.type == "kvm").all()
-        for host_info in host_list:
-            use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
-                                            func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
-                                            func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
-                                            ).filter(GnVmMachines.host_id == host_info.id).filter(GnVmMachines.status != "Removed").one_or_none()
-            rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
-            rest_mem = host_info.max_mem - use_sum_info.sum_mem
-            rest_disk = host_info.max_disk - use_sum_info.sum_disk
+    #vm 조회
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
 
-            if rest_cpu >= int(cpu) and rest_mem >= int(memory) and rest_disk >= int(disk):
-                host_ip = host_info.ip
-                host_id = host_info.id
-                break;
+    #host 조회
+    host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).one()
 
+    # base image 조회
+    image_info = db_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
 
-        if(host_ip is None):
-            result = {"status":False, "message":"HOST 머신 리소스가 부족합니다"}
-            return result
+    # ssh 조회
+    ssh_info = db_session.query(GnSshKeys).filter(GnSshKeys.id == vm_info.ssh_key_id).one()
 
-        # base image 조회
-        image_info = db_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
+    # vm 생성
+    internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+    intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
 
-        # vm 생성
-        internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-        intern_id = kvm_create(internal_name, cpu, memory, disk, image_info.filename, image_info.sub_type, host_ip)
+    #ip 세팅
+    ip = ""
+    while len(ip) == 0:
+        ip = getIpAddress(internal_name, host_info.ip)
 
-        #ip 세팅
-        ip = ""
-        while len(ip) == 0:
-            ip = getIpAddress(internal_name, host_ip)
+    if len(ip) != 0:
+         setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
 
-        if len(ip) != 0:
-             setStaticIpAddress(ip, host_ip, image_info.ssh_id)
+    # 기존 저장된 ssh key 등록
+    # s = pxssh.pxssh()
+    # s.login(host_info.ip, USER)
+    # s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
+    # s.logout()
 
-        # 기존 저장된 ssh key 등록
-        if len(sshkeys) > 0:
-            sshkey_list = GnSshKeys.query.filter(GnSshKeys.id.in_(sshkeys)).all()
-            for gnSshkey in sshkey_list:
-                s = pxssh.pxssh()
-                s.login(host_ip, USER)
-                s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(gnSshkey.path) + "' " + str(ip) + " "+image_info.ssh_id)
-                s.logout()
-
-        #db 저장
-        #id 생성
-        while True:
-            id = random_string(8)
-            check_info = GnId.query.filter(GnId.id == id).first();
-            if not check_info:
-                id_info = GnId(id,'kvn')
-                db_session.add(id_info)
-                db_session.commit()
-                break
-
-        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
-                                  , type='kvm', internal_id=intern_id, internal_name=internal_name, ip=ip, host_id=host_id, os=image_info.os
-                                  , os_ver=image_info.os_ver, os_sub_ver=image_info.os_subver, os_bit=image_info.os_bit
-                                  , team_code=team_code, author_id=user_id,status='running', tag=tag, image_id = image_info.id)
-        db_session.add(vm_machine)
-        return result
-    except IOError as errmsg:
-        db_session.rollback()
-        print(errmsg)
-    finally:
-        db_session.commit()
-
+    vm_info.internal_name = internal_name
+    vm_info.internal_id = intern_id
+    vm_info.ip = ip
+    vm_info.status = "running"
+    vm_info.os = image_info.os
+    vm_info.os_ver = image_info.os_ver
+    vm_info.os_sub_ver = image_info.os_subver
+    vm_info.os_bit = image_info.os_bit
+    sql_session.commit()
 
 
 def getIpAddress(name, host_ip):
