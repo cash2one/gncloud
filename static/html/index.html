@@ -133,14 +133,14 @@
                     <input type="password" name="login_pw" id="login_pw" class="form-control gn-input" placeholder="비밀번호를 입력해주세요." onkeydown="onKeyDown();">
                     <!--체크박스-->
                     <div class="btn-id">
-                        <input class="form-inputPop" id="idSaveCheck" name="idSaveCheck" type="checkbox" id="checkbox-id" onclick="saveId()"/>
+                        <input class="form-inputPop" id="idSaveCheck" name="idSaveCheck" type="checkbox" id="checkbox-id" />
                         <i></i>
                         <label for="checkbox-id"  class="label-id">아이디 저장</label>
                     </div>
 
                     <!--아이디, 비밀번호가 틀렸을 때 출력(아니라면 가려짐)-->
                     <div id="error" class="error-message">아이디, 또는 비밀번호가 잘못되었습니다</div>
-                        <input type="button" class="btn btn-gn-login btn-lg btn-block" value="로그인" id="login_btn">
+                        <input type="button" class="btn btn-gn-login btn-lg btn-block" value="로그인" id="login_btn" onclick="saveId()">
 
                     <!--처음이시면 회원가입을 해주세요 링크-->
                     <a href="/signin.html" class="log-join-btn">처음이시면 회원가입을 해주세요</a>

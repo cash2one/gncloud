@@ -97,7 +97,7 @@ angular
         $scope.container=function(){
             $http({
                 method: 'GET',
-                url: '/api/manager/vm/container/services',
+                url: '/api/manager/vm/container/services/base',
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {

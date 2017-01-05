@@ -218,7 +218,7 @@ def tea_list():
 
 @app.route('/vm/container/services/<type>', methods=['GET'])
 def container_list(type):
-    return jsonify(status=True, message="success", list=container(type,db_session))
+    return jsonify(status=True, message="success", list=container(type,session['teamCode'],db_session))
 
 @app.route('/vm/container/services', methods=['GET'])
 def containers_lit():
