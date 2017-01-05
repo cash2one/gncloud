@@ -3,12 +3,12 @@ __author__ = 'NaDa'
 
 from sqlalchemy import func
 import datetime
+import humanfriendly
 
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
                                 , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
-import humanfriendly
 
 
 def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, sql_session):
@@ -39,7 +39,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         id = random_string(8)
         check_info = GnId.query.filter(GnId.id == id).first();
         if not check_info:
-            id_info = GnId(id,'kvm')
+            id_info = GnId(id,type)
             sql_session.add(id_info)
             sql_session.commit()
             break
@@ -259,14 +259,14 @@ def getQuotaOfTeam(team_code, sql_session):
 
     if current_info.sum_cpu is None:
         memory_per_info = [0,100]
-        mem_cnt_info = [0, limit_quota.mem_quota]
+        mem_cnt_info = [0, humanfriendly.format_size(limit_quota.mem_quota)]
     else:
         memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
         mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
 
     if current_info.sum_cpu is None:
         disk_per_info = [0,100]
-        disk_cnt_info = [0, limit_quota.disk_quota]
+        disk_cnt_info = [0, humanfriendly.format_size(limit_quota.disk_quota)]
     else:
         disk_per_info = [int((current_disk_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_disk_info.sum_disk/limit_quota.disk_quota)*100))]
         disk_cnt_info = [humanfriendly.format_size(int(current_disk_info.sum_disk)), humanfriendly.format_size(limit_quota.disk_quota)]
@@ -439,17 +439,17 @@ def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소
 
         if current_info.sum_cpu is None:
             memory_per_info = [0,100]
-            mem_cnt_info = [0, limit_quota.mem_quota]
+            mem_cnt_info = [0, humanfriendly.format_size(limit_quota.mem_quota)]
         else:
             memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
-            mem_cnt_info = [int(current_info.sum_mem), limit_quota.mem_quota]
+            mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
 
         if current_info.sum_cpu is None:
             disk_per_info = [0,100]
-            disk_cnt_info = [0, limit_quota.disk_quota]
+            disk_cnt_info = [0, humanfriendly.format_size(limit_quota.disk_quota)]
         else:
             disk_per_info = [int((current_info_disk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info_disk.sum_disk/limit_quota.disk_quota)*100))]
-            disk_cnt_info = [int(current_info_disk.sum_disk), limit_quota.disk_quota]
+            disk_cnt_info = [humanfriendly.format_size(int(current_info_disk.sum_disk)), humanfriendly.format_size(limit_quota.disk_quota)]
         count_info = [vm_run_count.count,vm_stop_count.count]
         type_info = [vm_kvm_count.count,vm_hyperv_count.count]
         docker_info = vm_docker_count.count
