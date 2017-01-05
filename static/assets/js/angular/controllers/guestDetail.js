@@ -80,7 +80,7 @@ angular
         }
 
         $scope.statusUpdate = function() {
-            $scope.vm_data.status = "Deleting"
+            $scope.vm_data.status = "eleting"
             $http({
                 method  : 'PUT',
                 url: '/api/manager/vm/machine',

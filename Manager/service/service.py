@@ -8,6 +8,7 @@ from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonito
                                 , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
+import humanfriendly
 
 
 def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, sql_session):
@@ -61,6 +62,9 @@ def vm_list(sql_session, team_code):
     list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
+        vmMachine.disk = humanfriendly.format_size(vmMachine.disk)
+        vmMachine.memory = humanfriendly.format_size(vmMachine.memory)
+
     retryCheck = False
     if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
         retryCheck = True
@@ -69,9 +73,10 @@ def vm_list(sql_session, team_code):
 
 def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    vm_info.day1 = ""
-    monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
+    vm_info.disk = humanfriendly.format_size(vm_info.disk)
+    vm_info.memory = humanfriendly.format_size(vm_info.memory)
 
+    monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
     disk_info = {}
     if monitor_info is not None:
         total = vm_info.disk
@@ -257,14 +262,14 @@ def getQuotaOfTeam(team_code, sql_session):
         mem_cnt_info = [0, limit_quota.mem_quota]
     else:
         memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
-        mem_cnt_info = [int(current_info.sum_mem), limit_quota.mem_quota]
+        mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
 
     if current_info.sum_cpu is None:
         disk_per_info = [0,100]
         disk_cnt_info = [0, limit_quota.disk_quota]
     else:
         disk_per_info = [int((current_disk_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_disk_info.sum_disk/limit_quota.disk_quota)*100))]
-        disk_cnt_info = [int(current_disk_info.sum_disk), limit_quota.disk_quota]
+        disk_cnt_info = [humanfriendly.format_size(int(current_disk_info.sum_disk)), humanfriendly.format_size(limit_quota.disk_quota)]
 
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]

@@ -1,5 +1,5 @@
 <volume>
 <name>{{ guest_name }}.img</name>
 <allocation>0</allocation>
-<capacity unit='G'>{{ disk }}</capacity>
+<capacity unit='B'>{{ disk }}</capacity>
 </volume>
