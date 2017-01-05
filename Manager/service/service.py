@@ -73,8 +73,6 @@ def vm_list(sql_session, team_code):
 
 def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    vm_info.disk = humanfriendly.format_size(vm_info.disk)
-    vm_info.memory = humanfriendly.format_size(vm_info.memory)
 
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
     disk_info = {}
@@ -83,8 +81,10 @@ def vm_info(sql_session, id):
         use = int(monitor_info.disk_usage)
         disk_per_info = int((use*100)/total)
         rest_disk = total - use;
-        disk_info = {"total":total, "use":use, "rest_disk":rest_disk, "disk_per_info":disk_per_info}
+        disk_info = {"total":humanfriendly.format_size(total), "use":humanfriendly.format_size(use), "rest_disk":humanfriendly.format_size(rest_disk), "disk_per_info":disk_per_info}
 
+    vm_info.disk = humanfriendly.format_size(vm_info.disk)
+    vm_info.memory = humanfriendly.format_size(vm_info.memory)
     info = {"vm_info":vm_info, "disk_info":disk_info}
     return info
 
