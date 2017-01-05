@@ -1,7 +1,6 @@
 angular
     .module('gncloud')
     .controller('guestCreateCtrl', function ($scope, $http, $timeout, $rootScope) {
-        console.log($rootScope.authority);
 
         $("#windows").hide();
         $("#ssh").hide();
@@ -96,7 +95,7 @@ angular
             }
 
         }
-        $scope.sshkeys = [];
+
         $scope.getkeys = function () {
             $http({
                 method: 'GET',
@@ -119,6 +118,11 @@ angular
         }
 
         $scope.getkeys();
+        $scope.selectKey = function (data) {
+            if (data != null){
+                $scope.data.sshkeys = data;
+            }
+        };
 
         $scope.save = function () {
             $http({
@@ -166,50 +170,46 @@ angular
 
 
         $scope.submit = function() {
-
-            $timeout(function () {
-                window.location.href = '#/guestList';
-            }, 1000 /* 1000ms 뒤에 지연된 작업이 수행된다. */, true );
-
-            if($scope.data.vm_name == "" || $scope.data.vm_name == null){
-                alert("인스턴스명을 입력해 주세요");
-                $('#vm_name').focus();
-                return false;
-            }
-
-            if($scope.data.id == "" || $scope.data.id == null){
-                alert("이미지를 선택해 주세요");
-                var offset = $("#vm_image").offset();
-                $('html, body').animate({scrollTop : offset.top}, 400);
-                return false;
-            }
-
-            if($scope.data.cpu == "" || $scope.data.cpu == null){
-                alert("사이즈를 선택해주세요");
-                var offset = $("#vm_size").offset();
-                $('html, body').animate({scrollTop : offset.top}, 400);
-                return false;
-            }
-
-            $scope.data.sshkeys = $scope.sshkeys;
             $scope.data.tag = $("#tag").val();
+            $scope.data.type = $scope.type;
             $http({
                 method  : 'POST',
-                url: '/api/'+$scope.type+'/vm/machine',
+                url: '/api/manager/vm/machine',
                 data: $scope.data,
-                async:   true,
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
             })
                 .success(function(data) {
-                    /*if (data.status == true) {
-                        window.location.href = '#/guestList';
+                    if (data.status == true) {
+                        $scope.createInstance(data.value);
                     } else {
-                        if(data.message != null) {
-                            alert(data.message)
+                        if(data.value != null) {
+                            alert(data.value)
                         }
-                    }*/
+                    }
+                });
+        };
+
+        $scope.createInstance = function(id){
+            $timeout(function () {
+                window.location.href = '#/guestList';
+            }, 1000 , true );
+
+            $http({
+                method  : 'POST',
+                url: '/api/'+$scope.type+'/vm/machine',
+                data: '{"id":"'+id+'"}',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            })
+                .success(function(data) {
+                    if (data.status == true) {
+
+                    }
+                     else {
+                    }
                 });
         };
 

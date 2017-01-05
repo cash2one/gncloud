@@ -127,16 +127,14 @@
         <h2>SSH 키/비밀번호 설정</h2>
         <div class="row gn-margin-bott10" id="ssh">
             <!--최초 등록 시 출력되는 버튼-->
-            <button type="button" class="btn btn-gn-sub btn-lg col-md-2" data-toggle="modal" data-target="#myModal">SSH 키 생성</button>
-            <form name="passForm" ng-submit="submitForm(passForm.$valid)" novalidate>
+            <button type="button" class="btn btn-gn-sub btn-lg col-md-2" data-toggle="msshkey_listodal" data-target="#myModal">SSH 키 생성</button>
             <!-- ****체크박스 대신 select box로 변경되었습니다**** -->
-            <div class="col-md-3" ng-class="{ 'has-error' : passForm.ssh.$invalid && !passForm.ssh.$pristine }">
-                <select class="gn-select form-control gn-form-control" name="ssh" ng-model="guest_item" ng-model="ssh" ng-options="item.name for item in sshkey_list" required>
+            <div class="col-md-3">
+                <select class="gn-select form-control gn-form-control" name="ssh" ng-model="guest_item" ng-options="item.id as item.name for item in sshkey_list" ng-change="selectKey(guest_item)">
                     <option value="">SSH 키 선택</option>
                 </select>
                 <p ng-show="passForm.ssh.$invalid && !passForm.ssh.$pristine" class="help-block">ssh키를 선택하세요.</p>
             </div>
-            </form>
         </div>
         <!--윈도우의 경우-->
         <form name="winForm" ng-submit="submitForm(winForm.$valid)" novalidate>

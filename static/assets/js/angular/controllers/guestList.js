@@ -1,44 +1,47 @@
 angular
     .module('gncloud')
-    .controller('guestListCtrl', function ($scope, $http, dateModifyService) {
+    .controller('guestListCtrl', function ($scope, $http, $interval, dateModifyService) {
 
-        //탭이동
-        $('.nav-sidebar li').removeClass('active');
-        var url = window.location;
-        $('ul.nav-sidebar a').filter(function () {
-            return this.href.indexOf(url.hash) != -1;
-        }).parent().addClass('active');
-        $('[data-toggle="tooltip"]').tooltip();
-
-        $scope.guest_list = {};
-
-        $http({
-            method: 'GET',
-            url: '/api/manager/vm/machines',
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    $scope.guest_list = data.list;
-
-                    for(var i = 0 ; i < data.list.length ; i++){
-                        var tagArr = data.list[i].tag.split(",");
-                        if(tagArr.length - 1 > 0 ) {
-                            $scope.guest_list[i].tagFirst = tagArr[0];
-                            $scope.guest_list[i].tagcount = "+" + (tagArr.length - 1);
-                        }else{
-                            $scope.guest_list[i].tagFirst = data.list[i].tag;
-                        }
-                        $scope.guest_list[i].create_time_diff = dateModifyService.modifyDate(data.list[i].create_time);
-                    }
-
-                } else {
-                    if(data.message != null) {
-                        alert(data.message);
-                    }
-                }
-
+        var stop;
+        $scope.selectGuestList = function() {
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/machines',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        $scope.guest_list = data.list.guest_list;
+
+                        for (var i = 0; i < data.list.guest_list.length; i++) {
+                            var tagArr = data.list.guest_list[i].tag.split(",");
+                            if (tagArr.length - 1 > 0) {
+                                $scope.guest_list[i].tagFirst = tagArr[0];
+                                $scope.guest_list[i].tagcount = "+" + (tagArr.length - 1);
+                            } else {
+                                $scope.guest_list[i].tagFirst = data.list.guest_list[i].tag;
+                            }
+                            $scope.guest_list[i].create_time_diff = dateModifyService.modifyDate(data.list.guest_list[i].create_time);
+                        }
+
+                        if(data.list.retryCheck == false) {
+                            $interval.cancel(stop);
+                            stop = undefined;
+                        }
+
+
+                    } else {
+                        if (data.message != null) {
+                            alert(data.message);
+                        }
+                    }
+
+                })
+        };
+
+        $scope.selectGuestList();
+
+        stop = $interval($scope.selectGuestList,10000);
 
         $scope.actions = [
             {name: '시작', type: 'resume'},
