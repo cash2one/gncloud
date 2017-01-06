@@ -14,46 +14,49 @@ from kvm.util.config import config
 USER = "root"
 
 def server_create(team_code, user_id, id, sql_session):
+    try:
+        #vm 조회
+        vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
 
-    #vm 조회
-    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+        #host 조회
+        host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).one()
 
-    #host 조회
-    host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).one()
+        # base image 조회
+        image_info = db_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
 
-    # base image 조회
-    image_info = db_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
+        # ssh 조회
+        ssh_info = db_session.query(GnSshKeys).filter(GnSshKeys.id == vm_info.ssh_key_id).one()
 
-    # ssh 조회
-    ssh_info = db_session.query(GnSshKeys).filter(GnSshKeys.id == vm_info.ssh_key_id).one()
+        # vm 생성
+        internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
 
-    # vm 생성
-    internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
+        #ip 세팅
+        ip = ""
+        while len(ip) == 0:
+            ip = getIpAddress(internal_name, host_info.ip)
 
-    #ip 세팅
-    ip = ""
-    while len(ip) == 0:
-        ip = getIpAddress(internal_name, host_info.ip)
+        if len(ip) != 0:
+             setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
 
-    if len(ip) != 0:
-         setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
+        # 기존 저장된 ssh key 등록
+        # s = pxssh.pxssh()
+        # s.login(host_info.ip, USER)
+        # s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
+        # s.logout()
 
-    # 기존 저장된 ssh key 등록
-    # s = pxssh.pxssh()
-    # s.login(host_info.ip, USER)
-    # s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
-    # s.logout()
-
-    vm_info.internal_name = internal_name
-    vm_info.internal_id = intern_id
-    vm_info.ip = ip
-    vm_info.status = "Running"
-    vm_info.os = image_info.os
-    vm_info.os_ver = image_info.os_ver
-    vm_info.os_sub_ver = image_info.os_subver
-    vm_info.os_bit = image_info.os_bit
-    sql_session.commit()
+        vm_info.internal_name = internal_name
+        vm_info.internal_id = intern_id
+        vm_info.ip = ip
+        vm_info.status = "Running"
+        vm_info.os = image_info.os
+        vm_info.os_ver = image_info.os_ver
+        vm_info.os_sub_ver = image_info.os_subver
+        vm_info.os_bit = image_info.os_bit
+        sql_session.commit()
+    except:
+        vm_info.status="Error"
+        sql_session.commit()
 
 
 def getIpAddress(name, host_ip):
