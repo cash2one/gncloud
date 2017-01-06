@@ -55,7 +55,9 @@ def create_vm():
     sshkeys = request.json['sshkeys']
     tag =request.json['tag']
     type =request.json['type']
-    result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type,db_session)
+    if 'password' in request.json:
+        password = request.json['password']
+    result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
     return jsonify(status=result["status"], value=result["value"])
 
 @app.route('/vm/machine/snapshots', methods=['POST'])

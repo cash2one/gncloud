@@ -59,12 +59,13 @@ class GnVmMachines(Base):
     tag = Column(String(100), primary_key=False, nullable=False)
     image_id = Column(String(8), primary_key=False, nullable=False)
     ssh_key_id = Column(Integer, primary_key=False, nullable=False)
+    hyperv_pass= Column(String(50), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
 
     def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None
                  , cpu=None, memory=None, disk=None, ip=None, host_id=None
                  , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
-                 , author_id=None, status=None, tag=None, image_id=None, ssh_key_id=None):
+                 , author_id=None, status=None, tag=None, image_id=None, ssh_key_id=None, hyperv_pass=None):
         self.id = id
         self.name = name
         self.type = type
@@ -85,18 +86,19 @@ class GnVmMachines(Base):
         self.tag = tag
         self.image_id = image_id
         self.ssh_key_id = ssh_key_id
+        self.hyperv_pass = hyperv_pass
 
 
     def __repr__(self):
         return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / ' \
                'Cpu %r / Memory %r / Disk %r / Ip %r / Status %r / Tag %r / Create_time %r / ' \
-               'Ssh_key_id %r>' \
+               'Ssh_key_id %r / Hyperv_pass %r/>' \
                % (self.id, self.name, self.type, self.internal_id, self.internal_name, self.cpu, self.memory, self.disk,
-                  self.ip, self.status, self.tag, self.create_time, self.ssh_key_id)
+                  self.ip, self.status, self.tag, self.create_time, self.ssh_key_id, self.hyperv_pass)
 
     def __json__(self):
         return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu'
-            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os']
+            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass']
 
 
 class GnUser(Base):

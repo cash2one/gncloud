@@ -11,12 +11,12 @@ from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
 
 
-def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, sql_session):
+def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password ,sql_session):
 
     # host 선택 룰
     # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
     host_id = None
-    host_list = sql_session.query(GnHostMachines).filter(GnHostMachines.type == "kvm").all()
+    host_list = sql_session.query(GnHostMachines).filter(GnHostMachines.type == type).all()
     for host_info in host_list:
         use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
                                         func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
@@ -43,11 +43,16 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             sql_session.add(id_info)
             sql_session.commit()
             break
-
-    vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+    if(type == "hyperv"):
+        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status='Starting', tag=tag, image_id=image_id
-                              , host_id=host_id, ssh_key_id=sshkeys)
+                              , host_id=host_id, ssh_key_id=sshkeys, hyperv_pass=password)
+    else:
+        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+                                  , type=type, team_code=team_code, author_id=user_id
+                                  , status='Starting', tag=tag, image_id=image_id
+                                  , host_id=host_id, ssh_key_id=sshkeys)
     sql_session.add(vm_machine)
     sql_session.commit()
     return {"status":True, "value":id}
