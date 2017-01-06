@@ -14,7 +14,6 @@ var serviceAddModules = [
         });
 
     app.run(function($rootScope,$http){
-
         $http({
             method: 'GET',
             url: '/api/manager/vm/logincheck',

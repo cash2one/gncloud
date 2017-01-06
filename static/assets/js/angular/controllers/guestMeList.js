@@ -23,7 +23,9 @@ angular
                         $scope.te_list = data.list; // 유저 부분 리스트
 
                     } else {
-                        alert(data.message);
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
 
                 })
@@ -43,7 +45,9 @@ angular
                         $scope.teamname = data.list; //유저팀에 대한 정보
 
                     } else {
-                        alert(data.message);
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
 
                 })
@@ -72,7 +76,9 @@ angular
                         $scope.team_list = newArr; // 팀원들에 대한 정보
 
                     } else {
-                        alert(data.message);
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
 
                 })
@@ -164,7 +170,9 @@ angular
                         alert("비밀번호가 틀렸습니다");
                     }
                     else {
-                        alert(data.message)
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 });
         };
@@ -194,7 +202,9 @@ angular
                         alert("변경되었습니다");
                         $scope.teamtable();
                     } else {
-                        alert(data.message);
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function(data, status, headers, config) {
@@ -217,7 +227,9 @@ angular
                         $scope.team_profile();
                     }
                     else {
-                        alert(data.message)
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 });
         }
@@ -256,7 +268,9 @@ angular
                         alert(name + "상태가 변경되었습니다");
                         $scope.data_list.splice(index, 1);
                     } else {
-                        alert(data.message);
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 });
         };
@@ -331,7 +345,9 @@ angular
                         $("#disk_total_cnt").html(data.list.disk_cnt[1]);
                     }
                     else {
-                        alert(data.message)
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
                     }
                 })
                 .error(function (data, status, headers, config) {
