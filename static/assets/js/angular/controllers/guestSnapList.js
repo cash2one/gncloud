@@ -179,7 +179,7 @@ angular
             $http({
                 method: 'POST',
                 url: "/api/" + $scope.data.type + "/vm/machine/snapshots",
-                data: '{"ord_id":"'+ord_id+'", "vm_id":"'+vm_id+'"}',//id = 머신id image_id = 스냅샷 아이디
+                data: '{"ord_id":"'+ord_id+'", "vm_id":"'+vm_id+'"}',//ord_id = 머신id vm_id = 스냅샷 아이디
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data) {

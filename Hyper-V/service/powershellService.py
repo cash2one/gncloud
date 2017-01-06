@@ -119,9 +119,8 @@ class PowerShell(object):
         # script = '$user=[adsi]"WinNT://$env:computerName/gncloud";'
         # script += '$user.setPassword("'+password+'"); '
         # script += '$user:USERNAME | ConvertTo-Json -Compress ;'
-        # script = '$username = "gncloud";'
-
-        script = '$password = "1111";'
+        script = '$username = "gncloud";'
+        script += '$password = "1111";'
         script += '$secstr = New-Object -TypeName System.Security.SecureString;'
         script += '$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)};'
         script += '$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $secstr;'
