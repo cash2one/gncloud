@@ -91,6 +91,7 @@
                             <tr ng-repeat="snap in snap_list">
                                 <td>
                                     <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
+                                    <img ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
                                     <img src="/gn_images/gn_icon_{{snap.os}}.png" alt="ubuntu">
                                     <a href="#">{{snap.name}}</a>
                                 </td>

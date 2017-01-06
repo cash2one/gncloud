@@ -94,7 +94,7 @@ def kvm_image_delete(name,host_ip):
 def kvm_image_copy(name_volume, name_snap, host_ip):
     conn = libvirt.open(config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1))
     ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
-
+    list= 1/0
     #디스크 유무 체크
     stgvols = ptr_POOL.listVolumes()
     if all(e != name_volume + ".img" for e in stgvols):

@@ -114,9 +114,10 @@ def server_change_status(id, status, sql_session):
 
 
 def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
-        snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
-        guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
 
+    snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
+    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    try:
         # 네이밍
         new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         # 디스크 복사
@@ -125,6 +126,9 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
         snap_info.filename = new_image_name+'.img'
         snap_info.status = "Running"
         snap_info.host_id = guest_info.gnHostMachines.id
+        sql_session.commit()
+    except:
+        snap_info.status = "Error"
         sql_session.commit()
 
 
