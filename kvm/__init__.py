@@ -4,6 +4,7 @@ import traceback
 from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta
 from gevent.pywsgi import WSGIServer
+from apscheduler.scheduler import Scheduler
 
 from db.database import db_session
 from service.service import server_create, server_change_status, server_monitor \
@@ -126,10 +127,10 @@ def test():
 
 if __name__ == '__main__':
     #로그 설정
-    # cron = Scheduler(daemon=True)
-    # cron.add_interval_job(job_function, seconds=180) #minites=1)
-    # cron.start()
-    #app.run(port=8081)
-    http_server = WSGIServer(('', 8081), app)
-    http_server.serve_forever()
+    cron = Scheduler(daemon=True)
+    cron.add_interval_job(job_function, seconds=180) #minites=1)
+    cron.start()
+    app.run(port=8081)
+    # http_server = WSGIServer(('', 8081), app)
+    # http_server.serve_forever()
 
