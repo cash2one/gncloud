@@ -8,7 +8,8 @@ from service.dockerService import DockerService
 from db.database import db_session
 from db.models import GnDockerContainers, GnDockerVolumes, GnDockerImageDetail, \
     GnDockerServices, GnHostMachines, GnDockerPorts, GnVmMachines, GnDockerImages
-from Docker.util.config import config
+# from Docker.util.config import config
+from util.config import config
 from util.hash import random_string
 
 
@@ -18,15 +19,14 @@ def doc_create():
     sql_session = db_session
 
     # request 파라미터 중 userName과 teamCode 값이 별도로 오지 않으면 세션에 저장된 값을 입력한다.
-    if 'userName' in request.json:
-        author_id = request.json['userName']
-    else:
-        author_id = session['userName']
-    if 'teamCode' in request.json:
-        team_code = request.json['teamCode']
-    else:
-        team_code = session['teamCode']
-
+    # if 'userName' in request.json:
+    #     author_id = request.json['userName']
+    # else:
+    #     author_id = session['userName']
+    # if 'teamCode' in request.json:
+    #     team_code = request.json['teamCode']
+    # else:
+    #     team_code = session['teamCode']
 
     #로직 변경
     id = request.json['id']
@@ -37,7 +37,7 @@ def doc_create():
         name = docker_info.name
         cpu = docker_info.cpu
         disk = docker_info.disk
-        memory  = "%sB" % docker_info.memory
+        memory = "%sB" % docker_info.memory
         tag = docker_info.tag
 
         # image_id = request.json['id']
@@ -87,7 +87,7 @@ def doc_create():
                 logger.debug("container: %s" % container)
                 sql_session.add(container)
             # 생성된 volume 정보를 DB에 저장한다.
-            service_volume_list = ds.get_service_volumes(service.internal_id)
+            service_volume_list = ds.get_service_volumes(docker_service[0]['ID'])
             logger.debug("service_volume_list: %s" % service_volume_list)
             for service_volume in service_volume_list:
                 volume = GnDockerVolumes(
@@ -103,26 +103,25 @@ def doc_create():
             for port in ports:
                 set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
                 sql_session.add(set_port)
-            service.ip += ":%s" % ports[0]['PublishedPort']
 
             #sql_session.add(service)
             # 데이터베이스 업데이트
             docker_info.ip = dsmanager.ip + ":%s" % ports[0]['PublishedPort']
             docker_info.host_id = dsmanager.id
             docker_info.status = "Running"
-            docker_info.internal_id=docker_service[0]['ID']
-            docker_info.internal_name=docker_service[0]['Spec']['Name']
-            docker_info.create_time=datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
-            docker_info.os="docker"
-            docker_info.os_ver=base_image.os
-            docker_info.os_sub_ver=base_image.os_ver
+            docker_info.internal_id = docker_service[0]['ID']
+            docker_info.internal_name = docker_service[0]['Spec']['Name']
+            docker_info.create_time = datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+            docker_info.os = "docker"
+            docker_info.os_ver = base_image.os
+            docker_info.os_sub_ver = base_image.os_ver
 
             sql_session.commit()
-            return jsonify(status=True, message="서비스를 생성하였습니다.", result=service.to_json())
+            return jsonify(status=True, message="서비스를 생성하였습니다.", result=docker_info.to_json())
     except Exception as e:
         sql_session.rollback()
         docker_info.status = "Error"
-        sql_session.commit();
+        sql_session.commit()
         logger.error(e)
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
