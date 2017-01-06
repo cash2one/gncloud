@@ -45,6 +45,8 @@ def index():
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
+    password=""
+    sshkeys=""
     team_code = session['teamCode']
     user_id = session['userId']
     name = request.json['vm_name']
@@ -52,7 +54,8 @@ def create_vm():
     memory = request.json['memory']
     disk = request.json['hdd']
     image_id = request.json['id']
-    sshkeys = request.json['sshkeys']
+    if 'sshkeys' in request.json:
+        sshkeys = request.json['sshkeys']
     tag =request.json['tag']
     type =request.json['type']
     if 'password' in request.json:

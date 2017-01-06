@@ -47,7 +47,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status='Starting', tag=tag, image_id=image_id
-                              , host_id=host_id, ssh_key_id=sshkeys, hyperv_pass=password)
+                              , host_id=host_id, hyperv_pass=password)
     else:
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type=type, team_code=team_code, author_id=user_id
@@ -285,14 +285,14 @@ def getQuotaOfTeam(team_code, sql_session):
         cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
         cpu_cnt_info = [int(current_info.sum_cpu), limit_quota.cpu_quota]
 
-    if current_info.sum_cpu is None:
+    if current_info.sum_mem is None:
         memory_per_info = [0,100]
         mem_cnt_info = [0, humanfriendly.format_size(limit_quota.mem_quota)]
     else:
         memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
         mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
 
-    if current_info.sum_cpu is None:
+    if current_disk_info.sum_disk is None:
         disk_per_info = [0,100]
         disk_cnt_info = [0, humanfriendly.format_size(limit_quota.disk_quota)]
     else:
@@ -465,14 +465,14 @@ def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소
             cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
             cpu_cnt_info = [int(current_info.sum_cpu), limit_quota.cpu_quota]
 
-        if current_info.sum_cpu is None:
+        if current_info.sum_mem is None:
             memory_per_info = [0,100]
             mem_cnt_info = [0, humanfriendly.format_size(limit_quota.mem_quota)]
         else:
             memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
             mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
 
-        if current_info.sum_cpu is None:
+        if current_info_disk.sum_disk is None:
             disk_per_info = [0,100]
             disk_cnt_info = [0, humanfriendly.format_size(limit_quota.disk_quota)]
         else:

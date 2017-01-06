@@ -3,6 +3,7 @@ __author__ = 'gncloud'
 
 import datetime
 from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Numeric, BigInteger
+
 from db.database import Base
 
 
@@ -396,6 +397,7 @@ class GnVmMachines(Base):
     stop_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default=None)
     hyperv_pass = Column(String(50), nullable=True, default='')
+    image_id = Column(String(8), nullable=False, default=None)
 
     def __init__(self,
                  id, name='', tag='', type='',
@@ -406,7 +408,7 @@ class GnVmMachines(Base):
                  team_code=None, author_id=None,
                  create_time=datetime.datetime.now(), start_time=datetime.datetime.now(),
                  stop_time=datetime.datetime.now(),
-                 status=None, hyperv_pass=None):
+                 status=None, hyperv_pass=None, image_id=None):
         self.id = id
         self.name = name
         self.tag = tag
@@ -429,6 +431,7 @@ class GnVmMachines(Base):
         self.stop_time = stop_time
         self.status = status
         self.hyperv_pass = hyperv_pass
+        self.image_id = image_id
 
 
     def __repr__(self):
@@ -436,11 +439,11 @@ class GnVmMachines(Base):
                "id='%r', name='%r', tag='%r', type='%r', internal_id='%r', internal_name='%r'" \
                "host_id='%r', ip='%r', cpu='%r', memory='%r', disk='%r', os='%r', " \
                "os_ver='%r', os_sub_ver='%r', os_bit='%r', team_code='%r', author_id='%r', " \
-               "create_time='%r', start_time='%r', stop_time='%r', status='%r', hyperv_pass='%r')>" \
+               "create_time='%r', start_time='%r', stop_time='%r', status='%r', hyperv_pass='%r', image_id='%r')>" \
                % (self.id, self.name, self.tag, self.type, self.internal_id, self.internal_name,
                   self.host_id, self.ip, self.cpu, self.memory, self.disk,
                   self.os, self.os_ver, self.os_sub_ver, self.os_bit, self.team_code, self.author_id,
-                  self.create_time, self.start_time, self.stop_time, self.status, self.hyperv_pass)
+                  self.create_time, self.start_time, self.stop_time, self.status, self.hyperv_pass, self.image_id)
 
 
 class GnMonitor(Base):

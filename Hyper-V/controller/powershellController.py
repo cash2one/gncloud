@@ -12,11 +12,10 @@ __author__ = 'jhjeon'
 
 import datetime
 import time
-from flask import request, jsonify, session
+from flask import request, jsonify
 from service.powershellService import PowerShell
 from db.database import db_session
 from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist
-from sqlalchemy import func
 
 from util.config import config
 from util.hash import random_string
@@ -34,7 +33,7 @@ def manual():
 def hvm_create():
     try:
         vm_id = request.json['id']
-        vm_info =db_session.query(GnVmMachines).filter(GnVmMachines.id == vm_id).one()
+        vm_info =db_session.query(GnVmMachines).filter(GnVmMachines.id == vm_id).first()
 
         host_id =vm_info.host_id
         host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
@@ -111,9 +110,11 @@ def hvm_create():
             insert_monitor = GnMonitor(vm_id, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
             db_session.add(insert_monitor)
             db_session.commit()
+            return jsonify(status=True)
     except:
         vm_info.status = "Error"
         db_session.commit()
+        return jsonify(status=True)
 
 #  REST. VM 스냅샷 생성
 #  hvm_snapshot 1. VM 정지 (Stop-VM)
@@ -215,7 +216,7 @@ def hvm_state(id):
     type = request.json['type']
     #print vmid.internal_id
     #    vm = GnVmMachines.query.filter_by().first
-    if type == "start" or type == "resume":
+    if type == "Resume":
         # VM 시작
         # 1. 가상머신을 시작한다. (Start-VM)
         start_vm = ps.start_vm(vmid.internal_id)
@@ -245,7 +246,7 @@ def hvm_state(id):
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
             # return jsonify(status=False, message="상태 미완성")
-    elif type == "reboot":
+    elif type == "Reboot":
         restart = ps.restart_vm(vmid.internal_id)
         # resume 1. 가상머신을 재시작한다. (Restart-VM)
         if restart['State'] is 2:
@@ -255,7 +256,7 @@ def hvm_state(id):
             return jsonify(status=True, message="VM Restart")
         else:
             return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
-    elif type == "suspend":
+    elif type == "Suspend":
         suspend = ps.suspend_vm(vmid.internal_id)
         if suspend['State'] is 9:
             update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id']).update(
