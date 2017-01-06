@@ -21,7 +21,7 @@
             <tbody class="gn-tdody">
             <tr ng-repeat="list in guest_list">
                 <td>
-                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Running'" src="/gn_images/gn_dot_play.png" alt="">
+                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Running' || list.status=='Reboot'" src="/gn_images/gn_dot_play.png" alt="">
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Suspend'" src="/gn_images/gn_dot_doing.png" alt="">
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Stop'" src="/gn_images/gn_dot_stop.png" alt="">
 

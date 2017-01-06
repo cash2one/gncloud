@@ -44,9 +44,9 @@ angular
         stop = $interval($scope.selectGuestList,10000);
 
         $scope.actions = [
-            {name: '시작', type: 'resume'},
-            {name: '정지', type: 'suspend'},
-            {name: '재시작', type: 'reboot'}
+            {name: '시작', type: 'Resume'},
+            {name: '정지', type: 'Suspend'},
+            {name: '재시작', type: 'Reboot'}
         ];
 
         $scope.update = function (id, action, sh, index) {
