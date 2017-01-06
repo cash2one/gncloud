@@ -72,7 +72,8 @@ def hvm_create():
             add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
 
             # hdd 확장
-            ps.resize_vhd(host_machine.image_path+"/vhdx/base/"+internal_name+".vhdx", host_machine.image_path )
+            if vm_info.disk >21475000000:
+                ps.resize_vhd(host_machine.image_path+"/vhdx/base/"+internal_name+".vhdx", host_machine.image_path, vm_info.disk)
 
 
             start_vm = ps.start_vm(new_vm['VMId'])
