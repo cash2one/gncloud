@@ -107,7 +107,7 @@ def server_image_delete(id, sql_session):
 def server_change_status(id, status, sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     kvm_change_status(guest_info.internal_name, status, guest_info.gnHostMachines.ip)
-    if status == "Resume":
+    if status == "Reboot" or status == "Resume":
         status = "Running"
     guest_info.status = status
     sql_session.commit()
