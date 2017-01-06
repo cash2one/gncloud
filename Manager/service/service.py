@@ -57,7 +57,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
     sql_session.commit()
     return {"status":True, "value":id}
 
-def server_create_snapshot(ord_id, name, user_id, team_code, type,sql_session):
+def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == ord_id).one()
     pool_info = sql_session.query(GnImagePool).filter(GnImagePool.host_id == guest_info.gnHostMachines.id).one()
 

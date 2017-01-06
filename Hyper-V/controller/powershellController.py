@@ -94,9 +94,8 @@ def hvm_create():
                     get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
                 else:
                     break
-
+                    
             ps.set_password(get_vm_ip, vm_info.hyperv_pass)
-
             vm_info.internal_id=new_vm['VMId']
             vm_info.internal_name=internal_name
             vm_info.ip=get_vm_ip
@@ -126,6 +125,7 @@ def hvm_snapshot():
 
     # 지금은 internal_id 받아야한다
     #org_id = request.json['org_id'] #원본 이미지 아이디
+    vm_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['vm_id']).first()
     org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
 
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == org_id.host_id).first()
@@ -133,44 +133,47 @@ def hvm_snapshot():
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
 
-    stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
-    if stop_vm['State'] is 3:
-        create_snap = ps.create_snap(org_id.internal_id, image_pool.image_path)
+    # stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
+    # if stop_vm['State'] is 3:
+    create_snap = ps.create_snap(org_id.internal_id, image_pool.image_path)
         #print create_snap
-        if create_snap['Name'] is not None:
-            base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
+    if create_snap['Name'] is not None:
+        base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
-            name = request.json['name'] #request name 으로 저장해야한다.
+        # name = request.json['name'] #request name 으로 저장해야한다.
 
-            filename = create_snap['Name']
-            icon = 'icon_path'
-            os = base_image_info.os
-            os_ver = base_image_info.os_ver
-            os_subver = base_image_info.os_sub_ver
-            subtype = 'snap'
-            type = request.json['type']
-            #author_id = session['userName']
-            author_id = request.json['userName']
+        filename = create_snap['Name']
+        icon = 'icon_path'
+        # os = base_image_info.os
+        # os_ver = base_image_info.os_ver
+        # os_subver = base_image_info.os_sub_ver
+        # subtype = 'snap'
+        # type = request.json['type']
+        # author_id = session['userName']
+        # author_id = request.json['userName']
 
-            os_bit = base_image_info.os_bit
-            team_code = request.json['team_code']
-            #team_code = session['teamCode']
-
-            insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
-                                            icon, os, os_ver, os_subver, os_bit, team_code,
-                                            author_id, datetime.datetime.now(), "running", "", "", org_id.host_id)
-            db_session.add(insert_image_query)
-            db_session.commit()
-
-            start_vm = ps.start_vm(org_id.internal_id)
-            if start_vm['State'] is 2:
-                return jsonify(status=True, message="성공")
-            else:
-                return jsonify(status=False, message="실패")
+        # os_bit = base_image_info.os_bit
+        # team_code = request.json['team_code']
+        #team_code = session['teamCode']
+        vm_info.filename = filename
+        vm_info.icon =icon
+        vm_info.status="Running"
+        db_session.commit()
+        start_vm = ps.start_vm(org_id.internal_id)
+        if start_vm['State'] is 2:
+            return jsonify(status=True)
         else:
-            return jsonify(status=False, message="실패")
+            vm_info.status="Error"
+            db_session.commit()
+            return jsonify(status=False)
     else:
-        return jsonify(status=False, message="실패")
+        vm_info.status="Error"
+        db_session.commit()
+        return jsonify(status=False)
+    # else:
+    #     vm_info.status="Error"
+    #     db_session.commit()
+    #     return jsonify(status=False)
 
 '''
     org_id = request.form['org_id']
