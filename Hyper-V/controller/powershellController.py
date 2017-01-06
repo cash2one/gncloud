@@ -94,9 +94,8 @@ def hvm_create():
                     get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
                 else:
                     break
-
+                    
             ps.set_password(get_vm_ip, vm_info.hyperv_pass)
-
             vm_info.internal_id=new_vm['VMId']
             vm_info.internal_name=internal_name
             vm_info.ip=get_vm_ip
