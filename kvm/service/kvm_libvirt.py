@@ -11,58 +11,52 @@ from kvm.util.config import config
 USER = "root"
 
 def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
-    try:
-        s = pxssh.pxssh()
-        s.login(host_ip, USER)
-        s.sendline(config.SCRIPT_PATH + "sshkey_copy.sh ")
-        s.logout()
-        url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
-        conn = libvirt.open(url)
+    s = pxssh.pxssh()
+    s.login(host_ip, USER)
+    s.sendline(config.SCRIPT_PATH + "sshkey_copy.sh ")
+    s.logout()
+    url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
+    conn = libvirt.open(url)
 
-        # 스냅샷 기반 유무에 따른 생성 set_vm_ip.sh로직 분기
-        ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
-        if base_sub_type == "base":
-            # guest 생성 정보 xml 템플릿 생성
-            vol = render_template(
-                "volume.xml"
-                , guest_name=name
-                , disk=disk
-            )
-
-            defaultVol = ptr_POOL.storageVolLookupByName(base_name)
-            ptr_POOL.createXMLFrom(vol, defaultVol, 0)
-            ptr_POOL.storageVolLookupByName(name + ".img").resize(disk)
-        else:
-            kvm_image_copy(base_name.split(".")[0], name, host_ip)
-
-        # vm 생성
-        guest = render_template(
-            "guest.xml"
+    # 스냅샷 기반 유무에 따른 생성 set_vm_ip.sh로직 분기
+    ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
+    if base_sub_type == "base":
+        # guest 생성 정보 xml 템플릿 생성
+        vol = render_template(
+            "volume.xml"
             , guest_name=name
-            , current_memory=memory
-            , vcpu=cpu
+            , disk=disk
         )
-        dom = conn.defineXML(guest)
-        dom.create()
-        guest = conn.lookupByName(name)
-        guest.setAutostart(True)
-        conn.close()
-        return guest.UUIDString()
-    except IOError as errmsg:
-        print(str(errmsg))
 
+        defaultVol = ptr_POOL.storageVolLookupByName(base_name)
+        ptr_POOL.createXMLFrom(vol, defaultVol, 0)
+        ptr_POOL.storageVolLookupByName(name + ".img").resize(disk)
+    else:
+        kvm_image_copy(base_name.split(".")[0], name, host_ip)
+
+    # vm 생성
+    guest = render_template(
+        "guest.xml"
+        , guest_name=name
+        , current_memory=memory
+        , vcpu=cpu
+    )
+    dom = conn.defineXML(guest)
+    dom.create()
+    guest = conn.lookupByName(name)
+    guest.setAutostart(True)
+    conn.close()
+    return guest.UUIDString()
 
 def kvm_change_status(vm_name, status, host_ip):
     url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
     conn = libvirt.open(url)
     ptr_VM = conn.lookupByName(vm_name)
-    if status == 'start':
+    if status == 'Resum':
         ptr_VM.resume()
-    elif status == "suspend":
+    elif status == "Suspend":
         ptr_VM.suspend()
-    elif status == "resume":
-        ptr_VM.resume()
-    elif status == "reboot":
+    elif status == "Reboot":
         ptr_VM.reboot();
 
     conn.close()

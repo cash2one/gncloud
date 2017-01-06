@@ -11,7 +11,7 @@ from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
 
 
-def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, sql_session):
+def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password ,sql_session):
 
     # host 선택 룰
     # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
@@ -46,14 +46,38 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             sql_session.add(id_info)
             sql_session.commit()
             break
-
-    vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+    if(type == "hyperv"):
+        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status='Starting', tag=tag, image_id=image_id
-                              , host_id=host_id, ssh_key_id=sshkeys)
+                              , host_id=host_id, hyperv_pass=password)
+    else:
+        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+                                  , type=type, team_code=team_code, author_id=user_id
+                                  , status='Starting', tag=tag, image_id=image_id
+                                  , host_id=host_id, ssh_key_id=sshkeys)
     sql_session.add(vm_machine)
     sql_session.commit()
     return {"status":True, "value":id}
+
+def server_create_snapshot(ord_id, name, user_id, team_code, type,sql_session):
+    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == ord_id).one()
+    pool_info = sql_session.query(GnImagePool).filter(GnImagePool.host_id == guest_info.gnHostMachines.id).one()
+
+
+    #id 생성
+    while True:
+        vm_id = random_string(8)
+        check_info = GnId.query.filter(GnId.id == vm_id).first()
+        if not check_info:
+            break
+
+    guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename=""
+                            , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
+                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="Starting")
+    sql_session.add(guest_snap)
+    sql_session.commit();
+    return {"status":True, "value":ord_id, "snap_id":vm_id}
 
 def server_change_status(id, status, sql_session):
     #vm 조회
@@ -192,7 +216,11 @@ def server_image(type, sql_session, team_code):
         for vm in list:
             vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
-    return list
+    retryCheck = False
+    if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
+        retryCheck = True
+
+    return {"guest_list":list,"retryCheck":retryCheck}
 
 def getQuotaOfTeam(team_code, sql_session):
     current_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
@@ -260,14 +288,14 @@ def getQuotaOfTeam(team_code, sql_session):
         cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
         cpu_cnt_info = [int(current_info.sum_cpu), limit_quota.cpu_quota]
 
-    if current_info.sum_cpu is None:
+    if current_info.sum_mem is None:
         memory_per_info = [0,100]
         mem_cnt_info = [0, humanfriendly.format_size(limit_quota.mem_quota)]
     else:
         memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
         mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
 
-    if current_info.sum_cpu is None:
+    if current_disk_info.sum_disk is None:
         disk_per_info = [0,100]
         disk_cnt_info = [0, humanfriendly.format_size(limit_quota.disk_quota)]
     else:
@@ -440,14 +468,14 @@ def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소
             cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
             cpu_cnt_info = [int(current_info.sum_cpu), limit_quota.cpu_quota]
 
-        if current_info.sum_cpu is None:
+        if current_info.sum_mem is None:
             memory_per_info = [0,100]
             mem_cnt_info = [0, humanfriendly.format_size(limit_quota.mem_quota)]
         else:
             memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
             mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
 
-        if current_info.sum_cpu is None:
+        if current_info_disk.sum_disk is None:
             disk_per_info = [0,100]
             disk_cnt_info = [0, humanfriendly.format_size(limit_quota.disk_quota)]
         else:

@@ -2,7 +2,7 @@
 __author__ = 'gncloud'
 
 import datetime
-from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Numeric
+from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Numeric, BigInteger
 
 from db.database import Base
 
@@ -88,9 +88,12 @@ class GnContainers(Base):
     internal_id = Column(String(100), nullable=True, default=None)
     internal_name = Column(String(100), nullable=True, default=None)
     host_id = Column(String(100), nullable=True, default=None)
-    cpu = Column(Integer, nullable=True, default=None)
-    memory = Column(Integer, nullable=True, default=None)
-    disk = Column(Integer, nullable=True, default=None)
+    # cpu = Column(Integer, nullable=True, default=None)
+    # memory = Column(Integer, nullable=True, default=None)
+    # disk = Column(Integer, nullable=True, default=None)
+    cpu = Column(BigInteger, nullable=True, default=None)
+    memory = Column(BigInteger, nullable=True, default=None)
+    disk = Column(BigInteger, nullable=True, default=None)
     team_code = Column(String(10), nullable=True, default=None)
     author_id = Column(String(3), nullable=True, default=None)
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
@@ -180,9 +183,12 @@ class GnDepts(Base):
     __tablename__ = 'GN_DEPTS'
     dept_code = Column(String(3), primary_key=True, nullable=False)
     dept_name = Column(String(50), nullable=True, default=None)
-    cpu_quota = Column(Integer, nullable=True, default=None)
-    mem_quota = Column(Integer, nullable=True, default=None)
-    disk_quota = Column(Integer, nullable=True, default=None)
+    cpu_quota = Column(BigInteger, nullable=True, default=None)
+    mem_quota = Column(BigInteger, nullable=True, default=None)
+    disk_quota = Column(BigInteger, nullable=True, default=None)
+    # cpu_quota = Column(Integer, nullable=True, default=None)
+    # mem_quota = Column(Integer, nullable=True, default=None)
+    # disk_quota = Column(Integer, nullable=True, default=None)
 
     def __init__(self, dept_code, dept_name=None, cpu_quota=None, mem_quota=None, disk_quota=None):
         self.dept_code = dept_code
@@ -202,16 +208,23 @@ class GnHostMachines(Base):
     name = Column(String(100), nullable=True, default='')
     ip = Column(String(100), nullable=True, default='')
     type = Column(String(10), nullable=True, default='')
+    cpu = Column(BigInteger, nullable=True, default=None)
+    mem = Column(BigInteger, nullable=True, default=None)
+    disk = Column(BigInteger, nullable=True, default=None)
+    max_cpu = Column(BigInteger, nullable=True, default=None)
+    max_mem = Column(BigInteger, nullable=True, default=None)
+    max_disk = Column(BigInteger, nullable=True, default=None)
     cpu = Column(Integer, nullable=True, default=None)
-    mem = Column(Integer, nullable=True, default=None)
-    disk = Column(Integer, nullable=True, default=None)
-    max_cpu = Column(Integer, nullable=True, default=None)
-    max_mem = Column(Integer, nullable=True, default=None)
-    max_disk = Column(Integer, nullable=True, default=None)
+    # mem = Column(Integer, nullable=True, default=None)
+    # disk = Column(Integer, nullable=True, default=None)
+    # max_cpu = Column(Integer, nullable=True, default=None)
+    # max_mem = Column(Integer, nullable=True, default=None)
+    # max_disk = Column(Integer, nullable=True, default=None)
+
     host_agent_port = Column(Integer, nullable=True, default=None)
+    image_path = Column(String(200), nullable=True, default='')
 
-
-    def __init__(self, id, name='', ip='', type='', cpu=None, mem=None, disk=None, max_cpu=None, max_mem=None, max_disk=None, host_agent_port=None):
+    def __init__(self, id, name='', ip='', type='', cpu=None, mem=None, disk=None, max_cpu=None, max_mem=None, max_disk=None, host_agent_port=None, image_path = None):
         self.id = id
         self.name = name
         self.ip = ip
@@ -223,10 +236,11 @@ class GnHostMachines(Base):
         self.max_mem = max_mem
         self.max_disk = max_disk
         self.host_agent_port = host_agent_port
+        self.image_path = image_path
 
     def __repr__(self):
-        return "<GnHostMachines(id='%r', name='%r', ip='%r', type='%r', cpu='%r', mem='%r', disk='%r', max_cpu='%r', max_mem='%r', max_disk='%r',host_agent_port='%r')>" \
-               % (self.id, self.name, self.ip, self.type, self.cpu, self.mem, self.disk, self.max_cpu, self.max_mem, self.max_disk, self.host_agent_port)
+        return "<GnHostMachines(id='%r', name='%r', ip='%r', type='%r', cpu='%r', mem='%r', disk='%r', max_cpu='%r', max_mem='%r', max_disk='%r',host_agent_port='%r', image_path='%r')>" \
+               % (self.id, self.name, self.ip, self.type, self.cpu, self.mem, self.disk, self.max_cpu, self.max_mem, self.max_disk, self.host_agent_port, self.image_path)
 
 
 class GnHostMonitor(Base):
@@ -347,7 +361,7 @@ class GnVmImages(Base):
                "type='%r', sub_type='%r', icon='%r', " \
                "os='%r', os_ver='%r', os_subver='%r', os_bit='%r', team_code='%r', author_id='%r',create_time='%r', status='%r', ssh_id='%r', pool_id='%r', host_id='%r')>" \
                % (self.id, self.name, self.filename, self.type,
-                  self.sub_type, self.icon, self.os, self.os_ver, self.os_sub_ver,
+                  self.sub_type, self.icon, self.os, self.os_ver, self.os_subver,
                   self.os_bit, self.team_code, self.author_id, self.create_time, self.status, self.ssh_id, self.pool_id, self.host_id)
 
 '''
@@ -366,9 +380,12 @@ class GnVmMachines(Base):
     internal_name = Column(String(100), nullable=True, default='')
     host_id = Column(String(100), nullable=False, default=None)
     ip = Column(String(20), nullable=True, default=None)
-    cpu = Column(Integer, nullable=False)
-    memory = Column(Integer, nullable=False)
-    disk = Column(Integer, nullable=False)
+    cpu = Column(BigInteger, nullable=False)
+    memory = Column(BigInteger, nullable=False)
+    disk = Column(BigInteger, nullable=False)
+    # cpu = Column(Integer, nullable=False)
+    # memory = Column(Integer, nullable=False)
+    # disk = Column(Integer, nullable=False)
     os = Column(String(10), nullable=True, default=None)
     os_ver = Column(String(20), nullable=True, default=None)
     os_sub_ver = Column(String(20), nullable=True, default=None)
@@ -379,6 +396,8 @@ class GnVmMachines(Base):
     start_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     stop_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default=None)
+    hyperv_pass = Column(String(50), nullable=True, default='')
+    image_id = Column(String(8), nullable=False, default=None)
 
     def __init__(self,
                  id, name='', tag='', type='',
@@ -389,7 +408,7 @@ class GnVmMachines(Base):
                  team_code=None, author_id=None,
                  create_time=datetime.datetime.now(), start_time=datetime.datetime.now(),
                  stop_time=datetime.datetime.now(),
-                 status=None):
+                 status=None, hyperv_pass=None, image_id=None):
         self.id = id
         self.name = name
         self.tag = tag
@@ -411,6 +430,8 @@ class GnVmMachines(Base):
         self.start_time = start_time
         self.stop_time = stop_time
         self.status = status
+        self.hyperv_pass = hyperv_pass
+        self.image_id = image_id
 
 
     def __repr__(self):
@@ -418,11 +439,11 @@ class GnVmMachines(Base):
                "id='%r', name='%r', tag='%r', type='%r', internal_id='%r', internal_name='%r'" \
                "host_id='%r', ip='%r', cpu='%r', memory='%r', disk='%r', os='%r', " \
                "os_ver='%r', os_sub_ver='%r', os_bit='%r', team_code='%r', author_id='%r', " \
-               "create_time='%r', start_time='%r', stop_time='%r', status='%r')>" \
+               "create_time='%r', start_time='%r', stop_time='%r', status='%r', hyperv_pass='%r', image_id='%r')>" \
                % (self.id, self.name, self.tag, self.type, self.internal_id, self.internal_name,
                   self.host_id, self.ip, self.cpu, self.memory, self.disk,
                   self.os, self.os_ver, self.os_sub_ver, self.os_bit, self.team_code, self.author_id,
-                  self.create_time, self.start_time, self.stop_time, self.status)
+                  self.create_time, self.start_time, self.stop_time, self.status, self.hyperv_pass, self.image_id)
 
 
 class GnMonitor(Base):

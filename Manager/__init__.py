@@ -9,7 +9,7 @@ from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
-                            , pathimage, select_info, delteam_list, containers, server_create, server_change_status
+                            , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot
 from db.database import db_session
 
 app = Flask(__name__)
@@ -45,6 +45,8 @@ def index():
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
+    password=""
+    sshkeys=""
     team_code = session['teamCode']
     user_id = session['userId']
     name = request.json['vm_name']
@@ -52,11 +54,24 @@ def create_vm():
     memory = request.json['memory']
     disk = request.json['hdd']
     image_id = request.json['id']
-    sshkeys = request.json['sshkeys']
+    if 'sshkeys' in request.json:
+        sshkeys = request.json['sshkeys']
     tag =request.json['tag']
     type =request.json['type']
-    result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type,db_session)
+    if 'password' in request.json:
+        password = request.json['password']
+    result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
     return jsonify(status=result["status"], value=result["value"])
+
+@app.route('/vm/machine/snapshots', methods=['POST'])
+def create_snapshots():
+    team_code = session['teamCode']
+    user_id = session['userId']
+    name= request.json['vm_name']
+    image_id = request.json['ord_id']
+    type =request.json['type']
+    result= server_create_snapshot(image_id, name, user_id, team_code, type, db_session)
+    return jsonify(status=result["status"], value=result["value"], snap_id=result["snap_id"])
 
 @app.route('/vm/machine', methods=['PUT'])
 def change_status():

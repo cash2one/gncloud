@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import traceback
 
-from apscheduler.scheduler import Scheduler
 from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta
 from gevent.pywsgi import WSGIServer
@@ -78,8 +77,8 @@ def create_snap():
     user_id = session['userId'] # session
     team_code = session['teamCode']  # session
     ord_id = request.json['ord_id']
-    name = request.json['name']
-    server_create_snapshot(ord_id, name, user_id, team_code)
+    id = request.json['vm_id']
+    server_create_snapshot(ord_id, id, user_id, team_code, db_session)
     return jsonify(status=True, message="success")
 
 

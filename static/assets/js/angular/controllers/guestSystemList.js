@@ -33,7 +33,7 @@ angular
                             var usersfirstid ="";
                             for (var j = 0; j < data.list[i].user_list.length; j++) {
                                 if (data.list[i].user_list[j][0].team_owner == 'owner') { //팀장찾는 곳
-                                    owner_id = data.list[i].user_list[j][1].user_id;
+                                    owner_id = "("+data.list[i].user_list[j][1].user_id+")";
                                     owner_name = data.list[i].user_list[j][1].user_name;
 
                                 }else if(j==1){

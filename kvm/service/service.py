@@ -5,57 +5,58 @@ import subprocess
 
 import datetime
 from pexpect import pxssh
-from sqlalchemy import func
 
-from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys, GnId, GnImagesPool
+from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
-from kvm.util.hash import random_string
 from kvm.util.config import config
 
 USER = "root"
 
 def server_create(team_code, user_id, id, sql_session):
+    try:
+        #vm 조회
+        vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
 
-    #vm 조회
-    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+        #host 조회
+        host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).one()
 
-    #host 조회
-    host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).one()
+        # base image 조회
+        image_info = db_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
 
-    # base image 조회
-    image_info = db_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
+        # ssh 조회
+        ssh_info = db_session.query(GnSshKeys).filter(GnSshKeys.id == vm_info.ssh_key_id).one()
 
-    # ssh 조회
-    ssh_info = db_session.query(GnSshKeys).filter(GnSshKeys.id == vm_info.ssh_key_id).one()
+        # vm 생성
+        internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
 
-    # vm 생성
-    internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-    intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
+        #ip 세팅
+        ip = ""
+        while len(ip) == 0:
+            ip = getIpAddress(internal_name, host_info.ip)
 
-    #ip 세팅
-    ip = ""
-    while len(ip) == 0:
-        ip = getIpAddress(internal_name, host_info.ip)
+        if len(ip) != 0:
+             setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
 
-    if len(ip) != 0:
-         setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
+        # 기존 저장된 ssh key 등록
+        # s = pxssh.pxssh()
+        # s.login(host_info.ip, USER)
+        # s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
+        # s.logout()
 
-    # 기존 저장된 ssh key 등록
-    # s = pxssh.pxssh()
-    # s.login(host_info.ip, USER)
-    # s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
-    # s.logout()
-
-    vm_info.internal_name = internal_name
-    vm_info.internal_id = intern_id
-    vm_info.ip = ip
-    vm_info.status = "Running"
-    vm_info.os = image_info.os
-    vm_info.os_ver = image_info.os_ver
-    vm_info.os_sub_ver = image_info.os_subver
-    vm_info.os_bit = image_info.os_bit
-    sql_session.commit()
+        vm_info.internal_name = internal_name
+        vm_info.internal_id = intern_id
+        vm_info.ip = ip
+        vm_info.status = "Running"
+        vm_info.os = image_info.os
+        vm_info.os_ver = image_info.os_ver
+        vm_info.os_sub_ver = image_info.os_subver
+        vm_info.os_bit = image_info.os_bit
+        sql_session.commit()
+    except:
+        vm_info.status="Error"
+        sql_session.commit()
 
 
 def getIpAddress(name, host_ip):
@@ -109,33 +110,29 @@ def server_image_delete(id, sql_session):
 def server_change_status(id, status, sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     kvm_change_status(guest_info.internal_name, status, guest_info.gnHostMachines.ip)
-    if status == "resume":
-        status = "running"
+    if status == "Reboot" or status == "Resume":
+        status = "Running"
     guest_info.status = status
     sql_session.commit()
 
 
-def server_create_snapshot(id, name, user_id, team_code):
-        guest_info = GnVmMachines.query.filter(GnVmMachines.id == id).one();
-        pool_info = GnImagesPool.query.filter(GnImagesPool.host_id == guest_info.gnHostMachines.id).one();
+def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
 
+    snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
+    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    try:
         # 네이밍
         new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         # 디스크 복사
-        kvm_image_copy('aaa', new_image_name, guest_info.gnHostMachines.ip)
+        kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
 
-        #id 생성
-        while True:
-            id = random_string(8)
-            check_info = GnId.query.filter(GnId.id == id).first()
-            if not check_info:
-                break
-
-        guest_snap = GnVmImages(id=id, name=name, type="kvm", sub_type="snap", filename=new_image_name + ".img"
-                                , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                                , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="running", host_id=guest_info.gnHostMachines.id)
-        db_session.add(guest_snap)
-        db_session.commit();
+        snap_info.filename = new_image_name+'.img'
+        snap_info.status = "Running"
+        snap_info.host_id = guest_info.gnHostMachines.id
+        sql_session.commit()
+    except:
+        snap_info.status = "Error"
+        sql_session.commit()
 
 
 def server_monitor(sql_session):
