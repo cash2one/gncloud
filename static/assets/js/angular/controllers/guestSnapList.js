@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestSnapListCtrl', function ($scope, $http, dateModifyService) {
+    .controller('guestSnapListCtrl', function ($scope, $http, dateModifyService, $timeout, $interval) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -45,7 +45,7 @@ angular
         })
             .success(function (data, status, headers, config) {
                 if (data) {
-                    $scope.base_list = data.list;
+                    $scope.base_list = data.list.guest_list;
                 }
                 else {
                 }
@@ -54,7 +54,7 @@ angular
                 console.log(status);
             });
 
-
+        var stop;
         $scope.snapList = function() {
             $http({
                 method: 'GET',
@@ -63,12 +63,15 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data) {
-                        $scope.snap_list = data.list;
-                        for(var i = 0 ; i < data.list.length ; i++){
-                            $scope.snap_list[i].create_time_diff = dateModifyService.modifyDate(data.list[i].create_time);
+                        $scope.snap_list = data.list.guest_list;
+                        for(var i = 0 ; i < data.list.guest_list.length ; i++){
+                            $scope.snap_list[i].create_time_diff = dateModifyService.modifyDate(data.list.guest_list[i].create_time);
                         }
 
-
+                    }
+                    if(data.list.retryCheck == false){
+                        $interval.cancel(stop);
+                        stop=undefiend;
                     }
                     else {
                     }
@@ -83,7 +86,7 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data) {
-                        $scope.list = data.list;
+                        $scope.list = data.list.guest_list;
                     }
                     else {
                     }
@@ -92,6 +95,7 @@ angular
                     console.log(status);
                 });
         }
+        stop = $interval($scope.snapList,10000);
 
 
         $scope.container=function(){
@@ -149,19 +153,37 @@ angular
                 $scope.data.type = data.type;
             }
         };
-        $scope.submit = function () {
-            var url = "/api/" + $scope.data.type + "/vm/machine/snapshots";
+        $scope.submit= function(){
+            $http({
+                method : 'POST',
+                url : '/api/manager/vm/machine/snapshots',
+                data: $scope.data,
+                headers:{
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            })
+                .success(function(data){
+                if(data.status ==true){
+                    $scope.createSnap(data.value, data.snap_id);
+                }else{
+                    if(data.value != null) {
+                        alert(data.value)
+                    }
+                }
+            })
+        }
+        $scope.createSnap = function (ord_id,vm_id) {
+            $timeout(function(){
+                $scope.snapList();
+            },1000,true);
             $http({
                 method: 'POST',
-                url: url,
-                data: $scope.data,
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                }
+                url: "/api/" + $scope.data.type + "/vm/machine/snapshots",
+                data: '{"ord_id":"'+ord_id+'", "vm_id":"'+vm_id+'"}',//id = 머신id image_id = 스냅샷 아이디
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data) {
                     if (data.status == true) {
-                        alert("스냅샷이 생성되었습니다");
                         $scope.snapList();
                     } else {
                         alert(data.message);

@@ -57,7 +57,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-4" ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
-                                <input type="text" class="form-control gn-form-control"name="name" ng-model="data.name" placeholder="스냅샷 이름" required>
+                                <input type="text" class="form-control gn-form-control"name="name" ng-model="data.vm_name" placeholder="스냅샷 이름" required>
                                 <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">이름을 입력해 주세요</p>
                             </div>
                             <div class="col-sm-2">
@@ -90,6 +90,7 @@
                             <tbody class="gn-tdody">
                             <tr ng-repeat="snap in snap_list">
                                 <td>
+                                    <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                                     <img src="/gn_images/gn_icon_{{snap.os}}.png" alt="ubuntu">
                                     <a href="#">{{snap.name}}</a>
                                 </td>

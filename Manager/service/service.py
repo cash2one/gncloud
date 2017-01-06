@@ -52,6 +52,25 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
     sql_session.commit()
     return {"status":True, "value":id}
 
+def server_create_snapshot(ord_id, name, user_id, team_code, type,sql_session):
+    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == ord_id).one()
+    pool_info = sql_session.query(GnImagePool).filter(GnImagePool.host_id == guest_info.gnHostMachines.id).one()
+
+
+    #id 생성
+    while True:
+        vm_id = random_string(8)
+        check_info = GnId.query.filter(GnId.id == vm_id).first()
+        if not check_info:
+            break
+
+    guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename=""
+                            , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
+                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="Starting")
+    sql_session.add(guest_snap)
+    sql_session.commit();
+    return {"status":True, "value":ord_id, "snap_id":vm_id}
+
 def server_change_status(id, status, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
@@ -189,7 +208,11 @@ def server_image(type, sql_session, team_code):
         for vm in list:
             vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
-    return list
+    retryCheck = False
+    if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
+        retryCheck = True
+
+    return {"guest_list":list,"retryCheck":retryCheck}
 
 def getQuotaOfTeam(team_code, sql_session):
     current_info = sql_session.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
