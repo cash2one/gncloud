@@ -40,7 +40,7 @@ class PowerShell(object):
             if option == "Path":
                 script += " -" + option + " " + value + ""
             elif option == "MemoryStartupBytes":
-                script += " -" + option + " " + "511MB"
+                script += " -" + option + " " + "500MB"
             else:
                 script += " -" + option + " " + value
         #script += " -Generation " + str(self.GENERATION_TYPE_2)
@@ -281,7 +281,7 @@ class PowerShell(object):
         script += 'Remove-Item -Path '+path+'/$VMname"clone" -Recurse ;'
         script += 'Get-ChildItem -Path '+path+'/vhdx/snap/$VMName'
         script += '"' + snapshot_id
-        script += '.vhdx" | ConvertTo-Json -Compress'
+        script += '.vhdx"| Select-Object -Property Name | ConvertTo-Json -Compress'
         # print script
         return self.send(script)
 

@@ -25,7 +25,7 @@
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Suspend'" src="/gn_images/gn_dot_doing.png" alt="">
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Stop'" src="/gn_images/gn_dot_stop.png" alt="">
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
-                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting'" src="/gn_images/gn_icon_{{list.os}}.png" alt="">
+                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status != 'Error'" src="/gn_images/gn_icon_{{list.os}}.png" alt="">
 
                     <img ng-show="list.status == 'Starting' || list.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
 
