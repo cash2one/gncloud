@@ -26,5 +26,3 @@ logger.addHandler(fileHandler)
 logger.addHandler(streamHandler)
 
 logger.setLevel(logging.DEBUG)
-
-
