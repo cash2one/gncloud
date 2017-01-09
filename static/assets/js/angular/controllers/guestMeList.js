@@ -128,12 +128,16 @@ angular
                             }else {
                                 var team_owner='팀원';
                             }
+                            if(data.list[i][0].user_id == $rootScope.user_info.user_id){
+                                data.list[i][0].user_name = data.list[i][0].user_name+"\n(YOU)";
+                            }
                             data.list[i].user_id = data.list[i][0].user_id;
                             data.list[i].user_name = data.list[i][0].user_name;
                             data.list[i].tel = data.list[i][0].tel;
                             data.list[i].email = data.list[i][0].email;
                             data.list[i].comf = comfirm_re;
                             data.list[i].team_owner = team_owner;
+                            data.list[i].team_check = data.list[i][1].comfirm
                             data.list[i].apply_date = data.list[i][1].apply_date;
                             data.list[i].approve_date = data.list[i][1].approve_date;
                             //날짜 카운팅
@@ -394,6 +398,7 @@ angular
         }
         $rootScope.$on('init', function () {
             $scope.authority = $rootScope.user_info.authority;
+            $scope.user_id = $rootScope.user_info.user_id;
         });
         $scope.refresh = function(){
             $scope.won_list = Array.prototype.slice.call($scope.won_list).reverse();

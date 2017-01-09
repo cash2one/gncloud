@@ -18,7 +18,7 @@
             <div id="image" class="gn-box">
                 <div class="table-responsive gn-table-responsive gn-margin-box">
                     <h2>목록</h2>
-                    <table class="table table-striped gn-table">
+                    <table class="table table gn-table">
                         <thead>
                         <tr>
                             <th class="col-sm-3">OS</th>
@@ -77,7 +77,7 @@
                     <!--컨테이너 tab-->
                     <div class="table-responsive gn-table-responsive gn-margin-box">
                         <h2>목록</h2>
-                        <table class="table table-striped gn-table">
+                        <table class="table table gn-table">
                             <thead>
                             <tr>
                                 <th class="col-sm-4">이름</th>
@@ -88,7 +88,7 @@
                             </tr>
                             </thead>
                             <tbody class="gn-tdody">
-                            <tr ng-repeat="snap in snap_list">
+                            <tr ng-repeat="snap in snap_list" ng-class="{'gn-on-error':list.status=='Error'}">
                                 <td>
                                     <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                                     <img ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
@@ -123,7 +123,7 @@
         <!--컨테이너 tab-->
         <div class="gn-table-responsive gn-margin-box">
             <h2>목록</h2>
-            <table class="table table-striped gn-table">
+            <table class="table table gn-table">
                 <thead>
                 <tr>
                     <th style="width:30%">OS</th>

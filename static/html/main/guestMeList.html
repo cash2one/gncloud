@@ -47,15 +47,15 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label gn-control-label">현재 비밀번호</label>
-                                            <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password.$invalid && !meForm.password.$pristine }">
-                                                <input type="password" class="form-control gn-form-control" name="password" ng-model="data.password" placeholder="Password" ng-pattern="/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}/">
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control gn-form-control" name="password" ng-model="data.password" placeholder="Password">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label gn-control-label">새 비밀번호</label>
                                             <div class="col-sm-offset-1 col-sm-8" ng-class="{ 'has-error' : meForm.password_new.$invalid && !meForm.password_new.$pristine }">
                                                 <input type="password" class="form-control gn-form-control" name="password_new" ng-model="data.password_new" placeholder="Password" ng-pattern="/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}/">
-                                                <p ng-show="meForm.password_new.$invalid && !meForm.password_new.$pristine" class="help-block">6~15자리의 영문과 특수문자를 조합해 주세요.</p>
+                                                <p ng-show="meForm.password_new.$invalid && !meForm.password_new.$pristine" class="help-block">6~15자리의 특수문자와 대문자를 합께 조합해 주세요.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -148,7 +148,7 @@
 
                 <div class="container-fluid">
                     <div class="table-responsive gn-table-responsive">
-                        <table class="table table-striped gn-table">
+                        <table class="table table gn-table">
                             <thead>
                             <tr>
                                 <th class="col-sm-11">이름</th>
@@ -223,7 +223,7 @@
                     <h2>{{teamname.team_name}}</h2>
 
                     <div class="table-responsive gn-table-responsive">
-                        <table class="table table-striped gn-table">
+                        <table class="table table gn-table">
                             <thead>
                             <tr>
                                 <th>번호</th>
@@ -241,7 +241,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="won in won_list">
+                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}">
                                 <td class="">{{$index+1}}</td>
                                 <td class="">{{won.team_owner}}</td>
                                 <td class="">{{won.user_name}}</td>

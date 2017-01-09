@@ -3,8 +3,8 @@
     <h1>인스턴스</h1>
     <h2>인스턴스 목록</h2>
 
-      <div class="table-responsive gn-table-responsive">
-        <table class="table table-striped gn-table">
+      <div class="table-responsive gn-table-responsive" >
+        <table class="table table gn-table">
             <thead>
                 <tr>
                     <th class="col-sm-3">이름</th>
@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody class="gn-tdody">
-            <tr ng-repeat="list in guest_list">
+            <tr  ng-repeat="list in guest_list">
                 <td>
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Running' || list.status=='Reboot'" src="/gn_images/gn_dot_play.png" alt="">
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Suspend'" src="/gn_images/gn_dot_doing.png" alt="">
