@@ -22,11 +22,9 @@ from util.hash import random_string
 
 ps_exec = 'powershell/execute'
 
-# PowerShell Script Manual 실행: (Script) | ConvertTo-Json
 def manual():
     script = request.form['script']
     ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, ps_exec)
-    # return ps.send(script)
     return jsonify(result=ps.send(script))
 
 # VM 생성 및 실행
@@ -67,13 +65,11 @@ def hvm_create():
             # CONVERT_VHD_PATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
 
             convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
-            # 가져온 디스크를 가상머신에 연결한다. (Add-VMHardDiskDrive)
             add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
 
             # hdd 확장
             if vm_info.disk >21475000000:
                 ps.resize_vhd(host_machine.image_path+"/vhdx/base/"+internal_name+".vhdx", host_machine.image_path, vm_info.disk)
-
 
             start_vm = ps.start_vm(new_vm['VMId'])
 
@@ -95,11 +91,14 @@ def hvm_create():
                 else:
                     break
 
+            # password setting 완전하지 않음 수정 필요함
             ps.set_password(get_vm_ip, vm_info.hyperv_pass)
+
             vm_info.internal_id=new_vm['VMId']
             vm_info.internal_name=internal_name
-            vm_info.ip=get_vm_ip
+            vm_info.ip = get_vm_ip
             vm_info.os = os
+            vm_info.os_ver = os_ver
             vm_info.os_sub_ver = os_sub_ver
             vm_info.os_bit = os_bit
             vm_info.create_time = datetime.datetime.now()
@@ -115,16 +114,8 @@ def hvm_create():
         db_session.commit()
         return jsonify(status=True)
 
-#  REST. VM 스냅샷 생성
-#  hvm_snapshot 1. VM 정지 (Stop-VM)
-#  hvm_snapshot 2. 스냅샷을 생성한다.
-#  hvm_snapshot 3. 생성된 스냅샷 이미지 이름 변경 (2번에서 이름 변경이 안 될 경우)
-#  hvm_snapshot 4. 생성된 스냅샷 이미지 이름 를 지정된 폴더에 옮긴다. (테스트 때에는 C:\images 로 한다.)
-#  hvm_snapshot 5. 생성된 스냅샷의 정보를 데이터베이스에 저장한다.
-def hvm_snapshot():
 
-    # 지금은 internal_id 받아야한다
-    #org_id = request.json['org_id'] #원본 이미지 아이디
+def hvm_snapshot():
     vm_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['vm_id']).first()
     org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
 
@@ -132,34 +123,20 @@ def hvm_snapshot():
     image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == org_id.host_id).first()
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
-
-    # stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
-    # if stop_vm['State'] is 3:
     create_snap = ps.create_snap(org_id.internal_id, image_pool.image_path)
-    #print create_snap
     if create_snap['Name'] is not None:
-        base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
-
-        # name = request.json['name'] #request name 으로 저장해야한다.
+        # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
         filename = create_snap['Name']
         icon = 'icon_path'
-        # os = base_image_info.os
-        # os_ver = base_image_info.os_ver
-        # os_subver = base_image_info.os_sub_ver
-        # subtype = 'snap'
-        # type = request.json['type']
-        # author_id = session['userName']
-        # author_id = request.json['userName']
 
-        # os_bit = base_image_info.os_bit
-        # team_code = request.json['team_code']
-        #team_code = session['teamCode']
         vm_info.filename = filename
-        vm_info.icon =icon
-        vm_info.status="Running"
+        vm_info.icon = icon
+        vm_info.status = "Running"
+        vm_info.os_ver = org_id.os_ver
         vm_info.host_id = host_machine.id
         db_session.commit()
+
         start_vm = ps.start_vm(org_id.internal_id)
         if start_vm['State'] is 2:
             return jsonify(status=True)
@@ -171,18 +148,6 @@ def hvm_snapshot():
         vm_info.status="Error"
         db_session.commit()
         return jsonify(status=False)
-        # else:
-        #     vm_info.status="Error"
-        #     db_session.commit()
-        #     return jsonify(status=False)
-
-'''
-    org_id = request.form['org_id']
-    name = request.form['name']
-    type = request.form['type']
-    author_id = request.form['author_id']
-'''
-
 
 # -------------------------------------------------------
 # REST. VM 상태변경
