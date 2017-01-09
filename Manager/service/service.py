@@ -150,7 +150,7 @@ def login_list(user_id, password, sql_session):
 
 
 def teamwon_list(user_id,team_code,team,sql_session):
-    list =sql_session.query(GnUser, GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.team_owner==team).all()
+    list =sql_session.query(GnUser, GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.team_owner==team).order_by(GnUserTeam.team_owner.desc()).all()
     team_list = len(sql_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).all())
     infor = {"list":list, "info":team_list}
     return infor
@@ -384,9 +384,9 @@ def teamset(team_code, sql_session):
             vm[1].approve_date = vm[1].approve_date.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
-def approve_set(user_id,code,type,user_name):
+def approve_set(user_id,code,type,user_name,sql_session):
     if(type == 'approve'):
-        list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id==user_id).filter(GnUserTeam.team_code == code).one()
+        list = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id==user_id).filter(GnUserTeam.team_code == code).first()
         if(list.comfirm == 'Y'):
             return False
         list.comfirm = "Y"
@@ -394,7 +394,7 @@ def approve_set(user_id,code,type,user_name):
         db_session.commit()
         return True
     if(type == 'change'):
-        list = db_session.query(GnUserTeam).filter(GnUserTeam.user_id== user_id).one()
+        list = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id== user_id).first()
         if(list.team_owner == 'owner'):
             list.team_owner = 'user'
             db_session.commit()
@@ -403,7 +403,7 @@ def approve_set(user_id,code,type,user_name):
             db_session.commit()
         return True
     if(type == 'reset'):
-        list = db_session.query(GnUser).filter(GnUser.user_id==user_id).one()
+        list = sql_session.query(GnUser).filter(GnUser.user_id==user_id).first()
         list.password = random_string('11111111')
         db_session.commit()
         return True
@@ -445,7 +445,7 @@ def select(sql_session ):
     return sql_session.query(GnTeam).all()
 
 def select_info(team_code, sql_session): #팀 프로필 팀생성일/ 이름 개인설정 팀프로필 팀 생성일 /이름
-    list =sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
+    list =sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).order_by(GnTeam.create_date.desc()).one()
     list.create_date = list.create_date.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
@@ -509,7 +509,7 @@ def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소
     return result
 
 def pathimage(sql_session): #시스템 이미지 리스트 path 쿼리
-    list = sql_session.query(GnImagePool, GnVmImages).join(GnVmImages, GnImagePool.id == GnVmImages.pool_id).all()
+    list = sql_session.query(GnImagePool, GnVmImages).join(GnVmImages, GnImagePool.id == GnVmImages.pool_id).order_by(GnImagePool.id.desc()).all()
     for data in list:
         data[1].create_time = data[1].create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list

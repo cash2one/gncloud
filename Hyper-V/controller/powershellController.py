@@ -158,6 +158,7 @@ def hvm_snapshot():
         vm_info.filename = filename
         vm_info.icon =icon
         vm_info.status="Running"
+        vm_info.host_id = host_machine.id
         db_session.commit()
         start_vm = ps.start_vm(org_id.internal_id)
         if start_vm['State'] is 2:

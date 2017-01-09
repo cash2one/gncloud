@@ -258,7 +258,7 @@ def teamwon1(code):
 def approve(id,code):
     type = request.json['type']
     user_name = session['userName']
-    approve_set(id, code, type, user_name)
+    approve_set(id, code, type, user_name, db_session)
     return jsonify(status=True, message="success")
 
 
