@@ -104,6 +104,25 @@ angular
                 });
         }
 
+        $scope.sshkey_save=function(){
+            $http({
+                method: 'POST',
+                url: '/api/kvm/account/keys',
+                data:'{"name":"'+$("#sshkey_name").val()+'"}',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.sshkey();
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
 
         $scope.teamtable=function(){
             $scope.won_list ={};

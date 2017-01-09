@@ -58,7 +58,7 @@ def hvm_create():
                            SwitchName=SWITCHNAME)
         if new_vm is not None:
             # 새 머신에서 추가적인 설정을 한다 (Set-VM)
-            set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(vm_info.cpu))
+            set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(vm_info.cpu), MemoryMaximumBytes=str(vm_info.memory))
             CONVERT_VHD_DESTINATIONPATH = host_machine.image_path+"/vhdx/base/"+internal_name+".vhdx"
 
             CONVERT_VHD_PATH = host_machine.image_path+"/vhdx"+ image_path + base_image  #원본이미지로부터
@@ -94,7 +94,7 @@ def hvm_create():
                     get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
                 else:
                     break
-                    
+
             ps.set_password(get_vm_ip, vm_info.hyperv_pass)
             vm_info.internal_id=new_vm['VMId']
             vm_info.internal_name=internal_name
@@ -136,7 +136,7 @@ def hvm_snapshot():
     # stop_vm = ps.stop_vm(org_id.internal_id) #원본 이미지 인스턴스 종료
     # if stop_vm['State'] is 3:
     create_snap = ps.create_snap(org_id.internal_id, image_pool.image_path)
-        #print create_snap
+    #print create_snap
     if create_snap['Name'] is not None:
         base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
@@ -170,10 +170,10 @@ def hvm_snapshot():
         vm_info.status="Error"
         db_session.commit()
         return jsonify(status=False)
-    # else:
-    #     vm_info.status="Error"
-    #     db_session.commit()
-    #     return jsonify(status=False)
+        # else:
+        #     vm_info.status="Error"
+        #     db_session.commit()
+        #     return jsonify(status=False)
 
 '''
     org_id = request.form['org_id']
@@ -400,9 +400,9 @@ def vm_monitor():
         hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
 
         mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4)
-        cpu = round(float(vm_monitor['CPUUsage'])*float((seq.cpu/host.cpu)) , 4)
-        # hdd = 0.0000
-        script = '$vm = Get-vm -id '+seq.internal_id+';'
+        cpu = round(float(vm_monitor['CPUUsage'])*float((seq.cpu/host.cpu)), 4)
+
+        script = '$vm = Get-vm -id ' +seq.internal_id+';'
         script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
         script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
         ip = ps.send(script)
@@ -422,9 +422,6 @@ def vm_monitor():
             db_session.commit()
         except :
             db_session.rollback()
-        finally:
-            db_session.commit()
-
 
 
 

@@ -89,8 +89,8 @@ def vm_list(sql_session, team_code):
     list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
-        vmMachine.disk = humanfriendly.format_size(vmMachine.disk)
-        vmMachine.memory = humanfriendly.format_size(vmMachine.memory)
+        vmMachine.disk = convertHumanFriend(vmMachine.disk)
+        vmMachine.memory = convertHumanFriend(vmMachine.memory)
 
     retryCheck = False
     if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
@@ -108,10 +108,10 @@ def vm_info(sql_session, id):
         use = int(monitor_info.disk_usage)
         disk_per_info = int((use*100)/total)
         rest_disk = total - use;
-        disk_info = {"total":humanfriendly.format_size(total), "use":humanfriendly.format_size(use), "rest_disk":humanfriendly.format_size(rest_disk), "disk_per_info":disk_per_info}
+        disk_info = {"total":convertHumanFriend(total), "use":convertHumanFriend(use), "rest_disk":convertHumanFriend(rest_disk), "disk_per_info":disk_per_info}
 
-    vm_info.disk = humanfriendly.format_size(vm_info.disk)
-    vm_info.memory = humanfriendly.format_size(vm_info.memory)
+    vm_info.disk = convertHumanFriend(vm_info.disk)
+    vm_info.memory = convertHumanFriend(vm_info.memory)
     info = {"vm_info":vm_info, "disk_info":disk_info}
     return info
 
@@ -292,17 +292,17 @@ def getQuotaOfTeam(team_code, sql_session):
 
     if current_info.sum_mem is None:
         memory_per_info = [0,100]
-        mem_cnt_info = [0, humanfriendly.format_size(limit_quota.mem_quota)]
+        mem_cnt_info = [0, convertHumanFriend(limit_quota.mem_quota)]
     else:
         memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
-        mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
+        mem_cnt_info = [convertHumanFriend(int(current_info.sum_mem)), convertHumanFriend(limit_quota.mem_quota)]
 
     if current_disk_info.sum_disk is None:
         disk_per_info = [0,100]
-        disk_cnt_info = [0, humanfriendly.format_size(limit_quota.disk_quota)]
+        disk_cnt_info = [0, convertHumanFriend(limit_quota.disk_quota)]
     else:
         disk_per_info = [int((current_disk_info.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_disk_info.sum_disk/limit_quota.disk_quota)*100))]
-        disk_cnt_info = [humanfriendly.format_size(int(current_disk_info.sum_disk)), humanfriendly.format_size(limit_quota.disk_quota)]
+        disk_cnt_info = [convertHumanFriend(int(current_disk_info.sum_disk)), convertHumanFriend(limit_quota.disk_quota)]
 
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
@@ -472,17 +472,17 @@ def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소
 
         if current_info.sum_mem is None:
             memory_per_info = [0,100]
-            mem_cnt_info = [0, humanfriendly.format_size(limit_quota.mem_quota)]
+            mem_cnt_info = [0, convertHumanFriend(limit_quota.mem_quota)]
         else:
             memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
-            mem_cnt_info = [humanfriendly.format_size(int(current_info.sum_mem)), humanfriendly.format_size(limit_quota.mem_quota)]
+            mem_cnt_info = [convertHumanFriend(int(current_info.sum_mem)), convertHumanFriend(limit_quota.mem_quota)]
 
         if current_info_disk.sum_disk is None:
             disk_per_info = [0,100]
-            disk_cnt_info = [0, humanfriendly.format_size(limit_quota.disk_quota)]
+            disk_cnt_info = [0, convertHumanFriend(limit_quota.disk_quota)]
         else:
             disk_per_info = [int((current_info_disk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info_disk.sum_disk/limit_quota.disk_quota)*100))]
-            disk_cnt_info = [humanfriendly.format_size(int(current_info_disk.sum_disk)), humanfriendly.format_size(limit_quota.disk_quota)]
+            disk_cnt_info = [convertHumanFriend(int(current_info_disk.sum_disk)), convertHumanFriend(limit_quota.disk_quota)]
         count_info = [vm_run_count.count,vm_stop_count.count]
         type_info = [vm_kvm_count.count,vm_hyperv_count.count]
         docker_info = vm_docker_count.count
@@ -525,3 +525,6 @@ def delteam_list(team_code, sql_session): #팀삭제 쿼리
         return 1
     else:
         return 2
+
+def convertHumanFriend(num):
+    return humanfriendly.format_size(num,binary=True).replace("i","")
