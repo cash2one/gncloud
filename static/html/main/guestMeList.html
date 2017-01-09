@@ -1,7 +1,7 @@
 <h1>설정</h1>
 
 <!--왼쪽 메뉴-->
-<ul class="nav nav-pills gn-left-menu col-xs-2">
+<ul class="nav nav-pills gn-left-menu col-xs-12 col-sm-2">
     <li class="left-title">개인</li>
     <li class="active"><a data-toggle="pill" ng-click="click('profile')">프로필</a></li>
     <li class=""><a data-toggle="pill" ng-click="click('key-sett')">키 관리</a></li>
@@ -12,14 +12,14 @@
     <li class=""><a data-toggle="pill" ng-click="click('team-group')">팀원</a></li>
 </ul>
 
-<div class="tab-content col-xs-10">
+<div class="tab-content col-xs-12 col-sm-10">
     <!--프로필-->
     <div id="profile" class="">
         <div class="gn-box">
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
                     <h2>{{te_list.user_name}}</h2>
-                    <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn" data-toggle="modal" data-target="#myModal">수정</button>
+                    <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#myModal">수정</button>
 
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" role="dialog">
@@ -92,21 +92,15 @@
                 </div>
 
                 <div class="container-fluid">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label gn-control-label">아이디</label>
-                            <div class="col-sm-10">
-                                <p class="form-control-static">{{te_list.user_id}}</p>
-                            </div>
-                            <label class="col-sm-2 control-label gn-control-label">연락처</label>
-                            <div class="col-sm-10">
-                                <p class="form-control-static">{{te_list.tel}}</p>
-                            </div>
-                            <label class="col-sm-2 control-label gn-control-label">이메일</label>
-                            <div class="col-sm-10">
-                                <p class="form-control-static">{{te_list.email}}</p>
-                            </div>
-                        </div>
+                    <form>
+                        <dl class="dl-horizontal gn-description-list">
+                            <dt>아이디</dt>
+                            <dd>{{te_list.user_id}}</dd>
+                            <dt>연락처</dt>
+                            <dd>{{te_list.tel}}</dd>
+                            <dt>이메일</dt>
+                            <dt>{{te_list.email}}</dt>
+                        </dl>
                     </form>
                 </div>
             </div> <!--class="gn-sett-margin-box" 사용자 이름-->
@@ -120,7 +114,7 @@
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
                     <h2>SSH Keys</h2>
-                    <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn" data-toggle="modal" data-target="#modi">등록</button>
+                    <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#modi">등록</button>
 
                     <!-- SSH Modal -->
                     <div class="modal fade" id="modi" role="dialog">
@@ -153,8 +147,8 @@
                         <table class="table table gn-table">
                             <thead>
                             <tr>
-                                <th class="col-sm-11">이름</th>
-                                <th class="col-sm-1"></th>
+                                <th class="col-sm-10">이름</th>
+                                <th class="col-sm-2"></th>
                             </tr>
                             </thead>
                             <tbody class="gn-tdody">
@@ -228,18 +222,17 @@
                         <table class="table table gn-table">
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>등급</th>
-                                <th>이름</th>
-                                <th>아이디</th>
-                                <th>연락처</th>
-                                <th>이메일</th>
-                                <th>신청일</th>
-                                <th>승인일</th>
+                                <th class="col-sm-1">번호</th>
+                                <th class="col-sm-1">등급</th>
+                                <th class="col-sm-1">이름</th>
+                                <th class="col-sm-1 hidden-xs">아이디</th>
+                                <th class="col-sm-2 hidden-xs">연락처</th>
+                                <th class="col-sm-1 hidden-sm hidden-xs">이메일</th>
+                                <th class="col-sm-1 hidden-sm hidden-xs">신청일</th>
+                                <th class="col-sm-1 hidden-sm hidden-xs">승인일</th>
                                 <!-----여기서부터 팀장 로그인 시 보이는 영역----->
-                                <th>탈퇴일</th>
-                                <th>상태<div class="refresh" ng-click="refresh()"></div></th>
-                                <th><!--더보기--></th>
+                                <th class="col-sm-1">상태<div class="refresh" ng-click="refresh()"></div></th>
+                                <th class="col-sm-1"><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -248,13 +241,12 @@
                                 <td class="">{{won.team_owner}}</td>
                                 <td class="">{{won.user_name}}</td>
                                 <td class="" ng-model="data.user_id">{{won.user_id}}</td>
-                                <td class="">{{won.tel}}</td>
-                                <td class="">{{won.email}}</td>
-                                <td class=""><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>
-                                <td class=""><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>
+                                <td class="hidden-xs">{{won.tel}}</td>
+                                <td class="hidden-xs">{{won.email}}</td>
+                                <td class="hidden-sm hidden-xs"><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>
+                                <td class="hidden-sm hidden-xs"><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                                <td class=""><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>
-                                <td class="">{{won.comf}}</td>
+                                <td class="hidden-xs">{{won.comf}}</td>
                                 <td class="dropdown" ng-show="authority == 'owner' ">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         <div class="gn-more">더보기</div>
@@ -329,7 +321,7 @@
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
                     <h2>{{teamname.team_name}}</h2>
-                    <button type="button" class="btn btn-gn-sub col-sm-1 gn-sett-btn" data-toggle="modal" data-target="#modal-modi" ng-show="authority == 'owner' ">수정</button>
+                    <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#modal-modi" ng-show="authority == 'owner' ">수정</button>
 
                     <!-- 팀 Modal -->
                     <div class="modal fade" id="modal-modi" role="dialog">
@@ -369,24 +361,17 @@
 
                 <div class="container-fluid">
                     <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label gn-control-label">팀 코드</label>
-                            <div class="col-sm-10">
-                                <p class="form-control-static">{{teamname.team_code}}</p>
-                            </div>
-                            <label class="col-sm-2 control-label gn-control-label">팀장</label>
-                            <ul class="col-sm-10">
-                                <li class="fons-16 ng-binding ng-scope" ng-repeat="team in team_list">{{team.user_id}}</li>
-                            </ul>
-                            <label class="col-sm-2 control-label gn-control-label">팀 생성일</label>
-                            <div class="col-sm-10">
-                                <p class="form-control-static">{{teamname.create_date}}</p>
-                            </div>
-                            <label class="col-sm-2 control-label gn-control-label">총원</label>
-                            <div class="col-sm-10">
-                                <p class="form-control-static">{{team_list.total}}명</p>
-                            </div>
-                        </div>
+                        <dl class="dl-horizontal gn-description-list">
+                            <dt>팀 코드</dt>
+                            <dd class="form-control-static">{{teamname.team_code}}</dd>
+                            <dt class="col-sm-2 control-label gn-control-label">팀장</dt>
+                            <dd class="fons-16 ng-binding ng-scope" ng-repeat="team in team_list">{{team.user_id}}</dd>
+                            <dt class="col-sm-2 control-label gn-control-label">팀 생성일</dt>
+                            <dd class="form-control-static">{{teamname.create_date}}</dd>
+                            <dt class="col-sm-2 control-label gn-control-label">총원</dt>
+                            <dd class="form-control-static">{{team_list.total}}명</dd>
+
+                        </dl>
                     </form>
                 </div>
 
