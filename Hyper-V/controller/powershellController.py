@@ -358,10 +358,10 @@ def vm_monitor():
         host = db_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
         ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
 
-        script = 'Get-VM -id '+seq.internal_id+'| Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json'
+        script = 'Get-VM -id '+seq.internal_id+' | Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json '
         vm_monitor = ps.send(script)
 
-        script = 'Get-VHD -VMId ' +seq.internal_id+'| Select-Object -Property Filesize, Size|ConvertTo-Json;'
+        script = 'Get-VHD -VMId ' +seq.internal_id+' | Select-Object -Property Filesize, Size|ConvertTo-Json;'
         hdd_usage = ps.send(script)
         hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
 
