@@ -16,25 +16,40 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
     # host 선택 룰
     # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
     host_id = None
-    if type == "kvm" or type == "hyperv":
-        host_list = sql_session.query(GnHostMachines).filter(GnHostMachines.type == type).all()
-        for host_info in host_list:
-            use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
-                                            func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
-                                            func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
-                                            ).filter(GnVmMachines.host_id == host_info.id).filter(GnVmMachines.status != "Removed").one_or_none()
-            rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
-            rest_mem = host_info.max_mem - use_sum_info.sum_mem
-            rest_disk = host_info.max_disk - use_sum_info.sum_disk
+    max_cpu = int(cpu)
+    max_mem = int(memory)
+    max_disk = int(disk)
 
-            if rest_cpu >= int(cpu) and rest_mem >= int(memory) and rest_disk >= int(disk):
+    host_list = sql_session.query(GnHostMachines).filter(GnHostMachines.type == type).all()
+
+    for host_info in host_list:
+        use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
+                                        func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
+                                        func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
+                                        ).filter(GnVmMachines.host_id == host_info.id)\
+                                         .filter(GnVmMachines.status != "Removed") \
+                                         .filter(GnVmMachines.status != "Error") \
+                                         .one_or_none()
+        rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
+        rest_mem = host_info.max_mem - use_sum_info.sum_mem
+        rest_disk = host_info.max_disk - use_sum_info.sum_disk
+
+        if type == "kvm" or type == "hyperv":
+            if rest_cpu >= max_cpu and rest_mem >= max_mem and rest_disk >= max_disk:
                 host_id = host_info.id
-                break
+                max_cpu = rest_cpu
+                max_mem = rest_mem
+                max_disk = rest_disk
 
-        if(host_id is None):
-            return {"status":False, "value":"HOST 머신 리소스가 부족합니다"}
-    else:
-        host_id = ""
+        else:
+            if rest_cpu >= max_cpu and rest_mem >= max_mem:
+                host_id = host_info.id
+                max_cpu = rest_cpu
+                max_mem = rest_mem
+                max_disk = rest_disk
+
+    if(host_id is None):
+        return {"status":False, "value":"HOST 머신 리소스가 부족합니다"}
 
     #db 저장
     #id 생성
