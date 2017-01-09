@@ -71,7 +71,7 @@ angular
                     }
                     if(data.list.retryCheck == false){
                         $interval.cancel(stop);
-                        stop=undefiend;
+                        stop = undefined;
                     }
                     else {
                     }
