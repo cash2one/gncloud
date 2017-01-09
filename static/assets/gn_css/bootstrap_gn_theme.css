@@ -447,10 +447,6 @@ li.nav-link.active>a:hover,
     vertical-align: middle;
 }
 
-.gn-table-responsive > .gn-table tbody tr:nth-of-type(odd){
-    background-color: transparent;
-} 
-
 .gn-table-responsive > .gn-table tbody.gn-tdody tr td:nth-of-type(1){
     text-align: left;
 } 
@@ -1082,7 +1078,6 @@ ul.gn-tag-group > li{
 }
 
 .gn-btn-snap{
-    width: 32.7%;
     padding: 14px 14px;
     font-size: 16px; 
     color: #6f6f6f;
@@ -1117,11 +1112,20 @@ ul.gn-tag-group > li{
     margin-bottom: 10px;
 }
 
+.gn-btn-snap > input[type=radio]{
+    display: none;
+}
+
+#snap > form > .btn-group > .col-xs-4{
+    padding: 0px 5px;
+}
+
 .ellipsis{   
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis;
     margin-bottom: 0;
+    margin: 13px 0;
 }
 
 .sprite-img{
@@ -1154,6 +1158,36 @@ ul.gn-tag-group > li{
 .gn-btn-default.active .sprite-tomcat,
 .gn-btn-default.active .sprite-windows
 {background-position: 0px -55px;}
+
+
+/*****====스냅샷에 있는 스프라이트 이미지 추가====*****/
+.snap-sprite{float: left;}
+
+/***  스냅샷 스프라이트 이미지  ***/
+.sprite-snap-img{
+    display: block;
+    margin: auto;
+    width: 37px;
+    height: 38px;
+    overflow: hidden;  
+    margin: 5px 10px 5px 0px;
+}
+.sprite-snap-windows{background: url(../gn_images/instance_create_snap_window_s.png) no-repeat;}
+.sprite-snap-ubuntu{background: url(../gn_images/instance_create_snap_ubuntu_s.png) no-repeat;}
+.sprite-snap-docker{background: url(../gn_images/instance_create_snap_docker_s.png) no-repeat;}
+.sprite-snap-kvm{background: url(../gn_images/instance_create_snap_kvm_s.png) no-repeat;}
+.sprite-snap-centos{background: url(../gn_images/instance_create_snap_centos_s.png) no-repeat;}
+.sprite-snap-tomcat{background: url(../gn_images/instance_create_snap_tomcat_s.png) no-repeat;}
+
+.gn-btn-snap.active .sprite-snap-windows,
+.gn-btn-snap.active .sprite-snap-ubuntu,
+.gn-btn-snap.active .sprite-snap-docker,
+.gn-btn-snap.active .sprite-snap-kvm,
+.gn-btn-snap.active .sprite-snap-centos,
+.gn-btn-snap.active .sprite-snap-tomcat
+{background-position: 0px -38px;}
+
+
 
 .gn-name-ellip{
     width: 100%;
@@ -1226,8 +1260,6 @@ a.tab-sm-box{
     display: block;
 }
 
-/*li:nth-of-type(1) > a.tab-sm-box{border-right-color: #58c4c6;}
-li:nth-of-type(2) > a.tab-sm-box{border-left-color: #58c4c6;}*/
 
 a.tab-sm-box:hover{
     color: #505050;
@@ -1240,7 +1272,9 @@ li.active > .tab-sm-box{
     border: 1px solid #58c4c6 !important;
 }
 
-.gn-margin-box > .row.gn-margin-bott10 > div{margin-bottom: 10px;}
+.gn-container select.gn-select{
+
+}
 
 
 
@@ -1340,7 +1374,12 @@ ul.gn-sett-graph > li:nth-of-type(3){
 
 /*목록에서 가입 대기 중일때 bg-color*/
 .tr-on-wait{
-    background-color: rgba(245,166,35,.1) !important;
+    background-color: rgba(245,166,35,.1) ;
+}
+
+/*목록에서 에러가 났을 때 bg-color*/
+.tr-on-error{
+    background-color: rgba(255, 130, 130, 0.2) ;
 }
 
 
@@ -1507,38 +1546,22 @@ ul.gn-sett-graph > li:nth-of-type(3){
 
 
 
-/* ================================ 반응형 ================================ */
-@media screen and (max-width: 991px){
+/* ================================================= 반응형 ================================================= */
+/* 세로 방향 타블렛부터 가로 방향 타블렛과 데스크탑까지 */
+@media (min-width: 768px) and (max-width: 992px) {
+    
+    /* ======== gncloud 공통 ======== */
     .gn-header .container{width: 100%;}
-    .container{
-        width: 95%;
-    }
+    .container{width: 95%;}
+
     
     /* ======== gncloud HEADER ======== */
-    li.nav-link:nth-of-type(1){
-        margin-left: 15px;
-        transition: all .8s ease;
-    }
-    li.nav-link{
-        margin-left: 25px;
-        transition: all .8s ease;
-    }
-    
-    li.nav-link > a{
-        margin-left: 25px;
-        transition: all .8s ease;
-    }    
-   
-    
+          
    
     /* ======== gncloud 로그인 ======== */
     .gn-title-login span{
         font-size: 32px;
-        transition: all .3s ease;        
-    }
-    .gn-select{
-        /*width: 155px;*/
-    }
+        transition: all .3s ease;}
     
     /* ======== gncloud 대시보드 ======== */
 
@@ -1594,9 +1617,6 @@ ul.gn-sett-graph > li:nth-of-type(3){
     }
     
     /* ======== gncloud 인스턴스 리스트 ======== */ 
-    .gn-table>thead>tr>th:nth-of-type(2){display: none;}
-    .gn-table>.gn-tdody>tr>td:nth-of-type(2){display: none;}
-    .gn-table>.gn-tdody>tr>td > .user > .gn-more{display: none;}
     
     /* ======== gncloud 인스턴스 생성 ======== */
     
@@ -1606,40 +1626,34 @@ ul.gn-sett-graph > li:nth-of-type(3){
     /* ======== gncloud 이미지 ======== */
     
     /* ======== gncloud 설정 ======== */
-    .gn-table>thead>tr>th:nth-of-type(7){display: none;}
-    .gn-table>thead>tr>th:nth-of-type(8){display: none;}
-    .gn-table>thead>tr>th:nth-of-type(9){display: none;}
-    .gn-table>thead>tr>th:nth-of-type(10){display: none;}
-    
-    .gn-table>tbody>tr>td:nth-of-type(7){display: none;}
-    .gn-table>tbody>tr>td:nth-of-type(8){display: none;}
-    .gn-table>tbody>tr>td:nth-of-type(9){display: none;}
-    .gn-table>tbody>tr>td:nth-of-type(10){display: none;}    
     
 }
 
 
 
-@media screen and (max-width: 767px){
+/* 가로 방향 전화기부터 세로 방향 타블렛까지 */
+@media (max-width: 767px) {
     
     /* ======== gncloud 공통 ======== */    
     .gn-table-responsive {
         border: none;
         width: auto;
     } 
+
+    .gn-margin-box{margin: 20px;}    
     
     .gn-table-responsive > .gn-table thead tr th{font-size: 12px;}
+     
     
-    /* ======== gncloud HEADER ======== */ 
-    .gn-header > .container > .navbar-header > .navbar-toggle{
-        border-color: transparent;
-    } 
-    .gn-header > .container > .navbar-header > .navbar-toggle:hover{
+    /* ======== gncloud HEADER ======== */      
+    .gn-header > .container > .navbar-header > .navbar-toggle{ 
+        border-color: transparent; 
         background-color: transparent;
-    }     
+    } 
     
     li.nav-link{margin-left: 0;}
-    li.nav-link:nth-of-type(1){margin-left: 0px;}    
+    li.nav-link:nth-of-type(1){margin-left: 0px;}        
+    li.nav-link:nth-of-type(1) a{margin-top: 20px;}        
     li.nav-link a{margin-left: 0;}
     
     .navbar-collapse.gn-header-collapsed{
@@ -1652,7 +1666,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
     /*모바일 width:767px이하부터 display:none;되는 dropdown*/ 
     .navbar-right > .head-dropdown{display: none;}
     .navbar-right > .mobile-head-dropdown{display: block;}
-    .mobile-user{margin: 20px 0 0 18px;}
+    .mobile-user{margin: 17px 0 0 18px;}
     .mobile-user a{font-size: 16px; color: #505050;}
     .gn-mobile-caret{
         background: url(../gn_images/dd_arrow.png) no-repeat;
@@ -1668,6 +1682,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
 
     
     /* ======== gncloud 버튼 ======== */
+    .create-btn > a{margin-bottom: 15px;}
     .create-btn > a > button.btn-success{
         width: 95%;
         margin: auto;
@@ -1698,22 +1713,10 @@ ul.gn-sett-graph > li:nth-of-type(3){
     }    
     
     /* ======== gncloud 인스턴스 리스트 ======== */
-    .gn-table>thead>tr>th:nth-of-type(3){display: none;}
-    .gn-table>thead>tr>th:nth-of-type(4){display: none;}
-    .gn-table>thead>tr>th:nth-of-type(5){display: none;}
-    .gn-table>thead>tr>th:nth-of-type(6){display: none;}
-    
-    .gn-table>.gn-tdody>tr>td:nth-of-type(3){display: none;}
-    .gn-table>.gn-tdody>tr>td:nth-of-type(4){display: none;}
-    .gn-table>.gn-tdody>tr>td:nth-of-type(5){display: none;}
-    .gn-table>.gn-tdody>tr>td:nth-of-type(6){display: none;}
     
     /* ======== gncloud 인스터스 상세 ======== */
     .gn-detail-icon{display: none;}
-    .gn-detail-title > .row > .col-xs-12 > h2{font-size: 22px;}
-    .gn-spec-group li{font-size: 14px;}
     .gn-tag-group{margin-left: 15px;}
-    
     .graph-sm-box > .col-sm-2{margin-bottom: 5px;}
     
     /* ======== gncloud 인스턴스 생성 ======== */
@@ -1726,13 +1729,6 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
     /* ======== gncloud 설정 ======== */   
     
-    .gn-table>tbody>tr>td:nth-of-type(2){display: none;}
-    .gn-table>tbody>tr>td:nth-of-type(3){display: none;}
-    .gn-table>tbody>tr>td:nth-of-type(4){display: none;}
-    .gn-table>tbody>tr>td:nth-of-type(5){display: none;}
-    .gn-table>tbody>tr>td:nth-of-type(6){display: none;}     
-
-
     .gn-table>tbody>tr>td:last-child{display: table-cell !important;}
     
     .gn-left-menu > li{font-size: 15px;}
@@ -1765,7 +1761,23 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
 }
 
-
+/* 가로 방향 전화기 이하 */
+@media (max-width: 480px) {
+    
+    /* ======== gncloud 공통 ======== */   
+    
+    .gn-tdody > tr > td > a{
+        width: 170px;
+    }
+    .gn-table-ellip{
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis;  
+        display: inline-block; 
+        vertical-align: middle;
+    }     
+    
+}
 
 
 

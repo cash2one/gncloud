@@ -122,7 +122,7 @@
                 <div class="container-fluid">
 
                     <div class="table-responsive gn-table-responsive">
-                        <table class="table table-striped gn-table">
+                        <table class="table table gn-table">
                             <thead>
                             <tr>
                                 <th>번호</th>
@@ -140,7 +140,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="won in won_list">
+                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-wait': won.team_check == 'N'}">
                                 <td class="">{{$index+1}}</td>
                                 <td class="">{{won.team_owner}}</td>
                                 <td class="">{{won.user_name}}</td>

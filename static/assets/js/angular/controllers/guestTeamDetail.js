@@ -76,6 +76,7 @@ angular
                             data.list[i].user_name = data.list[i][0].user_name;
                             data.list[i].tel = data.list[i][0].tel;
                             data.list[i].email = data.list[i][0].email;
+                            data.list[i].team_check = data.list[i][1].comfirm;
                             data.list[i].apply_date = data.list[i][1].apply_date;
                             data.list[i].approve_date = data.list[i][1].approve_date;
                             data.list[i].comf = comfirm_re;

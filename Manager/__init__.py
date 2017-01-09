@@ -147,7 +147,7 @@ def logout():
 
 @app.route('/vm/logincheck', methods=['GET'])
 def logincheck():
-    user_info = {"name":session['userName'], "authority":session['teamOwner'], "team_code":session['teamCode']}
+    user_info = {"name":session['userName'],"user_id": session['userId'], "authority":session['teamOwner'], "team_code":session['teamCode']}
     return jsonify(status= True, info=user_info)
 
 
