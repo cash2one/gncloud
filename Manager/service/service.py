@@ -166,7 +166,7 @@ def sign_up(user_name, user_id, password, password_re):
     check = db_session.query(GnUser).filter(GnUser.user_id == user_id).one_or_none()
     if(password == password_re):
         if(check == None):
-            password_sha = random_string(password_re)
+            password_sha = convertToHashValue(password_re)
             sign_up_info = GnUser(user_id = user_id, password = password_sha,user_name = user_name,tel="-",email="-",start_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
             db_session.add(sign_up_info)
             db_session.commit()

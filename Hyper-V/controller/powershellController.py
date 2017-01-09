@@ -395,29 +395,36 @@ def vm_monitor():
         script = 'Get-VM -id '+seq.internal_id+'| Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json'
         vm_monitor = ps.send(script)
 
+        script = 'Get-VHD -VMId ' +seq.internal_id+'| Select-Object -Property Filesize, Size|ConvertTo-Json;'
+        hdd_usage = ps.send(script)
+        hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
+
         mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4)
         cpu = round(float(vm_monitor['CPUUsage'])*float((seq.cpu/host.cpu)) , 4)
-        hdd = 0.0000
-        script = '$vm = Get-vm -id ' +seq.internal_id+';'
+        # hdd = 0.0000
+        script = '$vm = Get-vm -id '+seq.internal_id+';'
         script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
         script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
         ip = ps.send(script)
         try:
-            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(),cpu, mem, hdd, 0.0000)
+            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(),cpu, mem, round(hdd, 4), 0.0000)
             db_session.add(monitor_insert)
             db_session.commit()
 
             db_session.query(GnMonitor).filter(GnMonitor.id == seq.id).update(
-                {"cpu_usage":cpu, "mem_usage":mem*100}
+                {"cpu_usage": cpu, "mem_usage": mem*100, "disk_usage": round(hdd, 4)}
             )
             db_session.commit()
 
             db_session.query(GnVmMachines).filter(GnVmMachines.id == seq.id).update(
-                {"ip":ip}
+                {"ip": ip}
             )
             db_session.commit()
         except :
             db_session.rollback()
+        finally:
+            db_session.commit()
+
 
 
 
