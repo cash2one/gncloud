@@ -10,9 +10,6 @@ class Config:
     CONTROLLER_HOST = None
     CONTROLLER_PORT = None
     DB_URL = None
-    AGENT_SERVER_IP = None
-    AGENT_PORT = None
-    AGENT_REST_URI = None
     SALT = None
     DOCKER_MANAGE_IPADDR = None
     DOCKER_MANAGER_SSH_ID = None
@@ -39,9 +36,6 @@ class Config:
         self.CONTROLLER_HOST = parser.get(config_section, "CONTROLLER_HOST")
         self.CONTROLLER_PORT = parser.get(config_section, "CONTROLLER_PORT")
         self.DB_URL = parser.get(config_section, "DB_URL")
-        self.AGENT_SERVER_IP = parser.get(config_section, "AGENT_SERVER_IP")
-        self.AGENT_PORT = parser.get(config_section, "AGENT_PORT")
-        self.AGENT_REST_URI = parser.get(config_section, "AGENT_REST_URI")
         self.SALT = parser.get(config_section, "SALT")
         self.DOCKER_MANAGE_IPADDR = parser.get(config_section, "DOCKER_MANAGE_IPADDR")
         self.DOCKER_MANAGER_SSH_ID = parser.get(config_section, "DOCKER_MANAGER_SSH_ID")
