@@ -128,7 +128,7 @@ def test():
 if __name__ == '__main__':
     #로그 설정
     cron = Scheduler(daemon=True)
-    cron.add_interval_job(job_function, seconds=180) #minites=1)
+    cron.add_interval_job(job_function, seconds=60)
     cron.start()
     app.run(port=8081)
     # http_server = WSGIServer(('', 8081), app)
