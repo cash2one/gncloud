@@ -100,6 +100,7 @@ def hvm_create():
             vm_info.internal_name=internal_name
             vm_info.ip=get_vm_ip
             vm_info.os = os
+            vm_info.os_ver = base_image_info.os_ver
             vm_info.os_sub_ver = os_sub_ver
             vm_info.os_bit = os_bit
             vm_info.create_time = datetime.datetime.now()
