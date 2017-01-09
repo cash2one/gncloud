@@ -238,7 +238,7 @@ def getQuotaOfTeam(team_code, sql_session):
 
     vm_run_count = sql_session.query(func.count(GnVmMachines.id).label("count"))\
                               .filter(GnVmMachines.team_code == team_code)\
-                              .filter(GnVmMachines.status != "Removed")\
+                              .filter(GnVmMachines.status == "Running") \
                               .filter(GnVmMachines.type != "docker").one()
 
     vm_stop_count = sql_session.query(func.count(GnVmMachines.id).label("count")) \
