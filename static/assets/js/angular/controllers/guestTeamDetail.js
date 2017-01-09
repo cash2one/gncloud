@@ -28,17 +28,13 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         var newArr = new Array();
-                        var team_code="";
-                        var user_id="";
-                        for(var i = 0 ; i < data.list.length ; i++) {
-                            team_code = data.list[i][1].team_code;
-                            user_id = data.list[i][0].user_name +' | '+ data.list[i][0].user_id +' | '+data.list[i][0].tel +' | '+data.list[i][0].email;
-                            data.list[i].team_code =team_code;
-                            data.list[i].user_id = user_id;
-                            newArr.push(data.list[i]);
+                        for(var i = 0 ; i < data.list.list.length ; i++) {
+                            data.list.list[i].user_id = data.list.list[i][0].user_name;
+                            newArr.push(data.list.list[i]);
                         }
 
                         $scope.team_list = newArr; // 팀원들에 대한 정보
+                        $scope.team_list.total = data.list.info
 
                     } else {
                         alert(data.message);
