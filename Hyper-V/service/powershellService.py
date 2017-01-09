@@ -40,7 +40,7 @@ class PowerShell(object):
             if option == "Path":
                 script += " -" + option + " " + value + ""
             elif option == "MemoryStartupBytes":
-                script += " -" + option + " " + value  # + "MB"
+                script += " -" + option + " " + "511MB"
             else:
                 script += " -" + option + " " + value
         #script += " -Generation " + str(self.GENERATION_TYPE_2)
@@ -59,8 +59,10 @@ class PowerShell(object):
             # vmId 값의 경우 VMObject를 불러오기 위해서 필요한 값이므로 Set-VM Script에서는 직접 넣지 않는다.
             if option == "VMId":
                 vmscript = "$vm = Get-VM -Id " + value + "; "
-            else:
+            elif option == "MemoryMaximumBytes":
                 script += " -" + option + " " + value
+            else:
+                script += " -" + option + " " + value + " -DynamicMemory"
         script += self.PASSTHRU
         script += self.CONVERTTO_JSON
         #print vmscript + script
@@ -100,15 +102,12 @@ class PowerShell(object):
     #하드디스크 확장
     def resize_vhd(self, vhd_name, path, size):
         script = "$dl=mount-vhd " +vhd_name+" -Passthru | get-disk | get-partition | get-volume;" \
-                 "foreach($x in $dl){" \
-                 "if ($x.FileSystemLabel -eq '') {$drive = $x.DriveLetter;}" \
-                 "Else { $sysize = $x.Size;} " \
-                 "}; " \
-                 "$drive, $sysize | ConvertTo-Json -Compress; "
-        # ps = PowerShell("192.168.1.100", config.AGENT_PORT, config.AGENT_REST_URI)
+                                            "foreach($x in $dl){" \
+                                            "if ($x.FileSystemLabel -eq '') {$drive = $x.DriveLetter;}" \
+                                            "Else { $sysize = $x.Size;} " \
+                                            "}; " \
+                                            "$drive, $sysize | ConvertTo-Json -Compress; "
         result = self.send(script)
-        # print script
-        # print result
         script = 'resize-partition -DriveLetter '+str(result[0])+' -size '+str(long(size)-result[1]-111111111)+';'
         script += 'dismount-vhd '+path+'/vhdx/base/'+vhd_name+'.vhdx;'
         result = self.send(script)
@@ -116,24 +115,23 @@ class PowerShell(object):
 
     # password 셋팅
     def set_password(self,ip, password):
-        # script = '$user=[adsi]"WinNT://$env:computerName/gncloud";'
-        # script += '$user.setPassword("'+password+'"); '
-        # script += '$user:USERNAME | ConvertTo-Json -Compress ;'
-        script = '$username = "gncloud";'
-        script += '$password = "1111";'
-        script += '$secstr = New-Object -TypeName System.Security.SecureString;'
-        script += '$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)};'
-        script += '$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $secstr;'
-        script += '$s = New-PSSession -ComputerName "'+ip+'" -Credential $cred ;'
-        script += 'Invoke-Command -Session $s -ScriptBlock {'
-        script += '$user=[adsi]"WinNT://$env:computerName/$username";'
-        script += '$user.setPassword("'+password+'");}'
+        script = '$user=[adsi]"WinNT://$env:computerName/gncloud";'
+        script += '$user.setPassword("'+password+'"); '
+        script += '$user:USERNAME | ConvertTo-Json -Compress ;'
+        # script = '$username = "gncloud";'
+        # script += '$password = "1111";'
+        # script += '$secstr = New-Object -TypeName System.Security.SecureString;'
+        # script += '$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)};'
+        # script += '$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $secstr;'
+        # script += '$s = New-PSSession -ComputerName "'+ip+'" -Credential $cred ;'
+        # script += 'Invoke-Command -Session $s -ScriptBlock {'
+        # script += '$user=[adsi]"WinNT://$env:computerName/$username";'
+        # script += '$user.setPassword("'+password+'");}'
 
         try:
             ret = self.send_new_vm(script, ip)
         except:
             return '{}'
-
         return ret
 
     # Get-WmiObject win32_useraccount | Select-Object -Property Name | ConvertTo-Json
