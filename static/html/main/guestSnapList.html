@@ -105,7 +105,7 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li ng-repeat="sel in actions"><a ng-click="update(snap.id,sel,snap.type,$index)">{{sel.name}}</a></li>
+                                        <li ng-repeat="sel in actions"><a ng-click="update(snap.id,sel,snap.type,$parent.$index)">{{sel.name}}</a></li>
                                     </ul>
                                 </td>
                             </tr>
