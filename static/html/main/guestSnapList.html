@@ -21,10 +21,10 @@
                     <table class="table table gn-table">
                         <thead>
                         <tr>
-                            <th class="col-sm-3">OS</th>
+                            <th class="col-xm-3">OS</th>
                             <th class="col-sm-2">버전</th>
-                            <th class="col-sm-2">Bit</th>
-                            <th class="col-sm-2">타입</th>
+                            <th class="col-sm-2 hidden-xs">Bit</th>
+                            <th class="col-sm-2 hidden-xs">타입</th>
                         </tr>
                         </thead>
                         <tbody class="gn-tdody">
@@ -34,8 +34,8 @@
                                 <a href="#">{{base.os}}</a>
                             </td>
                             <td>{{base.os_ver}}{{base.os_subver}}</td>
-                            <td>{{base.os_bit}}</td>
-                            <td>{{base.type}}</td>
+                            <td class="hidden-xs">{{base.os_bit}}</td>
+                            <td calss="hidden-xs">{{base.type}}</td>
                             <td></td>
                         </tr>
                         </tbody>
@@ -49,6 +49,7 @@
                 <!--1.스냅샷 선택 박스-->
                 <div class="gn-box gn-container">
                     <div class="gn-margin-box">
+                        <h2>스냅샷 생성</h2>
                         <div class="row gn-margin-bott10">
                             <form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
                             <div class="col-sm-4">
@@ -80,10 +81,10 @@
                         <table class="table table gn-table">
                             <thead>
                             <tr>
-                                <th class="col-sm-4">이름</th>
-                                <th class="col-sm-2">OS</th>
-                                <th class="col-sm-2">타입</th>
-                                <th class="col-sm-1">생성일<div class="refresh" ng-click="refresh()"></div></th>
+                                <th class="col-xs-4">이름</th>
+                                <th class="col-sm-2 hidden-xs">OS</th>
+                                <th class="col-sm-2 hidden-xs">타입</th>
+                                <th class="col-sm-1 hidden-sm">생성일<div class="refresh" ng-click="refresh()"></div></th>
                                 <th class="col-sm-1"><!--더보기--></th>
                             </tr>
                             </thead>
@@ -95,12 +96,13 @@
                                     <img ng-show="list.status != 'Error'" src="/gn_images/gn_icon_{{snap.os}}.png" alt="">
                                     <a>{{snap.name}}</a>
                                 </td>
-                                <td>{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
-                                <td>{{snap.type}}</td>
-                                <td>{{snap.create_time_diff}}</td>
+                                <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
+                                <td class="hidden-xs>{{snap.type}}</td>
+                                <td class="hidden-sm>{{snap.create_time_diff}}</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         더보기
+                                        <div class="gn-more"></div>
                                         <span class="gn-caret-table"></span>
                                     </div>
                                     <!--더보기>드롭다운-->
@@ -126,20 +128,21 @@
             <table class="table table gn-table">
                 <thead>
                 <tr>
-                    <th style="width:30%">OS</th>
-                    <th style="width:20%">버전</th>
-                    <th style="width:20%">태그</th>
+                    <th class="col-xs-8 col-sm-3">OS</th>
+                    <th class="col-sm-2">버전</th>
+                    <th class="col-sm-5 hidden-xs">태그</th>
+                    <th class="col-sm-5 hidden-sm"></th>
                 </tr>
                 </thead>
                 <tbody class="gn-tdody">
                 <tr ng-repeat="con in contain_list">
                     <td>
                         <img src="/gn_images/gn_icon_{{con.os}}.png" alt="postgres">
-                        <a href="#">{{con.view_name}}</a>
+                        <a>{{con.view_name}}</a>
                     </td>
                     <td>{{con.os_ver}}</td>
-                    <td><span class="tag">{{con.tag}}</span></td>
-                    <td></td>
+                    <td class=""><span class="tag">{{con.tag}}</span></td>
+                    <td class="col-sm-5 hidden-sm"></td>
                 </tr>
                 </tbody>
             </table>

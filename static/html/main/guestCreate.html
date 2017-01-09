@@ -5,7 +5,7 @@
     <div class="row">
         <h2>인스턴스 이름</h2>
         <div class="row">
-            <div class="col-sm-3" ng-class="{ 'has-error' : userForm.vm_name.$invalid && !userForm.vm_name.$pristine }">
+            <div class="col-sm-5" ng-class="{ 'has-error' : userForm.vm_name.$invalid && !userForm.vm_name.$pristine }">
                 <input type="text" class="form-control gn-form-control" name="vm_name" ng-model="data.vm_name" placeholder="이름을 입력하여주세요." id="vm_name" required>
                 <p ng-show="userForm.vm_name.$invalid && !userForm.vm_name.$pristine" class="help-block">이름을 입력해주세요.</p>
             </div>
@@ -64,7 +64,7 @@
 
             <div id="snap">
                 <form >
-                    <div class="btn-group" data-toggle="buttons">
+                    <div class="col-xs-4">
                         <label class="btn btn-default gn-btn-snap" ng-repeat="list in snap_list" ng-click="update_image(list)">
                             <input name="" value="" type="radio">
                             <span class="sprite-snap-img snap-sprite sprite-snap-{{list.os}}"></span>
@@ -127,6 +127,7 @@
         <h2>SSH 키/비밀번호 설정</h2>
         <div class="row gn-margin-bott10" id="ssh">
             <!--최초 등록 시 출력되는 버튼-->
+            <div class="col1-sm4 col-md-4">
             <button type="button" class="btn btn-gn-sub btn-lg col-md-2" data-toggle="msshkey_listodal" data-target="#myModal">SSH 키 생성</button>
             <form name="passForm" ng-submit="submitForm(passForm.$valid)" novalidate>
             <!-- ****체크박스 대신 select box로 변경되었습니다**** -->
@@ -137,13 +138,14 @@
                 <p ng-show="passForm.ssh.$invalid && !passForm.ssh.$pristine" class="help-block">ssh키를 선택하세요.</p>
             </div>
             </form>
+            </div>
         </div>
         <!--윈도우의 경우-->
         <form name="winForm" ng-submit="submitForm(winForm.$valid)" novalidate>
         <div class="form-group row" id="windows">
-            <div class="col-sm-2 gn-input-pw" >Administrator 비밀번호</div>
-            <div class="col-sm-3" ng-class="{ 'has-error' : winForm.pass.$invalid && !winForm.pass.$pristine }">
-                <input type="password" class="form-control gn-form-control" ng-model="data.password" name="pass" placeholder="비밀번호 입력" required>
+            <div class="col-sm-3 col-md-2 gn-input-pw" >Administrator 비밀번호</div>
+            <div class="col-sm-4 col-md-4" ng-class="{ 'has-error' : winForm.pass.$invalid && !winForm.pass.$pristine }">
+                <input type="password" class="form-control gn-form-control" ng-model="data.password" name="pass" placeholder="비밀번호 입력" ng-keyup="" required>
                 <p ng-show="winForm.pass.$invalid && !winForm.pass.$pristine" class="help-block">비밀번호를 입력하세요.</p>
             </div>
         </div>
@@ -151,6 +153,7 @@
 
         <!-- Modal -->
         <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
             <div class="modal-dialog modal-sm">
                 <div class="modal-content ">
                     <div class="modal-header gn-modal-header">
@@ -178,7 +181,7 @@
         <h2>태그입력</h2>
         <div class="form-group">
             <label for="comment" class="gn-lead">태그와 태그는 쉼표로 구분됩니다.</label>
-            <textarea class="form-control gn-form-control" id="tag" rows="5" id="comment" placeholder="ex)패스트캣, 개발, 512MB"></textarea>
+            <textarea class="form-control gn-form-control" id="tag" rows="5" id="comment" placeholder="ex)패스트캣, 개발, 512MB" ng-keyup=""></textarea>
         </div>
     </div>
 </div>

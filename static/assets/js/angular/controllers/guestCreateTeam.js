@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestCreateTeamCtrl', function ($scope, $http,$rootScope) {
+    .controller('guestCreateTeamCtrl', function ($scope, $http,$rootScope, $event) {
         //탭이동
         $('.nav-sidebar li').removeClass('active');
         var url = window.location;
@@ -34,5 +34,9 @@ angular
                 });
         };
 
-
+        $scope.keyup = function(){
+            if($event.keyCode == '13'){
+                submit();
+            }
+        }
     });

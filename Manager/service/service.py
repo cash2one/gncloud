@@ -456,7 +456,7 @@ def select_put(team_name, team_code): #팀 생성 쿼리
     return True
 
 def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소스
-    list = sql_sesseion.query(GnTeam).all()
+    list = sql_sesseion.query(GnTeam).order_by(GnTeam.create_date.desc()).all()
     result = []
     for team_info in list:
         team_info.create_date = team_info.create_date.strftime('%Y-%m-%d %H:%M:%S')

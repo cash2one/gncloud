@@ -20,6 +20,7 @@
 
                     <!-- 팀 Modal -->
                     <div class="modal fade" id="modal-modi" role="dialog">
+                        <div class="modal-backdrop fade in" style="height: 3000px;"></div>
                         <div class="modal-dialog form-horizontal">
                             <div class="modal-content col-sm-10 col-sm-offset-1">
                                 <div class="modal-header gn-modal-header">
@@ -173,7 +174,26 @@
             <div class="gn-margin-box">
                 <h2>삭제</h2>
                 <p class="gn-lead">해당 팀 및 관련된 모든 팀원들이 삭제되며, 모든 데이터는 복구할 수 없습니다.<br>정말 삭제 하시겠습니까?</p>
-                <button type="button" class="btn btn-delete btn-lg" ng-click="delete()">삭제</button>
+                <button type="button" class="btn btn-delete btn-lg" data-toggle="modal" data-target="#modal-modi2">삭제</button>
+            </div>
+        </div>
+        <!-- modal -->
+        <div class="modal fade" id="modal-modi2" role="dialog">
+            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+            <div class="modal-dialog form-horizontal">
+                <div class="modal-content col-sm-10 col-sm-offset-1">
+                    <div class="modal-header gn-modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">팀 삭제</h4>
+                    </div>
+                    <div class="modal-body gn-modal-body">
+                    <p>해당 팀 및 관련된 모든 팀원들이 삭제되며 모든 데이터는 복구할 수 없습니다.<br> 그래도 삭제 하시겠습니까 ? </p>
+
+                    </div>
+                    <div class="modal-footer gn-modal-footer">
+                        <button type="submit" class="btn btn-delete btn-block" data-dismiss="modal" ng-click="delete()">삭제</button>
+                    </div>
+                </div>
             </div>
         </div>
 
