@@ -44,9 +44,12 @@
                         <span class="gn-caret-table"></span>
                     </div>
                     <!--더보기>드롭다운-->
-                    <ul class="dropdown-menu gn-dropdown" role="menu" ng-show="list.status != 'starting'">
-                        <li ng-repeat="test in actions">
-                            <a href ng-click="update(list.id,test,list.type,$index)">{{test.name}}</a>
+                    <ul class="dropdown-menu gn-dropdown" role="menu">
+                        <li ng-repeat="test in actions" >
+                            <a href ng-click="update(list.id,test,list.type,$index)"
+                               ng-show="(test.type == 'Resume' && list.status != 'Running')
+                                         || (test.type == 'Suspend' && list.status == 'Running')
+                                         || (test.type == 'Reboot' && list.status != 'Suspend')" >{{test.name}}</a>
                         </li>
                     </ul>
                 </td>

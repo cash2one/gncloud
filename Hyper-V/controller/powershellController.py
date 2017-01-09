@@ -386,8 +386,44 @@ def hvm_image():
     return jsonify(status=False, message="미구현")
 
 
+def vm_monitor():
+    vm_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
+    for seq in vm_info:
+        host = db_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
+        ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
+
+        script = 'Get-VM -id '+seq.internal_id+'| Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json'
+        vm_monitor = ps.send(script)
+
+        mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4)
+        cpu = round(float(vm_monitor['CPUUsage'])*float((seq.cpu/host.cpu)) , 4)
+        hdd = 0.0000
+        script = '$vm = Get-vm -id ' +seq.internal_id+';'
+        script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
+        script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
+        ip = ps.send(script)
+        try:
+            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(),cpu, mem, hdd, 0.0000)
+            db_session.add(monitor_insert)
+            db_session.commit()
+
+            db_session.query(GnMonitor).filter(GnMonitor.id == seq.id).update(
+                {"cpu_usage":cpu, "mem_usage":mem*100}
+            )
+            db_session.commit()
+
+            db_session.query(GnVmMachines).filter(GnVmMachines.id == seq.id).update(
+                {"ip":ip}
+            )
+            db_session.commit()
+        except :
+            db_session.rollback()
+
+
+
 
 # 모니터링을 위한 스크립트 전송 함수
+'''
 def vm_monitor():
     vm_ip_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == "hyperv").all()
     for i in range(0, len(vm_ip_info)):
@@ -454,4 +490,4 @@ def vm_monitor():
                 db_session.rollback()
             finally:
                 db_session.commit()
-
+'''

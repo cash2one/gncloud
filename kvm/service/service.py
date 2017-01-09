@@ -40,10 +40,10 @@ def server_create(team_code, user_id, id, sql_session):
              setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
 
         # 기존 저장된 ssh key 등록
-        # s = pxssh.pxssh()
-        # s.login(host_info.ip, USER)
-        # s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
-        # s.logout()
+        s = pxssh.pxssh()
+        s.login(host_info.ip, USER)
+        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
+        s.logout()
 
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id

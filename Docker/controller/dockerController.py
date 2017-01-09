@@ -147,7 +147,7 @@ def doc_state(id):
     service = GnVmMachines.query.filter_by(id=id, type="docker").first()
     # -- 시작 (start)
     # service
-    if type == "resume":
+    if type == "Resume":
         # 이미 서비스가 돌아가는 상태인 경우는 아무 것도 안하고 끝낸다.
         if service.status == "Running":
             return jsonify(status=False, message="서비스가 이미 실행중입니다.", result=service.to_json())
@@ -184,21 +184,21 @@ def doc_state(id):
             sql_session.commit()
             return jsonify(status=True, message="서비스가 시작되었습니다.", result=service.to_json())
     # -- 정지 (suspend)
-    elif type == "suspend":
+    elif type == "Suspend":
         if service.status != "Running":
             return jsonify(status=False, message="서비스가 실행중이 아닙니다.", result=service.to_json())
         else:
             ds.docker_service_stop(service)
             service.stop_time = datetime.now()
-            service.status = "suspend"
+            service.status = "Suspend"
             sql_session.commit()
             return jsonify(status=True, message="서비스가 정지되었습니다.", result=service.to_json())
     # -- 재시작 (restart)
-    elif type == "reboot":
+    elif type == "Reboot":
         if service.status == "Running":
             ds.docker_service_stop(service)
             service.stop_time = datetime.now()
-            service.status = "suspend"
+            service.status = "Suspend"
             sql_session.commit()
             # commit된 내용을 가지고 서비스 생성.
             # image = "%s:backup" % service.internal_name
