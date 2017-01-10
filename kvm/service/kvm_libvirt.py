@@ -102,7 +102,7 @@ def kvm_image_copy(name_volume, name_snap, host_ip):
     save_vol = render_template(
         "volume.xml"
         , guest_name=name_snap
-        , disk=byteToGiga(info[1])
+        , disk=info[1]
     )
     ptr_POOL.createXMLFrom(save_vol, org_vol, 0)
 
