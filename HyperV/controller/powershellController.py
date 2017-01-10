@@ -5,8 +5,8 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 """
 import json
 
-from util.json_encoder import AlchemyEncoder
-from db.models import GnImagesPool, GnMonitorHist, GnHostMachines
+from HyperV.util.json_encoder import AlchemyEncoder
+from HyperV.db.models import GnImagesPool, GnHostMachines
 
 __author__ = 'jhjeon'
 

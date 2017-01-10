@@ -7,23 +7,23 @@ from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Numeric, BigI
 from HyperV.db.database import Base
 
 
-class GnController(Base):
-    __tablename__ = 'GN_CONTROLLER'
-    controller_id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
-    controller_name = Column(String(50), nullable=True, default=None)
-    ip = Column(String(20), nullable=True, default=None)
-    port = Column(Integer, nullable=True, default=None)
-    type = Column(String(10), nullable=True, default=None)
-
-    def __init__(self, controller_name, ip, port, type):
-        self.controller_name = controller_name
-        self.ip = ip
-        self.port = port
-        self.type = type
-
-    def __repr__(self):
-        return "<GnController(controller_id='%r', controller_name='%r', ip='%r', port='%r', type='%r')>" \
-               % (self.controller_id, self.controller_name, self.ip, self.port, self.type)
+# class GnController(Base):
+#     __tablename__ = 'GN_CLUSTER'
+#     controller_id = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+#     controller_name = Column(String(50), nullable=True, default=None)
+#     ip = Column(String(20), nullable=True, default=None)
+#     port = Column(Integer, nullable=True, default=None)
+#     type = Column(String(10), nullable=True, default=None)
+#
+#     def __init__(self, controller_name, ip, port, type):
+#         self.controller_name = controller_name
+#         self.ip = ip
+#         self.port = port
+#         self.type = type
+#
+#     def __repr__(self):
+#         return "<GnController(controller_id='%r', controller_name='%r', ip='%r', port='%r', type='%r')>" \
+#                % (self.controller_id, self.controller_name, self.ip, self.port, self.type)
 
 class GnImagesPool(Base):
     __tablename__ = 'GN_IMAGES_POOL'
