@@ -13,12 +13,12 @@ __author__ = 'jhjeon'
 import datetime
 import time
 from flask import request, jsonify
-from service.powershellService import PowerShell
-from db.database import db_session
-from db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist
+from HyperV.service.powershellService import PowerShell
+from HyperV.db.database import db_session
+from HyperV.db.models import GnVmMachines, GnVmImages, GnMonitor, GnMonitorHist
 
-from util.config import config
-from util.hash import random_string
+from HyperV.util.config import config
+from HyperV.util.hash import random_string
 
 ps_exec = 'powershell/execute'
 
@@ -368,7 +368,7 @@ def vm_monitor():
         mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4)
         cpu = round(float(vm_monitor['CPUUsage'])*float((seq.cpu/host.cpu)), 4)
 
-        script = '$vm = Get-vm -id ' +seq.internal_id+';'
+        script = '$vm = Get-vm -id '+ seq.internal_id+';'
         script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
         script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
         ip = ps.send(script)

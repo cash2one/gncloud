@@ -7,7 +7,7 @@ PowerShell 스크립트를 전달할 함수들을 가지고 있는 PowerShell �
 """
 import datetime
 
-from util.config import config
+from HyperV.util.config import config
 
 __author__ = 'jhjeon'
 
