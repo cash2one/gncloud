@@ -1324,8 +1324,10 @@ li.active > .tab-sm-box{
 
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
 .fons-16{font-size: 16px;}
+.gn-ms-cursor{cursor: pointer;}
+.gn-ms-cursor:hover{color: #505050; background-color: rgba(215,215,215,0.5);}
 
-.col-sm-11,
+/*.col-sm-11,
 .tab-content.col-sm-10{
     padding-right: 0;
     padding-left: 0;
@@ -1335,7 +1337,9 @@ li.active > .tab-sm-box{
 .nav-pills.col-sm-2{
     padding-right: 0;
     padding-left: 0;
-}
+}*/
+
+
 
 li.left-title{
     width: 100%;
@@ -1343,6 +1347,7 @@ li.left-title{
     font-size: 20px;
     color: #505050;  
     margin-bottom: 10px;
+    padding: 0;
 }
 
 li.left-title:nth-of-type(2){
@@ -1413,7 +1418,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
 
 /*목록에서 가입 대기 중일때 bg-color*/
 .tr-on-wait{
-    background-color: rgba(245,166,35,.1) ;
+    background-color: rgba(245,166,35,.1);   
 }
 
 /*목록에서 에러가 났을 때 bg-color*/

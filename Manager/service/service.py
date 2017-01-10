@@ -161,6 +161,8 @@ def teamwoninfo_list(user_id,sql_session):
         vm[1].apply_date = vm[1].apply_date.strftime('%Y-%m-%d %H:%M:%S')
         if(vm[1].approve_date != None):
             vm[1].approve_date = vm[1].approve_date.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            vm[1].approve_date = "-"
     return list
 
 def teamcheck_list(teamcode):
@@ -388,6 +390,8 @@ def teamset(team_code, sql_session):
         vm[1].apply_date = vm[1].apply_date.strftime('%Y-%m-%d %H:%M:%S')
         if(vm[1].approve_date != None):
             vm[1].approve_date = vm[1].approve_date.strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            vm[1].approve_date = "-"
     return list
 
 def approve_set(user_id,code,type,user_name,sql_session):

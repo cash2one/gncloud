@@ -79,7 +79,12 @@ angular
                             data.list[i].team_owner = team_owner;
                             //날짜 카운팅
                             data.list[i].create_time_diff = dateModifyService.modifyDate(data.list[i][1].apply_date);
-                            data.list[i].create_time_diff1 = dateModifyService.modifyDate(data.list[i][1].approve_date);
+                            if(data.list[i][1].approve_date != "-"){
+                                data.list[i].create_time_diff1 = dateModifyService.modifyDate(data.list[i][1].approve_date);
+                            }else{
+                                data.list[i].create_time_diff1 = data.list[i][1].approve_date;
+                            }
+
                             teamArr.push(data.list[i])
                         }
                         $scope.won_list = teamArr;
