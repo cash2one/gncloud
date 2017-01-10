@@ -53,8 +53,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label gn-control-label">새 비밀번호</label>
-                                            <div class="col-sm-offset-1 col-sm-8" ng-class="{ 'has-error' : meForm.password_new.$invalid && !meForm.password_new.$pristine }">
+                                            <label class="col-sm-4 control-label gn-control-label">새 비밀번호</label>
+                                            <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_new.$invalid && !meForm.password_new.$pristine }">
                                                 <input type="password" class="form-control gn-form-control" name="password_new" ng-model="data.password_new" placeholder="Password" ng-pattern="/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}/">
                                                 <p ng-show="meForm.password_new.$invalid && !meForm.password_new.$pristine" class="help-block">6~15자리의 특수문자와 대문자를 합께 조합해 주세요.</p>
                                             </div>
@@ -99,7 +99,7 @@
                             <dt>연락처</dt>
                             <dd>{{te_list.tel}}</dd>
                             <dt>이메일</dt>
-                            <dt>{{te_list.email}}</dt>
+                            <dd>{{te_list.email}}</dd>
                         </dl>
                     </form>
                 </div>
@@ -222,29 +222,29 @@
                         <table class="table table gn-table">
                             <thead>
                             <tr>
-                                <th class="col-sm-1">번호</th>
-                                <th class="col-sm-1">등급</th>
-                                <th class="col-sm-1">이름</th>
-                                <th class="col-sm-1 hidden-xs">아이디</th>
-                                <th class="col-sm-2 hidden-xs">연락처</th>
-                                <th class="col-sm-1 hidden-sm hidden-xs">이메일</th>
-                                <th class="col-sm-1 hidden-sm hidden-xs">신청일</th>
-                                <th class="col-sm-1 hidden-sm hidden-xs">승인일</th>
+                                <th class="">번호<div class="refresh" ng-click="refresh()"></div></th>
+                                <th class="">등급</th>
+                                <th class="">이름</th>
+                                <th class="hidden-xs">아이디</th>
+                                <!--<th class="col-sm-2 hidden-xs">연락처</th>-->
+                                <!--<th class="col-sm-1 hidden-sm hidden-xs">이메일</th>-->
+                                <!--<th class="col-sm-1 hidden-sm hidden-xs">신청일</th>-->
+                                <!--<th class="col-sm-1 hidden-sm hidden-xs">승인일</th>-->
                                 <!-----여기서부터 팀장 로그인 시 보이는 영역----->
-                                <th class="col-sm-1">상태<div class="refresh" ng-click="refresh()"></div></th>
-                                <th class="col-sm-1"><!--더보기--></th>
+                                <th class="hidden-xs">상태</th>
+                                <th class=""><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}">
+                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}" class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">
                                 <td class="">{{$index+1}}</td>
                                 <td class="">{{won.team_owner}}</td>
                                 <td class="">{{won.user_name}}</td>
                                 <td class="" ng-model="data.user_id">{{won.user_id}}</td>
-                                <td class="hidden-xs">{{won.tel}}</td>
-                                <td class="hidden-xs">{{won.email}}</td>
-                                <td class="hidden-sm hidden-xs"><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>
-                                <td class="hidden-sm hidden-xs"><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>
+                                <!--<td class="hidden-xs">{{won.tel}}</td>-->
+                                <!--<td class="hidden-xs">{{won.email}}</td>-->
+                                <!--<td class="hidden-sm hidden-xs"><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>-->
+                                <!--<td class="hidden-sm hidden-xs"><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>-->
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
                                 <td class="hidden-xs">{{won.comf}}</td>
                                 <td class="dropdown" ng-show="authority == 'owner' ">
@@ -310,6 +310,43 @@
                             <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
                             </tbody>
                         </table>
+                    <div class="modal fade" id="teamModal" role="dialog">
+                        <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+                        <div class="modal-dialog form-horizontal">
+                            <div class="modal-content col-sm-10 col-sm-offset-1">
+                                <div class="modal-header gn-modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">팀원 상세 정보</h4>
+                                </div>
+                                <div class="modal-body gn-modal-body">
+                                    <form>
+                                        <div class="form-group" ng-repeat="team in teamwon_list">
+                                            <label class="col-sm-4 control-label gn-control-label">이름</label>
+                                            <div class="col-sm-8">
+                                                <p class="form-control-static">{{team.user_name}}</p>
+                                            </div>
+                                            <label class="col-sm-4 control-label gn-control-label">연락처</label>
+                                            <div class="col-sm-8">
+                                                <p class="form-control-static">{{team.tel}}</p>
+                                            </div>
+                                            <label class="col-sm-4 control-label gn-control-label">이메일</label>
+                                            <div class="col-sm-8">
+                                                <p class="form-control-static">{{team.email}}</p>
+                                            </div>
+                                            <label class="col-sm-4 control-label gn-control-label">신청일</label>
+                                            <div class="col-sm-8">
+                                                <p class="form-control-static">{{team.apply_date}}</p>
+                                            </div>
+                                            <label class="col-sm-4 control-label gn-control-label">승인일</label>
+                                            <div class="col-sm-8">
+                                                <p class="form-control-static">{{team.approve_date}}</p>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    </div>
+                                </div> <!--class="modal-content"-->
+                            </div> <!--class="modal-dialog modal-sm"-->
+                        </div>
                     </div> <!--class="table-responsiv"-->
                 </div>
             </div> <!--class="gn-sett-margin-box"-->
@@ -363,13 +400,13 @@
                     <form class="form-horizontal">
                         <dl class="dl-horizontal gn-description-list">
                             <dt>팀 코드</dt>
-                            <dd class="form-control-static">{{teamname.team_code}}</dd>
-                            <dt class="col-sm-2 control-label gn-control-label">팀장</dt>
-                            <dd class="fons-16 ng-binding ng-scope" ng-repeat="team in team_list">{{team.user_id}}</dd>
-                            <dt class="col-sm-2 control-label gn-control-label">팀 생성일</dt>
-                            <dd class="form-control-static">{{teamname.create_date}}</dd>
-                            <dt class="col-sm-2 control-label gn-control-label">총원</dt>
-                            <dd class="form-control-static">{{team_list.total}}명</dd>
+                            <dd>{{teamname.team_code}}</dd>
+                            <dt>팀장</dt>
+                            <dd ng-repeat="team in team_list">{{team.user_id}}</dd>
+                            <dt>팀 생성일</dt>
+                            <dd>{{teamname.create_date}}</dd>
+                            <dt>총원</dt>
+                            <dd>{{team_list.total}}명</dd>
 
                         </dl>
                     </form>

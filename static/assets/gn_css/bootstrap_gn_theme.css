@@ -111,14 +111,10 @@ textarea.gn-form-control{
 
 /*tooltip*/
 .tooltip-inner {
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis;    
   max-width: 200px;
-  max-height: 50px;
-  padding: 5px 10px;
+  padding: 10px;
   color: #fff;
-  text-align: center;
+  text-align: justify;
   text-decoration: none;
   background-color: #58c4c6;
   border-radius: 3px;
@@ -148,6 +144,37 @@ textarea.gn-form-control{
 .tooltip.bottom-right .tooltip-arrow {
   border-bottom-color: #58c4c6;
 }
+
+.gn-description-list{
+    font-size: 16px;
+}  
+.gn-description-list dt{
+    width: 70px;
+    text-align: left;
+    padding: 2px 0;
+}
+
+.gn-description-list dd{
+    font-weight: 400;
+    margin-left: 100px;
+    padding: 2px 0;
+}
+
+.gn-description-list dd span{
+    margin-left: 10px;
+    font-weight: 400;
+    color: #7d7d7d;
+}
+
+.gn-table-ellip{
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;  
+    display: inline-block; 
+    vertical-align: middle;
+}
+
+.gn-disable-op{opacity: 0.3;}
 
 /* ============================= gncloud BUTTON STYLE ============================= */
 .btn-success {
@@ -246,12 +273,12 @@ textarea.gn-form-control{
 
 .navbar-brand{
     display: inline-table;
-    margin-top: 0px;
+    margin-top: 8px;
 }
 
 .navbar-brand img{
-    width:209px; 
-    height: 39px; 
+    width:206px; 
+    height: 33px; 
 }
 
 .navbar-nav{
@@ -413,7 +440,8 @@ li.nav-link.active>a:hover,
     color: #505050;
 }
 
-.gn-table>.gn-tdody>tr>td > .user > .gn-more{display: block; float: left;}
+.gn-table>.gn-tdody>tr>td > .user > .gn-more,
+.dropdown > .user > .gn-more{display: block; float: left;}
 
 .head-dropdown .user{
     margin-left: 20px;
@@ -626,6 +654,15 @@ li.nav-link.active>a:hover,
     text-align: left;
     color: #E60202;
     margin: 5px 0 2px 0;
+}
+
+p.error-message{
+    font-size: 14px;
+}
+
+.gn-input-error{
+    border: 1px solid #ff0000;
+    box-shadow: 1px 1px 6px rgba(215,0,0,.5);    
 }
 
 /*지앤클라우드 로그인버튼 < btn-gn-login > STYLE*/
@@ -951,10 +988,39 @@ a.log-join-btn:focus{
     font-weight: 600;
 }
 
-
 /* ========== gncloud 인스턴스 > 리스트 HTML ========== */
+/*리스트 왼쪽 첫번째 "이름"*/
+.gn-tdody > tr > th.col-sm-3{
+    padding: 8px 0;
+}
 
+.gn-tdody > tr > td.visible-xs-3 > a{
+    width: 190px;
+}
 
+.gn-dot-stop{
+    background: url(../gn_images/gn_dot_stop.png) no-repeat;
+    width: 15px;
+    height: 35px;
+    float: left;
+    margin-right: 5px;
+}
+
+.gn-dot-play{
+    background: url(../gn_images/gn_dot_play.png) no-repeat;
+    width: 15px;
+    height: 35px;
+    float: left;
+    margin-right: 5px;    
+}
+
+.gn-dot-error{
+    background: url(../gn_images/gn_dot_error.png) no-repeat;
+    width: 20px;
+    height: 35px;
+    float: left;
+    margin-right: 10px;    
+}
 
 /* ========== gncloud 인스턴스 > 상세 HTML ========== */
 .col-sm-1.gn-detail-icon{
@@ -1063,8 +1129,13 @@ ul.gn-tag-group > li{
 
 /* ========== gncloud 인스턴스 > 생성 HTML ========== */
 #snap > form > .btn-group{
-    width: 100%;    
-}   
+    width: 100%;
+}
+
+#snap > form > .btn-group > div{
+    padding: 0px 5px;
+}
+   
 
 .gn-btn-default{
     padding: 12px 12px;
@@ -1188,7 +1259,6 @@ ul.gn-tag-group > li{
 {background-position: 0px -38px;}
 
 
-
 .gn-name-ellip{
     width: 100%;
     display: block;
@@ -1197,7 +1267,7 @@ ul.gn-tag-group > li{
 }
 
 .windows-small{
-    font-size: 0.5em;
+    font-size: 0.6em;
     display: block;
     width: 100%;
     height: 20px;
@@ -1272,16 +1342,12 @@ li.active > .tab-sm-box{
     border: 1px solid #58c4c6 !important;
 }
 
-.gn-container select.gn-select{
-
-}
-
-
-
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
 .fons-16{font-size: 16px;}
+.gn-ms-cursor{cursor: pointer;}
+.gn-ms-cursor:hover{color: #505050; background-color: rgba(215,215,215,0.5);}
 
-.col-sm-11,
+/*.col-sm-11,
 .tab-content.col-sm-10{
     padding-right: 0;
     padding-left: 0;
@@ -1291,14 +1357,17 @@ li.active > .tab-sm-box{
 .nav-pills.col-sm-2{
     padding-right: 0;
     padding-left: 0;
-}
+}*/
+
+
 
 li.left-title{
     width: 100%;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 20px;
     color: #505050;  
     margin-bottom: 10px;
+    padding: 0;
 }
 
 li.left-title:nth-of-type(2){
@@ -1315,7 +1384,7 @@ li.left-title:nth-of-type(2){
 
 .gn-left-menu > li > a{
     display: block;
-    font-size: 18px; 
+    font-size: 16px; 
     background-color: transparent;
     padding: 0;
 }
@@ -1342,16 +1411,11 @@ li.left-title:nth-of-type(2){
     margin-top: -75px;
 } 
 
-.gn-control-label{
+/*.gn-control-label{
     font-size: 16px;
     font-weight: 400;
     text-align: left !important;
-}
-
-p.form-control-static{
-    font-size: 16px;
-    font-weight: 400;   
-}
+}*/
 
 ul.gn-sett-graph{
     text-align: center;
@@ -1369,12 +1433,12 @@ ul.gn-sett-graph > li:nth-of-type(3){
 
 /*목록에서 나(you)일 때 bg-color*/
 .tr-on-me{
-    background-color: rgba(170,225,226,.2) !important;
+    background-color: rgba(170,225,226,.2);
 }
 
 /*목록에서 가입 대기 중일때 bg-color*/
 .tr-on-wait{
-    background-color: rgba(245,166,35,.1) !important;
+    background-color: rgba(245,166,35,.1);   
 }
 
 /*목록에서 에러가 났을 때 bg-color*/
@@ -1515,35 +1579,36 @@ ul.gn-sett-graph > li:nth-of-type(3){
     height: 50px;
 }
 
+.gn-syssett-td span{
+    display: block; 
+}
+
 
 /*input=type 폼필드 디자인*/
 .filebox label {
-  display: inline-block;
-  padding: .5em .75em;
-  color: #999;
-  font-size: inherit;
-  line-height: normal;
-  vertical-align: middle;
-  background-color: transparent;
-  cursor: pointer;
-  border: none;
-  border-bottom-color: none;
-  border-radius: 0;
+    display: inline-block;
+    padding: .5em .75em;
+    color: #999;
+    font-size: inherit;
+    line-height: normal;
+    vertical-align: middle;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    border-bottom-color: none;
+    border-radius: 0;
 }
 
 .filebox input[type="file"] {  /* 파일 필드 숨기기 */
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip:rect(0,0,0,0);
-  border: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip:rect(0,0,0,0);
+    border: 0;
 }
-
-
-
 
 
 /* ================================================= 반응형 ================================================= */
@@ -1617,6 +1682,10 @@ ul.gn-sett-graph > li:nth-of-type(3){
     }
     
     /* ======== gncloud 인스턴스 리스트 ======== */ 
+    /*리스트 왼쪽 첫번째 "이름"*/
+    .gn-tdody > tr > td.visible-xs-3 > a{
+        width: 173px;
+    }    
     
     /* ======== gncloud 인스턴스 생성 ======== */
     
@@ -1641,8 +1710,10 @@ ul.gn-sett-graph > li:nth-of-type(3){
     } 
 
     .gn-margin-box{margin: 20px;}    
+     
+    .gn-description-list dt{float: left;}   
     
-    .gn-table-responsive > .gn-table thead tr th{font-size: 12px;}
+    /*.gn-description-list dd{margin-left: 0px;} */  
      
     
     /* ======== gncloud HEADER ======== */      
@@ -1692,9 +1763,6 @@ ul.gn-sett-graph > li:nth-of-type(3){
     .gn-title-login span{
         font-size: 25px;
     }
-    .gn-select{
-        /*width: 155px;*/
-    }
     
     /* ======== gncloud 대시보드 ======== */
     .dash-margin-box > div.col-sm-6:nth-of-type(1){
@@ -1703,16 +1771,18 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
     .dash-margin-box > div.col-sm-6:nth-of-type(1) img{
         width: 30%;
-        margin-bottom: 10px;
-    } 
+        margin-bottom: 10px;} 
     
     /*사용자*/
     .dash-box-6 div{
         top: 50px; 
-        transition: all .3s ease; 
-    }    
+        transition: all .3s ease;}    
     
-    /* ======== gncloud 인스턴스 리스트 ======== */
+    /* ======== gncloud 인스턴스 리스트 ======== */  
+    /*리스트 왼쪽 첫번째 "이름"*/
+    .gn-tdody > tr > td.visible-xs-3 > a{
+        width: 100%;
+    }    
     
     /* ======== gncloud 인스터스 상세 ======== */
     .gn-detail-icon{display: none;}
@@ -1720,44 +1790,28 @@ ul.gn-sett-graph > li:nth-of-type(3){
     .graph-sm-box > .col-sm-2{margin-bottom: 5px;}
     
     /* ======== gncloud 인스턴스 생성 ======== */
-    
-    
+    #snap > form > .btn-group > div{
+        padding: 0px 5px; 
+    }        
     /* ======== gncloud 이미지 ======== */
     .row.gn-margin-bott10 > div.col-sm-2 > button.btn-gn-sub{
         margin-bottom: 10px;
     }    
     
-    /* ======== gncloud 설정 ======== */   
+    /* ======== gncloud 설정 ======== */ 
+    .gn-sett-margin-box{margin: 15px;}
+    
+    .gn-left-menu{margin-bottom: 20px;}
     
     .gn-table>tbody>tr>td:last-child{display: table-cell !important;}
     
-    .gn-left-menu > li{font-size: 15px;}
-    .gn-left-menu > li > a{font-size: 13px;}
+    ul.gn-sett-graph{margin-bottom: 50px;}
     
-    /* ======== gncloud 시스템 설정 ======== */ 
-    .gn-sett-margin-box > .container-fluid > h1{font-size: 16px;}
-    .gn-control-label{font-size: 13px;}
-    p.form-control-static{font-size: 13px;}
-    .gn-more{display: none;}
-    .container-fluid > h2{font-size: 16px;}
-    .fons-16{font-size: 13px;}
-    
-    .container-fluid > .gn-nav-tabs > li.active > a, 
-    .container-fluid > .gn-nav-tabs > li.active > a:hover, 
-    .container-fluid > .gn-nav-tabs > li.active > a:focus {
-        color: #58c4c6;
-        cursor: pointer;
-        background-color: #fff;
-        border: none;
-        border-bottom: 2px solid #58c4c6;
-        font-size: 12px;
-    }
-
-    .container-fluid > .gn-nav-tabs > li > a {
-        border: none;
-        font-size: 12px;
-        padding-bottom: 5px;
-    }   
+    /* ======== gncloud 시스템 설정 ======== */
+    .form-group > .col-sm-7 > .form-control,
+    .form-group > .col-sm-8 > .form-control{
+        margin-bottom: 10px;
+    }    
     
 }
 
@@ -1765,17 +1819,17 @@ ul.gn-sett-graph > li:nth-of-type(3){
 @media (max-width: 480px) {
     
     /* ======== gncloud 공통 ======== */   
-    
+    /*리스트 왼쪽 첫번째 "이름"*/
     .gn-tdody > tr > td > a{
         width: 170px;
     }
-    .gn-table-ellip{
-        white-space: nowrap; 
-        overflow: hidden; 
-        text-overflow: ellipsis;  
-        display: inline-block; 
-        vertical-align: middle;
-    }     
+    
+    /*생성페이지*/
+    #snap > form > .btn-group > div{
+    padding: 0px; 
+}   
+
+     
     
 }
 

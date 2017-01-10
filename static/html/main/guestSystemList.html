@@ -19,7 +19,7 @@
                     <h2>지앤 클라우드 프라이빗</h2>
 
                     <form class="form-horizontal">
-                        <dl class="form-group">
+                        <dl class="dl-horizontal gn-description-list">
                             <dt>날짜</dt>
                             <dd>2016.12.27</dd>
                             <dt>저작권</dt>
@@ -49,20 +49,16 @@
                             <thead>
                             <tr>
                                 <th class="">팀명</th>
-                                <th class="hidden-xs">팀 코드</th>
                                 <th class="">팀장</th>
                                 <th class="hidden-xs">팀원</th>
                                 <th class="hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('table')"></div></th>
-                                <th class="hidden-xs hidden-sm">CPU</th>
-                                <th class="hidden-xs hidden-sm">MEMORY</th>
-                                <th class="hidden-xs hidden-sm">DISK</th>
+                                <th class="hidden-xs hidden-sm">CPU/MEMORY/DISK</th>
                                 <th><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="select in table">
                                 <td>{{select.team_name}}</td>
-                                <td class="hidden-xs">{{select.team_code}}</td>
                                 <td>{{select.owner_name}}
                                     <br>
                                     <span>{{select.owner_id}}</span>
@@ -81,13 +77,11 @@
                                     </div>
                                 </td>
                                 <td class="hidden-xs hidden-sm"><span data-toggle="tooltip" title="{{select.create_date}}" tooltip>{{select.create_time_diff}}</span></td>
-                                <td class="hidden-xs hidden-sm">{{select.cpu_use_per}}%사용중<br>{{select.cpu_use_cnt}}/{{select.cpu_tot_cnt}}CORE</td>
-                                <td class="hidden-xs hidden-sm">{{select.mem_use_per}}%사용중<br>{{select.mem_use_cnt}}/{{select.mem_tot_cnt}}</td>
-                                <td class="hidden-xs hidden-sm">{{select.disk_use_per}}%사용중<br>{{select.disk_use_cnt}}/{{select.disk_tot_cnt}}</td>
+                                <td class="hidden-xs hidden-sm">{{select.cpu_use_per}}%사용중<br>{{select.cpu_use_cnt}}/{{select.cpu_tot_cnt}}CORE / {{select.mem_use_per}}%사용중<br>{{select.mem_use_cnt}}/{{select.mem_tot_cnt}} / {{select.disk_use_per}}%사용중<br>{{select.disk_use_cnt}}/{{select.disk_tot_cnt}}</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         <div class="gn-more">더보기</div>
-                                        <span class="gn-caret"></span>
+                                        <span class="gn-caret-table"></span>
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
@@ -95,10 +89,9 @@
                                     </ul>
                                 </td>
                             </tr>
-
-
                             </tbody>
                         </table>
+
                     </div>
                 </div>
 
@@ -198,7 +191,7 @@
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         <div class="gn-more">더보기</div>
-                                        <span class="gn-caret"></span>
+                                        <span class="gn-caret-table"></span>
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
@@ -324,7 +317,6 @@
                                             <th class="col-sm-2">버전</th>
                                             <th class="col-sm-1 hidden-xs">BIT</th>
                                             <th class="col-sm-2 hidden-xs">타입</th>
-                                            <th>PATH</th>
                                             <th class="col-sm-2 col-sm-3 hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('image')"></div></th>
                                             <th><!--더보기--></th>
                                         </tr>
@@ -339,12 +331,11 @@
                                             <td class="hidden-xs">{{path.os}}{{path.os_ver}}</td>
                                             <td class="hidden-xs">{{path.os_bit}}</td>
                                             <td>{{path.type}}</td>
-                                            <td>{{path.image_path}}</td>
                                             <td class="hidden-xs hidden-sm">{{path.create_time_diff}}</td>
                                             <td class="dropdown">
                                                 <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                                     <div class="gn-more">더보기</div>
-                                                    <span class="gn-caret"></span>
+                                                    <span class="gn-caret-table"></span>
                                                 </div>
                                                 <!--더보기>드롭다운-->
                                                 <ul class="dropdown-menu gn-dropdown" role="menu">
@@ -479,7 +470,7 @@
                                             <td class="dropdown">
                                                 <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                                     <div class="gn-more">더보기</div>
-                                                    <span class="gn-caret"></span>
+                                                    <span class="gn-caret-table"></span>
                                                 </div>
                                                 <!--더보기>드롭다운-->
                                                 <ul class="dropdown-menu gn-dropdown" role="menu">

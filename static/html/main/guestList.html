@@ -7,11 +7,11 @@
         <table class="table table gn-table">
             <thead>
                 <tr>
-                    <th class="col-sm-3 hidden-xs">이름</th>
-                    <th class="col-sm-3 hidden-sm hidden-xs">사양</th>
+                    <th class="col-sm-3">이름</th>
+                    <th class="col-sm-3 hidden-xs">사양</th>
                     <th class="col-sm-1 hidden-sm hidden-xs">타입</th>
-                    <th class="col-sm-2 hidden-sm hidden-xs">IP</th>
-                    <th class="col-sm-1 hidden-sm hidden-xs">생성일
+                    <th class="col-sm-2 hidden-md hidden-sm hidden-xs">IP</th>
+                    <th class="col-sm-1 hidden-md hidden-sm hidden-xs">생성일
                         <div class="refresh" ng-click="refresh()"></div>
                     </th>
                     <th class="col-sm-1 hidden-xs">태그</th>
@@ -20,11 +20,11 @@
             </thead>
             <tbody class="gn-tdody">
             <tr  ng-repeat="list in guest_list">
-                <td class="visivle-xs-3">
-                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Running' || list.status=='Reboot'" src="/gn_images/gn_dot_play.png" alt="">
+                <td class="visible-xs-3">
+                    <div class="gn-dot-play" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Running' || list.status=='Reboot'"></div>
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Suspend'" src="/gn_images/gn_dot_doing.png" alt="">
-                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Stop'" src="/gn_images/gn_dot_stop.png" alt="">
-                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
+                    <div class="gn-dot-stop" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Stop'"></div>
+                    <div class="gn-dot-error" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Error'"></div>
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status != 'Error'" src="/gn_images/gn_icon_{{list.os}}.png" alt="">
 
                     <img ng-show="list.status == 'Starting' || list.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
@@ -33,13 +33,13 @@
                 </td>
                 <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }} Memory/{{ list.disk }} Disk</td>
                 <td class="hidden-sm hidden-xs">{{ list.type }}</td>
-                <td class="hidden-sm hidden-xs">{{ list.ip }}</td>
-                <td class="hidden-sm hidden-xs"><span data-toggle="tooltip" title="{{list.create_time}}" tooltip>{{list.create_time_diff}}</span></td>
-                <td class="hidden-sm hidden-xs">{{list.tagFirst}}
+                <td class="hidden-sm hidden-md hidden-xs">{{ list.ip }}</td>
+                <td class="hidden-sm hidden-md hidden-xs"><span data-toggle="tooltip" title="{{list.create_time}}" tooltip>{{list.create_time_diff}}</span></td>
+                <td class="hidden-xs">{{list.tagFirst}}
                     <span ng-show="list.tag.length > 0" class="tag" data-toggle="tooltip" title="{{list.tag}}" tooltip>{{list.tagcount}}</span>
                 </td>
                 <td class="dropdown">
-                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false" ng-class="{'gn-disable-op':list.status == 'Starting'|| list.status == 'Deleting' || list.status == 'Error'}" ng-disabled="list.status == 'Starting'|| list.status == 'Deleting' || list.status == 'Error'">
                         더보기
                         <div class="gn-more"></div>
                         <span class="gn-caret-table"></span>

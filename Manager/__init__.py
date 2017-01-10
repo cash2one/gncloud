@@ -11,6 +11,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot\
                             , hostMachineList
+                            , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list
 from db.database import db_session
 
 app = Flask(__name__)
@@ -230,6 +231,11 @@ def mydetail_list(code):
     team_owner = 'owner'
     team_code = code
     return jsonify(status=True, message="success", list=teamwon_list(session['userId'],team_code,team_owner ,db_session))
+
+@app.route('/vm/account/won/<id>', methods=['GET'])
+def teamwondetail_list(id,):
+    user_id = id
+    return jsonify(status=True, message="success", list=teamwoninfo_list(user_id, db_session))
 
 @app.route('/vm/acoount/teamlist', methods=['GET'])
 def tea_list():

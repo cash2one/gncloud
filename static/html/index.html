@@ -29,6 +29,16 @@
         $(document).ready(function() {
             getLogin();
             $('#error').hide();
+            $.ajax({
+                type:"GET",
+                url:'/api/manager/vm/logincheck',
+                headers: {'Content-Type': 'application/json; charset=utf-8'},
+                success: function (data) {
+                    if(data.info != null){
+                        location.href="/main/#/dashboard"
+                    }
+                }
+            })
             $('#login_btn').click(function() {
                 var formData = '{"login_id":"'+$("#login_id").val()+'","login_pw":"'+$("#login_pw").val()+'"}';
                 $.ajax({
