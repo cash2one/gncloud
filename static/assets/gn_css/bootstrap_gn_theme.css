@@ -111,14 +111,10 @@ textarea.gn-form-control{
 
 /*tooltip*/
 .tooltip-inner {
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis;    
   max-width: 200px;
-  max-height: 50px;
-  padding: 5px 10px;
+  padding: 10px;
   color: #fff;
-  text-align: center;
+  text-align: justify;
   text-decoration: none;
   background-color: #58c4c6;
   border-radius: 3px;
@@ -154,11 +150,20 @@ textarea.gn-form-control{
 }  
 .gn-description-list dt{
     width: 70px;
-    text-align: left
+    text-align: left;
+    padding: 2px 0;
 }
 
 .gn-description-list dd{
+    font-weight: 400;
     margin-left: 100px;
+    padding: 2px 0;
+}
+
+.gn-description-list dd span{
+    margin-left: 10px;
+    font-weight: 400;
+    color: #7d7d7d;
 }
 
 .gn-table-ellip{
@@ -655,6 +660,11 @@ p.error-message{
     font-size: 14px;
 }
 
+.gn-input-error{
+    border: 1px solid #ff0000;
+    box-shadow: 1px 1px 6px rgba(215,0,0,.5);    
+}
+
 /*지앤클라우드 로그인버튼 < btn-gn-login > STYLE*/
 .btn-gn-login {
   color: #fff;
@@ -980,9 +990,12 @@ a.log-join-btn:focus{
 
 /* ========== gncloud 인스턴스 > 리스트 HTML ========== */
 /*리스트 왼쪽 첫번째 "이름"*/
+.gn-tdody > tr > th.col-sm-3{
+    padding: 8px 0;
+}
+
 .gn-tdody > tr > td.visible-xs-3 > a{
     width: 190px;
-    padding: 8px 0;
 }
 
 .gn-dot-stop{
