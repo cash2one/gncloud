@@ -6,9 +6,9 @@ import requests
 import time
 from pexpect import pxssh
 from datetime import datetime
-from db.models import GnDockerContainers, GnDockerImages, GnDockerImageDetail, GnHostMachines, GnVmMachines, GnDockerVolumes
-from util.config import config
-from util.logger import logger
+from Docker.db.models import GnDockerContainers, GnDockerImages, GnDockerImageDetail, GnHostMachines, GnVmMachines, GnDockerVolumes
+from Docker.util.config import config
+from Docker.util.logger import logger
 
 
 class DockerService(object):

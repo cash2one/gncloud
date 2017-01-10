@@ -3,8 +3,8 @@ __author__ = 'jhjeon'
 
 from datetime import datetime
 from pexpect import pxssh
-from db.models import GnVmMachines, GnMonitorHist, GnMonitor
-from util.logger import logger
+from Docker.db.models import GnVmMachines, GnMonitorHist, GnMonitor
+from Docker.util.logger import logger
 
 
 def service_monitoring(sql_session):

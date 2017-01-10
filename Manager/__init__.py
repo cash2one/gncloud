@@ -9,6 +9,8 @@ from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
+                            , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot\
+                            , hostMachineList \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list
 from db.database import db_session
 
@@ -358,6 +360,18 @@ def delteam(code):
         return jsonify(status=True, message="팀이 삭제 되었습니다")
     elif(hist ==2):
         return jsonify(status=False, message="인스턴스가 남아있어 팀을 삭제 할 수 없습니다")
+
+@app.route('/vm/host',methods=['GET'])
+def getHostMachines():
+    return jsonify(status=True, message="success", info=hostMachineList(db_session))
+
+# @app.route('/vm/host/',methods=['POST'])
+# def approve(id,code):
+#     endpoint = request.json['endpoint']
+#     type = request.json['type']
+#     node = request.json['node']
+#
+#     return jsonify(status=True, message="success", info=hostMachineList(db_session))
 
 #### rest end ####
 

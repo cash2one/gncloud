@@ -87,7 +87,7 @@ def server_delete(id,sql_session):
     # backup image
     s = pxssh.pxssh()
     s.login(guest_info.gnHostMachines.ip, USER)
-    s.sendline("cp "+config.LIVERT_IMAGE_PATH+guest_info.internal_name+".img "+config.LIVERT_IMAGE_BACKUP_PATH+guest_info.internal_name+".img")
+    s.sendline("mv "+config.LIVERT_IMAGE_PATH+guest_info.internal_name+".img "+config.LIVERT_IMAGE_BACKUP_PATH+guest_info.internal_name+".img")
     s.close()
 
     # vm 삭제

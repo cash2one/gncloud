@@ -6,12 +6,12 @@ from datetime import timedelta
 #from gevent.pywsgi import WSGIServer
 from apscheduler.scheduler import Scheduler
 
-from db.database import db_session
-from service.service import server_create, server_change_status, server_monitor \
+from kvm.db.database import db_session
+from kvm.service.service import server_create, server_change_status, server_monitor \
     , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
     , server_image_delete, getsshkey_info
-from util.json_encoder import AlchemyEncoder
-from util.logger import logger
+from kvm.util.json_encoder import AlchemyEncoder
+from kvm.util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
 
 app = Flask(__name__)

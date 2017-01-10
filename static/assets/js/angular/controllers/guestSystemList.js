@@ -121,6 +121,28 @@ angular
                 });
         }
 
+        $scope.getCluster=function(){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/host',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.cluster_list = data.info;
+                        for (var i = 0; i < $scope.cluster_list.length; i++) {
+                            $scope.cluster_list[i].create_time_diff = dateModifyService.modifyDate(data.info[i].create_time);
+                            console.log($scope.cluster_list[i].create_time_diff);
+                        }
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
         $scope.imageset = function(ty){
             if(ty == 'container'){
                 $("#machine").hide();
@@ -152,6 +174,7 @@ angular
                 $("#team-sett").hide();
                 $("#cluster-sett").fadeIn();
                 $("#image-sett").hide();
+                $scope.getCluster();
             }
             else if(ty =='image-sett'){
                 $("#profile-system").hide();
