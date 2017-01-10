@@ -10,7 +10,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot\
-                            , hostMachineList \
+                            , hostMachineList, insertImageInfo, deleteImageInfo, selectImageInfo, updateImageInfo \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list
 from db.database import db_session
 
@@ -365,13 +365,39 @@ def delteam(code):
 def getHostMachines():
     return jsonify(status=True, message="success", info=hostMachineList(db_session))
 
-# @app.route('/vm/host/',methods=['POST'])
-# def approve(id,code):
-#     endpoint = request.json['endpoint']
-#     type = request.json['type']
-#     node = request.json['node']
-#
-#     return jsonify(status=True, message="success", info=hostMachineList(db_session))
+@app.route('/vm/image',methods=['POST'])
+def saveBaseImage():
+    type = request.json['type']
+    os = request.json['os']
+    os_ver = request.json['os_ver']
+    os_bit = request.json['os_bit']
+    filename = request.json['filename']
+    name = request.json['name']
+    insertImageInfo(type,os,os_ver,os_bit,filename, name, db_session)
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/image/<id>',methods=['DELETE'])
+def deleteBaseImage(id):
+    deleteImageInfo(id, db_session)
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/image/<id>',methods=['GET'])
+def getBaseImage(id):
+    return jsonify(status=True, message="success",info=selectImageInfo(id, db_session))
+
+@app.route('/vm/image',methods=['PUT'])
+def modifyBaseImage():
+    id = request.json['id']
+    type = request.json['type']
+    os = request.json['os']
+    os_ver = request.json['os_ver']
+    os_bit = request.json['os_bit']
+    filename = request.json['filename']
+    name = request.json['name']
+    updateImageInfo(id,type,os,os_ver,os_bit,filename, name, db_session)
+    return jsonify(status=True, message="success")
+
+
 
 #### rest end ####
 
