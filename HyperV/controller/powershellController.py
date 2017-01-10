@@ -92,7 +92,10 @@ def hvm_create():
                     break
 
             # password setting 완전하지 않음 수정 필요함
-            ps.set_password(get_vm_ip, vm_info.hyperv_pass)
+            try:
+                ps.set_password(get_vm_ip, vm_info.hyperv_pass)
+            except Exception as message:
+                print message
 
             vm_info.internal_id=new_vm['VMId']
             vm_info.internal_name=internal_name
