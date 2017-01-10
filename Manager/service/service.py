@@ -5,8 +5,10 @@ from sqlalchemy import func
 import datetime
 import humanfriendly
 
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
-                                , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId
+from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
+                             , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
+                             , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId\
+                             , GnCont
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
 
@@ -20,8 +22,28 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
     max_mem = int(memory)
     max_disk = int(disk)
 
-    host_list = sql_session.query(GnHostMachines).filter(GnHostMachines.type == type).all()
+    team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
 
+    #조직의 리소스 체크
+    current_info = sql_session.query(
+                                      func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
+                                      func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
+                                      func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
+                                     ) \
+                              .filter(GnVmMachines.team_code == team_code) \
+                              .filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "Error").one()
+
+    if type == "kvm" or type == "hyperv":
+        if (current_info.sum_cpu + max_cpu) >  team_info.cpu_quota or (current_info.sum_mem + max_mem) > team_info.mem_quota or (current_info.sum_disk + max_disk) > team_info.disk_quota:
+            return {"status":False, "value":"팀의 사용량을 초과하였습니다"}
+    else:
+        if (current_info.sum_cpu + max_cpu) >  team_info.cpu_quota \
+                or (current_info.sum_mem + max_mem) >  team_info.mem_quota:
+            return {"status":False, "value":"팀의 사용량을 초과하였습니다"}
+
+
+    #호스트의 남아있는 자원체크
+    host_list = sql_session.query(GnHostMachines).filter(GnHostMachines.type == type).all()
     for host_info in host_list:
         use_sum_info = db_session.query(func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
                                         func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
@@ -41,15 +63,10 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
                 max_mem = rest_mem
                 max_disk = rest_disk
 
-        else:
-            if rest_cpu >= max_cpu and rest_mem >= max_mem:
-                host_id = host_info.id
-                max_cpu = rest_cpu
-                max_mem = rest_mem
-                max_disk = rest_disk
-
-    if(host_id is None):
+    if host_id is None and type != "docker":
         return {"status":False, "value":"HOST 머신 리소스가 부족합니다"}
+
+
 
     #db 저장
     #id 생성
@@ -70,7 +87,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status='Starting', tag=tag, image_id=image_id
-                                  , host_id=host_id, ssh_key_id=sshkeys)
+                                  , host_id="", ssh_key_id=sshkeys)
     sql_session.add(vm_machine)
     sql_session.commit()
     return {"status":True, "value":id}
@@ -543,3 +560,11 @@ def delteam_list(team_code, sql_session): #팀삭제 쿼리
 
 def convertHumanFriend(num):
     return humanfriendly.format_size(num,binary=True).replace("i","")
+
+
+def hostMachineList(sql_session):
+    list = sql_session.query(GnCont).all()
+    for vmMachine in list:
+        vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
+    return list
+

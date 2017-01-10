@@ -13,7 +13,8 @@ class GnHostMachines(Base):
     id = Column(String(100), primary_key=True, nullable=False)
     name = Column(String(100), primary_key=False, nullable=False)
     ip = Column(String(50), primary_key=False, nullable=False)
-    type = Column(String(10), primary_key=False, nullable=False)
+    #type = Column(String(10), primary_key=False, nullable=False)
+    type = Column(String(10), ForeignKey('GN_CONTROLLER.type'))
     cpu = Column(Integer, primary_key=False, nullable=False)
     mem = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
@@ -31,7 +32,7 @@ class GnHostMachines(Base):
                % (self.id, self.ip, self.type)
 
     def __json__(self):
-        return ['host_id', 'host_ip', 'host_type']
+        return ['id', 'ip', 'type']
 
 
 class GnVmMachines(Base):
@@ -441,3 +442,30 @@ class GnUserTeamHist(Base):
 
     def __json__(self):
         return ['user_id', 'tema_code', 'team_del_code', 'comfirm', 'apply_date', 'approve_date', 'delete_date', 'team_owner']
+
+
+class GnCont(Base):
+    __tablename__="GN_CONTROLLER"
+    id = Column(String(8), primary_key=True, nullable=False)
+    name = Column(String(50), primary_key=False, nullable=False)
+    ip = Column(String(20), primary_key=False, nullable=False)
+    port = Column(Integer, primary_key=False, nullable=False)
+    type = Column(String(10), primary_key=False, nullable=False)
+    swarm_join = Column(String(10), primary_key=False, nullable=False)
+    create_time = Column(String(10), primary_key=False, default=datetime.datetime.now())
+    gnHostMachines = relationship('GnHostMachines')
+
+    def __init__(self, id=None, name=None, ip=None, port=None, type=None, swarm_join=None):
+        self.id = id
+        self.name = name
+        self.ip = ip
+        self.port = port
+        self.type = type
+        self.swarm_join = swarm_join
+
+    def __repr__(self):
+        return '< Id %r / Name %r / Ip %r / Port %r / Type %r / Swarm_join %r>' \
+               % (self.id, self.name, self.ip, self.port, self.type, self.swarm_join)
+
+    def __json__(self):
+        return ['id', 'name', 'ip', 'port', 'type', 'swarm_join', 'gnHostMachines', 'create_time']
