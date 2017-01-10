@@ -662,7 +662,7 @@ p.error-message{
 
 .gn-input-error{
     border: 1px solid #ff0000;
-    box-shadow: 1px 1px 6px rgba(215,0,0,.5);    
+    box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);    
 }
 
 /*지앤클라우드 로그인버튼 < btn-gn-login > STYLE*/
@@ -1380,6 +1380,7 @@ li.left-title:nth-of-type(2){
 
 .gn-left-menu > li{
     width: 100%;
+    padding-left: 15px;
 }
 
 .gn-left-menu > li > a{
@@ -1583,6 +1584,21 @@ ul.gn-sett-graph > li:nth-of-type(3){
     display: block; 
 }
 
+.gn-modal-body form{
+    margin-top: 10px;
+}
+
+.gn-description-node dt{
+    line-height: 38px; 
+    font-weight: 600;
+    font-size: 14px;
+    width: 100px;
+    margin-bottom: 10px;
+}
+.gn-description-node dd{
+    margin-left: 115px;
+    margin-bottom: 10px;    
+}
 
 /*input=type 폼필드 디자인*/
 .filebox label {
@@ -1802,8 +1818,6 @@ ul.gn-sett-graph > li:nth-of-type(3){
     .gn-sett-margin-box{margin: 15px;}
     
     .gn-left-menu{margin-bottom: 20px;}
-    
-    .gn-table>tbody>tr>td:last-child{display: table-cell !important;}
     
     ul.gn-sett-graph{margin-bottom: 50px;}
     
