@@ -155,6 +155,13 @@ def teamwon_list(user_id,team_code,team,sql_session):
     infor = {"list":list, "info":team_list}
     return infor
 
+def teamwoninfo_list(user_id,sql_session):
+    list = sql_session.query(GnUser,GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.user_id == user_id).all()
+    for vm in list:
+        vm[1].apply_date = vm[1].apply_date.strftime('%Y-%m-%d %H:%M:%S')
+        if(vm[1].approve_date != None):
+            vm[1].approve_date = vm[1].approve_date.strftime('%Y-%m-%d %H:%M:%S')
+    return list
 
 def teamcheck_list(teamcode):
     return db_session.query(GnUser).filter(GnUser.team_code == teamcode).all()
@@ -164,7 +171,6 @@ def tea(user_id, team_code, sql_session):
     sub_stmt = sql_session.query(GnUserTeam.user_id).filter(GnUserTeam.team_code == team_code)
     list = sql_session.query(GnUser).filter(GnUser.user_id.in_(sub_stmt)).all()
     return list
-
 
 def checkteam(user_id, sql_session):
     checklist = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one_or_none()
@@ -391,21 +397,21 @@ def approve_set(user_id,code,type,user_name,sql_session):
             return False
         list.comfirm = "Y"
         list.team_owner='user'
-        db_session.commit()
+        sql_session.commit()
         return True
     if(type == 'change'):
         list = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id== user_id).first()
         if(list.team_owner == 'owner'):
             list.team_owner = 'user'
-            db_session.commit()
+            sql_session.commit()
         elif(list.team_owner == 'user'):
             list.team_owner = 'owner'
-            db_session.commit()
+            sql_session.commit()
         return True
     if(type == 'reset'):
         list = sql_session.query(GnUser).filter(GnUser.user_id==user_id).first()
         list.password = random_string('11111111')
-        db_session.commit()
+        sql_session.commit()
         return True
 
 def team_delete(id ,code):

@@ -122,7 +122,32 @@ angular
                     console.log(status);
                 });
         }
+        $scope.teamwon_list={};
+        $scope.infolist=function(id){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/account/won/'+id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        var teamwonArr = new Array();
+                        data.list[0][0].approve_date = data.list[0][1].approve_date;
+                        data.list[0][0].apply_date = data.list[0][1].apply_date;
+                        teamwonArr.push(data.list[0][0]);
+                        $scope.teamwon_list = teamwonArr;
 
+                    } else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
+                    }
+
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
 
         $scope.teamtable=function(){
             $scope.won_list ={};
@@ -150,6 +175,7 @@ angular
                             }
                             data.list[i].user_id = data.list[i][0].user_id;
                             data.list[i].user_name = data.list[i][0].user_name;
+                            data.list[i].team_code = data.list[i][1].team_code;
                             data.list[i].tel = data.list[i][0].tel;
                             data.list[i].email = data.list[i][0].email;
                             data.list[i].comf = comfirm_re;
@@ -413,6 +439,7 @@ angular
                 return config;
             }
         }
+
         $rootScope.$on('init', function () {
             $scope.authority = $rootScope.user_info.authority;
             $scope.user_id = $rootScope.user_info.user_id;
