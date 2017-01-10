@@ -7,8 +7,8 @@ import humanfriendly
 
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
                              , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
-                             , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId\
-                             , GnCont
+                             , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
+                             , GnCluster
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
 
@@ -255,8 +255,9 @@ def server_image(type, sql_session, team_code):
         list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).all();
     else:
         list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.team_code == team_code).filter(GnVmImages.status != "Removed").all()
-        for vm in list:
-            vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
+
+    for vm in list:
+        vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
 
     retryCheck = False
     if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
@@ -573,7 +574,7 @@ def convertHumanFriend(num):
 
 
 def hostMachineList(sql_session):
-    list = sql_session.query(GnCont).all()
+    list = sql_session.query(GnCluster).all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list

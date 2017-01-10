@@ -77,21 +77,16 @@ angular
         $scope.image=function(){
             $http({
                 method: 'GET',
-                url: '/api/manager/vm/systems/path',
+                url: '/api/manager/vm/images/base',
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
                     if (data) {
-
-                        var imageArr = new Array();
-                        for (var i = 0; i < data.list.length; i++) {
-                            var path = data.list[i][0].image_path;
-                            data.list[i][1].image_path = path;
-                            data.list[i][1].create_time_diff = dateModifyService.modifyDate(data.list[i][1].create_time);
-                            imageArr.push(data.list[i][1]);
+                        for (var i = 0; i < data.list.guest_list.length; i++) {
+                            data.list.guest_list[i].create_time_diff = dateModifyService.modifyDate(data.list.guest_list[i].create_time);
                         }
 
-                        $scope.paths = imageArr; //이미지 관리 리스트
+                        $scope.images_list = data.list.guest_list; //이미지 관리 리스트
                     }
                     else {
                     }

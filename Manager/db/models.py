@@ -13,8 +13,7 @@ class GnHostMachines(Base):
     id = Column(String(100), primary_key=True, nullable=False)
     name = Column(String(100), primary_key=False, nullable=False)
     ip = Column(String(50), primary_key=False, nullable=False)
-    #type = Column(String(10), primary_key=False, nullable=False)
-    type = Column(String(10), ForeignKey('GN_CONTROLLER.type'))
+    type = Column(String(10), ForeignKey('GN_CLUSTER.type'))
     cpu = Column(Integer, primary_key=False, nullable=False)
     mem = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
@@ -444,8 +443,8 @@ class GnUserTeamHist(Base):
         return ['user_id', 'tema_code', 'team_del_code', 'comfirm', 'apply_date', 'approve_date', 'delete_date', 'team_owner']
 
 
-class GnCont(Base):
-    __tablename__="GN_CONTROLLER"
+class GnCluster(Base):
+    __tablename__="GN_CLUSTER"
     id = Column(String(8), primary_key=True, nullable=False)
     name = Column(String(50), primary_key=False, nullable=False)
     ip = Column(String(20), primary_key=False, nullable=False)
