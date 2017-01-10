@@ -134,28 +134,27 @@
                                                 </label>
                                             </div>
                                         </div>
-
-                                            <div class="form-group">
-                                                <label for="inputtext" class="col-sm-3 control-label gn-control-label">엔드 포인트</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="inputtext" placeholder="{{list.ip}}">
-                                                </div>
+                                        <div class="form-group">
+                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label">엔드 포인트</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="inputtext" placeholder="{{list.ip}}">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="inputtext" class="col-sm-3 control-label gn-control-label">노드</label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" class="form-control" id="inputtext" placeholder="192.168.0.100">
-                                                </div>
-                                                <div class="col-sm-2 btn-sm2">
-                                                    <button type="submit" class="btn btn-gn-sub btn-block">추가</button>
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label">노드</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" id="inputtext" placeholder="192.168.0.100">
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-3"></div>
-                                                <div class="col-sm-9">
-                                                    <textarea class="form-control" rows="3"></textarea>
-                                                </div>
+                                            <div class="col-sm-2 btn-sm2">
+                                                <button type="button" class="btn btn-gn-sub btn-block" data-toggle="modal" data-target="#cluster-more">추가</button>
                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div> <!--class="modal-body"-->
 
@@ -164,48 +163,83 @@
                                 </div>
                             </div>
                         </div>
-                    </div>  <!--class="modal fade" id="cluster"     -->
-                </div>
+                    </div>  <!--class="modal fade" id="cluster"-->
+                    
+                    <!-- 클러스터 노드 추가 Modal -->
+                    <div class="modal fade" id="cluster-more" role="dialog">
+                        <div class="modal-dialog form-horizontal">
+                            <div class="modal-content">
+                              <div class="modal-header gn-modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">노드 추가</h4>
+                              </div>
 
+                              <div class="modal-body gn-modal-body">
+
+                                <form class="form-horizontal">
+
+                                    <dl class="dl-horizontal gn-description-node">
+                                      <dt class="">CPU</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-"></dd>
+                                      <dt class="">MAX CPU</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-"></dd>
+                                      <dt class="">MEMORY</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-"></dd>
+                                      <dt class="">MAX MEMORY</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-"></dd>
+                                      <dt class="">DISK</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-"></dd>
+                                      <dt class="">MAX DISK</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-"></dd>
+                                    </dl>                                                                                                  
+                                </form>                                        
+                              </div> <!--class="modal-body"-->
+
+                              <div class="modal-footer gn-modal-footer">
+                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">추가</button> 
+                              </div><!--class="modal-footer gn-modal-footer"-->
+                            </div><!--class="modal-content"-->  
+                        </div> <!--class="modal-dialog form-horizontal"-->
+                    </div> <!--class="modal fade" id="cluster" role="dialog"-->                     
+                    
+                </div>
 
                 <div class="container-fluid">
                     <div class="table-responsive gn-table-responsive">
                         <table class="table table gn-table">
                             <thead>
-                            <tr>
-                                <th class="col-sm-2">타입</th>
-                                <th class="col-sm-3 hidden-xs">엔드 포인트</th>
-                                <th class="col-sm-3 hidden-xs">노드</th>
-                                <th class="col-sm-2 hidden-xs hidden-sm">생성일<div class="refresh"></div></th>
-                                <th class="col-sm-2"><!--더보기--></th>
-                            </tr>
+                                <tr>
+                                    <th class="col-sm-2">타입</th>
+                                    <th class="col-sm-3 hidden-xs">엔드 포인트</th>
+                                    <th class="col-sm-3 hidden-xs">노드</th>
+                                    <th class="col-sm-2 hidden-xs hidden-sm">생성일<div class="refresh"></div></th>
+                                    <th class="col-sm-2"><!--더보기--></th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="list in cluster_list">
-                                <td >{{list.type}}</td>
-                                <td class="hidden-xs">{{list.ip}}:{{list.port}}</td>
-                                <td class="hidden-xs gn-syssett-td">
-                                    <p ng-repeat="host in list.gnHostMachines">{{host.ip}}</p>
-                                </td>
-                                <td class="hidden-xs hidden-sm">{{list.create_time_diff}}</td>
-                                <td class="dropdown">
-                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                                        <div class="gn-more">더보기</div>
-                                        <span class="gn-caret-table"></span>
-                                    </div>
-                                    <!--더보기>드롭다운-->
-                                    <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li><a href="#">수정</a></li>
-                                        <li><a href="#">삭제</a></li>
-                                    </ul>
-                                </td>
-                            </tr>
-
-
+                                <tr ng-repeat="list in cluster_list">
+                                    <td >{{list.type}}</td>
+                                    <td class="hidden-xs">{{list.ip}}:{{list.port}}</td>
+                                    <td class="hidden-xs gn-syssett-td">
+                                        <p ng-repeat="host in list.gnHostMachines">{{host.ip}}</p>
+                                    </td>
+                                    <td class="hidden-xs hidden-sm">{{list.create_time_diff}}</td>
+                                    <td class="dropdown">
+                                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            <div class="gn-more">더보기</div>
+                                            <span class="gn-caret-table"></span>
+                                        </div>
+                                        <!--더보기>드롭다운-->
+                                        <ul class="dropdown-menu gn-dropdown" role="menu">
+                                            <li><a href="#">수정</a></li>
+                                            <li><a href="#">삭제</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div> <!--class="table-responsive table-reset"-->
-                </div>
+                </div> <!--class="container-fluid"-->
 
             </div> <!--class="gn-sett-margin-box"-->
         </div> <!--class="gn-box profile-team"-->
