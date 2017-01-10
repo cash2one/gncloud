@@ -65,7 +65,7 @@ class GnVmMachines(Base):
     def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None
                  , cpu=None, memory=None, disk=None, ip=None, host_id=None
                  , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
-                 , author_id=None, status=None, tag=None, image_id=None, ssh_key_id=None, hyperv_pass=None):
+                 , author_id=None, status=None, tag=None, image_id=None, ssh_key_id=None, hyperv_pass=None, create_time=None):
         self.id = id
         self.name = name
         self.type = type
@@ -87,6 +87,7 @@ class GnVmMachines(Base):
         self.image_id = image_id
         self.ssh_key_id = ssh_key_id
         self.hyperv_pass = hyperv_pass
+        self.create_time = create_time
 
 
     def __repr__(self):

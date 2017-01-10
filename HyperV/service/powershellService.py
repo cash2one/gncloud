@@ -7,7 +7,7 @@ PowerShell 스크립트를 전달할 함수들을 가지고 있는 PowerShell �
 """
 import datetime
 
-from util.config import config
+from HyperV.util.config import config
 
 __author__ = 'jhjeon'
 
@@ -115,18 +115,19 @@ class PowerShell(object):
 
     # password 셋팅
     def set_password(self,ip, password):
-        script = '$user=[adsi]"WinNT://$env:computerName/gncloud";'
-        script += '$user.setPassword("'+password+'"); '
-        script += '$user:USERNAME | ConvertTo-Json -Compress ;'
-        # script = '$username = "gncloud";'
-        # script += '$password = "1111";'
-        # script += '$secstr = New-Object -TypeName System.Security.SecureString;'
-        # script += '$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)};'
-        # script += '$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $secstr;'
-        # script += '$s = New-PSSession -ComputerName "'+ip+'" -Credential $cred ;'
-        # script += 'Invoke-Command -Session $s -ScriptBlock {'
-        # script += '$user=[adsi]"WinNT://$env:computerName/$username";'
-        # script += '$user.setPassword("'+password+'");}'
+        # script = '$user=[adsi]"WinNT://$env:computerName/gncloud";'
+        # script += '$user.setPassword("'+password+'"); '
+        # script += '$user:USERNAME | ConvertTo-Json -Compress ;'
+        script = 'Set-Item WSMan:\localhost\Client\TrustedHosts -Value "'+ip+'" -Force;'
+        script += '$username = "gncloud";'
+        script += '$password = "gnc=1151";'
+        script += '$secstr = New-Object -TypeName System.Security.SecureString;'
+        script += '$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)};'
+        script += '$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $secstr;'
+        script += '$s = New-PSSession -ComputerName "'+ip+'" -Credential $cred ;'
+        script += 'Invoke-Command -Session $s -ScriptBlock {'
+        script += '$user=[adsi]"WinNT://$env:computerName/gncloud";'
+        script += '$user.setPassword("'+password+'");}'
 
         try:
             ret = self.send_new_vm(script, ip)

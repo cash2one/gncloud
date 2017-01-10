@@ -4,7 +4,7 @@ __author__ = 'gncloud'
 import datetime
 from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Numeric, BigInteger
 
-from db.database import Base
+from HyperV.db.database import Base
 
 
 class GnController(Base):

@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import threading
-from apscheduler.scheduler import Scheduler
 
 __author__ = 'jhjeon'
 
 
 
+from apscheduler.scheduler import Scheduler
 from flask import Flask, redirect, url_for
 from datetime import timedelta
 
-from controller.powershellController import *
-from util.config import config
+from HyperV.controller.powershellController import *
+from HyperV.util.config import config
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'

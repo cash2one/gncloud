@@ -5,6 +5,7 @@ angular
         $("#windows").hide();
         $("#ssh").hide();
         $("#snap").hide();
+        $("#texterror").hide();
         $scope.selectType = function(type){
             if(type == 'docker'){
                 $http({
@@ -167,7 +168,17 @@ angular
             $scope.data.name = hdd
 
         }
-
+        $scope.customClass = function (name) {
+            var className = 'type1';
+            if (name === 'type1') {
+                className = 'gn-input-error';
+            } else if (name === 'type2') {
+                className = 'custom2';
+            } else if (name === 'type3') {
+                className = 'custom3';
+            }
+            return className;
+        };
 
         $scope.submit = function() {
             $scope.data.tag = $("#tag").val();
