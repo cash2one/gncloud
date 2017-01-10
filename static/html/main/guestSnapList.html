@@ -89,7 +89,7 @@
                             </tr>
                             </thead>
                             <tbody class="gn-tdody">
-                            <tr ng-repeat="snap in snap_list" ng-class="{'gn-on-error':list.status=='Error'}">
+                            <tr ng-repeat="snap in snap_list" ng-class="{'tr-on-error':snap.status =='Error'}">
                                 <td>
                                     <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                                     <img ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">

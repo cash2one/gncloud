@@ -169,6 +169,8 @@ textarea.gn-form-control{
     vertical-align: middle;
 }
 
+.gn-disable-op{opacity: 0.3;}
+
 /* ============================= gncloud BUTTON STYLE ============================= */
 .btn-success {
     color: #fff;
@@ -976,6 +978,7 @@ a.log-join-btn:focus{
 /*리스트 왼쪽 첫번째 "이름"*/
 .gn-tdody > tr > td.visible-xs-3 > a{
     width: 190px;
+    padding: 8px 0;
 }
 
 .gn-dot-stop{
@@ -999,7 +1002,7 @@ a.log-join-btn:focus{
     width: 20px;
     height: 35px;
     float: left;
-    margin-right: 5px;    
+    margin-right: 10px;    
 }
 
 /* ========== gncloud 인스턴스 > 상세 HTML ========== */
