@@ -651,6 +651,10 @@ li.nav-link.active>a:hover,
     margin: 5px 0 2px 0;
 }
 
+p.error-message{
+    font-size: 14px;
+}
+
 /*지앤클라우드 로그인버튼 < btn-gn-login > STYLE*/
 .btn-gn-login {
   color: #fff;
