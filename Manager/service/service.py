@@ -311,7 +311,7 @@ def getQuotaOfTeam(team_code, sql_session):
 
     team_user_cnt = sql_session.query(func.count(GnUserTeam.user_id).label("count"))\
                                .filter(GnUserTeam.team_code == team_code)\
-                               .filter(GnUserTeam.comfirm == "Y").filter(GnVmMachines.status != "Error").one()
+                               .filter(GnUserTeam.comfirm == "Y").one()
 
     user_list = sql_session.query(GnVmMachines.author_id,GnUser.user_name,func.count().label("count"))\
                            .outerjoin(GnUser, GnVmMachines.author_id == GnUser.user_id)\
