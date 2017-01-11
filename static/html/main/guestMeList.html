@@ -55,14 +55,14 @@
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label gn-control-label">새 비밀번호</label>
                                             <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_new.$invalid && !meForm.password_new.$pristine }">
-                                                <input type="password" class="form-control gn-form-control" name="password_new" ng-model="data.password_new" placeholder="Password" ng-pattern="/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}/">
-                                                <p ng-show="meForm.password_new.$invalid && !meForm.password_new.$pristine" class="help-block">6~15자리의 특수문자와 대문자를 합께 조합해 주세요.</p>
+                                                <input type="password" class="form-control gn-form-control" name="password_new" ng-model="data.password_new" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
+                                                <p ng-show="meForm.password_new.$invalid && !meForm.password_new.$pristine" class="help-block">숫자, 영문 특수문자를 6~15자리까지 혼합해서 사용해 주세요.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label gn-control-label">새 비밀번호 확인</label>
                                             <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_ret.$invalid && !meForm.password_ret.$pristine }">
-                                                <input type="password" class="form-control gn-form-control" name="password_ret" ng-model="data.password_ret" placeholder="Password" ng-pattern="/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}/">
+                                                <input type="password" class="form-control gn-form-control" name="password_ret" ng-model="data.password_ret" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$//">
                                                 <p ng-show="meForm.password_ret.$invalid && !meForm.password_ret.$pristine" class="help-block">비밀번호가 일치 하지 않습니다.</p>
                                             </div>
                                         </div>

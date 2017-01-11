@@ -132,10 +132,10 @@
     $.formUtils.addValidator({
         name : 'password',
         validatorFunction : function(value, $el, config, language, $form) {
-            var regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+            var regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/;
             return regExp.test(value)  ;
         },
-        errorMessage : '숫자, 영문 특수문자를 8~16자리까지 혼합해서 사용해 주세요.',
+        errorMessage : '숫자, 영문 특수문자를 6~15자리까지 혼합해서 사용해 주세요.',
         errorMessageKey: 'badEvenNumber',
         errorMessagePosition: 'element'
 

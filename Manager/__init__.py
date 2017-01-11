@@ -49,21 +49,58 @@ def index():
 def create_vm():
     password=""
     sshkeys=""
+    name=""
+    cpu=""
+    memory=""
+    disk=""
+    image_id=""
+    type = ""
+    sub_type =""
     team_code = session['teamCode']
     user_id = session['userId']
-    name = request.json['vm_name']
-    cpu = request.json['cpu']
-    memory = request.json['memory']
-    disk = request.json['hdd']
-    image_id = request.json['id']
+    if 'vm_name' in request.json:
+        name = request.json['vm_name']
+    if 'cpu' in request.json:
+        cpu = request.json['cpu']
+        memory = request.json['memory']
+        disk = request.json['hdd']
+    if 'id' in request.json:
+        image_id = request.json['id']
     if 'sshkeys' in request.json:
         sshkeys = request.json['sshkeys']
     tag =request.json['tag']
-    type =request.json['type']
+    if 'type' in request.json:
+        type =request.json['type']
     if 'password' in request.json:
         password = request.json['password']
-    result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
-    return jsonify(status=result["status"], value=result["value"])
+    if 'sub_type' in request.json:
+        sub_type = request.json['sub_type']
+    if name !="":
+        if type != "":
+            if image_id !="":
+                if cpu != "" and disk !="" and memory !="":
+                    if type=="hyperv" and password != "" and sub_type=="base":
+                        result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        return jsonify(status=result["status"], value=result["value"])
+                    elif type =="kvm" and sshkeys != "":
+                        result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        return jsonify(status=result["status"], value=result["value"])
+                    elif type =="docker":
+                        result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        return jsonify(status=result["status"], value=result["value"])
+                    elif type =="hyperv" and sub_type=="snap":
+                        result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        return jsonify(status=result["status"], value=result["value"])
+                    else:
+                        return jsonify(status=True, value="password")
+                else:
+                    return jsonify(status=True, value="cpu")
+            else:
+                return jsonify(status=True, value="image_id")
+        else:
+            return jsonify(status=True, value="type")
+    else:
+        return jsonify(status=True, value="name")
 
 @app.route('/vm/machine/snapshots', methods=['POST'])
 def create_snapshots():

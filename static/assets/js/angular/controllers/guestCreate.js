@@ -5,7 +5,6 @@ angular
         $("#windows").hide();
         $("#ssh").hide();
         $("#snap").hide();
-        $("#texterror").hide();
         $scope.selectType = function(type){
             if(type == 'docker'){
                 $http({
@@ -153,12 +152,14 @@ angular
             else if(ty =='snap'){
                 $("#image").hide();
                 $("#snap").show();
+
             }
         }
         $scope.data = {};
         $scope.update_image = function (data) {
             if (data != null){
                 $scope.data.id = data.id;
+                $scope.data.sub_type = data.sub_type;
             }
         };
         $scope.func = function(cpu, memory, hdd){
@@ -168,18 +169,6 @@ angular
             $scope.data.name = hdd
 
         }
-        $scope.customClass = function (name) {
-            var className = 'type1';
-            if (name === 'type1') {
-                className = 'gn-input-error';
-            } else if (name === 'type2') {
-                className = 'custom2';
-            } else if (name === 'type3') {
-                className = 'custom3';
-            }
-            return className;
-        };
-
         $scope.submit = function() {
             $scope.data.tag = $("#tag").val();
             $scope.data.type = $scope.type;
@@ -193,7 +182,24 @@ angular
             })
                 .success(function(data) {
                     if (data.status == true) {
-                        $scope.createInstance(data.value);
+                        if(data.value == 'name'){
+                            $scope.data_value = data.value;
+                            $("#vm_name").focus();
+                        }else if(data.value == 'password'){
+                            $scope.data_value = data.value;
+                            $("#pasword").focus();
+                        }else if(data.value == 'cpu'){
+                            $scope.data_value = data.value;
+                            $("#cpu").focus();
+                        }else if(data.value == 'image_id'){
+                            $scope.data_value = data.value;
+                            $("#image_id").focus();
+                        }else if(data.value == 'type'){
+                            $scope.data_value = data.value;
+                            $("#type").focus();
+                        }else{
+                            $scope.createInstance(data.value);
+                        }
                     } else {
                         if(data.value != null) {
                             alert(data.value)
