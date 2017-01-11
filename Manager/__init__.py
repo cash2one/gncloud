@@ -435,7 +435,7 @@ def saveBaseImageImportFile():
 
     type = request.form['type']
     os_name = request.form['os']
-    os_ver = request.form['type']
+    os_ver = request.form['os_ver']
     os_bit = request.form['os_bit']
     filename = request.form['filename']
 
