@@ -439,10 +439,11 @@ def saveBaseImageImportFile():
     os_bit = request.form['os_bit']
     filename = request.form['filename']
 
-    if request.form['id'] == "":
-        insertImageInfo(type,os_name,os_ver,os_bit,filename, icon, db_session)
-    else:
+    if 'id' in request.form:
         updateImageInfo(request.form['id'],type,os_name,os_ver,os_bit,filename,icon,db_session)
+    else:
+        insertImageInfo(type,os_name,os_ver,os_bit,filename, icon, db_session)
+
 
     return jsonify(status=True, message="success")
 
@@ -454,10 +455,10 @@ def saveBaseImageExceptFile():
     os_bit = request.json['os_bit']
     filename = request.json['filename']
 
-    if request.json['id'] == "":
-        insertImageInfo(type,os_name,os_ver,os_bit,filename, "", db_session)
-    else:
+    if 'id' in request.json:
         updateImageInfo(request.json['id'],type,os_name,os_ver,os_bit,filename,"",db_session)
+    else:
+        insertImageInfo(type,os_name,os_ver,os_bit,filename, "", db_session)
 
     return jsonify(status=True, message="success")
 
@@ -477,10 +478,10 @@ def saveBaseImageImportFileDocker():
     os_ver = request.form['os_ver']
     tag = request.form['tag']
 
-    if request.form['id'] == "":
-        insertImageInfoDocker(name,os_ver,tag,icon,db_session)
-    else:
+    if 'id' in request.form:
         updateImageInfoDocker(request.form['id'],name,os_ver,tag,icon,db_session)
+    else:
+        insertImageInfoDocker(name,os_ver,tag,icon,db_session)
 
     return jsonify(status=True, message="success")
 
@@ -490,10 +491,10 @@ def saveBaseImageExceptFileDocker():
     os_ver = request.json['os_ver']
     tag = request.json['tag']
 
-    if request.json['id'] == "":
-        insertImageInfoDocker(name,os_ver,tag,"",db_session)
-    else:
+    if 'id' in request.json:
         updateImageInfoDocker(request.json['id'],name,os_ver,tag,"",db_session)
+    else:
+        insertImageInfoDocker(name,os_ver,tag,"",db_session)
 
     return jsonify(status=True, message="success")
 

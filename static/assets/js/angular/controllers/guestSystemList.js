@@ -192,8 +192,11 @@ angular
         }
 
 
+        $scope.initForm = function (part) {
+            if(part =="instance") $scope.instanceImage = {};
+            if(part =="docker") $scope.dockerImage = {};
+        };
         //인스턴스 저장 로직
-        $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":"","id":""};
         $scope.uploadPic = function (file) {
             $scope.formUpload = true;
             if (file != null) {
@@ -215,7 +218,7 @@ angular
 
             file.upload.then(function (response) {
                 $scope.image();
-                $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":""};
+                $scope.instanceImage = {};
             }, function (response) {
 
             }, function (evt) {
@@ -234,7 +237,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.image();
-                        $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":""};
+                        $scope.instanceImage = {};
                     }else{
                         if(data.message != null){
                             alert(data.message);
@@ -293,7 +296,6 @@ angular
 
 
         //docker 저장 로직
-        $scope.dockerImage = {"view_name":"","os_ver":"","tag":"","id":""};
         $scope.uploadDocker = function (file) {
             $scope.formUpload = true;
             if (file != null) {

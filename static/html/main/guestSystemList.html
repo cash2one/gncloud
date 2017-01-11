@@ -262,7 +262,7 @@
 
                         <!--탭메뉴1 : 가상머신 -->
                         <div id="machine" class="">
-                            <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#image">등록</button>
+                            <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#image" ng-click="initForm('instance');">등록</button>
 
                             <!-- 이미지 Modal -->
                             <div class="modal-sett modal fade" id="image" role="dialog">
@@ -317,14 +317,14 @@
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">버전</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myForm.os_ver.$invalid && !myForm.os_ver.$pristine }">
-                                                        <input type="text" name="os_ver" class="form-control gn-form-control"  placeholder="10" ng-model="instanceImage.os_ver" required>
+                                                        <input type="text" name="os_ver" class="form-control gn-form-control"  placeholder="10" ng-model="instanceImage.os_ver" maxlength="2" required>
                                                         <p ng-show="myForm.os_ver.$invalid && !myForm.os_ver.$pristine" class="help-block">버전을 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">비트</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myForm.bit.$invalid && !myForm.bit.$pristine }">
-                                                        <input type="text" name="bit" class="form-control gn-form-control" placeholder="64" ng-model="instanceImage.os_bit" required>
+                                                        <input type="text" name="bit" class="form-control gn-form-control" placeholder="64" ng-model="instanceImage.os_bit" maxlength="2" required>
                                                         <p ng-show="myForm.bit.$invalid && !myForm.bit.$pristine" class="help-block">비트를 입력하세요.</p>
                                                     </div>
                                                 </div>
@@ -396,7 +396,7 @@
 
                         <!--시스템 > 이미지 관리 > 탭메뉴2 : 컨테이너-->
                         <div id="container" class="">
-                            <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#img-cont">등록</button>
+                            <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#img-cont" ng-click="initForm('docker');">등록</button>
 
                             <!-- 이미지 Modal -->
                             <div class="modal-sett modal fade" id="img-cont" role="dialog">
