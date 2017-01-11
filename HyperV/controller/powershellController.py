@@ -96,7 +96,7 @@ def hvm_create():
             while True:
                 time.sleep(5)
                 count += 1
-                if count >= 20:
+                if count >= 20 or base_image_info.sub_type == 'snap':
                     break
                 try:
                     ps.set_password(get_vm_ip, vm_info.hyperv_pass)
