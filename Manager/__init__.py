@@ -12,7 +12,8 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot\
-                            , hostMachineList, insertImageInfo, deleteImageInfo, selectImageInfo, updateImageInfo \
+                            , hostMachineList, insertImageInfo, selectImageInfo, selectImageInfo, updateImageInfo, deleteImageInfo \
+                            , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list
 from db.database import db_session
 import datetime
@@ -410,13 +411,6 @@ def getHostMachines():
     return jsonify(status=True, message="success", info=hostMachineList(db_session))
 
 
-def secure_filename(filename):
-    return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
 @app.route('/vm/image/<id>',methods=['DELETE'])
 def deleteBaseImage(id):
     deleteImageInfo(id, db_session)
@@ -460,6 +454,55 @@ def saveBaseImageExceptFile():
         updateImageInfo(request.json['id'],type,os_name,os_ver,os_bit,filename,"",db_session)
 
     return jsonify(status=True, message="success")
+
+
+@app.route('/vm/dockerimage/<id>',methods=['GET'])
+def getBaseImageDocker(id):
+    return jsonify(status=True, message="success",info=selectImageInfoDocker(id, db_session))
+
+@app.route('/vm/dockerimage/file',methods=['POST'])
+def saveBaseImageImportFileDocker():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        icon = secure_filename(file.filename)
+        file.save(os.path.join(config.IMAGE_PATH, icon))
+
+    name = request.form['view_name']
+    os_ver = request.form['os_ver']
+    tag = request.form['tag']
+
+    if request.form['id'] == "":
+        insertImageInfoDocker(name,os_ver,tag,icon,db_session)
+    else:
+        updateImageInfoDocker(request.form['id'],name,os_ver,tag,icon,db_session)
+
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/dockerimage',methods=['POST'])
+def saveBaseImageExceptFileDocker():
+    name = request.json['view_name']
+    os_ver = request.json['os_ver']
+    tag = request.json['tag']
+
+    if request.json['id'] == "":
+        insertImageInfoDocker(name,os_ver,tag,"",db_session)
+    else:
+        updateImageInfoDocker(request.json['id'],name,os_ver,tag,"",db_session)
+
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/dockerimage/<id>',methods=['DELETE'])
+def deleteBaseImageDocker(id):
+    deleteImageInfoDocker(id, db_session)
+    return jsonify(status=True, message="success")
+
+
+def secure_filename(filename):
+    return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
 

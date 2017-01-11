@@ -280,10 +280,10 @@
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
                                                     <div class="col-sm-10">
                                                         <!--초기 이미지 등록 박스-->
-                                                            <img ngf-src="picFile" class="thumb" id="icon_image">
+                                                            <img ngf-src="picFile" class="thumb">
 
                                                                 <fieldset>
-                                                                <input type="file" ngf-select ng-model="picFile" name="file" id="image_name" ngf-accept="'image/*'">
+                                                                <input type="file" ngf-select ng-model="picFile" name="file" ngf-accept="'image/*'">
 
 
                                                                 </fieldset>
@@ -405,83 +405,93 @@
                                     <div class="modal-content">
                                         <div class="modal-header gn-modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">이미지 등록</h4>
+                                            <!--<h4 class="modal-title">이미지 등록</h4>
                                               <span class="gn-lead">
                                                   도커 이미지 정보는 <a href="" class="link-color">http://hub.docker.com/explore/</a>에서 확인 가능 합니다.
                                                   특히, EXPOSEPORT 를 확인하여야 도커 컨테이너와 부모 시스템 간에 맵핑을 할 수 있습니다.
                                                   HA Proxy에 세팅을 할 때, 부모 시스템의 빈 포트 중 랜덤하게 연결 할 수 있습니다.
-                                              </span>
+                                              </span>-->
                                         </div>
 
                                         <div class="modal-body gn-modal-body">
 
-                                            <form class="form-horizontal">
+                                            <form name="myDockerForm" class="form-horizontal" ng-submit="submitForm(myDockerForm.$valid)">
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
-                                                    <div class="col-sm-10">
-                                                        <!--초기 이미지 등록 박스-->
+                                                    <!--초기 이미지 등록 박스-->
+                                                    <img ngf-src="dockerFile" class="thumb">
+                                                    <fieldset>
+                                                        <input type="file" ngf-select ng-model="dockerFile" name="file" ngf-accept="'image/*'">
+                                                    </fieldset>
+                                                    <!--<div class="col-sm-10">
                                                         <div class="img-icon-sett filebox">
                                                             <label class="hov-img-txt" for="img-file">이미지 등록</label>
                                                             <input type="file" id="img-file">
                                                         </div>
-                                                        <!--이미지 등록 후 변경,삭제해야 할 때 드롭박스-->
                                                         <div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>
-                                                        <!--더보기>드롭다운-->
                                                         <ul class="dropdown-img-icon" role="menu">
                                                             <li><a href="#">이미지 변경</a></li>
                                                             <li><a href="#">이미지 삭제</a></li>
                                                         </ul>
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">이름</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="inputtext" placeholder="postgres">
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.name.$invalid && !myDockerForm.name.$pristine }">
+                                                        <input type="text" class="form-control" name="name" placeholder="postgres" ng-model="dockerImage.view_name" required>
+                                                        <p ng-show="myDockerForm.name.$invalid && !myDockerForm.name.$pristine" class="help-block">이름을 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">버전</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="inputtext" placeholder="16.04.1">
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.ver.$invalid && !myDockerForm.ver.$pristine }">
+                                                        <input type="text" class="form-control" name="ver" placeholder="16.04.1" ng-model="dockerImage.os_ver" required>
+                                                        <p ng-show="myDockerForm.ver.$invalid && !myDockerForm.ver.$pristine" class="help-block">버전을 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">태그</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="inputtext" placeholder="태그와 태그는 쉼표로 구분 됩니다.">
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.tag.$invalid && !myDockerForm.tag.$pristine }">
+                                                        <input type="text" class="form-control" name="tag" placeholder="태그와 태그는 쉼표로 구분 됩니다." ng-model="dockerImage.tag" required>
+                                                        <p ng-show="myDockerForm.ver.$invalid && !myDockerForm.ver.$pristine" class="help-block">태그를 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">포트</label>
-                                                    <div class="col-sm-10">
-                                                        <textarea class="form-control" rows="2" placeholder="오픈할 포트를 쉼표로 구분하여 넣어주세요"></textarea>
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.port.$invalid && !myDockerForm.port.$pristine }">
+                                                        <input type="text" class="form-control" name="port" placeholder="오픈할 포트를 쉼표로 구분하여 넣어주세요" ng-model="dockerImage.port">
+                                                        <p ng-show="myDockerForm.port.$invalid && !myDockerForm.port.$pristine" class="help-block">포트를 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">환경변수</label>
-                                                    <div class="col-sm-10">
-                                                        <textarea class="form-control" rows="2" placeholder="환경변수와 볼륨은 한줄에 하나씩 넣어주세요"></textarea>
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.env.$invalid && !myDockerForm.env.$pristine }">
+                                                        <textarea class="form-control" rows="2" name="env" placeholder="환경변수와 볼륨은 한줄에 하나씩 넣어주세요" ng-model="dockerImage.env"></textarea>
+                                                        <p ng-show="myDockerForm.env.$invalid && !myDockerForm.env.$pristine" class="help-block">환경변수를 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label" >볼륨</label>
-                                                    <div class="col-sm-10">
-                                                        <textarea class="form-control" rows="2" placeholder="볼륨을 한 줄에 하나씩 넣어주세요"></textarea>
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.vol.$invalid && !myDockerForm.vol.$pristine }">
+                                                        <textarea class="form-control" rows="2" name="vol" placeholder="볼륨을 한 줄에 하나씩 넣어주세요" ng-model="dockerImage.vol"></textarea>
+                                                        <p ng-show="myDockerForm.vol.$invalid && !myDockerForm.vol.$pristine" class="help-block">볼륨을 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">설명</label>
-                                                    <div class="col-sm-10">
-                                                        <textarea class="form-control" rows="2"></textarea>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label" ng-model="dockerImage.dsc">설명</label>
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.dsc.$invalid && !myDockerForm.dsc.$pristine }">
+                                                        <textarea class="form-control" rows="2" name="dsc"></textarea>
+                                                        <p ng-show="myDockerForm.dsc.$invalid && !myDockerForm.dsc.$pristine" class="help-block">설명을 입력하세요.</p>
                                                     </div>
                                                 </div>
+                                                <input type="hidden" ng-model="dockerImage.id">
                                             </form>
                                         </div> <!--class="modal-body"-->
 
 
 
                                         <div class="modal-footer gn-modal-footer">
-                                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">저장</button>
+                                            <button type="submit" class="btn btn-gn-sub btn-block" ng-disabled="myDockerForm.$invalid" data-dismiss="modal" ng-click="uploadDocker(dockerFile)" >저장</button>
                                         </div>
                                     </div>
                                 </div>
@@ -503,7 +513,7 @@
                                         <tbody class="gn-tdody">
                                         <tr ng-repeat="contain in contain_list">
                                             <td>
-                                                <img src="/gn_images/gn_icon_{{contain.os}}.png" alt="">
+                                                <img src="/gn_images/{{contain.icon}}" alt="">
                                                 {{contain.view_name}}
                                             </td>
                                             <td class="hidden-xs">{{contain.os_ver}}</td>
@@ -516,8 +526,8 @@
                                                 </div>
                                                 <!--더보기>드롭다운-->
                                                 <ul class="dropdown-menu gn-dropdown" role="menu">
-                                                    <li><a href="#">수정</a></li>
-                                                    <li><a href="#">삭제</a></li>
+                                                    <li><a href  ng-click="getInstanceImageDocker(contain.id)" data-toggle="modal" data-target="#img-cont" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
+                                                    <li><a href ng-click="deleteInstanceImageDoker(contain.id)">삭제</a></li>
                                                 </ul>
                                             </td>
                                         </tr>
