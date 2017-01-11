@@ -965,6 +965,9 @@ a.log-join-btn:focus{
     font-size: 24px;
     font-weight: 600; 
 }
+[ng-click]{
+    cursor:pointer;
+}
 
 /*컨테이너 개수/총 사용자*/
 /*박스 왼쪽*/

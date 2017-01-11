@@ -107,7 +107,7 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
 
     guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename=""
                             , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="Starting")
+                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="Starting", create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(guest_snap)
     sql_session.commit();
     return {"status":True, "value":ord_id, "snap_id":vm_id}
@@ -220,12 +220,12 @@ def sign_up(user_name, user_id, password, password_re):
         return 'password'
 
 def repair(user_id, password, password_new, password_re, tel, email, sql_session):
-    test = db_session.query(GnUser).filter(GnUser.user_id == user_id).one()
+    test = sql_session.query(GnUser).filter(GnUser.user_id == user_id).one()
     if password != "":
-        password = random_string(password)
-        list = db_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
+        password = convertToHashValue(password)
+        list = sql_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
         if (list != None and password_re == password_new):
-              list.password = random_string(password_re)
+              list.password = convertToHashValue(password_re)
         else:
                 return 1
     if tel!="":
@@ -233,7 +233,7 @@ def repair(user_id, password, password_new, password_re, tel, email, sql_session
 
     if email != "":
         test.email = email
-    db_session.commit()
+    sql_session.commit()
     return 2
 
 
@@ -311,7 +311,7 @@ def getQuotaOfTeam(team_code, sql_session):
 
     team_user_cnt = sql_session.query(func.count(GnUserTeam.user_id).label("count"))\
                                .filter(GnUserTeam.team_code == team_code)\
-                               .filter(GnUserTeam.comfirm == "Y").filter(GnVmMachines.status != "Error").one()
+                               .filter(GnUserTeam.comfirm == "Y").one()
 
     user_list = sql_session.query(GnVmMachines.author_id,GnUser.user_name,func.count().label("count"))\
                            .outerjoin(GnUser, GnVmMachines.author_id == GnUser.user_id)\

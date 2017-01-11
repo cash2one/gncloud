@@ -68,7 +68,7 @@ def hvm_create():
             add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
 
             # hdd 확장
-            if vm_info.disk >21475000000:
+            if vm_info.disk > 21475000000 and base_image_info.sub_type == 'base':
                 ps.resize_vhd(host_machine.image_path+"/vhdx/base/"+internal_name+".vhdx", host_machine.image_path, vm_info.disk)
 
             start_vm = ps.start_vm(new_vm['VMId'])
@@ -91,11 +91,17 @@ def hvm_create():
                 else:
                     break
 
+            count = 0
             # password setting 완전하지 않음 수정 필요함
-            try:
-                ps.set_password(get_vm_ip, vm_info.hyperv_pass)
-            except Exception as message:
-                print message
+            while True:
+                time.sleep(5)
+                count += 1
+                if count >= 20 or base_image_info.sub_type == 'snap':
+                    break
+                try:
+                    ps.set_password(get_vm_ip, vm_info.hyperv_pass)
+                except Exception as message:
+                    break
 
             vm_info.internal_id=new_vm['VMId']
             vm_info.internal_name=internal_name
@@ -127,27 +133,28 @@ def hvm_snapshot():
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
     create_snap = ps.create_snap(org_id.internal_id, image_pool.image_path)
-    if create_snap['Name'] is not None:
-        # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
+    try:
+        if create_snap['Name'] is not None:
+            # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
-        filename = create_snap['Name']
-        icon = 'icon_path'
+            filename = create_snap['Name']
+            icon = 'icon_path'
 
-        vm_info.filename = filename
-        vm_info.icon = icon
-        vm_info.status = "Running"
-        vm_info.os_ver = org_id.os_ver
-        vm_info.host_id = host_machine.id
-        db_session.commit()
-
-        start_vm = ps.start_vm(org_id.internal_id)
-        if start_vm['State'] is 2:
-            return jsonify(status=True)
-        else:
-            vm_info.status="Error"
+            vm_info.filename = filename
+            vm_info.icon = icon
+            vm_info.status = "Running"
+            vm_info.os_ver = org_id.os_ver
+            vm_info.host_id = host_machine.id
             db_session.commit()
-            return jsonify(status=False)
-    else:
+
+            start_vm = ps.start_vm(org_id.internal_id)
+            if start_vm['State'] is 2:
+                return jsonify(status=True)
+            else:
+                vm_info.status="Error"
+                db_session.commit()
+                return jsonify(status=False)
+    except:
         vm_info.status="Error"
         db_session.commit()
         return jsonify(status=False)
@@ -366,10 +373,11 @@ def vm_monitor():
 
         script = 'Get-VHD -VMId ' +seq.internal_id+' | Select-Object -Property Filesize, Size | ConvertTo-Json;'
         hdd_usage = ps.send(script)
-        hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
+        #hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
+        hdd = float(hdd_usage['FileSize'])
 
-        mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4)
-        cpu = round(float(vm_monitor['CPUUsage'])*float((seq.cpu/host.cpu)), 4)
+        mem = round((float(vm_monitor['MemoryAssigned'])*1.024*1.024)/float(seq.memory), 4) * 100
+        cpu = round(float(vm_monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
 
         script = '$vm = Get-vm -id '+ seq.internal_id+';'
         script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
