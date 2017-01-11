@@ -220,12 +220,12 @@ def sign_up(user_name, user_id, password, password_re):
         return 'password'
 
 def repair(user_id, password, password_new, password_re, tel, email, sql_session):
-    test = db_session.query(GnUser).filter(GnUser.user_id == user_id).one()
+    test = sql_session.query(GnUser).filter(GnUser.user_id == user_id).one()
     if password != "":
-        password = random_string(password)
-        list = db_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
+        password = convertToHashValue(password)
+        list = sql_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
         if (list != None and password_re == password_new):
-              list.password = random_string(password_re)
+              list.password = convertToHashValue(password_re)
         else:
                 return 1
     if tel!="":
@@ -233,7 +233,7 @@ def repair(user_id, password, password_new, password_re, tel, email, sql_session
 
     if email != "":
         test.email = email
-    db_session.commit()
+    sql_session.commit()
     return 2
 
 
