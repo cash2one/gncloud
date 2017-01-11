@@ -133,27 +133,28 @@ def hvm_snapshot():
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
     create_snap = ps.create_snap(org_id.internal_id, image_pool.image_path)
-    if create_snap['Name'] is not None:
-        # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
+    try:
+        if create_snap['Name'] is not None:
+            # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
-        filename = create_snap['Name']
-        icon = 'icon_path'
+            filename = create_snap['Name']
+            icon = 'icon_path'
 
-        vm_info.filename = filename
-        vm_info.icon = icon
-        vm_info.status = "Running"
-        vm_info.os_ver = org_id.os_ver
-        vm_info.host_id = host_machine.id
-        db_session.commit()
-
-        start_vm = ps.start_vm(org_id.internal_id)
-        if start_vm['State'] is 2:
-            return jsonify(status=True)
-        else:
-            vm_info.status="Error"
+            vm_info.filename = filename
+            vm_info.icon = icon
+            vm_info.status = "Running"
+            vm_info.os_ver = org_id.os_ver
+            vm_info.host_id = host_machine.id
             db_session.commit()
-            return jsonify(status=False)
-    else:
+
+            start_vm = ps.start_vm(org_id.internal_id)
+            if start_vm['State'] is 2:
+                return jsonify(status=True)
+            else:
+                vm_info.status="Error"
+                db_session.commit()
+                return jsonify(status=False)
+    except:
         vm_info.status="Error"
         db_session.commit()
         return jsonify(status=False)

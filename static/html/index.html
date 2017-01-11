@@ -35,7 +35,13 @@
                 headers: {'Content-Type': 'application/json; charset=utf-8'},
                 success: function (data) {
                     if(data.info != null){
-                        location.href="/main/#/dashboard"
+                        if(data.info.team_check =='Y'){
+                            location.href="/main/#/guestReadyTeam"
+                        }else if(data.info.team_check =='N'){
+                            location.href="/main/#/guestSelectTeam"
+                        }else{
+                            location.href="/main/#/dashboard"
+                        }
                     }
                 }
             })

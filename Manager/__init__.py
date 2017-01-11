@@ -146,6 +146,7 @@ def login():
         session['userName'] = user_info.user_name
         session['teamOwner'] = ""
         session['teamCode'] = ""
+        session['teamCheck']="N"
         return jsonify(status=True, test='no')
     elif(user_info != None and team_info.comfirm == "Y"):
         session['userId'] = user_info.user_id
@@ -159,6 +160,7 @@ def login():
         session['userName'] = user_info.user_name
         session['teamOwner'] = ""
         session['teamCode'] = ""
+        session['teamCheck']="Y"
         return jsonify(status=True, test='noyes')
     else:
         return jsonify(status=True, test='noo')
@@ -186,7 +188,7 @@ def logout():
 
 @app.route('/vm/logincheck', methods=['GET'])
 def logincheck():
-    user_info = {"name":session['userName'],"user_id": session['userId'], "authority":session['teamOwner'], "team_code":session['teamCode']}
+    user_info = {"name":session['userName'],"user_id": session['userId'], "authority":session['teamOwner'], "team_code":session['teamCode'],"team_check":session['teamCheck']}
     return jsonify(status= True, info=user_info)
 
 
