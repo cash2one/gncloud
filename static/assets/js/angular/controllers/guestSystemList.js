@@ -238,8 +238,11 @@ angular
         }
 
 
-        //저장 로직
-        $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":"","id":""};
+        $scope.initForm = function (part) {
+            if(part =="instance") $scope.instanceImage = {};
+            if(part =="docker") $scope.dockerImage = {};
+        };
+        //인스턴스 저장 로직
         $scope.uploadPic = function (file) {
             $scope.formUpload = true;
             if (file != null) {
@@ -261,7 +264,7 @@ angular
 
             file.upload.then(function (response) {
                 $scope.image();
-                $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":""};
+                $scope.instanceImage = {};
             }, function (response) {
 
             }, function (evt) {
@@ -280,7 +283,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.image();
-                        $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":""};
+                        $scope.instanceImage = {};
                     }else{
                         if(data.message != null){
                             alert(data.message);
@@ -336,6 +339,103 @@ angular
                 });
         }
 
+
+
+        //docker 저장 로직
+        $scope.uploadDocker = function (file) {
+            $scope.formUpload = true;
+            if (file != null) {
+                uploadUsingUploadDocker(file);
+            }else{
+                saveInstanceImageDocker()
+            }
+        };
+
+        function uploadUsingUploadDocker(file) {
+            $scope.dockerImage.file = file;
+            file.upload = Upload.upload({
+                url: "/api/manager/vm/dockerimage/file",
+                headers: {
+                    'optional-header': 'header-value'
+                },
+                data: $scope.dockerImage
+            });
+
+            file.upload.then(function (response) {
+                $scope.contain();
+                $scope.instanceImage = {};
+            }, function (response) {
+
+            }, function (evt) {
+
+            });
+
+        }
+
+        function saveInstanceImageDocker(){
+            $http({
+                method: "POST",
+                url: '/api/manager/vm/dockerimage',
+                data: $scope.dockerImage,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.contain();
+                        $scope.dockerImage = {};
+                    }else{
+                        if(data.message != null){
+                            alert(data.message);
+                        }
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.getInstanceImageDocker = function(id){
+            $('#icon_image').attr('src','');
+
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/dockerimage/'+id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.dockerImage = data.info;
+                    }else{
+                        if(data.message != null){
+                            alert(data.message);
+                        }
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.deleteInstanceImageDoker = function(id){
+            $http({
+                method: 'DELETE',
+                url: '/api/manager/vm/dockerimage/'+id,
+                data: $scope.dockerImage,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.contain();
+                    }else{
+                        if(data.message != null){
+                            alert(data.message);
+                        }
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
 
 
 

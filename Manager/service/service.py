@@ -402,7 +402,7 @@ def container(type,team_code ,sql_sesssion):
     return list
 
 def containers(sql_sesssion):
-    list = sql_sesssion.query(GnDockerImages).all()
+    list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.status != "Removed").order_by(GnDockerImages.create_time.desc()).all()
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
@@ -618,6 +618,41 @@ def updateImageInfo(id,type,os_name,os_ver,os_bit,filename,icon,sql_session):
     if icon != "":
         image_info.icon = icon
 
+    sql_session.commit()
+
+
+def selectImageInfoDocker(id,sql_session):
+    return sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
+
+
+def insertImageInfoDocker(name,os_ver,tag,icon,sql_session):
+    #id 생성
+    while True:
+        id = random_string(8)
+        check_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).first();
+        if not check_info:
+            id_info = GnId(id,type)
+            sql_session.add(id_info)
+            sql_session.commit()
+            break
+    image_info = GnDockerImages(id=id, view_name=name, sub_type="base",tag=tag, icon=icon, os_ver=os_ver, status="running")
+    sql_session.add(image_info)
+    sql_session.commit()
+
+def updateImageInfoDocker(id,name,os_ver,tag,icon,sql_session):
+    image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one();
+    image_info.view_name = name
+    image_info.os_ver = os_ver;
+    image_info.tag = tag
+    if icon != "":
+        image_info.icon = icon
+
+    sql_session.commit()
+
+
+def deleteImageInfoDocker(id,sql_session):
+    image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one();
+    image_info.status = "Removed"
     sql_session.commit()
 
 

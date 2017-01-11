@@ -278,8 +278,10 @@ class GnDockerImages(Base):
     author_id = Column(String(10), nullable=True, default='')
     create_time = Column( nullable=False, default=datetime.datetime.now())
     status = Column(String(10), primary_key=False, nullable=False)
+    icon = Column(String(50), primary_key=False, nullable=False)
+    sub_type = Column(String(10), nullable=True, default='')
 
-    def __init__(self, id=id, name= None, tag=None, os=None, os_ver=None, team_code=None, author_id =None, create_time=None, status=None, view_name=None):
+    def __init__(self, id=id, name= None, tag=None, os=None, os_ver=None, team_code=None, author_id =None, create_time=None, status=None, view_name=None, icon=None, sub_type=None):
         self.id= id
         self.name =name
         self.tag = tag
@@ -291,13 +293,15 @@ class GnDockerImages(Base):
         self.status = status
         self.view_name = view_name
         self.type = type
+        self.type = icon
+        self.sub_type = sub_type
 
     def __repr__(self):
         return '<ID %r / Name %r / Tag %r / Os %r / Os_ver %r /Team_code %r / create_time %r / Status %r/ View_name %r />'\
             % (self.id, self.name, self.tag, self.os, self.os_ver, self.team_code, self.create_time, self.Status, self.view_name)
 
     def __json__(self):
-        return ['id', 'name','tag' ,'os','os_ver','team_code', 'create_time','status', 'view_name']
+        return ['id', 'name','tag' ,'os','os_ver','team_code', 'create_time','status', 'view_name', 'icon']
 
 class GnMonitor(Base):
     __tablename__ = "GN_MONITOR"
