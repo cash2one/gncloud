@@ -14,7 +14,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot\
                             , hostMachineList, insertImageInfo, deleteImageInfo, selectImageInfo, updateImageInfo \
-                            , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list
+                            , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list, team_table_info
 from db.database import db_session
 from Manager.util.config import config
 
@@ -393,6 +393,10 @@ def changeteamnamesystem(code):
 @app.route('/vm/account/teamtable', methods=['GET'])
 def teamshow():
     return jsonify(status=True, message="success", list=team_table(db_session))
+
+@app.route('/vm/account/teamtable/<code>', methods=['GET'])
+def teamshowlist(code):
+    return jsonify(status=True, message="success", list=team_table_info(code, db_session))
 
 @app.route('/vm/systems/path', methods=['GET'])
 def systembase():
