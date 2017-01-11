@@ -107,7 +107,7 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
 
     guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename=""
                             , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="Starting")
+                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="Starting", create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(guest_snap)
     sql_session.commit();
     return {"status":True, "value":ord_id, "snap_id":vm_id}
