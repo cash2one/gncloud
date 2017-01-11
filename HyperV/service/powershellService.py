@@ -109,7 +109,7 @@ class PowerShell(object):
                                             "$drive, $sysize | ConvertTo-Json -Compress; "
         result = self.send(script)
         script = 'resize-partition -DriveLetter '+str(result[0])+' -size '+str(long(size)-result[1]-111111111)+';'
-        script += 'dismount-vhd '+path+'/vhdx/base/'+vhd_name+'.vhdx;'
+        script += 'dismount-vhd '+path+'/vhdx/base/'+vhd_name
         result = self.send(script)
         return result
 
@@ -129,11 +129,12 @@ class PowerShell(object):
         script += '$user=[adsi]"WinNT://$env:computerName/gncloud";'
         script += '$user.setPassword("'+password+'");}'
 
-        try:
-            ret = self.send_new_vm(script, ip)
-        except:
-            return '{}'
-        return ret
+        # while True:
+        #     try:
+        #         ret = self.send_new_vm(script, ip)
+        #     except:
+        #         break
+        return self.send(script)
 
     # Get-WmiObject win32_useraccount | Select-Object -Property Name | ConvertTo-Json
     # user의 리스트를 받아온다. 리스트를 받아온 뒤 Admin 계정에 패스워드 설정 가능
