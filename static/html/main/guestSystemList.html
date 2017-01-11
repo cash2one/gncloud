@@ -275,7 +275,7 @@
                                         </div>
 
                                         <div class="modal-body gn-modal-body">
-                                            <form name="myForm" class="form-horizontal">
+                                            <form name="myForm" class="form-horizontal" ng-submit="submitForm(myForm.$valid)">
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
                                                     <div class="col-sm-10">
@@ -287,7 +287,7 @@
 
 
                                                                 </fieldset>
-                                                        </form>
+
                                                         <!--<div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>-->
                                                         <!--<ul class="dropdown-img-icon" role="menu">-->
                                                             <!--<li><a href="#">이미지 변경</a></li>-->
@@ -297,37 +297,42 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label gn-control-label">타입</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myForm.optradio.$invalid && !myForm.optradio.$pristine }">
                                                         <label class="radio-inline mod-input-name">
-                                                            <input type="radio" name="optradio" ng-model="instanceImage.type" value="hyperv">Hyper-V
+                                                            <input type="radio" name="optradio" ng-model="instanceImage.type" value="hyperv" required>Hyper-V
                                                         </label>
                                                         <label class="radio-inline mod-input-name">
-                                                            <input type="radio" name="optradio" ng-model="instanceImage.type" value="kvm">KVM
+                                                            <input type="radio" name="optradio" ng-model="instanceImage.type" value="kvm" required>KVM
                                                         </label>
+                                                        <p ng-show="myForm.optradio.$invalid && !myForm.optradio.$pristine" class="help-block">type를 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">OS</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows" ng-model="instanceImage.os" required>
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myForm.os.$invalid && !myForm.os.$pristine }">
+                                                        <input type="text" name="os" class="form-control gn-form-control" placeholder="windows" ng-model="instanceImage.os" required>
+                                                        <p ng-show="myForm.os.$invalid && !myForm.os.$pristine" class="help-block">os를 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">버전</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="10" ng-model="instanceImage.os_ver" required>
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myForm.os_ver.$invalid && !myForm.os_ver.$pristine }">
+                                                        <input type="text" name="os_ver" class="form-control gn-form-control"  placeholder="10" ng-model="instanceImage.os_ver" required>
+                                                        <p ng-show="myForm.os_ver.$invalid && !myForm.os_ver.$pristine" class="help-block">버전을 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">BIT</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="64" ng-model="instanceImage.os_bit" required>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">비트</label>
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myForm.bit.$invalid && !myForm.bit.$pristine }">
+                                                        <input type="text" name="bit" class="form-control gn-form-control" placeholder="64" ng-model="instanceImage.os_bit" required>
+                                                        <p ng-show="myForm.bit.$invalid && !myForm.bit.$pristine" class="help-block">비트를 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">PATH</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows_10_pro_x86.vhdx" ng-model="instanceImage.filename" required>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">파일명</label>
+                                                    <div class="col-sm-8" ng-class="{ 'has-error' : myForm.path.$invalid && !myForm.path.$pristine }">
+                                                        <input type="text" name="path" class="form-control gn-form-control"  placeholder="windows_10_pro_x86.vhdx" ng-model="instanceImage.filename" required>
+                                                        <p ng-show="myForm.path.$invalid && !myForm.path.$pristine" class="help-block">파일명을 입력하세요.</p>
                                                     </div>
                                                     <!--<div class="col-sm-2 btn-sm2">
                                                         <button type="file" class="btn btn-gn-sub btn-block">업로드</button>
@@ -338,7 +343,7 @@
                                         </div> <!--class="modal-body"-->
 
                                         <div class="modal-footer gn-modal-footer">
-                                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="uploadPic(picFile)">저장</button>
+                                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-disabled="myForm.$invalid" ng-click="uploadPic(picFile)">저장</button>
                                         </div>
                                     </div>
                                 </div>
