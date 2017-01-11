@@ -236,10 +236,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}" class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">
+                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}">
                                 <td class="">{{$index+1}}</td>
                                 <td class="">{{won.team_owner}}</td>
-                                <td class="">{{won.user_name}}</td>
+                                <td class="" class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">{{won.user_name}}</td>
                                 <td class="" ng-model="data.user_id">{{won.user_id}}</td>
                                 <!--<td class="hidden-xs">{{won.tel}}</td>-->
                                 <!--<td class="hidden-xs">{{won.email}}</td>-->
@@ -254,7 +254,7 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu" >
-                                        <li ng-repeat="ac in actions"><a href ng-click="update(won.user_id, won.team_code, ac)">{{ac.name}}</a></li>
+                                        <li ng-repeat="ac in actions"><a href ng-click="update(won.user_id, won.team_code, ac, won.user_name)">{{ac.name}}</a></li>
                                     </ul>
                                 </td>
                             </tr>

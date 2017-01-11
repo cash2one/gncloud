@@ -965,9 +965,6 @@ a.log-join-btn:focus{
     font-size: 24px;
     font-weight: 600; 
 }
-[ng-click]{
-    cursor:pointer;
-}
 
 /*컨테이너 개수/총 사용자*/
 /*박스 왼쪽*/
@@ -999,6 +996,7 @@ a.log-join-btn:focus{
 
 .gn-tdody > tr > td.visible-xs-3 > a{
     width: 190px;
+    line-height: 37px;
 }
 
 .gn-dot-stop{
@@ -1023,6 +1021,15 @@ a.log-join-btn:focus{
     height: 35px;
     float: left;
     margin-right: 10px;    
+}
+
+.gn-working{
+    background: url(../gn_images/status-working-28.gif) no-repeat;
+    width: 28px;
+    height: 28px;
+    float: left;
+    margin-right: 10px; 
+    margin-top: 5px;
 }
 
 /* ========== gncloud 인스턴스 > 상세 HTML ========== */
@@ -1345,6 +1352,9 @@ li.active > .tab-sm-box{
     border: 1px solid #58c4c6 !important;
 }
 
+[ng-click]{
+    cursor : pointer;
+}
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
 .fons-16{font-size: 16px;}
 .gn-ms-cursor{cursor: pointer;}
@@ -1362,7 +1372,7 @@ li.active > .tab-sm-box{
     padding-left: 0;
 }*/
 
-
+.gn-left-menu > li{padding: 3px 0;}
 
 li.left-title{
     width: 100%;
@@ -1457,6 +1467,17 @@ ul.gn-sett-graph > li:nth-of-type(3){
     margin-bottom: 20px;
 }
 
+.sett-detail dt,
+.sett-detail dd,
+.sett-detail div,
+.sett-detail span
+{line-height: 37px; float: left;}
+.sett-detail dt{text-align: right; width: 86px;}
+.sett-detail dd{margin-left: 32px;}
+.gn-description-list.sett-detail > div{padding: 2px 0; margin-left: 5px;}
+.gn-description-list.sett-detail > div > span{margin: 0px 5px;}
+.gn-description-list.sett-detail > div > span.sett-detail-span{width: 40px;}
+.gn-description-list.sett-detail > div > input{width: 85px;  margin: 0px 5px; float: left;} 
 
 /*시스템 > 이미지 관리*/
 .img-icon-sett{

@@ -102,7 +102,7 @@ angular
             {name: '팀탈퇴', type: 'dropout'}
         ];
         $scope.data={};
-        $scope.update = function (id, code, action) {  //팀장이 팀원 등급권한
+        $scope.update = function (id, code, action, name) {  //팀장이 팀원 등급권한
             var url = '/api/manager/vm/account/teamset/'+id+'/'+code;
             var method = "PUT";
             if (action.type == "dropout") {
@@ -118,10 +118,10 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert("변경되었습니다");
+                        alert(name + data.message);
                         $scope.teamtable();
                     } else {
-                        alert(data.message);
+                        //alert(data.message);
                     }
                 })
                 .error(function(data, status, headers, config) {

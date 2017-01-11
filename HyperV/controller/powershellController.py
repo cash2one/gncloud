@@ -92,11 +92,11 @@ def hvm_create():
                     break
 
             count = 0
-            # password setting 완전하지 않음 수정 필요함
+            # password setting
             while True:
                 time.sleep(5)
                 count += 1
-                if count >= 20 or base_image_info.sub_type == 'snap':
+                if count >= 50 or base_image_info.sub_type == 'snap':
                     break
                 try:
                     ps.set_password(get_vm_ip, vm_info.hyperv_pass)
@@ -376,7 +376,7 @@ def vm_monitor():
         #hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
         hdd = float(hdd_usage['FileSize'])
 
-        mem = round((float(vm_monitor['MemoryAssigned'])*1.024*1.024)/float(seq.memory), 4) * 100
+        mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4) * 100
         cpu = round(float(vm_monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
 
         script = '$vm = Get-vm -id '+ seq.internal_id+';'

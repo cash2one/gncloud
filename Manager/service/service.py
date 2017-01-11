@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'NaDa'
 
-from sqlalchemy import func, desc
+from sqlalchemy import func
 import datetime
 import humanfriendly
 
@@ -83,11 +83,16 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
                               , type=type, team_code=team_code, author_id=user_id
                               , status='Starting', tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                               , host_id=host_id, hyperv_pass=password)
-    else:
+    elif(type=="kvm"):
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status='Starting', tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                                   , host_id="", ssh_key_id=sshkeys)
+    else:
+        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+                                  , type=type, team_code=team_code, author_id=user_id
+                                  , status='Starting', tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+                                  , host_id="")
                                 
     sql_session.add(vm_machine)
     sql_session.commit()
@@ -421,7 +426,7 @@ def approve_set(user_id,code,type,user_name,sql_session):
         list.comfirm = "Y"
         list.team_owner='user'
         sql_session.commit()
-        return True
+        return 1
     if(type == 'change'):
         list = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id== user_id).first()
         if(list.team_owner == 'owner'):
@@ -430,12 +435,12 @@ def approve_set(user_id,code,type,user_name,sql_session):
         elif(list.team_owner == 'user'):
             list.team_owner = 'owner'
             sql_session.commit()
-        return True
+        return 2
     if(type == 'reset'):
         list = sql_session.query(GnUser).filter(GnUser.user_id==user_id).first()
-        list.password = random_string('11111111')
+        list.password = convertToHashValue('11111111')
         sql_session.commit()
-        return True
+        return 3
 
 def team_delete(id ,code):
     db_session.query(GnUserTeam).filter(GnUserTeam.user_id == id).filter(GnUserTeam.team_code == code).delete()
@@ -460,7 +465,7 @@ def comfirm_list(user_id, sql_session):
 def createteam_list(user_id,team_name, team_code, author_id, sql_session):
     if(sql_session.query(GnTeam).filter(GnTeam.team_name == team_name).one_or_none() == None):
         if(sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one_or_none() == None):
-            vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id,cpu_quota=30,mem_quota=21475000000,disk_quota= 107370000000, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+            vm = GnTeam(team_code= team_code, team_name=team_name, author_id=author_id,cpu_quota=30,mem_quota=21474836480,disk_quota= 107374182400, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
             tm = GnUserTeam(user_id=user_id, team_code=team_code, comfirm='Y', apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),approve_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), team_owner='owner')
             db_session.add(vm)
             db_session.add(tm)
