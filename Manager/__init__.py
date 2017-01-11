@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import traceback
+import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
 from datetime import timedelta
-import os
+import datetime
 
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
@@ -15,7 +16,6 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , hostMachineList, insertImageInfo, deleteImageInfo, selectImageInfo, updateImageInfo \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list
 from db.database import db_session
-import datetime
 from Manager.util.config import config
 
 app = Flask(__name__)
@@ -309,9 +309,15 @@ def teamwon1(code):
 def approve(id,code):
     type = request.json['type']
     user_name = session['userName']
-    approve_set(id, code, type, user_name, db_session)
-    return jsonify(status=True, message="success")
-
+    list= approve_set(id, code, type, user_name, db_session)
+    if(list == 1):
+        return jsonify(status=True, message="의 등급이 변경되었습니다.")
+    elif(list == 2):
+        return jsonify(status=True, message="의 등급이 변경되었습니다.")
+    elif(list == 3):
+        return jsonify(status=True, message="의 비밀번호가 초기화 되었습니다.")
+    else:
+        return jsonify(status=True, message="의 등급은 이미 변경 되었습니다.")
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['DELETE'])
 def delete(id, code):
