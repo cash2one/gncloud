@@ -92,11 +92,11 @@ def hvm_create():
                     break
 
             count = 0
-            # password setting 완전하지 않음 수정 필요함
+            # password setting
             while True:
                 time.sleep(5)
                 count += 1
-                if count >= 20 or base_image_info.sub_type == 'snap':
+                if count >= 50 or base_image_info.sub_type == 'snap':
                     break
                 try:
                     ps.set_password(get_vm_ip, vm_info.hyperv_pass)
