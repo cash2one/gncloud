@@ -101,7 +101,8 @@ class PowerShell(object):
 
     #하드디스크 확장
     def resize_vhd(self, vhd_name, path, size):
-        script = "$dl=mount-vhd " +vhd_name+" -Passthru | get-disk | get-partition | get-volume;" \
+        script = 'Resize-VHD -Path '+vhd_name+' -SizeBytes '+size+';'
+        script += "$dl=mount-vhd " +vhd_name+" -Passthru | get-disk | get-partition | get-volume;" \
                                             "foreach($x in $dl){" \
                                             "if ($x.FileSystemLabel -eq '') {$drive = $x.DriveLetter;}" \
                                             "Else { $sysize = $x.Size;} " \
@@ -109,7 +110,7 @@ class PowerShell(object):
                                             "$drive, $sysize | ConvertTo-Json -Compress; "
         result = self.send(script)
         print script
-        script = 'resize-partition -DriveLetter '+str(result[0])+' -size '+str(long(size)-long(result[1])-1111111111)+';'
+        script = 'resize-partition -DriveLetter '+str(result[0])+' -size '+str(long(size)-long(result[1])-111111111)+';'
         script += 'dismount-vhd '+vhd_name +';'
         print script
         result = self.send(script)
