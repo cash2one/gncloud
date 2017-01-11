@@ -372,7 +372,8 @@ def vm_monitor():
 
         script = 'Get-VHD -VMId ' +seq.internal_id+' | Select-Object -Property Filesize, Size | ConvertTo-Json;'
         hdd_usage = ps.send(script)
-        hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
+        #hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
+        hdd = float(hdd_usage['FileSize'])
 
         mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4) * 100
         cpu = round(float(vm_monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
