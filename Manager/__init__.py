@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+
 import traceback
 
 from flask import Flask, jsonify, request, session, escape, make_response
 from datetime import timedelta
+import os
 
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
@@ -13,12 +15,14 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , hostMachineList, insertImageInfo, deleteImageInfo, selectImageInfo, updateImageInfo \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list
 from db.database import db_session
+import datetime
+from Manager.util.config import config
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 app.json_encoder = AlchemyEncoder
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 #####common function start#####
 
@@ -365,16 +369,13 @@ def delteam(code):
 def getHostMachines():
     return jsonify(status=True, message="success", info=hostMachineList(db_session))
 
-@app.route('/vm/image',methods=['POST'])
-def saveBaseImage():
-    type = request.json['type']
-    os = request.json['os']
-    os_ver = request.json['os_ver']
-    os_bit = request.json['os_bit']
-    filename = request.json['filename']
-    name = request.json['name']
-    insertImageInfo(type,os,os_ver,os_bit,filename, name, db_session)
-    return jsonify(status=True, message="success")
+
+def secure_filename(filename):
+    return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 @app.route('/vm/image/<id>',methods=['DELETE'])
 def deleteBaseImage(id):
@@ -385,16 +386,39 @@ def deleteBaseImage(id):
 def getBaseImage(id):
     return jsonify(status=True, message="success",info=selectImageInfo(id, db_session))
 
-@app.route('/vm/image',methods=['PUT'])
-def modifyBaseImage():
-    id = request.json['id']
+@app.route('/vm/image/file',methods=['POST'])
+def saveBaseImageImportFile():
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        icon = secure_filename(file.filename)
+        file.save(os.path.join(config.IMAGE_PATH, icon))
+
+    type = request.form['type']
+    os_name = request.form['os']
+    os_ver = request.form['type']
+    os_bit = request.form['os_bit']
+    filename = request.form['filename']
+
+    if request.form['id'] == "":
+        insertImageInfo(type,os_name,os_ver,os_bit,filename, icon, db_session)
+    else:
+        updateImageInfo(request.form['id'],type,os_name,os_ver,os_bit,filename,icon,db_session)
+
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/image',methods=['POST'])
+def saveBaseImageExceptFile():
     type = request.json['type']
-    os = request.json['os']
+    os_name = request.json['os']
     os_ver = request.json['os_ver']
     os_bit = request.json['os_bit']
     filename = request.json['filename']
-    name = request.json['name']
-    updateImageInfo(id,type,os,os_ver,os_bit,filename, name, db_session)
+
+    if request.json['id'] == "":
+        insertImageInfo(type,os_name,os_ver,os_bit,filename, "", db_session)
+    else:
+        updateImageInfo(request.json['id'],type,os_name,os_ver,os_bit,filename,"",db_session)
+
     return jsonify(status=True, message="success")
 
 

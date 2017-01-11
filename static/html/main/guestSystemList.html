@@ -275,22 +275,24 @@
                                         </div>
 
                                         <div class="modal-body gn-modal-body">
-                                            <form class="form-horizontal">
+                                            <form name="myForm" class="form-horizontal">
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
                                                     <div class="col-sm-10">
                                                         <!--초기 이미지 등록 박스-->
-                                                        <div class="img-icon-sett filebox">
-                                                            <label class="hov-img-txt" for="img-file">이미지 등록</label>
-                                                            <input type="file" id="img-file">
-                                                        </div>
-                                                        <!--이미지 등록 후 변경,삭제해야 할 때 드롭박스-->
-                                                        <div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>
-                                                        <!--더보기>드롭다운-->
-                                                        <ul class="dropdown-img-icon" role="menu">
-                                                            <li><a href="#">이미지 변경</a></li>
-                                                            <li><a href="#">이미지 삭제</a></li>
-                                                        </ul>
+                                                            <img ngf-src="picFile" class="thumb" id="icon_image">
+
+                                                                <fieldset>
+                                                                <input type="file" ngf-select ng-model="picFile" name="file" id="image_name" ngf-accept="'image/*'">
+
+
+                                                                </fieldset>
+                                                        </form>
+                                                        <!--<div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>-->
+                                                        <!--<ul class="dropdown-img-icon" role="menu">-->
+                                                            <!--<li><a href="#">이미지 변경</a></li>-->
+                                                            <!--<li><a href="#">이미지 삭제</a></li>-->
+                                                        <!--</ul>-->
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -305,43 +307,38 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">이름</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows" ng-model="instanceImage.name">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">OS</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows" ng-model="instanceImage.os">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows" ng-model="instanceImage.os" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">버전</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="10" ng-model="instanceImage.os_ver">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="10" ng-model="instanceImage.os_ver" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">BIT</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="64" ng-model="instanceImage.os_bit">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="64" ng-model="instanceImage.os_bit" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">PATH</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="/data/gn_images/windows/windows_10_pro_x86.vhdx" ng-model="instanceImage.filename">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows_10_pro_x86.vhdx" ng-model="instanceImage.filename" required>
                                                     </div>
                                                     <!--<div class="col-sm-2 btn-sm2">
                                                         <button type="file" class="btn btn-gn-sub btn-block">업로드</button>
                                                     </div>-->
                                                 </div>
+                                                <input type="hidden" ng-model="instanceImage.id">
                                             </form>
                                         </div> <!--class="modal-body"-->
 
                                         <div class="modal-footer gn-modal-footer">
-                                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="saveInstanceImage()">저장</button>
+                                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="uploadPic(picFile)">저장</button>
                                         </div>
                                     </div>
                                 </div>
@@ -364,11 +361,11 @@
                                         <tbody class="gn-tdody">
                                         <tr ng-repeat="path in images_list">
                                             <td>
-                                                <img src="/gn_images/gn_icon_{{path.os}}.png" alt="">
+                                                <img src="/gn_images/{{path.icon}}" alt="">
 
                                             {{path.os}}
                                             </td>
-                                            <td class="hidden-xs">{{path.os}}{{path.os_ver}}</td>
+                                            <td class="hidden-xs">{{path.os_ver}}</td>
                                             <td class="hidden-xs">{{path.os_bit}}</td>
                                             <td>{{path.type}}</td>
                                             <td class="hidden-xs hidden-sm">{{path.create_time_diff}}</td>

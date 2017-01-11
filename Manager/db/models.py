@@ -188,7 +188,7 @@ class GnVmImages(Base):
     type = Column(String(10), primary_key=False, nullable=False)
     sub_type = Column(String(10), primary_key=False, nullable=False)
     icon = Column(String(100), primary_key=False, nullable=False)
-    os = Column(String(10), primary_key=False, nullable=False)
+    os = Column(String(100), primary_key=False, nullable=False)
     os_ver = Column(String(20), primary_key=False, nullable=False)
     os_subver = Column(String(20), primary_key=False, nullable=False)
     os_bit = Column(String(2), primary_key=False, nullable=False)

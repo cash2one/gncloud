@@ -1,5 +1,6 @@
 var serviceAddModules = [
     'ngRoute'
+    ,'ngFileUpload'
 ];
 
 (function () {
@@ -74,6 +75,7 @@ var serviceAddModules = [
             return dateDiff
         };
     });
+
 })();
 
 

@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestSystemListCtrl', function ($scope, $http, dateModifyService,$routeParams) {
+    .controller('guestSystemListCtrl', function ($scope, $http, dateModifyService,$routeParams,Upload) {
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');
@@ -193,15 +193,40 @@ angular
 
 
         //저장 로직
-        $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":""};
-        $scope.saveInstanceImage = function(){
-            var method = "POST";
-            if($scope.instanceImage.id != null){
-                method = "PUT"
+        $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":"","id":""};
+        $scope.uploadPic = function (file) {
+            $scope.formUpload = true;
+            if (file != null) {
+                uploadUsingUpload(file);
+            }else{
+                saveInstanceImage()
             }
+        };
 
+        function uploadUsingUpload(file) {
+            $scope.instanceImage.file = file;
+            file.upload = Upload.upload({
+                url: "/api/manager/vm/image/file",
+                headers: {
+                    'optional-header': 'header-value'
+                },
+                data: $scope.instanceImage
+            });
+
+            file.upload.then(function (response) {
+                $scope.image();
+                $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":""};
+            }, function (response) {
+
+            }, function (evt) {
+
+            });
+
+        }
+
+        function saveInstanceImage(){
             $http({
-                method: method,
+                method: "POST",
                 url: '/api/manager/vm/image',
                 data: $scope.instanceImage,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
@@ -220,6 +245,7 @@ angular
                     console.log(status);
                 });
         }
+
 
         $scope.deleteInstanceImage = function(id){
             $http({
@@ -243,6 +269,8 @@ angular
         }
 
         $scope.getInstanceImage = function(id){
+            $('#icon_image').attr('src','');
+
             $http({
                 method: 'GET',
                 url: '/api/manager/vm/image/'+id,
@@ -261,6 +289,9 @@ angular
                     console.log(status);
                 });
         }
+
+
+
 
 }).directive('tooltip', function(){
         return {

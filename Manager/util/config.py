@@ -11,6 +11,7 @@ from Manager.util.logger import logger
 class Config:
 
     DB_URL = ""
+    IMAGE_PATH = ""
 
     def __init__(self, path="../conf/config.conf"):
         config_section = "DEFAULT"
@@ -28,6 +29,7 @@ class Config:
         logger.info("Default Conf file path : %s", os.path.abspath(config_file))
         result = parser.read(config_file)
         self.DB_URL = parser.get(config_section, "DB_URL")
+        self.IMAGE_PATH = parser.get(config_section, "IMAGE_PATH")
 
 local_custom_file = os.environ.get('CONFIG_FILE_PATH')
 if local_custom_file is None:
