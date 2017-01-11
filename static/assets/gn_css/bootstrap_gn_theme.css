@@ -1352,6 +1352,9 @@ li.active > .tab-sm-box{
     border: 1px solid #58c4c6 !important;
 }
 
+[ng-click]{
+    cursor : pointer;
+}
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
 .fons-16{font-size: 16px;}
 .gn-ms-cursor{cursor: pointer;}
