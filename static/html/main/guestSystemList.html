@@ -297,45 +297,51 @@
                                                     <label class="col-sm-2 control-label gn-control-label">타입</label>
                                                     <div class="col-sm-10">
                                                         <label class="radio-inline mod-input-name">
-                                                            <input type="radio" name="optradio">Hyper-V
+                                                            <input type="radio" name="optradio" ng-model="instanceImage.type" value="hyperv">Hyper-V
                                                         </label>
                                                         <label class="radio-inline mod-input-name">
-                                                            <input type="radio" name="optradio">KVM
+                                                            <input type="radio" name="optradio" ng-model="instanceImage.type" value="kvm">KVM
                                                         </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">이름</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows" ng-model="instanceImage.name">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">OS</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="windows" ng-model="instanceImage.os">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">버전</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="10">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="10" ng-model="instanceImage.os_ver">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">BIT</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="64">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="64" ng-model="instanceImage.os_bit">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">PATH</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="/data/gn_images/windows/windows_10_pro_x86.vhdx">
+                                                        <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="/data/gn_images/windows/windows_10_pro_x86.vhdx" ng-model="instanceImage.filename">
                                                     </div>
-                                                    <div class="col-sm-2 btn-sm2">
+                                                    <!--<div class="col-sm-2 btn-sm2">
                                                         <button type="file" class="btn btn-gn-sub btn-block">업로드</button>
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                             </form>
                                         </div> <!--class="modal-body"-->
 
                                         <div class="modal-footer gn-modal-footer">
-                                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">저장</button>
+                                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="saveInstanceImage()">저장</button>
                                         </div>
                                     </div>
                                 </div>
@@ -373,8 +379,8 @@
                                                 </div>
                                                 <!--더보기>드롭다운-->
                                                 <ul class="dropdown-menu gn-dropdown" role="menu">
-                                                    <li><a href="#">수정</a></li>
-                                                    <li><a href="#">삭제</a></li>
+                                                    <li><a href  ng-click="getInstanceImage(path.id)" data-toggle="modal" data-target="#image" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
+                                                    <li><a href ng-click="deleteInstanceImage(path.id)">삭제</a></li>
                                                 </ul>
                                             </td>
                                         </tr>

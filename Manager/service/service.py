@@ -580,3 +580,34 @@ def hostMachineList(sql_session):
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
+def insertImageInfo(type,os,os_ver,os_bit,filename,name,sql_session):
+    #id 생성
+    while True:
+        id = random_string(8)
+        check_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).first();
+        if not check_info:
+            id_info = GnId(id,type)
+            sql_session.add(id_info)
+            sql_session.commit()
+            break
+    image_info = GnVmImages(id=id, filename=filename, type=type, os=os, name=os, sub_type="base"
+                            , os_ver=os_ver, os_bit=os_bit, author_id=None, status="running")
+    sql_session.add(image_info)
+    sql_session.commit()
+
+def deleteImageInfo(id,sql_session):
+    sql_session.query(GnVmImages).filter(GnVmImages.id == id).delete()
+    sql_session.commit()
+
+def selectImageInfo(id,sql_session):
+    return sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
+
+def updateImageInfo(id,type,os,os_ver,os_bit,filename,name,sql_session):
+    image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one();
+    image_info.type = type
+    image_info.os = os
+    image_info.os_ver = os_ver;
+    image_info.os_bit = os_bit
+    image_info.filename = filename
+    image_info.name = name
+    sql_session.commit()

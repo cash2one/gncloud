@@ -127,7 +127,6 @@ angular
                         $scope.cluster_list = data.info;
                         for (var i = 0; i < $scope.cluster_list.length; i++) {
                             $scope.cluster_list[i].create_time_diff = dateModifyService.modifyDate(data.info[i].create_time);
-                            console.log($scope.cluster_list[i].create_time_diff);
                         }
                     }
                     else {
@@ -190,6 +189,77 @@ angular
                 $scope.paths = Array.prototype.slice.call($scope.paths).reverse();
             }
 
+        }
+
+
+        //저장 로직
+        $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":""};
+        $scope.saveInstanceImage = function(){
+            var method = "POST";
+            if($scope.instanceImage.id != null){
+                method = "PUT"
+            }
+
+            $http({
+                method: method,
+                url: '/api/manager/vm/image',
+                data: $scope.instanceImage,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.image();
+                        $scope.instanceImage = {"type":"","os":"","os_ver":"","os_bit":"","filename":"","name":""};
+                    }else{
+                        if(data.message != null){
+                            alert(data.message);
+                        }
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.deleteInstanceImage = function(id){
+            $http({
+                method: 'DELETE',
+                url: '/api/manager/vm/image/'+id,
+                data: $scope.instanceImage,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.image();
+                    }else{
+                        if(data.message != null){
+                            alert(data.message);
+                        }
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.getInstanceImage = function(id){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/image/'+id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.instanceImage = data.info;
+                    }else{
+                        if(data.message != null){
+                            alert(data.message);
+                        }
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
         }
 
 }).directive('tooltip', function(){
