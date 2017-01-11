@@ -109,7 +109,7 @@ class PowerShell(object):
                                             "$drive, $sysize | ConvertTo-Json -Compress; "
         result = self.send(script)
         print script
-        script = 'resize-partition -DriveLetter '+str(result[0])+' -size '+str(long(size)-result[1]-111111111)+';'
+        script = 'resize-partition -DriveLetter '+str(result[0])+' -size '+str(long(size)-long(result[1])-1111111111)+';'
         script += 'dismount-vhd '+vhd_name +';'
         print script
         result = self.send(script)
