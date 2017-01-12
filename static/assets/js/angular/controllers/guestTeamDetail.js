@@ -105,27 +105,37 @@ angular
         $scope.update = function (id, code, action, name) {  //팀장이 팀원 등급권한
             var url = '/api/manager/vm/account/teamset/'+id+'/'+code+'/'+action;
             var method = "PUT";
-            if (action == "dropout") {
-                url = '/api/manager/vm/account/teamset/'+id+'/'+code;
-                method = 'DELETE';
-            }
             $scope.lits.type=action;
-            $http({
-                method: method,
-                url: url,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function(data, status, headers, config) {
-                    if (data.status == true) {
-                        alert(name + data.message);
-                        $scope.teamtable();
-                    } else {
-                        //alert(data.message);
-                    }
+            if (action == "dropout") {
+                var returnvalue = confirm(name+"을 탈퇴시기겠습니까 ?");
+                if (returnvalue == true){
+                    url = '/api/manager/vm/account/teamset/'+id+'/'+code;
+                    method = 'DELETE';
+                }else{
+                    $scope.teamtable();
+                }
+
+            }else if(action == "approve"){
+                $http({
+                    method: method,
+                    url: url,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
-                .error(function(data, status, headers, config) {
-                    console.log(status);
-                });
+                    .success(function(data, status, headers, config) {
+                        if (data.status == true) {
+                            alert(name + data.message);
+                            $scope.teamtable();
+                        } else {
+                            //alert(data.message);
+                        }
+                    })
+                    .error(function(data, status, headers, config) {
+                        console.log(status);
+                    });
+            }else if(action == 'change'){
+
+            }
+
 
         };
         $scope.change = function () { //팀이름 변경

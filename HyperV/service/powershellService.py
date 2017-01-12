@@ -366,9 +366,14 @@ class PowerShell(object):
         else:
             return "Other"
 
+def write_log(msg):
+    with open('./mylog', 'aw') as f:
+        f.write(msg + "\n")
+
 def vm_monitor(sql_session):
-    print '====================================vm monioter================================================='
+    write_log("============================================TEST LOG")
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
+    write_log("DB LOG================================================")
     for seq in vm_info:
         host = sql_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
         ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")

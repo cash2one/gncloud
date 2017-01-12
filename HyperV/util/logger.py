@@ -5,6 +5,8 @@ import logging.handlers
 
 from flask import request
 
+logging.basicConfig()
+
 logger = logging.getLogger(__name__)
 
 # 로그 설정 (초기 테스트용)
