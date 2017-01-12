@@ -49,85 +49,32 @@
                             <thead>
                             <tr>
                                 <th class="">팀명</th>
-                                <th class="">팀장</th>
+                                <th class="">관리자</th>
                                 <th class="">팀원</th>
-                                <th class="hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('table')"></div></th>
+                                <th class="hidden-xs hidden-sm">생성일</th>
                                 <th class="hidden-xs hidden-sm">리소스</th>
                                 <th><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="select in table">
-                                <td>{{select.team_name}}</td>
-                                <td data-toggle="modal" data-target="#teammodal" ng-click="diskusage(select.team_code)">{{select.owner_name}}
+                                <td><a href="#/guestTeamDetail?code={{select.team_code}}">{{select.team_name}}</a></td>
+                                <td>{{select.owner_name}}
                                     <br>
                                     <span>{{select.owner_id}}</span>
                                 </td>
                                 <td>
-
                                     <div>
                                         <div>
-                                            <span>{{select.usersfirst}}
-                                            <br>
-                                            {{select.usersfirstid}}
-                                                <span class="tag" data-toggle="tooltip" title="{{select.users}}" tooltip>+{{select.userslen}}</span>
-                                            </span>
-
+                                            <span><span class="tag" data-toggle="tooltip" title="{{select.users}}" tooltip>+{{select.userslen}}</span></span>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="hidden-xs hidden-sm"><span data-toggle="tooltip" title="{{select.create_date}}" tooltip>{{select.create_time_diff}}</span></td>
                                 <td class="hidden-xs hidden-sm">{{select.cpu_use_cnt}}CORE/{{select.mem_use_cnt}}/{{select.disk_use_cnt}}</td>
-                                <td class="dropdown">
-                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                                        <div class="gn-more">더보기</div>
-                                        <span class="gn-caret-table"></span>
-                                    </div>
-                                    <!--더보기>드롭다운-->
-                                    <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li><a href="#/guestTeamDetail?code={{select.team_code}}">상세보기</a></li>
-                                    </ul>
-                                </td>
                             </tr>
                             </tbody>
                         </table>
-                        <!-- *** 설정 : tbody > tr 클릭 modal *** -->
-                        <div class="modal fade" id="teammodal" role="dialog">
-                            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
-                            <div class="modal-dialog form-horizontal">
-                                <div class="modal-dialog form-horizontal">
-                                    <div class="modal-content col-sm-10 col-sm-offset-1">
-                                        <div class="modal-header gn-modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">×</button>
-                                            <h4 class="modal-title">팀 상세 정보</h4>
-                                        </div>
-                                        <div class="modal-body gn-modal-body">
-                                            <form>
-                                                <dl class="dl-horizontal gn-description-list">
-                                                    <dt>팀명</dt>
-                                                    <dd>{{select.team_name}}</dd>
-
-                                                    <dt>팀장</dt>
-                                                    <dd>{{select.owner_name}}<span>{{select.owner_id}}</span></dd>
-
-                                                    <dt>팀원</dt>
-                                                    <dd>{{select.users}}</dd>
-
-                                                    <dt>생성일</dt>
-                                                    <dd>{{select.create_time_diff}}</dd>
-
-                                                    <dt>리소스</dt>
-                                                    <dd>CPU <span>{{select.cpu_use_per}}% 사용중 {{select.cpu_use_cnt}}/{{select.cpu_tot_cnt}}CORE </span></dd>
-                                                    <dd>MEMORY <span>{{select.mem_use_per}}% 사용중 {{select.mem_use_cnt}}/{{select.mem_tot_cnt}} </span></dd>
-                                                    <dd>DISK <span>{{select.disk_use_per}}% 사용중 {{select.disk_use_cnt}}/{{select.disk_tot_cnt}} </span></dd>
-                                                </dl>
-                                            </form>
-                                        </div>
-                                    </div> <!--class="modal-content"-->
-                                </div> <!--class="modal-dialog modal-sm"-->
-                            </div> <!--div class="modal fade in" id="teamModal" role="dialog"-->
-                        </div>
-                        <!-- *** 설정 : tbody > tr 클릭 modal 끝 *** -->
                     </div>
                 </div>
 

@@ -4,6 +4,7 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
+
 from datetime import timedelta
 import datetime
 
@@ -312,13 +313,13 @@ def approve(id, code, type):
     user_name = session['userName']
     list= approve_set(id, code, type, user_name, db_session)
     if(list == 1):
-        return jsonify(status=True, message="의 등급이 변경되었습니다.")
+        return jsonify(status=True, message="의 가입이 승인되었습니다.")
     elif(list == 2):
-        return jsonify(status=True, message="의 등급이 변경되었습니다.")
+        return jsonify(status=True, message="이 관리자가 되었습니다.")
     elif(list == 3):
         return jsonify(status=True, message="의 비밀번호가 초기화 되었습니다.")
     else:
-        return jsonify(status=True, message="의 등급은 이미 변경 되었습니다.")
+        return jsonify(status=True, message="의 변경할 것이 없습니다.")
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['DELETE'])
 def delete(id, code):

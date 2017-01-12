@@ -90,7 +90,7 @@
                         <dl class="dl-horizontal gn-description-list">
                             <dt>팀 코드</dt>
                             <dd>{{teamname.team_code}}</dd>
-                            <dt>팀장</dt>
+                            <dt>관리자</dt>
                             <dd ng-repeat="team in team_list">{{team.user_id}}</dd>
                             <dt>팀 생성일</dt>
                             <dd>{{teamname.create_date}}</dd>
@@ -150,12 +150,7 @@
                                 <th>등급</th>
                                 <th>이름</th>
                                 <th>아이디</th>
-                                <th>연락처</th>
-                                <th>이메일</th>
-                                <th>신청일</th>
-                                <th>승인일</th>
-                                <!-----여기서부터 팀장 로그인 시 보이는 영역----->
-                                <th>상태<div class="refresh" ng-click="refresh()"></div></th>
+                                <th>상태</th>
                                 <th><!--더보기--></th>
                             </tr>
                             </thead>
@@ -163,12 +158,12 @@
                             <tr ng-repeat="won in won_list" ng-class="{'tr-on-wait': won.team_check == 'N'}">
                                 <td class="">{{$index+1}}</td>
                                 <td class="">{{won.team_owner}}</td>
-                                <td class="">{{won.user_name}}</td>
+                                <td class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">{{won.user_name}}</td>
                                 <td class="" ng-model="data.user_id">{{won.user_id}}</td>
-                                <td class="">{{won.tel}}</td>
-                                <td class="">{{won.email}}</td>
-                                <td class=""><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>
-                                <td class=""><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>
+                                <!--<td class="">{{won.tel}}</td>-->
+                                <!--<td class="">{{won.email}}</td>-->
+                                <!--<td class=""><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>-->
+                                <!--<td class=""><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>-->
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
                                 <td class="">{{won.comf}}</td>
                                 <td class="dropdown">
@@ -187,6 +182,44 @@
                             </tr>
                             </tbody>
                         </table>
+                        <div class="modal fade" id="teamModal" role="dialog">
+                            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+                            <div class="modal-dialog form-horizontal">
+                                <div class="modal-content col-sm-10 col-sm-offset-1">
+                                    <div class="modal-header gn-modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">팀원 상세 정보</h4>
+                                    </div>
+                                    <div class="modal-body gn-modal-body">
+                                        <form>
+                                            <div class="form-group" ng-repeat="team in teamwon_list">
+                                                <label class="col-sm-4 control-label gn-control-label">이름</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{team.user_name}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">연락처</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{team.tel}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">이메일</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{team.email}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">신청일</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{team.apply_date}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">승인일</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{team.approve_date}}</p>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div> <!--class="modal-content"-->
+                            </div> <!--class="modal-dialog modal-sm"-->
+                        </div>
+                    </div> <!--class="table-responsiv"-->
                     </div> <!--class="table-responsiv"-->
                 </div>
             </div> <!--class="gn-sett-margin-box"-->

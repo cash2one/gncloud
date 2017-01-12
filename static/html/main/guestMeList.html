@@ -222,16 +222,12 @@
                         <table class="table table gn-table">
                             <thead>
                             <tr>
-                                <th class="">번호<div class="refresh" ng-click="refresh()"></div></th>
+                                <th class="">번호</th>
                                 <th class="">등급</th>
                                 <th class="">이름</th>
                                 <th class="hidden-xs">아이디</th>
-                                <!--<th class="col-sm-2 hidden-xs">연락처</th>-->
-                                <!--<th class="col-sm-1 hidden-sm hidden-xs">이메일</th>-->
-                                <!--<th class="col-sm-1 hidden-sm hidden-xs">신청일</th>-->
-                                <!--<th class="col-sm-1 hidden-sm hidden-xs">승인일</th>-->
-                                <!-----여기서부터 팀장 로그인 시 보이는 영역----->
                                 <th class="hidden-xs">상태</th>
+                                <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
                                 <th class=""><!--더보기--></th>
                             </tr>
                             </thead>
@@ -241,10 +237,6 @@
                                 <td class="">{{won.team_owner}}</td>
                                 <td class="" class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">{{won.user_name}}</td>
                                 <td class="" ng-model="data.user_id">{{won.user_id}}</td>
-                                <!--<td class="hidden-xs">{{won.tel}}</td>-->
-                                <!--<td class="hidden-xs">{{won.email}}</td>-->
-                                <!--<td class="hidden-sm hidden-xs"><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>-->
-                                <!--<td class="hidden-sm hidden-xs"><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>-->
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
                                 <td class="hidden-xs">{{won.comf}}</td>
                                 <td class="dropdown" ng-show="authority == 'owner' ">
@@ -404,7 +396,7 @@
                         <dl class="dl-horizontal gn-description-list">
                             <dt>팀 코드</dt>
                             <dd>{{teamname.team_code}}</dd>
-                            <dt>팀장</dt>
+                            <dt>관리자</dt>
                             <dd ng-repeat="team in team_list">{{team.user_id}}</dd>
                             <dt>팀 생성일</dt>
                             <dd>{{teamname.create_date}}</dd>

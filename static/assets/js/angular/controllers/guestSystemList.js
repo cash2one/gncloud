@@ -33,14 +33,10 @@ angular
                             var usersfirstid ="";
                             for (var j = 0; j < data.list[i].user_list.length; j++) {
                                 if (data.list[i].user_list[j][0].team_owner == 'owner') { //팀장찾는 곳
-                                    owner_id = "("+data.list[i].user_list[j][1].user_id+")";
                                     owner_name = data.list[i].user_list[j][1].user_name;
 
-                                }else if(j==1){
-                                    usersfirst = data.list[i].user_list[j][1].user_name;
-                                    usersfirstid="("+data.list[i].user_list[j][1].user_id+")";
                                 }else{
-                                    users +=data.list[i].user_list[j][1].user_name+"("+data.list[i].user_list[j][1].user_id+")";
+                                    users +=data.list[i].user_list[j][1].user_name+"/";
                                 }
 
                             }
@@ -91,15 +87,13 @@ angular
                         var usersfirstid = "";
                         for (var j = 0; j < data.list[0].user_list.length; j++) {
                             if (data.list[0].user_list[j][0].team_owner == 'owner') { //팀장찾는 곳
-                                owner_id = "(" + data.list[0].user_list[j][1].user_id + ")";
                                 owner_name = data.list[0].user_list[j][1].user_name;
 
                             }else {
-                                users += data.list[0].user_list[j][1].user_name + "(" + data.list[0].user_list[j][1].user_id + ")";
+                                users += data.list[0].user_list[j][1].user_name+'/';
                             }
                             data.list[0].team_info.userslen = data.list[0].user_list.length > 0 ? (data.list[0].user_list.length - 1) : 0;
                             data.list[0].team_info.users = users;
-                            data.list[0].team_info.owner_id = owner_id;
                             data.list[0].team_info.owner_name = owner_name;
                             data.list[0].team_info.cpu_use_per = data.list[0].quto_info.cpu_per[0];
                             data.list[0].team_info.cpu_use_cnt = data.list[0].quto_info.cpu_cnt[0];

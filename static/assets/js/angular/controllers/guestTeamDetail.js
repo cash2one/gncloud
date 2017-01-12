@@ -64,7 +64,7 @@ angular
                                 var comfirm_re = '대기';
                             }//승인 한글화
                             if (data.list[i][1].team_owner == 'owner') {
-                                var team_owner = '팀장';
+                                var team_owner = '관리';
                             } else {
                                 var team_owner = '팀원';
                             }
@@ -107,7 +107,7 @@ angular
             var method = "PUT";
             $scope.lits.type=action;
             if (action == "dropout") {
-                var returnvalue = confirm(name+"을 탈퇴시기겠습니까 ?");
+                var returnvalue = confirm(name+"을 탈퇴시키겠습니까 ?");
                 if (returnvalue == true){
                     $http({
                         method:'DELETE',
@@ -126,28 +126,31 @@ angular
                             console.log(status);
                         });
                 }else{
-                    $scope.teamtable();
+
                 }
 
-            }else if(action == "approve" || action == 'reset'){
-                $http({
-                    method: method,
-                    url: url,
-                    headers: {'Content-Type': 'application/json; charset=utf-8'}
-                })
-                    .success(function(data, status, headers, config) {
-                        if (data.status == true) {
-                            alert(name + data.message);
-                            $scope.teamtable();
-                        } else {
-                            //alert(data.message);
-                        }
+            }else if(action == "approve"){
+                var returnvalue = confirm(name + "의 가입을 승인하시겠습니까 ?");
+                if(returnvalue==true){
+                    $http({
+                        method: method,
+                        url: url,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
                     })
-                    .error(function(data, status, headers, config) {
-                        console.log(status);
-                    });
+                        .success(function(data, status, headers, config) {
+                            if (data.status == true) {
+                                alert(name + data.message);
+                                $scope.teamtable();
+                            } else {
+                                //alert(data.message);
+                            }
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log(status);
+                        });
+                }
             }else if(action == 'change'){
-                var retrunvalue = confirm(name+"을 팀장으로 변경하시겠습니까 ?");
+                var retrunvalue = confirm(name+"을 관리자로 변경하시겠습니까 ?");
                 if(retrunvalue == true){
                     $http({
                         method: method,
@@ -166,7 +169,28 @@ angular
                             console.log(status);
                         });
                     }
+                }else if(action == "reset"){
+                var retrunvalue = confirm(name+"의 비밀번호를 초기화 시키겠습니까 ?");
+                if(returnvalue == true){
+                    $http({
+                        method: method,
+                        url: url,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
+                    })
+                        .success(function(data, status, headers, config) {
+                            if (data.status == true) {
+                                alert(name + data.message);
+                                $scope.teamtable();
+                            } else {
+                                //alert(data.message);
+                            }
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log(status);
+                        });
                 }
+            }
+
 
 
         };
@@ -189,7 +213,32 @@ angular
                     }
                 });
         }
+        //******************************팀 모달 *********************//
+        $scope.infolist=function(id){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/account/won/'+id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        var teamwonArr = new Array();
+                        data.list[0][0].approve_date = data.list[0][1].approve_date;
+                        data.list[0][0].apply_date = data.list[0][1].apply_date;
+                        teamwonArr.push(data.list[0][0]);
+                        $scope.teamwon_list = teamwonArr;
 
+                    } else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
+                    }
+
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
 
         //**********리소스*************//
         $http({

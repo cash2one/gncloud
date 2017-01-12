@@ -178,7 +178,7 @@ angular
                                 var comfirm_re = '대기';
                             }//승인 한글화
                             if(data.list[i][1].team_owner == 'owner') {
-                                var team_owner = '팀장';
+                                var team_owner = '관리자';
                             }else {
                                 var team_owner='팀원';
                             }
