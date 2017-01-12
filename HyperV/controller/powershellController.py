@@ -362,10 +362,11 @@ def hvm_image():
     return jsonify(status=False, message="미구현")
 
 
-def vm_monitor():
-    vm_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
+def vm_monitor(sql_session):
+
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
     for seq in vm_info:
-        host = db_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
+        host = sql_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
         ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
 
         script = 'Get-VM -id '+seq.internal_id+' | Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json '
@@ -389,22 +390,21 @@ def vm_monitor():
         print ip
         try:
             monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(), cpu, mem, round(hdd, 4), 0.0000)
-            db_session.add(monitor_insert)
-            db_session.commit()
+            sql_session.add(monitor_insert)
+            sql_session.commit()
 
-            db_session.query(GnMonitor).filter(GnMonitor.id == seq.id).update(
+            sql_session.query(GnMonitor).filter(GnMonitor.id == seq.id).update(
                 {"cpu_usage": cpu, "mem_usage": mem, "disk_usage": round(hdd, 4)}
             )
-            db_session.commit()
+            sql_session.commit()
 
-            db_session.query(GnVmMachines).filter(GnVmMachines.id == seq.id).update(
+            sql_session.query(GnVmMachines).filter(GnVmMachines.id == seq.id).update(
                 {"ip": ip}
             )
-            db_session.commit()
+            sql_session.commit()
         except Exception as message:
             print message
-            db_session.rollback()
-
+            sql_session.rollback()
 
 
 

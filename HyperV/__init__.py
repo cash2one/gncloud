@@ -1,24 +1,26 @@
 # -*- coding: utf-8 -*-
-import threading
 
 __author__ = 'jhjeon'
 
-
-
 from apscheduler.scheduler import Scheduler
 from flask import Flask, redirect, url_for
+
 from datetime import timedelta
 
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
+from HyperV.db.database import db_session
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 
+def shutdown_session(exception=None):
+    db_session.remove()
+
 def monitor():
-    vm_monitor()
+    vm_monitor(db_session)
 
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
@@ -62,6 +64,7 @@ app.add_url_rule("/vm/images/<type>/<id>", view_func=hvm_image, methods=['GET'])
 #     return jsonify(status= True, message="success")
 
 
+
 # Controller 상태 확인
 @app.route("/service/isAlive")
 def isAlive():
@@ -77,7 +80,7 @@ def index():
 if __name__ == '__main__':
     app.config['DEBUG'] = False
     cron = Scheduler(daemon=True)
-    cron.add_interval_job(monitor, seconds=60)
+    cron.add_interval_job(monitor, seconds=10)
     cron.start()
-    app.run(port=config.CONTROLLER_PORT)
+    app.run(port=8082)
     #app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
