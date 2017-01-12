@@ -4,6 +4,7 @@ __author__ = 'jhjeon'
 
 from apscheduler.scheduler import Scheduler
 from flask import Flask, redirect, url_for
+
 from datetime import timedelta
 
 from HyperV.controller.powershellController import *
@@ -76,5 +77,5 @@ if __name__ == '__main__':
     cron = Scheduler(daemon=True)
     cron.add_interval_job(monitor, seconds=60)
     cron.start()
-    app.run(port=config.CONTROLLER_PORT)
+    app.run(port=8082)
     #app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
