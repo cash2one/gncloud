@@ -78,5 +78,6 @@ if __name__ == '__main__':
     cron = Scheduler(daemon=True)
     cron.add_interval_job(monitor, seconds=10)
     cron.start()
+    print 'teststart'
     app.run(port=8082)
     #app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
