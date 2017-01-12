@@ -84,10 +84,10 @@ def hvm_create():
                     get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
                 elif get_ip_count > 160:
                     return jsonify(status=False, massage="VM에 ip를 할당할 수 없습니다.")
-                elif get_vm_ip[:2] == "16":
-                    time.sleep(5)
-                    get_ip_count = get_ip_count + 1
-                    get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
+                # elif get_vm_ip[:2] == "16":
+                #     time.sleep(5)
+                #     get_ip_count = get_ip_count + 1
+                #     get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
                 else:
                     break
 
@@ -384,12 +384,12 @@ def vm_monitor():
         script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
         ip = ps.send(script)
         try:
-            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(),cpu, mem, round(hdd, 4), 0.0000)
+            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(), cpu, mem, round(hdd, 4), 0.0000)
             db_session.add(monitor_insert)
             db_session.commit()
 
             db_session.query(GnMonitor).filter(GnMonitor.id == seq.id).update(
-                {"cpu_usage": cpu, "mem_usage": mem*100, "disk_usage": round(hdd, 4)}
+                {"cpu_usage": cpu, "mem_usage": mem, "disk_usage": round(hdd, 4)}
             )
             db_session.commit()
 
