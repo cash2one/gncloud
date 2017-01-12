@@ -1,12 +1,7 @@
 angular
     .module('gncloud')
-    .controller('guestCreateTeamCtrl', function ($scope, $http,$rootScope, $event) {
+    .controller('guestCreateTeamCtrl', function ($scope, $http,$rootScope) {
         //탭이동
-        $('.nav-sidebar li').removeClass('active');
-        var url = window.location;
-        $('ul.nav-sidebar a').filter(function () {
-            return this.href.indexOf(url.hash) != -1;
-        }).parent().addClass('active');
         $("#i").hide();
         $("#t").hide();
         $scope.submit = function() {
@@ -33,10 +28,4 @@ angular
                     }
                 });
         };
-
-        $scope.keyup = function(){
-            if($event.keyCode == '13'){
-                submit();
-            }
-        }
     });
