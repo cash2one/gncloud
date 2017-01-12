@@ -8,7 +8,7 @@ import humanfriendly
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
                              , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
-                             , GnCluster
+                             , GnCluster,GnDockerImageDetail
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
 
@@ -31,6 +31,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
                                       func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
                                      ) \
                               .filter(GnVmMachines.team_code == team_code) \
+                              .filter(GnVmMachines.type != "docker") \
                               .filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "Error").one()
 
     if type == "kvm" or type == "hyperv":
@@ -625,27 +626,58 @@ def selectImageInfoDocker(id,sql_session):
     return sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
 
 
-def insertImageInfoDocker(name,os_ver,tag,icon,sql_session):
-    #id 생성
-    while True:
-        id = random_string(8)
-        check_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).first();
-        if not check_info:
-            id_info = GnId(id,type)
-            sql_session.add(id_info)
-            sql_session.commit()
-            break
-    image_info = GnDockerImages(id=id, view_name=name, sub_type="base",tag=tag, icon=icon, os_ver=os_ver, status="running")
-    sql_session.add(image_info)
+def insertImageInfoDocker(name,os_ver,tag,icon,port,env,sql_session):
+    try:
+        #id 생성
+        while True:
+            image_id = random_string(8)
+            check_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == image_id).first();
+            if not check_info:
+                break
+        image_info = GnDockerImages(id=image_id, view_name=name, sub_type="base",tag=tag, icon=icon, os_ver=os_ver, status="running")
+        sql_session.add(image_info)
+
+
+
+        #port 부분
+        portArr = port.split(',')
+
+        for str_port in portArr:
+            #id 생성
+            while True:
+                detail_id = random_string(8)
+                check_info = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.id == detail_id).first();
+                if not check_info:
+                    break
+
+            detail_info = GnDockerImageDetail(id=detail_id, image_id=image_id, arg_type="port", argument="-p "+str_port)
+            sql_session.add(detail_info)
+
+        #환경변수 부분
+        portArr = port.split(',')
+    except:
+        sql_session.rollback()
+
     sql_session.commit()
 
-def updateImageInfoDocker(id,name,os_ver,tag,icon,sql_session):
-    image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one();
-    image_info.view_name = name
-    image_info.os_ver = os_ver;
-    image_info.tag = tag
-    if icon != "":
-        image_info.icon = icon
+def updateImageInfoDocker(id,name,os_ver,tag,icon,port,env,sql_session):
+    try:
+        image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
+        image_info.view_name = name
+        image_info.os_ver = os_ver;
+        image_info.tag = tag
+        if icon != "":
+            image_info.icon = icon
+
+        #port 부분
+        portArr = port.split(',')
+        sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.image_id == id).delete()
+
+        for str_port in portArr:
+            detail_info = GnDockerImageDetail(id=id, image_id=id, arg_type="port", argument="-p "+str_port)
+            sql_session.add(detail_info)
+    except:
+        sql_session.rollback()
 
     sql_session.commit()
 
