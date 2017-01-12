@@ -181,7 +181,10 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li ng-repeat="ac in actions"><a href ng-click="update(won.user_id, teamname.team_code, ac, won.user_name)">{{ac.name}}</a></li>
+                                        <li><a ng-click="update(won.user_id, teamname.team_code, 'approve', won.user_name)">승인</a></li>
+                                        <li><a ng-click="update(won.user_id, teamname.team_code, 'change', won.user_name)">등급변경</a></li>
+                                        <li><a ng-click="update(won.user_id, teamname.team_code, 'reset', won.user_name)">비밀번호초기화</a></li>
+                                        <li><a ng-click="update(won.user_id, teamname.team_code, 'dropout', won.user_name)">탈퇴</a></li>
                                     </ul>
                                 </td>
                             </tr>

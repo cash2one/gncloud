@@ -101,19 +101,18 @@ angular
             {name: '비밀번호초기화', type: 'reset'},
             {name: '팀탈퇴', type: 'dropout'}
         ];
-        $scope.data={};
+        $scope.lits={};
         $scope.update = function (id, code, action, name) {  //팀장이 팀원 등급권한
-            var url = '/api/manager/vm/account/teamset/'+id+'/'+code;
+            var url = '/api/manager/vm/account/teamset/'+id+'/'+code+'/'+action;
             var method = "PUT";
-            if (action.type == "dropout") {
+            if (action == "dropout") {
                 url = '/api/manager/vm/account/teamset/'+id+'/'+code;
                 method = 'DELETE';
             }
-
+            $scope.lits.type=action;
             $http({
                 method: method,
                 url: url,
-                data: action,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data, status, headers, config) {

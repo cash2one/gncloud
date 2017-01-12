@@ -307,9 +307,8 @@ def teamwon():
 def teamwon1(code):
     return jsonify(status=True, message="success", list=teamset(code, db_session))
 
-@app.route('/vm/account/teamset/<id>/<code>',methods=['PUT'])
-def approve(id,code):
-    type = request.json['type']
+@app.route('/vm/account/teamset/<id>/<code>/<type>',methods=['PUT'])
+def approve(id, code, type):
     user_name = session['userName']
     list= approve_set(id, code, type, user_name, db_session)
     if(list == 1):
