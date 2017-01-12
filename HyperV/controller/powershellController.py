@@ -361,7 +361,7 @@ def hvm_image_list(type):
 def hvm_image():
     return jsonify(status=False, message="미구현")
 
-'''
+
 def vm_monitor(sql_session):
 
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
@@ -405,7 +405,7 @@ def vm_monitor(sql_session):
         except Exception as message:
             print message
             sql_session.rollback()
-'''
+
 
 
 # 모니터링을 위한 스크립트 전송 함수
