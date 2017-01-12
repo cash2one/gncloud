@@ -16,6 +16,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 
 def monitor():
+    print 'crontest'
     vm_monitor()
 
 
