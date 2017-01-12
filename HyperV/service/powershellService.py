@@ -367,7 +367,7 @@ class PowerShell(object):
             return "Other"
 
 def write_log(msg):
-    with open('./mylog', 'aw') as f:
+    with open('/tmp/mylog', 'aw') as f:
         f.write(msg + "\n")
 
 def vm_monitor(sql_session):
