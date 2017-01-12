@@ -9,14 +9,18 @@ from datetime import timedelta
 
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
+from HyperV.db.database import db_session
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 
+def shutdown_session(exception=None):
+    db_session.remove()
+
 def monitor():
-    vm_monitor()
+    vm_monitor(db_session)
 
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
@@ -58,6 +62,7 @@ app.add_url_rule("/vm/images/<type>/<id>", view_func=hvm_image, methods=['GET'])
 #     team_code = session['teamCode']
 #     hvm_state(id, type, team_code)
 #     return jsonify(status= True, message="success")
+
 
 
 # Controller 상태 확인
