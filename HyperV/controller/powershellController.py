@@ -6,7 +6,7 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 import json
 
 from HyperV.util.json_encoder import AlchemyEncoder
-from HyperV.db.models import GnImagesPool, GnHostMachines
+from HyperV.db.models import GnImagesPool, GnHostMachines, GnMonitorHist
 
 __author__ = 'jhjeon'
 
@@ -370,15 +370,15 @@ def vm_monitor(sql_session):
         ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
 
         script = 'Get-VM -id '+seq.internal_id+' | Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json '
-        vm_monitor = ps.send(script)
+        monitor = ps.send(script)
 
         script = 'Get-VHD -VMId ' +seq.internal_id+' | Select-Object -Property Filesize, Size | ConvertTo-Json;'
         hdd_usage = ps.send(script)
         #hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
         hdd = float(hdd_usage['FileSize'])
 
-        mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4) * 100
-        cpu = round(float(vm_monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
+        mem = round((float(monitor['MemoryAssigned']))/float(seq.memory), 4) * 100
+        cpu = round(float(monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
 
         script = '$vm = Get-vm -id '+ seq.internal_id+';'
         script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
