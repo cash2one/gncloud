@@ -482,11 +482,14 @@ def saveBaseImageImportFileDocker():
     name = request.form['view_name']
     os_ver = request.form['os_ver']
     tag = request.form['tag']
+    port = request.form['port']
+    env = request.form['env']
+    vol = request.form['vol']
 
     if 'id' in request.form:
-        updateImageInfoDocker(request.form['id'],name,os_ver,tag,icon,db_session)
+        updateImageInfoDocker(request.form['id'],name,os_ver,tag,icon,port,env,vol,db_session)
     else:
-        insertImageInfoDocker(name,os_ver,tag,icon,db_session)
+        insertImageInfoDocker(name,os_ver,tag,icon,port,env,vol,db_session)
 
     return jsonify(status=True, message="success")
 
@@ -497,12 +500,12 @@ def saveBaseImageExceptFileDocker():
     tag = request.json['tag']
     port = request.json['port']
     env = request.json['env']
-    env = request.json['vol']
+    vol = request.json['vol']
 
     if 'id' in request.json:
-        updateImageInfoDocker(request.json['id'],name,os_ver,tag,"",port,env,db_session)
+        updateImageInfoDocker(request.json['id'],name,os_ver,tag,"",port,env,vol,db_session)
     else:
-        insertImageInfoDocker(name,os_ver,tag,"",port,env,db_session)
+        insertImageInfoDocker(name,os_ver,tag,"",port,env,vol,db_session)
 
     return jsonify(status=True, message="success")
 
