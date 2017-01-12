@@ -8,7 +8,7 @@
 
             <!-- Modal : 이름 수정 -->
             <div class="modal fade" id="name-Modal" role="dialog">
-                <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+                <div class="modal-backdrop fade in"></div>
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header gn-modal-header">
@@ -16,12 +16,12 @@
                             <h4 class="modal-title">이름 수정</h4>
                         </div>
                         <form name="vm_nameForm" ng-submit="submitForm(vm_nameForm.$valid)" novalidate>
-                        <div class="modal-body gn-modal-body">
-                            <div class="form-group" ng-class="{ 'has-error' : vm_nameForm.name.$invalid && !vm_nameForm.name.$pristine }">
-                                <input type="text" id="vm_name" name="name" class="form-control gn-form-control" ng-model="name" placeholder="{{vm_data.name}}" ng-keyup="$event.keyCode=='13' && change_name()" required>
-                                <p ng-show="vm_nameForm.name.$invalid && !vm_nameForm.name.$pristine" class="help-block">이름을 입력하세요.</p>
+                            <div class="modal-body gn-modal-body">
+                                <div class="form-group" ng-class="{ 'has-error' : vm_nameForm.name.$invalid && !vm_nameForm.name.$pristine }">
+                                    <input type="text" id="vm_name" name="name" class="form-control gn-form-control" ng-model="name" placeholder="{{vm_data.name}}" ng-keyup="$event.keyCode=='13' && change_name()" required>
+                                    <p ng-show="vm_nameForm.name.$invalid && !vm_nameForm.name.$pristine" class="help-block">이름을 입력하세요.</p>
+                                </div>
                             </div>
-                        </div>
                         </form>
                         <div class="modal-footer gn-modal-footer">
                             <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal" ng-click="change_name()"  ng-disabled="vm_nameForm.$invalid">저장</button>
@@ -64,7 +64,7 @@
 
     <!-- Modal : 태그 수정 -->
     <div class="modal fade" id="tag-modal" role="dialog">
-        <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+        <div class="modal-backdrop fade in"></div>
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header gn-modal-header">

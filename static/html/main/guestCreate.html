@@ -129,11 +129,11 @@
         <h2 id="password">SSH 키/비밀번호 설정</h2>
         <div class="row gn-margin-bott10" id="ssh" >
             <!--최초 등록 시 출력되는 버튼-->
-            <div class="col1-sm-3 col-md-2 gn-margin-bott10">
+            <div class="col-sm-3 col-md-2 gn-margin-bott10">
                 <button type="button" class="btn btn-gn-sub btn-lg btn-block" data-toggle="modal" data-target="#sshModal"  ng-class="{'gn-input-error':data_value == 'password'}">SSH 키 생성</button>
             </div>
             <!-- ****체크박스 대신 select box로 변경되었습니다**** -->
-            <div class="col-md-4 col-md-4">
+            <div class="col-sm-4 col-md-4">
                 <select class="gn-select form-control gn-form-control" name="ssh" ng-model="guest_item" ng-options="item.id as item.name for item in sshkey_list" ng-change="selectKey(guest_item)" required  ng-class="{'gn-input-error':data_value == 'password'}">
                     <option value="">SSH 키 선택</option>
                 </select>
@@ -152,7 +152,7 @@
 
         <!-- Modal -->
         <div class="modal fade" id="sshModal" role="dialog">
-            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+            <div class="modal-backdrop fade in"></div>
             <div class="modal-dialog modal-sm">
                 <div class="modal-content ">
                     <div class="modal-header gn-modal-header">
