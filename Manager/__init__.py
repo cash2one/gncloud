@@ -494,11 +494,14 @@ def saveBaseImageExceptFileDocker():
     name = request.json['view_name']
     os_ver = request.json['os_ver']
     tag = request.json['tag']
+    port = request.json['port']
+    env = request.json['env']
+    env = request.json['vol']
 
     if 'id' in request.json:
-        updateImageInfoDocker(request.json['id'],name,os_ver,tag,"",db_session)
+        updateImageInfoDocker(request.json['id'],name,os_ver,tag,"",port,env,db_session)
     else:
-        insertImageInfoDocker(name,os_ver,tag,"",db_session)
+        insertImageInfoDocker(name,os_ver,tag,"",port,env,db_session)
 
     return jsonify(status=True, message="success")
 
