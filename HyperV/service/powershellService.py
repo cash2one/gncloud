@@ -5,9 +5,9 @@ PowerShell 스크립트를 전달할 함수들을 가지고 있는 PowerShell �
 모든 함수명은 소문자로, -는 _로 표현한다
 다른 결과가 나오지만 같은 명령어를 사용하여 함수명이 겹칠 경우, 함수명 뒤에 _(역할)로 추가적으로 함수명을 구분해준다.
 """
-import datetime
 
 from HyperV.util.config import config
+from HyperV.db.models import *
 
 __author__ = 'jhjeon'
 
@@ -365,3 +365,52 @@ class PowerShell(object):
             return "FastSaving"
         else:
             return "Other"
+
+def write_log(msg):
+    with open('/tmp/mylog', 'aw') as f:
+        f.write(msg + "\n")
+
+def vm_monitor(sql_session):
+    write_log("============================================TEST LOG")
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
+    write_log("DB LOG================================================")
+    for seq in vm_info:
+        host = sql_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
+        ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
+
+        script = 'Get-VM -id '+seq.internal_id+' | Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json '
+        vm_monitor = ps.send(script)
+
+        script = 'Get-VHD -VMId ' +seq.internal_id+' | Select-Object -Property Filesize, Size | ConvertTo-Json;'
+        hdd_usage = ps.send(script)
+        #hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
+        hdd = float(hdd_usage['FileSize'])
+
+        mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4) * 100
+        cpu = round(float(vm_monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
+
+        script = '$vm = Get-vm -id '+ seq.internal_id+';'
+        script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
+        script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
+        ip = ps.send(script)
+        print hdd
+        print cpu
+        print mem
+        print ip
+        try:
+            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(), cpu, mem, round(hdd, 4), 0.0000)
+            sql_session.add(monitor_insert)
+            sql_session.commit()
+
+            sql_session.query(GnMonitor).filter(GnMonitor.id == seq.id).update(
+                {"cpu_usage": cpu, "mem_usage": mem, "disk_usage": round(hdd, 4)}
+            )
+            sql_session.commit()
+
+            sql_session.query(GnVmMachines).filter(GnVmMachines.id == seq.id).update(
+                {"ip": ip}
+            )
+            sql_session.commit()
+        except Exception as message:
+            print message
+            sql_session.rollback()

@@ -4,12 +4,12 @@ __author__ = 'jhjeon'
 
 from apscheduler.scheduler import Scheduler
 from flask import Flask, redirect, url_for
-
 from datetime import timedelta
 
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
 from HyperV.db.database import db_session
+from HyperV.service.powershellService import vm_monitor
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -76,11 +76,15 @@ def isAlive():
 def index():
     return redirect(url_for("isAlive"))
 
+def write_log(msg):
+    with open('/tmp/mylog', 'aw') as f:
+        f.write(msg + "\n")
 
 if __name__ == '__main__':
     app.config['DEBUG'] = False
     cron = Scheduler(daemon=True)
     cron.add_interval_job(monitor, seconds=10)
+    write_log("main====")
     cron.start()
     app.run(port=8082)
     #app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
