@@ -87,7 +87,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status='Starting', tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id="", ssh_key_id=sshkeys)
+                                  , host_id=host_id, ssh_key_id=sshkeys)
     else:
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type=type, team_code=team_code, author_id=user_id
