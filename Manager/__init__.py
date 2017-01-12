@@ -16,7 +16,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , hostMachineList, insertImageInfo, selectImageInfo, selectImageInfo, updateImageInfo, deleteImageInfo \
                             , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
-                            , team_table_info
+                            , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo
 from db.database import db_session
 from Manager.util.config import config
 
@@ -416,9 +416,52 @@ def delteam(code):
     elif(hist ==2):
         return jsonify(status=False, message="인스턴스가 남아있어 팀을 삭제 할 수 없습니다")
 
-@app.route('/vm/host',methods=['GET'])
+@app.route('/vm/cluster',methods=['GET'])
 def getHostMachines():
     return jsonify(status=True, message="success", info=hostMachineList(db_session))
+
+@app.route('/vm/cluster/<id>',methods=['GET'])
+def getHostMachineInfo(id):
+    return jsonify(status=True, message="success", info=hostMachineInfo(id,db_session))
+
+@app.route('/vm/cluster/node/<id>',methods=['DELETE'])
+def removeHostMachine(id):
+    deleteHostMachine(id,db_session)
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/cluster',methods=['POST'])
+def saveCluster():
+    ip = request.json['ip']
+    port = request.json['port']
+    node = ""
+    if 'node' in request.json:
+        node = request.json['node']
+
+    if 'id' in request.json:
+        updateClusterInfo(request.json['id'],ip,port,node,db_session)
+    else:
+        type = request.json['type']
+        insertClusterInfo(type,ip,port,node,db_session)
+
+    return jsonify(status=True, message="success")
+
+@app.route('/vm/host',methods=['POST'])
+def saveHostMachine():
+    cpu = request.json['cpu']
+    mem = request.json['mem']
+    disk = request.json['disk']
+    max_cpu = request.json['max_cpu']
+    max_mem = request.json['max_mem']
+    max_disk = request.json['max_disk']
+    ip = request.json['ip']
+    insertHostInfo(ip,cpu,mem,disk,max_cpu,max_mem,max_disk,db_session)
+    return jsonify(status=True, message="success")
+
+
+@app.route('/vm/cluster/<id>',methods=['DELETE'])
+def removeCluster(id):
+    deleteCluster(id,db_session);
+    return jsonify(status=True, message="success")
 
 
 @app.route('/vm/image/<id>',methods=['DELETE'])

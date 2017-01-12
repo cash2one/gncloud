@@ -162,26 +162,6 @@ angular
                 });
         }
 
-        $scope.getCluster=function(){
-            $http({
-                method: 'GET',
-                url: '/api/manager/vm/host',
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data) {
-                        $scope.cluster_list = data.info;
-                        for (var i = 0; i < $scope.cluster_list.length; i++) {
-                            $scope.cluster_list[i].create_time_diff = dateModifyService.modifyDate(data.info[i].create_time);
-                        }
-                    }
-                    else {
-                    }
-                })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                });
-        }
 
         $scope.imageset = function(ty){
             if(ty == 'container'){
@@ -214,7 +194,7 @@ angular
                 $("#team-sett").hide();
                 $("#cluster-sett").fadeIn();
                 $("#image-sett").hide();
-                $scope.getCluster();
+                $scope.getClusterList();
             }
             else if(ty =='image-sett'){
                 $("#profile-system").hide();
@@ -242,7 +222,9 @@ angular
             if(part =="instance") $scope.instanceImage = {};
             if(part =="docker") $scope.dockerImage = {};
         };
-        //인스턴스 저장 로직
+
+
+        //이미지 저장
         $scope.uploadPic = function (file) {
             $scope.formUpload = true;
             if (file != null) {
@@ -461,6 +443,142 @@ angular
                         if(data.message != null){
                             alert(data.message);
                         }
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+
+        //클러스터 관련
+        $scope.registYn = "Y";
+        $scope.getClusterList=function(){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/cluster',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.cluster_list = data.info;
+                        for (var i = 0; i < $scope.cluster_list.length; i++) {
+                            $scope.cluster_list[i].create_time_diff = dateModifyService.modifyDate(data.info[i].create_time);
+                        }
+
+                        if($scope.cluster_list.length == 3){
+                            $scope.registYn = "N";
+                        }
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+        $scope.cluster={};
+        $scope.host={}
+        $scope.getCluster=function(id){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/cluster/'+id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.cluster = data.info;
+                        for (var i = 0; i < data.info.gnHostMachines.length; i++) {
+                            $("hostlist").html($("hostlist").html()+data.info.gnHostMachines[i].ip);
+                        }
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.deleteNode=function(id){
+            $http({
+                method: 'DELETE',
+                url: '/api/manager/vm/cluster/node/'+id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.getCluster($scope.cluster.id);
+                        $scope.getClusterList();
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.saveCluster=function(){
+            $http({
+                method: 'POST',
+                url: '/api/manager/vm/cluster',
+                data:$scope.cluster,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.getClusterList();
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.deleteCluster=function(id){
+            $http({
+                method: 'DELETE',
+                url: '/api/manager/vm/cluster/'+id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.getClusterList();
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.saveHost=function(){
+
+            if($scope.host.ip == null){
+                alert("ip를 입력하세요");
+                return false;
+            }
+
+            $http({
+                method: 'POST',
+                url: '/api/manager/vm/host',
+                data:$scope.host,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        if($scope.cluster.node == null){
+                            $scope.cluster.node = $scope.host.ip;
+                        }else{
+                            $scope.cluster.node += $scope.host.ip;
+                        }
+                        $scope.host = {};
+                    }
+                    else {
                     }
                 })
                 .error(function (data, status, headers, config) {
