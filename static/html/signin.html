@@ -61,34 +61,35 @@
 <body>
 
 <!-- --------- 회원가입 페이지 ---------- -->
-    <div class="body-gray">
-        <div class="container container-login">
-            <div class="col-md-offset-4 col-md-4">
-                <a href="index.html" class="logo">
-                    <h1>지앤클라우드 프라이빗</h1>
-                    <img src="gn_images/private_login_img.png" alt="지앤클라우드 프라이빗">
-                </a> 
-            </div> <!--class="col-md-offset-4 col-md-4"-->
-                    
-            <div class="col-md-offset-4 col-md-4 login-box">
-                    <form id="form" >
-                    <h3>회원가입</h3>
-                    <p><input type="text" class="form-control gn-input gn-inputs" id="user_name" placeholder="이름을 입력해주세요." data-validation='user_name' /></p>
-                    <p><input type="text" class="form-control gn-input gn-inputs" id="user_id" placeholder="아이디를 입력해주세요." data-validation='user_id' /></p>
-                    <div class="error-message" id="i">이미 등록된 아이디입니다.</div>
-                    <p><input type="password" class="form-control gn-input gn-inputs" id="password" placeholder="비밀번호를 입력해주세요." minlength="2" data-validation='password' /></p>
-                    <p><input type="password" class="form-control gn-input gn-inputs" id="password_re" placeholder="비밀번호를 다시 입력해주세요." minlength="2" onkeydown="onKeyDown();" data-validation='password_re' /></p>
-                    <!--이미 등록된 아이디를 적었을 때 출력-->
-                    <div class="error-message" id="p">입력된 비밀번호가 일치하지 않습니다.</div>
-                    </form>
-                    <button type="submit" class="btn btn-gn-login btn-lg btn-block" id="sigin_btn">회원가입</button>
-                <a href="/index.html" class="log-join-btn">이미 아이디를 가지고 계신가요 가지고 계신다면 로그인을 해주세요.</a>
+<div class="body-gray">
+    <div class="container container-login">
+        <div class="col-md-offset-4 col-md-4">
+            <a href="index.html" class="logo">
+                <h1>지앤클라우드 프라이빗</h1>
+                <img src="gn_images/private_login_img.png" alt="지앤클라우드 프라이빗">
+            </a> 
+        </div> <!--class="col-md-offset-4 col-md-4"-->
+
+        <div class="col-md-offset-4 col-md-4 login-box">
+            <form id="form" >
+                <h3>회원가입</h3>
+                
+                <p><input type="text" class="form-control gn-input gn-inputs" id="user_name" placeholder="이름을 입력해주세요." data-validation='user_name' /></p>
+                <p><input type="text" class="form-control gn-input gn-inputs" id="user_id" placeholder="아이디를 입력해주세요." data-validation='user_id' /></p>
+                <div class="error-message" id="i">이미 등록된 아이디입니다.</div>
+                <p><input type="password" class="form-control gn-input gn-inputs" id="password" placeholder="비밀번호를 입력해주세요." minlength="2" data-validation='password' /></p>
+                <p><input type="password" class="form-control gn-input gn-inputs" id="password_re" placeholder="비밀번호를 다시 입력해주세요." minlength="2" onkeydown="onKeyDown();" data-validation='password_re' /></p>
+                <!--이미 등록된 아이디를 적었을 때 출력-->
+                <div class="error-message" id="p">입력된 비밀번호가 일치하지 않습니다.</div>
+            </form>
+            <button type="submit" class="btn btn-gn-login btn-lg btn-block" id="sigin_btn">회원가입</button>
+            <a href="/index.html" class="log-join-btn">이미 아이디를 가지고 계신가요 가지고 계신다면 로그인을 해주세요.</a>
 
 
-            </div> <!--class="login-box"-->
+        </div> <!--class="login-box"-->
 
-        </div> <!-- 회원가입 container -->
-    </div>
+    </div> <!-- 회원가입 container -->
+</div>
 <!-- --------- 회원가입 container ----------END -->
 
 
