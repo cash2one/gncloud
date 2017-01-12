@@ -138,7 +138,7 @@ def hvm_snapshot():
             # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
             filename = create_snap['Name']
-            icon = 'icon_path'
+            icon = 'gn_icon_windows.png'
 
             vm_info.filename = filename
             vm_info.icon = icon

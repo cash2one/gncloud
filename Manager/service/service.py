@@ -87,7 +87,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status='Starting', tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id="", ssh_key_id=sshkeys)
+                                  , host_id=host_id, ssh_key_id=sshkeys)
     else:
         vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
                                   , type=type, team_code=team_code, author_id=user_id
@@ -654,3 +654,57 @@ def deleteImageInfoDocker(id,sql_session):
     image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one();
     image_info.status = "Removed"
     sql_session.commit()
+
+
+def team_table_info(team_code,sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소스
+    list = sql_sesseion.query(GnTeam).filter(GnTeam.team_code==team_code).order_by(GnTeam.create_date.desc()).all()
+    result = []
+    for team_info in list:
+        team_info.create_date = team_info.create_date.strftime('%Y-%m-%d %H:%M:%S')
+        user_list = sql_sesseion.query(GnUserTeam, GnUser).join(GnUser, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_info.team_code).all()
+        current_info = sql_sesseion.query(func.sum(GnVmMachines.cpu).label("sum_cpu"),
+                                          func.sum(GnVmMachines.memory).label("sum_mem")
+                                          ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status != "Removed").one()
+        current_info_disk=sql_sesseion.query(func.sum(GnVmMachines.disk).label("sum_disk")
+                                             ).filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type != "docker").filter(GnVmMachines.status == "Running").one()
+        limit_quota = sql_sesseion.query(GnTeam).filter(GnTeam.team_code == team_info.team_code).one()
+        vm_run_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Running").one()
+        vm_stop_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.status == "Suspend").one()
+        vm_kvm_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type == "kvm").one()
+        vm_hyperv_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type == "hyperv").one()
+        vm_docker_count = sql_sesseion.query(func.count(GnVmMachines.id).label("count")) \
+            .filter(GnVmMachines.team_code == team_info.team_code).filter(GnVmMachines.type == "docker").one()
+        team_info = sql_sesseion.query(GnTeam).filter(GnTeam.team_code == team_info.team_code).one()
+        if current_info.sum_cpu is None:
+            cpu_per_info = [0,100]
+            cpu_cnt_info = [0,limit_quota.cpu_quota]
+        else:
+            cpu_per_info = [int((current_info.sum_cpu/limit_quota.cpu_quota)*100), 100 - (int((current_info.sum_cpu/limit_quota.cpu_quota)*100))]
+            cpu_cnt_info = [int(current_info.sum_cpu), limit_quota.cpu_quota]
+
+        if current_info.sum_mem is None:
+            memory_per_info = [0,100]
+            mem_cnt_info = [0, convertHumanFriend(limit_quota.mem_quota)]
+        else:
+            memory_per_info = [int((current_info.sum_mem/limit_quota.mem_quota)*100), 100 - (int((current_info.sum_mem/limit_quota.mem_quota)*100))]
+            mem_cnt_info = [convertHumanFriend(int(current_info.sum_mem)), convertHumanFriend(limit_quota.mem_quota)]
+
+        if current_info_disk.sum_disk is None:
+            disk_per_info = [0,100]
+            disk_cnt_info = [0, convertHumanFriend(limit_quota.disk_quota)]
+        else:
+            disk_per_info = [int((current_info_disk.sum_disk/limit_quota.disk_quota)*100), 100 - (int((current_info_disk.sum_disk/limit_quota.disk_quota)*100))]
+            disk_cnt_info = [convertHumanFriend(int(current_info_disk.sum_disk)), convertHumanFriend(limit_quota.disk_quota)]
+        count_info = [vm_run_count.count,vm_stop_count.count]
+        type_info = [vm_kvm_count.count,vm_hyperv_count.count]
+        docker_info = vm_docker_count.count
+        quato_info = {'team_name':team_info.team_name, 'cpu_per':cpu_per_info, 'mem_per':memory_per_info, 'disk_per':disk_per_info
+            , 'cpu_cnt':cpu_cnt_info, 'mem_cnt':mem_cnt_info, 'disk_cnt':disk_cnt_info
+            , 'vm_count':count_info, 'vm_type':type_info, 'docker_info':docker_info};
+        team_table = {"team_info":team_info, "user_list":user_list, "quto_info":quato_info}
+        result.append(team_table);
+    return result

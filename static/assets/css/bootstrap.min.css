@@ -1690,6 +1690,7 @@ dt {
 }
 
 dd {
+    white-space: pre-line;
     margin-left: 0
 }
 
