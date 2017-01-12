@@ -60,9 +60,16 @@ def index():
     logger.debug("%s Connection Check" % "/service/isAlive")
     return redirect(url_for("is_alive"))
 
+@app.route('/monitor', methods=['GET'])
+def cronMnitor():
+    service_monitoring(db_session)
+    return jsonify(status=True, message="success")
+
 
 def interval_status_update():
     service_monitoring(db_session)
+
+
 
 
 @app.teardown_appcontext

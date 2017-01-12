@@ -119,7 +119,7 @@ def download_sshKey(id):
     return make_response((body, headers))
 
 @app.route('/monitor', methods=['GET'])
-def test():
+def cronMnitor():
     server_monitor(db_session)
     return jsonify(status=True, message="success")
 

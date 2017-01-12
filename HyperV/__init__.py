@@ -76,6 +76,11 @@ def isAlive():
 def index():
     return redirect(url_for("isAlive"))
 
+@app.route('/monitor', methods=['GET'])
+def cronMnitor():
+    vm_monitor(db_session)
+    return jsonify(status=True, message="success")
+
 if __name__ == '__main__':
     app.config['DEBUG'] = False
     cron = Scheduler(daemon=True)
