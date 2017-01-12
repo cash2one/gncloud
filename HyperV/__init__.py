@@ -74,7 +74,7 @@ def index():
 
 
 if __name__ == '__main__':
-    app.config['DEBUG'] = True
+    app.config['DEBUG'] = False
     cron = Scheduler(daemon=True)
     cron.add_interval_job(monitor, seconds=10)
     cron.start()
