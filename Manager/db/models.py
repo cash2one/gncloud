@@ -22,9 +22,16 @@ class GnHostMachines(Base):
     max_disk = Column(Integer, primary_key=False, nullable=False)
     host_agent_port = Column(Integer, primary_key=False, nullable=False)
 
-    def __init__(self, id=None, type=None):
+    def __init__(self, id=None, ip=None, type=None, cpu=None, mem=None,disk=None,max_cpu=None,max_mem=None,max_disk=None):
         self.id = id
         self.type = type
+        self.ip = ip
+        self.cpu = cpu
+        self.mem = mem
+        self.disk = disk
+        self.max_cpu = max_cpu
+        self.max_mem = max_mem
+        self.max_disk = max_disk
 
     def __repr__(self):
         return '<Id %r / Ip %r / Type %r>' \
@@ -454,17 +461,19 @@ class GnCluster(Base):
     ip = Column(String(20), primary_key=False, nullable=False)
     port = Column(Integer, primary_key=False, nullable=False)
     type = Column(String(10), primary_key=False, nullable=False)
+    status = Column(String(10), primary_key=False, nullable=False)
     swarm_join = Column(String(10), primary_key=False, nullable=False)
     create_time = Column(String(10), primary_key=False, default=datetime.datetime.now())
     gnHostMachines = relationship('GnHostMachines')
 
-    def __init__(self, id=None, name=None, ip=None, port=None, type=None, swarm_join=None):
+    def __init__(self, id=None, name=None, ip=None, port=None, type=None, swarm_join=None, status=None):
         self.id = id
         self.name = name
         self.ip = ip
         self.port = port
         self.type = type
         self.swarm_join = swarm_join
+        self.status = status
 
     def __repr__(self):
         return '< Id %r / Name %r / Ip %r / Port %r / Type %r / Swarm_join %r>' \

@@ -586,10 +586,69 @@ def convertHumanFriend(num):
 
 
 def hostMachineList(sql_session):
-    list = sql_session.query(GnCluster).all()
+    list = sql_session.query(GnCluster).filter(GnCluster.status != "Removed").all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
+
+def hostMachineInfo(id,sql_session):
+    return sql_session.query(GnCluster).filter(GnCluster.id == id).one()
+
+def deleteHostMachine(id,sql_session):
+    host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.id == id).one()
+    host_info.type = ""
+    sql_session.commit()
+
+def updateClusterInfo(id,ip,port,node,sql_session):
+    try:
+        cluster_info = sql_session.query(GnCluster).filter(GnCluster.id == id).one()
+        cluster_info.ip = ip
+        cluster_info.port = port
+
+        #node 부분
+        nodeArr = node.split('\n')
+
+        for str_node in nodeArr:
+            host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.ip == str_node).first()
+            host_info.type = cluster_info.type
+    except:
+        sql_session.rollback()
+
+    sql_session.commit()
+
+
+def insertClusterInfo(type,ip,port,node,sql_session):
+    try:
+        cluster_info =GnCluster(type=type, ip=ip, port=port)
+        sql_session.add(cluster_info)
+
+        #node 부분
+        nodeArr = node.split('\n')
+
+        for str_node in nodeArr:
+            host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.ip == str_node).first()
+            host_info.type = type
+    except:
+        sql_session.rollback()
+
+    sql_session.commit()
+
+def deleteCluster(id,sql_session):
+    cluster_info = sql_session.query(GnCluster).filter(GnCluster.id == id).one()
+    cluster_info.status = "Removed"
+    sql_session.commit()
+
+def insertHostInfo(ip,cpu,mem,disk,max_cpu,max_mem,max_disk,sql_session):
+
+    while True:
+        id = random_string(8)
+        check_info = sql_session.query(GnHostMachines).filter(GnVmImages.id == id).first();
+        if not check_info:
+            break
+
+    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=mem,disk=disk,max_cpu=max_cpu,max_mem=max_mem,max_disk=max_disk,type="")
+    sql_session.add(host_info)
+    sql_session.commit()
 
 def insertImageInfo(type,os,os_ver,os_bit,filename,icon,sql_session):
     #id 생성
