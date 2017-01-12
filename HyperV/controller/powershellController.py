@@ -10,7 +10,6 @@ from HyperV.db.models import GnImagesPool, GnHostMachines
 
 __author__ = 'jhjeon'
 
-import logging
 import datetime
 import time
 from flask import request, jsonify
@@ -365,10 +364,7 @@ def hvm_image():
 
 def vm_monitor():
 
-    db_session=None
     vm_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
-    logger = logging.getLogger("log")
-    logger.error(vm_info)
     for seq in vm_info:
         host = db_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
         ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
