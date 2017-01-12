@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-import threading
 
 __author__ = 'jhjeon'
-
-
 
 from apscheduler.scheduler import Scheduler
 from flask import Flask, redirect, url_for
@@ -75,7 +72,7 @@ def index():
 
 
 if __name__ == '__main__':
-    app.config['DEBUG'] = False
+    app.config['DEBUG'] = True
     cron = Scheduler(daemon=True)
     cron.add_interval_job(monitor, seconds=60)
     cron.start()
