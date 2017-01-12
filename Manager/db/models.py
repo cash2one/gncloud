@@ -473,3 +473,28 @@ class GnCluster(Base):
 
     def __json__(self):
         return ['id', 'name', 'ip', 'port', 'type', 'swarm_join', 'gnHostMachines', 'create_time']
+
+
+class GnDockerImageDetail(Base):
+    __tablename__ = 'GN_DOCKER_IMAGES_DETAIL'
+    id = Column(String(8), primary_key=True, nullable=False, default='')
+    image_id = Column(String(8), ForeignKey('GN_DOCKER_IMAGES.id'))
+    arg_type = Column(String(10), nullable=False, default='')
+    argument = Column(String(200), nullable=False, default='')
+    description = Column(String(300), nullable=True, default='')
+    status = Column(String(10), nullable=True, default='')
+
+    def __init__(self, id=None, image_id=None, arg_type=None, argument=None, description=None, status=None):
+        self.id = id
+        self.image_id = image_id
+        self.arg_type = arg_type
+        self.argument = argument
+        self.description = description
+        self.status = status
+
+    def __repr__(self):
+        return "<GnDockerImageDetail %r_%r)>" % (self.id, self.image_id)
+
+    def to_json(self):
+        return dict(id=self.id, image_id=self.image_id, arg_type=self.arg_type,
+                    argument=self.argument, description=self.description, status=self.status)

@@ -28,14 +28,19 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
     current_info = sql_session.query(
                                       func.ifnull(func.sum(GnVmMachines.cpu),0).label("sum_cpu"),
                                       func.ifnull(func.sum(GnVmMachines.memory),0).label("sum_mem"),
-                                      func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
                                      ) \
                               .filter(GnVmMachines.team_code == team_code) \
-                              .filter(GnVmMachines.type != "docker") \
                               .filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "Error").one()
 
+    disk_info = sql_session.query(
+                                    func.ifnull(func.sum(GnVmMachines.disk),0).label("sum_disk")
+                                 ) \
+        .filter(GnVmMachines.team_code == team_code) \
+        .filter(GnVmMachines.type != 'docker') \
+        .filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "Error").one()
+
     if type == "kvm" or type == "hyperv":
-        if (current_info.sum_cpu + max_cpu) >  team_info.cpu_quota or (current_info.sum_mem + max_mem) > team_info.mem_quota or (current_info.sum_disk + max_disk) > team_info.disk_quota:
+        if (current_info.sum_cpu + max_cpu) >  team_info.cpu_quota or (current_info.sum_mem + max_mem) > team_info.mem_quota or (disk_info.sum_disk + max_disk) > team_info.disk_quota:
             return {"status":False, "value":"팀의 사용량을 초과하였습니다"}
     else:
         if (current_info.sum_cpu + max_cpu) >  team_info.cpu_quota \
