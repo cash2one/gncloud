@@ -109,13 +109,27 @@ angular
             if (action == "dropout") {
                 var returnvalue = confirm(name+"을 탈퇴시기겠습니까 ?");
                 if (returnvalue == true){
-                    url = '/api/manager/vm/account/teamset/'+id+'/'+code;
-                    method = 'DELETE';
+                    $http({
+                        method:'DELETE',
+                        url:'/api/manager/vm/account/teamset/'+id+'/'+code,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
+                    })
+                        .success(function(data, status, headers, config) {
+                            if (data.status == true) {
+                                alert(name + data.message);
+                                $scope.teamtable();
+                            } else {
+                                //alert(data.message);
+                            }
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log(status);
+                        });
                 }else{
                     $scope.teamtable();
                 }
 
-            }else if(action == "approve"){
+            }else if(action == "approve" || action == 'reset'){
                 $http({
                     method: method,
                     url: url,
@@ -133,8 +147,26 @@ angular
                         console.log(status);
                     });
             }else if(action == 'change'){
-
-            }
+                var retrunvalue = confirm(name+"을 팀장으로 변경하시겠습니까 ?");
+                if(retrunvalue == true){
+                    $http({
+                        method: method,
+                        url: url,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
+                    })
+                        .success(function(data, status, headers, config) {
+                            if (data.status == true) {
+                                alert(name + data.message);
+                                $scope.teamtable();
+                            } else {
+                                //alert(data.message);
+                            }
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log(status);
+                        });
+                    }
+                }
 
 
         };

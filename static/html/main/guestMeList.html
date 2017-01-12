@@ -236,7 +236,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}">
+                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}" ng-cloak>
                                 <td class="">{{$index+1}}</td>
                                 <td class="">{{won.team_owner}}</td>
                                 <td class="" class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">{{won.user_name}}</td>
@@ -254,7 +254,10 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu" >
-                                        <li ng-repeat="ac in actions"><a href ng-click="update(won.user_id, won.team_code, ac, won.user_name)">{{ac.name}}</a></li>
+                                        <li><a ng-click="update(won.user_id, won.team_code, 'approve', won.user_name)">승인</a></li>
+                                        <li><a ng-click="update(won.user_id, won.team_code, 'change', won.user_name)">등급변경</a></li>
+                                        <li><a ng-click="update(won.user_id, won.team_code, 'reset', won.user_name)">비밀번호초기화</a></li>
+                                        <li><a ng-click="update(won.user_id, won.team_code, 'dropout', won.user_name)">팀탈퇴</a></li>
                                     </ul>
                                 </td>
                             </tr>

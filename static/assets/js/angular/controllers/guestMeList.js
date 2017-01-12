@@ -172,6 +172,9 @@ angular
                             }
                             if(data.list[i][0].user_id == $rootScope.user_info.user_id){
                                 data.list[i][0].user_name = data.list[i][0].user_name+"\n(YOU)";
+                                data.list[i][0].set= 1;
+                            }else{
+                                data.list[i][0].sett=0;
                             }
                             data.list[i].user_id = data.list[i][0].user_id;
                             data.list[i].user_name = data.list[i][0].user_name;
@@ -180,7 +183,8 @@ angular
                             data.list[i].email = data.list[i][0].email;
                             data.list[i].comf = comfirm_re;
                             data.list[i].team_owner = team_owner;
-                            data.list[i].team_check = data.list[i][1].comfirm
+                            data.list[i].team_check = data.list[i][1].comfirm;
+                            data.list[i].sett = data.list[i][0].sett;
                             //날짜 카운팅
                             teamArr.push(data.list[i])
                         }
@@ -219,41 +223,75 @@ angular
                     }
                 });
         };
-        $scope.actions = [
-            {name: '승인', type: 'approve'},
-            {name: '등급변경', type: 'change'},
-            {name: '비밀번호초기화', type: 'reset'},
-            {name: '팀탈퇴', type: 'dropout'}
-        ];
         $scope.update = function (id, code, action, name) {  //팀장이 팀원 등급권한
-            var url = '/api/manager/vm/account/teamset/'+id+'/'+code;
+            var url = '/api/manager/vm/account/teamset/'+id+'/'+code+'/'+action;
             var method = "PUT";
-            if (action.type == "dropout") {
-                url = '/api/manager/vm/account/teamset/'+id+'/'+code;
-                method = 'DELETE';
+            $scope.lits={}
+            $scope.lits.type=action;
+            if (action == "dropout") {
+                var returnvalue = confirm(name+"을 탈퇴시기겠습니까 ?");
+                if (returnvalue == true){
+                    $http({
+                        method:'DELETE',
+                        url:'/api/manager/vm/account/teamset/'+id+'/'+code,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
+                    })
+                        .success(function(data, status, headers, config) {
+                            if (data.status == true) {
+                                alert(name + data.message);
+                                $scope.teamtable();
+                            } else {
+                                //alert(data.message);
+                            }
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log(status);
+                        });
+                }else{
+                    $scope.teamtable();
+                }
+
+            }else if(action == "approve" || action == 'reset'){
+                $http({
+                    method: method,
+                    url: url,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
+                })
+                    .success(function(data, status, headers, config) {
+                        if (data.status == true) {
+                            alert(name + data.message);
+                            $scope.teamtable();
+                        } else {
+                            //alert(data.message);
+                        }
+                    })
+                    .error(function(data, status, headers, config) {
+                        console.log(status);
+                    });
+            }else if(action == 'change'){
+                var retrunvalue = confirm(name+"을 팀장으로 변경하시겠습니까 ?");
+                if(retrunvalue == true){
+                    $http({
+                        method: method,
+                        url: url,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
+                    })
+                        .success(function(data, status, headers, config) {
+                            if (data.status == true) {
+                                alert(name + data.message);
+                                $scope.teamtable();
+                            } else {
+                                //alert(data.message);
+                            }
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log(status);
+                        });
+                }
             }
 
-            $http({
-                method: method,
-                url: url,
-                data: action,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function(data, status, headers, config) {
-                    if (data.status == true) {
-                        alert(name+ data.message);
-                        $scope.teamtable();
-                    } else {
-                        if(data.message != null) {
 
-                        }
-                    }
-                })
-                .error(function(data, status, headers, config) {
-                    console.log(status);
-                });
-
-            };
+        };
         $scope.change = function () { //팀이름 변경
             $http({
                 method  : 'PUT',
