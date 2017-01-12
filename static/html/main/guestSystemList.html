@@ -2,7 +2,7 @@
 
 <!--왼쪽 메뉴-->
 <ul class="nav nav-pills gn-left-menu col-xs-12 col-sm-2">
-    <li class="left-title gn-top">시스템</li>
+    <li class="left-title">시스템</li>
     <li><a data-toggle="pill" ng-click="click('profile-system')">프로필</a></li>
     <li><a data-toggle="pill" ng-click="click('team-sett')">팀 관리</a></li>
     <li><a data-toggle="pill" ng-click="click('cluster-sett')">클러스터 관리</a></li>
@@ -26,7 +26,7 @@
                             <dd>&copy;&nbsp;COPYRIGHT&nbsp;&nbsp;지앤클라우드
                                 &nbsp;&nbsp;ALL&nbsp;&nbsp;RIGHT&nbsp;&nbsp;RESERVED.</dd>
                             <dt>홈페이지</dt>
-                            <dd><a href="http://www.gnclouds.com" class="gn-url">www.gnclouds.com</a></dd>
+                            <dd><a href="http://www.gnclouds.com">www.gnclouds.com</a></dd>
 
                         </dl>
                     </form>
@@ -52,7 +52,7 @@
                                 <th class="">관리자</th>
                                 <th class="">팀원</th>
                                 <th class="hidden-xs hidden-sm">생성일</th>
-                                <th class="hidden-xs hidden-sm">리소스</th>
+                                <th class="hidden-xs">리소스</th>
                                 <th><!--더보기--></th>
                             </tr>
                             </thead>
@@ -71,7 +71,7 @@
                                     </div>
                                 </td>
                                 <td class="hidden-xs hidden-sm"><span data-toggle="tooltip" title="{{select.create_date}}" tooltip>{{select.create_time_diff}}</span></td>
-                                <td class="hidden-xs hidden-sm">{{select.cpu_use_cnt}}CORE/{{select.mem_use_cnt}}/{{select.disk_use_cnt}}</td>
+                                <td class="hidden-xs">{{select.cpu_use_cnt}}CORE/{{select.mem_use_cnt}}/{{select.disk_use_cnt}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -123,10 +123,14 @@
                                             <div class="col-sm-9" ng-class="{ 'has-error' : clusterForm.ip.$invalid && !clusterForm.ip.$pristine }">
                                                 <input type="text" class="form-control" name="ip" placeholder="192.168.0.3" ng-model="cluster.ip" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.ip.$pristine" class="help-block">ip를 입력하세요.</p>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="192.168.0.3" ng-model="cluster.ip">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">엔드 포인트 <br/>PORT</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="9090" ng-model="cluster.port">
                                             <div class="col-sm-9"  ng-class="{ 'has-error' : clusterForm.port.$invalid && !clusterForm.port.$pristine }">
                                                 <input type="text" class="form-control" name="port" placeholder="9090" ng-model="cluster.port" required>
                                                 <p ng-show="clusterForm.port.$invalid && !clusterForm.port.$pristine" class="help-block">포트를 입력하세요.</p>
@@ -141,7 +145,7 @@
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">노드</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control"  placeholder="192.168.0.100" ng-model="host.ip">
+                                                <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="192.168.0.100" ng-model="host.ip">
                                             </div>
                                             <div class="col-sm-2 btn-sm2">
                                                 <button type="button" class="btn btn-gn-sub btn-block" data-toggle="modal" data-target="#cluster-more">추가</button>
@@ -209,11 +213,11 @@
                         <table class="table table gn-table">
                             <thead>
                                 <tr>
-                                    <th class="col-sm-2">타입</th>
-                                    <th class="col-sm-3 hidden-xs">엔드 포인트</th>
-                                    <th class="col-sm-3 hidden-xs">노드</th>
-                                    <th class="col-sm-2 hidden-xs hidden-sm">생성일<div class="refresh"></div></th>
-                                    <th class="col-sm-2"><!--더보기--></th>
+                                    <th class="">타입</th>
+                                    <th class="hidden-xs">엔드 포인트</th>
+                                    <th class="hidden-xs">노드</th>
+                                    <th class="hidden-xs hidden-sm">생성일<div class="refresh"></div></th>
+                                    <th class=""><!--더보기--></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -355,11 +359,11 @@
                                     <table class="table table gn-table gn-top">
                                         <thead>
                                         <tr>
-                                            <th class="col-sm-3">OS</th>
-                                            <th class="col-sm-2">버전</th>
-                                            <th class="col-sm-1 hidden-xs">BIT</th>
-                                            <th class="col-sm-2 hidden-xs">타입</th>
-                                            <th class="col-sm-2 col-sm-3 hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('image')"></div></th>
+                                            <th class="">OS</th>
+                                            <th class="">버전</th>
+                                            <th class="hidden-xs">BIT</th>
+                                            <th class="hidden-xs">타입</th>
+                                            <th class="hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('image')"></div></th>
                                             <th><!--더보기--></th>
                                         </tr>
                                         </thead>
@@ -503,11 +507,11 @@
                                     <table class="table table gn-table gn-top">
                                         <thead>
                                         <tr>
-                                            <th class="col-sm-3">이름</th>
-                                            <th class="col-sm-2">버전</th>
-                                            <th class="col-sm-2">태그</th>
-                                            <th class="col-sm-2">생성일<div class="refresh" ng-click="refresh('contain')"></div></th>
-                                            <th class="col-sm-1"><!--더보기--></th>
+                                            <th class="">이름</th>
+                                            <th class="">버전</th>
+                                            <th class="">태그</th>
+                                            <th class="">생성일<div class="refresh" ng-click="refresh('contain')"></div></th>
+                                            <th class=""><!--더보기--></th>
                                         </tr>
                                         </thead>
                                         <tbody class="gn-tdody">
@@ -516,9 +520,9 @@
                                                 <img src="/gn_images/{{contain.icon}}" alt="" ng-show="contain.icon != '' ">
                                                 {{contain.view_name}}
                                             </td>
-                                            <td class="hidden-xs">{{contain.os_ver}}</td>
+                                            <td>{{contain.os_ver}}</td>
                                             <td class="hidden-xs">{{contain.tag}}</td>
-                                            <td class="hidden-xs hidden-xs">{{contain.create_time_diff}}</td>
+                                            <td class="hidden-xs hidden-sm">{{contain.create_time_diff}}</td>
                                             <td class="dropdown">
                                                 <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                                     <div class="gn-more">더보기</div>

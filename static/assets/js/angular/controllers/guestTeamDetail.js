@@ -261,6 +261,15 @@ angular
                     $("#disk_per").html(data.list.disk_per[0]);
                     $("#disk_use_cnt").html(data.list.disk_cnt[0]);
                     $("#disk_total_cnt").html(data.list.disk_cnt[1]);
+                    $("#cpu_per1").html(data.list.cpu_per[0]);
+                    $("#cpu_use_cnt1").html(data.list.cpu_cnt[0]);
+                    $("#cpu_total_cnt1").html(data.list.cpu_cnt[1]);
+                    $("#mem_per1").html(data.list.mem_per[0]);
+                    $("#mem_use_cnt1").html(data.list.mem_cnt[0]);
+                    $("#mem_total_cnt1").html(data.list.mem_cnt[1]);
+                    $("#disk_per1").html(data.list.disk_per[0]);
+                    $("#disk_use_cnt1").html(data.list.disk_cnt[0]);
+                    $("#disk_total_cnt1").html(data.list.disk_cnt[1]);
                 }
                 else {
                     alert(data.message)
