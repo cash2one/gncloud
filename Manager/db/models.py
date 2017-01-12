@@ -111,8 +111,6 @@ class GnUser(Base):
     email= Column(String(30), primary_key= False, nullable= False)
     start_date = Column(DateTime, default=datetime.datetime.now())
 
-
-
     def __init__(self, user_id = user_id, password= None, team_code=None, user_name=None, tel=None, email=None, start_date=None):
 
         self.user_id = user_id
@@ -280,6 +278,7 @@ class GnDockerImages(Base):
     status = Column(String(10), primary_key=False, nullable=False)
     icon = Column(String(50), primary_key=False, nullable=False)
     sub_type = Column(String(10), nullable=True, default='')
+    gnDockerImageDetail = relationship('GnDockerImageDetail')
 
     def __init__(self, id=id, name= None, tag=None, os=None, os_ver=None, team_code=None, author_id =None, create_time=None, status=None, view_name=None, icon=None, sub_type=None):
         self.id= id
@@ -293,7 +292,7 @@ class GnDockerImages(Base):
         self.status = status
         self.view_name = view_name
         self.type = type
-        self.type = icon
+        self.icon = icon
         self.sub_type = sub_type
 
     def __repr__(self):
@@ -301,7 +300,7 @@ class GnDockerImages(Base):
             % (self.id, self.name, self.tag, self.os, self.os_ver, self.team_code, self.create_time, self.Status, self.view_name)
 
     def __json__(self):
-        return ['id', 'name','tag' ,'os','os_ver','team_code', 'create_time','status', 'view_name', 'icon']
+        return ['id', 'name','tag' ,'os','os_ver','team_code', 'create_time','status', 'view_name', 'icon', 'gnDockerImageDetail']
 
 class GnMonitor(Base):
     __tablename__ = "GN_MONITOR"

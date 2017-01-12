@@ -405,6 +405,37 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.dockerImage = data.info;
+
+                        for(var i=0; i < data.info.gnDockerImageDetail.length ; i++){
+                            if(data.info.gnDockerImageDetail[i].arg_type == "mount"){
+                                if($scope.dockerImage.vol != null) {
+                                    $scope.dockerImage.vol += data.info.gnDockerImageDetail[i].argument + "\n";
+                                }else{
+                                    $scope.dockerImage.vol = data.info.gnDockerImageDetail[i].argument + "\n";
+                                }
+                            }
+
+                            if(data.info.gnDockerImageDetail[i].arg_type == "port"){
+                                if($scope.dockerImage.port != null) {
+                                    $scope.dockerImage.port += data.info.gnDockerImageDetail[i].argument.replace("-p ","")+",";
+                                }else{
+                                    $scope.dockerImage.port = data.info.gnDockerImageDetail[i].argument.replace("-p ","")+",";
+                                }
+                            }
+
+                            if(data.info.gnDockerImageDetail[i].arg_type == "env"){
+                                if($scope.dockerImage.env != null) {
+                                    $scope.dockerImage.env += data.info.gnDockerImageDetail[i].argument + "\n";
+                                }else{
+                                    $scope.dockerImage.env = data.info.gnDockerImageDetail[i].argument + "\n";
+                                }
+                            }
+                        }
+
+                        $scope.dockerImage.vol = $scope.dockerImage.vol.slice(0,-1)
+                        $scope.dockerImage.port = $scope.dockerImage.port.slice(0,-1)
+                        $scope.dockerImage.env = $scope.dockerImage.env.slice(0,-1)
+
                     }else{
                         if(data.message != null){
                             alert(data.message);

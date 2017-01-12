@@ -631,7 +631,7 @@ def selectImageInfoDocker(id,sql_session):
     return sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
 
 
-def insertImageInfoDocker(name,os_ver,tag,icon,port,env,sql_session):
+def insertImageInfoDocker(name,os_ver,tag,icon,port,env,vol,sql_session):
     try:
         #id 생성
         while True:
@@ -642,7 +642,60 @@ def insertImageInfoDocker(name,os_ver,tag,icon,port,env,sql_session):
         image_info = GnDockerImages(id=image_id, view_name=name, sub_type="base",tag=tag, icon=icon, os_ver=os_ver, status="running")
         sql_session.add(image_info)
 
+        #port 부분
+        portArr = port.split(',')
 
+        for str_port in portArr:
+            while True:
+                detail_id = random_string(8)
+                check_info = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.id == detail_id).first();
+                if not check_info:
+                    break
+
+            detail_info = GnDockerImageDetail(id=detail_id, image_id=image_id, arg_type="port", argument="-p "+str_port)
+            sql_session.add(detail_info)
+
+        #환경변수 부분
+        envArr = env.split('\n')
+
+        for str_env in envArr:
+            while True:
+                detail_id = random_string(8)
+                check_info = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.id == detail_id).first();
+                if not check_info:
+                    break
+
+            detail_info = GnDockerImageDetail(id=detail_id, image_id=image_id, arg_type="env", argument=str_env)
+            sql_session.add(detail_info)
+
+        #환경변수 부분
+        volArr = vol.split('\n')
+
+        for str_vol in volArr:
+            while True:
+                detail_id = random_string(8)
+                check_info = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.id == detail_id).first();
+                if not check_info:
+                    break
+
+            detail_info = GnDockerImageDetail(id=detail_id, image_id=image_id, arg_type="mount", argument=str_vol)
+            sql_session.add(detail_info)
+
+    except:
+        sql_session.rollback()
+
+    sql_session.commit()
+
+def updateImageInfoDocker(id,name,os_ver,tag,icon,port,env,vol,sql_session):
+    try:
+        image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
+        image_info.view_name = name
+        image_info.os_ver = os_ver;
+        image_info.tag = tag
+        if icon != "":
+            image_info.icon = icon
+
+        sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.image_id == id).delete()
 
         #port 부분
         portArr = port.split(',')
@@ -655,32 +708,37 @@ def insertImageInfoDocker(name,os_ver,tag,icon,port,env,sql_session):
                 if not check_info:
                     break
 
-            detail_info = GnDockerImageDetail(id=detail_id, image_id=image_id, arg_type="port", argument="-p "+str_port)
+            detail_info = GnDockerImageDetail(id=detail_id, image_id=image_info.id, arg_type="port", argument="-p "+str_port)
             sql_session.add(detail_info)
 
         #환경변수 부분
-        portArr = port.split(',')
-    except:
-        sql_session.rollback()
+        envArr = env.split('\n')
 
-    sql_session.commit()
+        for str_env in envArr:
+            #id 생성
+            while True:
+                detail_id = random_string(8)
+                check_info = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.id == detail_id).first();
+                if not check_info:
+                    break
 
-def updateImageInfoDocker(id,name,os_ver,tag,icon,port,env,sql_session):
-    try:
-        image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
-        image_info.view_name = name
-        image_info.os_ver = os_ver;
-        image_info.tag = tag
-        if icon != "":
-            image_info.icon = icon
-
-        #port 부분
-        portArr = port.split(',')
-        sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.image_id == id).delete()
-
-        for str_port in portArr:
-            detail_info = GnDockerImageDetail(id=id, image_id=id, arg_type="port", argument="-p "+str_port)
+            detail_info = GnDockerImageDetail(id=detail_id, image_id=image_info.id, arg_type="env", argument=str_env)
             sql_session.add(detail_info)
+
+        #환경변수 부분
+        volArr = vol.split('\n')
+
+        for str_vol in volArr:
+            #id 생성
+            while True:
+                detail_id = random_string(8)
+                check_info = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.id == detail_id).first();
+                if not check_info:
+                    break
+
+            detail_info = GnDockerImageDetail(id=detail_id, image_id=image_info.id, arg_type="mount", argument=str_vol)
+            sql_session.add(detail_info)
+
     except:
         sql_session.rollback()
 

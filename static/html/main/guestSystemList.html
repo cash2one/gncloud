@@ -402,7 +402,7 @@
                                         <tbody class="gn-tdody">
                                         <tr ng-repeat="path in images_list">
                                             <td>
-                                                <img src="/gn_images/{{path.icon}}" alt="">
+                                                <img src="/gn_images/{{path.icon}}" alt="" ng-show="path.icon != ''">
 
                                             {{path.os}}
                                             </td>
@@ -495,21 +495,21 @@
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">포트</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.port.$invalid && !myDockerForm.port.$pristine }">
-                                                        <input type="text" class="form-control" name="port" placeholder="오픈할 포트를 쉼표로 구분하여 넣어주세요" ng-model="dockerImage.port">
+                                                        <input type="text" class="form-control" name="port" placeholder="오픈할 포트를 쉼표로 구분하여 넣어주세요" ng-model="dockerImage.port" required>
                                                         <p ng-show="myDockerForm.port.$invalid && !myDockerForm.port.$pristine" class="help-block">포트를 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">환경변수</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.env.$invalid && !myDockerForm.env.$pristine }">
-                                                        <textarea class="form-control" rows="2" name="env" placeholder="환경변수와 볼륨은 한줄에 하나씩 넣어주세요" ng-model="dockerImage.env"></textarea>
+                                                        <textarea class="form-control" rows="2" name="env" placeholder="환경변수와 볼륨은 한줄에 하나씩 넣어주세요" ng-model="dockerImage.env" required></textarea>
                                                         <p ng-show="myDockerForm.env.$invalid && !myDockerForm.env.$pristine" class="help-block">환경변수를 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label" >볼륨</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.vol.$invalid && !myDockerForm.vol.$pristine }">
-                                                        <textarea class="form-control" rows="2" name="vol" placeholder="볼륨을 한 줄에 하나씩 넣어주세요" ng-model="dockerImage.vol"></textarea>
+                                                        <textarea class="form-control" rows="2" name="vol" placeholder="볼륨을 한 줄에 하나씩 넣어주세요" ng-model="dockerImage.vol" required></textarea>
                                                         <p ng-show="myDockerForm.vol.$invalid && !myDockerForm.vol.$pristine" class="help-block">볼륨을 입력하세요.</p>
                                                     </div>
                                                 </div>
@@ -549,7 +549,7 @@
                                         <tbody class="gn-tdody">
                                         <tr ng-repeat="contain in contain_list">
                                             <td>
-                                                <img src="/gn_images/{{contain.icon}}" alt="">
+                                                <img src="/gn_images/{{contain.icon}}" alt="" ng-show="contain.icon != '' ">
                                                 {{contain.view_name}}
                                             </td>
                                             <td class="hidden-xs">{{contain.os_ver}}</td>
