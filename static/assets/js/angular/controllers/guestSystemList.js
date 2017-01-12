@@ -514,6 +514,7 @@ angular
         }
 
         $scope.saveCluster=function(){
+            alert($scope.cluster.type);
             $http({
                 method: 'POST',
                 url: '/api/manager/vm/cluster',
