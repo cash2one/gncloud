@@ -34,7 +34,7 @@ def job_function():
 
 @app.before_request
 def before_request():
-    if ('userId' not in session):
+    if ('userId' not in session) and request.path != '/monitor':
         return make_response(jsonify(status=False),401)
 
 
@@ -118,9 +118,10 @@ def download_sshKey(id):
         body = f.read()
     return make_response((body, headers))
 
-@app.route('/test', methods=['GET'])
+@app.route('/monitor', methods=['GET'])
 def test():
     server_monitor(db_session)
+    return jsonify(status=True, message="success")
 
 #### rest end ####
 
