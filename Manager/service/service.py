@@ -375,7 +375,7 @@ def getQuotaOfTeam(team_code, sql_session):
                  , 'team_user_count':team_user_cnt, 'user_list':user_list
                  , 'vm_kvm_per':vm_kvm_per, 'vm_hyperv_per':vm_hyperv_per
                  , "image_type_list":image_type_list};
-
+    print ("=====================time==============================")
     return quato_info
 
 def list_user_sshkey(team_code, sql_session):
