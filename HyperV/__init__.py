@@ -9,7 +9,6 @@ from datetime import timedelta
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
 from HyperV.db.database import db_session
-from HyperV.service.powershellService import vm_monitor
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
