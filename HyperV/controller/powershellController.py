@@ -383,6 +383,10 @@ def vm_monitor():
         script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
         script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
         ip = ps.send(script)
+        print hdd
+        print cpu
+        print mem
+        print ip
         try:
             monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(), cpu, mem, round(hdd, 4), 0.0000)
             db_session.add(monitor_insert)
@@ -397,7 +401,8 @@ def vm_monitor():
                 {"ip": ip}
             )
             db_session.commit()
-        except :
+        except Exception as message:
+            print message
             db_session.rollback()
 
 
