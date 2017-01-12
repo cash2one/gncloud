@@ -10,6 +10,7 @@ from HyperV.db.models import GnImagesPool, GnHostMachines
 
 __author__ = 'jhjeon'
 
+import logging
 import datetime
 import time
 from flask import request, jsonify
@@ -363,50 +364,51 @@ def hvm_image():
 
 
 def vm_monitor():
-    try:
-        vm_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
-        for seq in vm_info:
-            host = db_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
-            ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
 
-            script = 'Get-VM -id '+seq.internal_id+' | Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json '
-            vm_monitor = ps.send(script)
+    db_session=None
+    vm_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
+    logger = logging.getLogger("log")
+    logger.error(vm_info)
+    for seq in vm_info:
+        host = db_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
+        ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
 
-            script = 'Get-VHD -VMId ' +seq.internal_id+' | Select-Object -Property Filesize, Size | ConvertTo-Json;'
-            hdd_usage = ps.send(script)
-            #hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
-            hdd = float(hdd_usage['FileSize'])
+        script = 'Get-VM -id '+seq.internal_id+' | Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json '
+        vm_monitor = ps.send(script)
 
-            mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4) * 100
-            cpu = round(float(vm_monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
+        script = 'Get-VHD -VMId ' +seq.internal_id+' | Select-Object -Property Filesize, Size | ConvertTo-Json;'
+        hdd_usage = ps.send(script)
+        #hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
+        hdd = float(hdd_usage['FileSize'])
 
-            script = '$vm = Get-vm -id '+ seq.internal_id+';'
-            script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
-            script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
-            ip = ps.send(script)
-            print hdd
-            print cpu
-            print mem
-            print ip
-            try:
-                monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(), cpu, mem, round(hdd, 4), 0.0000)
-                db_session.add(monitor_insert)
-                db_session.commit()
+        mem = round((float(vm_monitor['MemoryAssigned']))/float(seq.memory), 4) * 100
+        cpu = round(float(vm_monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
 
-                db_session.query(GnMonitor).filter(GnMonitor.id == seq.id).update(
-                    {"cpu_usage": cpu, "mem_usage": mem, "disk_usage": round(hdd, 4)}
-                )
-                db_session.commit()
+        script = '$vm = Get-vm -id '+ seq.internal_id+';'
+        script += '$ip = Get-VMNetworkAdapter -VM $vm | Select-Object -Property IPAddresses;'
+        script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json ;'
+        ip = ps.send(script)
+        print hdd
+        print cpu
+        print mem
+        print ip
+        try:
+            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(), cpu, mem, round(hdd, 4), 0.0000)
+            db_session.add(monitor_insert)
+            db_session.commit()
 
-                db_session.query(GnVmMachines).filter(GnVmMachines.id == seq.id).update(
-                    {"ip": ip}
-                )
-                db_session.commit()
-            except Exception as message:
-                print message
-                db_session.rollback()
-    except Exception as message:
-        print message
+            db_session.query(GnMonitor).filter(GnMonitor.id == seq.id).update(
+                {"cpu_usage": cpu, "mem_usage": mem, "disk_usage": round(hdd, 4)}
+            )
+            db_session.commit()
+
+            db_session.query(GnVmMachines).filter(GnVmMachines.id == seq.id).update(
+                {"ip": ip}
+            )
+            db_session.commit()
+        except Exception as message:
+            print message
+            db_session.rollback()
 
 
 
