@@ -21,7 +21,7 @@
                     <table class="table table gn-table">
                         <thead>
                         <tr>
-                            <th class="col-xm-3">OS</th>
+                            <th class="col-xs-3">OS</th>
                             <th class="col-sm-2">버전</th>
                             <th class="col-sm-2 hidden-xs">Bit</th>
                             <th class="col-sm-2 hidden-xs">타입</th>
@@ -35,7 +35,7 @@
                             </td>
                             <td>{{base.os_ver}}{{base.os_subver}}</td>
                             <td class="hidden-xs">{{base.os_bit}}</td>
-                            <td calss="hidden-xs">{{base.type}}</td>
+                            <td class="hidden-xs">{{base.type}}</td>
                             <td></td>
                         </tr>
                         </tbody>
@@ -50,18 +50,18 @@
                 <div class="gn-box gn-container">
                     <div class="gn-margin-box">
                         <h2>스냅샷 생성</h2>
-                        <div class="row gn-margin-bott10">
+                        <div class="row">
                             <form name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 gn-margin-bott10">
                                 <select class="gn-select form-control gn-form-control" ng-model="guest_image" ng-options="list.name for list in list" ng-change="update_image(guest_image)">
                                     <option value="">인스턴스 선택</option>
                                 </select>
                             </div>
-                            <div class="col-sm-4" ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
+                            <div class="col-sm-4 gn-margin-bott10" ng-class="{ 'has-error' : userForm.name.$invalid && !userForm.name.$pristine }">
                                 <input type="text" class="form-control gn-form-control"name="name" ng-model="data.vm_name" placeholder="스냅샷 이름" required>
                                 <p ng-show="userForm.name.$invalid && !userForm.name.$pristine" class="help-block">이름을 입력해 주세요</p>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-2 gn-margin-bott10">
                                 <button type="submit" value="submit" class="btn btn-gn-sub btn-block" ng-click="submit()" ng-disabled="userForm.$invalid">스냅샷 생성</button>
                             </div>
                             </form>
@@ -83,8 +83,9 @@
                             <tr>
                                 <th class="col-xs-4">이름</th>
                                 <th class="col-sm-2 hidden-xs">OS</th>
-                                <th class="col-sm-2 hidden-xs">타입</th>
-                                <th class="col-sm-1 hidden-sm">생성일<div class="refresh" ng-click="refresh()"></div></th>
+                                <th class="col-sm-2 hidden-xs">사이즈</th>
+                                <th class="col-sm-2 hidden-sm hidden-xs">타입</th>
+                                <th class="col-sm-1 hidden-sm hidden-xs">생성일<div class="refresh" ng-click="refresh()"></div></th>
                                 <th class="col-sm-1"><!--더보기--></th>
                             </tr>
                             </thead>
@@ -97,8 +98,9 @@
                                     <a>{{snap.name}}</a>
                                 </td>
                                 <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
-                                <td class="hidden-xs>{{snap.type}}</td>
-                                <td class="hidden-sm>{{snap.create_time_diff}}</td>
+                                <td class="hidden-xs">성훈씨</td>
+                                <td class="hidden-sm hidden-xs">{{snap.type}}</td>
+                                <td class="hidden-sm hidden-xs">{{snap.create_time_diff}}</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         더보기
@@ -130,7 +132,7 @@
                 <tr>
                     <th class="col-xs-8 col-sm-3">OS</th>
                     <th class="col-sm-2">버전</th>
-                    <th class="col-sm-5 hidden-xs">태그</th>
+                    <th class="col-sm-2 hidden-xs">태그</th>
                     <th class="col-sm-5 hidden-sm"></th>
                 </tr>
                 </thead>
