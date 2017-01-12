@@ -604,8 +604,8 @@ li.nav-link.active>a:hover,
 /*-----모달 공통 end-----*/
 
 /* ========== gncloud 로그인 HTML ========== */
-.body-white{background-color: #ffffff; min-height: 100%; border-bottom: 1px solid #dddddd;}
-.body-gray{background-color: #f6f6f6; min-height: 100%; border-bottom: 1px solid #dddddd;}
+.body-white{background-color: #ffffff; min-height: 100%;}
+.body-gray{background-color: #f6f6f6; min-height: 100%;}
 
 .container-login{
     text-align: center;
