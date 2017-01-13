@@ -149,35 +149,38 @@ def server_monitor(sql_session):
     try:
         lists = sql_session.query(GnVmMachines).filter(GnVmMachines.type == "kvm").filter(GnVmMachines.status == "Running").all()
         for list in lists:
-            host_ip = list.gnHostMachines.ip
-            s = pxssh.pxssh()
-            s.login(host_ip, USER)
-            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh cpu " + list.ip + " "+list.os)
-            s.prompt()
-            cpu_use = (str(s.before)).split("\r\n")[3]
-            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh mem " + list.ip + " "+list.os)
-            s.prompt()
-            mem_use = (str(s.before)).split("\r\n")[2]
-            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh disk " + list.ip + " "+list.os)
-            s.prompt()
-            disk_use = (str(s.before)).split("\r\n")[2]
-            s.sendline(config.SCRIPT_PATH+"get_vm_use.sh net " + list.ip + " "+list.os)
-            s.prompt()
-            net_use = (str(s.before)).split("\r\n")[2]
-            s.logout()
+            try:
+                host_ip = list.gnHostMachines.ip
+                s = pxssh.pxssh()
+                s.login(host_ip, USER)
+                s.sendline(config.SCRIPT_PATH+"get_vm_use.sh cpu " + list.ip + " "+list.os)
+                s.prompt()
+                cpu_use = (str(s.before)).split("\r\n")[3]
+                s.sendline(config.SCRIPT_PATH+"get_vm_use.sh mem " + list.ip + " "+list.os)
+                s.prompt()
+                mem_use = (str(s.before)).split("\r\n")[2]
+                s.sendline(config.SCRIPT_PATH+"get_vm_use.sh disk " + list.ip + " "+list.os)
+                s.prompt()
+                disk_use = (str(s.before)).split("\r\n")[2]
+                s.sendline(config.SCRIPT_PATH+"get_vm_use.sh net " + list.ip + " "+list.os)
+                s.prompt()
+                net_use = (str(s.before)).split("\r\n")[2]
+                s.logout()
 
-            vm_monitor_hist = GnMonitorHist(id=list.id, type="kvm", cpu_usage=cpu_use, mem_usage=mem_use, disk_usage=disk_use, net_usage=net_use)
-            sql_session.add(vm_monitor_hist)
+                vm_monitor_hist = GnMonitorHist(id=list.id, type="kvm", cpu_usage=cpu_use, mem_usage=mem_use, disk_usage=disk_use, net_usage=net_use)
+                sql_session.add(vm_monitor_hist)
 
-            gnMontor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == list.id).one_or_none()
-            if gnMontor_info is None:
-                vm_monitor = GnMonitor(id=list.id, type="kvm", cpu_usage=cpu_use, mem_usage=mem_use, disk_usage=disk_use, net_usage=net_use)
-                sql_session.add(vm_monitor)
-            else:
-                gnMontor_info.cpu_usage = cpu_use
-                gnMontor_info.mem_usage = mem_use
-                gnMontor_info.disk_usage = disk_use
-                gnMontor_info.net_usage = net_use
+                gnMontor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == list.id).one_or_none()
+                if gnMontor_info is None:
+                    vm_monitor = GnMonitor(id=list.id, type="kvm", cpu_usage=cpu_use, mem_usage=mem_use, disk_usage=disk_use, net_usage=net_use)
+                    sql_session.add(vm_monitor)
+                else:
+                    gnMontor_info.cpu_usage = cpu_use
+                    gnMontor_info.mem_usage = mem_use
+                    gnMontor_info.disk_usage = disk_use
+                    gnMontor_info.net_usage = net_use
+            except:
+                continue
 
     except:
         sql_session.rollback()

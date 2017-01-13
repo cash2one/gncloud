@@ -52,7 +52,7 @@ def kvm_change_status(vm_name, status, host_ip):
     url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
     conn = libvirt.open(url)
     ptr_VM = conn.lookupByName(vm_name)
-    if status == 'Resum':
+    if status == 'Resume':
         ptr_VM.resume()
     elif status == "Suspend":
         ptr_VM.suspend()
