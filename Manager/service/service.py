@@ -107,6 +107,7 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
 def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == ord_id).one()
     pool_info = sql_session.query(GnImagePool).filter(GnImagePool.host_id == guest_info.gnHostMachines.id).one()
+    image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == guest_info.image_id).one()
 
 
     #id 생성
@@ -116,7 +117,7 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
         if not check_info:
             break
 
-    guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename=""
+    guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename="", ssh_id=image_info.ssh_id
                             , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
                             , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status="Starting", create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(guest_snap)
