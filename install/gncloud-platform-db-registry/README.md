@@ -17,7 +17,8 @@
 2. gncloud-registry-install.sh 실행
 --------------------------------------
 
-- 압축이 풀린 폴더 중 gncloud platform mariadb, docker-registry를 설치하기 위해 
+- 압축이 풀린 폴더 중 gncloud platform mariadb, docker-registry를 설치하기 위해
+
     ```
     $ cd ./gncloud-install/gncloud-platform-db-registry
     $ chmod +x *.sh
