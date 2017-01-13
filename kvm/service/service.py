@@ -63,8 +63,9 @@ def server_create(team_code, user_id, id, sql_session):
         vm_info.os_bit = image_info.os_bit
         sql_session.commit()
         print(id+":complete modify data!!!")
-    except:
+    except Exception as e:
         print(id+":init vm error!!!")
+        print("error:"+e.message)
         vm_info.status="Error"
         sql_session.commit()
 
