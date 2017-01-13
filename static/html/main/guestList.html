@@ -7,7 +7,7 @@
         <table class="table table gn-table">
             <thead>
                 <tr>
-                    <th class="col-sm-3">이름</th>
+                    <th class="col-sm-3 col-xs-9">이름</th>
                     <th class="col-sm-3 hidden-xs">사양</th>
                     <th class="col-sm-1 hidden-sm hidden-xs">타입</th>
                     <th class="col-sm-2 hidden-md hidden-sm hidden-xs">IP</th>
@@ -15,7 +15,7 @@
                         <div class="refresh" ng-click="refresh()"></div>
                     </th>
                     <th class="col-sm-1 hidden-xs">태그</th>
-                    <th class="col-sm-1"><!--더보기--></th>
+                    <th class="col-sm-1 col-xs-3"><!--더보기--></th>
                 </tr>
             </thead>
             <tbody class="gn-tdody">
@@ -45,7 +45,7 @@
                         <span class="gn-caret-table"></span>
                     </div>
                     <!--더보기>드롭다운-->
-                    <ul class="dropdown-menu gn-dropdown" role="menu">
+                    <ul class="dropdown-menu gn-dropdown gn-list" role="menu">
                         <li ng-repeat="test in actions" >
                             <a href ng-click="update(list.id,test,list.type,$index)"
                                ng-show="(test.type == 'Resume' && list.status != 'Running')
