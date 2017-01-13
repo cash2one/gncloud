@@ -1,0 +1,1 @@
+# Gncloud private platform install shell

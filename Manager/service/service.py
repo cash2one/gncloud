@@ -471,11 +471,14 @@ def team_delete(id ,code):
     db_session.commit()
     return True
 
-def signup_team(team_code,user_id):
-    vm = GnUserTeam(user_id= user_id, team_code= team_code, comfirm = 'N',apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),team_owner='user')
-    db_session.add(vm)
-    db_session.commit()
-    return True
+def signup_team(team_code,user_id,sql_session):
+    list = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one_or_none()
+    if(list ==None):
+        vm = GnUserTeam(user_id= user_id, team_code= team_code, comfirm = 'N',apply_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'),team_owner='user')
+        db_session.add(vm)
+        db_session.commit()
+        return 1
+    return 2
 
 def comfirm_list(user_id, sql_session):
     team =sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
