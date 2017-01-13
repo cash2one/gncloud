@@ -63,13 +63,14 @@ def doc_create():
         if type(docker_service) is not list:
             return jsonify(status=False, message=docker_service)
         else:
-            base_image = GnDockerImages.query.filter_by(id=image_id).one()
+            image = GnDockerImages.query.filter_by(id=image_id).one()
+
             # Service 정보를 DB에 저장한다.
-            service_image = GnDockerServices(service_id=id, image=base_image.name)
+            service_image = GnDockerServices(service_id=id, image=image.name)
             sql_session.add(service_image)
 
-            # os=base_image.os,
-            # os_ver=base_image.os_ver,
+            # os=image.os,
+            # os_ver=image.os_ver,
             # 생성된 Service의 Container 정보를 DB에 저장한다.
             service_container_list = ds.get_service_containers(docker_service[0]['ID'])
             while service_container_list is None:
@@ -113,8 +114,8 @@ def doc_create():
             docker_info.internal_name = docker_service[0]['Spec']['Name']
             docker_info.create_time = datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
             docker_info.os = "docker"
-            docker_info.os_ver = base_image.os
-            docker_info.os_sub_ver = base_image.os_ver
+            docker_info.os_ver = image.os
+            docker_info.os_sub_ver = image.os_ver
 
             sql_session.commit()
             return jsonify(status=True, message="서비스를 생성하였습니다.", result=docker_info.to_json())
@@ -266,8 +267,9 @@ def doc_snap():
         if len(GnDockerImages.query.filter_by(name=snapshot["name"]).all()) != 0:
             return jsonify(status=False, message="이미 존재하는 이미지입니다.")
         image = GnDockerImages(
-            id=image_id, name=snapshot["name"], view_name=name, tag=baseimage.tag, os=baseimage.os, os_ver=baseimage.os_ver,
-            sub_type=snapshot["sub_type"], team_code=team_code, author_id=user_id, create_time=datetime.now(), status="Running"
+            id=image_id, base_image=baseimage.id, name=snapshot["name"], view_name=name, tag=baseimage.tag, os=baseimage.os,
+            os_ver=baseimage.os_ver, sub_type=snapshot["sub_type"], team_code=team_code, author_id=user_id,
+            create_time=datetime.now(), status="Running"
         )
         sql_session.add(image)
         sql_session.commit()
@@ -375,7 +377,7 @@ def doc_new_image():
     create_time = datetime.strptime(request.json["create_time"][:-2], '%Y-%m-%dT%H:%M:%S.%f')
     status = "Running"
     image = GnDockerImages(
-        id=id, name=name, view_name=view_name, tag=tag, os=os, os_ver=os_ver, sub_type=sub_type, team_code=team_code,
+        id=id, base_image=id, name=name, view_name=view_name, tag=tag, os=os, os_ver=os_ver, sub_type=sub_type, team_code=team_code,
         author_id=author_id, create_time=create_time, status=status
     )
     sql_session.add(image)
