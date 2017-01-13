@@ -34,25 +34,25 @@ def server_create(team_code, user_id, id, sql_session):
         #ip 세팅
         ip = ""
         while len(ip) == 0:
-            print("processing init ip!!!")
+            print(id+":processing init ip!!!")
             ip = getIpAddress(internal_name, host_info.ip)
 
-        print("processing init ip!!!")
+        print(id+":processing init ip!!!")
         if len(ip) != 0:
-             print("set init ip!!!")
+             print(id+":set init ip!!!")
              setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
 
-        print("complete set ip!!!")
+        print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
-        print("processing set sshkey!!!")
+        print(id+":processing set sshkey!!!")
         s = pxssh.pxssh()
         s.login(host_info.ip, USER)
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
         s.logout()
-        print("complete set sshkey!!!")
+        print(id+":complete set sshkey!!!")
 
-        print("processing modify data!!!")
+        print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id
         vm_info.ip = ip
@@ -62,8 +62,9 @@ def server_create(team_code, user_id, id, sql_session):
         vm_info.os_sub_ver = image_info.os_subver
         vm_info.os_bit = image_info.os_bit
         sql_session.commit()
-        print("complete modify data!!!")
+        print(id+":complete modify data!!!")
     except:
+        print(id+":init vm error!!!")
         vm_info.status="Error"
         sql_session.commit()
 
