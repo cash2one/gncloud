@@ -372,8 +372,10 @@ def doc_new_image():
     os = request.json["os"]
     os_ver = request.json["os_ver"]
     sub_type = "base"
-    team_code = request.json["team_code"]
-    author_id = request.json["author_id"]
+    team_code = None
+    author_id = None
+    # team_code = request.json["team_code"]
+    # author_id = request.json["author_id"]
     create_time = datetime.strptime(request.json["create_time"][:-2], '%Y-%m-%dT%H:%M:%S.%f')
     status = "Running"
     image = GnDockerImages(
