@@ -5,9 +5,8 @@ import subprocess
 
 import datetime
 from pexpect import pxssh
-
 from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys
-from kvm.db.database import db_session
+from kvm.db.database import db_session, connection
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
 from kvm.util.config import config
 
@@ -37,10 +36,21 @@ def server_create(team_code, user_id, id, sql_session):
             print(id+":processing init ip!!!")
             ip = getIpAddress(internal_name, host_info.ip)
 
-        print(id+":processing init ip!!!")
         if len(ip) != 0:
              print(id+":set init ip!!!")
-             setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
+             new_ip = ""
+             if image_info.sub_type == "snap":
+                 print(id+":set snap new ip!!!")
+                 cursor = connection.cursor()
+                 cursor.callproc("GET_MAX_IP")
+                 new_ip = cursor.fetchone()
+                 connection.close()
+
+             setStaticIpAddress(ip, host_info.ip, image_info.ssh_id, new_ip)
+
+             if image_info.sub_type == "snap":
+                 ip = new_ip
+
 
         print(id+":complete set ip!!!")
 
@@ -80,11 +90,11 @@ def getIpAddress(name, host_ip):
     return ip
 
 
-def setStaticIpAddress(ip, host_ip, ssh_id):
+def setStaticIpAddress(ip, host_ip, ssh_id, new_ip):
     try:
         s = pxssh.pxssh()
         s.login(host_ip, USER)
-        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh %s %s" % (ip, ssh_id))
+        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh %s %s %s" % (ip, ssh_id, new_ip))
         s.logout()
     except pxssh.TIMEOUT:
         print("==timeout==")

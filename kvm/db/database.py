@@ -11,6 +11,7 @@ db_session = scoped_session(sessionmaker(autocommit=False,
                                          bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
+connection = engine.raw_connection()
 
 
 def init_db():
