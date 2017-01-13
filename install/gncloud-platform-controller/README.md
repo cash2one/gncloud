@@ -56,6 +56,7 @@
     pip install logger
     yum -y install uwsgi-plugin-python
     pip install --upgrade Flask-SQLAlchemy
+    ```
 
 - docker 설치
     ```
@@ -79,7 +80,6 @@
 - nginx, uwsgi 및 libvirt 설치
     ```
     yum -y group install "Development Tools"
-    
     pip install uwsgi
 
     # libvirt 설치
