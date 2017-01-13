@@ -147,7 +147,7 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
 
 def server_monitor(sql_session):
     try:
-        lists = sql_session.query(GnVmMachines).filter(GnVmMachines.type == "kvm").filter(GnVmMachines.status == "running").all()
+        lists = sql_session.query(GnVmMachines).filter(GnVmMachines.type == "kvm").filter(GnVmMachines.status == "Running").all()
         for list in lists:
             host_ip = list.gnHostMachines.ip
             s = pxssh.pxssh()
