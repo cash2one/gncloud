@@ -30,14 +30,19 @@ def server_create(team_code, user_id, id, sql_session):
         # vm 생성
         internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
-
+        print("complete init vm!!!")
         #ip 세팅
         ip = ""
         while len(ip) == 0:
+            print("processing init ip!!!")
             ip = getIpAddress(internal_name, host_info.ip)
 
+        print("processing init ip!!!")
         if len(ip) != 0:
+             print("set init ip!!!")
              setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
+
+        print("complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
         s = pxssh.pxssh()
