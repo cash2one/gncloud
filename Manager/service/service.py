@@ -504,7 +504,7 @@ def createteam_list(user_id,team_name, team_code, author_id, sql_session):
     else:
         return 'team_name'
 def select(sql_session ):
-    return sql_session.query(GnTeam).all()
+    return sql_session.query(GnTeam).filter(GnTeam.author_id != 'System').all()
 
 def select_info(team_code, sql_session): #팀 프로필 팀생성일/ 이름 개인설정 팀프로필 팀 생성일 /이름
     list =sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).order_by(GnTeam.create_date.desc()).one()
@@ -527,7 +527,7 @@ def select_putsys(team_name, team_code, team_cpu, team_memory, team_disk): #팀 
     return True
 
 def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소스
-    list = sql_sesseion.query(GnTeam).order_by(GnTeam.create_date.desc()).all()
+    list = sql_sesseion.query(GnTeam).filter(GnTeam.author_id != 'System').order_by(GnTeam.create_date.desc()).all()
     result = []
     for team_info in list:
         team_info.create_date = team_info.create_date.strftime('%Y-%m-%d %H:%M:%S')
