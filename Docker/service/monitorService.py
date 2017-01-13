@@ -32,6 +32,8 @@ def service_monitoring(sql_session):
                         pass
                     elif line[0] == "docker":
                         pass
+                    elif line[0] == "CONTAINER":
+                        pass
                     else:
                         # CPU 사용량 가지고 오기
                         cpu_usage += round(float(line[1][:-1]), 4)
