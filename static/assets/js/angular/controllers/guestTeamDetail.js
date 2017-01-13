@@ -207,6 +207,7 @@ angular
                     if (data.status == true) {
                         alert("변경되었습니다")
                         $scope.profile();
+                        $scope.resose();
                     }
                     else {
                         alert(data.message)
@@ -239,46 +240,51 @@ angular
                     console.log(status);
                 });
         }
-        $scope.total={};
-        //**********리소스*************//
-        $http({
-            method: 'GET',
-            url: '/api/manager/useinfo/'+$routeParams.code,
-            headers: {'Content-Type': 'application/json; charset=utf-8'}
-        })
-            .success(function (data, status, headers, config) {
-                if (data.status == true) {
-                    new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "cpu"));
-                    new Chart(document.getElementById("memory_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "mem"));
-                    new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "disk"));
 
-                    $("#cpu_per").html(data.list.cpu_per[0]);
-                    $("#cpu_use_cnt").html(data.list.cpu_cnt[0]);
-                    $("#cpu_total_cnt").html(data.list.cpu_cnt[1]);
-                    $("#mem_per").html(data.list.mem_per[0]);
-                    $("#mem_use_cnt").html(data.list.mem_cnt[0]);
-                    $("#mem_total_cnt").html(data.list.mem_cnt[1]);
-                    $("#disk_per").html(data.list.disk_per[0]);
-                    $("#disk_use_cnt").html(data.list.disk_cnt[0]);
-                    $("#disk_total_cnt").html(data.list.disk_cnt[1]);
-                    data.list.cpu_per = data.list.cpu_per[0];
-                    data.list.cpu_use_cnt = data.list.cpu_cnt[0];
-                    data.list.cpu_total_cnt = data.list.cpu_cnt[1];
-                    data.list.mem_per = data.list.mem_per[0];
-                    data.list.mem_use_cnt = data.list.mem_cnt[0];
-                    data.list.mem_total_cnt = data.list.mem_cnt[1];
-                    data.list.disk_per = data.list.disk_per[0];
-                    data.list.disk_use_cnt = data.list.disk_cnt[0];
-                    data.list.disk_total_cnt = data.list.disk_cnt[1];
-                    $scope.total = data.list;
-                }
-                else {
-                    alert(data.message)
-                }
+        //**********리소스*************//
+        $scope.resose=function()
+        {
+            $scope.total={};
+            $http({
+                method: 'GET',
+                url: '/api/manager/useinfo/'+$routeParams.code,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-            .error(function (data, status, headers, config) {
-                console.log(status);
-            });
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        new Chart(document.getElementById("cpu_chart").getContext("2d"), $scope.getConfig(data.list.cpu_per, "cpu"));
+                        new Chart(document.getElementById("memory_chart").getContext("2d"), $scope.getConfig(data.list.mem_per, "mem"));
+                        new Chart(document.getElementById("disk_chart").getContext("2d"), $scope.getConfig(data.list.disk_per, "disk"));
+
+                        $("#cpu_per").html(data.list.cpu_per[0]);
+                        $("#cpu_use_cnt").html(data.list.cpu_cnt[0]);
+                        $("#cpu_total_cnt").html(data.list.cpu_cnt[1]);
+                        $("#mem_per").html(data.list.mem_per[0]);
+                        $("#mem_use_cnt").html(data.list.mem_cnt[0]);
+                        $("#mem_total_cnt").html(data.list.mem_cnt[1]);
+                        $("#disk_per").html(data.list.disk_per[0]);
+                        $("#disk_use_cnt").html(data.list.disk_cnt[0]);
+                        $("#disk_total_cnt").html(data.list.disk_cnt[1]);
+                        data.list.cpu_per = data.list.cpu_per[0];
+                        data.list.cpu_use_cnt = data.list.cpu_cnt[0];
+                        data.list.cpu_total_cnt = data.list.cpu_cnt[1];
+                        data.list.mem_per = data.list.mem_per[0];
+                        data.list.mem_use_cnt = data.list.mem_cnt[0];
+                        data.list.mem_total_cnt = data.list.mem_cnt[1];
+                        data.list.disk_per = data.list.disk_per[0];
+                        data.list.disk_use_cnt = data.list.disk_cnt[0];
+                        data.list.disk_total_cnt = data.list.disk_cnt[1];
+                        $scope.total = data.list;
+                    }
+                    else {
+                        alert(data.message)
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+        $scope.resose();
         $scope.delete=function(){
             $http({
                 method: 'DELETE',
