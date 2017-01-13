@@ -55,6 +55,7 @@ def internal_error(error):
 def index():
     return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
 
+
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
     password=""
@@ -322,6 +323,8 @@ def approve(id, code, type):
         return jsonify(status=True, message="이 관리자가 되었습니다.")
     elif(list == 3):
         return jsonify(status=True, message="의 비밀번호가 초기화 되었습니다.")
+    elif(list == 4):
+        return jsonify(status=True, message="이 팀원이 되었습니다.")
     else:
         return jsonify(status=True, message="의 변경할 것이 없습니다.")
 

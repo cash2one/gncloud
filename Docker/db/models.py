@@ -294,6 +294,7 @@ class GnDockerPorts(Base):
 class GnDockerImages(Base):
     __tablename__ = 'GN_DOCKER_IMAGES'
     id = Column(String(8), primary_key=True, nullable=False)
+    base_image = Column(String(8), primary_key=True, nullable=False)
     name = Column(String(200), nullable=False, default='')
     view_name = Column(String(200), nullable=False, default='')
     tag = Column(String(200), nullable=False, default='')
@@ -305,9 +306,10 @@ class GnDockerImages(Base):
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     status = Column(String(10), nullable=True, default='')
 
-    def __init__(self, id, name, view_name, tag, os, os_ver, sub_type, team_code, author_id, create_time, status):
+    def __init__(self, id, base_image, name, view_name, tag, os, os_ver, sub_type, team_code, author_id, create_time, status):
         self.id = id
         self.name = name
+        self.base_image = base_image
         self.view_name = view_name
         self.tag = tag
         self.os = os
@@ -322,7 +324,7 @@ class GnDockerImages(Base):
         return "<GnDockerImages %r_%r_%r>" % (self.id, self.name, self.view_name)
 
     def to_json(self):
-        return dict(id=self.id, name=self.name, view_name=self.view_name, tag=self.tag, os=self.os,
+        return dict(id=self.id, base_image=self.base_image, name=self.name, view_name=self.view_name, tag=self.tag, os=self.os,
                     os_ver=self.os_ver, sub_type=self.sub_type, team_code=self.team_code,
                     author_id=self.author_id, create_time=self.create_time, status=self.status)
 
