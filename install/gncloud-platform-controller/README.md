@@ -17,6 +17,7 @@
 --------------------------------------
 
 - 압축이 풀린 폴더 중 gncloud platform controller를 설치하기 위해 
+
     ```
     $ cd ./gncloud-install/gncloud-platform-controller
     $ chmod +x *.sh
