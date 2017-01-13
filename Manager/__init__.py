@@ -4,6 +4,7 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
+
 from datetime import timedelta
 import datetime
 
@@ -352,8 +353,10 @@ def selectteam():
 def teamsignup():
     team_code = request.json['team_code']
     user_id = session['userId']
-    signup_team(team_code, user_id)
-    return jsonify(status=True, message="success")
+    lits=signup_team(team_code, user_id)
+    if(lits):
+        session['teamCheck'] ="Y"
+        return jsonify(status=True, message="success")
 
 
 @app.route('/vm/account/teamcomfirm', methods=['GET'])
