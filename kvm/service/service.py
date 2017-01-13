@@ -38,7 +38,7 @@ def server_create(team_code, user_id, id, sql_session):
 
         if len(ip) != 0:
              print(id+":set init ip!!!")
-             new_ip = ""
+             new_ip = "ip"
              if image_info.sub_type == "snap":
                  print(id+":set snap new ip!!!")
                  cursor = connection.cursor()

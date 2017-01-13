@@ -1,13 +1,12 @@
 #!/bin/bash
 ip=$1
 ssh_id=$2
-
-if [$3 != ""]
-then
-  new_ip=$3
-else
-  new_ip=ip
+new_ip=$3
+if [$new_ip != "ip"]; then
+  new_ip=$ip
 fi
+
+
 
 if [ $ssh_id = "centos" ]; then
 echo -e 'DEVICE="eth0"\nBOOTPROTO="static"\nONBOOT="yes"\nTYPE="Ethernet"\nUSERCTL="yes"\nBROADCAST=192.168.1.255\nGATEWAY=192.168.1.1\nIPADDR='${new_ip}'\nNETMASK=255.255.255.0' > /mnt/kvm/scripts/ifcfg-eth0
