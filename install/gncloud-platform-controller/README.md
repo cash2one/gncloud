@@ -23,7 +23,8 @@
     ```
     $ cd ./gncloud-install/gncloud-platform-controller
     $ chmod +x *.sh
-    $ ./gncloud-platform-controller.sh ip port (예:192.168.1.204 5000 docker registry ip & port)
+    $ ./gncloud-platform-controller.sh ip port # (docker registry ip & port)
+       (예: ./gncloud-platform-controller.sh 192.168.1.204 5000)
     ```
 
 <span></span>

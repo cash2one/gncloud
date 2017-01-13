@@ -5,6 +5,7 @@
 
 1. 설치 절차
 2. docker-install.sh 실행
+3. shell 내용
 
 <span></span>
 1. 설치 절차
@@ -31,7 +32,9 @@
 <span></span>
 3. shell 내용
 ------------
+
 - docker 설치
+
     ```
     > /etc/yum.repos.d/docker.repo
     echo '[dockerrepo]' >> /etc/yum.repos.d/docker.repo
