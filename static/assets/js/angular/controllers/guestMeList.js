@@ -150,18 +150,18 @@ angular
         }
 
         $scope.teamtable=function(){
-            $http({
-                method: 'GET',
-                url: '/api/manager/vm/logincheck',
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    $rootScope.user_info = data.info;
-                    $rootScope.$emit('init');
-                })
-                .error(function (data, status, headers, config) {
-                    console.log("checking success!!");
-                });
+            //$http({
+            //    method: 'GET',
+            //    url: '/api/manager/vm/logincheck',
+            //    headers: {'Content-Type': 'application/json; charset=utf-8'}
+            //})
+            //    .success(function (data, status, headers, config) {
+            //        $rootScope.user_info = data.info;
+            //        $rootScope.$emit('init');
+            //    })
+            //    .error(function (data, status, headers, config) {
+            //        console.log("checking success!!");
+            //    });
             $scope.won_list ={};
             $http({
                 method: 'GET',
@@ -485,9 +485,10 @@ angular
             }
         }
 
+        $scope.user_info = $rootScope.user_info;
+
         $rootScope.$on('init', function () {
-            $scope.authority = $rootScope.user_info.authority;
-            $scope.user_id = $rootScope.user_info.user_id;
+            $scope.user_info = $rootScope.user_info;
         });
         $scope.refresh = function(){
             $scope.won_list = Array.prototype.slice.call($scope.won_list).reverse();

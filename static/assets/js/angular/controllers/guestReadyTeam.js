@@ -20,6 +20,7 @@ angular
                     $scope.team_list = data.list;
 
                 } else {
+
                     alert(data.message);
                 }
 
