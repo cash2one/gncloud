@@ -5,7 +5,7 @@ import datetime
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Numeric
 from sqlalchemy.orm import relationship
 
-from db.database import Base
+from Docker.db.database import Base
 
 
 # GnCloud에서 사용하는 각 노드 정보
@@ -85,48 +85,51 @@ class GnHostMachines(Base):
 
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'
-    id = Column(String(30), primary_key=True, nullable=False)
-    name = Column(String(50), primary_key=True, nullable=False)
-    type = Column(String(50), primary_key=False, nullable=False)
-    internal_id = Column(String(100), primary_key=False, nullable=False)
-    internal_name = Column(String(100), primary_key=False, nullable=False)
-    cpu = Column(Integer, primary_key=False, nullable=False)
-    memory = Column(Integer, primary_key=False, nullable=False)
-    disk = Column(Integer, primary_key=False, nullable=False)
-    ip = Column(String(20), primary_key=False, nullable=False)
+    id = Column(String(8), primary_key=True, nullable=False, default='')
+    name = Column(String(50), nullable=True, default='')
+    tag = Column(String(100), nullable=True, default='')
+    type = Column(String(10), nullable=False, default='')
+    internal_id = Column(String(100), nullable=True, default='')
+    internal_name = Column(String(100), nullable=True, default='')
     host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'))
-    os = Column(String(10), primary_key=False, nullable=True)
-    os_ver = Column(String(20), primary_key=False, nullable=True)
-    os_sub_ver = Column(String(20), primary_key=False, nullable=True)
-    os_bit = Column(String(2), primary_key=False, nullable=True)
-    team_code = Column(String(50), primary_key=False, nullable=True)
-    author_id = Column(String(15), primary_key=False, nullable=False)
+    ip = Column(String(20), nullable=True, default='')
+    cpu = Column(Integer, nullable=False, default='')
+    memory = Column( nullable=False, default='')
+    disk = Column( nullable=True, default='')
+    os = Column(String(10), nullable=True, default='')
+    os_ver = Column(String(20), nullable=True, default='')
+    os_sub_ver = Column(String(20), nullable=True, default='')
+    os_bit = Column(String(2), nullable=True, default='')
+    team_code = Column(String(10), nullable=True, default='')
+    author_id = Column(String(50), nullable=False, default='')
     create_time = Column(DateTime, default=datetime.datetime.now())
     start_time = Column(DateTime, default=datetime.datetime.now())
     stop_time = Column(DateTime, default=datetime.datetime.now())
-    status = Column(String(10), primary_key=False, nullable=False)
-    tag = Column(String(100), primary_key=False, nullable=False)
-    image_id = Column(String(8), primary_key=False, nullable=False)
+    status = Column(String(10), nullable=True, default='')
+    hyperv_pass = Column(String(50), nullable=True, default='')
+    image_id = Column(String(8), nullable=True, default='')
+    ssh_key_id = Column(Integer, nullable=True, default='')
     gnHostMachines = relationship('GnHostMachines')
     gnDockerServices = relationship('GnDockerServices')
     gnDockerContainers = relationship('GnDockerContainers')
     gnDockerVolumes = relationship('GnDockerVolumes')
     gnDockerPorts = relationship('GnDockerPorts')
 
-    def __init__(self, id, name=None, type=None, internal_id=None, internal_name=None, cpu=None
-                 , memory=None, disk=None, ip=None, host_id=None
-                 , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
-                 , author_id=None, status=None, tag=None, create_time=None, image_id=None):
+    def __init__(self,
+                 id, name=None, tag=None, type=None, internal_id=None, internal_name=None, host_id=None, ip=None,
+                 cpu=None, memory=None, disk=None, os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None,
+                 author_id=None, create_time=None, status=None, hyperv_pass=None, image_id=None, ssh_key_id=None):
         self.id = id
         self.name = name
+        self.tag = tag
         self.type = type
         self.internal_id = internal_id
         self.internal_name = internal_name
+        self.host_id = host_id
+        self.ip = ip
         self.cpu = cpu
         self.memory = memory
         self.disk = disk
-        self.ip = ip
-        self.host_id = host_id
         self.os = os
         self.os_ver = os_ver
         self.os_sub_ver = os_sub_ver
@@ -134,24 +137,23 @@ class GnVmMachines(Base):
         self.team_code = team_code
         self.author_id = author_id
         self.status = status
-        self.tag = tag
+        self.hyperv_pass = hyperv_pass
         self.create_time = create_time
         self.image_id = image_id
+        self.ssh_key_id = ssh_key_id
 
     def __repr__(self):
         return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / Cpu %r / Memory %r / Disk %r / Ip %r / Status %r / Tag %r / Create_time %r>' \
                % (self.id, self.name, self.type, self.internal_id, self.internal_name, self.cpu, self.memory, self.disk,
                   self.ip, self.status, self.tag, self.create_time)
 
-    def __json__(self):
-        return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu', 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'num', 'day1']
-
     def to_json(self):
-        return dict(id=self.id, name=self.name, type=self.type, tag=self.tag, internal_id=self.internal_id,
-                    internal_name=self.internal_name, cpu=self.cpu, memory=self.memory,
-                    disk=self.disk, team_code=self.team_code, author_id=self.author_id,
-                    create_time=self.create_time, start_time=self.start_time,
-                    stop_time=self.stop_time, status=self.status)
+        return dict(id=self.id, name=self.name, tag=self.tag, type=self.type, internal_id=self.internal_id,
+                    internal_name=self.internal_name, host_id=self.host_id, ip=self.ip, cpu=self.cpu,
+                    memory=self.memory, disk=self.disk, os=self.os, os_ver=self.os_ver, os_sub_ver=self.os_sub_ver,
+                    os_bit=self.os_bit, team_code=self.team_code, author_id=self.author_id,
+                    create_time=self.create_time, start_time=self.start_time, stop_time=self.stop_time,
+                    hyperv_pass=self.hyperv_pass, status=self.status, image_id=self.image_id, ssh_key_id=self.ssh_key_id)
 
 
 class GnDockerServices(Base):

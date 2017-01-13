@@ -30,21 +30,29 @@ def server_create(team_code, user_id, id, sql_session):
         # vm 생성
         internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
-
+        print("complete init vm!!!")
         #ip 세팅
         ip = ""
         while len(ip) == 0:
+            print(id+":processing init ip!!!")
             ip = getIpAddress(internal_name, host_info.ip)
 
+        print(id+":processing init ip!!!")
         if len(ip) != 0:
+             print(id+":set init ip!!!")
              setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
 
+        print(id+":complete set ip!!!")
+
         # 기존 저장된 ssh key 등록
+        print(id+":processing set sshkey!!!")
         s = pxssh.pxssh()
         s.login(host_info.ip, USER)
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
         s.logout()
+        print(id+":complete set sshkey!!!")
 
+        print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id
         vm_info.ip = ip
@@ -54,7 +62,9 @@ def server_create(team_code, user_id, id, sql_session):
         vm_info.os_sub_ver = image_info.os_subver
         vm_info.os_bit = image_info.os_bit
         sql_session.commit()
+        print(id+":complete modify data!!!")
     except:
+        print(id+":init vm error!!!")
         vm_info.status="Error"
         sql_session.commit()
 
@@ -137,7 +147,7 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
 
 def server_monitor(sql_session):
     try:
-        lists = sql_session.query(GnVmMachines).filter(GnVmMachines.type == "kvm").filter(GnVmMachines.status == "running").all()
+        lists = sql_session.query(GnVmMachines).filter(GnVmMachines.type == "kvm").filter(GnVmMachines.status == "Running").all()
         for list in lists:
             host_ip = list.gnHostMachines.ip
             s = pxssh.pxssh()

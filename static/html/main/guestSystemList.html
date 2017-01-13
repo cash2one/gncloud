@@ -2,7 +2,7 @@
 
 <!--왼쪽 메뉴-->
 <ul class="nav nav-pills gn-left-menu col-xs-12 col-sm-2">
-    <li class="left-title gn-top">시스템</li>
+    <li class="left-title">시스템</li>
     <li><a data-toggle="pill" ng-click="click('profile-system')">프로필</a></li>
     <li><a data-toggle="pill" ng-click="click('team-sett')">팀 관리</a></li>
     <li><a data-toggle="pill" ng-click="click('cluster-sett')">클러스터 관리</a></li>
@@ -26,7 +26,7 @@
                             <dd>&copy;&nbsp;COPYRIGHT&nbsp;&nbsp;지앤클라우드
                                 &nbsp;&nbsp;ALL&nbsp;&nbsp;RIGHT&nbsp;&nbsp;RESERVED.</dd>
                             <dt>홈페이지</dt>
-                            <dd><a href="http://www.gnclouds.com" class="gn-url">www.gnclouds.com</a></dd>
+                            <dd><a href="http://www.gnclouds.com">www.gnclouds.com</a></dd>
 
                         </dl>
                     </form>
@@ -52,7 +52,7 @@
                                 <th class="">관리자</th>
                                 <th class="">팀원</th>
                                 <th class="hidden-xs hidden-sm">생성일</th>
-                                <th class="hidden-xs hidden-sm">리소스</th>
+                                <th class="hidden-xs">리소스</th>
                                 <th><!--더보기--></th>
                             </tr>
                             </thead>
@@ -71,7 +71,7 @@
                                     </div>
                                 </td>
                                 <td class="hidden-xs hidden-sm"><span data-toggle="tooltip" title="{{select.create_date}}" tooltip>{{select.create_time_diff}}</span></td>
-                                <td class="hidden-xs hidden-sm">{{select.cpu_use_cnt}}CORE/{{select.mem_use_cnt}}/{{select.disk_use_cnt}}</td>
+                                <td class="hidden-xs">{{select.cpu_use_cnt}}CORE/{{select.mem_use_cnt}}/{{select.disk_use_cnt}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -88,7 +88,7 @@
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
                     <h2>클러스터 관리</h2>
-                    <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#cluster" ng-show="registYn == 'Y'">등록</button>
+                    <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#cluster" >등록</button>
 
                     <!-- 클러스터 Modal -->
                     <div class="modal fade" id="cluster" role="dialog">
@@ -102,34 +102,37 @@
 
                                 <div class="modal-body gn-modal-body">
 
-                                    <form class="form-horizontal">
-                                        <div class="form-group" ng-show="cluster.id == ''">
+                                    <form name="clusterForm" class="form-horizontal"  ng-submit="submitForm(clusterForm.$valid)">
+                                        <div class="form-group" ng-show="cluster.id == null">
                                             <label class="col-sm-3 control-label gn-control-label">타입</label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-9"  ng-class="{ 'has-error' : clusterForm.type.$invalid && !clusterForm.type.$pristine }">
                                                 <label class="radio-inline mod-input-name">
-                                                    <input type="radio" name="optradio" ng-model="cluster.type">Hyper-V
+                                                    <input type="radio" name="type" ng-model="cluster.type" value="hyperv">Hyper-V
                                                 </label>
-                                                <label class="radio-inline mod-input-name" ng-model="cluster.type">
-                                                    <input type="radio" name="optradio">KVM
+                                                <label class="radio-inline mod-input-name">
+                                                    <input type="radio" name="type" ng-model="cluster.type" value="kvm">KVM
                                                 </label>
-                                                <label class="radio-inline mod-input-name" ng-model="cluster.type">
-                                                    <input type="radio" name="optradio">Docker
+                                                <label class="radio-inline mod-input-name">
+                                                    <input type="radio" name="type" ng-model="cluster.type" value="docker">Docker
                                                 </label>
+                                                <p ng-show="clusterForm.type.$invalid && !clusterForm.type.$pristine" class="help-block">type를 입력하세요.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">엔드 포인트 IP</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" id="inputtext" placeholder="192.168.0.3" ng-model="cluster.ip">
+                                            <div class="col-sm-9" ng-class="{ 'has-error' : clusterForm.ip.$invalid && !clusterForm.ip.$pristine }">
+                                                <input type="text" class="form-control" name="ip" placeholder="192.168.0.3" ng-model="cluster.ip" required>
+                                                <p ng-show="clusterForm.ip.$invalid && !clusterForm.ip.$pristine" class="help-block">ip를 입력하세요.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">엔드 포인트 <br/>PORT</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" id="inputtext" placeholder="9090" ng-model="cluster.port">
+                                            <div class="col-sm-9"  ng-class="{ 'has-error' : clusterForm.port.$invalid && !clusterForm.port.$pristine }">
+                                                <input type="text" class="form-control" name="port" placeholder="9090" ng-model="cluster.port" required>
+                                                <p ng-show="clusterForm.port.$invalid && !clusterForm.port.$pristine" class="help-block">포트를 입력하세요.</p>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" ng-show="cluster.id != null">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">노드 리스트</label>
                                             <div class="col-sm-9">
                                                 <span ng-repeat="gnHostMachine in cluster.gnHostMachines">{{gnHostMachine.ip}}  <a href ng-click="deleteNode(gnHostMachine.id)">삭제</a><br/></span>
@@ -138,7 +141,7 @@
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">노드</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" id="inputtext" placeholder="192.168.0.100" ng-model="host.ip">
+                                                <input type="text" class="form-control gn-form-control" id="inputtext" placeholder="192.168.0.100" ng-model="host.ip">
                                             </div>
                                             <div class="col-sm-2 btn-sm2">
                                                 <button type="button" class="btn btn-gn-sub btn-block" data-toggle="modal" data-target="#cluster-more">추가</button>
@@ -154,83 +157,85 @@
                                 </div> <!--class="modal-body"-->
 
                                 <div class="modal-footer gn-modal-footer">
-                                    <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="saveCluster()">저장</button>
+                                    <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-disabled="clusterForm.$invalid" ng-click="saveCluster()">저장</button>
                                 </div>
                             </div>
                         </div>
                     </div>  <!--class="modal fade" id="cluster"-->
-
+                    
                     <!-- 클러스터 노드 추가 Modal -->
                     <div class="modal fade" id="cluster-more" role="dialog">
                         <div class="modal-dialog form-horizontal">
                             <div class="modal-content col-sm-10 col-sm-offset-1">
-                                <div class="modal-header gn-modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">노드 추가</h4>
-                                </div>
+                              <div class="modal-header gn-modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">노드 추가</h4>
+                              </div>
 
-                                <div class="modal-body gn-modal-body">
+                              <div class="modal-body gn-modal-body">
 
-                                    <form class="form-horizontal">
+                                <form class="form-horizontal" name="hostForm">
 
-                                        <dl class="dl-horizontal gn-description-node">
-                                            <dt class="">CPU</dt>
-                                            <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.cpu"></dd>
-                                            <dt class="">MAX CPU</dt>
-                                            <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_cpu"></dd>
-                                            <dt class="">MEMORY</dt>
-                                            <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.mem"></dd>
-                                            <dt class="">MAX MEMORY</dt>
-                                            <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_mem"></dd>
-                                            <dt class="">DISK</dt>
-                                            <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.disk"></dd>
-                                            <dt class="">MAX DISK</dt>
-                                            <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_disk"></dd>
-                                        </dl>
-                                    </form>
-                                </div> <!--class="modal-body"-->
+                                    <dl class="dl-horizontal gn-description-node">
+                                      <dt class="">CPU</dt>
+                                      <dd>
+                                          <input type="text" name="cpu" class="form-control gn-form-control" placeholder="-" ng-model="host.cpu" required>
+                                      </dd>
+                                      <dt class="">MAX CPU</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_cpu" required></dd>
+                                      <dt class="">MEMORY</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.mem" required></dd>
+                                      <dt class="">MAX MEMORY</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_mem" required></dd>
+                                      <dt class="">DISK</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.disk" required></dd>
+                                      <dt class="">MAX DISK</dt>
+                                      <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_disk" required></dd>
+                                    </dl>                                                                                                  
+                                </form>                                        
+                              </div> <!--class="modal-body"-->
 
-                                <div class="modal-footer gn-modal-footer">
-                                    <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="saveHost()">추가</button>
-                                </div><!--class="modal-footer gn-modal-footer"-->
-                            </div><!--class="modal-content"-->
+                              <div class="modal-footer gn-modal-footer">
+                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-disabled="hostForm.$invalid" ng-click="saveHost()">추가</button>
+                              </div><!--class="modal-footer gn-modal-footer"-->
+                            </div><!--class="modal-content"-->  
                         </div> <!--class="modal-dialog form-horizontal"-->
-                    </div> <!--class="modal fade" id="cluster" role="dialog"-->
-
+                    </div> <!--class="modal fade" id="cluster" role="dialog"-->                     
+                    
                 </div>
 
                 <div class="container-fluid">
                     <div class="table-responsive gn-table-responsive">
                         <table class="table table gn-table">
                             <thead>
-                            <tr>
-                                <th class="col-sm-2">타입</th>
-                                <th class="col-sm-3 hidden-xs">엔드 포인트</th>
-                                <th class="col-sm-3 hidden-xs">노드</th>
-                                <th class="col-sm-2 hidden-xs hidden-sm">생성일<div class="refresh"></div></th>
-                                <th class="col-sm-2"><!--더보기--></th>
-                            </tr>
+                                <tr>
+                                    <th class="">타입</th>
+                                    <th class="hidden-xs">엔드 포인트</th>
+                                    <th class="hidden-xs">노드</th>
+                                    <th class="">생성일<div class="refresh"></div></th>
+                                    <th class=""><!--더보기--></th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="list in cluster_list">
-                                <td >{{list.type}}</td>
-                                <td class="hidden-xs">{{list.ip}}:{{list.port}}</td>
-                                <td class="hidden-xs gn-syssett-td">
-                                    <p ng-repeat="host in list.gnHostMachines">{{host.ip}}</p>
-                                </td>
-                                <td class="hidden-xs hidden-sm">{{list.create_time_diff}}</td>
-                                <td class="dropdown">
-                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                                        <div class="gn-more">더보기</div>
-                                        <span class="gn-caret-table"></span>
-                                    </div>
-                                    <!--더보기>드롭다운-->
-                                    <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li><a href data-toggle="modal" data-target="#cluster" ng-click="getCluster(list.id)">수정</a></li>
-                                        <li><a href ng-click="deleteCluster(list.id)">삭제</a></li>
-                                    </ul>
-                                </td>
-                            </tr>
+                                <tr ng-repeat="list in cluster_list">
+                                    <td >{{list.type}}</td>
+                                    <td class="hidden-xs">{{list.ip}}:{{list.port}}</td>
+                                    <td class="hidden-xs gn-syssett-td">
+                                        <p ng-repeat="host in list.gnHostMachines">{{host.ip}}</p>
+                                    </td>
+                                    <td class="">{{list.create_time_diff}}</td>
+                                    <td class="dropdown">
+                                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            <div class="gn-more">더보기</div>
+                                            <span class="gn-caret-table"></span>
+                                        </div>
+                                        <!--더보기>드롭다운-->
+                                        <ul class="dropdown-menu gn-dropdown" role="menu">
+                                            <li><a href data-toggle="modal" data-target="#cluster" ng-click="getCluster(list.id)">수정</a></li>
+                                            <li><a href ng-click="deleteCluster(list.id)">삭제</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div> <!--class="table-responsive table-reset"-->
@@ -271,25 +276,25 @@
 
                                         <div class="modal-body gn-modal-body">
                                             <form name="myForm" class="form-horizontal" ng-submit="submitForm(myForm.$valid)">
-                                                <div class="form-group">
+                                                <!--<div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
                                                     <div class="col-sm-10">
-                                                        <!--초기 이미지 등록 박스-->
-                                                        <img ngf-src="picFile" class="thumb">
+                                                        &lt;!&ndash;초기 이미지 등록 박스&ndash;&gt;
+                                                            <img ngf-src="picFile" class="thumb">
 
-                                                        <fieldset>
-                                                            <input type="file" ngf-select ng-model="picFile" name="file" ngf-accept="'image/*'">
+                                                                <fieldset>
+                                                                <input type="file" ngf-select ng-model="picFile" name="file" ngf-accept="'image/*'">
 
 
-                                                        </fieldset>
+                                                                </fieldset>
 
-                                                        <!--<div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>-->
-                                                        <!--<ul class="dropdown-img-icon" role="menu">-->
-                                                        <!--<li><a href="#">이미지 변경</a></li>-->
-                                                        <!--<li><a href="#">이미지 삭제</a></li>-->
-                                                        <!--</ul>-->
+                                                        &lt;!&ndash;<div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>&ndash;&gt;
+                                                        &lt;!&ndash;<ul class="dropdown-img-icon" role="menu">&ndash;&gt;
+                                                            &lt;!&ndash;<li><a href="#">이미지 변경</a></li>&ndash;&gt;
+                                                            &lt;!&ndash;<li><a href="#">이미지 삭제</a></li>&ndash;&gt;
+                                                        &lt;!&ndash;</ul>&ndash;&gt;
                                                     </div>
-                                                </div>
+                                                </div>-->
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label gn-control-label">타입</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myForm.optradio.$invalid && !myForm.optradio.$pristine }">
@@ -350,11 +355,11 @@
                                     <table class="table table gn-table gn-top">
                                         <thead>
                                         <tr>
-                                            <th class="col-sm-3">OS</th>
-                                            <th class="col-sm-2">버전</th>
-                                            <th class="col-sm-1 hidden-xs">BIT</th>
-                                            <th class="col-sm-2 hidden-xs">타입</th>
-                                            <th class="col-sm-2 col-sm-3 hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('image')"></div></th>
+                                            <th class="">OS</th>
+                                            <th class="">버전</th>
+                                            <th class="hidden-xs">BIT</th>
+                                            <th class="hidden-xs">타입</th>
+                                            <th class="hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('image')"></div></th>
                                             <th><!--더보기--></th>
                                         </tr>
                                         </thead>
@@ -363,7 +368,7 @@
                                             <td>
                                                 <img src="/gn_images/{{path.icon}}" alt="" ng-show="path.icon != ''">
 
-                                                {{path.os}}
+                                            {{path.os}}
                                             </td>
                                             <td class="hidden-xs">{{path.os_ver}}</td>
                                             <td class="hidden-xs">{{path.os_bit}}</td>
@@ -411,14 +416,14 @@
                                         <div class="modal-body gn-modal-body">
 
                                             <form name="myDockerForm" class="form-horizontal" ng-submit="submitForm(myDockerForm.$valid)">
-                                                <div class="form-group">
+                                                <!--<div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
-                                                    <!--초기 이미지 등록 박스-->
+                                                    &lt;!&ndash;초기 이미지 등록 박스&ndash;&gt;
                                                     <img ngf-src="dockerFile" class="thumb">
                                                     <fieldset>
                                                         <input type="file" ngf-select ng-model="dockerFile" name="file" ngf-accept="'image/*'">
                                                     </fieldset>
-                                                    <!--<div class="col-sm-10">
+                                                    &lt;!&ndash;<div class="col-sm-10">
                                                         <div class="img-icon-sett filebox">
                                                             <label class="hov-img-txt" for="img-file">이미지 등록</label>
                                                             <input type="file" id="img-file">
@@ -428,8 +433,8 @@
                                                             <li><a href="#">이미지 변경</a></li>
                                                             <li><a href="#">이미지 삭제</a></li>
                                                         </ul>
-                                                    </div>-->
-                                                </div>
+                                                    </div>&ndash;&gt;
+                                                </div>-->
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">이름</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.name.$invalid && !myDockerForm.name.$pristine }">
@@ -498,11 +503,11 @@
                                     <table class="table table gn-table gn-top">
                                         <thead>
                                         <tr>
-                                            <th class="col-sm-3">이름</th>
-                                            <th class="col-sm-2">버전</th>
-                                            <th class="col-sm-2">태그</th>
-                                            <th class="col-sm-2">생성일<div class="refresh" ng-click="refresh('contain')"></div></th>
-                                            <th class="col-sm-1"><!--더보기--></th>
+                                            <th class="">이름</th>
+                                            <th class="">버전</th>
+                                            <th class="">태그</th>
+                                            <th class="">생성일<div class="refresh" ng-click="refresh('contain')"></div></th>
+                                            <th class=""><!--더보기--></th>
                                         </tr>
                                         </thead>
                                         <tbody class="gn-tdody">
@@ -511,9 +516,9 @@
                                                 <img src="/gn_images/{{contain.icon}}" alt="" ng-show="contain.icon != '' ">
                                                 {{contain.view_name}}
                                             </td>
-                                            <td class="hidden-xs">{{contain.os_ver}}</td>
+                                            <td>{{contain.os_ver}}</td>
                                             <td class="hidden-xs">{{contain.tag}}</td>
-                                            <td class="hidden-xs hidden-xs">{{contain.create_time_diff}}</td>
+                                            <td class="hidden-xs hidden-sm">{{contain.create_time_diff}}</td>
                                             <td class="dropdown">
                                                 <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                                     <div class="gn-more">더보기</div>

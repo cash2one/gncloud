@@ -27,7 +27,14 @@ class DockerService(object):
         dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
         if dockerimage is None:
             return None
-        image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
+
+        real_image_id = None
+        if (dockerimage.sub_type == 'snap'):
+            real_image_id = dockerimage.base_image
+        else:
+            real_image_id = dockerimage.id
+
+        image_detail = GnDockerImageDetail.query.filter_by(image_id=real_image_id).all()
         # --- Docker Service 생성 커맨드 작성 ---
         command = "docker service create"
         command += " --limit-cpu %s" % cpu
