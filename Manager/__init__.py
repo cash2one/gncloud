@@ -37,6 +37,8 @@ def before_request():
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
+    if exception and db_session.is_active:
+        db_session.rollback()
 
 @app.errorhandler(500)
 def internal_error(error):

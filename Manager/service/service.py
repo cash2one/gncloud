@@ -595,7 +595,7 @@ def convertHumanFriend(num):
 
 
 def hostMachineList(sql_session):
-    list = sql_session.query(GnCluster).filter(GnCluster.status != "Removed").all()
+    list = sql_session.query(GnCluster).filter(GnCluster.status != "Removed").order_by(GnCluster.create_time.desc()).all()
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
@@ -628,15 +628,22 @@ def updateClusterInfo(id,ip,port,node,sql_session):
 
 def insertClusterInfo(type,ip,port,node,sql_session):
     try:
-        cluster_info =GnCluster(type=type, ip=ip, port=port)
+        while True:
+            id = random_string(8)
+            check_info = sql_session.query(GnCluster).filter(GnCluster.id == id).first();
+            if not check_info:
+                break
+
+        cluster_info =GnCluster(id=id,type=type, ip=ip, port=port, status="Running")
         sql_session.add(cluster_info)
 
-        #node 부분
-        nodeArr = node.split('\n')
 
-        for str_node in nodeArr:
-            host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.ip == str_node).first()
-            host_info.type = type
+        #node 부분
+        if len(node) > 0:
+            nodeArr = node.split('\n')
+            for str_node in nodeArr:
+                host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.ip == str_node).first()
+                host_info.type = type
     except:
         sql_session.rollback()
 
