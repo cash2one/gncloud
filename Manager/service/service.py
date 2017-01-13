@@ -499,8 +499,8 @@ def select_putsys(team_name, team_code, team_cpu, team_memory, team_disk): #팀 
     lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()
     lit.team_name = team_name
     lit.cpu_quota = team_cpu
-    lit.mem_quota = humanfriendly.parse_size(team_memory)
-    lit.disk_quota = humanfriendly.parse_size(team_disk)
+    lit.mem_quota = int(team_memory)*1024**3
+    lit.disk_quota = int(team_disk)*1024**4
     db_session.commit()
     return True
 
