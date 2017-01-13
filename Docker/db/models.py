@@ -109,7 +109,11 @@ class GnVmMachines(Base):
     hyperv_pass = Column(String(50), nullable=True, default='')
     image_id = Column(String(8), nullable=True, default='')
     ssh_key_id = Column(Integer, nullable=True, default='')
-
+    gnHostMachines = relationship('GnHostMachines')
+    gnDockerServices = relationship('GnDockerServices')
+    gnDockerContainers = relationship('GnDockerContainers')
+    gnDockerVolumes = relationship('GnDockerVolumes')
+    gnDockerPorts = relationship('GnDockerPorts')
 
     def __init__(self,
                  id, name=None, tag=None, type=None, internal_id=None, internal_name=None, host_id=None, ip=None,
