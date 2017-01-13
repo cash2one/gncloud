@@ -16,7 +16,8 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , hostMachineList, insertImageInfo, selectImageInfo, selectImageInfo, updateImageInfo, deleteImageInfo \
                             , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
-                            , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys
+                            , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys \
+                            , vm_list_snap
 from db.database import db_session
 from Manager.util.config import config
 
@@ -132,6 +133,10 @@ def guest_list():
     team_code = session['teamCode']
     return jsonify(status=True, message="success", list=vm_list(db_session, team_code))
 
+@app.route('/vm/snaplist', methods=['GET'])
+def guest_list_snap():
+    team_code = session['teamCode']
+    return jsonify(status=True, message="success", list=vm_list_snap(db_session, team_code))
 
 @app.route('/vm/machines/<id>', methods=['GET'])
 def guest_info(id):
@@ -246,9 +251,6 @@ def quota_info():
 def quota(code):
     return jsonify(status=True, message = 'success',list=getQuotaOfTeam(code, db_session))
 
-@app.route('/vm/machines', methods=['GET'])
-def list():
-    return jsonify(status=True, message="success", list=vm_list(db_session))
 
 
 @app.route('/vm/images/<type>/<sub_type>', methods=['GET'])
@@ -366,9 +368,10 @@ def createteam():
     team_name = request.json['team_name']
     team_code = request.json['team_code']
     author_id = session['userName']
-    session['teamCode']=team_code
     teamnamecheck=createteam_list(user_id, team_name, team_code, author_id, db_session)
     if(teamnamecheck=='success'):
+        session['teamCode']=team_code
+        session['teamOwner']="owner"
         return jsonify(status=True, test='success')
     elif(teamnamecheck=='team_code'):
         return jsonify(status=True, test='id')

@@ -81,7 +81,7 @@ angular
                 });
             $http({
                 method: 'GET',
-                url: '/api/manager/vm/machines',
+                url: '/api/manager/vm/snaplist',
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {

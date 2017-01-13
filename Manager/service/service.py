@@ -142,6 +142,19 @@ def vm_list(sql_session, team_code):
 
     return {"guest_list":list,"retryCheck":retryCheck}
 
+def vm_list_snap(sql_session, team_code):
+    list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.type != 'docker').order_by(GnVmMachines.create_time.desc()).all()
+    for vmMachine in list:
+        vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
+        vmMachine.disk = convertHumanFriend(vmMachine.disk)
+        vmMachine.memory = convertHumanFriend(vmMachine.memory)
+
+    retryCheck = False
+    if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
+        retryCheck = True
+
+    return {"guest_list":list,"retryCheck":retryCheck}
+
 def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
 
@@ -334,6 +347,7 @@ def getQuotaOfTeam(team_code, sql_session):
     image_type_list = sql_session.query(GnVmImages.name, func.count().label("count")) \
                                  .join(GnVmMachines,  GnVmImages.id == GnVmMachines.image_id) \
                                  .filter(GnVmMachines.status != "Removed").filter(GnVmMachines.status != "Error") \
+                                 .filter(GnVmMachines.team_code == team_code) \
                                  .group_by(GnVmImages.id).all()
 
     if current_info.sum_cpu is None:
@@ -402,7 +416,7 @@ def team_list(user_id, sql_sesssion):
     return list
 
 def container(type,team_code ,sql_sesssion):
-    list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.team_code ==team_code).all()
+    list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).all()
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
