@@ -2,6 +2,7 @@
 
 1. 설치 절차
 2. gncloud-platform-controller.sh 실행
+3. shell 내용
 
 <span></span>
 1. 설치 절차
