@@ -212,7 +212,7 @@
                                     <th class="">타입</th>
                                     <th class="hidden-xs">엔드 포인트</th>
                                     <th class="hidden-xs">노드</th>
-                                    <th class="hidden-xs hidden-sm">생성일<div class="refresh"></div></th>
+                                    <th class="">생성일<div class="refresh"></div></th>
                                     <th class=""><!--더보기--></th>
                                 </tr>
                             </thead>
@@ -223,7 +223,7 @@
                                     <td class="hidden-xs gn-syssett-td">
                                         <p ng-repeat="host in list.gnHostMachines">{{host.ip}}</p>
                                     </td>
-                                    <td class="hidden-xs hidden-sm">{{list.create_time_diff}}</td>
+                                    <td class="">{{list.create_time_diff}}</td>
                                     <td class="dropdown">
                                         <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                             <div class="gn-more">더보기</div>
@@ -276,10 +276,10 @@
 
                                         <div class="modal-body gn-modal-body">
                                             <form name="myForm" class="form-horizontal" ng-submit="submitForm(myForm.$valid)">
-                                                <div class="form-group">
+                                                <!--<div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
                                                     <div class="col-sm-10">
-                                                        <!--초기 이미지 등록 박스-->
+                                                        &lt;!&ndash;초기 이미지 등록 박스&ndash;&gt;
                                                             <img ngf-src="picFile" class="thumb">
 
                                                                 <fieldset>
@@ -288,13 +288,13 @@
 
                                                                 </fieldset>
 
-                                                        <!--<div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>-->
-                                                        <!--<ul class="dropdown-img-icon" role="menu">-->
-                                                            <!--<li><a href="#">이미지 변경</a></li>-->
-                                                            <!--<li><a href="#">이미지 삭제</a></li>-->
-                                                        <!--</ul>-->
+                                                        &lt;!&ndash;<div class="drop-img" data-toggle="dropdown" role="button" aria-expanded="false">&nabla;</div>&ndash;&gt;
+                                                        &lt;!&ndash;<ul class="dropdown-img-icon" role="menu">&ndash;&gt;
+                                                            &lt;!&ndash;<li><a href="#">이미지 변경</a></li>&ndash;&gt;
+                                                            &lt;!&ndash;<li><a href="#">이미지 삭제</a></li>&ndash;&gt;
+                                                        &lt;!&ndash;</ul>&ndash;&gt;
                                                     </div>
-                                                </div>
+                                                </div>-->
                                                 <div class="form-group">
                                                     <label class="col-sm-2 control-label gn-control-label">타입</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myForm.optradio.$invalid && !myForm.optradio.$pristine }">
@@ -416,14 +416,14 @@
                                         <div class="modal-body gn-modal-body">
 
                                             <form name="myDockerForm" class="form-horizontal" ng-submit="submitForm(myDockerForm.$valid)">
-                                                <div class="form-group">
+                                                <!--<div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">아이콘</label>
-                                                    <!--초기 이미지 등록 박스-->
+                                                    &lt;!&ndash;초기 이미지 등록 박스&ndash;&gt;
                                                     <img ngf-src="dockerFile" class="thumb">
                                                     <fieldset>
                                                         <input type="file" ngf-select ng-model="dockerFile" name="file" ngf-accept="'image/*'">
                                                     </fieldset>
-                                                    <!--<div class="col-sm-10">
+                                                    &lt;!&ndash;<div class="col-sm-10">
                                                         <div class="img-icon-sett filebox">
                                                             <label class="hov-img-txt" for="img-file">이미지 등록</label>
                                                             <input type="file" id="img-file">
@@ -433,8 +433,8 @@
                                                             <li><a href="#">이미지 변경</a></li>
                                                             <li><a href="#">이미지 삭제</a></li>
                                                         </ul>
-                                                    </div>-->
-                                                </div>
+                                                    </div>&ndash;&gt;
+                                                </div>-->
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">이름</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.name.$invalid && !myDockerForm.name.$pristine }">
