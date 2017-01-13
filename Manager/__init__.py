@@ -4,7 +4,6 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
-
 from datetime import timedelta
 import datetime
 
@@ -54,6 +53,7 @@ def internal_error(error):
 @app.route('/')
 def index():
     return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
+
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
@@ -322,12 +322,15 @@ def approve(id, code, type):
         return jsonify(status=True, message="이 관리자가 되었습니다.")
     elif(list == 3):
         return jsonify(status=True, message="의 비밀번호가 초기화 되었습니다.")
+    elif(list == 4):
+        return jsonify(status=True, message="이 팀원이 되었습니다.")
     else:
         return jsonify(status=True, message="의 변경할 것이 없습니다.")
 
 @app.route('/vm/account/teamset/<id>/<code>',methods=['DELETE'])
 def delete(id, code):
     team_delete(id, code)
+    session['teamCheck']='N'
     return jsonify(status=True, message="success")
 
 
@@ -353,11 +356,12 @@ def selectteam():
 def teamsignup():
     team_code = request.json['team_code']
     user_id = session['userId']
-    lits=signup_team(team_code, user_id)
-    if(lits):
+    lits=signup_team(team_code, user_id, db_session)
+    if(lits==1):
         session['teamCheck'] ="Y"
-        return jsonify(status=True, message="success")
-
+        return jsonify(status=True)
+    elif(lits==2):
+        return jsonify(status=False)
 
 @app.route('/vm/account/teamcomfirm', methods=['GET'])
 def comfirm():
