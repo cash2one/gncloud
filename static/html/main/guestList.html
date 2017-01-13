@@ -48,9 +48,12 @@
                     <ul class="dropdown-menu gn-dropdown gn-list" role="menu">
                         <li ng-repeat="test in actions" >
                             <a href ng-click="update(list.id,test,list.type,$index)"
-                               ng-show="(test.type == 'Resume' && list.status != 'Running')
+                               ng-class="{'gn-disable-op':(test.type == 'Resume' && list.status == 'Running')
+                                         || (test.type == 'Suspend' && list.status != 'Running')
+                                         || (test.type == 'Reboot' && list.status == 'Suspend')}"
+                               ng-disabled="(test.type == 'Resume' && list.status != 'Running')
                                          || (test.type == 'Suspend' && list.status == 'Running')
-                                         || (test.type == 'Reboot' && list.status != 'Suspend')" >{{test.name}}</a>
+                                         || (test.type == 'Reboot' && list.status != 'Suspend')">{{test.name}}</a>
                         </li>
                     </ul>
                 </td>
