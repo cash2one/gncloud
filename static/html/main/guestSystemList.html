@@ -123,14 +123,10 @@
                                             <div class="col-sm-9" ng-class="{ 'has-error' : clusterForm.ip.$invalid && !clusterForm.ip.$pristine }">
                                                 <input type="text" class="form-control" name="ip" placeholder="192.168.0.3" ng-model="cluster.ip" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.ip.$pristine" class="help-block">ip를 입력하세요.</p>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control gn-form-control" name="ip" placeholder="192.168.0.3" ng-model="cluster.ip">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">엔드 포인트 <br/>PORT</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control gn-form-control" name="port" placeholder="9090" ng-model="cluster.port">
                                             <div class="col-sm-9"  ng-class="{ 'has-error' : clusterForm.port.$invalid && !clusterForm.port.$pristine }">
                                                 <input type="text" class="form-control" name="port" placeholder="9090" ng-model="cluster.port" required>
                                                 <p ng-show="clusterForm.port.$invalid && !clusterForm.port.$pristine" class="help-block">포트를 입력하세요.</p>
