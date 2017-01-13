@@ -19,7 +19,8 @@
 2. docker-install.sh 실행
 -------------------------
 
-- 압축이 풀린 폴더 중 gncloud docker를 설치하기 위해 
+- 압축이 풀린 폴더 중 gncloud docker를 설치하기 위해
+
     ```
     $ cd ./gncloud-install/gncloud-docker-manager-worker
     $ chmod +x *.sh

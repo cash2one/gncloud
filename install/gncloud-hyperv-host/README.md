@@ -26,6 +26,7 @@
 3. setting script.ps1 내용
 --------------------------------------
 - 가상스위치 생성
+
     ```
     $net = Get-NetAdapter -physical | where status -eq 'up';
     New-VMSwitch -Name out -NetAdapterName $net.Name -AllowManagementOS $true -Notes 'Parent OS, VMs, LAN';
@@ -40,16 +41,19 @@
     New-Item $image_path\vhdx\backup -ItemType directory;
     ```
 - gncloud platform Anget 인바운드 허용
+
     ```
     New-NetFirewallRule -DisplayName hypervagent -Direction Inbound -Action Allow -EdgeTraversalPolicy Allow -Protocol TCP -LocalPort 8180 
     ```
 - Agent service 압축 풀기
+
     ```
     Expand-Archive '.\Gncloud Hyper-V Agent.zip'
     # hyper-v agent install script
     .\"Gncloud Hyper-V Agent\Gncloud Hyper-V Agent"\setup.exe
     ```
 - hyper-v agent를 관리자 계정 세팅 및 서비스 시작 하기
+
     ```
     1 . Win + R
     2 . services.msc 입력후 Enter 
@@ -73,13 +77,15 @@
         Gncloud Hyper-V Agent Service 서비스 중지 후 다시 시작
     ```
 - 원격접속 허용 커맨드
+
     ```
     (Get-WmiObject Win32_TerminalServiceSetting -Namespace root\cimv2\TerminalServices).SetAllowTsConnections(1,1) | Out-Null
     (Get-WmiObject -Class "Win32_TSGeneralSetting" -Namespace root\cimv2\TerminalServices -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(0) | Out-Null
     Get-NetFirewallRule -DisplayName "Remote Desktop*" | Set-NetFirewallRule -enabled true
     ```
  
-- windows 10 버전에는 이미 dotnet framework가 최신으로 설치되어 있어 불필요하나 windows server 2012는 필요 함 
+- windows 10 버전에는 이미 dotnet framework가 최신으로 설치되어 있어 불필요하나 windows server 2012는 필요 함
+
     ```
     if([environment]::OSVersion.version.Major -gt 9 ) { return }
     # dotnet install
