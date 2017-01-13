@@ -160,7 +160,7 @@ def vm_info(sql_session, id):
     return info
 
 def vm_info_graph(sql_session, id):
-    monitor_history_list = sql_session.query(GnMonitorHist).filter(GnMonitorHist.id == id).order_by(GnMonitorHist.cur_time.desc()).limit(5).all()
+    monitor_history_list = sql_session.query(GnMonitorHist).filter(GnMonitorHist.id == id).order_by(GnMonitorHist.cur_time.desc()).limit(30).all()
     x_info=[]
     cpu_per_info=[]
     memory_per_info=[]
