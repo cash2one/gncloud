@@ -1,3 +1,4 @@
+# gncloud private platform 중 controller HOST에 설치
 # Gncloud private platform Controller Install
 
 1. 설치 절차
