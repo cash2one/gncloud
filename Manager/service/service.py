@@ -402,7 +402,11 @@ def team_list(user_id, sql_sesssion):
     return list
 
 def container(type,team_code ,sql_sesssion):
-    list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.team_code ==team_code).all()
+    if type == "base":
+        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).all()
+    else:
+        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.team_code ==team_code).all()
+
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
