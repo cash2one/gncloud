@@ -328,6 +328,7 @@ def approve(id, code, type):
 @app.route('/vm/account/teamset/<id>/<code>',methods=['DELETE'])
 def delete(id, code):
     team_delete(id, code)
+    session['teamCheck']='N'
     return jsonify(status=True, message="success")
 
 
@@ -353,11 +354,12 @@ def selectteam():
 def teamsignup():
     team_code = request.json['team_code']
     user_id = session['userId']
-    lits=signup_team(team_code, user_id)
-    if(lits):
+    lits=signup_team(team_code, user_id, db_session)
+    if(lits==1):
         session['teamCheck'] ="Y"
-        return jsonify(status=True, message="success")
-
+        return jsonify(status=True)
+    elif(lits==2):
+        return jsonify(status=False)
 
 @app.route('/vm/account/teamcomfirm', methods=['GET'])
 def comfirm():

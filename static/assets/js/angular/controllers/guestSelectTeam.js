@@ -1,7 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestSelectTeamCtrl', function ($scope, $http, $location) {
-
+    .controller('guestSelectTeamCtrl', function ($scope, $http, $window, $rootScope) {
         //탭이동
         $('.nav-sidebar li').removeClass('active');
         var url = window.location;
@@ -9,8 +8,8 @@ angular
             return this.href.indexOf(url.hash) != -1;
         }).parent().addClass('active');
         $('[data-toggle="tooltip"]').tooltip();
-        $scope.list = {};
 
+        $scope.list = {};
         $http({
             method: 'GET',
             url: '/api/manager/vm/account/selectteam',
@@ -50,9 +49,10 @@ angular
                         location.href="/main/#/guestReadyTeam"
 
                     } else {
-                        alert(data.message);
+                        alert("이미 가입신청이 된 상태입니다.");
                     }
                 });
         }
+
 
     });

@@ -10,12 +10,13 @@
                     <select class="gn-select col-md-5" ng-model="guset_image" ng-options="list.team_name for list in list" ng-change="update_image(guset_image)">
                         <option value="">선택</option>
                     </select>
-                    <button type="submit" value="submit" class="btn btn-gn-login col-md-2" ng-click="submit()">신청하기</button>
+                    <button type="submit" value="submit" class="btn btn-gn-login col-md-2" ng-click="submit()">신청하기</button> <button type="submit" value="submit" class="btn btn-gn-login" onclick=javascript:logout();>로그아웃</button>
                 </div>
             </div>
             <span class="col-md-12">
                 나의 팀을 찾을 수 없나요? 관리자라면 <a href="/main/#/guestCreateTeam">팀을 만들어</a> 주세요.
             </span>
+
         </div> <!--class="row gn-box-login"-->
 
     </div> <!-- 로그인 초기 container -->
