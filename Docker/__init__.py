@@ -60,6 +60,7 @@ def index():
     logger.debug("%s Connection Check" % "/service/isAlive")
     return redirect(url_for("is_alive"))
 
+
 @app.route('/monitor', methods=['GET'])
 def cronMnitor():
     service_monitoring(db_session)
@@ -68,8 +69,6 @@ def cronMnitor():
 
 def interval_status_update():
     service_monitoring(db_session)
-
-
 
 
 @app.teardown_appcontext
@@ -84,8 +83,8 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
-    cron = Scheduler(daemon=True)
-    cron.add_interval_job(interval_status_update, seconds=180)
-    cron.start()
+    # cron = Scheduler(daemon=True)
+    # cron.add_interval_job(interval_status_update, seconds=180)
+    # cron.start()
     app.config['DEBUG'] = False
     app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
