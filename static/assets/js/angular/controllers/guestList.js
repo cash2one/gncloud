@@ -58,9 +58,8 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert(name + " guest의 상태가 변경되었습니다");
-                        window.location.reload();
-                        $scope.guest_list.splice(index, 1);
+                        alert(name + " 인스턴스의 상태가 변경되었습니다");
+                        $scope.selectGuestList();
                     } else {
                         if(data.message != null) {
                             alert(data.message);
