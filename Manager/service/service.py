@@ -455,10 +455,11 @@ def approve_set(user_id,code,type,user_name,sql_session):
         if(list.team_owner == 'owner'):
             list.team_owner = 'user'
             sql_session.commit()
+            return 4
         elif(list.team_owner == 'user'):
             list.team_owner = 'owner'
             sql_session.commit()
-        return 2
+            return 2
     if(type == 'reset'):
         list = sql_session.query(GnUser).filter(GnUser.user_id==user_id).first()
         list.password = convertToHashValue('11111111')
