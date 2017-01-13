@@ -4,7 +4,6 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
-
 from datetime import timedelta
 import datetime
 
@@ -17,7 +16,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , hostMachineList, insertImageInfo, selectImageInfo, selectImageInfo, updateImageInfo, deleteImageInfo \
                             , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
-                            , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo
+                            , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys
 from db.database import db_session
 from Manager.util.config import config
 
@@ -392,7 +391,10 @@ def changeteamname():
 @app.route('/vm/account/teamname/<code>', methods=['PUT'])
 def changeteamnamesystem(code):
     team_name=request.json['team_name']
-    return jsonify(status=True, message="success", list=select_put(team_name,code))
+    team_cpu =request.json['cpu']
+    team_memory = request.json['mem']
+    team_disk = request.json['disk']
+    return jsonify(status=True, message="success", list=select_putsys(team_name,code,team_cpu, team_memory, team_disk))
 
 @app.route('/vm/account/teamtable', methods=['GET'])
 def teamshow():

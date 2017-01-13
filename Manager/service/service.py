@@ -489,9 +489,18 @@ def select_info(team_code, sql_session): #팀 프로필 팀생성일/ 이름 개
     list.create_date = list.create_date.strftime('%Y-%m-%d %H:%M:%S')
     return list
 
-def select_put(team_name, team_code): #팀 생성 쿼리
+def select_put(team_name, team_code): #팀 수정
     lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()
     lit.team_name = team_name
+    db_session.commit()
+    return True
+
+def select_putsys(team_name, team_code, team_cpu, team_memory, team_disk): #팀 시스템 수정 / cpu / memory / disk
+    lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()
+    lit.team_name = team_name
+    lit.cpu_quota = team_cpu
+    lit.mem_quota = humanfriendly.parse_size(team_memory)
+    lit.disk_quota = humanfriendly.parse_size(team_disk)
     db_session.commit()
     return True
 

@@ -48,27 +48,27 @@
                                         <hr>
                                         <dl class="dl-horizontal gn-description-list sett-detail">
                                           <dt>CPU</dt>
-                                          <dd><span id="cpu_per1"></span>%</dd>
+                                          <dd>{{total.cpu_per}}%</dd>
                                           <div>
                                               <span>사용중</span>
-                                              <span class="sett-detail-span" id="cpu_use_cnt1"> / </span>
-                                              <input type="text" class="form-control gn-form-control">
-                                              <span>core</span>
+                                              <span class="sett-detail-span">{{total.cpu_use_cnt}} / </span>
+                                              <input type="text" ng-model="data.cpu" class="form-control gn-form-control" placeholder="{{total.cpu_total_cnt}}CORE">
+
                                           </div>  
                                           
                                           <dt>MEMORY</dt>
-                                          <dd><span id="mem_per1"></span>%</dd>
+                                          <dd>{{total.mem_per}}%</dd>
                                           <div>
                                               <span>사용중</span>
-                                              <span class="sett-detail-span" id="mem_use_cnt1"> / </span>
-                                              <input type="text" class="form-control gn-form-control">
+                                              <span class="sett-detail-span">{{total.mem_use_cnt}} / </span>
+                                              <input type="text" ng-model="data.mem" class="form-control gn-form-control" placeholder="{{total.mem_total_cnt}}">
                                           </div>                                                                                  
                                           <dt>DISK</dt>
-                                          <dd><span id="disk_per1"></span>%</dd>
+                                          <dd>{{total.disk_per}}</dd>
                                           <div>
                                               <span>사용중</span>
-                                              <span class="sett-detail-span" id="disk_use_cnt1"> / </span>
-                                              <input type="text" class="form-control gn-form-control">
+                                              <span class="sett-detail-span">{{total.disk_use_cnt}} / </span>
+                                              <input type="text" ng-model="data.disk" class="form-control gn-form-control" placeholder="{{total.disk_total_cnt}}">
                                           </div>
                                         </dl>                                         
                                         
