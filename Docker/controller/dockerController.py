@@ -30,7 +30,7 @@ def doc_create():
 
     #로직 변경
     id = request.json['id']
-    docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    docker_info = sql_session.query(GnVmMachines).filter_by(id=id).one()
 
     try:
         image_id = docker_info.image_id
@@ -133,19 +133,20 @@ def doc_create():
 # {name: '재시작', type: 'reboot'}
 def doc_state(id):
     sql_session = db_session
+    #print db_session
     type = request.json["type"]
-    if 'userName' in request.json:
-        author_id = request.json['userName']
-    else:
-        author_id = session['userName']
-    if 'teamCode' in request.json:
-        team_code = request.json['teamCode']
-    else:
-        team_code = session['teamCode']
+    # if 'userName' in request.json:
+    #     author_id = request.json['userName']
+    # else:
+    #     author_id = session['userName']
+    # if 'teamCode' in request.json:
+    #     team_code = request.json['teamCode']
+    # else:
+    #     team_code = session['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
     # 서비스 DB 데이터 가져오기
-    service = GnVmMachines.query.filter_by(id=id, type="docker").first()
+    service = GnVmMachines.query.filter_by(id=id, type="docker").one()
     # -- 시작 (start)
     # service
     if type == "Resume":
@@ -191,6 +192,7 @@ def doc_state(id):
         else:
             ds.docker_service_stop(service)
             service.stop_time = datetime.now()
+            service.ssh_key_id = "1"
             service.status = "Suspend"
             sql_session.commit()
             return jsonify(status=True, message="서비스가 정지되었습니다.", result=service.to_json())
@@ -283,26 +285,28 @@ def doc_snap():
 
 # Docker 서비스 삭제
 def doc_delete(id):
-    sql_session = db_session
     # 지정된 Docker 서비스를 삭제한다.
-    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-    service = GnVmMachines.query.filter_by(id=id, type="docker").first()
-    # 서비스 삭제 (서비스 및 컨테이너가 삭제된다)
-    result = ds.docker_service_rm(service.internal_id)
-    for container in service.gnDockerContainers:
-        # 각 컨테이너 노드 별로 존재하는 볼륨 삭제
-        result2 = ds.docker_volume_rm(container.host_id, service.gnDockerVolumes)
-    # DB에 삭제된 내용을 업데이트한다.
-    if service is not None:
-        # 서비스 상태 수정
-        service.status = "Removed"
-        # 컨테이너 상태 수정
+    try:
+        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        service = GnVmMachines.query.filter_by(id=id, type="docker").first()
+        # 서비스 삭제 (서비스 및 컨테이너가 삭제된다)
+        result = ds.docker_service_rm(service.internal_id)
         for container in service.gnDockerContainers:
-            container.status = "Removed"
-        # 볼륨 상태 수정
-        for volume in service.gnDockerVolumes:
-            volume.status = "Removed"
-        sql_session.commit()
+            # 각 컨테이너 노드 별로 존재하는 볼륨 삭제
+            result2 = ds.docker_volume_rm(container.host_id, service.gnDockerVolumes)
+        # DB에 삭제된 내용을 업데이트한다.
+        if service is not None:
+            # 서비스 상태 수정
+            service.status = "Removed"
+            # 컨테이너 상태 수정
+            for container in service.gnDockerContainers:
+                container.status = "Removed"
+            # 볼륨 상태 수정
+            for volume in service.gnDockerVolumes:
+                volume.status = "Removed"
+            db_session.commit()
+    except Exception as err:
+        logger.error(err)
     if result == service.internal_id:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")
     else:
@@ -317,12 +321,12 @@ def doc_vm(id):
     if team_code is None:
         service = sql_session.query(GnVmMachines).filter(
             GnVmMachines.author_id == user_id, GnVmMachines.id == id, GnVmMachines.status != "Removed"
-        ).first()
+        ).one()
     else:
         service = sql_session.query(GnVmMachines).filter(
             GnVmMachines.team_code == team_code, GnVmMachines.id == id, GnVmMachines.status != "Removed"
-        ).first()
-        service = GnVmMachines.query.filter_by(team_code=team_code, id=id).first()
+        ).one()
+        service = GnVmMachines.query.filter_by(team_code=team_code, id=id).one()
     if service is None:
         return jsonify(status=False, message="서비스 정보를 가져올 수 없습니다.")
     else:
@@ -460,7 +464,7 @@ def doc_delete_image(id):
     repositories = "repositories"
     namespace = "library"
     # 레지스트리 노드 정보 가지고 오기
-    registry = GnHostMachines.query.filter_by(type="docker_r").first()
+    registry = GnHostMachines.query.filter_by(type="docker_r").one()
     # 삭제할 이미지 정보 저장
     image = GnDockerImages.query.filter_by(id=id).first()
     if image is None:
