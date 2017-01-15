@@ -38,18 +38,7 @@ def server_create(team_code, user_id, id, sql_session):
 
         if len(ip) != 0:
              print(id+":set init ip!!!")
-             new_ip = ip
-             if image_info.sub_type == "snap":
-                 print(id+":set snap new ip!!!")
-                 cursor = connection.cursor()
-                 cursor.callproc("GET_MAX_IP")
-                 new_ip = cursor.fetchone()
-                 print(id+":new ip="+new_ip)
-
-             setStaticIpAddress(ip, host_info.ip, image_info.ssh_id, new_ip)
-
-             if image_info.sub_type == "snap":
-                 ip = new_ip
+             setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
 
 
         print(id+":complete set ip!!!")
@@ -94,7 +83,7 @@ def setStaticIpAddress(ip, host_ip, ssh_id, new_ip):
     try:
         s = pxssh.pxssh()
         s.login(host_ip, USER)
-        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh %s %s %s" % (ip, ssh_id, new_ip))
+        s.sendline(config.SCRIPT_PATH+"set_vm_ip.sh %s %s" % (ip, ssh_id))
         s.logout()
     except pxssh.TIMEOUT:
         print("==timeout==")
@@ -144,6 +133,13 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
     try:
         # 네이밍
         new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+
+        # 원본디스크 ip를 dhcp로 교체
+        s = pxssh.pxssh()
+        s.login(guest_info.gnHostMachines.ip, USER)
+        s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (guest_info.ip, snap_info.ssh_id, "dhcp"))
+        s.logout()
+
         # 디스크 복사
         kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
 
@@ -154,6 +150,12 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
     except:
         snap_info.status = "Error"
         sql_session.commit()
+    finally:
+        # 원본디스크 ip를 dhcp로 교체
+        s = pxssh.pxssh()
+        s.login(guest_info.gnHostMachines.ip, USER)
+        s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (guest_info.ip, snap_info.ssh_id, "static"))
+        s.logout()
 
 
 def server_monitor(sql_session):
