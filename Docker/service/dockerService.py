@@ -83,6 +83,7 @@ class DockerService(object):
         if service_id[:5] == "Error":
             return service_id
         else:
+            time.sleep(2)
             return self.docker_service_ps(service_id)
 
     # 서비스 정지 (라 해 놓고 서비스 내 컨테이너 백업 후 서비스 삭제)
