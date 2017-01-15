@@ -42,12 +42,7 @@ def server_create(team_code, user_id, id, sql_session):
         #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
-        print(id+":processing set sshkey!!!")
-        s = pxssh.pxssh()
-        s.login(host_info.ip, USER)
-        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(ip) + " "+image_info.ssh_id)
-        s.logout()
-        print(id+":complete set sshkey!!!")
+        setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
 
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
@@ -65,6 +60,18 @@ def server_create(team_code, user_id, id, sql_session):
         print("error:"+e.message)
         vm_info.status="Error"
         sql_session.commit()
+
+def setSsh(host_ip, path, ip, ssh_id):
+    try:
+        print(id+":processing set sshkey!!!")
+        s = pxssh.pxssh()
+        s.login(host_ip, USER)
+        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(path) + "' " + str(ip) + " "+ssh_id)
+        s.logout()
+        print(id+":complete set sshkey!!!")
+    except IOError as e:
+        print(e)
+    pass
 
 
 def getIpAddress(name, host_ip):
