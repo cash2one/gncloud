@@ -6,7 +6,7 @@ import subprocess
 import datetime
 from pexpect import pxssh
 from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys
-from kvm.db.database import db_session, connection
+from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
 from kvm.util.config import config
 
@@ -36,12 +36,10 @@ def server_create(team_code, user_id, id, sql_session):
             print(id+":processing init ip!!!")
             ip = getIpAddress(internal_name, host_info.ip)
 
-        if len(ip) != 0:
-             print(id+":set init ip!!!")
-             setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
-
-
-        print(id+":complete set ip!!!")
+        # if len(ip) != 0:
+        #     print(id+":set init ip!!!")
+        #     setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
+        #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
         print(id+":processing set sshkey!!!")
@@ -135,24 +133,34 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
         new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
         # 원본디스크 ip를 dhcp로 교체
-        s = pxssh.pxssh()
-        s.login(guest_info.gnHostMachines.ip, USER)
-        s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (guest_info.ip, snap_info.ssh_id, "dhcp"))
+        #setChangDhcp(guest_info.gnHostMachines.ip ,guest_info.ip, snap_info.ssh_id, "dhcp")
 
         # 디스크 복사
         kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
 
-        # 원본디스크 ip를 static 교체
-        s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (guest_info.ip, snap_info.ssh_id, "static"))
-        s.logout()
+        # 원본디스크 ip를 dhcp로 교체
+        #setChangDhcp(guest_info.gnHostMachines.ip ,guest_info.ip, snap_info.ssh_id, "static")
 
         snap_info.filename = new_image_name+'.img'
         snap_info.status = "Running"
         snap_info.host_id = guest_info.gnHostMachines.id
         sql_session.commit()
-    except:
+    except Exception as e:
+        print(e.message)
         snap_info.status = "Error"
         sql_session.commit()
+
+def setChangDhcp(host_ip,ip ,ssh_id, type):
+    try:
+        s = pxssh.pxssh()
+        s.login(host_ip, USER)
+        s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (ip, ssh_id, type))
+        s.logout()
+    except pxssh.TIMEOUT:
+        print("==timeout==")
+        pass
+    except IOError as errmsg:
+        pass
 
 
 
