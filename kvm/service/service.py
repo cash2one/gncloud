@@ -79,7 +79,7 @@ def getIpAddress(name, host_ip):
     return ip
 
 
-def setStaticIpAddress(ip, host_ip, ssh_id, new_ip):
+def setStaticIpAddress(ip, host_ip, ssh_id):
     try:
         s = pxssh.pxssh()
         s.login(host_ip, USER)
