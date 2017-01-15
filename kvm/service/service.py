@@ -44,7 +44,7 @@ def server_create(team_code, user_id, id, sql_session):
                  cursor = connection.cursor()
                  cursor.callproc("GET_MAX_IP")
                  new_ip = cursor.fetchone()
-                 connection.close()
+                 print(id+":new ip="+new_ip)
 
              setStaticIpAddress(ip, host_info.ip, image_info.ssh_id, new_ip)
 
