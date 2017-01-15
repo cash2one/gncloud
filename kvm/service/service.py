@@ -143,6 +143,12 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
         # 디스크 복사
         kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
 
+        # 원본디스크 ip를 static 교체
+        s = pxssh.pxssh()
+        s.login(guest_info.gnHostMachines.ip, USER)
+        s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (guest_info.ip, snap_info.ssh_id, "static"))
+        s.logout()
+
         snap_info.filename = new_image_name+'.img'
         snap_info.status = "Running"
         snap_info.host_id = guest_info.gnHostMachines.id
@@ -150,12 +156,7 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
     except:
         snap_info.status = "Error"
         sql_session.commit()
-    finally:
-        # 원본디스크 ip를 dhcp로 교체
-        s = pxssh.pxssh()
-        s.login(guest_info.gnHostMachines.ip, USER)
-        s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (guest_info.ip, snap_info.ssh_id, "static"))
-        s.logout()
+
 
 
 def server_monitor(sql_session):
