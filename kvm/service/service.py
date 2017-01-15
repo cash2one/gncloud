@@ -138,14 +138,11 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
         s = pxssh.pxssh()
         s.login(guest_info.gnHostMachines.ip, USER)
         s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (guest_info.ip, snap_info.ssh_id, "dhcp"))
-        s.logout()
 
         # 디스크 복사
         kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
 
         # 원본디스크 ip를 static 교체
-        s = pxssh.pxssh()
-        s.login(guest_info.gnHostMachines.ip, USER)
         s.sendline(config.SCRIPT_PATH+"set_vm_dhcp.sh %s %s %s" % (guest_info.ip, snap_info.ssh_id, "static"))
         s.logout()
 
