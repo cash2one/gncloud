@@ -167,7 +167,7 @@ def doc_state(id):
             service.start_time = datetime.strptime(restart_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
             service.status = "Running"
             # 컨테이너 데이터 수정
-            service_container_list = ds.get_service_containers(service.internal_id)
+            service_container_list = ds.get_service_containers(restart_service[0]["ID"])
             for service_container in service_container_list:
                 node = GnHostMachines.query.filter_by(name=service_container['host_name']).first()
                 container = GnDockerContainers.query.filter_by(service_id=id, host_id=node.id).first()
