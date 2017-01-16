@@ -276,11 +276,11 @@ def doc_snap():
 
 
 # Docker 서비스 삭제
-def doc_delete(id):
+def doc_delete(id,sql_session):
     # 지정된 Docker 서비스를 삭제한다.
     try:
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-        service = GnVmMachines.query.filter_by(id=id, type="docker").first()
+        service = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
         # 서비스 삭제 (서비스 및 컨테이너가 삭제된다)
         result = ds.docker_service_rm(service.internal_id)
         for container in service.gnDockerContainers:
