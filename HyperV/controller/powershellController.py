@@ -83,7 +83,7 @@ def hvm_create(id, sql_session):
                     get_ip_count = get_ip_count + 1
                     get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
                 elif get_ip_count > 160:
-                    return jsonify(status=False, massage="VM에 ip를 할당할 수 없습니다.")
+                    return False
                 # elif get_vm_ip[:2] == "16":
                 #     time.sleep(5)
                 #     get_ip_count = get_ip_count + 1
@@ -118,12 +118,12 @@ def hvm_create(id, sql_session):
             sql_session.add(insert_monitor)
             sql_session.commit()
             sql_session.remove()
-            return jsonify(status=True)
+            return True
     except:
         vm_info.status = "Error"
         sql_session.commit()
         sql_session.remove()
-        return jsonify(status=True)
+        return True
 
 
 def hvm_snapshot():
