@@ -16,12 +16,11 @@ from Docker.util.hash import random_string
 
 # Docker Service 생성 및 실행
 # 서비스 생성 시에는 실행은 자동이다.
-def doc_create():
+def doc_create(id):
     sql_session = db_session
 
     #로직 변경
-    print("get request start")
-    id = request.json['id']
+    print("get id"+id)
     docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
 
     try:

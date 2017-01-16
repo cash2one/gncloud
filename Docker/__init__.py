@@ -19,7 +19,15 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 # --- VM 함수 --- #
 # Docker Service 생성 및 실행
 # create_vm
-app.add_url_rule("/vm/machine", view_func=doc_create, methods=['POST'])
+#app.add_url_rule("/vm/machine", view_func=doc_create, methods=['POST'])
+@app.route('/vm/machine', methods=['POST'])
+def create_vm():
+    team_code = session['teamCode']
+    user_id = session['userId']
+    id = request.json['id']
+    doc_create(id)
+    return jsonify(status=True)
+
 # Docker Service 상태변경
 # change_status
 # app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
