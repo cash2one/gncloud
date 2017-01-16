@@ -26,7 +26,7 @@ def monitor():
 app.add_url_rule("/manual", view_func=manual, methods=['GET'])
 # --- VM 함수 --- #
 # VM 생성 및 실행
-app.add_url_rule("/vm/machine", view_func=hvm_create, methods=['POST'])
+# app.add_url_rule("/vm/machine", view_func=hvm_create, methods=['POST'])
 # VM 스냅샷 생성
 app.add_url_rule("/vm/machine/snapshots", view_func=hvm_snapshot, methods=['POST'])
 # VM 상태변경
@@ -63,6 +63,9 @@ app.add_url_rule("/vm/images/<type>/<id>", view_func=hvm_image, methods=['GET'])
 #     return jsonify(status= True, message="success")
 
 
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 # Controller 상태 확인
 @app.route("/service/isAlive")
@@ -74,6 +77,12 @@ def isAlive():
 @app.route("/")
 def index():
     return redirect(url_for("isAlive"))
+
+@app.route("/vm/machine", methods=['POST'])
+def hvmcreate():
+    id=request.json['id']
+    return jsonify(status=True, list=hvm_create(id,db_session))
+
 
 @app.route('/monitor', methods=['GET'])
 def cronMnitor():
