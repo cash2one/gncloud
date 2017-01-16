@@ -117,10 +117,12 @@ def hvm_create():
             insert_monitor = GnMonitor(vm_id, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
             db_session.add(insert_monitor)
             db_session.commit()
+            db_session.remove()
             return jsonify(status=True)
     except:
         vm_info.status = "Error"
         db_session.commit()
+        db_session.remove()
         return jsonify(status=True)
 
 
