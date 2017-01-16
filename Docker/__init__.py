@@ -39,7 +39,6 @@ app.add_url_rule('/vm/machine/snapshots', view_func=doc_snap, methods=['POST'])
 # app.add_url_rule("/vm/machines/<id>", view_func=doc_delete, methods=['DELETE'])
 @app.route('/vm/machines/<id>', methods=['DELETE'])
 def delete_vm(id):
-    id = request.json['id']
     doc_delete(id,db_session)
     return jsonify(status=True)
 
