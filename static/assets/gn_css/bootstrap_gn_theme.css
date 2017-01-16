@@ -66,6 +66,7 @@ li{
 .container:after,
 .container-fluid:after,
 .container-login:after,
+.sett-detail:after,
 .gn-container:after
 { content:""; clear:both; display:block; }
 
@@ -175,6 +176,8 @@ textarea.gn-form-control{
 }
 
 .gn-disable-op{opacity: 0.3;}
+
+td:nth-of-type(1) img{width: 35px;}
 
 /* ============================= gncloud BUTTON STYLE ============================= */
 .btn-success {
@@ -522,10 +525,19 @@ li.nav-link.active>a:hover,
     right: 0;
 }
 
+/*인스턴스 리스트/이미지에들어가는*/
+.dropdown-menu.gn-dropdown.gn-list{
+    position: absolute;
+    top: 70%;
+    left : -30px;
+    min-width: 120px;
+    margin: 0;
+}
+
 .dropdown-menu.gn-dropdown{
     position: absolute;
     top: 65%;
-    left: -30px;
+    right : 0px;
     min-width: 120px;
     margin: 0;
 }
@@ -1469,15 +1481,15 @@ ul.gn-sett-graph > li:nth-of-type(3){
 
 .sett-detail dt,
 .sett-detail dd,
-.sett-detail div,
 .sett-detail span
 {line-height: 37px; float: left;}
-.sett-detail dt{text-align: right; width: 86px;}
-.sett-detail dd{margin-left: 32px;}
+
+.sett-detail dt{text-align: right; width: 77px;}
+.sett-detail dd{margin-left: 32px; width: 50px;}
 .gn-description-list.sett-detail > div{padding: 2px 0; margin-left: 5px;}
-.gn-description-list.sett-detail > div > span{margin: 0px 5px;}
-.gn-description-list.sett-detail > div > span.sett-detail-span{width: 40px;}
-.gn-description-list.sett-detail > div > input{width: 85px;  margin: 0px 5px; float: left;} 
+.gn-description-list.sett-detail > div > span{margin-right: 41px;}
+.gn-description-list.sett-detail > div > span.sett-detail-span{width: 60px; margin-right: 5px;}
+.gn-description-list.sett-detail > div > input{width: 120px;  margin: 0px 5px; float: right;} 
 
 /*시스템 > 이미지 관리*/
 .img-icon-sett{
@@ -1800,9 +1812,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
     }
     
     /* ======== gncloud 로그인 ======== */
-    .gn-title-login span{
-        font-size: 25px;
-    }
+
     
     /* ======== gncloud 대시보드 ======== */
     .dash-margin-box > div.col-sm-6:nth-of-type(1){
@@ -1858,14 +1868,14 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
     /* ======== gncloud 공통 ======== */   
     /*리스트 왼쪽 첫번째 "이름"*/
-    .gn-tdody > tr > td > a{
+    .gn-tdody > tr > td > a.gn-table-ellip{
         width: 170px;
     }
     
     /*생성페이지*/
     #snap > form > .btn-group > div{
     padding: 0px; 
-}   
+    }   
 
      
     

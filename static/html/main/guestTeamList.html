@@ -1,0 +1,62 @@
+<h1>설정</h1>
+
+<!--왼쪽 메뉴-->
+<ul class="nav nav-pills gn-left-menu col-xs-12 col-sm-2">
+    <li class="left-title">시스템</li>
+    <li><a data-toggle="pill" href="#/guestSystemList">프로필</a></li>
+    <li class="active"><a data-toggle="pill" href="#/guestTeamList">팀 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestCluster">클러스터 관리</a></li>
+    <li><a data-toggle="pill" ng-click="click('image-sett')">이미지 관리</a></li>
+</ul>
+<div class="tab-content col-xs-12 col-sm-10">
+    <!--시스템 > 팀 관리-->
+    <div id="team-sett" class="">
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>팀 관리</h2>
+
+                    <!--팀 관리 목록-->
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table table gn-table">
+                            <thead>
+                            <tr>
+                                <th class="">팀명</th>
+                                <th class="">관리자</th>
+                                <th class="">팀원</th>
+                                <th class="hidden-xs hidden-sm">생성일</th>
+                                <th class="hidden-xs">리소스</th>
+                                <th><!--더보기--></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="select in table">
+                                <td><a href="#/guestTeamDetail?code={{select.team_code}}">{{select.team_name}}</a></td>
+                                <td>{{select.owner_name}}
+                                    <br>
+                                    <span>{{select.owner_id}}</span>
+                                </td>
+                                <td>
+                                    <div>
+                                        <div>
+                                            <span><span class="tag" data-toggle="tooltip" title="{{select.users}}" tooltip>+{{select.userslen}}</span></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="hidden-xs hidden-sm"><span data-toggle="tooltip" title="{{select.create_date}}" tooltip>{{select.create_time_diff}}</span></td>
+                                <td class="hidden-xs">{{select.cpu_use_cnt}}CORE/{{select.mem_use_cnt}}/{{select.disk_use_cnt}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div> <!--class="gn-sett-margin-box"-->
+        </div> <!--class="gn-box profile-team"-->
+    </div><!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
+
+
+
+
+
+</div>
