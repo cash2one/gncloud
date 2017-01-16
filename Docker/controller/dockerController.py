@@ -14,6 +14,17 @@ from Docker.util.config import config
 from Docker.util.hash import random_string
 
 
+def doc_select_id(id):
+    sql_session = db_session
+    docker_info = None
+    try:
+        docker_info = sql_session.query(GnVmMachines).filter_by(GnVmMachines.id == id).one()
+    except Exception as e:
+        time.sleep(5)
+        docker_info = sql_session.query(GnVmMachines).filter_by(GnVmMachines.id == id).one()
+
+    return docker_info
+
 # Docker Service 생성 및 실행
 # 서비스 생성 시에는 실행은 자동이다.
 def doc_create():
@@ -31,7 +42,7 @@ def doc_create():
 
     #로직 변경
     id = request.json['id']
-    docker_info = sql_session.query(GnVmMachines).filter_by(GnVmMachines.id == id).one()
+    docker_info = doc_select_id(id)
 
     try:
         image_id = docker_info.image_id
