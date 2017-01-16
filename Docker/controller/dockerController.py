@@ -16,8 +16,7 @@ from Docker.util.hash import random_string
 
 # Docker Service 생성 및 실행
 # 서비스 생성 시에는 실행은 자동이다.
-def doc_create(id):
-    sql_session = db_session
+def doc_create(id,sql_session):
 
     #로직 변경
     print("get id"+id)
@@ -107,13 +106,11 @@ def doc_create(id):
             docker_info.os_sub_ver = image.os_ver
 
             sql_session.commit()
-            db_session.remove()
             return jsonify(status=True, message="서비스를 생성하였습니다.", result=docker_info.to_json())
     except Exception as e:
         sql_session.rollback()
         docker_info.status = "Error"
         sql_session.commit()
-        db_session.remove()
         logger.error(e)
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 

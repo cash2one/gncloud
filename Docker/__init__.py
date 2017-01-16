@@ -25,7 +25,7 @@ def create_vm():
     team_code = session['teamCode']
     user_id = session['userId']
     id = request.json['id']
-    doc_create(id)
+    doc_create(id,db_session)
     return jsonify(status=True)
 
 # Docker Service 상태변경
