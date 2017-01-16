@@ -14,35 +14,15 @@ from Docker.util.config import config
 from Docker.util.hash import random_string
 
 
-def doc_select_id(id):
-    sql_session = db_session
-    docker_info = None
-    try:
-        docker_info = sql_session.query(GnVmMachines).filter_by(GnVmMachines.id == id).one()
-    except Exception as e:
-        time.sleep(5)
-        docker_info = sql_session.query(GnVmMachines).filter_by(GnVmMachines.id == id).one()
-
-    return docker_info
-
 # Docker Service 생성 및 실행
 # 서비스 생성 시에는 실행은 자동이다.
 def doc_create():
     sql_session = db_session
 
-    # request 파라미터 중 userName과 teamCode 값이 별도로 오지 않으면 세션에 저장된 값을 입력한다.
-    # if 'userName' in request.json:
-    #     author_id = request.json['userName']
-    # else:
-    #     author_id = session['userName']
-    # if 'teamCode' in request.json:
-    #     team_code = request.json['teamCode']
-    # else:
-    #     team_code = session['teamCode']
-
     #로직 변경
+    print("get request start")
     id = request.json['id']
-    docker_info = doc_select_id(id)
+    docker_info = sql_session.query(GnVmMachines).filter_by(GnVmMachines.id == id).one()
 
     try:
         image_id = docker_info.image_id
@@ -51,24 +31,22 @@ def doc_create():
         disk = docker_info.disk
         memory = "%sB" % docker_info.memory
         tag = docker_info.tag
-
-        # image_id = request.json['id']
-        # name = request.json['name']
-        # tag = request.json['tag']
-        # cpu = request.json['cpu']
-        # disk = request.json['hdd']
-        # memory = "%sMB" % request.json['memory']
+        print(docker_info.id+":request ok")
 
         logger.debug("id: %s, image_id: %s, name: %s, tag: %s, cpu: %s, disk: %s, memory: %s" %
                      (id, image_id, name, tag, cpu, disk, memory))
         # --- //파라미터 정리 ---
         # --- Docker Service (밖에서 보기엔 컨테이너 생성) 생성 ---
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        print(docker_info.id+":get class ok")
+
         # Docker Swarm manager 값을 가져온다.
         dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
         # Docker Swarm Service를 생성한다.
         # docker_service_create: Docker Service 생성
+        print(docker_info.id+":start create")
         docker_service = ds.docker_service_create(id=id, image_id=image_id, cpu=cpu, memory=memory)
+        print(docker_info.id+":end create")
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
         if docker_service is None:
             return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
