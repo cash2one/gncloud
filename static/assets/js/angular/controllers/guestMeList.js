@@ -235,13 +235,13 @@ angular
                     }
                 });
         };
+        $scope.lits={};
         $scope.update = function (id, code, action, name) {  //팀장이 팀원 등급권한
             var url = '/api/manager/vm/account/teamset/'+id+'/'+code+'/'+action;
             var method = "PUT";
-            $scope.lits={}
             $scope.lits.type=action;
             if (action == "dropout") {
-                var returnvalue = confirm(name+"을 탈퇴시기겠습니까 ?");
+                var returnvalue = confirm(name+"을 탈퇴시키겠습니까 ?");
                 if (returnvalue == true){
                     $http({
                         method:'DELETE',
@@ -260,28 +260,31 @@ angular
                             console.log(status);
                         });
                 }else{
-                    $scope.teamtable();
+
                 }
 
-            }else if(action == "approve" || action == 'reset'){
-                $http({
-                    method: method,
-                    url: url,
-                    headers: {'Content-Type': 'application/json; charset=utf-8'}
-                })
-                    .success(function(data, status, headers, config) {
-                        if (data.status == true) {
-                            alert(name + data.message);
-                            $scope.teamtable();
-                        } else {
-                            //alert(data.message);
-                        }
+            }else if(action == "approve"){
+                var returnvalue = confirm(name + "의 가입을 승인하시겠습니까 ?");
+                if(returnvalue==true){
+                    $http({
+                        method: method,
+                        url: url,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
                     })
-                    .error(function(data, status, headers, config) {
-                        console.log(status);
-                    });
+                        .success(function(data, status, headers, config) {
+                            if (data.status == true) {
+                                alert(name + data.message);
+                                $scope.teamtable();
+                            } else {
+                                //alert(data.message);
+                            }
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log(status);
+                        });
+                }
             }else if(action == 'change'){
-                var retrunvalue = confirm(name+"을 팀장으로 변경하시겠습니까 ?");
+                var retrunvalue = confirm(name+"을 관리자로 변경하시겠습니까 ?");
                 if(retrunvalue == true){
                     $http({
                         method: method,
@@ -300,7 +303,28 @@ angular
                             console.log(status);
                         });
                 }
+            }else if(action == "reset"){
+                var retrunvalue = confirm(name+"의 비밀번호를 초기화 시키겠습니까 ?");
+                if(returnvalue == true){
+                    $http({
+                        method: method,
+                        url: url,
+                        headers: {'Content-Type': 'application/json; charset=utf-8'}
+                    })
+                        .success(function(data, status, headers, config) {
+                            if (data.status == true) {
+                                alert(name + data.message);
+                                $scope.teamtable();
+                            } else {
+                                //alert(data.message);
+                            }
+                        })
+                        .error(function(data, status, headers, config) {
+                            console.log(status);
+                        });
+                }
             }
+
 
 
         };

@@ -95,12 +95,6 @@ angular
                 });
         }
         $scope.teamtable();
-        $scope.actions = [
-            {name: '승인', type: 'approve'},
-            {name: '등급변경', type: 'change'},
-            {name: '비밀번호초기화', type: 'reset'},
-            {name: '팀탈퇴', type: 'dropout'}
-        ];
         $scope.lits={};
         $scope.update = function (id, code, action, name) {  //팀장이 팀원 등급권한
             var url = '/api/manager/vm/account/teamset/'+id+'/'+code+'/'+action;

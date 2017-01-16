@@ -332,7 +332,7 @@ def approve(id, code, type):
 def delete(id, code):
     team_delete(id, code)
     session['teamCheck']='N'
-    return jsonify(status=True, message="success")
+    return jsonify(status=True, message="을 탈퇴 시켰습니다.")
 
 
 @app.route('/vm/images/<type>', methods=['GET'])
