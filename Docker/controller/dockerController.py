@@ -22,7 +22,7 @@ def doc_create():
     #로직 변경
     print("get request start")
     id = request.json['id']
-    docker_info = sql_session.query(GnVmMachines).filter_by(GnVmMachines.id == id).one()
+    docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
 
     try:
         image_id = docker_info.image_id
@@ -108,11 +108,13 @@ def doc_create():
             docker_info.os_sub_ver = image.os_ver
 
             sql_session.commit()
+            sql_session.remove()
             return jsonify(status=True, message="서비스를 생성하였습니다.", result=docker_info.to_json())
     except Exception as e:
         sql_session.rollback()
         docker_info.status = "Error"
         sql_session.commit()
+        sql_session.remove()
         logger.error(e)
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
