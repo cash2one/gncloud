@@ -31,7 +31,7 @@ def doc_create():
 
     #로직 변경
     id = request.json['id']
-    docker_info = sql_session.query(GnVmMachines).filter_by(id=id).one()
+    docker_info = sql_session.query(GnVmMachines).filter_by(GnVmMachines.id == id).one()
 
     try:
         image_id = docker_info.image_id
