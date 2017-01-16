@@ -63,6 +63,9 @@ app.add_url_rule("/vm/images/<type>/<id>", view_func=hvm_image, methods=['GET'])
 #     return jsonify(status= True, message="success")
 
 
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 # Controller 상태 확인
 @app.route("/service/isAlive")
@@ -74,6 +77,12 @@ def isAlive():
 @app.route("/")
 def index():
     return redirect(url_for("isAlive"))
+
+@app.route("/vm/machine", methods=['POST'])
+def hvmcreate():
+    id=request.json['id']
+    return jsonify(status=True, list=hvm_create(id,db_session))
+
 
 @app.route('/monitor', methods=['GET'])
 def cronMnitor():

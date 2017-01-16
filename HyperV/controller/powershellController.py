@@ -28,16 +28,16 @@ def manual():
     return jsonify(result=ps.send(script))
 
 # VM 생성 및 실행
-def hvm_create():
+def hvm_create(id, sql_session):
     try:
-        vm_id = request.json['id']
-        vm_info =db_session.query(GnVmMachines).filter(GnVmMachines.id == vm_id).first()
+        vm_id = id
+        vm_info =sql_session.query(GnVmMachines).filter(GnVmMachines.id == vm_id).first()
 
         host_id =vm_info.host_id
-        host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
+        host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
         ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
 
-        base_image_info = db_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).first()
+        base_image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).first()
 
         image_path = "/original/"
         if base_image_info.sub_type == 'snap':
@@ -115,14 +115,14 @@ def hvm_create():
             vm_info.status = ps.get_state_string(start_vm['State'])
 
             insert_monitor = GnMonitor(vm_id, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
-            db_session.add(insert_monitor)
-            db_session.commit()
-            db_session.remove()
+            sql_session.add(insert_monitor)
+            sql_session.commit()
+            sql_session.remove()
             return jsonify(status=True)
     except:
         vm_info.status = "Error"
-        db_session.commit()
-        db_session.remove()
+        sql_session.commit()
+        sql_session.remove()
         return jsonify(status=True)
 
 
