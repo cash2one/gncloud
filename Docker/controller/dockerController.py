@@ -296,7 +296,7 @@ def doc_delete(id,sql_session):
             # 볼륨 상태 수정
             for volume in service.gnDockerVolumes:
                 volume.status = "Removed"
-            db_session.commit()
+            sql_session.commit()
     except Exception as err:
         logger.error(err)
     if result == service.internal_id:
