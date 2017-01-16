@@ -36,7 +36,12 @@ app.add_url_rule("/vm/machines/<id>", view_func=doc_state, methods=['PUT'])
 app.add_url_rule('/vm/machine/snapshots', view_func=doc_snap, methods=['POST'])
 # Docker Service 삭제
 # delete_vm
-app.add_url_rule("/vm/machines/<id>", view_func=doc_delete, methods=['DELETE'])
+# app.add_url_rule("/vm/machines/<id>", view_func=doc_delete, methods=['DELETE'])
+@app.route('/vm/machines/<id>', methods=['DELETE'])
+def delete_vm(id):
+    doc_delete(id,db_session)
+    return jsonify(status=True)
+
 # Docker Service 리스트
 app.add_url_rule("/vm/machines", view_func=doc_vm_list, methods=['GET'])
 # Docker 이미지 생성 및 업로드
