@@ -23,7 +23,8 @@
     ```
     $ cd ./gncloud-install/gncloud-platform-controller
     $ chmod +x *.sh
-    $ ./gncloud-platform-controller.sh ip port # (docker registry ip & port)
+    $ ./gncloud-platform-controller.sh ip port
+        * setting for docker registry ip & port
        (예: ./gncloud-platform-controller.sh 192.168.1.204 5000)
     ```
 
@@ -98,6 +99,8 @@
     ```
     mkdir -p /usr/local/source
     cd /usr/local/source; git clone https://github.com/gncloud/gncloud.git
+    mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.org
+    cp /usr/local/source/gncloud/sites-available/nginx.conf /etc/nginx/.
     systemctl restart nginx
     ```
 
