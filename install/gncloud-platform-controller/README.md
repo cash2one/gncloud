@@ -98,6 +98,8 @@
     ```
     mkdir -p /usr/local/source
     cd /usr/local/source; git clone https://github.com/gncloud/gncloud.git
+    mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.org
+    cp /usr/local/source/gncloud/sites-available/nginx.conf /etc/nginx/.
     systemctl restart nginx
     ```
 
