@@ -5,6 +5,24 @@ angular
         $("#windows").hide();
         $("#ssh").hide();
         $("#snap").hide();
+        $http({
+            method: 'GET',
+            url: '/api/manager/vm/createsize',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data) {
+                    $scope.size = data.list;
+                }
+                else {
+                    if(data.message != null) {
+                        alert(data.message)
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
         $scope.selectType = function(type){
             if(type == 'docker'){
                 $http({
@@ -162,12 +180,8 @@ angular
                 $scope.data.sub_type = data.sub_type;
             }
         };
-        $scope.func = function(cpu, memory, hdd){
-            $scope.data.cpu = cpu
-            $scope.data.memory = memory
-            $scope.data.hdd = hdd
-            $scope.data.name = hdd
-
+        $scope.func = function(data){
+            $scope.data.size_id = data.id;
         }
         $scope.submit = function() {
             $scope.data.tag = $("#tag").val();
@@ -188,7 +202,7 @@ angular
                         }else if(data.value == 'password'){
                             $scope.data_value = data.value;
                             $("#pasword").focus();
-                        }else if(data.value == 'cpu'){
+                        }else if(data.value == 'size_id'){
                             $scope.data_value = data.value;
                             $("#cpu").focus();
                         }else if(data.value == 'image_id'){

@@ -508,3 +508,23 @@ class GnDockerImageDetail(Base):
     def to_json(self):
         return dict(id=self.id, image_id=self.image_id, arg_type=self.arg_type,
                     argument=self.argument, description=self.description, status=self.status)
+
+class GnVmSize(Base):
+    __tablename__ = 'GN_VM_SIZE'
+    id = Column(Integer, primary_key=True, nullable=False)
+    cpu = Column(Numeric, primary_key=False, nullable=False)
+    mem = Column(Numeric, primary_key=False, nullable=False)
+    disk = Column(Numeric, primary_key=False, nullable=False)
+
+    def __init__(self, id=id, cpu=None, mem=None, disk=None):
+        self.id = id
+        self.cpu = cpu
+        self.mem = mem
+        self.disk = disk
+
+    def __repr__(self):
+        return '< ID %r / Cpu %r / Mem %r / Disk %r />' \
+                %(self.id, self.cpu, self.mem, self.disk)
+
+    def __json__(self):
+        return ['id', 'cpu', 'mem', 'disk']

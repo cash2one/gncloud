@@ -4,7 +4,6 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
-
 from datetime import timedelta
 import datetime
 
@@ -18,7 +17,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
                             , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys \
-                            , vm_list_snap
+                            , vm_list_snap, create_size
 from db.database import db_session
 from Manager.util.config import config
 
@@ -61,9 +60,7 @@ def create_vm():
     password=""
     sshkeys=""
     name=""
-    cpu=""
-    memory=""
-    disk=""
+    size_id=""
     image_id=""
     type = ""
     sub_type =""
@@ -71,10 +68,8 @@ def create_vm():
     user_id = session['userId']
     if 'vm_name' in request.json:
         name = request.json['vm_name']
-    if 'cpu' in request.json:
-        cpu = request.json['cpu']
-        memory = request.json['memory']
-        disk = request.json['hdd']
+    if 'size_id' in request.json:
+        size_id = request.json['size_id']
     if 'id' in request.json:
         image_id = request.json['id']
     if 'sshkeys' in request.json:
@@ -89,23 +84,23 @@ def create_vm():
     if name !="":
         if type != "":
             if image_id !="":
-                if cpu != "" and disk !="" and memory !="":
+                if size_id !="":
                     if type=="hyperv" and password != "" and sub_type=="base":
-                        result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        result = server_create(name,size_id, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="kvm" and sshkeys != "":
-                        result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="docker":
-                        result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="hyperv" and sub_type=="snap":
-                        result = server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     else:
                         return jsonify(status=True, value="password")
                 else:
-                    return jsonify(status=True, value="cpu")
+                    return jsonify(status=True, value="size_id")
             else:
                 return jsonify(status=True, value="image_id")
         else:
@@ -509,6 +504,10 @@ def saveBaseImageImportFile():
 
 
     return jsonify(status=True, message="success")
+
+@app.route('/vm/createsize', methods=['GET'])
+def createsize():
+    return jsonify(status=True, list=create_size(db_session))
 
 @app.route('/vm/image',methods=['POST'])
 def saveBaseImageExceptFile():

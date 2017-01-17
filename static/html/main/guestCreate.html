@@ -85,37 +85,13 @@
 
         <form>
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default gn-btn-default inp-box-size" ng-click="func(1,536870912,21474836480)" ng-class="{'gn-input-error':data_value == 'cpu'}">
+                <label class="btn btn-default gn-btn-default inp-box-size" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
                     <input id="cpu" name="" value="1" type="radio">
-                    <div class="size-info">1 CPU</div>
+                    <div class="size-info">{{size.cpu}} CPU</div>
                     <div class="border-bottom"></div>
-                    <div class="size-info">512 MB</div>
+                    <div class="size-info">{{size.mem}}</div>
                     <div class="border-bottom"></div>
-                    <div class="size-info">20 GB</div>
-                </label>
-                <label class="btn btn-default gn-btn-default inp-box-size" ng-click="func(1,1073741824,42949672960)" ng-class="{'gn-input-error':data_value == 'cpu'}">
-                    <input name="" value="2" type="radio">
-                    <div class="size-info">1 CPU</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">1024 MB</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">40 GB</div>
-                </label>
-                <label class="btn btn-default gn-btn-default inp-box-size" ng-click="func(2,536870912,21474836480)" ng-class="{'gn-input-error':data_value == 'cpu'}">
-                    <input name="" value="2" type="radio">
-                    <div class="size-info">2 CPU</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">512 MB</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">20 GB</div>
-                </label>
-                <label class="btn btn-default gn-btn-default inp-box-size" ng-click="func(2,1073741824,21474836480)" ng-class="{'gn-input-error':data_value == 'cpu'}">
-                    <input name="" value="2" type="radio">
-                    <div class="size-info">2 CPU</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">1024 MB</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">20 GB</div>
+                    <div class="size-info">{{size.disk}}</div>
                 </label>
                 <p ng-show="data_value =='cpu' " class="error-message">cpu / memory / disk 의 크기를 선택해주세요.</p>
             </div>

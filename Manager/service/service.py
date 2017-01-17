@@ -8,19 +8,20 @@ import humanfriendly
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
                              , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
-                             , GnCluster,GnDockerImageDetail
+                             , GnCluster,GnDockerImageDetail, GnVmSize
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue
 
 
-def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys, tag, type, password ,sql_session):
+def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password ,sql_session):
 
     # host 선택 룰
     # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
     host_id = None
-    max_cpu = int(cpu)
-    max_mem = int(memory)
-    max_disk = int(disk)
+    size_info = sql_session.query(GnVmSize).filter(GnVmSize.id == size_id).one()
+    max_cpu = int(size_info.cpu)
+    max_mem = int(size_info.mem)
+    max_disk = int(size_info.disk)
 
     team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
 
@@ -85,17 +86,17 @@ def server_create(name, cpu, memory, disk, image_id, team_code, user_id, sshkeys
             sql_session.commit()
             break
     if(type == "hyperv"):
-        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+        vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status='Starting', tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                               , host_id=host_id, hyperv_pass=password)
     elif(type=="kvm"):
-        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+        vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status='Starting', tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                                   , host_id=host_id, ssh_key_id=sshkeys)
     else:
-        vm_machine = GnVmMachines(id=id, name=name, cpu=cpu, memory=memory, disk=disk
+        vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status='Starting', tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                                   , host_id="")
@@ -900,3 +901,10 @@ def team_table_info(team_code,sql_sesseion): #시스템 팀 테이블 리스트 
         team_table = {"team_info":team_info, "user_list":user_list, "quto_info":quato_info}
         result.append(team_table);
     return result
+
+def create_size(sql_session):
+    list= sql_session.query(GnVmSize).all()
+    for vm in list:
+        vm.mem = convertHumanFriend(vm.mem)
+        vm.disk = convertHumanFriend(vm.disk)
+    return list
