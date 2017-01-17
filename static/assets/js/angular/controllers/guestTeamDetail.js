@@ -199,13 +199,16 @@ angular
             })
                 .success(function(data) {
                     if (data.status == true) {
-                        alert("변경되었습니다")
+                        alert("변경되었습니다");
                         $scope.profile();
                         $scope.resose();
                     }
-                    else {
-                        alert(data.message)
+                    else if(data.status==false){
+                        alert("잘못입력하셨습니다.");
                     }
+                })
+                .error(function(data, status, headers, config) {
+                        alert("");
                 });
         }
         //******************************팀 모달 *********************//

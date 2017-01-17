@@ -4,6 +4,7 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
+
 from datetime import timedelta
 import datetime
 
@@ -400,7 +401,11 @@ def changeteamnamesystem(code):
     team_cpu =request.json['cpu']
     team_memory = request.json['mem']
     team_disk = request.json['disk']
-    return jsonify(status=True, message="success", list=select_putsys(team_name,code,team_cpu, team_memory, team_disk))
+    list=select_putsys(team_name,code,team_cpu, team_memory, team_disk)
+    if(list == 'True'):
+        return jsonify(status=True, message="success")
+    else:
+        return jsonify(status=False)
 
 @app.route('/vm/account/teamtable', methods=['GET'])
 def teamshow():

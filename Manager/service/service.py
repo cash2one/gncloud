@@ -10,7 +10,7 @@ from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonito
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
                              , GnCluster,GnDockerImageDetail, GnVmSize
 from Manager.db.database import db_session
-from Manager.util.hash import random_string, convertToHashValue
+from Manager.util.hash import random_string, convertToHashValue, convertsize
 
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password ,sql_session):
@@ -391,7 +391,6 @@ def getQuotaOfTeam(team_code, sql_session):
                  , 'team_user_count':team_user_cnt, 'user_list':user_list
                  , 'vm_kvm_per':vm_kvm_per, 'vm_hyperv_per':vm_hyperv_per
                  , "image_type_list":image_type_list};
-    print ("=====================time==============================")
     return quato_info
 
 def list_user_sshkey(team_code, sql_session):
@@ -520,12 +519,15 @@ def select_put(team_name, team_code): #팀 수정
 
 def select_putsys(team_name, team_code, team_cpu, team_memory, team_disk): #팀 시스템 수정 / cpu / memory / disk
     lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()
-    lit.team_name = team_name
-    lit.cpu_quota = team_cpu
-    lit.mem_quota = int(team_memory)*1024**3
-    lit.disk_quota = int(team_disk)*1024**4
-    db_session.commit()
-    return True
+    try:
+        lit.team_name = team_name
+        lit.cpu_quota = team_cpu
+        lit.mem_quota = convertsize(team_memory)
+        lit.disk_quota = convertsize(team_disk)
+        db_session.commit()
+        return True
+    except:
+        return False
 
 def team_table(sql_sesseion): #시스템 팀 테이블 리스트 / 리소스 소스
     list = sql_sesseion.query(GnTeam).filter(GnTeam.author_id != 'System').order_by(GnTeam.create_date.desc()).all()
@@ -784,7 +786,7 @@ def insertImageInfoDocker(name,os_ver,tag,icon,port,env,vol,sql_session):
 
     sql_session.commit()
 
-def updateImageInfoDocker(id,name,os_ver,tag,icon,port,env,vol,sql_session):
+def updateImageInfoDocker(id,name,os_ver,tag,icon,port,env,vol,sql_session): #컨테이너 이미지 관리
     try:
         image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
         image_info.view_name = name
@@ -843,7 +845,7 @@ def updateImageInfoDocker(id,name,os_ver,tag,icon,port,env,vol,sql_session):
     sql_session.commit()
 
 
-def deleteImageInfoDocker(id,sql_session):
+def deleteImageInfoDocker(id,sql_session): #dockerimage 삭제용 / 시스템 > 이미지관리
     image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one();
     image_info.status = "Removed"
     sql_session.commit()
@@ -902,7 +904,7 @@ def team_table_info(team_code,sql_sesseion): #시스템 팀 테이블 리스트 
         result.append(team_table);
     return result
 
-def create_size(sql_session):
+def create_size(sql_session): # 인스턴스 생성 size
     list= sql_session.query(GnVmSize).all()
     for vm in list:
         vm.mem = convertHumanFriend(vm.mem)
