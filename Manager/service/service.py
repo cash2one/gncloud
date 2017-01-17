@@ -418,9 +418,9 @@ def team_list(user_id, sql_sesssion):
 
 def container(type,team_code ,sql_sesssion):
     if type == "base":
-        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).all()
+        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.status != "Removed").all()
     else:
-        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.team_code ==team_code).all()
+        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.team_code ==team_code).filter(GnDockerImages.status != "Removed").all()
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list

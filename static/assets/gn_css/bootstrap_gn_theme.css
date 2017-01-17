@@ -1150,14 +1150,14 @@ ul.gn-tag-group > li{
 
 
 /* ========== gncloud 인스턴스 > 생성 HTML ========== */
-#snap > form > .btn-group{
+#snap > form > .btn-group,
+form > .btn-group{
     width: 100%;
 }
 
 #snap > form > .btn-group > div{
     padding: 0px 5px;
 }
-   
 
 .gn-btn-default{
     padding: 12px 12px;
@@ -1167,7 +1167,7 @@ ul.gn-tag-group > li{
     color: #6f6f6f;
     border: 2px solid rgba(215,215,215,.5); 
     border-radius: 3px !important;
-    margin: 0px 10px 10px 0px;  
+    margin: 0px 8px 8px 0px;  
 }
 
 .gn-btn-snap{
