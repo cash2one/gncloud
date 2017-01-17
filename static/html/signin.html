@@ -83,11 +83,9 @@
                         if (data.test == 'success') {
                             location.href="/index.html"
                         }else if(data.test =='user_id'){
-                            $('#i').show();
-                            $('#p').hide();
+                            alert("이미 있는 아이디 입니다.");
                         }else if(data.test == 'password'){
-                            $('#p').show();
-                            $('#i').hide();
+                            alert("비밀번호가 틀립니다.")
                         }else if(data.test == 'not'){
 
                         }
