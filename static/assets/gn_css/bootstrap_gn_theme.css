@@ -82,6 +82,10 @@ li{
     border-radius: 3px;
     margin-bottom: 10px;
 }
+.gn-input.error{
+    border :1px solid #ff0000;
+    box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+}
 
 .gn-form-control{
     height: 37px;
@@ -666,6 +670,10 @@ li.nav-link.active>a:hover,
     text-align: left;
     color: #E60202;
     margin: 5px 0 2px 0;
+}
+
+label#user_name-error.error,label#user_id-error.error,label#password-error.error,label#password_re-error.error{
+    color : #ff0000;
 }
 
 p.error-message{

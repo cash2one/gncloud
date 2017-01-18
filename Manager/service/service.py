@@ -131,8 +131,14 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
 def server_change_status(id, status, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    vm_info.status = status
-    sql_session.commit()
+    if(vm_info.status == "Error"):
+        sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
+        sql_session.commit()
+        return False
+    else:
+        vm_info.status = status
+        sql_session.commit()
+        return True
 
 def vm_list(sql_session, team_code):
     list = sql_session.query(GnVmMachines)\
@@ -428,9 +434,9 @@ def team_list(user_id, sql_sesssion):
 
 def container(type,team_code ,sql_sesssion):
     if type == "base":
-        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).all()
+        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.status != "Removed").all()
     else:
-        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.team_code ==team_code).all()
+        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.team_code ==team_code).filter(GnDockerImages.status != "Removed").all()
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
