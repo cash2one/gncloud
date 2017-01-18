@@ -17,7 +17,7 @@
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
                     <h2>클러스터 관리</h2>
-                    <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#cluster" >등록</button>
+                    <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-show="cluster.registYn == 'Y'" data-toggle="modal" data-target="#cluster" >등록</button>
 
                     <!-- 클러스터 Modal -->
                     <div class="modal fade" id="cluster" role="dialog">
@@ -112,13 +112,13 @@
                                             </dd>
                                             <dt class="">MAX CPU</dt>
                                             <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_cpu" required></dd>
-                                            <dt class="">MEMORY</dt>
+                                            <dt class="">MEMORY(GB)</dt>
                                             <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.mem" required></dd>
-                                            <dt class="">MAX MEMORY</dt>
+                                            <dt class="">MAX MEMORY<br/>(GB)</dt>
                                             <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_mem" required></dd>
-                                            <dt class="">DISK</dt>
+                                            <dt class="">DISK(GB)</dt>
                                             <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.disk" required></dd>
-                                            <dt class="">MAX DISK</dt>
+                                            <dt class="">MAX DISK(GB)</dt>
                                             <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.max_disk" required></dd>
                                         </dl>
                                     </form>

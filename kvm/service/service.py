@@ -219,7 +219,7 @@ def add_user_sshkey(team_code, name):
         now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         path = config.SSHKEY_PATH+ now
 
-        result = subprocess.check_output ("ssh-keygen -f "+ path +" -P ''", shell=True)
+        result = subprocess.check_output("ssh-keygen -f "+ path +" -P ''", shell=True)
         fingerprint = result.split("\n")[4].split(" ")[0]
 
         # db 저장

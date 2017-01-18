@@ -12,6 +12,15 @@ class Config:
 
     DB_URL = ""
     IMAGE_PATH = ""
+    RUN_STATUS = ""
+    REMOVE_STATUS = ""
+    DELETING_STATUS = ""
+    STARTING_STATUS = ""
+    ERROR_STATUS = ""
+    SUSPEND_STATUS = ""
+    KVM_HOST_POOL_IMAGE_PATH = ""
+    HYPERV_HOST_POOL_IMAGE_PATH = ""
+    NGINX_CONF_PATH = ""
 
     def __init__(self, path="../conf/config.conf"):
         config_section = "DEFAULT"
@@ -30,6 +39,15 @@ class Config:
         result = parser.read(config_file)
         self.DB_URL = parser.get(config_section, "DB_URL")
         self.IMAGE_PATH = parser.get(config_section, "IMAGE_PATH")
+        self.RUN_STATUS = parser.get(config_section, "RUN_STATUS")
+        self.REMOVE_STATUS = parser.get(config_section, "REMOVE_STATUS")
+        self.STARTING_STATUS = parser.get(config_section, "STARTING_STATUS")
+        self.DELETING_STATUS = parser.get(config_section, "DELETING_STATUS")
+        self.ERROR_STATUS = parser.get(config_section, "ERROR_STATUS")
+        self.SUSPEND_STATUS = parser.get(config_section, "SUSPEND_STATUS")
+        self.KVM_HOST_POOL_IMAGE_PATH = parser.get(config_section, "KVM_HOST_POOL_IMAGE_PATH")
+        self.HYPERV_HOST_POOL_IMAGE_PATH = parser.get(config_section, "HYPERV_HOST_POOL_IMAGE_PATH")
+        self.NGINX_CONF_PATH = parser.get(config_section, "NGINX_CONF_PATH")
 
 local_custom_file = os.environ.get('CONFIG_FILE_PATH')
 if local_custom_file is None:
