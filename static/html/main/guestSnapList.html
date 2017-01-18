@@ -143,7 +143,7 @@
                         <a>{{con.view_name}}</a>
                     </td>
                     <td>{{con.os_ver}}</td>
-                    <td class="hidden-xs" style="text-align: left; padding-left: 50px;"><span class="tag">{{con.tag}}</span></td>
+                    <td class="hidden-xs">{{con.tagFirst}}<span ng-show="con.tag.length > 1" data-toggle="tooltip" title="{{con.tag}}" tooltip><span class="tag">{{con.tagcount}}</span></span></td>
                     <td class="hidden-xs"></td>
                 </tr>
                 </tbody>

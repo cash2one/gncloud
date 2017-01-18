@@ -59,7 +59,9 @@
         <li>
             <img src="/gn_images/detail_tag_pencil.png" alt="태그 수정" data-toggle="modal" data-target="#tag-modal">
         </li>
-        <li ng-repeat="item in tag_list track by $index">#{{ item }}</li>
+        <li ng-repeat="item in tag_list track by $index">
+            <span ng-show="item.length > 1">#{{ item }}</span>
+        </li>
     </ul><!-- class="tag-group li-style"-->
 
     <!-- Modal : 태그 수정 -->
