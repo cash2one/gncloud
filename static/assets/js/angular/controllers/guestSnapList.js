@@ -12,11 +12,8 @@ angular
         $("#snap").hide();
         $scope.snap =function(data){
             if(data == 'mac'){
-                $("#tab").fadeIn();
-                $("#sab").fadeIn();
-                $("#snap").hide();
-                $("#image").fadeIn();
                 $("#container").hide();
+                $("#machine").fadeIn();
             }
             if(data == 'snap'){
                 $("#snap").fadeIn();
@@ -30,10 +27,7 @@ angular
                 $("#container").hide();
             }
             if(data == 'container'){
-                $("#tab").hide();
-                $("#sab").hide();
-                $("#snap").hide();
-                $("#image").hide();
+                $("#machine").hide();
                 $("#container").fadeIn();
                 $scope.container();
             }
