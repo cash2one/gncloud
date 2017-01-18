@@ -2,7 +2,6 @@
 
 __author__ = 'jhjeon'
 
-from apscheduler.scheduler import Scheduler
 from flask import Flask, redirect, url_for
 from datetime import timedelta
 
@@ -91,8 +90,8 @@ def cronMnitor():
 
 if __name__ == '__main__':
     app.config['DEBUG'] = False
-    cron = Scheduler(daemon=True)
-    cron.add_interval_job(monitor, seconds=10)
-    cron.start()
+    # cron = Scheduler(daemon=True)
+    # cron.add_interval_job(monitor, seconds=10)
+    # cron.start()
     app.run(port=8082)
     #app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)

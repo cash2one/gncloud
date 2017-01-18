@@ -4,6 +4,7 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
+
 from datetime import timedelta
 import datetime
 
@@ -17,7 +18,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
                             , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys \
-                            , vm_list_snap, create_size
+                            , vm_list_snap, create_size, snapshot_delete
 from db.database import db_session
 from Manager.util.config import config
 
@@ -442,6 +443,14 @@ def getHostMachines():
 def getHostMachineInfo(id):
     return jsonify(status=True, message="success", info=hostMachineInfo(id,db_session))
 
+@app.route('/vm/images/<id>', methods=['PUT'])
+def snapshotsdelete(id):
+    id =id
+    check = snapshot_delete(id, db_session)
+    if(check == True):
+        return jsonify(status=True)
+    else:
+        return jsonify(status=False)
 @app.route('/vm/cluster/node/<id>',methods=['DELETE'])
 def removeHostMachine(id):
     deleteHostMachine(id,db_session)

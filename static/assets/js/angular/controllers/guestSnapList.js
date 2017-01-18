@@ -115,21 +115,33 @@ angular
             {name: '삭제', type: 'delete'}
         ];
         $scope.update = function (id, action, ty,index) {
-            if (action.type == "delete") {
-                 var  url = '/api/'+ty+'/vm/images/' + id;
-                 var  method = 'DELETE';
-            }
-
             $http({
-                method: method,
-                url: url,
-                data: action,
+                method: 'PUT',
+                url: '/api/manager/vm/images/'+id,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert(name + "상태가 변경되었습니다");
-                        $scope.snap_list.splice(index, 1);
+                        $scope.snapshotsdelete(ty,id);
+                    } else {
+                        alert("삭제 되었습니다.");
+                        $scope.snapList();
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    console.log(status);
+                });
+        };
+        $scope.snapshotsdelete=function(ty,id){
+            $http({
+                method: 'DELETE',
+                url: '/api/'+ty+'/vm/images/' + id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function(data, status, headers, config) {
+                    if (data.status == true) {
+                        alert("삭제 되었습니다.");
+                        $scope.snapList();
                     } else {
                         alert(data.message);
                     }
@@ -137,9 +149,7 @@ angular
                 .error(function(data, status, headers, config) {
                     console.log(status);
                 });
-
-        };
-
+        }
         $scope.data = {};
         $scope.update_image = function (data) {
             if (data != null) {

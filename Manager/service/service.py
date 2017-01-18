@@ -125,6 +125,17 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
     sql_session.commit();
     return {"status":True, "value":ord_id, "snap_id":vm_id}
 
+def snapshot_delete(id, sql_session):
+    snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id ==id).one()
+    if(snap_info.filename == ""):
+        sql_session.query(GnVmImages).filter(GnVmImages.id ==id).delete()
+        sql_session.commit()
+        return False
+    elif(snap_info.filename != None):
+        snap_info.status = "Deleting"
+        sql_session.commit()
+        return True
+
 def server_change_status(id, status, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
