@@ -92,6 +92,8 @@ angular
                 .success(function(data) {
                     if (data.status == true) {
                         $scope.deleteInstance();
+                    }else if(data.status == false){
+                        window.location.href='#/guestList'
                     } else {
                         if(data.value != null) {
                             alert(data.value)

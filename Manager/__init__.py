@@ -4,7 +4,6 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
-
 from datetime import timedelta
 import datetime
 
@@ -123,8 +122,11 @@ def create_snapshots():
 def change_status():
     id = request.json['id']
     status = request.json['status']
-    server_change_status(id, status, db_session)
-    return jsonify(status=True, message="success")
+    list=server_change_status(id, status, db_session)
+    if(list == True):
+        return jsonify(status=True, message="success")
+    else:
+        return jsonify(status=False)
 
 @app.route('/vm/machines', methods=['GET'])
 def guest_list():

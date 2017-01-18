@@ -128,8 +128,14 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
 def server_change_status(id, status, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    vm_info.status = status
-    sql_session.commit()
+    if(vm_info.status == "Error"):
+        sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
+        sql_session.commit()
+        return False
+    else:
+        vm_info.status = status
+        sql_session.commit()
+        return True
 
 def vm_list(sql_session, team_code):
     list = sql_session.query(GnVmMachines).filter(GnVmMachines.status != "Removed").filter(GnVmMachines.team_code == team_code).order_by(GnVmMachines.create_time.desc()).all()
