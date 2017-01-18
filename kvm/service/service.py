@@ -5,6 +5,7 @@ import subprocess
 
 import datetime
 from pexpect import pxssh
+
 from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
@@ -131,8 +132,9 @@ def server_change_status(id, status, sql_session):
 
 
 def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
-
-    snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
+    print id
+    print image_id
+    snap_info = db_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     try:
         # 네이밍
