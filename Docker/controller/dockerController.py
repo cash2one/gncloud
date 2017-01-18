@@ -100,7 +100,7 @@ def doc_create(id,sql_session):
             docker_info.status = "Running"
             docker_info.internal_id = docker_service[0]['ID']
             docker_info.internal_name = docker_service[0]['Spec']['Name']
-            docker_info.create_time = datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+            #docker_info.create_time = datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
             docker_info.os = "docker"
             docker_info.os_ver = image.os
             docker_info.os_sub_ver = image.os_ver
