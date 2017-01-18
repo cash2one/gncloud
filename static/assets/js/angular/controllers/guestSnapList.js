@@ -58,16 +58,15 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.snap_list = data.list.guest_list;
-                        for (var i = 0; i < data.list.guest_list.length; i++) {
-                            var tagArr = data.list.guest_list[i].tag.split(",");
+                        for(var i = 0 ; i < data.list.snap_list.length ; i++){
+                            $scope.snap_list[i].create_time_diff = dateModifyService.modifyDate(data.list.guest_list[i].create_time);
+                            var tagArr = data.list.snap_list[i].tag.split(",");
                             if (tagArr.length - 1 > 0) {
                                 $scope.snap_list[i].tagFirst = tagArr[0];
                                 $scope.snap_list[i].tagcount = "+" + (tagArr.length - 1);
                             } else {
                                 $scope.snap_list[i].tagFirst = data.list.guest_list[i].tag;
-                            }
-                        for(var i = 0 ; i < data.list.snap_list.length ; i++){
-                            $scope.snap_list[i].create_time_diff = dateModifyService.modifyDate(data.list.guest_list[i].create_time);
+                                }
                         }
 
                     }
