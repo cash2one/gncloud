@@ -4,7 +4,6 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
-
 from datetime import timedelta
 import datetime
 
@@ -117,7 +116,7 @@ def create_snapshots():
     image_id = request.json['ord_id']
     type =request.json['type']
     result= server_create_snapshot(image_id, name, user_id, team_code, type, db_session)
-    return jsonify(status=result["status"], value=result["value"], snap_id=result["snap_id"])
+    return jsonify(status=result["status"], ord_id=result["ord_id"], snap_id=result["snap_id"])
 
 @app.route('/vm/machine', methods=['PUT'])
 def change_status():

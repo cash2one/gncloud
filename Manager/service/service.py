@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
-import math
 
 __author__ = 'NaDa'
 
 import subprocess
+
 from sqlalchemy import func
 import datetime
 import humanfriendly
+from flask import render_template
+
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
                              , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
                              , GnCluster,GnDockerImageDetail, GnVmSize
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue, convertsize
-from flask import render_template
 from Manager.util.config import config
+
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password ,sql_session):
 
@@ -123,10 +125,10 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
 
     guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename="", ssh_id=image_info.ssh_id
                             , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status=config.STARTING_STATUS, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status=config.STARTING_STATUS,host_id=guest_info.host_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(guest_snap)
-    sql_session.commit();
-    return {"status":True, "value":ord_id, "snap_id":vm_id}
+    sql_session.commit()
+    return {"status":True,"ord_id":ord_id, "snap_id":vm_id}
 
 def snapshot_delete(id, sql_session):
     snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id ==id).one()

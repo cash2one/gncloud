@@ -203,11 +203,12 @@ class GnVmImages(Base):
     pool_id = Column(String(8), primary_key=False, nullable=False)
     status = Column(String(10), primary_key=False, nullable=False)
     ssh_id = Column(String(10), primary_key=False, nullable=False)
+    host_id = Column(String(8), primary_key=False, nullable=False)
 
 
     def __init__(self,id=id, name=None, filename=None, type=None, ssh_id=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
-                 , os_bit=None, team_code=None, author_id=None, pool_id= None, create_time= None, status=None):
+                 , os_bit=None, team_code=None, author_id=None, pool_id= None, create_time= None, status=None, host_id=None):
         self.id=id
         self.name = name
         self.filename = filename
@@ -224,14 +225,15 @@ class GnVmImages(Base):
         self.create_time = create_time
         self.status = status
         self.ssh_id = ssh_id
+        self.host_id =host_id
 
 
 
     def __repr__(self):
-        return '< ID %r / Name %r / Filename %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_Ver %r / Os_subVer %r / Os_bit %r / Team_code %r / Author_id %r / Create_time %r / Pool_id %r/ Status %r / >'\
-                % (self.id, self.name, self.filename, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time, self.pool_id, self.status)
+        return '< ID %r / Name %r / Filename %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_Ver %r / Os_subVer %r / Os_bit %r / Team_code %r / Author_id %r / Create_time %r / Pool_id %r/ Status %r / Host_id %r/ >'\
+                % (self.id, self.name, self.filename, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time, self.pool_id, self.status, self.host_id)
     def __json__(self):
-        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id', 'status']
+        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id', 'status', 'host_id']
 
 
 class GnSshKeys(Base):

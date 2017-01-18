@@ -171,7 +171,7 @@ angular
             })
                 .success(function(data){
                 if(data.status ==true){
-                    $scope.createSnap(data.value, data.snap_id);
+                    $scope.createSnap(data.ord_id, data.snap_id);
                 }else{
                     if(data.value != null) {
                         alert(data.value)
