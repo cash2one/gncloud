@@ -133,6 +133,9 @@ angular
                 });
         };
         $scope.snapshotsdelete=function(ty,id){
+            $timeout(function(){
+                $scope.snapList();
+            },2000,true);
             $http({
                 method: 'DELETE',
                 url: '/api/'+ty+'/vm/images/' + id,
@@ -179,7 +182,7 @@ angular
         $scope.createSnap = function (ord_id,vm_id) {
             $timeout(function(){
                 $scope.snapList();
-            },1000,true);
+            },2000,true);
             $http({
                 method: 'POST',
                 url: "/api/" + $scope.data.type + "/vm/machine/snapshots",
