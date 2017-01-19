@@ -9,16 +9,16 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#dashboard">
-                <img src="/gn_images/gncloud_private_header_logo.png" alt="지앤클라우드 프라이빗 홈">
+                <img src="/gn_images/gncloud_private_header_logo.png" alt="지앤클라우드 프라이빗 홈" ng-click="select(1)">
             </a>
         </div><!--class="navbar-header"-->
 
         <div id="navbar" class="navbar-collapse collapse gn-header-collapsed">
             <!--왼쪽메뉴-->
-            <ul class="nav navbar-nav">
-                <li class="nav-link"><a href="#dashboard">대시보드</a></li>
-                <li class="nav-link"><a href="#/guestList">인스턴스</a></li>
-                <li class="nav-link"><a href="#guestSnapList/">이미지</a></li>
+            <ul class="nav navbar-nav" id="navigation">
+                <li class="nav-link" ng-class="{'active':1 == selected}" ng-click="select(1)"><a href="#dashboard">대시보드</a></li>
+                <li class="nav-link" ng-class="{'active':2 == selected}" ng-click="select(2)"><a href="#/guestList">인스턴스</a></li>
+                <li class="nav-link" ng-class="{'active':3 == selected}" ng-click="select(3)"><a href="#guestSnapList/">이미지</a></li>
             </ul><!--class="nav navbar-nav"-->
             <ul class="nav navbar-nav navbar-right">
                 <!-- ========== 모바일에서 보여지는 dropdown ========== -->

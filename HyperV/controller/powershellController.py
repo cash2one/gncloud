@@ -379,7 +379,7 @@ def vm_monitor(sql_session):
         #hdd = float(hdd_usage['FileSize'])/float(hdd_usage['Size'])
         hdd = float(hdd_usage['FileSize'])
 
-        mem = round((float(monitor['MemoryAssigned']))/float(seq.memory), 4) * 100
+        mem = float(monitor['MemoryAssigned'])
         cpu = round(float(monitor['CPUUsage'])*float((host.cpu/seq.cpu)), 4)
 
         script = '$vm = Get-vm -id '+ seq.internal_id+';'

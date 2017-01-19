@@ -7,6 +7,8 @@
         <table class="table table gn-table">
             <thead>
                 <tr>
+                    <th></th>
+                    <th></th>
                     <th class="col-sm-3 col-xs-9">이름</th>
                     <th class="col-sm-3 hidden-xs">사양</th>
                     <th class="col-sm-1 hidden-sm hidden-xs">타입</th>
@@ -20,15 +22,17 @@
             </thead>
             <tbody class="gn-tdody">
             <tr ng-repeat="list in guest_list">
-                <td class="visible-xs-3">
+                <td class="first-td-dot">
                     <div class="gn-dot-play" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Running' || list.status=='Reboot'"></div>
-                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Suspend'" src="/gn_images/gn_dot_doing.png" alt="">
                     <div class="gn-dot-stop" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Stop'"></div>
                     <div class="gn-dot-error" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Error'"></div>
+                </td>
+                <td class="second-td-img">
+                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Suspend'" src="/gn_images/gn_dot_doing.png" alt="">
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status != 'Error'" src="/gn_images/gn_icon_{{list.os}}.png" alt="">
-
                     <img ng-show="list.status == 'Starting' || list.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
-
+                </td>
+                <td class="visible-xs-3">
                     <a href="#/guestDetail?id={{list.id}}" class="gn-table-ellip"> {{ list.name }} </a>
                 </td>
                 <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }} Memory/{{ list.disk }} Disk</td>

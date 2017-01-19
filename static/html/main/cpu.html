@@ -43,7 +43,7 @@
             data: {
                         labels: data_info.x_info,
                         datasets: [{
-                            label: "My Second dataset",
+                            label: "Value",
                             data: data_info.cpu_per_info,
                             borderColor: 'rgba(233, 30, 99, 0.75)',
                             backgroundColor: 'rgba(233, 30, 99, 0.3)',
@@ -59,9 +59,13 @@
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero:true
-                            ,max: 100
+                            max:100,
+                            min:0,
+                            callback: function(label) {
+                                return label+'%';
+                            },
                         }
+
                     }]
                 }
             }

@@ -84,7 +84,7 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
     #id 생성
     while True:
         id = random_string(8)
-        check_info = GnId.query.filter(GnId.id == id).first();
+        check_info = sql_session.query(GnId).filter(GnId.id == id).first()
         if not check_info:
             id_info = GnId(id,type)
             sql_session.add(id_info)
@@ -190,6 +190,7 @@ def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
 
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
+    mem_info={}
     disk_info = {}
     if monitor_info is not None:
         total = vm_info.disk
@@ -198,9 +199,14 @@ def vm_info(sql_session, id):
         rest_disk = total - use;
         disk_info = {"total":convertHumanFriend(total), "use":convertHumanFriend(use), "rest_disk":convertHumanFriend(rest_disk), "disk_per_info":disk_per_info}
 
+        mem_total = vm_info.memory
+        mem_use = int(monitor_info.mem_usage)
+        mem_per_info = int((mem_use*100)/mem_total)
+        rest_mem = mem_total - mem_use;
+        mem_info = {"mem_total":convertHumanFriend(mem_total), "mem_use":convertHumanFriend(mem_use), "rest_mem":convertHumanFriend(rest_mem), "mem_per_info":mem_per_info}
     vm_info.disk = convertHumanFriend(vm_info.disk)
     vm_info.memory = convertHumanFriend(vm_info.memory)
-    info = {"vm_info":vm_info, "disk_info":disk_info}
+    info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info}
     return info
 
 def vm_info_graph(sql_session, id):

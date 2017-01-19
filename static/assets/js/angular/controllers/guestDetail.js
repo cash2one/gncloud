@@ -16,6 +16,7 @@ angular
                     $scope.vm_data = data.info.vm_info;
                     $scope.tag_list = data.info.vm_info.tag.split(",");
                     $scope.disk_data = data.info.disk_info;
+                    $scope.mem_data = data.info.mem_info;
                 }
                 else {
                     alert(data.message)
