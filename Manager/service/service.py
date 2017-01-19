@@ -14,7 +14,7 @@ from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonito
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
                              , GnCluster,GnDockerImageDetail, GnVmSize
 from Manager.db.database import db_session
-from Manager.util.hash import random_string, convertToHashValue, convertsize
+from Manager.util.hash import random_string, convertToHashValue, convertsize, convertcore
 from Manager.util.config import config
 
 
@@ -1006,3 +1006,29 @@ def create_size(sql_session): # 인스턴스 생성 size
         vm.mem = convertHumanFriend(vm.mem)
         vm.disk = convertHumanFriend(vm.disk)
     return list
+
+def price_list(sql_seesion):
+    price_info = sql_seesion.query(GnVmSize).all()
+    for price in price_info:
+        price.mem = convertHumanFriend(price.mem)
+        price.disk = convertHumanFriend(price.disk)
+    return price_info
+
+def price_put(cpu, mem, disk, price , sql_session):
+    byte_cpu = convertcore(cpu)
+    byte_mem = convertsize(mem)
+    byte_disk= convertsize(disk)
+    while True:
+        id = random_string(8)
+        check_info = sql_session.query(GnVmSize).filter(GnVmSize.id == id).first()
+        if not check_info:
+            break
+
+    price_info = GnVmSize(id=id, cpu=byte_cpu, mem=byte_mem, disk=byte_disk, price=price)
+    sql_session.add(price_info)
+    sql_session.commit()
+
+def price_del(id,sql_session):
+    sql_session.query(GnVmSize).filter(GnVmSize.id == id).delete()
+    sql_session.commit()
+
