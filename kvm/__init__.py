@@ -23,7 +23,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 ### cron job start ###
 
 @timer(seconds=10)
-def job_function():
+def job_function(signal_number):
     server_monitor(db_session)
 
 ### cron job end ###
