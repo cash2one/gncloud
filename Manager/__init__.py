@@ -169,7 +169,7 @@ def login():
         session['teamCheck']=""
         return jsonify(status=True, test='yes')
 
-    elif(user_info.user_id != None and user_info.GnUserTeam.comfirm == "N" ):
+    elif(user_info != None and user_info.GnUserTeam.comfirm == "N" ):
         session['userId'] = user_info.GnUser.user_id
         session['userName'] = user_info.GnUser.user_name
         session['teamOwner'] = ""
