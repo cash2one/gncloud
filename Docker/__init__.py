@@ -3,7 +3,7 @@ __author__ = 'jhjeon'
 import traceback
 from datetime import timedelta
 from flask import Flask, redirect, url_for, request
-from apscheduler.scheduler import Scheduler
+from uwsgi_tasks import *
 from util.config import config
 from util.logger import logger
 from util.json_encoder import AlchemyEncoder
@@ -15,6 +15,16 @@ app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 app.json_encoder = AlchemyEncoder
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+
+
+### cron job start ###
+
+@timer(seconds=60)
+def monitor():
+    service_monitoring(db_session)
+
+### cron job end ###
+
 
 # --- VM 함수 --- #
 # Docker Service 생성 및 실행
@@ -80,10 +90,6 @@ def cronMnitor():
     return jsonify(status=True, message="success")
 
 
-def interval_status_update():
-    service_monitoring(db_session)
-
-
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
@@ -96,8 +102,4 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
-    # cron = Scheduler(daemon=True)
-    # cron.add_interval_job(interval_status_update, seconds=180)
-    # cron.start()
-    app.config['DEBUG'] = False
     app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
