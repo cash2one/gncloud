@@ -205,6 +205,27 @@ angular
                     }
                 });
         };
+        $scope.snap_list_info=function(id){
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/snapshot/list/'+id,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function(data, status, headers, config) {
+                    if (data.status == true) {
+                        if(data.list.snap_info.ssh_id=="") {
+                            data.list.snap_info.ssh_id="-";
+                        }
+                        $scope.snapshot=data.list.snap_info;
+                        $scope.snapshot.user_name = data.list.user_info.user_name;
+                    } else {
+
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    console.log(status);
+                });
+        }
         $scope.refresh = function(){
             $scope.snap_list = Array.prototype.slice.call($scope.snap_list).reverse();
         }

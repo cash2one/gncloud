@@ -7,7 +7,7 @@
     <li><a data-toggle="pill" href="#/guestTeamList">팀 관리</a></li>
     <li><a data-toggle="pill" href="#/guestCluster">클러스터 관리</a></li>
     <li><a data-toggle="pill" href="#/guestImage">이미지 관리</a></li>
-    <li class="active"><a data-toggle="pill" href="#/guestPrice">과금</a></li>
+    <li class="active"><a data-toggle="pill" href="#/guestPrice">리소스 단위 관리</a></li>
 </ul>
 
 <!--오른쪽 메뉴-->
@@ -17,7 +17,7 @@
         <div class="gn-box">
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
-                    <h2>과금</h2>
+                    <h2>리소스 단위 관리</h2>
                     <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#cluster" >등록</button>
 
                     <!-- 클러스터 Modal -->
@@ -37,7 +37,7 @@
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">CPU</label>
                                             <div class="col-sm-9" ng-class="{ 'has-error' : clusterForm.cpu.$invalid && !clusterForm.cpu.$pristine }">
                                                 <input type="text" class="form-control" name="cpu" placeholder="1 CORE" ng-model="data.cpu" required>
-                                                <p ng-show="clusterForm.ip.$invalid && !clusterForm.cpu.$pristine" class="help-block">CPU 개수를 입력하세요.</p>
+                                                <p ng-show="clusterForm.ip.$invalid && !clusterForm.cpu.$pristine" class="help-block">CPU 갯수를 입력하세요.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -95,7 +95,9 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li ng-repeat="sel in actions"><a ng-click="update(price.id)">{{sel.name}}</a></li>
+                                        <li ng-repeat="sel in actions">
+                                            <a ng-click="update(price.id)">{{sel.name}}</a>
+                                        </li>
                                     </ul>
                                 </td>
                             </tr>

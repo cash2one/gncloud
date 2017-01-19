@@ -4,6 +4,7 @@ __author__ = 'jhjeon'
 
 from flask import Flask, redirect, url_for
 from datetime import timedelta
+from uwsgi_tasks import *
 
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
@@ -14,11 +15,16 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 
-def shutdown_session(exception=None):
-    db_session.remove()
+### cron job start ###
 
+@timer(seconds=60)
 def monitor():
     vm_monitor(db_session)
+
+### cron job end ###
+
+def shutdown_session(exception=None):
+    db_session.remove()
 
 
 # PowerShell Script Manual 실행: (Script) | ConvertTo-Json
@@ -89,9 +95,4 @@ def cronMnitor():
     return jsonify(status=True, message="success")
 
 if __name__ == '__main__':
-    app.config['DEBUG'] = False
-    # cron = Scheduler(daemon=True)
-    # cron.add_interval_job(monitor, seconds=10)
-    # cron.start()
     app.run(port=8082)
-    #app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)

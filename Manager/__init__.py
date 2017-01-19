@@ -4,6 +4,7 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
+
 from datetime import timedelta
 import datetime
 
@@ -11,13 +12,13 @@ from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
 from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
                             , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete, createteam_list, comfirm_list, teamwon_list, checkteam, signup_team, select, select_put, team_table \
+                            , team_delete, createteam_list, comfirm_list, teamwon_list, signup_team, select, select_put, team_table \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot\
                             , hostMachineList, insertImageInfo, selectImageInfo, selectImageInfo, updateImageInfo, deleteImageInfo \
                             , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
                             , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys \
-                            , vm_list_snap, create_size, snapshot_delete, price_list, price_put, price_del
+                            , vm_list_snap, create_size, snapshot_delete, price_list, price_put, price_del, snap_list_info, logout_info
 from db.database import db_session
 from Manager.util.config import config
 
@@ -153,25 +154,24 @@ def login():
     user_id = request.json['login_id']
     password = request.json['login_pw']
     user_info = login_list(user_id, password, db_session)
-    team_info = checkteam(user_id, db_session)
-    if(user_info != None and team_info == None ):
-        session['userId'] = user_info.user_id
-        session['userName'] = user_info.user_name
+    if(user_info != None and user_info.GnUserTeam == None ):
+        session['userId'] = user_info.GnUser.user_id
+        session['userName'] = user_info.GnUser.user_name
         session['teamOwner'] = ""
         session['teamCode'] = ""
         session['teamCheck']="N"
         return jsonify(status=True, test='no')
-    elif(user_info != None and team_info.comfirm == "Y"):
-        session['userId'] = user_info.user_id
-        session['userName'] = user_info.user_name
-        session['teamCode'] = team_info.team_code
-        session['teamOwner'] = team_info.team_owner
+    elif(user_info != None and user_info.GnUserTeam.comfirm == "Y"):
+        session['userId'] = user_info.GnUser.user_id
+        session['userName'] = user_info.GnUser.user_name
+        session['teamCode'] = user_info.GnUserTeam.team_code
+        session['teamOwner'] = user_info.GnUserTeam.team_owner
         session['teamCheck']=""
         return jsonify(status=True, test='yes')
 
-    elif(user_info != None and team_info.comfirm == "N" ):
-        session['userId'] = user_info.user_id
-        session['userName'] = user_info.user_name
+    elif(user_info.user_id != None and user_info.GnUserTeam.comfirm == "N" ):
+        session['userId'] = user_info.GnUser.user_id
+        session['userName'] = user_info.GnUser.user_name
         session['teamOwner'] = ""
         session['teamCode'] = ""
         session['teamCheck']="Y"
@@ -196,6 +196,7 @@ def signup_list():
     return jsonify(status=False, test='not')
 @app.route('/vm/guestLogout', methods=['GET'])
 def logout():
+    logout_info(session['userId'],session['teamCode'],db_session)
     session.clear()
     return jsonify(status=True, message="success")
 
@@ -602,6 +603,9 @@ def deleteBaseImageDocker(id):
     deleteImageInfoDocker(id, db_session)
     return jsonify(status=True, message="success")
 
+@app.route('/vm/snapshot/list/<id>',methods=['GET'])
+def snaplistinfo(id):
+    return jsonify(status=True, message="success", list=snap_list_info(id, db_session))
 
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]

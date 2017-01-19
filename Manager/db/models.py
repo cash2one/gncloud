@@ -58,7 +58,7 @@ class GnVmMachines(Base):
     os_sub_ver = Column(String(20), primary_key=False, nullable=True)
     os_bit = Column(String(2), primary_key=False, nullable=True)
     team_code = Column(String(50), primary_key=False, nullable=True)
-    author_id = Column(String(15), primary_key=False, nullable=False)
+    author_id = Column(String(15), ForeignKey('GN_USERS.user_id'))
     create_time = Column(DateTime, default=datetime.datetime.now())
     start_time = Column(DateTime, default=datetime.datetime.now())
     stop_time = Column(DateTime, default=datetime.datetime.now())
@@ -68,6 +68,7 @@ class GnVmMachines(Base):
     ssh_key_id = Column(Integer, primary_key=False, nullable=False)
     hyperv_pass= Column(String(50), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
+    gnUser = relationship('GnUser')
 
     def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None
                  , cpu=None, memory=None, disk=None, ip=None, host_id=None
@@ -230,10 +231,10 @@ class GnVmImages(Base):
 
 
     def __repr__(self):
-        return '< ID %r / Name %r / Filename %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_Ver %r / Os_subVer %r / Os_bit %r / Team_code %r / Author_id %r / Create_time %r / Pool_id %r/ Status %r / Host_id %r/ >'\
-                % (self.id, self.name, self.filename, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time, self.pool_id, self.status, self.host_id)
+        return '< ID %r / Name %r / Filename %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_Ver %r / Os_subVer %r / Os_bit %r / Team_code %r / Author_id %r / Create_time %r / Pool_id %r/ Status %r / Host_id %r/ Ssh_id %r/ >'\
+                % (self.id, self.name, self.filename, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time, self.pool_id, self.status, self.host_id, self.ssh_id)
     def __json__(self):
-        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id', 'status', 'host_id']
+        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id', 'status', 'host_id', 'ssh_id']
 
 
 class GnSshKeys(Base):
@@ -519,8 +520,7 @@ class GnVmSize(Base):
     disk = Column(Numeric, primary_key=False, nullable=False)
     price = Column(String(11), primary_key=False, nullable=False)
 
-    def __init__(self, id=id, cpu=None, mem=None, disk=None, price=None):
-        self.id = id
+    def __init__(self, cpu=None, mem=None, disk=None, price=None):
         self.cpu = cpu
         self.mem = mem
         self.disk = disk
@@ -532,3 +532,23 @@ class GnVmSize(Base):
 
     def __json__(self):
         return ['id', 'cpu', 'mem', 'disk', 'price']
+
+class GnLoginHist(Base):
+    __tablename__='GN_USER_ACCESS_HISTORY'
+    user_id = Column(String(50), primary_key=True, nullable=False)
+    team_code = Column(String(10), primary_key=False, nullable=False)
+    action=Column(String(7), primary_key=False, nullable=False)
+    action_time= Column(DateTime, primary_key=True, default=datetime.datetime.now())
+
+    def __init__(self, user_id=None, team_code=None, action=None, action_time=None ):
+        self.user_id=user_id
+        self.team_code=team_code
+        self.action=action
+        self.action_time = action_time
+
+    def __repr__(self):
+        return '<User_id %r / Team_code %r / Action %r / Action_time %r / >'\
+                %(self.user_id, self.team_code, self.action, self.action_time)
+
+    def __json__(self):
+        return ['user_id', 'team_code', 'action', 'action_time']
