@@ -81,7 +81,8 @@
                         <table class="table table gn-table">
                             <thead>
                             <tr>
-                                <th class="col-xs-4">이름</th>
+                                <th></th>
+                                <th class="">이름</th>
                                 <th class="col-sm-2 hidden-xs">OS</th>
                                 
                                 <th class="col-sm-2 hidden-sm hidden-xs">타입</th>
@@ -91,10 +92,11 @@
                             </thead>
                             <tbody class="gn-tdody">
                             <tr ng-repeat="snap in snap_list" ng-class="{'tr-on-error':snap.status =='Error'}">
-                                <td>
-                                    <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
+                                <td><img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                                     <img ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
                                     <img ng-show="list.status != 'Error'" src="/gn_images/gn_icon_{{snap.os}}.png" alt="">
+                                </td>
+                                <td class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="snap_list_info(snap.id)">
                                     <a>{{snap.name}}</a>
                                 </td>
                                 <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
@@ -115,6 +117,51 @@
                             </tr>
                             </tbody>
                         </table>
+                        <div class="modal fade" id="teamModal" role="dialog">
+                            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+                            <div class="modal-dialog form-horizontal">
+                                <div class="modal-content col-sm-10 col-sm-offset-1">
+                                    <div class="modal-header gn-modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">스냅샷 상세 정보</h4>
+                                    </div>
+                                    <div class="modal-body gn-modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">이름</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{snapshot.name}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">파일 이름</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{snapshot.filename}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">OS</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{snapshot.os}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">BIT</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{snapshot.os_bit}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">SSH_ID</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{snapshot.ssh_id}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">생성자</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{snapshot.user_name}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">생성일</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{snapshot.create_time}}</p>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div> <!--class="modal-content"-->
+                            </div> <!--class="modal-dialog modal-sm"-->
+                        </div>
                     </div> <!--컨테이너 목록 class="table-responsive"-->
                 </div> <!--class="" 2.스냅샷 목록 박스-->
             </div> <!--스냅샷-->
