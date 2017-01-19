@@ -520,8 +520,7 @@ class GnVmSize(Base):
     disk = Column(Numeric, primary_key=False, nullable=False)
     price = Column(String(11), primary_key=False, nullable=False)
 
-    def __init__(self, id=id, cpu=None, mem=None, disk=None, price=None):
-        self.id = id
+    def __init__(self, cpu=None, mem=None, disk=None, price=None):
         self.cpu = cpu
         self.mem = mem
         self.disk = disk

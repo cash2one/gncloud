@@ -1019,13 +1019,8 @@ def price_put(cpu, mem, disk, price , sql_session):
     byte_cpu = convertcore(cpu)
     byte_mem = convertsize(mem)
     byte_disk= convertsize(disk)
-    while True:
-        id = random_string(8)
-        check_info = sql_session.query(GnVmSize).filter(GnVmSize.id == id).first()
-        if not check_info:
-            break
 
-    price_info = GnVmSize(id=id, cpu=byte_cpu, mem=byte_mem, disk=byte_disk, price=price)
+    price_info = GnVmSize(cpu=byte_cpu, mem=byte_mem, disk=byte_disk, price=price)
     sql_session.add(price_info)
     sql_session.commit()
 
