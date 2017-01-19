@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta
 #from gevent.pywsgi import WSGIServer
 from apscheduler.scheduler import Scheduler
-
+from uwsgi_tasks import *
 from kvm.db.database import db_session
 from kvm.service.service import server_create, server_change_status, server_monitor \
     , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
@@ -22,6 +22,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 ### cron job start ###
 
+@timer(seconds=10)
 def job_function():
     server_monitor(db_session)
 
@@ -128,9 +129,6 @@ def cronMnitor():
 
 if __name__ == '__main__':
     #로그 설정
-    # cron = Scheduler(daemon=True)
-    # cron.add_interval_job(job_function, seconds=60)
-    # cron.start()
     app.run(port=8081)
     # http_server = WSGIServer(('', 8081), app)
     # http_server.serve_forever()
