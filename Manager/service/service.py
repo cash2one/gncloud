@@ -12,7 +12,7 @@ from flask import render_template
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
                              , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
-                             , GnCluster,GnDockerImageDetail, GnVmSize
+                             , GnCluster,GnDockerImageDetail, GnVmSize, GnLoginHist
 from Manager.db.database import db_session
 from Manager.util.hash import random_string, convertToHashValue, convertsize, convertcore
 from Manager.util.config import config
@@ -225,12 +225,18 @@ def vm_info_graph(sql_session, id):
 
 def login_list(user_id, password, sql_session):
     password = convertToHashValue(password)
-    list = sql_session.query(GnUser).filter(GnUser.user_id == user_id).filter(GnUser.password==password).one_or_none()
-    return list
+    user_info = sql_session.query(GnUser, GnUserTeam).outerjoin(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUser.password == password)\
+                      .one_or_none()
+    if user_info != None:
+        login_hist=GnLoginHist(user_id=user_info.GnUser.user_id, action='login',team_code=user_info.GnUserTeam.team_code,action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+        sql_session.add(login_hist)
+        sql_session.commit()
+    return user_info
 
 
 def teamwon_list(user_id,team_code,team,sql_session):
-    list =sql_session.query(GnUser, GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code).filter(GnUserTeam.team_owner==team).order_by(GnUserTeam.team_owner.desc()).all()
+    list =sql_session.query(GnUser, GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code)\
+                    .filter(GnUserTeam.team_owner==team).order_by(GnUserTeam.team_owner.desc()).all()
     team_list = len(sql_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).all())
     infor = {"list":list, "info":team_list}
     return infor
@@ -253,13 +259,6 @@ def tea(user_id, team_code, sql_session):
     sub_stmt = sql_session.query(GnUserTeam.user_id).filter(GnUserTeam.team_code == team_code)
     list = sql_session.query(GnUser).filter(GnUser.user_id.in_(sub_stmt)).all()
     return list
-
-def checkteam(user_id, sql_session):
-    checklist = sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one_or_none()
-    if(checklist != None):
-        return sql_session.query(GnUserTeam).filter(GnUserTeam.user_id == user_id).one()
-    else:
-        return None
 
 
 def teamcheck_list(user_id,sql_session):
@@ -1035,3 +1034,9 @@ def snap_list_info(id, sql_session):
     snap_info.create_time = snap_info.create_time.strftime('%Y-%m-%d %H:%M:%S')
     info={"snap_info":snap_info, "user_info":user_info}
     return info
+
+
+def logout_info(user_id, team_code, sql_session):
+    logout = GnLoginHist(user_id=user_id, team_code=team_code, action='logout', action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(logout)
+    sql_session.commit()
