@@ -17,7 +17,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
                             , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys \
-                            , vm_list_snap, create_size, snapshot_delete
+                            , vm_list_snap, create_size, snapshot_delete, price_list, price_put, price_del
 from db.database import db_session
 from Manager.util.config import config
 
@@ -581,6 +581,22 @@ def saveBaseImageExceptFileDocker():
 
     return jsonify(status=True, message="success")
 
+@app.route('/vm/price',methods=['GET'])
+def Price_info():
+    return jsonify(status=True, message="success", list=price_list(db_session))
+
+@app.route('/vm/price',methods=['POST'])
+def Price_info_put():
+    cpu = request.json['cpu']
+    mem = request.json['mem']
+    disk = request.json['disk']
+    price = request.json['won']
+    return jsonify(status=True, message="success", list=price_put(cpu,mem,disk,price,db_session))
+
+@app.route('/vm/price/<id>', methods=['DELETE'])
+def price_info_delete(id):
+    return jsonify(status=True, message="success", list=price_del(id,db_session))
+
 @app.route('/vm/dockerimage/<id>',methods=['DELETE'])
 def deleteBaseImageDocker(id):
     deleteImageInfoDocker(id, db_session)
@@ -593,7 +609,6 @@ def secure_filename(filename):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
 
 
 #### rest end ####

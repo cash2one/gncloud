@@ -13,6 +13,7 @@
                     <th class="col-sm-3 hidden-xs">사양</th>
                     <th class="col-sm-1 hidden-sm hidden-xs">타입</th>
                     <th class="col-sm-2 hidden-md hidden-sm hidden-xs">IP</th>
+                    <th class="col-sm-1 hidden-xs">소유자</th>
                     <th class="col-sm-1 hidden-md hidden-sm hidden-xs">생성일
                         <div class="refresh" ng-click="refresh()"></div>
                     </th>
@@ -38,6 +39,7 @@
                 <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }} Memory/{{ list.disk }} Disk</td>
                 <td class="hidden-sm hidden-xs">{{ list.type }}</td>
                 <td class="hidden-md hidden-sm hidden-xs">{{ list.ip }}</td>
+                <td class="hidden-md hidden-sm hidden-xs">{{ list.author_id }}</td>
 				<td class="hidden-md hidden-sm hidden-xs"><span data-toggle="tooltip" title="{{list.create_time}}" tooltip>{{list.create_time_diff}}</span></td>
                 <td class="hidden-xs">{{list.tagFirst}}
                     <span ng-show="list.tag.length > 0" class="tag" data-toggle="tooltip" title="{{list.tag}}" tooltip>{{list.tagcount}}</span>

@@ -100,13 +100,13 @@ class GnVmMachines(Base):
     def __repr__(self):
         return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / ' \
                'Cpu %r / Memory %r / Disk %r / Ip %r / Status %r / Tag %r / Create_time %r / ' \
-               'Ssh_key_id %r / Hyperv_pass %r/>' \
+               'Ssh_key_id %r / Hyperv_pass %r/ Author_id %r />' \
                % (self.id, self.name, self.type, self.internal_id, self.internal_name, self.cpu, self.memory, self.disk,
-                  self.ip, self.status, self.tag, self.create_time, self.ssh_key_id, self.hyperv_pass)
+                  self.ip, self.status, self.tag, self.create_time, self.ssh_key_id, self.hyperv_pass, self.author_id)
 
     def __json__(self):
         return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu'
-            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass']
+            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id']
 
 
 class GnUser(Base):
@@ -517,16 +517,18 @@ class GnVmSize(Base):
     cpu = Column(Numeric, primary_key=False, nullable=False)
     mem = Column(Numeric, primary_key=False, nullable=False)
     disk = Column(Numeric, primary_key=False, nullable=False)
+    price = Column(String(11), primary_key=False, nullable=False)
 
-    def __init__(self, id=id, cpu=None, mem=None, disk=None):
+    def __init__(self, id=id, cpu=None, mem=None, disk=None, price=None):
         self.id = id
         self.cpu = cpu
         self.mem = mem
         self.disk = disk
+        self.price = price
 
     def __repr__(self):
-        return '< ID %r / Cpu %r / Mem %r / Disk %r />' \
-                %(self.id, self.cpu, self.mem, self.disk)
+        return '< ID %r / Cpu %r / Mem %r / Disk %r / Price %r / >' \
+                %(self.id, self.cpu, self.mem, self.disk, self.price)
 
     def __json__(self):
-        return ['id', 'cpu', 'mem', 'disk']
+        return ['id', 'cpu', 'mem', 'disk', 'price']
