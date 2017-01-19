@@ -2,9 +2,7 @@
 import traceback
 
 from flask import Flask, jsonify, request, make_response,session
-from datetime import timedelta
-#from gevent.pywsgi import WSGIServer
-from apscheduler.scheduler import Scheduler
+from datetime import timedelta, datetime
 from uwsgi_tasks import *
 from kvm.db.database import db_session
 from kvm.service.service import server_create, server_change_status, server_monitor \
@@ -22,8 +20,9 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 ### cron job start ###
 
-@timer(seconds=10)
-def job_function():
+@timer(seconds=60, target='kvm')
+def monitor(signal_number):
+    print(datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     server_monitor(db_session)
 
 ### cron job end ###
@@ -128,8 +127,5 @@ def cronMnitor():
 
 
 if __name__ == '__main__':
-    #로그 설정
     app.run(port=8081)
-    # http_server = WSGIServer(('', 8081), app)
-    # http_server.serve_forever()
 
