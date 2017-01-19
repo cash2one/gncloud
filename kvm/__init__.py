@@ -128,8 +128,5 @@ def cronMnitor():
 
 
 if __name__ == '__main__':
-    #로그 설정
     app.run(port=8081)
-    # http_server = WSGIServer(('', 8081), app)
-    # http_server.serve_forever()
 
