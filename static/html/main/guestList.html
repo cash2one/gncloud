@@ -46,12 +46,11 @@
                 </td>
                 <td class="dropdown">
                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false" ng-class="{'gn-disable-op':list.status == 'Starting'|| list.status == 'Deleting' || list.status == 'Error'}" ng-disabled="list.status == 'Starting'|| list.status == 'Deleting' || list.status == 'Error'">
-                        더보기
-                        <div class="gn-more"></div>
+                        <div class="gn-more">더보기</div>
                         <span class="gn-caret-table"></span>
                     </div>
                     <!--더보기>드롭다운-->
-                    <ul class="dropdown-menu gn-dropdown gn-list" role="menu">
+                    <ul class="dropdown-menu gn-dropdown" role="menu">
                         <li ng-repeat="test in actions" >
                             <a href ng-click="update(list.id,test,list.type,$index)"
                                ng-class="{'gn-disable-op':(test.type == 'Resume' && list.status == 'Running')

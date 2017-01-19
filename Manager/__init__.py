@@ -4,6 +4,7 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
+
 from datetime import timedelta
 import datetime
 
@@ -17,7 +18,7 @@ from service.service import vm_list, vm_info, login_list, teamwon_list, teamchec
                             , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
                             , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
                             , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys \
-                            , vm_list_snap, create_size, snapshot_delete, price_list, price_put, price_del
+                            , vm_list_snap, create_size, snapshot_delete, price_list, price_put, price_del, snap_list_info
 from db.database import db_session
 from Manager.util.config import config
 
@@ -602,6 +603,9 @@ def deleteBaseImageDocker(id):
     deleteImageInfoDocker(id, db_session)
     return jsonify(status=True, message="success")
 
+@app.route('/vm/snapshot/list/<id>',methods=['GET'])
+def snaplistinfo(id):
+    return jsonify(status=True, message="success", list=snap_list_info(id, db_session))
 
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]

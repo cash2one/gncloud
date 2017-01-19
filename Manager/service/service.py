@@ -162,6 +162,7 @@ def vm_list(sql_session, team_code):
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
         vmMachine.disk = convertHumanFriend(vmMachine.disk)
         vmMachine.memory = convertHumanFriend(vmMachine.memory)
+        vmMachine.author_id =vmMachine.gnUser.user_name
 
     retryCheck = False
     if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
@@ -1032,3 +1033,10 @@ def price_del(id,sql_session):
     sql_session.query(GnVmSize).filter(GnVmSize.id == id).delete()
     sql_session.commit()
 
+
+def snap_list_info(id, sql_session):
+    snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
+    user_info = sql_session.query(GnUser).filter(GnUser.user_id == snap_info.author_id).one()
+    snap_info.create_time = snap_info.create_time.strftime('%Y-%m-%d %H:%M:%S')
+    info={"snap_info":snap_info, "user_info":user_info}
+    return info
