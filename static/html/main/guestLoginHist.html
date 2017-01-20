@@ -1,0 +1,43 @@
+<h1>설정</h1>
+
+<!--왼쪽 메뉴-->
+<ul class="nav nav-pills gn-left-menu col-xs-12 col-sm-2">
+    <li class="left-title">시스템</li>
+    <li><a data-toggle="pill" href="#/guestSystemList">프로필</a></li>
+    <li><a data-toggle="pill" href="#/guestTeamList">팀 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestCluster">클러스터 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestImage">이미지 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestPrice">리소스 단위 관리</a></li>
+    <li class="active"><a data-toggle="pill" href="#/guestLoginHist">로그인 이력 조회</a></li>
+</ul>
+
+<!--오른쪽 메뉴-->
+<div class="tab-content col-xs-12 col-sm-10">
+    <!--시스템 > 가격 관리-->
+    <div id="cluster-sett" class="">
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>리소스 단위 관리</h2>
+                        <table class="table table gn-table">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-3 col-xs-9">아이디</th>
+                                <th class="col-sm-1 hidden-xs">액션</th>
+                                <th class="col-sm-3 hidden-sm hidden-xs">날짜</th>
+                            </tr>
+                            </thead>
+                            <tbody class="gn-tdody">
+                            <tr ng-repeat="list in login_hist">
+                                <td>{{list.user_id}}</td>
+                                <td>{{list.action}}</td>
+                                <td>{{list.action_time}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->

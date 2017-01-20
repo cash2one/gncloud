@@ -4,21 +4,11 @@ import traceback
 import os
 
 from flask import Flask, jsonify, request, session, escape, make_response
-
 from datetime import timedelta
-import datetime
 
 from Manager.db.database import db_session
 from Manager.util.json_encoder import AlchemyEncoder
-from service.service import vm_list, vm_info, login_list, teamwon_list, teamcheck_list, sign_up, repair, getQuotaOfTeam, server_image_list\
-                            , vm_update_info, vm_info_graph, teamsignup_list, team_list, server_image, container, tea, teamset, approve_set \
-                            , team_delete, createteam_list, comfirm_list, teamwon_list, signup_team, select, select_put, team_table \
-                            , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot\
-                            , hostMachineList, insertImageInfo, selectImageInfo, selectImageInfo, updateImageInfo, deleteImageInfo \
-                            , selectImageInfoDocker, insertImageInfoDocker, updateImageInfoDocker,deleteImageInfoDocker \
-                            , pathimage, select_info, delteam_list, containers, server_create, server_change_status, server_create_snapshot, teamwoninfo_list \
-                            , team_table_info, hostMachineInfo, deleteHostMachine, updateClusterInfo, insertClusterInfo, deleteCluster,insertHostInfo, select_putsys \
-                            , vm_list_snap, create_size, snapshot_delete, price_list, price_put, price_del, snap_list_info, logout_info
+from service.service import *
 from db.database import db_session
 from Manager.util.config import config
 
@@ -582,11 +572,11 @@ def saveBaseImageExceptFileDocker():
 
     return jsonify(status=True, message="success")
 
-@app.route('/vm/price',methods=['GET'])
+@app.route('/vm/price',methods=['GET']) #시스템 > 리소스 단위 관리
 def Price_info():
     return jsonify(status=True, message="success", list=price_list(db_session))
 
-@app.route('/vm/price',methods=['POST'])
+@app.route('/vm/price',methods=['POST']) #시스템 > 리소스 단위 관리 입력
 def Price_info_put():
     cpu = request.json['cpu']
     mem = request.json['mem']
@@ -603,9 +593,13 @@ def deleteBaseImageDocker(id):
     deleteImageInfoDocker(id, db_session)
     return jsonify(status=True, message="success")
 
-@app.route('/vm/snapshot/list/<id>',methods=['GET'])
+@app.route('/vm/snapshot/list/<id>',methods=['GET']) #스냅샷 모달창
 def snaplistinfo(id):
     return jsonify(status=True, message="success", list=snap_list_info(id, db_session))
+
+@app.route('/vm/loginhist', methods=['GET'])
+def login_hist():
+    return jsonify(status=True, message="success", list=login_history(db_session))
 
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]

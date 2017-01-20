@@ -1040,3 +1040,9 @@ def logout_info(user_id, team_code, sql_session):
     logout = GnLoginHist(user_id=user_id, team_code=team_code, action='logout', action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(logout)
     sql_session.commit()
+
+def login_history(sql_session):
+    list=sql_session.query(GnLoginHist).all()
+    for login_hist in list:
+        login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
+    return list
