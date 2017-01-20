@@ -3,7 +3,6 @@ import traceback
 
 from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta, datetime
-from uwsgi_tasks import *
 from kvm.db.database import db_session
 from kvm.service.service import server_create, server_change_status, server_monitor \
     , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
@@ -11,6 +10,7 @@ from kvm.service.service import server_create, server_change_status, server_moni
 from kvm.util.json_encoder import AlchemyEncoder
 from kvm.util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
+from apscheduler.scheduler import Scheduler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -20,10 +20,13 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 ### cron job start ###
 
-@timer(seconds=60, target='kvm')
-def monitor(signal_number):
+def monitor():
     print(datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
-    server_monitor(db_session)
+    #server_monitor(db_session)
+
+cron = Scheduler(daemon=True)
+cron.add_interval_job(monitor, seconds=60)
+cron.start()
 
 ### cron job end ###
 
