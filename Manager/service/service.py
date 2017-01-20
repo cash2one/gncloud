@@ -225,8 +225,11 @@ def vm_info_graph(sql_session, id):
 
 def login_list(user_id, password, sql_session):
     password = convertToHashValue(password)
-    user_info = sql_session.query(GnUser, GnUserTeam).outerjoin(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUser.password == password)\
-                      .one_or_none()
+    user_info = sql_session.query(GnUser, GnUserTeam)\
+                           .outerjoin(GnUserTeam, GnUserTeam.user_id == GnUser.user_id) \
+                           .filter(GnUser.user_id == user_id) \
+                           .filter(GnUser.password == password)\
+                           .one_or_none()
     if user_info != None:
         login_hist=GnLoginHist(user_id=user_info.GnUser.user_id, action='login',team_code=user_info.GnUserTeam.team_code,action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
         sql_session.add(login_hist)
