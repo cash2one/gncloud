@@ -292,3 +292,6 @@ class DockerService(object):
             response = requests.delete(url, data=json.dumps(data))
         # response = requests.delete(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
+
+    def logout(self):
+        self.cmd.logout()

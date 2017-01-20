@@ -102,4 +102,4 @@ def internal_error(error):
 
 
 if __name__ == '__main__':
-    app.run(host=config.CONTROLLER_HOST, port=config.CONTROLLER_PORT)
+    app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
