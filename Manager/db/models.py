@@ -514,24 +514,27 @@ class GnDockerImageDetail(Base):
 
 class GnVmSize(Base):
     __tablename__ = 'GN_VM_SIZE'
-    id = Column(Integer, primary_key=True, nullable=False)
+    id = Column(String(8), primary_key=True, nullable=False)
     cpu = Column(Numeric, primary_key=False, nullable=False)
     mem = Column(Numeric, primary_key=False, nullable=False)
     disk = Column(Numeric, primary_key=False, nullable=False)
-    price = Column(String(11), primary_key=False, nullable=False)
+    hour_price = Column(Integer, primary_key=False, nullable=False)
+    day_price= Column(Integer, primary_key=False, nullable=False)
 
-    def __init__(self, cpu=None, mem=None, disk=None, price=None):
+    def __init__(self,id=id, cpu=None, mem=None, disk=None, hour_price=None, day_price=None):
+        self.id=id
         self.cpu = cpu
         self.mem = mem
         self.disk = disk
-        self.price = price
+        self.hour_price = hour_price
+        self.day_price = day_price
 
     def __repr__(self):
-        return '< ID %r / Cpu %r / Mem %r / Disk %r / Price %r / >' \
-                %(self.id, self.cpu, self.mem, self.disk, self.price)
+        return '< ID %r / Cpu %r / Mem %r / Disk %r / Hour_price %r / day_price %r/>' \
+                %(self.id, self.cpu, self.mem, self.disk, self.hour_price, self.day_price)
 
     def __json__(self):
-        return ['id', 'cpu', 'mem', 'disk', 'price']
+        return ['id', 'cpu', 'mem', 'disk', 'hour_price', 'day_price']
 
 class GnLoginHist(Base):
     __tablename__='GN_USER_ACCESS_HISTORY'

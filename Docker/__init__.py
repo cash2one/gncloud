@@ -19,7 +19,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 ### cron job start ###
 
-@timer(seconds=60)
+#@timer(seconds=60)
 def monitor():
     service_monitoring(db_session)
 
