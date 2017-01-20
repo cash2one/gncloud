@@ -1,1 +1,1 @@
-nohup uwsgi --http-socket :8081 --plugin python --wsgi-file __init__.py --spooler kvm --logto kvm.log --callable app &
+nohup uwsgi --http-socket :8081 --plugin python --wsgi-file __init__.py  --logto kvm.log --callable app &

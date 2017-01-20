@@ -17,7 +17,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 ### cron job start ###
 
-@timer(seconds=60)
+#@timer(seconds=60)
 def monitor():
     vm_monitor(db_session)
 

@@ -20,13 +20,11 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 ### cron job start ###
 
+#@timer(seconds=60)
 def monitor():
     print(datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     #server_monitor(db_session)
 
-cron = Scheduler(daemon=True)
-cron.add_interval_job(monitor, seconds=60)
-cron.start()
 
 ### cron job end ###
 
