@@ -1,6 +1,7 @@
 var serviceAddModules = [
     'ngRoute'
     ,'ngFileUpload'
+    ,'uiSwitch'
 ];
 
 (function () {
