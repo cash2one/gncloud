@@ -8,11 +8,12 @@
     <li><a data-toggle="pill" href="#/guestCluster">클러스터 관리</a></li>
     <li><a data-toggle="pill" href="#/guestImage">이미지 관리</a></li>
     <li class="active"><a data-toggle="pill" href="#/guestPrice">리소스 단위 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestLoginHist">로그인 이력 조회</a></li>
 </ul>
 
 <!--오른쪽 메뉴-->
 <div class="tab-content col-xs-12 col-sm-10">
-    <!--시스템 > 클러스터 관리-->
+    <!--시스템 > 가격 관리-->
     <div id="cluster-sett" class="">
         <div class="gn-box">
             <div class="gn-sett-margin-box">
@@ -20,7 +21,7 @@
                     <h2>리소스 단위 관리</h2>
                     <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#cluster" >등록</button>
 
-                    <!-- 클러스터 Modal -->
+                    <!-- 가격 Modal -->
                     <div class="modal fade" id="cluster" role="dialog">
                         <div class="modal-backdrop fade in" style="height: 3000px;"></div>
                         <div class="modal-dialog form-horizontal">
@@ -37,7 +38,7 @@
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">CPU</label>
                                             <div class="col-sm-9" ng-class="{ 'has-error' : clusterForm.cpu.$invalid && !clusterForm.cpu.$pristine }">
                                                 <input type="text" class="form-control" name="cpu" placeholder="1 CORE" ng-model="data.cpu" required>
-                                                <p ng-show="clusterForm.ip.$invalid && !clusterForm.cpu.$pristine" class="help-block">CPU 갯수를 입력하세요.</p>
+                                                <p ng-show="clusterForm.ip.$invalid && !clusterForm.cpu.$pristine" class="help-block">CPU 개수를 입력하세요.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
