@@ -80,7 +80,8 @@
                             <tr>
                                 <th class="">번호</th>
                                 <th class="hidden-xs">정보</th>
-                                <th class="hidden-xs">가격</th>
+                                <th class="hidden-xs">시간 가격</th>
+                                <th class="hidden-xs">일 가격</th>
                                 <th class="hidden-xs"></th>
                             </tr>
                             </thead>
@@ -88,7 +89,8 @@
                             <tr ng-repeat="price in price_list">
                                 <td>{{$index+1}}</td>
                                 <td class="hidden-xs">{{price.cpu}} CPU/ {{price.mem}} / {{price.disk}}</td>
-                                <td class="hidden-xs">{{price.price}}</td>
+                                <td class="hidden-xs">{{price.hour_price}}</td>
+                                <td class="hidden-xs">{{price.day_price}}</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         <div class="gn-more">더보기</div>
