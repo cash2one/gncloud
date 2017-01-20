@@ -47,8 +47,10 @@ def doc_create(id,sql_session):
         print(docker_info.id+":end create")
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
         if docker_service is None:
+            ds.logout()
             return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
         if type(docker_service) is not list:
+            ds.logout()
             return jsonify(status=False, message=docker_service)
         else:
             image = GnDockerImages.query.filter_by(id=image_id).one()
@@ -106,11 +108,13 @@ def doc_create(id,sql_session):
             docker_info.os_sub_ver = image.os_ver
 
             sql_session.commit()
+            ds.logout()
             return jsonify(status=True, message="서비스를 생성하였습니다.", result=docker_info.to_json())
     except Exception as e:
         sql_session.rollback()
         docker_info.status = "Error"
         sql_session.commit()
+        ds.logout()
         logger.error(e)
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
@@ -140,6 +144,7 @@ def doc_state(id):
     if type == "Resume":
         # 이미 서비스가 돌아가는 상태인 경우는 아무 것도 안하고 끝낸다.
         if service.status == "Running":
+            ds.logout()
             return jsonify(status=False, message="서비스가 이미 실행중입니다.", result=service.to_json())
         else:
             # commit된 내용을 가지고 서비스 생성.
@@ -174,10 +179,12 @@ def doc_state(id):
                 set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
                 sql_session.add(set_port)
             sql_session.commit()
+            ds.logout()
             return jsonify(status=True, message="서비스가 시작되었습니다.", result=service.to_json())
     # -- 정지 (suspend)
     elif type == "Suspend":
         if service.status != "Running":
+            ds.logout()
             return jsonify(status=False, message="서비스가 실행중이 아닙니다.", result=service.to_json())
         else:
             ds.docker_service_stop(service)
@@ -185,6 +192,7 @@ def doc_state(id):
             service.ssh_key_id = "1"
             service.status = "Suspend"
             sql_session.commit()
+            ds.logout()
             return jsonify(status=True, message="서비스가 정지되었습니다.", result=service.to_json())
     # -- 재시작 (restart)
     elif type == "Reboot":
@@ -225,8 +233,10 @@ def doc_state(id):
             set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
             sql_session.add(set_port)
         sql_session.commit()
+        ds.logout()
         return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
     else:
+        ds.logout()
         return jsonify(status=False, message="정의된 상태값이 아닙니다.")
 
 
@@ -259,6 +269,7 @@ def doc_snap():
             image_id = random_string(config.SALT, 8)
         # 이미지 Tag 중복 체크 중복되는 값이 존재할 경우 False 리턴 후 종료.
         if len(GnDockerImages.query.filter_by(name=snapshot["name"]).all()) != 0:
+            ds.logout()
             return jsonify(status=False, message="이미 존재하는 이미지입니다.")
         image = GnDockerImages(
             id=image_id, base_image=baseimage.id, name=snapshot["name"], view_name=name, tag=baseimage.tag, os=baseimage.os,
@@ -270,8 +281,10 @@ def doc_snap():
         sql_session.remove()
         # result 값에서 에러가 발생하여 일단 주석처리 해둠.
         # return jsonify(status=True, message="Success", result=image.to_json())
+        ds.logout()
         return jsonify(status=True, message="Success")
     except Exception as err:
+        ds.logout()
         return jsonify(status=False, message="Error: %s" % err)
 
 
@@ -297,8 +310,11 @@ def doc_delete(id,sql_session):
             for volume in service.gnDockerVolumes:
                 volume.status = "Removed"
             sql_session.commit()
+        ds.logout()
     except Exception as err:
         logger.error(err)
+        ds.logout()
+
     if result == service.internal_id:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")
     else:
@@ -460,6 +476,7 @@ def doc_delete_image(id):
     # 삭제할 이미지 정보 저장
     image = GnDockerImages.query.filter_by(id=id).first()
     if image is None:
+        ds.logout()
         return jsonify(status=False, message="존재하지 않는 이미지입니다.")
     image_name = image.name.split("/")[1].split(":")[0]
     # Docker Registry 이미지 삭제
@@ -469,6 +486,7 @@ def doc_delete_image(id):
         method="DELETE",
         uri="/" + version + "/" + repositories + "/" + namespace + "/" + image_name
     )
+    ds.logout()
     # 삭제된 상태를 이미지 및 이미지 상세 테이블에 적용
     if result:
         try:
