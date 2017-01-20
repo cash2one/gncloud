@@ -1042,7 +1042,7 @@ def logout_info(user_id, team_code, sql_session):
     sql_session.commit()
 
 def login_history(sql_session):
-    list=sql_session.query(GnLoginHist).all()
+    list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).all()
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
