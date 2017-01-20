@@ -4,12 +4,12 @@ import traceback
 from datetime import timedelta
 from flask import Flask, redirect, url_for, request
 from uwsgi_tasks import *
-from util.config import config
-from util.logger import logger
-from util.json_encoder import AlchemyEncoder
-from controller.dockerController import *
-from db.database import db_session
-from service.monitorService import service_monitoring
+from Docker.util.config import config
+from Docker.util.logger import logger
+from Docker.util.json_encoder import AlchemyEncoder
+from Docker.controller.dockerController import *
+from Docker.db.database import db_session
+from Docker.service.monitorService import service_monitoring
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
