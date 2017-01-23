@@ -28,6 +28,7 @@ from HyperV.db.database import Base
 class GnImagesPool(Base):
     __tablename__ = 'GN_IMAGES_POOL'
     host_id = Column(String(8), primary_key=True, nullable=False, unique=True)
+    id = Column(String(8), nullable=False, unique=True)
     type = Column(String(10), nullable=True, default=None)
     local_path = Column(String(200), nullable=True, default=None)
     nas_path = Column(String(200), nullable=True, default=None)
