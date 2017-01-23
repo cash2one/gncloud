@@ -187,6 +187,8 @@ def signup_list():
         elif(check =='user_id'):
             return jsonify(status=True, test='user_id')
     return jsonify(status=False, test='not')
+
+
 @app.route('/vm/guestLogout', methods=['GET'])
 def logout():
     logout_info(session['userId'],session['teamCode'],db_session)
@@ -585,7 +587,10 @@ def Price_info_put():
     mem = request.json['mem']
     disk = request.json['disk']
     price = request.json['won']
-    return jsonify(status=True, message="success", list=price_put(cpu,mem,disk,price,db_session))
+    price_hour = request.json['won_hour']
+    disk_size = request.json['disk_size']
+    mem_size = request.json['mem_size']
+    return jsonify(status=True, message="success", list=price_put(cpu,mem,disk,price,disk_size,mem_size,price_hour,db_session))
 
 @app.route('/vm/price/<id>', methods=['DELETE'])
 def price_info_delete(id):
@@ -600,15 +605,29 @@ def deleteBaseImageDocker(id):
 def snaplistinfo(id):
     return jsonify(status=True, message="success", list=snap_list_info(id, db_session))
 
-@app.route('/vm/loginhist', methods=['GET'])
+@app.route('/vm/loginhist', methods=['GET']) #login hist
 def login_hist():
-    return jsonify(status=True, message="success", list=login_history(db_session))
+    page = 1
+    return jsonify(status=True, message="success", list=login_history(page,db_session))
+
+@app.route('/vm/loginhist/page',methods=['PUT'])
+def login_page():
+    page=request.json['page']
+    return jsonify(status=True, message="success", list=login_history(page,db_session))
 
 @app.route('/vm/backup/<id>', methods=['PUT'])
 def backup_change(id):
     backup=request.json['backup']
     return jsonify(status=True, list=backupchnage(id, backup, db_session))
 
+@app.route('/vm/money',methods=['GET'])
+def money():
+    return jsonify(status=True, list=money_list(db_session))
+
+@app.route('/vm/money/monitor',methods=['PUT'])
+def monitoring_time():
+    monitor_period =request.json['monitor_period']
+    return jsonify(status=True, list=monitoring_time_change(monitor_period,db_session))
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
 

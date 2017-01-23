@@ -207,11 +207,13 @@ class GnVmImages(Base):
     status = Column(String(10), primary_key=False, nullable=False)
     ssh_id = Column(String(10), primary_key=False, nullable=False)
     host_id = Column(String(8), primary_key=False, nullable=False)
+    parent_id = Column(String(8), primary_key=False, nullable=False)
 
 
     def __init__(self,id=id, name=None, filename=None, type=None, ssh_id=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
-                 , os_bit=None, team_code=None, author_id=None, pool_id= None, create_time= None, status=None, host_id=None):
+                 , os_bit=None, team_code=None, author_id=None, pool_id= None
+                 , create_time= None, status=None, host_id=None, parent_id=None):
         self.id=id
         self.name = name
         self.filename = filename
@@ -229,6 +231,7 @@ class GnVmImages(Base):
         self.status = status
         self.ssh_id = ssh_id
         self.host_id =host_id
+        self.parent_id=parent_id
 
 
 
@@ -561,3 +564,23 @@ class GnLoginHist(Base):
 
     def __json__(self):
         return ['user_id', 'team_code', 'action', 'action_time']
+
+class GnSystemSetting(Base):
+    __tablename__='GN_SYSTEM_SETTING'
+    billing_type = Column(String(2), primary_key=True, nullable=False, default='')
+    backup_schedule_type = Column(String(2), nullable=True, default='')
+    backup_schedule_period = Column(String(13), nullable=True, default='')
+    monitor_period = Column(String(4), nullable=True, default='')
+
+    def __init__(self, billing_type = billing_type, backup_schedule_type =None, backup_schedule_period= None, monitor_period=None):
+        self.billing_type = billing_type
+        self.backup_schedule_type = backup_schedule_type
+        self.backup_schedule_period = backup_schedule_period
+        self.monitor_period = monitor_period
+
+    def __repr__(self):
+        return '<Billing_type %r / Backup_schedule_type %r / Backup_schedule_period %r / Monitor_period %r/ >'\
+                %(self.billing_type, self.backup_schedule_type, self.backup_schedule_period, self.monitor_period)
+
+    def __json__(self):
+        return ['billing_type', 'backup_schedule_type', 'backup_schedule_period', 'monitor_period']

@@ -4,18 +4,14 @@ __author__ = 'NaDa'
 
 import subprocess
 
-import datetime
 import humanfriendly
 from flask import render_template
 from sqlalchemy import func
 
 from Manager.db.database import db_session
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
-                             , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
-                             , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
-                             , GnCluster,GnDockerImageDetail, GnVmSize, GnLoginHist
+from Manager.db.models import *
 from Manager.util.config import config
-from Manager.util.hash import random_string, convertToHashValue, convertsize, convertcore
+from Manager.util.hash import random_string, convertToHashValue, convertsize
 
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, backup ,sql_session):
@@ -116,7 +112,6 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
 
 def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == ord_id).one()
-    pool_info = sql_session.query(GnImagePool).filter(GnImagePool.host_id == guest_info.gnHostMachines.id).one()
     image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == guest_info.image_id).one()
 
 
@@ -129,7 +124,9 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
 
     guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename="", ssh_id=image_info.ssh_id
                             , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status=config.STARTING_STATUS,host_id=guest_info.host_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, status=config.STARTING_STATUS
+                            ,host_id=guest_info.host_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+                            ,parent_id=guest_info.image_id)
     sql_session.add(guest_snap)
     sql_session.commit()
     return {"status":True,"ord_id":ord_id, "snap_id":vm_id}
@@ -198,7 +195,7 @@ def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
     if vm_info.type != 'docker':
-        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
+        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one_or_none()
     else:
         image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
@@ -1086,8 +1083,10 @@ def price_list(sql_seesion):
         price.disk = convertHumanFriend(price.disk)
     return price_info
 
-def price_put(cpu, mem, disk,hour_price,day_price , sql_session):
-    byte_cpu = convertcore(cpu)
+def price_put(cpu, mem, disk,price,disk_size,mem_size,price_hour, sql_session):
+    byte_cpu = cpu
+    mem=mem+mem_size
+    disk=disk+disk_size
     byte_mem = convertsize(mem)
     byte_disk= convertsize(disk)
     while True:
@@ -1095,7 +1094,7 @@ def price_put(cpu, mem, disk,hour_price,day_price , sql_session):
         check_info = sql_session.query(GnVmSize).filter(GnVmSize.id == id).first()
         if not check_info:
             break
-    price_info = GnVmSize(id=id,cpu=byte_cpu, mem=byte_mem, disk=byte_disk, hour_price=hour_price, day_price=day_price)
+    price_info = GnVmSize(id=id,cpu=byte_cpu, mem=byte_mem, disk=byte_disk, hour_price=price_hour, day_price=price)
     sql_session.add(price_info)
     sql_session.commit()
 
@@ -1108,8 +1107,17 @@ def snap_list_info(id, sql_session):
     snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
     user_info = sql_session.query(GnUser).filter(GnUser.user_id == snap_info.author_id).one()
     snap_info.create_time = snap_info.create_time.strftime('%Y-%m-%d %H:%M:%S')
-    info={"snap_info":snap_info, "user_info":user_info}
+    parent_history = selectParentImageInfo(snap_info.parent_id,sql_session)
+    info={"snap_info":snap_info, "user_info":user_info, "parent_history":snap_info.name +","+ parent_history[:-1]}
     return info
+
+def selectParentImageInfo(parent_id,sql_session):
+    parent_info = sql_session.query(GnVmImages).filter(GnVmImages.id == parent_id).one_or_none()
+
+    if parent_info != None:
+        return parent_info.name +"," +selectParentImageInfo(parent_info.parent_id,sql_session);
+    else:
+        return ""
 
 
 def logout_info(user_id, team_code, sql_session):
@@ -1117,16 +1125,28 @@ def logout_info(user_id, team_code, sql_session):
     sql_session.add(logout)
     sql_session.commit()
 
-def login_history(sql_session):
-    list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).all()
+def login_history(page, sql_session): #login history
+    page_size=30
+    list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).limit(page_size).offset(page*page_size).all()
+    login_info={};
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
-    return list
+    login_info={"list":list,"page":page}
+    return login_info
 
-def backupchnage(id, backup, sql_sseion):
+
+def backupchnage(id, backup, sql_sseion): #백업 수정
     list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     if(backup == False):
         list.backup_comfirm = "false"
     else:
         list.backup_comfirm = "true"
     sql_sseion.commit()
+
+def money_list(sql_ssesion):
+    return sql_ssesion.query(GnSystemSetting).one()
+
+def monitoring_time_change(monitor_period, sql_session):
+    list = sql_session.query(GnSystemSetting).one()
+    list.monitor_period = monitor_period
+    sql_session.commit()

@@ -85,16 +85,16 @@
 
         <form>
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default gn-btn-default inp-box-size" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
+                <label class="btn btn-default gn-btn-default height-auto inp-box-size" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
                     <input id="cpu" name="" value="1" type="radio">
                     <div class="size-info">{{size.cpu}} CPU</div>
                     <div class="border-bottom"></div>
                     <div class="size-info">{{size.mem}}</div>
                     <div class="border-bottom"></div>
                     <div class="size-info">{{size.disk}}</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">hour:{{size.hour_price}}</div>
-                    <div class="size-info">day:{{size.day_price}}</div>
+                    <div class="gn-btn-devider"></div>
+                    <div class="price-info">₩{{size.hour_price}}<snap class="price-untis"></snap> / 시간</div>
+                    <div class="price-info">₩{{size.day_price}}<snap class="price-untis"></snap> / 일</div>
                 </label>
                 <p ng-show="data_value =='cpu' " class="error-message">cpu / memory / disk 의 크기를 선택해주세요.</p>
             </div>

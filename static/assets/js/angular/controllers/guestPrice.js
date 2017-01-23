@@ -21,14 +21,18 @@ angular
         $scope.price();
         $scope.data={}
         $scope.mem=[
-            {name:'GB',type:'GB'},
-            {name:'MB',type:'MB'}
+            {name:'GB'},
+            {name:'MB'}
+        ]
+        $scope.disk=[
+            {name:'GB'},
+            {name:'TB'}
         ]
         $scope.sizemem=function (data) {
-            $scope.data.mem_size = data;
+            $scope.data.mem_size = data.name;
         }
         $scope.sizedisk=function (data) {
-            $scope.data.disk_size = data;
+            $scope.data.disk_size = data.name;
         }
         $scope.savesize=function(){
             $http({
