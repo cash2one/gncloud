@@ -21,15 +21,11 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     # 스냅샷 기반 유무에 따른 생성 set_vm_ip.sh로직 분기
     ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
     if base_sub_type == "base":
-        # guest 생성 정보 xml 템플릿 생성
-        vol = render_template(
-            "volume.xml"
-            , guest_name=name
-            , disk=disk
-        )
-
-        defaultVol = ptr_POOL.storageVolLookupByName(base_name)
-        ptr_POOL.createXMLFrom(vol, defaultVol, 0)
+        v = pxssh.pxssh()
+        v.login(host_ip, USER)
+        v.sendline("cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
+        v.logout()
+        ptr_POOL.refresh()
         ptr_POOL.storageVolLookupByName(name + ".img").resize(disk)
     else:
         kvm_image_copy(base_name.split(".")[0], name, host_ip)
@@ -38,6 +34,8 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     guest = render_template(
         "guest.xml"
         , guest_name=name
+        , guest_path=config.LIVERT_IMAGE_LOCAL_PATH+name+".img"
+        , config_path = config.SCRIPT_PATH+"initcloud/config.iso"
         , current_memory=memory
         , vcpu=cpu
     )

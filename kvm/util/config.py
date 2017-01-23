@@ -12,8 +12,10 @@ class Config:
     DB_URL = ""
     SCRIPT_PATH = ""
     SSHKEY_PATH = ""
-    LIVERT_IMAGE_PATH = ""
+    LIVERT_IMAGE_BASE_PATH = ""
+    LIVERT_IMAGE_SNAPSHOT_PATH = ""
     LIVERT_IMAGE_BACKUP_PATH = ""
+    LIVERT_IMAGE_LOCAL_PATH = ""
     POOL_NAME = ""
 
     def __init__(self, path="../conf/config.conf"):
@@ -35,9 +37,11 @@ class Config:
         self.DB_URL = parser.get(config_section, "DB_URL")
         self.SCRIPT_PATH = parser.get(config_section, "SCRIPT_PATH")
         self.SSHKEY_PATH = parser.get(config_section, "SSHKEY_PATH")
-        self.LIVERT_IMAGE_PATH = parser.get(config_section, "LIVERT_IMAGE_PATH")
-        self.LIVERT_IMAGE_BACKUP_PATH = parser.get(config_section, "LIVERT_IMAGE_BACKUP_PATH")
         self.POOL_NAME = parser.get(config_section, "POOL_NAME")
+        self.LIVERT_IMAGE_BASE_PATH = parser.get(config_section, "LIVERT_IMAGE_BASE_PATH")
+        self.LIVERT_IMAGE_SNAPSHOT_PATH = parser.get(config_section, "LIVERT_IMAGE_SNAPSHOT_PATH")
+        self.LIVERT_IMAGE_BACKUP_PATH = parser.get(config_section, "LIVERT_IMAGE_BACKUP_PATH")
+        self.LIVERT_IMAGE_LOCAL_PATH = parser.get(config_section, "LIVERT_IMAGE_LOCAL_PATH")
 
 # 전역 공통사용 객체이다.
 local_custom_file = os.environ.get('CONFIG_FILE_PATH')
