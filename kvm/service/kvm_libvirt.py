@@ -19,14 +19,25 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     conn = libvirt.open(url)
 
     # 스냅샷 기반 유무에 따른 생성 set_vm_ip.sh로직 분기
-    ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
+    instance_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
+    base_POOL = conn.storagePoolLookupByName("basepool")
     if base_sub_type == "base":
-        v = pxssh.pxssh()
-        v.login(host_ip, USER)
-        v.sendline("cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
-        v.logout()
-        ptr_POOL.refresh()
-        ptr_POOL.storageVolLookupByName(name + ".img").resize(disk)
+        # v = pxssh.pxssh()
+        # v.login(host_ip, USER)
+        # v.sendline("cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
+        # v.logout()
+        # ptr_POOL.refresh()
+        # ptr_POOL.storageVolLookupByName(name + ".img").resize(disk)
+        # guest 생성 정보 xml 템플릿 생성
+        vol = render_template(
+            "volume.xml"
+            , guest_name=name
+            , disk=disk
+        )
+
+        defaultVol = base_POOL.storageVolLookupByName(base_name)
+        instance_POOL.createXMLFrom(vol, defaultVol, 0)
+        instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
     else:
         kvm_image_copy(base_name.split(".")[0], name, host_ip)
 
