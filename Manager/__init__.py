@@ -605,9 +605,15 @@ def deleteBaseImageDocker(id):
 def snaplistinfo(id):
     return jsonify(status=True, message="success", list=snap_list_info(id, db_session))
 
-@app.route('/vm/loginhist', methods=['GET'])
+@app.route('/vm/loginhist', methods=['GET']) #login hist
 def login_hist():
-    return jsonify(status=True, message="success", list=login_history(db_session))
+    page = 1
+    return jsonify(status=True, message="success", list=login_history(page,db_session))
+
+@app.route('/vm/loginhist/page',methods=['PUT'])
+def login_page():
+    page=request.json['page']
+    return jsonify(status=True, message="success", list=login_history(page,db_session))
 
 @app.route('/vm/backup/<id>', methods=['PUT'])
 def backup_change(id):
