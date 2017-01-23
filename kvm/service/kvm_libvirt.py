@@ -14,32 +14,28 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     s = pxssh.pxssh()
     s.login(host_ip, USER)
     s.sendline(config.SCRIPT_PATH + "sshkey_copy.sh ")
-    s.logout()
     url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
     conn = libvirt.open(url)
 
     # 스냅샷 기반 유무에 따른 생성 set_vm_ip.sh로직 분기
     instance_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
-    base_POOL = conn.storagePoolLookupByName("basepool")
-    if base_sub_type == "base":
-        # v = pxssh.pxssh()
-        # v.login(host_ip, USER)
-        # v.sendline("cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
-        # v.logout()
-        # ptr_POOL.refresh()
-        # ptr_POOL.storageVolLookupByName(name + ".img").resize(disk)
-        # guest 생성 정보 xml 템플릿 생성
-        vol = render_template(
-            "volume.xml"
-            , guest_name=name
-            , disk=disk
-        )
 
-        defaultVol = base_POOL.storageVolLookupByName(base_name)
-        instance_POOL.createXMLFrom(vol, defaultVol, 0)
-        instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
+    if base_sub_type == "base":
+        s.sendline("cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
     else:
-        kvm_image_copy(base_name.split(".")[0], name, host_ip)
+        s.sendline("cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
+
+    vol = render_template(
+        "volume.xml"
+        , guest_name=name
+        , disk=disk
+    )
+    instance_POOL.refresh()
+    defaultVol = instance_POOL.storageVolLookupByName(base_name)
+    instance_POOL.createXMLFrom(vol, defaultVol, 0)
+    instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
+    defaultVol.delete()
+    s.logout()
 
     # vm 생성
     guest = render_template(
