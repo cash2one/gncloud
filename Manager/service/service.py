@@ -1120,7 +1120,7 @@ def login_history(sql_session):
 
 def backupchnage(id, backup, sql_sseion):
     list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    if(backup == "false"):
+    if(backup == False):
         list.backup_comfirm = "false"
     else:
         list.backup_comfirm = "true"
