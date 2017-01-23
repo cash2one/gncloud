@@ -116,7 +116,6 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
 
 def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == ord_id).one()
-    pool_info = sql_session.query(GnImagePool).filter(GnImagePool.host_id == guest_info.gnHostMachines.id).one()
     image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == guest_info.image_id).one()
 
 
@@ -129,7 +128,9 @@ def server_create_snapshot(ord_id, name, user_id, team_code, type, sql_session):
 
     guest_snap = GnVmImages(id=vm_id, name=name, type=type, sub_type="snap", filename="", ssh_id=image_info.ssh_id
                             , icon="", os=guest_info.os, os_ver=guest_info.os_ver, os_subver=guest_info.os_sub_ver
-                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, pool_id=pool_info.id, status=config.STARTING_STATUS,host_id=guest_info.host_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+                            , os_bit=guest_info.os_bit, team_code=team_code, author_id=user_id, status=config.STARTING_STATUS
+                            ,host_id=guest_info.host_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+                            ,parent_id=guest_info.image_id)
     sql_session.add(guest_snap)
     sql_session.commit()
     return {"status":True,"ord_id":ord_id, "snap_id":vm_id}
@@ -1110,8 +1111,17 @@ def snap_list_info(id, sql_session):
     snap_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
     user_info = sql_session.query(GnUser).filter(GnUser.user_id == snap_info.author_id).one()
     snap_info.create_time = snap_info.create_time.strftime('%Y-%m-%d %H:%M:%S')
-    info={"snap_info":snap_info, "user_info":user_info}
+    parent_history = selectParentImageInfo(snap_info.parent_id,sql_session)
+    info={"snap_info":snap_info, "user_info":user_info, "parent_history":snap_info.name +","+ parent_history[:-1]}
     return info
+
+def selectParentImageInfo(parent_id,sql_session):
+    parent_info = sql_session.query(GnVmImages).filter(GnVmImages.id == parent_id).one_or_none()
+
+    if parent_info != None:
+        return parent_info.name +"," +selectParentImageInfo(parent_info.parent_id,sql_session);
+    else:
+        return ""
 
 
 def logout_info(user_id, team_code, sql_session):

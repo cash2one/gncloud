@@ -207,11 +207,13 @@ class GnVmImages(Base):
     status = Column(String(10), primary_key=False, nullable=False)
     ssh_id = Column(String(10), primary_key=False, nullable=False)
     host_id = Column(String(8), primary_key=False, nullable=False)
+    parent_id = Column(String(8), primary_key=False, nullable=False)
 
 
     def __init__(self,id=id, name=None, filename=None, type=None, ssh_id=None
                  , sub_type=None, icon=None, os=None, os_ver=None, os_subver=None
-                 , os_bit=None, team_code=None, author_id=None, pool_id= None, create_time= None, status=None, host_id=None):
+                 , os_bit=None, team_code=None, author_id=None, pool_id= None
+                 , create_time= None, status=None, host_id=None, parent_id=None):
         self.id=id
         self.name = name
         self.filename = filename
@@ -229,6 +231,7 @@ class GnVmImages(Base):
         self.status = status
         self.ssh_id = ssh_id
         self.host_id =host_id
+        self.parent_id=parent_id
 
 
 

@@ -187,6 +187,8 @@ def signup_list():
         elif(check =='user_id'):
             return jsonify(status=True, test='user_id')
     return jsonify(status=False, test='not')
+
+
 @app.route('/vm/guestLogout', methods=['GET'])
 def logout():
     logout_info(session['userId'],session['teamCode'],db_session)
