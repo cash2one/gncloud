@@ -17,6 +17,14 @@ angular
                     $scope.tag_list = data.info.vm_info.tag.split(",");
                     $scope.disk_data = data.info.disk_info;
                     $scope.mem_data = data.info.mem_info;
+                    $scope.name_data = data.info.name_info;
+                    if($scope.vm_data.type != 'docker'){
+                        $scope.image_data = data.info.image_info;
+                    }else{
+                        $scope.image_data = data.info.image_info;
+                        $scope.image_data.name = data.info.image_info.view_name;
+                    }
+
                 }
                 else {
                     alert(data.message)
@@ -115,6 +123,7 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
+
                     }
                     else {
 

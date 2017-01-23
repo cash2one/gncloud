@@ -40,11 +40,6 @@
                 <li><span ng-bind="vm_data.memory"></span> Memory</li>
                 <li>/</li>
                 <li><span ng-bind="vm_data.disk"></span> Disk</li>
-                <li>/</li>
-                <li><span ng-bind="vm_data.os"></span></li>
-                <li>/</li>
-                <li><spna ng-bind="vm_data.ip"></spna></li>
-
                 <!-- Modal : IP 수정 -->
 
             </ul> <!--class="gn-spec-group"   -->
@@ -91,6 +86,21 @@
 
 <!--상세 페이지 메인-->
 <div class="gn-box gn-detail-main">
+    <div class="gn-margin-box">
+        <dl class="dl-horizontal gn-description-list">
+            <h2>정보</h2>
+            <dt>ip</dt>
+            <dd><span ng-bind="vm_data.ip"></span></dd>
+            <dt> os</dt>
+            <dd><spna ng-bind="vm_data.os"></spna></dd>
+            <dt>소유자</dt>
+            <dd><spna ng-bind="name_data.user_name"></spna></dd>
+            <dt>베이스이미지</dt>
+            <dd><spna ng-bind="image_data.name"></spna></dd>
+        </dl>
+    </div>
+</div>
+<div class="gn-box gn-detail-main">
     <!--CPU-->
     <div class="gn-margin-box">
         <div class="col-sm-2">
@@ -125,24 +135,37 @@
     <div class="gn-margin-box">
         <div class="col-sm-2">
             <h2>DISK</h2>
-        </div>
-            <div class="col-sm-10 gn-graph">
-                <span>{{disk_data.rest_disk}} 사용가능 (총 {{disk_data.total}})</span>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': disk_data.disk_per_info + '%' }">
-                        {{disk_data.disk_per_info}}%
+            </div>
+                <div class="col-sm-10 gn-graph">
+                    <span>{{disk_data.rest_disk}} 사용가능 (총 {{disk_data.total}})</span>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width': disk_data.disk_per_info + '%' }">
+                            {{disk_data.disk_per_info}}%
+                        </div>
+                    </div>
+                    <div class="row graph-sm-box">
+                        <div class="col-sm-2"><i></i>사용량</div>
+                        <div class="col-sm-2"><i></i>남은용량</div>
                     </div>
                 </div>
-                <div class="row graph-sm-box">
-                    <div class="col-sm-2"><i></i>사용량</div>
-                    <div class="col-sm-2"><i></i>남은용량</div>
-                </div>
+            </div>
+        </div> <!--class="gn-margin-box"-->
+    </div>
+
+
+<div class="gn-box gn-detail-main">
+    <div class="gn-margin-box">
+        <h2>백업</h2>
+        <label class="gn-lead">백업주기는 시스템 관리자가 설정합니다.</label>
+        <div class="checkbox-switch" style="float:right;">
+            <input type="checkbox" checked="" onchange="" value="N" name="status" class="input-checkbox" id="toolbar">
+            <div class="checkbox-animate">
+                <span class="checkbox-off">OFF</span>
+                <span class="checkbox-on">ON</span>
             </div>
         </div>
-    </div> <!--class="gn-margin-box"-->
-
+    </div>
 </div>
-
 <!--상세 페이지 삭제-->
 <div class="gn-box">
     <div class="gn-margin-box">

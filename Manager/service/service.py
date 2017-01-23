@@ -4,18 +4,18 @@ __author__ = 'NaDa'
 
 import subprocess
 
-from sqlalchemy import func
 import datetime
 import humanfriendly
 from flask import render_template
+from sqlalchemy import func
 
+from Manager.db.database import db_session
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
                              , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
                              , GnCluster,GnDockerImageDetail, GnVmSize, GnLoginHist
-from Manager.db.database import db_session
-from Manager.util.hash import random_string, convertToHashValue, convertsize, convertcore
 from Manager.util.config import config
+from Manager.util.hash import random_string, convertToHashValue, convertsize, convertcore
 
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password ,sql_session):
@@ -189,7 +189,11 @@ def vm_list_snap(sql_session, team_code):
 
 def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-
+    name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
+    if vm_info.type != 'docker':
+        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
+    else:
+        image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
     mem_info={}
     disk_info = {}
@@ -207,7 +211,7 @@ def vm_info(sql_session, id):
         mem_info = {"mem_total":convertHumanFriend(mem_total), "mem_use":convertHumanFriend(mem_use), "rest_mem":convertHumanFriend(rest_mem), "mem_per_info":mem_per_info}
     vm_info.disk = convertHumanFriend(vm_info.disk)
     vm_info.memory = convertHumanFriend(vm_info.memory)
-    info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info}
+    info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info,"name_info":name_info,"image_info":image_info}
     return info
 
 def vm_info_graph(sql_session, id):

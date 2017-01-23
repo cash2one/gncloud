@@ -244,8 +244,6 @@ angular
                 });
         };
 
-
-
     })
     .directive("checkboxGroup", function() {
         return {
