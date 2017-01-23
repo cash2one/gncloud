@@ -1,7 +1,14 @@
 <div class="container">
 
-    <h1>인스턴스</h1>
+    <h1>인스턴스
+    <div class="create-btn">
+        <a href="#/guestCreate">
+            <button type="submit" value="submit" class="btn btn-success">인스턴스 생성</button>
+        </a>
+    </div>
+    </h1>
     <h2>인스턴스 목록</h2>
+
 
       <div class="table-responsive gn-table-responsive" >
         <table class="table table gn-table">
@@ -30,7 +37,7 @@
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status != 'Error'" src="/gn_images/gn_icon_{{list.os}}.png" alt="">
                     <img ng-show="list.status == 'Starting' || list.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                 </td>
-                <td class="visible-xs-3">
+                <td class="visible-xs-3 second-td-name">
                     <a href="#/guestDetail?id={{list.id}}" class="gn-table-ellip"> {{ list.name }} </a>
                 </td>
                 <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }} Memory/{{ list.disk }} Disk</td>

@@ -7,6 +7,7 @@ import json
 
 from HyperV.util.json_encoder import AlchemyEncoder
 from HyperV.db.models import GnImagesPool, GnHostMachines, GnMonitorHist
+from HyperV.util.logger import logger
 
 __author__ = 'jhjeon'
 
@@ -35,13 +36,14 @@ def hvm_create(id, sql_session):
 
         host_id =vm_info.host_id
         host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
+        image_pool = sql_session.query(GnImagesPool).filter(GnImagesPool.host_id == host_id).first()
         ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
 
         base_image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).first()
 
-        image_path = "/original/"
+        source_path = "/base/"
         if base_image_info.sub_type == 'snap':
-            image_path = "/snap/"
+            source_path = "/snapshot/"
 
         base_image = base_image_info.filename
         os = base_image_info.os
@@ -52,14 +54,14 @@ def hvm_create(id, sql_session):
                         base_image_info.os_bit + '_' + vm_id
 
         SWITCHNAME = "out"
-        new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(vm_info.memory), Path=host_machine.image_path,
+        new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(vm_info.memory), Path=image_pool.manager_path,
                            SwitchName=SWITCHNAME)
         if new_vm is not None:
             # 새 머신에서 추가적인 설정을 한다 (Set-VM)
             set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(vm_info.cpu), MemoryMaximumBytes=str(vm_info.memory))
-            CONVERT_VHD_DESTINATIONPATH = host_machine.image_path+"/vhdx/base/"+internal_name+".vhdx"
+            CONVERT_VHD_DESTINATIONPATH = image_pool.local_path + "/instance/" + internal_name + ".vhdx"
 
-            CONVERT_VHD_PATH = host_machine.image_path+"/vhdx"+ image_path + base_image  #원본이미지로부터
+            CONVERT_VHD_PATH = image_pool.nas_path + source_path + base_image  #원본이미지로부터
 
             # CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
             # CONVERT_VHD_PATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
@@ -69,7 +71,7 @@ def hvm_create(id, sql_session):
 
             # hdd 확장
             if vm_info.disk > 21475000000 and base_image_info.sub_type == 'base':
-                ps.resize_vhd(host_machine.image_path+"/vhdx/base/"+internal_name+".vhdx", host_machine.image_path, vm_info.disk)
+                ps.resize_vhd(image_pool.local_path + "/instance/" + internal_name + ".vhdx", vm_info.disk)
 
             start_vm = ps.start_vm(new_vm['VMId'])
 
@@ -117,12 +119,12 @@ def hvm_create(id, sql_session):
             insert_monitor = GnMonitor(vm_id, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
             sql_session.add(insert_monitor)
             sql_session.commit()
-            sql_session.remove()
+            # sql_session.remove()
             return True
     except:
         vm_info.status = "Error"
         sql_session.commit()
-        sql_session.remove()
+        # sql_session.remove()
         return True
 
 
@@ -134,7 +136,7 @@ def hvm_snapshot():
     image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == org_id.host_id).first()
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
-    create_snap = ps.create_snap(org_id.internal_id, image_pool.image_path)
+    create_snap = ps.create_snap(org_id.internal_id, image_pool.manager_path, image_pool.nas_path)
     try:
         if create_snap['Name'] is not None:
             # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
@@ -198,54 +200,97 @@ def hvm_state(id):
     #print vmid.internal_id
     #    vm = GnVmMachines.query.filter_by().first
     if type == "Resume":
-        # VM 시작
-        # 1. 가상머신을 시작한다. (Start-VM)
-        start_vm = ps.start_vm(vmid.internal_id)
-        # start_vm
-        # print id
-        # 2. 가상머신 상태를 체크한다. (Get-VM)
-        if start_vm['State'] is 2:
-            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id']).update(
-                {"status": "Running", "start_time": datetime.datetime.now()})
+        try:
+            # VM 시작
+            # 1. 가상머신을 시작한다. (Start-VM)
+            start_vm = ps.start_vm(vmid.internal_id)
+            # start_vm
+            # print id
+            # 2. 가상머신 상태를 체크한다. (Get-VM)
+
+            if start_vm['State'] is 2:
+                db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id'])\
+                        .update({"status": "Running", "start_time": datetime.datetime.now()})
+                db_session.commit()
+                # print start_vm['Id']
+                return jsonify(status=True, message="success VM starting")
+            else:
+                db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id'])\
+                        .update({"status": "error"})
+                db_session.commit()
+                return jsonify(status=False, message="정상적인 결과가 아닙니다.")
+        except Exception as err:
+            logger.error(err)
+            db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id']) \
+                .update({"status": "error"})
             db_session.commit()
-            # print start_vm['Id']
-            return jsonify(status=True, message="start success")
-        elif start_vm['State'] is not 2:
-            return jsonify(status=False, message="fail")
-        else:
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
+
     elif type == "stop" or type == "shutdown" :
-        # stop 1. 가상머신을 정지한다. (Stop-VM)
-        stop = ps.stop_vm(vmid.internal_id)
-        # stop 2. 가상머신 상태를 체크한다. (Get-VM)
-        if stop['State'] is 3:
-            # stop 3. 변경된 가상머신 상태를 DB에 업데이트한다.
-            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']).update(
-                {"status": "Stop", "stop_time": datetime.datetime.now()})
+        try:
+            # stop 1. 가상머신을 정지한다. (Stop-VM)
+            stop = ps.stop_vm(vmid.internal_id)
+            # stop 2. 가상머신 상태를 체크한다. (Get-VM)
+            if stop['State'] is 3:
+                # stop 3. 변경된 가상머신 상태를 DB에 업데이트한다.
+                db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id'])\
+                        .update({"status": "Stop", "stop_time": datetime.datetime.now()})
+                db_session.commit()
+                return jsonify(status=True, message="VM Stop")
+            else:
+                db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']) \
+                        .update({"status": "error"})
+                db_session.commit()
+                return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
+                # return jsonify(status=False, message="상태 미완성")
+        except Exception as err:
+            logger.error(err)
+            db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']) \
+                .update({"status": "error"})
             db_session.commit()
-            return jsonify(status=True, message="VM Stop")
-        else:
-            return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
-            # return jsonify(status=False, message="상태 미완성")
+            return jsonify(status=False, message="정상적인 결과가 아닙니다.")
+
     elif type == "Reboot":
-        restart = ps.restart_vm(vmid.internal_id)
-        # resume 1. 가상머신을 재시작한다. (Restart-VM)
-        if restart['State'] is 2:
-            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id']).update(
-                {"start_time": datetime.datetime.now(), "stop_time": datetime.datetime.now()})
+        try:
+            restart = ps.restart_vm(vmid.internal_id)
+            # resume 1. 가상머신을 재시작한다. (Restart-VM)
+            if restart['State'] is 2:
+                db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id'])\
+                    .update({"start_time": datetime.datetime.now(), "stop_time": datetime.datetime.now()})
+                db_session.commit()
+                return jsonify(status=True, message="VM Restart")
+            else:
+                db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id']) \
+                    .update({"status": "error"})
+                db_session.commit()
+                return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
+        except Exception as err:
+            logger.error(err)
+            db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id']) \
+                .update({"status": "error"})
             db_session.commit()
-            return jsonify(status=True, message="VM Restart")
-        else:
-            return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
+            return jsonify(status=False, message="정상적인 결과가 아닙니다.")
+
     elif type == "Suspend":
-        suspend = ps.suspend_vm(vmid.internal_id)
-        if suspend['State'] is 9:
-            update = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id']).update(
-                {"status": "Suspend"})
+        try:
+            suspend = ps.suspend_vm(vmid.internal_id)
+            if suspend['State'] is 9:
+                db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id'])\
+                    .update({"status": "Suspend"})
+                db_session.commit()
+                return jsonify(status=True, message="가상머신이 일시정지되었습니다.")
+            else:
+                db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id']) \
+                    .update({"status": "error"})
+                db_session.commit()
+                return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
+        except Exception as err:
+            logger.error(err)
+            db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id']) \
+                .update({"status": "error"})
             db_session.commit()
-            return jsonify(status=True, message="가상머신이 일시정지되었습니다.")
-        else:
-            return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
+            return jsonify(status=False, message="정상적인 결과가 아닙니다.")
+
     elif type == "powerdown":
         return jsonify(status=False, message="상태 미완성")
     else:
@@ -263,13 +308,12 @@ def hvm_delete(id):
     #  REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
     stop_vm = ps.stop_vm(vmid.internal_id)
     if stop_vm['State'] is 3:
-        delete_vm = ps.delete_vm(vmid.internal_id, "base", image_pool.image_path)
-        update_vm_machines = db_session.query(GnVmMachines).filter(GnVmMachines.id
-                                                                   == id).update({"status" : "Removed"})
+        delete_vm = ps.delete_vm(vmid.internal_id, image_pool.local_path, image_pool.manager_path)
+        update_vm_machines = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
         db_session.commit()
-        update_vm_images = db_session.query(GnVmImages).filter(GnVmImages.filename == vm_info['VMName']
-                                                               +".vhdx").update({"status" : "Removed"})
-        db_session.commit()
+        # update_vm_images = db_session.query(GnVmImages).filter(GnVmImages.filename == vm_info['VMName']
+        #                                                       +".vhdx").update({"status" : "Removed"})
+        # db_session.commit()
         # REST hvm_delete 2. VM을 삭제한다.
         # todo REST hvm_delete 3. 삭제된 VM DB 데이터를 삭제 상태로 업데이트한다.
         return jsonify(message="Remove success", status=True)
@@ -335,7 +379,7 @@ def hvm_delete_image(id):
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vhd_Name.host_id).first()
 
     ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
-    image_delete = ps.delete_vm_Image(vhd_Name.filename, vhd_Name.sub_type, image_pool.image_path)
+    image_delete = ps.delete_vm_Image(vhd_Name.filename, image_pool.nas_path)
 
     json_obj = json.dumps(image_delete)
     json_size = len(json_obj)

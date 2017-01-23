@@ -100,7 +100,7 @@ class PowerShell(object):
         return self.send_get_vm_info(script, ip)
 
     #하드디스크 확장
-    def resize_vhd(self, vhd_name, path, size):
+    def resize_vhd(self, vhd_name, size):
         script = 'Resize-VHD -Path '+vhd_name+' -SizeBytes '+str(size)+';'
         script += "$dl=mount-vhd " +vhd_name+" -Passthru | get-disk | get-partition | get-volume;" \
                                             "foreach($x in $dl){" \
@@ -250,20 +250,23 @@ class PowerShell(object):
         return self.send(script)
 
     #VM 이미지 삭제
-    def delete_vm_Image(self, vhd_File_Name, type, path):
+    def delete_vm_Image(self, vhd_File_Name, path):
         #하이퍼V폴더에 반드시 backup 폴더가 있어야 합니다.
-        script = "Move-Item -Path "+path+"/vhdx/"+type+"/" + vhd_File_Name
-        script += " -Destination "+path+"/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json -Compress;"
+        script = "Remove-Item -Path "+path+"/snapshot/" + vhd_File_Name + " | ConvertTo-Json -Compress;"
+        #script += " -Destination "+path+"/vhdx/backup/" + vhd_File_Name + " | ConvertTo-Json -Compress;"
         #print script
         return self.send(script)
 
     #VM 삭제
-    def delete_vm(self, vmId, type, path):
-        script = "$vm = Get-VM -Id "+vmId+";"
+    def delete_vm(self, vmId, path, manager_path):
+        # complete deleting about all
+        script =  "$vm = Get-VM -Id "+vmId+";"
         script += "$vmn = $vm.Name;"
         script += "Remove-VM -VM $vm -Force;"
-        script += "Move-Item -Path "+path+"/vhdx/"+type+'/$vmn".vhdx" '
-        script += "-Destination "+path+"/vhdx/backup/ | ConvertTo-Json -Compress"
+        script += "Remove-Item -Path "+ path + 'instance/$vmn".vhdx" ;'
+        script += "Remove-Item -Recurse -Path "+ manager_path + '/$vmn ; '
+        #script += "Move-Item -Path "+path+"/vhdx/"+type+'/$vmn".vhdx" '
+        #script += "-Destination "+path+"/vhdx/backup/ | ConvertTo-Json -Compress"
         #print script
         return self.send(script)
 
@@ -273,18 +276,18 @@ class PowerShell(object):
         return self.send(script)
 
     #스냅샷 생성
-    def create_snap(self, vm_Id, path):
+    def create_snap(self, vm_Id, local_path, nas_path):
         snapshot_id = "_"+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         #script = 'Invoke-Command -ComputerName '+computer_name+' -ScriptBlock {'
         script = '$vm = Get-VM -Id '
         script += vm_Id + ';'
         script += '$VMname = $vm.Name;'
         script += '$CloneVMname = "' +snapshot_id+'";'
-        script += 'Export-VM -Name $VMname -Path '+path+'/$VMname"clone"/ '+';'
-        script += 'Move-Item '+path+'/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
-        script += '-Destination '+path+'/vhdx/snap/$VMName$CloneVMname".vhdx";'
-        script += 'Remove-Item -Path '+path+'/$VMname"clone" -Recurse ;'
-        script += 'Get-ChildItem -Path '+path+'/vhdx/snap/$VMName'
+        script += 'Export-VM -Name $VMname -Path '+local_path+'/$VMname"clone"/ '+';'
+        script += 'Move-Item '+local_path+'/$VMname"clone"/$VMname/"Virtual Hard Disks"/$VMName.vhdx '
+        script += '-Destination '+nas_path+'/snapshot/$VMName$CloneVMname".vhdx";'
+        script += 'Remove-Item -Path '+local_path+'/$VMname"clone" -Recurse ;'
+        script += 'Get-ChildItem -Path '+nas_path+'/snapshot/$VMName'
         script += '"' + snapshot_id
         script += '.vhdx"| Select-Object -Property Name | ConvertTo-Json -Compress'
         # print script

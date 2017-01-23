@@ -15,7 +15,7 @@ from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonito
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
                              , GnCluster,GnDockerImageDetail, GnVmSize, GnLoginHist
 from Manager.util.config import config
-from Manager.util.hash import random_string, convertToHashValue, convertsize, convertcore
+from Manager.util.hash import random_string, convertToHashValue, convertsize
 
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, backup ,sql_session):
@@ -1086,8 +1086,10 @@ def price_list(sql_seesion):
         price.disk = convertHumanFriend(price.disk)
     return price_info
 
-def price_put(cpu, mem, disk,hour_price,day_price , sql_session):
-    byte_cpu = convertcore(cpu)
+def price_put(cpu, mem, disk,price,disk_size,mem_size,price_hour, sql_session):
+    byte_cpu = cpu
+    mem=mem+mem_size
+    disk=disk+disk_size
     byte_mem = convertsize(mem)
     byte_disk= convertsize(disk)
     while True:
@@ -1095,7 +1097,7 @@ def price_put(cpu, mem, disk,hour_price,day_price , sql_session):
         check_info = sql_session.query(GnVmSize).filter(GnVmSize.id == id).first()
         if not check_info:
             break
-    price_info = GnVmSize(id=id,cpu=byte_cpu, mem=byte_mem, disk=byte_disk, hour_price=hour_price, day_price=day_price)
+    price_info = GnVmSize(id=id,cpu=byte_cpu, mem=byte_mem, disk=byte_disk, hour_price=price_hour, day_price=price)
     sql_session.add(price_info)
     sql_session.commit()
 

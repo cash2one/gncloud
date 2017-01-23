@@ -37,7 +37,7 @@
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">CPU</label>
                                             <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.cpu.$invalid && !clusterForm.cpu.$pristine }">
-                                                <input type="text" class="form-control" name="cpu" placeholder="1" ng-model="data.cpu" required>
+                                                <input type="text" class="form-control gn-form-control" name="cpu" placeholder="1" ng-model="data.cpu" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.cpu.$pristine" class="help-block">CPU 개수를 입력하세요.</p>
                                             </div>
                                             <span>CORE</span>
@@ -45,25 +45,24 @@
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">Memory</label>
                                             <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.mem.$invalid && !clusterForm.mem.$pristine }">
-                                                <input type="text" class="form-control" name="mem" placeholder="2" ng-model="data.mem" required>
+                                                <input type="text" class="form-control gn-form-control" name="mem" placeholder="2" ng-model="data.mem" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.mem.$pristine" class="help-block">메모리 크기를 입력하세요.</p>
                                             </div>
                                             <span>
-                                                <select class="gn-select gn-form-control col-sm-2" name="mem_size" ng-model="guest_image" ng-options="mem.name in mem" ng-change="sizemem()">
-                                                    <option value="">GB</option>
+                                                <select class="gn-select gn-form-control col-sm-2" name="mem_size" ng-model="memsize" ng-options="mem.name for mem in mem" ng-change="sizemem(memsize)">
+                                                    <option value="">선택</option>
                                             </select>
                                             </span>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">Disk</label>
                                             <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.disk.$invalid && !clusterForm.disk.$pristine }">
-                                                <input type="text" class="form-control" name="disk" placeholder="10" ng-model="data.disk" required>
+                                                <input type="text" class="form-control gn-form-control" name="disk" placeholder="10" ng-model="data.disk" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.disk.$pristine" class="help-block">디스크 크기를 입력하세요.</p>
                                             </div>
                                             <span>
-                                            <select class="gn-select gn-form-control col-sm-2" name="disk_size" ng-model="data.disk_size">
-                                                <option value="">GB</option>
-                                                <option value="TB">TB</option>
+                                            <select class="gn-select gn-form-control col-sm-2" name="disk_size" ng-model="disksize" ng-options="disk.name for disk in disk" ng-change="sizedisk(disksize)">
+                                                <option value="">선택</option>
                                             </select>
                                         </span>
                                         </div>
@@ -71,7 +70,7 @@
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">가격</label>
                                             <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.won.$invalid && !clusterForm.won.$pristine }">
-                                                <input type="text" class="form-control" name="won" placeholder="1000" ng-model="data.won" required>
+                                                <input type="text" class="form-control gn-form-control" name="won" placeholder="1000" ng-model="data.won" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.won.$pristine" class="help-block">가격를 입력하세요.</p>
                                             </div>
                                             <span>원/일</span>
@@ -79,7 +78,7 @@
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">가격</label>
                                             <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.won.$invalid && !clusterForm.won.$pristine }">
-                                                <input type="text" class="form-control" name="won_hour" placeholder="100" ng-model="data.won_hour" required>
+                                                <input type="text" class="form-control gn-form-control" name="won_hour" placeholder="100" ng-model="data.won_hour" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.won.$pristine" class="help-block">가격를 입력하세요.</p>
                                             </div>
                                             <span>원/시간</span>
