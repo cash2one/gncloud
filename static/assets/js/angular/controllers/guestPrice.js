@@ -19,6 +19,17 @@ angular
                 });
         }
         $scope.price();
+        $scope.data={}
+        $scope.mem=[
+            {name:'GB',type:'GB'},
+            {name:'MB',type:'MB'}
+        ]
+        $scope.sizemem=function (data) {
+            $scope.data.mem_size = data;
+        }
+        $scope.sizedisk=function (data) {
+            $scope.data.disk_size = data;
+        }
         $scope.savesize=function(){
             $http({
                 method: 'POST',
@@ -35,6 +46,7 @@ angular
                     console.log(status);
                 });
         }
+
         $scope.actions = [
             {name: '삭제', type: 'delete'}
         ];

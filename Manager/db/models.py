@@ -370,19 +370,23 @@ class GnMonitorHist(Base):
 
 class GnImagePool(Base):
     __tablename__= "GN_IMAGES_POOL"
-    id = Column(String(8), primary_key=True, nullable=False)
-    type =Column(String(10), primary_key=False, nullable=False)
-    image_path =Column(String(200), primary_key=False,nullable=False)
-    host_id =Column(String(8), primary_key=False, nullable=False)
+    host_id = Column(String(8), primary_key=True, nullable=False, default='')
+    id = Column(String(8), nullable=True, default='')
+    type = Column(String(10), nullable=True, default='')
+    local_path = Column(String(200), nullable=True, default='')
+    nas_path = Column(String(200), nullable=True, default='')
+    manager_path = Column(String(200), nullable=True, default='')
 
-    def __init__(self, id=id, type=None, image_path=None, host_id=None):
+    def __init__(self, host_id=host_id, type=None, nas_path=None, id=None, local_path=None, manager_path=None):
         self.id = id
         self.type = type
-        self.image_path = image_path
+        self.local_path = local_path
+        self.nas_path = nas_path
+        self.manager_path =manager_path
         self.host_id = host_id
 
     def __repr__(self):
-        return '< ID %r / Type %r / Image_path %r / Host_id %r>'\
+        return '< ID %r / Type %r / Image_path %r / Host_id %r / >'\
                 %(self.id , self.type, self.image_path, self.host_id)
 
     def __json__(self):
