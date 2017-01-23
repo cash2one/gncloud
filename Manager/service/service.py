@@ -1119,13 +1119,17 @@ def logout_info(user_id, team_code, sql_session):
     sql_session.add(logout)
     sql_session.commit()
 
-def login_history(sql_session):
-    list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).all()
+def login_history(page, sql_session): #login history
+    page_size=30
+    list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).limit(page_size).offset(page*page_size).all()
+    login_info={};
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
-    return list
+    login_info={"list":list,"page":page}
+    return login_info
 
-def backupchnage(id, backup, sql_sseion):
+
+def backupchnage(id, backup, sql_sseion): #백업 수정
     list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     if(backup == False):
         list.backup_comfirm = "false"
