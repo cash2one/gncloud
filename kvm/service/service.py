@@ -5,10 +5,9 @@ import subprocess
 
 import datetime
 from pexpect import pxssh
-
 from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys
 from kvm.db.database import db_session
-from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
+from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_delete
 from kvm.util.config import config
 
 USER = "root"
@@ -100,26 +99,23 @@ def setStaticIpAddress(ip, host_ip, ssh_id):
 def server_delete(id,sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one();
 
-    # backup image
-    s = pxssh.pxssh()
-    s.login(guest_info.gnHostMachines.ip, USER)
-    s.sendline("mv "+config.LIVERT_IMAGE_PATH+guest_info.internal_name+".img "+config.LIVERT_IMAGE_BACKUP_PATH+guest_info.internal_name+".img")
-    s.close()
-
     # vm 삭제
     kvm_vm_delete(guest_info.internal_name, guest_info.gnHostMachines.ip);
 
     # db 저장
-    guest_info.status = "Removed"
+    sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
     sql_session.commit()
 
 
 def server_image_delete(id, sql_session):
 
     image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
-    # 물리적 이미지 삭제하지 않고 데이터만 삭제된걸로 수정
-    kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
-    image_info.status = "Removed"
+    s = pxssh.pxssh()
+    s.login(image_info.gnHostMachines.ip, USER)
+    s.sendline("rm -f "+config.LIVERT_IMAGE_SNAPSHOT_PATH+image_info.filename)
+    s.logout()
+    #kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
+    sql_session.query(GnVmImages).filter(GnVmImages.id == id).delete()
     sql_session.commit()
 
 
@@ -133,22 +129,17 @@ def server_change_status(id, status, sql_session):
 
 
 def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
-    print id
-    print image_id
     snap_info = db_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     try:
         # 네이밍
         new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
-        # 원본디스크 ip를 dhcp로 교체
-        #setChangDhcp(guest_info.gnHostMachines.ip ,guest_info.ip, snap_info.ssh_id, "dhcp")
-
         # 디스크 복사
-        kvm_image_copy(guest_info.internal_name, new_image_name, guest_info.gnHostMachines.ip)
-
-        # 원본디스크 ip를 dhcp로 교체
-        #setChangDhcp(guest_info.gnHostMachines.ip ,guest_info.ip, snap_info.ssh_id, "static")
+        s = pxssh.pxssh()
+        s.login(guest_info.gnHostMachines.ip, USER)
+        s.sendline("cp "+config.LIVERT_IMAGE_LOCAL_PATH+guest_info.internal_name+".img"+" "+config.LIVERT_IMAGE_SNAPSHOT_PATH+new_image_name+".img")
+        s.logout()
 
         snap_info.filename = new_image_name+'.img'
         snap_info.status = "Running"

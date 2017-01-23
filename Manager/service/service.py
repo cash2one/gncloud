@@ -198,7 +198,7 @@ def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
     if vm_info.type != 'docker':
-        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
+        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one_or_none()
     else:
         image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
