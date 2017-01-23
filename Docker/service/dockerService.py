@@ -14,16 +14,22 @@ from Docker.util.logger import logger
 class DockerService(object):
 
     def __init__(self, addr, id, passwd):
-        self.cmd = pxssh.pxssh()
-        self.login_check = self.cmd.login(addr, id, passwd)
-        if not self.login_check:
-            logger.error("SSH 로그인 에러")
+        try:
+            self.cmd = pxssh.pxssh()
+            self.login_check = self.cmd.login(addr, id, passwd)
+            if not self.login_check:
+                logger.error("SSH 로그인 에러")
+            self.cmd.prompt()
+        except Exception as e:
+            logger.error(e)
+            self.login_check = False
 
     # Docker 서비스를 생성한다.
     def docker_service_create(self, id, image_id, cpu, memory):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
             return "SSH 로그인 에러"
+
         dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
         if dockerimage is None:
             return None
@@ -61,6 +67,7 @@ class DockerService(object):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
             return "SSH 로그인 에러"
+
         dockerimage = GnDockerImages.query.filter_by(name=image).first()
         if dockerimage is None:
             return None
@@ -104,7 +111,14 @@ class DockerService(object):
             logger.error("SSH 로그인 에러")
             return "SSH 로그인 에러"
         command = "docker service inspect %s" % internal_id
-        return self.send_command_return_json(command)
+        try:
+            # docker swarm manager need a second for assigning to service port
+            time.sleep(3)
+            result = self.send_command_return_json(command)
+        except Exception as e:
+              logger.error(e)
+
+        return result
 
     # Docker 서비스를 삭제한다.
     def docker_service_rm(self, internal_id):
@@ -134,6 +148,7 @@ class DockerService(object):
         container_list = []
         command = "docker service ps %s" % internal_id
         result = self.send_command_return_all_line(command)
+
         for line in result:
             logger.debug("get_service_containers result line: %s" % line)
             container_info = line.split()
@@ -142,6 +157,8 @@ class DockerService(object):
             elif container_info[0] == "docker" or container_info[0] == "ID":
                 pass
             else:
+                if container_info[0] is None:
+                    return None
                 container = {}
                 container['internal_id'] = container_info[0]
                 container['internal_name'] = container_info[1]
@@ -294,4 +311,4 @@ class DockerService(object):
         return json.loads(response.json())
 
     def logout(self):
-        self.cmd.logout()
+        self.cmd.close(self)

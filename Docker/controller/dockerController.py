@@ -21,6 +21,7 @@ def doc_create(id,sql_session):
     #로직 변경
     print("get id"+id)
     docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    ds = None
 
     try:
         image_id = docker_info.image_id
@@ -31,7 +32,7 @@ def doc_create(id,sql_session):
         tag = docker_info.tag
         print(docker_info.id+":request ok")
 
-        logger.debug("id: %s, image_id: %s, name: %s, tag: %s, cpu: %s, disk: %s, memory: %s" %
+        print("id: %s, image_id: %s, name: %s, tag: %s, cpu: %s, disk: %s, memory: %s" %
                      (id, image_id, name, tag, cpu, disk, memory))
         # --- //파라미터 정리 ---
         # --- Docker Service (밖에서 보기엔 컨테이너 생성) 생성 ---
@@ -64,6 +65,7 @@ def doc_create(id,sql_session):
             # 생성된 Service의 Container 정보를 DB에 저장한다.
             service_container_list = ds.get_service_containers(docker_service[0]['ID'])
             while service_container_list is None:
+                time.sleep(3)
                 service_container_list = ds.get_service_containers(docker_service[0]['ID'])
             logger.debug("service_container_list: %s" % service_container_list)
             for service_container in service_container_list:
@@ -114,7 +116,6 @@ def doc_create(id,sql_session):
         sql_session.rollback()
         docker_info.status = "Error"
         sql_session.commit()
-        ds.logout()
         logger.error(e)
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
@@ -242,6 +243,7 @@ def doc_state(id):
 
 # Docker Service 스냅샷 저장
 def doc_snap():
+    ds = None
     try:
         sql_session = db_session
         if 'userId' in request.json:
@@ -284,21 +286,28 @@ def doc_snap():
         ds.logout()
         return jsonify(status=True, message="Success")
     except Exception as err:
-        ds.logout()
         return jsonify(status=False, message="Error: %s" % err)
 
 
 # Docker 서비스 삭제
 def doc_delete(id,sql_session):
+    ds = None
     # 지정된 Docker 서비스를 삭제한다.
+
+    logger.debug('delete docker start ~~~')
     try:
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        logger.debug('after ssh shell prompt')
         service = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
+
+        logger.debug('delete docker %s' % service.internal_name)
         # 서비스 삭제 (서비스 및 컨테이너가 삭제된다)
         result = ds.docker_service_rm(service.internal_id)
+        logger.debug('after docker_service_rm')
         for container in service.gnDockerContainers:
             # 각 컨테이너 노드 별로 존재하는 볼륨 삭제
             result2 = ds.docker_volume_rm(container.host_id, service.gnDockerVolumes)
+        logger.debug('after docker_volume_rm')
         # DB에 삭제된 내용을 업데이트한다.
         if service is not None:
             # 서비스 상태 수정
@@ -313,7 +322,6 @@ def doc_delete(id,sql_session):
         ds.logout()
     except Exception as err:
         logger.error(err)
-        ds.logout()
 
     if result == service.internal_id:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")

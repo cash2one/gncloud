@@ -40,14 +40,14 @@ def service_monitoring(sql_session):
                         # Memory 사용량 가지고 오기
                         mem_usage += round(float(line[7][:-1]), 4)
                         # container_info['DISK_USAGE'] = float(line[13])/float(line[16])
-                        # 디스크 사용량 가지고 오기
-                        disk_usage += round(float(line[13])/1000.0, 4)
+                        # 디스크 사용량 가지고 오기 => change "no disk usage of docker"
+                        #disk_usage += round(float(line[13])/1000.0, 4)
                         # 네트워크 정보 가지고 오기
                         net_usage += float(line[8])
                 ssh.close()
             cpu_usage = (cpu_usage/2.0)
             mem_usage = (mem_usage/2.0)
-            disk_usage = (disk_usage/2.0)
+            #disk_usage = (disk_usage/2.0)
             net_usage = (net_usage/2.0)
             vm_monitor_hist = GnMonitorHist(
                 id=service.id, type="docker", cpu_usage=cpu_usage, mem_usage=mem_usage,

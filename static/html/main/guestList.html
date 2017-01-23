@@ -7,28 +7,27 @@
         <table class="table table gn-table">
             <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th class="col-sm-3 col-xs-9">이름</th>
-                    <th class="col-sm-3 hidden-xs">사양</th>
-                    <th class="col-sm-1 hidden-sm hidden-xs">타입</th>
-                    <th class="col-sm-2 hidden-md hidden-sm hidden-xs">IP</th>
-                    <th class="col-sm-1 hidden-xs">소유자</th>
-                    <th class="col-sm-1 hidden-md hidden-sm hidden-xs">생성일
+                    <th class="first-td"></th>
+                    <th class="">이름</th>
+                    <th class="hidden-xs">사양</th>
+                    <th class="hidden-sm hidden-xs">타입</th>
+                    <th class="hidden-md hidden-sm hidden-xs">IP</th>
+                    <th class="hidden-xs">소유자</th>
+                    <th class="hidden-md hidden-sm hidden-xs">생성일
                         <div class="refresh" ng-click="refresh()"></div>
                     </th>
-                    <th class="col-sm-1 hidden-xs">태그</th>
-                    <th class="col-sm-1 col-xs-3"><!--더보기--></th>
+                    <th class="hidden-xs">태그</th>
+                    <th class=""><!--더보기--></th>
                 </tr>
             </thead>
             <tbody class="gn-tdody">
             <tr ng-repeat="list in guest_list">
-                <td class="first-td-dot">
+                <td>
                     <div class="gn-dot-play" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Running' || list.status=='Reboot'"></div>
                     <div class="gn-dot-stop" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Stop'"></div>
                     <div class="gn-dot-error" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Error'"></div>
                 </td>
-                <td class="second-td-img">
+                <td>
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Suspend'" src="/gn_images/gn_dot_doing.png" alt="">
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status != 'Error'" src="/gn_images/gn_icon_{{list.os}}.png" alt="">
                     <img ng-show="list.status == 'Starting' || list.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
