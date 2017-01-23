@@ -24,7 +24,8 @@ angular
                         $scope.image_data = data.info.image_info;
                         $scope.image_data.name = data.info.image_info.view_name;
                     }
-
+                    if($scope.vm_data.backup_comfirm == 'false')
+                    $scope.vm_data.backup_comfirm=0;
                 }
                 else {
                     alert(data.message)
@@ -108,6 +109,28 @@ angular
                             alert(data.value)
                         }
                     }
+                });
+        }
+        $scope.backupchange=function (data) {
+            console.log(data);
+            $scope.data = {};
+            $scope.data.backup = data;
+            $http({
+                method: 'PUT',
+                url:'/api/manager/vm/backup/'+$routeParams.id,
+                data:$scope.data,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+
+                    }
+                    else {
+
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
                 });
         }
 

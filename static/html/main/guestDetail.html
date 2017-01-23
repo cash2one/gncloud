@@ -156,10 +156,12 @@
 <div class="gn-box gn-detail-main">
     <div class="gn-margin-box">
         <h2>백업</h2>
+        <span ng-bind="vm_data.backup_comfirm"></span>
         <label class="gn-lead">백업주기는 시스템 관리자가 설정합니다.</label>
         <div class="checkbox-switch" style="float:right;">
             <form>
-                <switch id="enabled" name="enabled" ng-model="data.enabled" on="On" off="Off" class="green"></switch>
+                <switch id="data.backup" name="data.backup" ng-model="vm_data.backup_comfirm" on="On" off="Off" class="green" ng-change="backupchange(vm_data.backup_comfirm)" ></switch>
+
             </form>
         </div>
     </div>

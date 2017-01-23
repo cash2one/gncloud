@@ -55,9 +55,11 @@ def create_vm():
     image_id=""
     type = ""
     sub_type =""
+    backup="false"
     team_code = session['teamCode']
     user_id = session['userId']
-    backup = request.json['backup']
+    if 'backup' in request.json:
+        backup = request.json['backup']
     if 'vm_name' in request.json:
         name = request.json['vm_name']
     if 'size_id' in request.json:
@@ -601,6 +603,11 @@ def snaplistinfo(id):
 @app.route('/vm/loginhist', methods=['GET'])
 def login_hist():
     return jsonify(status=True, message="success", list=login_history(db_session))
+
+@app.route('/vm/backup/<id>', methods=['PUT'])
+def backup_change(id):
+    backup=request.json['backup']
+    return jsonify(status=True, list=backupchnage(id, backup, db_session))
 
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]

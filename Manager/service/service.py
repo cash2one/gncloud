@@ -81,9 +81,9 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
 
     #backup imfo
     if(backup == True):
-        backup = "True"
+        backup = "true"
     else:
-        backup= "False"
+        backup= "false"
     #db 저장
     #id 생성
     while True:
@@ -1117,3 +1117,11 @@ def login_history(sql_session):
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
+
+def backupchnage(id, backup, sql_sseion):
+    list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    if(backup == "false"):
+        list.backup_comfirm = "false"
+    else:
+        list.backup_comfirm = "true"
+    sql_sseion.commit()
