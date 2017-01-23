@@ -27,20 +27,24 @@ from HyperV.db.database import Base
 
 class GnImagesPool(Base):
     __tablename__ = 'GN_IMAGES_POOL'
-    id = Column(String(8), primary_key=True, nullable=False, unique=True)
+    host_id = Column(String(8), primary_key=True, nullable=False, unique=True)
+    id = Column(String(8), nullable=False, unique=True)
     type = Column(String(10), nullable=True, default=None)
-    image_path = Column(String(200), nullable=True, default=None)
-    host_id = Column(String(8), nullable=True, default=None)
+    local_path = Column(String(200), nullable=True, default=None)
+    nas_path = Column(String(200), nullable=True, default=None)
+    manager_path =  Column(String(200), nullable=True, default=None)
 
-    def __init__(self,id ,type ,image_path, host_id):
+    def __init__(self, host_id ,type ,local_path, nas_path, manager_path):
         self.id = id
         self.type = type
-        self.image_path = image_path
+        self.local_path = local_path
+        self.nas_path = nas_path
         self.host_id = host_id
+        self.manager_path = manager_path
 
     def __repr__(self):
-        return "<GnImagesPool(id='%r', type='%r', image_path='%r', host_id = '%r')>" \
-               % (self.id, self.type, self.image_path, self.host_id)
+        return "<GnImagesPool(_hostid='%r', type='%r', local_path='%r', nas_path='%r', manager_path = '%r')>" \
+               % (self._hostid, self.type, self.local_path, self.nas_path, self.manager_path)
 
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'
