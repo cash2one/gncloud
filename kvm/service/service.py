@@ -139,6 +139,7 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
         s = pxssh.pxssh()
         s.login(guest_info.gnHostMachines.ip, USER)
         s.sendline("cp "+config.LIVERT_IMAGE_LOCAL_PATH+guest_info.internal_name+".img"+" "+config.LIVERT_IMAGE_SNAPSHOT_PATH+new_image_name+".img")
+        s.prompt(300)
         s.logout()
 
         snap_info.filename = new_image_name+'.img'

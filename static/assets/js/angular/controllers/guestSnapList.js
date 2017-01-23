@@ -58,10 +58,10 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.snap_list = data.list.guest_list;
-                        for(var i = 0 ; i < data.list.guest_list.length ; i++){
+                        for(var i = 0 ; i < $scope.snap_list.length ; i++){
                             $scope.snap_list[i].create_time_diff = dateModifyService.modifyDate(data.list.guest_list[i].create_time);
                         }
-
+                        console.log(data.list.guest_list.length);
                     }
                     if(data.list.retryCheck == false){
                         $interval.cancel(stop);
@@ -218,6 +218,8 @@ angular
                         }
                         $scope.snapshot=data.list.snap_info;
                         $scope.snapshot.user_name = data.list.user_info.user_name;
+                        $scope.parent_history = Array.prototype.slice.call(data.list.parent_history.split(",")).reverse();
+
                     } else {
 
                     }
