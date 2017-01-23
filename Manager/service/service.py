@@ -4,16 +4,12 @@ __author__ = 'NaDa'
 
 import subprocess
 
-import datetime
 import humanfriendly
 from flask import render_template
 from sqlalchemy import func
 
 from Manager.db.database import db_session
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
-                             , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
-                             , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
-                             , GnCluster,GnDockerImageDetail, GnVmSize, GnLoginHist
+from Manager.db.models import *
 from Manager.util.config import config
 from Manager.util.hash import random_string, convertToHashValue, convertsize
 
@@ -1136,3 +1132,11 @@ def backupchnage(id, backup, sql_sseion): #백업 수정
     else:
         list.backup_comfirm = "true"
     sql_sseion.commit()
+
+def money_list(sql_ssesion):
+    return sql_ssesion.query(GnSystemSetting).one()
+
+def monitoring_time_change(monitor_period, sql_session):
+    list = sql_session.query(GnSystemSetting).one()
+    list.monitor_period = monitor_period
+    sql_session.commit()

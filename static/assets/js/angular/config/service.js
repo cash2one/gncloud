@@ -23,6 +23,7 @@ var serviceConfig = function ($routeProvider, $httpProvider) {
         .when('/guestImage', {templateUrl: '/main/guestImage.html', controller: 'guestImageCtrl'})
         .when('/guestPrice', {templateUrl: '/main/guestPrice.html', controller: 'guestPriceCtrl'})
         .when('/guestLoginHist', {templateUrl: '/main/guestLoginHist.html', controller: 'guestLoginHistCtrl'})
+        .when('/guestMoney', {templateUrl: '/main/guestMoney.html', controller: 'guestMoneyCtrl'})
     $httpProvider.interceptors.push('serviceLogger');
 }
 
