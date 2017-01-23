@@ -242,9 +242,14 @@ def login_list(user_id, password, sql_session):
                            .filter(GnUser.password == password)\
                            .one_or_none()
     if user_info != None:
-        login_hist=GnLoginHist(user_id=user_info.GnUser.user_id, action='login',team_code=user_info.GnUserTeam.team_code,action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
-        sql_session.add(login_hist)
-        sql_session.commit()
+        if(user_info.GnUserTeam != None):
+            login_hist=GnLoginHist(user_id=user_info.GnUser.user_id, action='login',team_code=user_info.GnUserTeam.team_code,action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+            sql_session.add(login_hist)
+            sql_session.commit()
+        else:
+            login_hist=GnLoginHist(user_id=user_info.GnUser.user_id, action='login',action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+            sql_session.add(login_hist)
+            sql_session.commit()
     return user_info
 
 
