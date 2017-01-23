@@ -411,7 +411,6 @@ def getQuotaOfTeam(team_code, sql_session):
 
     #docker 인스턴스 개수
     vm_docker_query = sql_session.query(func.count(GnVmMachines.id).label("count")) \
-                                 .filter(GnVmMachines.team_code == team_code) \
                                  .filter(GnVmMachines.status != config.REMOVE_STATUS) \
                                  .filter(GnVmMachines.type == "docker") \
                                  .filter(GnVmMachines.status != config.ERROR_STATUS)
@@ -477,8 +476,8 @@ def getQuotaOfTeam(team_code, sql_session):
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
     docker_info = vm_docker_count.count
-    vm_kvm_per = 0;
-    vm_hyperv_per = 0;
+    vm_kvm_per = 0
+    vm_hyperv_per = 0
     if vm_kvm_count.count != 0:
         vm_kvm_per = (vm_kvm_count.count*100)/(vm_kvm_count.count+vm_hyperv_count.count)
     if vm_hyperv_count.count != 0:
