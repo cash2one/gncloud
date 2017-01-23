@@ -472,8 +472,8 @@ def getQuotaOfTeam(team_code, sql_session):
     count_info = [vm_run_count.count,vm_stop_count.count]
     type_info = [vm_kvm_count.count,vm_hyperv_count.count]
     docker_info = vm_docker_count.count
-    vm_kvm_per = 0;
-    vm_hyperv_per = 0;
+    vm_kvm_per = 0
+    vm_hyperv_per = 0
     if vm_kvm_count.count != 0:
         vm_kvm_per = (vm_kvm_count.count*100)/(vm_kvm_count.count+vm_hyperv_count.count)
     if vm_hyperv_count.count != 0:
