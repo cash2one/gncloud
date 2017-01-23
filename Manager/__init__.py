@@ -585,7 +585,10 @@ def Price_info_put():
     mem = request.json['mem']
     disk = request.json['disk']
     price = request.json['won']
-    return jsonify(status=True, message="success", list=price_put(cpu,mem,disk,price,db_session))
+    price_hour = request.json['won_hour']
+    disk_size = request.json['disk_size']
+    mem_size = request.json['mem_size']
+    return jsonify(status=True, message="success", list=price_put(cpu,mem,disk,price,disk_size,mem_size,price_hour,db_session))
 
 @app.route('/vm/price/<id>', methods=['DELETE'])
 def price_info_delete(id):

@@ -42,10 +42,3 @@ def convertprice(price):
         return price
     else:
         return size_split[1]
-
-def convertcore(core):
-    size_split = core.partition('CORE')
-    if(size_split[1]!='CORE'):
-        return core
-    else:
-        return size_split[0]

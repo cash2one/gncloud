@@ -50,6 +50,8 @@ li{
     list-style: none;
 }
 
+
+
 .gn-box{
     border-radius: 3px;
     border: 2px solid rgba(215,215,215,.5);
@@ -81,10 +83,6 @@ li{
     color: #7d7d7d;
     border-radius: 3px;
     margin-bottom: 10px;
-}
-.gn-input.error{
-    border :1px solid #ff0000;
-    box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
 }
 
 .gn-form-control{
@@ -157,6 +155,7 @@ textarea.gn-form-control{
     width: 70px;
     text-align: left;
     padding: 2px 0;
+    font-weight: 400;
 }
 
 .gn-description-list dd{
@@ -288,6 +287,13 @@ td:nth-of-type(1) img{width: 35px;}
     height: 33px; 
 }
 
+.gn-noti{
+    background: url(../gn_images/gn-noti-img.png) no-repeat;    
+    width: 23px;
+    height: 21px;
+    margin: 29px 10px 29px 0px;
+}
+
 .navbar-nav{
     text-align: center;
 }
@@ -311,12 +317,12 @@ li.nav-link > a{
 li.nav-link a:focus,
 li.nav-link a:hover,
 li.nav-link.active>a, 
-li.nav-link.active>a:focus, 
+/*li.nav-link.active>a:focus, */
 li.nav-link.active>a:hover,
 .navbar-default .navbar-nav>li.nav-link.active>a, 
-.navbar-default .navbar-nav>li.nav-link.active>a:focus, 
+/*.navbar-default .navbar-nav>li.nav-link.active>a:focus, */
 .navbar-default .navbar-nav>li.nav-link.active>a:hover,
-.navbar-default .navbar-nav>li.nav-link>a:focus, 
+/*.navbar-default .navbar-nav>li.nav-link>a:focus,*/ 
 .navbar-default .navbar-nav>li.nav-link>a:hover{
     color: #58c4c6 !important;
     background-color: transparent;
@@ -377,11 +383,6 @@ li.nav-link.active>a:hover,
 /*인스턴스 생성 버튼*/
 .navbar-right li.create-btn{
     margin-top: 20px;    
-}
-
-.create-btn > a > button{
-    padding: 0px 20px;
-	height: 46px;   
 }
 
 /*drop style*/
@@ -486,10 +487,6 @@ li.nav-link.active>a:hover,
     text-align: left;
 } 
 
-.gn-table-responsive > .gn-table tbody.gn-tdody tr td:nth-of-type(1) img{
-    margin-right: 10px;
-}
-
 .gn-table-responsive > .gn-table tbody tr td > p{
     margin: 0;
 }
@@ -507,6 +504,7 @@ li.nav-link.active>a:hover,
     background-color: rgba(238,238,238,50);
     color: #58c4c6;
     border-radius: 3px;
+    margin-right: 5px;
 }
 
 .navbar-default .navbar-nav>.open>a, 
@@ -530,6 +528,15 @@ li.nav-link.active>a:hover,
 }
 
 /*인스턴스 리스트/이미지에들어가는*/
+.create-btn{
+    float: right;
+    margin-top: -10px;
+}
+.create-btn > a > button{
+    padding: 0px 20px;
+	height: 46px;   
+}
+
 .dropdown-menu.gn-dropdown.gn-list{
     position: absolute;
     top: 70%;
@@ -668,12 +675,8 @@ li.nav-link.active>a:hover,
     line-height: 20px;
     font-size:12px; 
     text-align: left;
-    color: #E60202;
+    color: #ff0000;
     margin: 5px 0 2px 0;
-}
-
-label#user_name-error.error,label#user_id-error.error,label#password-error.error,label#password_re-error.error{
-    color : #ff0000;
 }
 
 p.error-message{
@@ -685,6 +688,13 @@ p.error-message{
     box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);    
 }
 
+input.error{
+    border: 1px solid #ff0000;
+    
+}
+form.signupForm label.error, label.error{
+    color :#ff0000;
+}
 /*지앤클라우드 로그인버튼 < btn-gn-login > STYLE*/
 .btn-gn-login {
   color: #fff;
@@ -1009,13 +1019,16 @@ a.log-join-btn:focus{
 }
 
 /* ========== gncloud 인스턴스 > 리스트 HTML ========== */
-/*리스트 왼쪽 첫번째 "이름"*/
-.gn-tdody > tr > th.col-sm-3{
-    padding: 8px 0;
+.first-td{
+    width: 65px;
+}
+
+.gn-table-responsive > .gn-table tbody tr td.second-td-name{
+    text-align: left;
 }
 
 .gn-tdody > tr > td.visible-xs-3 > a{
-    width: 190px;
+    width: 220px;
     line-height: 37px;
 }
 
@@ -1024,7 +1037,7 @@ a.log-join-btn:focus{
     width: 15px;
     height: 35px;
     float: left;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 
 .gn-dot-play{
@@ -1088,7 +1101,7 @@ ul.gn-tag-group{
 ul.gn-tag-group > li:nth-of-type(1){
     color: transparent;
     background-color: transparent;
-    margin-right: 20px;
+    margin-right: 5px;
     cursor: pointer;
 }
 
@@ -1167,6 +1180,10 @@ form > .btn-group{
     padding: 0px 5px;
 }
 
+.height-auto{
+      height:auto !important;
+}
+
 .gn-btn-default{
     padding: 12px 12px;
     font-size: 18px; 
@@ -1178,6 +1195,12 @@ form > .btn-group{
     margin: 0px 8px 8px 0px;  
 }
 
+.gn-btn-devider {
+    border-top: solid 2px rgba(215,215,215,.5);
+    width: 133px;
+    margin-left: -14px;
+    margin-bottom: 7px;
+}
 .gn-btn-snap{
     padding: 14px 14px;
     font-size: 16px; 
@@ -1203,15 +1226,15 @@ form > .btn-group{
     box-shadow: none;
 }
 
-.gn-btn-snap:nth-child(3n-1),
+/*.gn-btn-snap:nth-child(3n-1),
 .gn-btn-snap:nth-child(3n-2){
     margin-right: 1%;
     margin-bottom: 10px;
-}
+}*/
 
-.gn-btn-snap:nth-child(3n){
+/*.gn-btn-snap:nth-child(3n){
     margin-bottom: 10px;
-}
+}*/
 
 .gn-btn-snap > input[type=radio]{
     display: none;
@@ -1301,10 +1324,8 @@ form > .btn-group{
     display: block;
     width: 100%;
     height: 20px;
-    line-height: 1;
     white-space: normal;
     overflow: hidden;
-    margin-top: -3px;   
 }
 
 img.elli-img-icon{
@@ -1312,8 +1333,9 @@ img.elli-img-icon{
 }
 
 .size-info{
+    font-size: 16px;
     margin:  auto;
-    padding: 5px;
+    padding: 3px;
 }
 
 .border-bottom{
@@ -1322,15 +1344,28 @@ img.elli-img-icon{
     border-bottom: 1px solid rgba(215,215,215,.5);
 }
 
+.price-info {
+    font-size: 13px;
+    padding: 5px 0 0 0;
+}
+
+.price-units {
+    font-size: 12px;
+}
+/*.gn-btn-default.inp-box-size{
+    height: 150px;   
+}*/
+
 .inp-box-size.active div.border-bottom{
     border-bottom: 1px solid rgba(88,196,198,.2);
 }
+
+.price-width{width: 38px; text-align: right; margin-right: 3px;}
 
 .gn-input-pw{
     line-height: 37px;
     font-size: 16px;
     font-weight: 300;
-    /*padding: 0px 5px 0px 5px;*/
 }
 .gn-margin-bott10{
     margin-bottom: 10px;
@@ -1432,7 +1467,7 @@ li.left-title:nth-of-type(2){
     background-color: transparent;
     -webkit-transition: all .2s ease-in-out;
     -o-transition: all .2s ease-in-out;
-    transition: all .2s ease-in-out;    
+    transition: all .2s ease-in-out;  
 }
 
 .gn-sett-btn{
@@ -1496,7 +1531,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
 .sett-detail dd{margin-left: 32px; width: 50px;}
 .gn-description-list.sett-detail > div{padding: 2px 0; margin-left: 5px;}
 .gn-description-list.sett-detail > div > span{margin-right: 41px;}
-.gn-description-list.sett-detail > div > span.sett-detail-span{width: 60px; margin-right: 5px;}
+.gn-description-list.sett-detail > div > span.sett-detail-span{width: 63px; margin-right: 5px;}
 .gn-description-list.sett-detail > div > input{width: 120px;  margin: 0px 5px; float: right;} 
 
 /*시스템 > 이미지 관리*/
@@ -1599,7 +1634,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
 .dropdown-img-icon > li > a:hover, .dropdown-img-icon > li > a:focus {
     color: #58c4c6;
     text-decoration: none;
-    transition: all .3s ease;
+    /*transition: all .3s ease;*/
 }
 
 .form-control-img{
@@ -1678,15 +1713,14 @@ ul.gn-sett-graph > li:nth-of-type(3){
     /* ======== gncloud 공통 ======== */
     .gn-header .container{width: 100%;}
     .container{width: 95%;}
-
     
     /* ======== gncloud HEADER ======== */
           
    
     /* ======== gncloud 로그인 ======== */
-    .gn-title-login span{
+/*    .gn-title-login span{
         font-size: 32px;
-        transition: all .3s ease;}
+        transition: all .3s ease;}*/
     
     /* ======== gncloud 대시보드 ======== */
 
@@ -1748,8 +1782,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
     }    
     
     /* ======== gncloud 인스턴스 생성 ======== */
-    
-    
+ 
     /* ======== gncloud 인스턴스 상세 ======== */
     
     /* ======== gncloud 이미지 ======== */
@@ -1774,7 +1807,17 @@ ul.gn-sett-graph > li:nth-of-type(3){
     .gn-description-list dt{float: left;}   
     
     /*.gn-description-list dd{margin-left: 0px;} */  
-     
+    
+    .gn-noti{display: none !important;}
+    .gn-noti-mobile{
+        background: url(../gn_images/gn-noti-img.png) no-repeat;    
+        width: 23px;
+        height: 21px; 
+        position: absolute;
+        right: 25px;
+        margin-top: 25px;
+        z-index: 101;
+    }
     
     /* ======== gncloud HEADER ======== */      
     .gn-header > .container > .navbar-header > .navbar-toggle{ 
@@ -1784,15 +1827,17 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
     li.nav-link{margin-left: 0;}
     li.nav-link:nth-of-type(1){margin-left: 0px;}        
-    li.nav-link:nth-of-type(1) a{margin-top: 20px;}        
+    li.nav-link:nth-of-type(1) a{margin-top: 20px; display: inline-block;}        
     li.nav-link a{margin-left: 0;}
     
     .navbar-collapse.gn-header-collapsed{
-        background-color: #f7f7f7;  
+        background-color: #f7f7f7;
+        padding-bottom: 20px;
     }
     .gn-header .navbar-header .navbar-toggle{
         margin-top: 20px;
-    }    
+    }
+
     
     /*모바일 width:767px이하부터 display:none;되는 dropdown*/ 
     .navbar-right > .head-dropdown{display: none;}
@@ -1889,97 +1934,6 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
 }
 
-/* Checkbox switch */
 
-.checkbox-switch {
-    cursor: pointer;
-    display: inline-block;
-    overflow: hidden;
-    position: relative;
-    text-align: left;
-    width: 80px;
-    height: 30px;
-    -webkit-border-radius: 30px;
-    border-radius: 30px;
-    line-height: 1.2;
-    font-size: 14px;
-}
 
-.checkbox-switch input.input-checkbox {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 80px;
-    height: 30px;
-    padding: 0;
-    margin: 0;
-    opacity: 0;
-    z-index: 2;
-    cursor: pointer;
-}
 
-.checkbox-switch .checkbox-animate {
-    position: relative;
-    width: 80px;
-    height: 30px;
-    background-color: #95a5a6;
-    -webkit-transition: background 0.25s ease-out 0s;
-    transition: background 0.25s ease-out 0s;
-}
-
-.checkbox-switch .checkbox-animate:before {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    background-color: #7f8c8d;
-    top: 5px;
-    left: 5px;
-    -webkit-transition: left 0.3s ease-out 0s;
-    transition: left 0.3s ease-out 0s;
-    z-index: 10;
-}
-
-.checkbox-switch input.input-checkbox:checked + .checkbox-animate {
-    background-color: #2ecc71;
-}
-
-.checkbox-switch input.input-checkbox:checked + .checkbox-animate:before {
-    left: 55px;
-    background-color: #27ae60;
-}
-
-.checkbox-switch .checkbox-off,
-.checkbox-switch .checkbox-on {
-    float: left;
-    color: #fff;
-    font-weight: 700;
-    padding-top: 6px;
-    -webkit-transition: all 0.3s ease-out 0s;
-    transition: all 0.3s ease-out 0s;
-}
-
-.checkbox-switch .checkbox-off {
-    margin-left: 30px;
-    opacity: 1;
-}
-
-.checkbox-switch .checkbox-on {
-    display: none;
-    float: right;
-    margin-right: 35px;
-    opacity: 0;
-}
-
-.checkbox-switch input.input-checkbox:checked + .checkbox-animate .checkbox-off {
-    display: none;
-    opacity: 0;
-}
-
-.checkbox-switch input.input-checkbox:checked + .checkbox-animate .checkbox-on {
-    display: block;
-    opacity: 1;
-}
