@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-import traceback
 import os
+import traceback
 
-from flask import Flask, jsonify, request, session, escape, make_response
 from datetime import timedelta
+from flask import Flask, jsonify, request, session, escape, make_response
 
 from Manager.db.database import db_session
-from Manager.util.json_encoder import AlchemyEncoder
-from service.service import *
-from db.database import db_session
 from Manager.util.config import config
+from Manager.util.json_encoder import AlchemyEncoder
+from db.database import db_session
+from service.service import *
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -57,6 +57,7 @@ def create_vm():
     sub_type =""
     team_code = session['teamCode']
     user_id = session['userId']
+    backup = request.json['backup']
     if 'vm_name' in request.json:
         name = request.json['vm_name']
     if 'size_id' in request.json:
@@ -77,16 +78,16 @@ def create_vm():
             if image_id !="":
                 if size_id !="":
                     if type=="hyperv" and password != "" and sub_type=="base":
-                        result = server_create(name,size_id, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        result = server_create(name,size_id, image_id, team_code, user_id, sshkeys, tag, type, password,backup ,db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="kvm" and sshkeys != "":
-                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password,backup, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="docker":
-                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password,backup, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="hyperv" and sub_type=="snap":
-                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password,backup, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     else:
                         return jsonify(status=True, value="password")

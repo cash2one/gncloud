@@ -158,11 +158,9 @@
         <h2>백업</h2>
         <label class="gn-lead">백업주기는 시스템 관리자가 설정합니다.</label>
         <div class="checkbox-switch" style="float:right;">
-            <input type="checkbox" checked="" onchange="" value="N" name="status" class="input-checkbox" id="toolbar">
-            <div class="checkbox-animate">
-                <span class="checkbox-off">OFF</span>
-                <span class="checkbox-on">ON</span>
-            </div>
+            <form>
+                <switch id="enabled" name="enabled" ng-model="data.enabled" on="On" off="Off" class="green"></switch>
+            </form>
         </div>
     </div>
 </div>

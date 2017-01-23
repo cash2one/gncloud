@@ -170,19 +170,16 @@
         <div class="form-group">
             <label for="comment" class="gn-lead">백업주기는 시스템 관리자가 설정합니다.</label>
             <div class="checkbox-switch" style="float:right;">
-                <input type="checkbox" checked="" onchange="" value="1" name="status" class="input-checkbox" id="toolbar-active">
-                <div class="checkbox-animate">
-                    <span class="checkbox-off">OFF</span>
-                    <span class="checkbox-on">ON</span>
+                <form>
+                    <switch id="data.backup" name="data.backup" ng-model="data.backup" on="On" off="Off" class="green"></switch>
+                </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div class="container-fluid gn-container">
-    <div class="row">
-    <input type="checkbox" class="js-switch" ui-switch checked />
-    </div>
+
 </div>
 <button type="submit" value="submit" class="btn btn-success btn-block btn-lg" ng-click="submit()">인스턴스 생성</button>
 

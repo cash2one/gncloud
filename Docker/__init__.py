@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 import traceback
+
 from datetime import timedelta
-from flask import Flask, redirect, url_for, request
+from flask import Flask, redirect, url_for
 from uwsgi_tasks import *
-from Docker.util.config import config
-from Docker.util.logger import logger
-from Docker.util.json_encoder import AlchemyEncoder
+
 from Docker.controller.dockerController import *
 from Docker.db.database import db_session
 from Docker.service.monitorService import service_monitoring
+from Docker.util.config import config
+from Docker.util.json_encoder import AlchemyEncoder
+from Docker.util.logger import logger
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
