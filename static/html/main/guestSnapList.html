@@ -156,6 +156,12 @@
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{snapshot.create_time}}</p>
                                                 </div>
+                                                <label class="col-sm-4 control-label gn-control-label">버전 정보</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">
+                                                        <span ng-repeat="item in parent_history">{{$index+1}}.{{item}}<br/></span>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
