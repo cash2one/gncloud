@@ -21,9 +21,9 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     instance_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
 
     if base_sub_type == "base":
-        s.sendline("cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
+        s.sendline("\cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
     else:
-        s.sendline("cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
+        s.sendline("\cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
     s.logout()
 
     instance_POOL.refresh()
