@@ -24,13 +24,13 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
         s.sendline("cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
     else:
         s.sendline("cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
+    instance_POOL.refresh()
 
     vol = render_template(
         "volume.xml"
         , guest_name=name
         , disk=disk
     )
-    instance_POOL.refresh()
     defaultVol = instance_POOL.storageVolLookupByName(base_name)
     instance_POOL.createXMLFrom(vol, defaultVol, 0)
     instance_POOL.storageVolLookupByName(name + ".img").resize(disk)

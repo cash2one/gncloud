@@ -5,10 +5,9 @@ import subprocess
 
 import datetime
 from pexpect import pxssh
-
 from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys
 from kvm.db.database import db_session
-from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_copy, kvm_image_delete
+from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_delete
 from kvm.util.config import config
 
 USER = "root"
@@ -111,9 +110,12 @@ def server_delete(id,sql_session):
 def server_image_delete(id, sql_session):
 
     image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
-    # 물리적 이미지 삭제하지 않고 데이터만 삭제된걸로 수정
-    kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
-    image_info.status = "Removed"
+    s = pxssh.pxssh()
+    s.login(image_info.gnHostMachines.ip, USER)
+    s.sendline("rm -f "+config.LIVERT_IMAGE_SNAPSHOT_PATH+image_info.filename)
+    s.logout()
+    #kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
+    sql_session.query(GnVmImages).filter(GnVmImages.id == id).delete()
     sql_session.commit()
 
 
