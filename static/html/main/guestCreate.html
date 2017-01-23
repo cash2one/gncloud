@@ -164,5 +164,22 @@
     </div>
 </div>
 
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>백업</h2>
+        <div class="form-group">
+            <label for="comment" class="gn-lead">백업주기는 시스템 관리자가 설정합니다.</label>
+            <div class="checkbox-switch" style="float:right;">
+                <form>
+                    <switch id="data.backup" name="data.backup" ng-model="data.backup" on="On" off="Off" class="green"></switch>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid gn-container">
+
+</div>
 <button type="submit" value="submit" class="btn btn-success btn-block btn-lg" ng-click="submit()">인스턴스 생성</button>
 

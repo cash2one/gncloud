@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
-from datetime import datetime
 from pexpect import pxssh
+
 from Docker.db.models import GnVmMachines, GnMonitorHist, GnMonitor
 from Docker.util.logger import logger
 

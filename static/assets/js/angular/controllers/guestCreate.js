@@ -178,6 +178,7 @@ angular
             if (data != null){
                 $scope.data.id = data.id;
                 $scope.data.sub_type = data.sub_type;
+                $scope.data.backup = data.backup;
             }
         };
         $scope.func = function(data){
@@ -243,8 +244,6 @@ angular
                     }
                 });
         };
-
-
 
     })
     .directive("checkboxGroup", function() {

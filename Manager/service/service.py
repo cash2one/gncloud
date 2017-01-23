@@ -4,21 +4,21 @@ __author__ = 'NaDa'
 
 import subprocess
 
-from sqlalchemy import func
 import datetime
 import humanfriendly
 from flask import render_template
+from sqlalchemy import func
 
+from Manager.db.database import db_session
 from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
                              , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
                              , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
                              , GnCluster,GnDockerImageDetail, GnVmSize, GnLoginHist
-from Manager.db.database import db_session
-from Manager.util.hash import random_string, convertToHashValue, convertsize, convertcore
 from Manager.util.config import config
+from Manager.util.hash import random_string, convertToHashValue, convertsize, convertcore
 
 
-def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password ,sql_session):
+def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, backup ,sql_session):
 
     # host 선택 룰
     # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
@@ -79,7 +79,11 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
         return {"status":False, "value":"HOST 머신 리소스가 부족합니다"}
 
 
-
+    #backup imfo
+    if(backup == True):
+        backup = "true"
+    else:
+        backup= "false"
     #db 저장
     #id 생성
     while True:
@@ -94,17 +98,17 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                              , host_id=host_id, hyperv_pass=password)
+                              , host_id=host_id, hyperv_pass=password, backup_comfirm=backup)
     elif(type=="kvm"):
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id=host_id, ssh_key_id=sshkeys)
+                                  , host_id=host_id, ssh_key_id=sshkeys, backup_comfirm=backup)
     else:
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id="")
+                                  , host_id="", backup_comfirm=backup)
                                 
     sql_session.add(vm_machine)
     sql_session.commit()
@@ -192,7 +196,11 @@ def vm_list_snap(sql_session, team_code):
 
 def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-
+    name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
+    if vm_info.type != 'docker':
+        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one()
+    else:
+        image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
     monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
     mem_info={}
     disk_info = {}
@@ -210,7 +218,7 @@ def vm_info(sql_session, id):
         mem_info = {"mem_total":convertHumanFriend(mem_total), "mem_use":convertHumanFriend(mem_use), "rest_mem":convertHumanFriend(rest_mem), "mem_per_info":mem_per_info}
     vm_info.disk = convertHumanFriend(vm_info.disk)
     vm_info.memory = convertHumanFriend(vm_info.memory)
-    info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info}
+    info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info,"name_info":name_info,"image_info":image_info}
     return info
 
 def vm_info_graph(sql_session, id):
@@ -1109,3 +1117,11 @@ def login_history(sql_session):
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
+
+def backupchnage(id, backup, sql_sseion):
+    list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    if(backup == "false"):
+        list.backup_comfirm = "false"
+    else:
+        list.backup_comfirm = "true"
+    sql_sseion.commit()

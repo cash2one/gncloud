@@ -17,6 +17,15 @@ angular
                     $scope.tag_list = data.info.vm_info.tag.split(",");
                     $scope.disk_data = data.info.disk_info;
                     $scope.mem_data = data.info.mem_info;
+                    $scope.name_data = data.info.name_info;
+                    if($scope.vm_data.type != 'docker'){
+                        $scope.image_data = data.info.image_info;
+                    }else{
+                        $scope.image_data = data.info.image_info;
+                        $scope.image_data.name = data.info.image_info.view_name;
+                    }
+                    if($scope.vm_data.backup_comfirm == 'false')
+                    $scope.vm_data.backup_comfirm=0;
                 }
                 else {
                     alert(data.message)
@@ -102,6 +111,28 @@ angular
                     }
                 });
         }
+        $scope.backupchange=function (data) {
+            console.log(data);
+            $scope.data = {};
+            $scope.data.backup = data;
+            $http({
+                method: 'PUT',
+                url:'/api/manager/vm/backup/'+$routeParams.id,
+                data:$scope.data,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+
+                    }
+                    else {
+
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
 
         $scope.deleteInstance = function(){
             $timeout(function () {
@@ -115,6 +146,7 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
+
                     }
                     else {
 
