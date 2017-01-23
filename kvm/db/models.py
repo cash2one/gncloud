@@ -149,21 +149,6 @@ class GnVmImages(Base):
             , 'team_code', 'author_id', 'create_time', 'ssh_id', 'status']
 
 
-class GnImagesPool(Base):
-    __tablename__ = 'GN_IMAGES_POOL'
-    id = Column(String(8), primary_key=True, nullable=False)
-    type = Column(String(10), primary_key=False, nullable=False)
-    image_path = Column(String(200), primary_key=False, nullable=False)
-    host_id = Column(String(8), primary_key=False, nullable=False)
-
-    def __init__(self,id=None, type=None, image_path=None, host_id=None):
-        self.id = id
-        self.type = type
-        self.image_path = image_path
-        self.host_id = host_id
-
-
-
 class GnMonitor(Base):
     __tablename__ = "GN_MONITOR"
     id = Column(String(8), primary_key=True, nullable=False)
