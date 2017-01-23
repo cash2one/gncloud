@@ -36,6 +36,7 @@ def server_create(team_code, user_id, id, sql_session):
         while len(ip) == 0:
             print(id+":processing init ip!!!")
             ip = getIpAddress(internal_name, host_info.ip)
+        print("complete get ip="+ip)
         #ip 고정
         # if len(ip) != 0:
         #     print(id+":set init ip!!!")
