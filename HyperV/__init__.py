@@ -2,9 +2,9 @@
 
 __author__ = 'jhjeon'
 
-from flask import Flask, redirect, url_for
 from datetime import timedelta
-from uwsgi_tasks import *
+
+from flask import Flask, redirect, url_for
 
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
