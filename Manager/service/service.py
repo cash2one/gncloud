@@ -94,17 +94,17 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                              , host_id=host_id, hyperv_pass=password, backup_comfirm=backup)
+                              , host_id=host_id, hyperv_pass=password, backup_comfirm=backup, size_id=size_id)
     elif(type=="kvm"):
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id=host_id, ssh_key_id=sshkeys, backup_comfirm=backup)
+                                  , host_id=host_id, ssh_key_id=sshkeys, backup_comfirm=backup,size_id=size_id)
     else:
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id="", backup_comfirm=backup)
+                                  , host_id="", backup_comfirm=backup,size_id=size_id)
                                 
     sql_session.add(vm_machine)
     sql_session.commit()
