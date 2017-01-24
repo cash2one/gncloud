@@ -160,11 +160,11 @@ def server_change_status(id, status, sql_session):
 
 def vm_list(sql_session, team_code):
     list_query = sql_session.query(GnVmMachines) \
-                            .filter(GnVmMachines.status != config.REMOVE_STATUS) \
-                            .order_by(GnVmMachines.create_time.desc())
+                            .filter(GnVmMachines.status != config.REMOVE_STATUS)
+
     if team_code != "000":
-        list_query.filter(GnVmMachines.team_code == team_code)
-    list = list_query.all()
+        list_query = list_query.filter(GnVmMachines.team_code == team_code)
+    list = list_query.order_by(GnVmMachines.create_time.desc()).all()
 
     for vmMachine in list:
         vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
