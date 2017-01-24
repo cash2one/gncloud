@@ -1127,11 +1127,14 @@ def logout_info(user_id, team_code, sql_session):
 
 def login_history(page, sql_session): #login history
     page_size=30
+    page=int(page)-1
     list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).limit(page_size).offset(page*page_size).all()
+    total_page= sql_session.query(func.count(GnLoginHist.id).label("count")).one()
+    total = total_page.count /30
     login_info={};
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
-    login_info={"list":list,"page":page}
+    login_info={"list":list,"page":page,"total":total}
     return login_info
 
 

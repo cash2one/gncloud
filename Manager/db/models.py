@@ -547,6 +547,7 @@ class GnVmSize(Base):
 
 class GnLoginHist(Base):
     __tablename__='GN_USER_ACCESS_HISTORY'
+    id = Column(Integer, primary_key=False, nullable=False)
     user_id = Column(String(50), primary_key=True, nullable=False)
     team_code = Column(String(10), primary_key=False, nullable=False)
     action=Column(String(7), primary_key=False, nullable=False)
@@ -559,11 +560,11 @@ class GnLoginHist(Base):
         self.action_time = action_time
 
     def __repr__(self):
-        return '<User_id %r / Team_code %r / Action %r / Action_time %r / >'\
+        return '<User_id %r / Team_code %r / Action %r / Action_time %r />'\
                 %(self.user_id, self.team_code, self.action, self.action_time)
 
     def __json__(self):
-        return ['user_id', 'team_code', 'action', 'action_time']
+        return ['user_id', 'team_code', 'action', 'action_time','id']
 
 class GnSystemSetting(Base):
     __tablename__='GN_SYSTEM_SETTING'
