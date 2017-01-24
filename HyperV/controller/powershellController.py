@@ -6,7 +6,7 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 import json
 
 from HyperV.util.json_encoder import AlchemyEncoder
-from HyperV.db.models import GnImagesPool, GnHostMachines, GnMonitorHist
+from HyperV.db.models import GnHostMachines, GnMonitorHist, GnVmSize, GnInstanceStatus, GnSystemSetting
 from HyperV.util.logger import logger
 
 __author__ = 'jhjeon'
@@ -112,12 +112,30 @@ def hvm_create(id, sql_session):
             vm_info.os_ver = os_ver
             vm_info.os_sub_ver = os_sub_ver
             vm_info.os_bit = os_bit
-            vm_info.create_time = datetime.datetime.now()
-            vm_info.start_time = datetime.datetime.now()
+            vm_info.create_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            vm_info.start_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             vm_info.status = ps.get_state_string(start_vm['State'])
 
             insert_monitor = GnMonitor(vm_id, 'hyperv', 0.0000, 0.0000, 0.0000, 0.0000)
             sql_session.add(insert_monitor)
+
+            # for insert of GN_INSTANCE_STATUS table
+            vm_size = sql_session.query(GnVmSize).filter(GnVmSize.id == vm_info.size_id).first()
+            instance_status_price = None
+            system_setting = sql_session.query(GnSystemSetting).first()
+            if system_setting.billing_type == 'D':
+                instance_status_price = vm_size.day_price
+            elif system_setting.billing_type == 'H':
+                instance_status_price = vm_size.hour_price
+            else:
+                logger.error('invalid price_type : system_setting.billing_type %s' % system_setting.billing_type)
+
+            insert_instance_status = GnInstanceStatus(vm_info.id, datetime.datetime.now().strftime('%Y%m%d%H%M%S'),
+                                                      None, vm_info.author_id, vm_info.team_code, instance_status_price,
+                                                      system_setting.billing_type, vm_info.cpu, vm_info.memory,
+                                                      vm_info.disk)
+            sql_session.add(insert_instance_status)
+
             sql_session.commit()
             # sql_session.remove()
             return True
@@ -210,7 +228,7 @@ def hvm_state(id):
 
             if start_vm['State'] is 2:
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id'])\
-                        .update({"status": "Running", "start_time": datetime.datetime.now()})
+                        .update({"status": "Running", "start_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S')})
                 db_session.commit()
                 # print start_vm['Id']
                 return jsonify(status=True, message="success VM starting")
@@ -234,7 +252,7 @@ def hvm_state(id):
             if stop['State'] is 3:
                 # stop 3. 변경된 가상머신 상태를 DB에 업데이트한다.
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id'])\
-                        .update({"status": "Stop", "stop_time": datetime.datetime.now()})
+                        .update({"status": "Stop", "stop_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S')})
                 db_session.commit()
                 return jsonify(status=True, message="VM Stop")
             else:
@@ -256,7 +274,8 @@ def hvm_state(id):
             # resume 1. 가상머신을 재시작한다. (Restart-VM)
             if restart['State'] is 2:
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id'])\
-                    .update({"start_time": datetime.datetime.now(), "stop_time": datetime.datetime.now()})
+                    .update({"start_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S'),
+                             "stop_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S')})
                 db_session.commit()
                 return jsonify(status=True, message="VM Restart")
             else:
@@ -310,6 +329,9 @@ def hvm_delete(id):
     if stop_vm['State'] is 3:
         delete_vm = ps.delete_vm(vmid.internal_id, config.LOCAL_PATH, config.MANAGER_PATH)
         update_vm_machines = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
+        update_instance_status = db_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == vmid.id)\
+            .update({"delete_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S')})
+
         db_session.commit()
         # update_vm_images = db_session.query(GnVmImages).filter(GnVmImages.filename == vm_info['VMName']
         #                                                       +".vhdx").update({"status" : "Removed"})
@@ -356,7 +378,7 @@ def hvm_new_image():
 
     insert_image_query = GnVmImages(random_string(config.SALT, 8), name, filename, type, subtype,
                                     icon, os, os_ver, os_subver, os_bit, team_code,
-                                    author_id, datetime.datetime.now())
+                                    author_id, datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     db_session.add(insert_image_query)
     db_session.commit()
 
@@ -432,7 +454,8 @@ def vm_monitor(sql_session):
         ip = ps.send(script)
 
         try:
-            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now(), cpu, mem, round(hdd, 4), 0.0000)
+            monitor_insert = GnMonitorHist(seq.id, "hyperv", datetime.datetime.now().strftime('%Y%m%d%H%M%S'),
+                                           cpu, mem, round(hdd, 4), 0.0000)
             sql_session.add(monitor_insert)
             sql_session.commit()
 
