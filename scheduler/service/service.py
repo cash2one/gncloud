@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 from util.config import config
 from db.models import *
 from util.logger import logger
@@ -21,14 +22,15 @@ class Monitoring:
 
         clusters = sql_session.query(GnCluster).filter(GnCluster.status=='Running').all()
         for cluster in clusters:
-            url = 'http://%s:%s/monitor' % (str(cluster.ip), str(cluster.port))
-            print 'url=%s, type=%s. period=%s' % (url, cluster.type, self.period)
             if cluster.type == 'docker':
-                self.sched.add_interval_job(lambda : self.docker_monitor(url), seconds=int(self.period))
+                docker_url = 'http://%s:%s/monitor' % (str(cluster.ip), str(cluster.port))
+                self.sched.add_interval_job(lambda : self.docker_monitor(docker_url), seconds=int(self.period))
             elif cluster.type == 'kvm':
-                self.sched.add_interval_job(lambda : self.kvm_monitor(url), seconds=int(self.period))
+                kvm_url = 'http://%s:%s/monitor' % (str(cluster.ip), str(cluster.port))
+                self.sched.add_interval_job(lambda : self.kvm_monitor(kvm_url), seconds=int(self.period))
             elif cluster.type == 'hyperv':
-                self.sched.add_interval_job(lambda : self.hyperv_monitor(url), seconds=int(self.period))
+                hyperv_url = 'http://%s:%s/monitor' % (str(cluster.ip), str(cluster.port))
+                self.sched.add_interval_job(lambda : self.hyperv_monitor(hyperv_url), seconds=int(self.period))
             else:
                 print 'type is error = %s' % cluster.type
         self.sched.start()
@@ -40,24 +42,24 @@ class Monitoring:
     def shutdown(self):
         self.sched.shutdown()
 
-    def hyperv_monitor(self, url):
+    def hyperv_monitor(self, hyperv_url):
         try:
-            response = requests.get(url, data=None)
+            response = requests.get(hyperv_url, data=None)
         except Exception as message:
             logger.error(message)
-        print 'hyperv:%s:%s' % (datetime.datetime.now(), response.json())
+        print 'hyperv:%s:url=%s, period=%s:%s' % (datetime.datetime.now(), hyperv_url, self.period, response.json())
 
-    def kvm_monitor(self, url):
+    def kvm_monitor(self, kvm_url):
         try:
-            response = requests.get(url, data=None)
+            response = requests.get(kvm_url, data=None)
         except Exception as message:
             logger.error(message)
-        print 'kvm   :%s:%s' % (datetime.datetime.now(), response.json())
-    def docker_monitor(self, url):
+        print 'kvm   :%s:url=%s, period=%s:%s' % (datetime.datetime.now(), kvm_url, self.period, response.json())
+    def docker_monitor(self, docker_url):
         try:
-            response = requests.get(url, data=None)
+            response = requests.get(docker_url, data=None)
         except Exception as message:
             logger.error(message)
-        print 'docker:%s:%s' % (datetime.datetime.now(), response.json())
+        print 'cokder:%s:url=%s, period=%s:%s' % (datetime.datetime.now(), docker_url, self.period, response.json())
 
 
