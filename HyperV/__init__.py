@@ -95,4 +95,5 @@ def cronMnitor():
     return jsonify(status=True, message="success")
 
 if __name__ == '__main__':
-    app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
+    #app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
+    app.run(port=8082)
