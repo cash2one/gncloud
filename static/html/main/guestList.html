@@ -34,7 +34,7 @@
                     <div class="gn-dot-stop" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Stop'"></div>
                     <div class="gn-dot-error" ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Error'"></div>
                     <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status == 'Suspend'" src="/gn_images/gn_dot_doing.png" alt="">
-                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status != 'Error'" src="/gn_images/gn_icon_{{list.os}}.png" alt="">
+                    <img ng-show="list.status != 'Starting' && list.status != 'Deleting' && list.status != 'Error'" ng-src="/gn_images/gn_icon_{{list.os}}.png" alt="">
                     <img ng-show="list.status == 'Starting' || list.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                 </td>
                 <td class="visible-xs-3 second-td-name">
