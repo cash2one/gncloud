@@ -634,6 +634,21 @@ def backup_time():
     type = request.json['type']
     day= request.json['value']
     return jsonify(status=True, list=backup_time_change(type, day, db_session))
+@app.route('/vm/notice', methods=['GET'])
+def Notice():
+    page= request.args.get("page")
+    return jsonify(status=True, list=notice_list(page,db_session))
+
+@app.route('/vm/notice/<id>', methods=['GET'])
+def Notice_info(id):
+    return jsonify(status=True, list=notice_info(id,db_session))
+
+@app.route('/vm/notice',methods=['POST'])
+def Notice_create():
+    title=request.json['title']
+    text = request.json['text']
+    return jsonify(status=True, list=notice_create(title,text,db_session))
+
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
 

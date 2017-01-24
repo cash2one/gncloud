@@ -587,3 +587,26 @@ class GnSystemSetting(Base):
 
     def __json__(self):
         return ['billing_type', 'backup_schedule_type', 'backup_schedule_period', 'monitor_period']
+
+
+class GnNotice(Base):
+    __tablename__='GN_NOTICE'
+    id = Column(Integer, primary_key=True, nullable=False)
+    title = Column(nullable=True, default='')
+    text = Column(nullable=True, default='')
+    write_date = Column(DateTime, nullable=True, default='')
+    count = Column(Integer, nullable=False, default='')
+
+    def __init__(self, title=None, text=None, write_date=None, count=None):
+        self.title=title
+        self.text=text
+        self.write_date=write_date
+        self.count = count
+
+    def __repr__(self):
+        return '<Title %r / Text %r / write_date %r / Count %r / >'\
+            %(self.title, self.text, self.write_date, self.count)
+
+    def __json__(self):
+        return ['title', 'text', 'write_date','id', 'count']
+

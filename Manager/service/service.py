@@ -1171,3 +1171,25 @@ def backup_time_change(type, day, sql_session):
     list.backup_schedule_type = type
     list.backup_schedule_period = day
     sql_session.commit()
+
+def notice_list(page,sql_session):
+    page_size=30
+    page=int(page)-1
+    list = sql_session.query(GnNotice).order_by(GnNotice.write_date.desc()).limit(page_size).offset(page*page_size).all()
+    total_page= sql_session.query(func.count(GnNotice.id).label("count")).one()
+    total=int(total_page.count)/30
+    for vm in list:
+        vm.write_date = vm.write_date.strftime('%Y-%m-%d %H:%M:%S')
+    return {"list":list, "total_page":total_page.count,"total":total}
+
+def notice_info(id,sql_session):
+    list = sql_session.query(GnNotice).filter(GnNotice.id ==id).one()
+    list.count = list.count+1
+    sql_session.commit()
+    list.write_date = list.write_date.strftime('%Y-%m-%d %H:%M:%S')
+    return list
+
+def notice_create(title, text, sql_session):
+    notice_info = GnNotice(title=title, text=text,write_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), count=0)
+    sql_session.add(notice_info)
+    sql_session.commit()

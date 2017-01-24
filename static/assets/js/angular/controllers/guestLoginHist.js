@@ -4,7 +4,6 @@ angular
 
         $scope.data={};
         $scope.page=function (page) {
-            $scope.data.page=page;
             $http({
                 method: 'GET',
                 url: '/api/manager/vm/loginhist',
