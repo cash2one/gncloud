@@ -17,21 +17,15 @@ class GnHostMachines(Base):
     cpu = Column(Integer, primary_key=False, nullable=False)
     mem = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
-    max_cpu = Column(Integer, primary_key=False, nullable=False)
-    max_mem = Column(Integer, primary_key=False, nullable=False)
-    max_disk = Column(Integer, primary_key=False, nullable=False)
     host_agent_port = Column(Integer, primary_key=False, nullable=False)
 
-    def __init__(self, id=None, ip=None, type=None, cpu=None, mem=None,disk=None,max_cpu=None,max_mem=None,max_disk=None):
+    def __init__(self, id=None, ip=None, type=None, cpu=None, mem=None,disk=None):
         self.id = id
         self.type = type
         self.ip = ip
         self.cpu = cpu
         self.mem = mem
         self.disk = disk
-        self.max_cpu = max_cpu
-        self.max_mem = max_mem
-        self.max_disk = max_disk
 
     def __repr__(self):
         return '<Id %r / Ip %r / Type %r>' \
