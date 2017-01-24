@@ -616,13 +616,24 @@ def backup_change(id):
     return jsonify(status=True, list=backupchnage(id, backup, db_session))
 
 @app.route('/vm/money',methods=['GET'])
-def money():
-    return jsonify(status=True, list=money_list(db_session))
+def setting():
+    return jsonify(status=True, list=setting_list(db_session))
 
 @app.route('/vm/money/monitor',methods=['PUT'])
 def monitoring_time():
     monitor_period =request.json['monitor_period']
     return jsonify(status=True, list=monitoring_time_change(monitor_period,db_session))
+
+@app.route('/vm/day',methods=['PUT'])
+def billing_time():
+    billing = request.json['bills']
+    return jsonify(status=True, list=billing_time_change(billing,db_session))
+
+@app.route('/vm/backup', methods=['PUT'])
+def backup_time():
+    type = request.json['type']
+    day= request.json['value']
+    return jsonify(status=True, list=backup_time_change(type, day, db_session))
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
 

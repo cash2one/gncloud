@@ -1146,10 +1146,28 @@ def backupchnage(id, backup, sql_sseion): #백업 수정
         list.backup_comfirm = "true"
     sql_sseion.commit()
 
-def money_list(sql_ssesion):
-    return sql_ssesion.query(GnSystemSetting).one()
+def setting_list(sql_ssesion):
+    setting_info = sql_ssesion.query(GnSystemSetting).one()
+    if(setting_info.backup_schedule_type == 'D'):
+        return {"billing":setting_info.billing_type,"list":setting_info.monitor_period, "backup_type":setting_info.backup_schedule_type
+                ,"backup_week":setting_info.backup_schedule_period}
+    else:
+        week_info = list(str(setting_info.backup_schedule_period))
+        return {"billing":setting_info.billing_type,"list":setting_info.monitor_period, "backup_type":setting_info.backup_schedule_type
+            ,"backup_week":week_info}
 
 def monitoring_time_change(monitor_period, sql_session):
     list = sql_session.query(GnSystemSetting).one()
     list.monitor_period = monitor_period
+    sql_session.commit()
+
+def billing_time_change(bills, sql_session):
+    list=sql_session.query(GnSystemSetting).one()
+    list.billing_type = bills
+    sql_session.commit()
+
+def backup_time_change(type, day, sql_session):
+    list=sql_session.query(GnSystemSetting).one()
+    list.backup_schedule_type = type
+    list.backup_schedule_period = day
     sql_session.commit()
