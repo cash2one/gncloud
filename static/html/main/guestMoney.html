@@ -1,0 +1,64 @@
+<h1>설정</h1>
+
+<!--왼쪽 메뉴-->
+<ul class="nav nav-pills gn-left-menu col-xs-12 col-sm-2">
+    <li class="left-title">시스템</li>
+    <li><a data-toggle="pill" href="#/guestSystemList">프로필</a></li>
+    <li><a data-toggle="pill" href="#/guestTeamList">팀 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestCluster">클러스터 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestImage">이미지 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestPrice">리소스 단위 관리</a></li>
+    <li><a data-toggle="pill" href="#/guestLoginHist">로그인 이력 조회</a></li>
+    <li class="active"><a data-toggle="pill" href="#/guestMoney">설정</a></li>
+</ul>
+
+<!--오른쪽 메뉴-->
+<div class="tab-content col-xs-12 col-sm-10">
+    <div class="gn-box gn-detail-main">
+        <div class="gn-sett-margin-box">
+            <h2>과금</h2>
+            <button type="button" class="btn btn-gn-sub gn-sett-btn">저장</button>
+            <div style="float:left">
+                <input type="radio" name="day" style="float:left" ng-checked="">
+                 일단위
+            </div>
+            <div style="float:left">
+                <input type="radio" name="day" style="float:left" ng-checked="">
+                시간단위
+            </div>
+    </div>
+    </div>
+    <div class="gn-box gn-detail-main">
+        <div class="gn-sett-margin-box">
+            <h2>백업 기준</h2>
+            <form>
+            <button type="button" class="btn btn-gn-sub gn-sett-btn">저장</button>
+            <div class="gn-margin-bott10" style="float:left">
+                <input type="radio" name="select" style="float:left" ng-checked="">
+                <input type="text"  style="float:left">
+                <span>일마다</span>
+            </div><br><br>
+            <div style="float:left">
+                <input type="radio" name="select" ng-checked="">
+                <input type="radio" name="week" ng-checked="">월
+                <input type="radio" name="week" ng-checked="">화
+                <input type="radio" name="week" ng-checked="">수
+                <input type="radio" name="week" ng-checked="">목
+                <input type="radio" name="week" ng-checked="">금
+                <input type="radio" name="week" ng-checked="">토
+                <input type="radio" name="week" ng-checked="">일
+            </div>
+            </form>
+        </div>
+    </div>
+    <div class="gn-box">
+        <div class="gn-sett-margin-box">
+            <h2>모니터링 기준</h2>
+            <form>
+                <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-click="submit(data.monitor_period)">저장</button>
+                    <input type="text"  style="float:left" ng-model="data.monitor_period" placeholder="{{list.monitor_period}}">
+                    <span>초마다</span>
+            </form>
+        </div>
+    </div><!-- /container -->
+</div>

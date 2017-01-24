@@ -547,6 +547,7 @@ class GnVmSize(Base):
 
 class GnLoginHist(Base):
     __tablename__='GN_USER_ACCESS_HISTORY'
+    id = Column(Integer, primary_key=False, nullable=False)
     user_id = Column(String(50), primary_key=True, nullable=False)
     team_code = Column(String(10), primary_key=False, nullable=False)
     action=Column(String(7), primary_key=False, nullable=False)
@@ -559,8 +560,28 @@ class GnLoginHist(Base):
         self.action_time = action_time
 
     def __repr__(self):
-        return '<User_id %r / Team_code %r / Action %r / Action_time %r / >'\
+        return '<User_id %r / Team_code %r / Action %r / Action_time %r />'\
                 %(self.user_id, self.team_code, self.action, self.action_time)
 
     def __json__(self):
-        return ['user_id', 'team_code', 'action', 'action_time']
+        return ['user_id', 'team_code', 'action', 'action_time','id']
+
+class GnSystemSetting(Base):
+    __tablename__='GN_SYSTEM_SETTING'
+    billing_type = Column(String(2), primary_key=True, nullable=False, default='')
+    backup_schedule_type = Column(String(2), nullable=True, default='')
+    backup_schedule_period = Column(String(13), nullable=True, default='')
+    monitor_period = Column(String(4), nullable=True, default='')
+
+    def __init__(self, billing_type = billing_type, backup_schedule_type =None, backup_schedule_period= None, monitor_period=None):
+        self.billing_type = billing_type
+        self.backup_schedule_type = backup_schedule_type
+        self.backup_schedule_period = backup_schedule_period
+        self.monitor_period = monitor_period
+
+    def __repr__(self):
+        return '<Billing_type %r / Backup_schedule_type %r / Backup_schedule_period %r / Monitor_period %r/ >'\
+                %(self.billing_type, self.backup_schedule_type, self.backup_schedule_period, self.monitor_period)
+
+    def __json__(self):
+        return ['billing_type', 'backup_schedule_type', 'backup_schedule_period', 'monitor_period']

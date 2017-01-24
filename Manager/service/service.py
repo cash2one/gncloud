@@ -4,16 +4,12 @@ __author__ = 'NaDa'
 
 import subprocess
 
-import datetime
 import humanfriendly
 from flask import render_template
 from sqlalchemy import func
 
 from Manager.db.database import db_session
-from Manager.db.models import GnVmMachines, GnUser, GnTeam, GnVmImages, GnMonitor, GnMonitorHist\
-                             , GnSshKeys, GnUserTeam, GnImagePool, GnDockerImages \
-                             , GnTeamHist, GnUserTeamHist, GnHostMachines, GnId \
-                             , GnCluster,GnDockerImageDetail, GnVmSize, GnLoginHist
+from Manager.db.models import *
 from Manager.util.config import config
 from Manager.util.hash import random_string, convertToHashValue, convertsize
 
@@ -1131,11 +1127,14 @@ def logout_info(user_id, team_code, sql_session):
 
 def login_history(page, sql_session): #login history
     page_size=30
+    page=int(page)-1
     list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).limit(page_size).offset(page*page_size).all()
+    total_page= sql_session.query(func.count(GnLoginHist.id).label("count")).one()
+    total = total_page.count /30
     login_info={};
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
-    login_info={"list":list,"page":page}
+    login_info={"list":list,"page":page,"total":total}
     return login_info
 
 
@@ -1146,3 +1145,11 @@ def backupchnage(id, backup, sql_sseion): #백업 수정
     else:
         list.backup_comfirm = "true"
     sql_sseion.commit()
+
+def money_list(sql_ssesion):
+    return sql_ssesion.query(GnSystemSetting).one()
+
+def monitoring_time_change(monitor_period, sql_session):
+    list = sql_session.query(GnSystemSetting).one()
+    list.monitor_period = monitor_period
+    sql_session.commit()
