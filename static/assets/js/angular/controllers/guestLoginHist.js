@@ -1,16 +1,23 @@
 angular
     .module('gncloud')
-    .controller('guestLoginHistCtrl', function ($scope, $http, dateModifyService,$routeParams,Upload) {
-        $scope.getLoginList=function() {
+    .controller('guestLoginHistCtrl', function ($scope, $http) {
+
+        $scope.data={};
+        $scope.page=function (page) {
+            $scope.data.page=page;
             $http({
                 method: 'GET',
                 url: '/api/manager/vm/loginhist',
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
+                params:$scope.data//,
+                //headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.login_hist = data.list.list;
-                        $scope.page_hist =data.list.page;
+                        $scope.page_hist =data.list.page+1;
+                        $scope.page_total =data.list.total+1;
+                        $scope.prev_page = page - 1;
+                        $scope.next_page = page + 1;
                     }
                     else {
                     }
@@ -19,35 +26,5 @@ angular
                     console.log(status);
                 });
         }
-        $scope.getLoginList();
-        $scope.data={};
-        $scope.page=function (type) {
-
-            if(type == 'next'){
-                $scope.data.page=$scope.page_hist+1;
-            }else if(type=='before'){
-                if($scope.login_hist.page_info != 0){
-                    $scope.data.page=$scope.page_hist-1;
-                }
-
-            }
-
-            $http({
-                method: 'PUT',
-                url: '/api/manager/vm/loginhist/page',
-                data:$scope.data,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data) {
-                        $scope.login_hist = data.list.list;
-                        $scope.page_hist =data.list.page;
-                    }
-                    else {
-                    }
-                })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                });
-        }
+        $scope.page(1);
     });

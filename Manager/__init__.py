@@ -607,17 +607,12 @@ def snaplistinfo(id):
 
 @app.route('/vm/loginhist', methods=['GET']) #login hist
 def login_hist():
-    page = 1
-    return jsonify(status=True, message="success", list=login_history(page,db_session))
-
-@app.route('/vm/loginhist/page',methods=['PUT'])
-def login_page():
-    page=request.json['page']
+    page= request.args.get("page")
     return jsonify(status=True, message="success", list=login_history(page,db_session))
 
 @app.route('/vm/backup/<id>', methods=['PUT'])
 def backup_change(id):
-    backup=request.json['backup']
+    backup=['backup']
     return jsonify(status=True, list=backupchnage(id, backup, db_session))
 
 @app.route('/vm/money',methods=['GET'])
