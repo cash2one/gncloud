@@ -9,7 +9,7 @@
     <li><a data-toggle="pill" href="#/guestImage">이미지 관리</a></li>
     <li><a data-toggle="pill" href="#/guestPrice">리소스 단위 관리</a></li>
     <li class="active"><a data-toggle="pill" href="#/guestMoney">로그인 이력 조회</a></li>
-    <li><a data-toggle="pill" href="#/guestMoney">설정</a></li>
+    <li><a data-toggle="pill" href="#/guestSetting">설정</a></li>
 </ul>
 
 <!--오른쪽 메뉴-->
@@ -39,7 +39,6 @@
                             </tbody>
                         </table>
                     <input type="button" class="btn" ng-click="page(prev_page)" value="이전" ng-disabled="page_hist == 1">
-                    <span style="margin-left:340px">- {{page_hist}} -</span>
                     <input type="button" class="btn" style="float:right;" ng-click="page(next_page)" value="다음" ng-disabled="page_total==page_hist">
 
                 </div>

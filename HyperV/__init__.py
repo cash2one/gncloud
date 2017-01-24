@@ -2,9 +2,9 @@
 
 __author__ = 'jhjeon'
 
-from flask import Flask, redirect, url_for
 from datetime import timedelta
-from uwsgi_tasks import *
+
+from flask import Flask, redirect, url_for
 
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
@@ -95,4 +95,5 @@ def cronMnitor():
     return jsonify(status=True, message="success")
 
 if __name__ == '__main__':
-    app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
+    #app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
+    app.run(port=8082)

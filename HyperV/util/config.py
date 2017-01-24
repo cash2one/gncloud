@@ -21,6 +21,9 @@ class Config:
     MASK_BIT = None
     GATE_WAY = None
     HYPERV_PATH = None
+    LOCAL_PATH = None
+    NAS_PATH = None
+    MANAGER_PATH = None
 
     def __init__(self, path="../conf/config.conf"):
         # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
@@ -52,6 +55,10 @@ class Config:
         self.MASK_BIT = parser.get(config_section, "MASK_BIT")
         self.GATE_WAY = parser.get(config_section, "GATE_WAY")
         self.HYPERV_PATH = parser.get(config_section,"HYPERV_PATH")
+
+        self.LOCAL_PATH = parser.get(config_section,"LOCAL_PATH")
+        self.NAS_PATH = parser.get(config_section,"NAS_PATH")
+        self.MANAGER_PATH = parser.get(config_section,"MANAGER_PATH")
 
 
 # 전역 공통사용 객체이다.

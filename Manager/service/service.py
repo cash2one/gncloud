@@ -93,17 +93,17 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                              , host_id=host_id, hyperv_pass=password, backup_comfirm=backup)
+                              , host_id=host_id, hyperv_pass=password, backup_comfirm=backup, size_id=size_id)
     elif(type=="kvm"):
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id=host_id, ssh_key_id=sshkeys, backup_comfirm=backup)
+                                  , host_id=host_id, ssh_key_id=sshkeys, backup_comfirm=backup,size_id=size_id)
     else:
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id="", backup_comfirm=backup)
+                                  , host_id="", backup_comfirm=backup,size_id=size_id)
                                 
     sql_session.add(vm_machine)
     sql_session.commit()
@@ -1107,10 +1107,50 @@ def backupchnage(id, backup, sql_sseion): #백업 수정
         list.backup_comfirm = "true"
     sql_sseion.commit()
 
-def money_list(sql_ssesion):
-    return sql_ssesion.query(GnSystemSetting).one()
+def setting_list(sql_ssesion):
+    setting_info = sql_ssesion.query(GnSystemSetting).one()
+    if(setting_info.backup_schedule_type == 'D'):
+        return {"billing":setting_info.billing_type,"list":setting_info.monitor_period, "backup_type":setting_info.backup_schedule_type
+                ,"backup_week":setting_info.backup_schedule_period}
+    else:
+        week_info = list(str(setting_info.backup_schedule_period))
+        return {"billing":setting_info.billing_type,"list":setting_info.monitor_period, "backup_type":setting_info.backup_schedule_type
+            ,"backup_week":week_info}
 
 def monitoring_time_change(monitor_period, sql_session):
     list = sql_session.query(GnSystemSetting).one()
     list.monitor_period = monitor_period
+    sql_session.commit()
+
+def billing_time_change(bills, sql_session):
+    list=sql_session.query(GnSystemSetting).one()
+    list.billing_type = bills
+    sql_session.commit()
+
+def backup_time_change(type, day, sql_session):
+    list=sql_session.query(GnSystemSetting).one()
+    list.backup_schedule_type = type
+    list.backup_schedule_period = day
+    sql_session.commit()
+
+def notice_list(page,sql_session):
+    page_size=30
+    page=int(page)-1
+    list = sql_session.query(GnNotice).order_by(GnNotice.write_date.desc()).limit(page_size).offset(page*page_size).all()
+    total_page= sql_session.query(func.count(GnNotice.id).label("count")).one()
+    total=int(total_page.count)/30
+    for vm in list:
+        vm.write_date = vm.write_date.strftime('%Y-%m-%d %H:%M:%S')
+    return {"list":list, "total_page":total_page.count,"total":total}
+
+def notice_info(id,sql_session):
+    list = sql_session.query(GnNotice).filter(GnNotice.id ==id).one()
+    list.count = list.count+1
+    sql_session.commit()
+    list.write_date = list.write_date.strftime('%Y-%m-%d %H:%M:%S')
+    return list
+
+def notice_create(title, text, sql_session):
+    notice_info = GnNotice(title=title, text=text,write_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), count=0)
+    sql_session.add(notice_info)
     sql_session.commit()
