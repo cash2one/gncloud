@@ -736,20 +736,18 @@ def deleteHostMachine(id,sql_session):
     sql_session.query(GnImagePool).filter(GnImagePool.host_id == id).delete()
     sql_session.commit()
 
-def updateClusterInfo(id,ip,port,node,sql_session):
+def updateClusterInfo(id,ip,sql_session):
     try:
         cluster_info = sql_session.query(GnCluster).filter(GnCluster.id == id).one()
         cluster_info.ip = ip
-        cluster_info.port = port
+        cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
+        nginx_reload(cluster_list)
+        sql_session.commit()
     except:
         sql_session.rollback()
 
-    cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
-    nginx_reload(cluster_list)
-    sql_session.commit()
 
-
-def insertClusterInfo(type,ip,port,node,sql_session):
+def insertClusterInfo(type,ip,port,sql_session):
     try:
         while True:
             id = random_string(8)
@@ -757,7 +755,7 @@ def insertClusterInfo(type,ip,port,node,sql_session):
             if not check_info:
                 break
 
-        cluster_info =GnCluster(id=id,type=type, ip=ip, port=port, status=config.RUN_STATUS)
+        cluster_info =GnCluster(id=id,type=type, ip=ip, status=config.RUN_STATUS)
         sql_session.add(cluster_info)
         cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
         nginx_reload(cluster_list)
@@ -772,13 +770,13 @@ def nginx_reload(cluster_list):
     docker_str = ""
     if any((e.type == "kvm") for e in cluster_list):
         kvm_info = [x for x in cluster_list if x.type == "kvm"].pop()
-        kvm_str = kvm_info.ip +":"+ kvm_info.port
+        kvm_str = kvm_info.ip
     if any((e.type == "hyperv") for e in cluster_list):
         hyperv_info = [x for x in cluster_list if x.type == "hyperv"].pop()
-        hyper_str = hyperv_info.ip +":"+ hyperv_info.port
+        hyper_str = hyperv_info.ip
     if any((e.type == "docker") for e in cluster_list):
         docker_info = [x for x in cluster_list if x.type == "docker"].pop()
-        docker_str = docker_info.ip +":"+ docker_info.port
+        docker_str = docker_info.ip
 
     subprocess.check_output("cp "+config.NGINX_CONF_PATH+"nginx.conf "+config.NGINX_CONF_PATH+"nginx.conf_bak", shell=True)
     nginx_conf = render_template(

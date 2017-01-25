@@ -15,9 +15,6 @@ class GnHostMachines(Base):
     cpu = Column(Integer, primary_key=False, nullable=False)
     mem = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
-    max_cpu = Column(Integer, primary_key=False, nullable=False)
-    max_mem = Column(Integer, primary_key=False, nullable=False)
-    max_disk = Column(Integer, primary_key=False, nullable=False)
     host_agent_port = Column(Integer, primary_key=False, nullable=False)
 
     def __init__(self, id=None, type=None):
