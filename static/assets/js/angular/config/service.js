@@ -25,6 +25,7 @@ var serviceConfig = function ($routeProvider, $httpProvider) {
         .when('/guestLoginHist', {templateUrl: '/main/guestLoginHist.html', controller: 'guestLoginHistCtrl'})
         .when('/guestSetting', {templateUrl: '/main/guestSetting.html', controller: 'guestSettingCtrl'})
         .when('/guestNotice', {templateUrl: '/main/guestNotice.html', controller: 'guestNoticeCtrl'})
+        .when('/guestQna', {templateUrl: '/main/guestQna.html', controller: 'guestQnaCtrl'})
     $httpProvider.interceptors.push('serviceLogger');
 }
 
