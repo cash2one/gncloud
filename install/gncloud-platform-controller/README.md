@@ -55,7 +55,7 @@
     pip install sqlalchemy
     pip install pexpect
     pip install ConfigParser
-    pip install apscheduler==2.1.2
+    pip install apscheduler
     pip install humanfriendly
     pip install logger
     yum -y install uwsgi-plugin-python
@@ -115,6 +115,8 @@
     nohup uwsgi --http-socket :8081 --plugin python --wsgi-file ./kvm/__init__.py --logto  ./kvm/kvm.log --callable app &
     cd /usr/local/source/gncloud; 
     nohup uwsgi --http-socket :8082 --plugin python --wsgi-file ./HyperV/__init__.py --logto  ./HyperV/hyperv.log --callable app &
+    cd /usr/local/source/gncloud;
+    nohup uwsgi --http-socket :8084 --plugin python --wsgi-file ./scheduler/__init__.py --logto  ./scheduler/scheduler.log --callable app &
     ```
 
     * 각 컴포넌트 폴더에서 실행 시
@@ -127,5 +129,7 @@
     nohup uwsgi --http-socket :8081 --plugin python --wsgi-file __init__.py --logto  kvm.log --callable app &
     cd /usr/local/source/gncloud/HyperV; 
     nohup uwsgi --http-socket :8082 --plugin python --wsgi-file __init__.py --logto  hyperv.log --callable app &
+    cd /usr/local/source/gncloud/scheduler;
+    nohup uwsgi --http-socket :8084 --plugin python --wsgi-file __init__.py --logto  scheduler.log --callable app &
     ```
     
