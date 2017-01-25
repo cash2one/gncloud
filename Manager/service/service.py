@@ -1156,3 +1156,12 @@ def notice_create(title, text, sql_session):
     notice_info = GnNotice(title=title, text=text,write_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), count=0)
     sql_session.add(notice_info)
     sql_session.commit()
+
+def notice_change(id ,text, sql_session):
+    notice_info=sql_session.query(GnNotice).filter(GnNotice.id == id).one()
+    notice_info.text = text
+    sql_session.commit()
+
+def notice_delete(id, sql_session):
+    sql_session.query(GnNotice).filter(GnNotice.id == id).delete()
+    sql_session.commit()

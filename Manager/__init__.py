@@ -649,6 +649,16 @@ def Notice_create():
     text = request.json['text']
     return jsonify(status=True, list=notice_create(title,text,db_session))
 
+@app.route('/vm/notice',methods=['PUT'])
+def Notice_change():
+    id = request.json['id']
+    text = request.json['text']
+    return jsonify(status=True, list=notice_change(id,text,db_session))
+
+@app.route('/vm/notice/<id>',methods=['DELETE'])
+def Notice_delete(id):
+    return jsonify(status=True, list=notice_delete(id,db_session))
+
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
 

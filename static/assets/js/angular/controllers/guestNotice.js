@@ -1,6 +1,11 @@
 angular
     .module('gncloud')
-    .controller('guestNoticeCtrl', function ($scope, $http) {
+    .controller('guestNoticeCtrl', function ($scope, $http, $rootScope) {
+        $scope.user_info = $rootScope.user_info;
+
+        $rootScope.$on('init', function () {
+            $scope.user_info = $rootScope.user_info;
+        });
         $scope.data={};
         $scope.noticeList = function (page) {
             $scope.data.page=page;
@@ -63,5 +68,42 @@ angular
 
                 })
 
+        }
+        $scope.changetext=function (id, text) {
+            $scope.data.text=text;
+            $scope.data.id=id;
+            $http({
+                method:'PUT',
+                url:'/api/manager/vm/notice',
+                data:$scope.data
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        $scope.noticeList($scope.data.page);
+                        alert("수정 되었습니다.");
+                    }else {
+                        if (data.message != null) {
+                            alert(data.message);
+                        }
+                    }
+
+                })
+        }
+        $scope.deletenoti=function (id) {
+            $http({
+                method:'DELETE',
+                url: '/api/manager/vm/notice/'+id
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        $scope.noticeList($scope.data.page);
+                        alert("삭제 되었습니다.");
+                    }else {
+                        if (data.message != null) {
+                            alert(data.message);
+                        }
+                    }
+
+                })
         }
     });

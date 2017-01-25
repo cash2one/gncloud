@@ -2,7 +2,7 @@
 <h2>목록</h2>
 
 <!--쓰기 버튼-->
-<input type="button" class="btn btn-right pull-right" data-toggle="modal" data-target="#modi-write" value="작성하기">
+<input type="button" class="btn btn-right pull-right" data-toggle="modal" data-target="#modi-write" value="작성하기" ng-show="user_info.authority == 'sysowner' ">
 <!-- 공지사항 글쓰기 Modal -->
 <div class="modal fade" id="modi-write" role="dialog">
     <div class="modal-backdrop fade in" style="height: 3000px;"></div>
@@ -78,16 +78,19 @@
                         </tr>
                         </thead>
                         <tbody class="gn-tdody gn-tdody-modal">
-                        <tr class="" data-toggle="modal" data-target="#modal-noti">
+                        <tr class="" data-toggle="modal" data-target="#modal-noti" ng-show="!showData">
                             <td class="second-td-name gn-lead">{{notice.text}}</td>
                         </tr>
+                        <td id="change" class="second-td-name gn-lead col-sm-8" ng-show="showData">
+                            <textarea class="form-control gn-write" rows="6" ng-model="notice.text"></textarea></td>
+                        <td id="change_button" class="col-sm-1" ng-show="showData"><button  type="submit" class="btn btn-gn-sub btn-block pull-right" data-dismiss="modal" ng-click="changetext(notice.id, notice.text)">수정</button></td>
                         </tbody>
                     </table>
                 </div><!--div class="table-responsive gn-table-responsive" -->
             </div>
             <div class="modal-footer gn-modal-footer">
-                <button type="submit" class="btn btn-gn-sub pull-left" data-dismiss="modal">수정</button>
-                <button type="submit" class="btn btn-gn-sub pull-left" data-dismiss="modal">삭제</button>
+                <button type="submit" class="btn btn-gn-sub pull-left" ng-show="user_info.authority == 'sysowner' " ng-click="showData= !showData">수정</button>
+                <button type="submit" class="btn btn-gn-sub pull-left" data-dismiss="modal" ng-show="user_info.authority == 'sysowner' " ng-click="deletenoti(notice.id)">삭제</button>
                 <button type="submit" class="btn btn-gn-sub pull-right" data-dismiss="modal">닫기</button>
             </div>
         </div>
