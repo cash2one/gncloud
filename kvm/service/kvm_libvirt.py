@@ -11,7 +11,7 @@ from kvm.util.config import config
 USER = "root"
 
 def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
-    s = pxssh.pxssh()
+    s = pxssh.pxssh(timeout=1200)
     s.login(host_ip, USER)
     s.sendline(config.SCRIPT_PATH + "sshkey_copy.sh ")
     url = config.LIBVIRT_REMOTE_URL.replace("ip", host_ip, 1)
@@ -24,21 +24,9 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
         s.sendline("\cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
     else:
         s.sendline("\cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
-    s.prompt(300)
     s.logout()
 
     instance_POOL.refresh()
-    vol = render_template(
-        "volume.xml"
-        , guest_name=name
-        , disk=disk
-    )
-    defaultVol = instance_POOL.storageVolLookupByName(base_name)
-    instance_POOL.createXMLFrom(vol, defaultVol, 0)
-    instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
-    defaultVol.delete()
-
-
     # vm 생성
     guest = render_template(
         "guest.xml"
