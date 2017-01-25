@@ -469,28 +469,26 @@ class GnCluster(Base):
     id = Column(String(8), primary_key=True, nullable=False)
     name = Column(String(50), primary_key=False, nullable=False)
     ip = Column(String(20), primary_key=False, nullable=False)
-    port = Column(Integer, primary_key=False, nullable=False)
     type = Column(String(10), primary_key=False, nullable=False)
     status = Column(String(10), primary_key=False, nullable=False)
     swarm_join = Column(String(10), primary_key=False, nullable=False)
     create_time = Column(String(10), primary_key=False, default=datetime.datetime.now())
     gnHostMachines = relationship('GnHostMachines')
 
-    def __init__(self, id=None, name=None, ip=None, port=None, type=None, swarm_join=None, status=None):
+    def __init__(self, id=None, name=None, ip=None, type=None, swarm_join=None, status=None):
         self.id = id
         self.name = name
         self.ip = ip
-        self.port = port
         self.type = type
         self.swarm_join = swarm_join
         self.status = status
 
     def __repr__(self):
-        return '< Id %r / Name %r / Ip %r / Port %r / Type %r / Swarm_join %r>' \
-               % (self.id, self.name, self.ip, self.port, self.type, self.swarm_join)
+        return '< Id %r / Name %r / Ip %r / Type %r / Swarm_join %r>' \
+               % (self.id, self.name, self.ip, self.type, self.swarm_join)
 
     def __json__(self):
-        return ['id', 'name', 'ip', 'port', 'type', 'swarm_join', 'gnHostMachines', 'create_time']
+        return ['id', 'name', 'ip', 'type', 'swarm_join', 'gnHostMachines', 'create_time']
 
 
 class GnDockerImageDetail(Base):

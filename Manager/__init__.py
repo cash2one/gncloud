@@ -454,16 +454,12 @@ def removeHostMachine(id):
 @app.route('/vm/cluster',methods=['POST'])
 def saveCluster():
     ip = request.json['ip']
-    port = request.json['port']
-    node = ""
-    if 'node' in request.json:
-        node = request.json['node']
 
     if 'id' in request.json:
-        updateClusterInfo(request.json['id'],ip,port,node,db_session)
+        updateClusterInfo(request.json['id'],ip,db_session)
     else:
         type = request.json['type']
-        insertClusterInfo(type,ip,port,node,db_session)
+        insertClusterInfo(type,ip,db_session)
 
     return jsonify(status=True, message="success")
 
