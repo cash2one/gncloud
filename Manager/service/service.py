@@ -60,9 +60,9 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
                                          .filter(GnVmMachines.status != config.REMOVE_STATUS) \
                                          .filter(GnVmMachines.status != config.ERROR_STATUS) \
                                          .first()
-        rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
-        rest_mem = host_info.max_mem - use_sum_info.sum_mem
-        rest_disk = host_info.max_disk - use_sum_info.sum_disk
+        rest_cpu = host_info.cpu - use_sum_info.sum_cpu
+        rest_mem = host_info.mem - use_sum_info.sum_mem
+        rest_disk = host_info.disk - use_sum_info.sum_disk
 
         if type == "kvm" or type == "hyperv":
             if rest_cpu >= max_cpu and rest_mem >= max_mem and rest_disk >= max_disk:
@@ -73,7 +73,6 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
 
     if host_id is None and type != "docker":
         return {"status":False, "value":"HOST 머신 리소스가 부족합니다"}
-
 
     #backup imfo
     if(backup == True):
@@ -742,34 +741,12 @@ def updateClusterInfo(id,ip,port,node,sql_session):
         cluster_info = sql_session.query(GnCluster).filter(GnCluster.id == id).one()
         cluster_info.ip = ip
         cluster_info.port = port
-
-        #node 부분
-        if node != "":
-            nodeArr = node.split('\n')
-            for str_node in nodeArr:
-                host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.ip == str_node).first()
-                host_info.type = cluster_info.type
-
-                #insert host pool
-                if type == "hyperv" or type == "kvm":
-                    while True:
-                        id = random_string(8)
-                        check_info = sql_session.query(GnImagePool).filter(GnImagePool.id == id).first();
-                        if not check_info:
-                            break
-                    if type == "hyperv":
-                        image_path = config.HYPERV_HOST_POOL_IMAGE_PATH
-                    else:
-                        image_path = config.KVM_HOST_POOL_IMAGE_PATH
-
-                    image_info = GnImagePool(id=id,type=host_info.type,image_path=image_path,host_id=host_info.id)
-                    sql_session.add(image_info)
     except:
         sql_session.rollback()
 
-    sql_session.commit()
     cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
     nginx_reload(cluster_list)
+    sql_session.commit()
 
 
 def insertClusterInfo(type,ip,port,node,sql_session):
@@ -782,30 +759,6 @@ def insertClusterInfo(type,ip,port,node,sql_session):
 
         cluster_info =GnCluster(id=id,type=type, ip=ip, port=port, status=config.RUN_STATUS)
         sql_session.add(cluster_info)
-
-
-        #node 부분
-        if len(node) > 0:
-            nodeArr = node.split('\n')
-            for str_node in nodeArr:
-                host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.ip == str_node).first()
-                host_info.type = type
-
-                if type == "hyperv" or type == "kvm":
-                    #insert host pool
-                    while True:
-                        id = random_string(8)
-                        check_info = sql_session.query(GnImagePool).filter(GnImagePool.id == id).first();
-                        if not check_info:
-                            break
-                    if type == "hyperv":
-                        image_path = config.HYPERV_HOST_POOL_IMAGE_PATH
-                    else:
-                        image_path = config.KVM_HOST_POOL_IMAGE_PATH
-
-                    image_info = GnImagePool(id=id,type=type,image_path=image_path,host_id=host_info.id)
-                    sql_session.add(image_info)
-
         cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
         nginx_reload(cluster_list)
         sql_session.commit()
@@ -814,15 +767,25 @@ def insertClusterInfo(type,ip,port,node,sql_session):
 
 def nginx_reload(cluster_list):
     #nginx reload
-    kvm_info = [x for x in cluster_list if x.type == "kvm"].pop()
-    hyperv_info = [x for x in cluster_list if x.type == "hyperv"].pop()
-    docker_info = [x for x in cluster_list if x.type == "docker"].pop()
+    kvm_str = ""
+    hyper_str = ""
+    docker_str = ""
+    if any((e.type == "kvm") for e in cluster_list):
+        kvm_info = [x for x in cluster_list if x.type == "kvm"].pop()
+        kvm_str = kvm_info.ip +":"+ kvm_info.port
+    if any((e.type == "hyperv") for e in cluster_list):
+        hyperv_info = [x for x in cluster_list if x.type == "hyperv"].pop()
+        hyper_str = hyperv_info.ip +":"+ hyperv_info.port
+    if any((e.type == "docker") for e in cluster_list):
+        docker_info = [x for x in cluster_list if x.type == "docker"].pop()
+        docker_str = docker_info.ip +":"+ docker_info.port
+
     subprocess.check_output("cp "+config.NGINX_CONF_PATH+"nginx.conf "+config.NGINX_CONF_PATH+"nginx.conf_bak", shell=True)
     nginx_conf = render_template(
         "nginx.conf"
-        ,kvm_endpoint = kvm_info.ip +":"+ kvm_info.port
-        ,hyperv_endpoint = hyperv_info.ip +":"+ hyperv_info.port
-        ,docker_endpoint = docker_info.ip +":"+ docker_info.port
+        ,kvm_endpoint = kvm_str
+        ,hyperv_endpoint = hyper_str
+        ,docker_endpoint = docker_str
     );
     f = open("/usr/local/nginx/conf/nginx.conf", 'w')
     f.write(nginx_conf)
@@ -836,11 +799,9 @@ def deleteCluster(id,sql_session):
     sql_session.commit()
 
 
-def insertHostInfo(ip,cpu,mem,disk,max_cpu,max_mem,max_disk,sql_session):
+def insertHostInfo(ip,cpu,mem,disk,type,sql_session):
     mem = int(mem)*1024**3
-    max_mem = int(max_mem)*1024**3
     disk = int(disk)*1024**3
-    max_disk = int(max_disk)*1024**3
 
     #insert host
     while True:
@@ -849,7 +810,7 @@ def insertHostInfo(ip,cpu,mem,disk,max_cpu,max_mem,max_disk,sql_session):
         if not check_info:
             break
 
-    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=mem,disk=disk,max_cpu=max_cpu,max_mem=max_mem,max_disk=max_disk,type="")
+    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=mem,disk=disk,type=type)
     sql_session.add(host_info)
     sql_session.commit()
 

@@ -472,11 +472,9 @@ def saveHostMachine():
     cpu = request.json['cpu']
     mem = request.json['mem']
     disk = request.json['disk']
-    max_cpu = request.json['max_cpu']
-    max_mem = request.json['max_mem']
-    max_disk = request.json['max_disk']
     ip = request.json['ip']
-    insertHostInfo(ip,cpu,mem,disk,max_cpu,max_mem,max_disk,db_session)
+    type = request.json['type']
+    insertHostInfo(ip,cpu,mem,disk,type,db_session)
     return jsonify(status=True, message="success")
 
 
