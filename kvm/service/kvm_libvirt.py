@@ -22,8 +22,10 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
 
     if base_sub_type == "base":
         s.sendline("\cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
+        s.prompt(300)
     else:
         s.sendline("\cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
+        s.prompt(300)
     s.logout()
 
     instance_POOL.refresh()
