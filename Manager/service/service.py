@@ -329,14 +329,17 @@ def server_image_list(type, sub_type, sql_session, team_code):
 
 def server_image(type, sql_session, team_code):
     if type == "base":
-        list = sql_session.query(GnVmImages).filter(GnVmImages.sub_type == type).filter(GnVmImages.status != config.REMOVE_STATUS).order_by(GnVmImages.create_time.desc()).all();
+        list = sql_session.query(GnVmImages)\
+                          .filter(GnVmImages.sub_type == type)\
+                          .filter(GnVmImages.status != config.REMOVE_STATUS)\
+                          .order_by(GnVmImages.create_time.desc()).all();
     else:
         list_query = sql_session.query(GnVmImages)\
                                 .filter(GnVmImages.sub_type == type)\
                                 .filter(GnVmImages.status != config.REMOVE_STATUS)
         if team_code != "000":
           list_query = list_query.filter(GnVmImages.team_code == team_code)
-        list = list_query.all()
+        list = list_query.order_by(GnVmImages.create_time.desc()).all()
 
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
