@@ -10,7 +10,7 @@ from kvm.service.service import server_create, server_change_status, server_moni
 from kvm.util.json_encoder import AlchemyEncoder
 from kvm.util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
-from apscheduler.scheduler import Scheduler
+#from apscheduler.scheduler import Scheduler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
