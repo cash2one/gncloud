@@ -43,7 +43,7 @@ def server_create(team_code, user_id, id, sql_session):
         #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
-        #setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
+        setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
 
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
@@ -113,12 +113,17 @@ def setStaticIpAddress(ip, host_ip, ssh_id):
 
 def server_delete(id,sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one();
+    status_info = sql_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == id).one();
+
 
     # vm 삭제
     kvm_vm_delete(guest_info.internal_name, guest_info.gnHostMachines.ip);
 
     # db 저장
     sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
+    #과금 테이블 업데이트
+    status_info.delete_time = datetime.datetime.now()
+
     sql_session.commit()
 
 
