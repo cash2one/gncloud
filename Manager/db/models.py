@@ -589,18 +589,39 @@ class GnNotice(Base):
     title = Column(nullable=True, default='')
     text = Column(nullable=True, default='')
     write_date = Column(DateTime, nullable=True, default='')
-    count = Column(Integer, nullable=False, default='')
 
-    def __init__(self, title=None, text=None, write_date=None, count=None):
+    def __init__(self, title=None, text=None, write_date=None):
         self.title=title
         self.text=text
         self.write_date=write_date
-        self.count = count
 
     def __repr__(self):
-        return '<Title %r / Text %r / write_date %r / Count %r / >'\
-            %(self.title, self.text, self.write_date, self.count)
+        return '<Title %r / Text %r / write_date %r / >'\
+            %(self.title, self.text, self.write_date)
 
     def __json__(self):
-        return ['title', 'text', 'write_date','id', 'count']
+        return ['title', 'text', 'write_date','id']
+
+class GnQnA(Base):
+    __tablename__='GN_QNA'
+    id = Column(Integer, primary_key=True, nullable=False)
+    title = Column(String(200), nullable=True)
+    text = Column(nullable=True)
+    farent_id = Column(Integer, nullable=True)
+    author_id = Column(String(50), nullable=True)
+    create_date = Column(DateTime, nullable=True)
+
+    def __init__(self, title=None, text=None, farent_id=None, author_id=None, create_date=None):
+        self.title=title
+        self.text=text
+        self.farent_id = farent_id
+        self.author_id = author_id
+        self.create_date = create_date
+
+    def __repr__(self):
+        return '<Title %r / Text %r / Farent_id %r / author_id %r / Create_date %r />'\
+                %(self.title, self.text, self.farent_id, self.author_id, self.create_date)
+
+    def __json__(self):
+        return ['id', 'title', 'text', 'farent_id', 'author_id', 'create_date']
 

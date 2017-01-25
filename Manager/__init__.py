@@ -634,6 +634,8 @@ def backup_time():
     type = request.json['type']
     day= request.json['value']
     return jsonify(status=True, list=backup_time_change(type, day, db_session))
+
+#-------------------------공지사항 시작--------------------------------
 @app.route('/vm/notice', methods=['GET'])
 def Notice():
     page= request.args.get("page")
@@ -658,6 +660,56 @@ def Notice_change():
 @app.route('/vm/notice/<id>',methods=['DELETE'])
 def Notice_delete(id):
     return jsonify(status=True, list=notice_delete(id,db_session))
+
+#-------------------------공지사항 끝 --------------------------------
+
+#-------------------------QnA 시작--------------------------------
+
+@app.route('/vm/qna', methods=['GET'])
+def Qna():
+    page=request.args.get("page")
+    return jsonify(status=True, list=qna_list(page, db_session))
+
+@app.route('/vm/qna/<id>', methods=['GET'])
+def Qna_info(id):
+    return jsonify(status=True, list=qna_info_list(id, db_session))
+
+@app.route('/vm/qna', methods=['POST'])
+def Qna_create():
+    title=request.json['title']
+    text = request.json['text']
+    user_id = session['userId']
+    return jsonify(status=True, list=qna_ask(title, text, user_id, db_session))
+
+@app.route('/vm/qna/<id>', methods=['POST'])
+def Qna_reply_create(id):
+    text =request.json['text']
+    user_id=session['userId']
+    return jsonify(status=True, list= qna_ask_reply(id, text, user_id, db_session))
+
+@app.route('/vm/qna/<id>', methods=['PUT'])
+def Qna_change(id):
+    text = request.json['text']
+    user_id =session['userId']
+    return jsonify(status=True, list=qna_ask_change(id, user_id, text, db_session))
+
+@app.route('/vm/qna/ask/<id>', methods=['PUT'])
+def Qna_reply_change(id):
+    text= request.json['text']
+    user_id = session['userId']
+    return jsonify(status=True, list=qna_ask_reply_change(id, user_id, text, db_session))
+
+@app.route('/vm/qna/<id>', methods=['DELETE'])
+def Qna_delete(id):
+    return jsonify(status=True, list=qna_ask_delete(id, db_session))
+
+@app.route('/vm/qna/ask/<id>', methods=['DELETE'])
+def Qna_reply_delete(id):
+    return jsonify(status=True, list=qna_ask_reply_delete(id, db_session))
+
+
+#-------------------------QnA 끝--------------------------------
+
 
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]

@@ -1089,11 +1089,11 @@ def logout_info(user_id, team_code, sql_session):
     sql_session.commit()
 
 def login_history(page, sql_session): #login history
-    page_size=30
+    page_size=10
     page=int(page)-1
     list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).limit(page_size).offset(page*page_size).all()
     total_page= sql_session.query(func.count(GnLoginHist.id).label("count")).one()
-    total = total_page.count /30
+    total = total_page.count /10
     login_info={};
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -1135,25 +1135,25 @@ def backup_time_change(type, day, sql_session):
     list.backup_schedule_period = day
     sql_session.commit()
 
+#-------------공지사항 관련 start ------------------------------------#
+
 def notice_list(page,sql_session):
-    page_size=30
+    page_size=10
     page=int(page)-1
     list = sql_session.query(GnNotice).order_by(GnNotice.write_date.desc()).limit(page_size).offset(page*page_size).all()
     total_page= sql_session.query(func.count(GnNotice.id).label("count")).one()
-    total=int(total_page.count)/30
+    total=int(total_page.count)/10
     for vm in list:
-        vm.write_date = vm.write_date.strftime('%Y-%m-%d %H:%M:%S')
-    return {"list":list, "total_page":total_page.count,"total":total}
+        vm.write_date = vm.write_date.strftime('%Y-%m-%d %H:%M')
+    return {"list":list, "total_page":total_page.count,"total":total, "page":page}
 
 def notice_info(id,sql_session):
     list = sql_session.query(GnNotice).filter(GnNotice.id ==id).one()
-    list.count = list.count+1
-    sql_session.commit()
-    list.write_date = list.write_date.strftime('%Y-%m-%d %H:%M:%S')
+    list.write_date = list.write_date.strftime('%Y-%m-%d %H:%M')
     return list
 
 def notice_create(title, text, sql_session):
-    notice_info = GnNotice(title=title, text=text,write_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), count=0)
+    notice_info = GnNotice(title=title, text=text,write_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(notice_info)
     sql_session.commit()
 
@@ -1165,3 +1165,56 @@ def notice_change(id ,text, sql_session):
 def notice_delete(id, sql_session):
     sql_session.query(GnNotice).filter(GnNotice.id == id).delete()
     sql_session.commit()
+
+#-------------공지사항 관련 END ------------------------------------#
+
+#-------------QNA START-------------------------------------#
+
+def qna_list(page,sql_session):
+    page_size=10
+    page=int(page)-1
+    qna_info = sql_session.query(GnQnA).filter(GnQnA.farent_id == None)\
+        .order_by(GnQnA.create_date.desc()).limit(page_size).offset(page*page_size).all()
+    total_page = total_page= sql_session.query(func.count(GnQnA.id).label("count")) \
+                                        .filter(GnQnA.farent_id==None).one()
+    total=int(total_page.count)/10
+    for qna in qna_info:
+        qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
+    return {"list":qna_info, "total_page":total_page.count,"total":total, "page":page}
+
+def qna_info_list(id, sql_session):
+    qna_info = sql_session.query(GnQnA).filter(GnQnA.id ==id).one()
+    qna_ask = sql_session.query(GnQnA).filter(GnQnA.farent_id ==id).all()
+    qna_info.create_date = qna_info.create_date.strftime('%Y-%m-%d %H:%M')
+    return {"qna_info":qna_info, "qna_ask":qna_ask}
+
+def qna_ask(title,text,user_id,sql_session):
+    qna_ask_inf = GnQnA(title=title, text=text,author_id=user_id, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(qna_ask_inf)
+    sql_session.commit()
+
+def qna_ask_reply(id, text, user_id ,sql_session):
+    qna_ask_replys=GnQnA(farent_id= id ,text=text,author_id=user_id,create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(qna_ask_replys)
+    sql_session.commit()
+
+def qna_ask_reply_change(id,user_id ,text, sql_session):
+    qna_ask_replys= sql_session.query(GnQnA).filter(GnQnA.farent_id==id).filter(GnQnA.author_id == user_id).one()
+    qna_ask_replys.text = text
+    sql_session.commit()
+
+def qna_ask_change(id, user_id , text, sql_session):
+    qna_ask_info = sql_session.query(GnQnA).filter(GnQnA.id == id).filter(GnQnA.farent_id == None).filter(GnQnA.author_id==user_id).one()
+    qna_ask_info.text =text
+    sql_session.commit()
+
+def qna_ask_delete(id, sql_session):
+    sql_session.query(GnQnA).filter(GnQnA.id==id).delete()
+    sql_session.query(GnQnA).filter(GnQnA.farent_id==id).delete()
+    sql_session.commit()
+
+def qna_ask_reply_delete(id , sql_session):
+    sql_session.query(GnQnA).filter(GnQnA.farent_id==id).delete()
+    sql_session.commit()
+
+#-------------QNA END-------------------------------------#

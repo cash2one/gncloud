@@ -187,6 +187,7 @@ td:nth-of-type(1) img{width: 35px;}
     color: #fff;
     background-color: #15cd72;
     border-color: #15cd72;
+    border-radius: 3px;
 }
 .btn-success:hover,
 .btn-success:focus,
@@ -210,7 +211,6 @@ td:nth-of-type(1) img{width: 35px;}
     color: #E60202;
     border: 1px solid #E60202;
     border-radius: 3px; 
-    padding: 10px 50px;
 }
 
 .btn-delete:hover,
@@ -256,6 +256,8 @@ td:nth-of-type(1) img{width: 35px;}
 }
 
 .modal-open{padding-right: 15px;}
+
+.gn-btn-height{height: 37px;}
 
 /* ==================== gncloud HEADER STYLE ==================== */
 .gn-header{
@@ -610,6 +612,7 @@ li.nav-link.active>a:hover,
 
 .gn-modal-header{
     border-bottom: none;
+    padding-bottom: 0;
 }
 
 .gn-modal-body{
@@ -643,20 +646,21 @@ li.nav-link.active>a:hover,
 .gn-modal-body > .gn-table-responsive  p span{padding: 0px 5px; color: #999999;}
 .gn-modal-body > .gn-table-responsive{margin-top: 30px;} 
 
-#modal-noti > .modal-dialog,
+#modal-board > .modal-dialog,
 #modi-write > .modal-dialog,
-#modal-qna > .modal-dialog
-{width: 1200px;}
+#modal-qna > .modal-dialog{width: 800px;}
 .noti-count{margin-right: 5px;}
 
-/*모달창 TABLE*/
-tbody.gn-tdody-modal tr td{padding-top: 20px; padding-bottom: 50px;}
+#modal-board p{border-bottom: 2px solid rgba(215,215,215,0.5); padding-bottom: 10px;}
+/*모달창*/
 .gn-write{font-weight: 200; color: #7d7d7d; line-height: 1.5;}
-#modal-noti .gn-modal-footer{padding-top: 0;}
+#modal-board .gn-modal-footer{padding-top: 0;}
+
+.gn-page-btn .pull-left{margin-right: 5px;}
+.gn-content{padding-bottom: 50px;}
 
 /* ========== gncloud 묻고답하기 HTML ========== */
-.btn-right{margin-top: -48px;}
-
+h2 > .pull-right{margin-top: -6px;}
 #modal-qna .glyphicon{margin-left: 10px;}
 /*댓글(comment)있는 영역의 쓰기,삭제하기 아이콘에 마진값*/
 #modal-qna .glyphicon.glyphicon-trash.pull-right.comm{margin-right: -20px;}
@@ -863,6 +867,28 @@ a.log-join-btn:focus{
     color: #00afb4;
     font-weight: 400;
 }
+
+/*대시보드 헬스체크*/
+.gn-health-check span.gn-health-name{
+    font-size: 16px;
+    color: #505050;
+    display: table;
+    line-height: 35px;
+}
+.gn-health-check span{
+    display: inline-block;
+}
+
+.gn-health-check ul li{
+    line-height: 35px;
+    text-align: left;
+}
+
+.gn-health-check .gn-dot-play{
+    margin-right: 10px;
+}
+
+.gn-health-name.center-block{width: 92px;}
 
 /* ========== gncloud 대시보드 HTML ========== */
 /*대시보드 TABLE STYLE*/
