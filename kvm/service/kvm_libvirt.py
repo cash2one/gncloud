@@ -21,12 +21,24 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     instance_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
 
     if base_sub_type == "base":
-        s.sendline("\cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
+        s.sendline("\cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
+        s.logout()
+        instance_POOL.refresh()
+        vol = render_template(
+            "volume.xml"
+            , guest_name=name
+            , disk=disk
+        )
+        defaultVol = instance_POOL.storageVolLookupByName(base_name)
+        instance_POOL.createXMLFrom(vol, defaultVol, 0)
+        instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
+        defaultVol.delete()
     else:
         s.sendline("\cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
-    s.logout()
+        instance_POOL.refresh()
+        s.logout()
 
-    instance_POOL.refresh()
+
     # vm 생성
     guest = render_template(
         "guest.xml"

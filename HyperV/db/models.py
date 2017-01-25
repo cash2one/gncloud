@@ -391,6 +391,7 @@ class GnVmMachines(Base):
     status = Column(String(10), nullable=True, default=None)
     hyperv_pass = Column(String(50), nullable=True, default='')
     image_id = Column(String(8), nullable=False, default=None)
+    size_id = Column(String(8), nullable=False, default=None)
 
     def __init__(self,
                  id, name='', tag='', type='',
@@ -401,7 +402,7 @@ class GnVmMachines(Base):
                  team_code=None, author_id=None,
                  create_time=datetime.datetime.now(), start_time=datetime.datetime.now(),
                  stop_time=datetime.datetime.now(),
-                 status=None, hyperv_pass=None, image_id=None):
+                 status=None, hyperv_pass=None, image_id=None, size_id=None):
         self.id = id
         self.name = name
         self.tag = tag
@@ -425,6 +426,7 @@ class GnVmMachines(Base):
         self.status = status
         self.hyperv_pass = hyperv_pass
         self.image_id = image_id
+        self.size_id = size_id
 
 
     def __repr__(self):
@@ -514,7 +516,7 @@ class GnInstanceStatus(Base):
     __tablename__ = 'GN_INSTANCE_STATUS'
     vm_id = Column(String(8), primary_key=True, nullable=False, default='')
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
-    delete_time = Column(DateTime, nullable=True, default='')
+    delete_time = Column(DateTime, nullable=True)
     author_id = Column(String(50), nullable=False, default='')
     team_code = Column(String(10), nullable=True, default='')
     price = Column(Integer, nullable=True, default='')
@@ -523,7 +525,8 @@ class GnInstanceStatus(Base):
     memory = Column( nullable=True, default='')
     disk = Column( nullable=True, default='')
 
-    def __init__(self, vm_id, create_time, delete_time=None, author_id=None, team_code=None, price=None, price_type=None, cpu=None, memory=None, disk=None):
+    def __init__(self, vm_id=None, create_time=None, delete_time=None, author_id=None, team_code=None
+                     , price=None, price_type=None, cpu=None, memory=None, disk=None):
         self.vm_id = vm_id
         self.create_time = create_time
         self.delete_time = delete_time

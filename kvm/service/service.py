@@ -5,9 +5,9 @@ import subprocess
 
 import datetime
 from pexpect import pxssh
-from kvm.db.models import GnVmMachines,GnHostMachines, GnMonitor, GnVmImages, GnMonitorHist, GnSshKeys
+from kvm.db.models import *
 from kvm.db.database import db_session
-from kvm.service.kvm_libvirt import kvm_create, kvm_change_status, kvm_vm_delete, kvm_image_delete
+from kvm.service.kvm_libvirt import *
 from kvm.util.config import config
 
 USER = "root"
@@ -43,7 +43,7 @@ def server_create(team_code, user_id, id, sql_session):
         #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
-        setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
+        #setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
 
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
@@ -54,6 +54,21 @@ def server_create(team_code, user_id, id, sql_session):
         vm_info.os_ver = image_info.os_ver
         vm_info.os_sub_ver = image_info.os_subver
         vm_info.os_bit = image_info.os_bit
+
+        print(id+":insert payment info")
+        vm_size = sql_session.query(GnVmSize).filter(GnVmSize.id == vm_info.size_id).first()
+        system_setting = sql_session.query(GnSystemSetting).first()
+        instance_status_price = None
+        if system_setting.billing_type == 'D':
+            instance_status_price = vm_size.day_price
+        elif system_setting.billing_type == 'H':
+            instance_status_price = vm_size.hour_price
+
+        insert_instance_status = GnInstanceStatus(vm_id=vm_info.id, author_id=vm_info.author_id, team_code=vm_info.team_code
+                                                  , price=instance_status_price,price_type=system_setting.billing_type
+                                                  , cpu=vm_info.cpu, memory=vm_info.memory,disk=vm_info.disk)
+        sql_session.add(insert_instance_status)
+
         sql_session.commit()
         print(id+":complete modify data!!!")
     except Exception as e:

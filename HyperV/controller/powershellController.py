@@ -130,16 +130,16 @@ def hvm_create(id, sql_session):
             else:
                 logger.error('invalid price_type : system_setting.billing_type %s' % system_setting.billing_type)
 
-            insert_instance_status = GnInstanceStatus(vm_info.id, datetime.datetime.now().strftime('%Y%m%d%H%M%S'),
-                                                      None, vm_info.author_id, vm_info.team_code, instance_status_price,
-                                                      system_setting.billing_type, vm_info.cpu, vm_info.memory,
-                                                      vm_info.disk)
+            insert_instance_status = GnInstanceStatus(vm_id=vm_info.id, author_id=vm_info.author_id, team_code=vm_info.team_code
+                                                      , price=instance_status_price,price_type=system_setting.billing_type
+                                                      , cpu=vm_info.cpu, memory=vm_info.memory,disk=vm_info.disk)
             sql_session.add(insert_instance_status)
 
             sql_session.commit()
             # sql_session.remove()
             return True
-    except:
+    except Exception as e:
+        print(e.message)
         vm_info.status = "Error"
         sql_session.commit()
         # sql_session.remove()
