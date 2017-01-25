@@ -28,7 +28,7 @@ class Invoice:
         job_defaults = { 'coalesce': False, 'max_instances': 3 }
         self.scheduler = BackgroundScheduler()
         self.scheduler.configure(executors=executors, job_defaults=job_defaults)
-        self.scheduler.add_job(lambda : self.self.invoice_calc(), trigger='cron', day=1, hour=1)
+        self.scheduler.add_job(lambda : self.invoice_calc(), trigger='cron', day=1, hour=1)
         self.scheduler.start()
 
     def invoice_calc(self):
