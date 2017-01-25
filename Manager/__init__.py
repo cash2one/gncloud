@@ -650,7 +650,7 @@ def Notice_create():
 @app.route('/vm/notice',methods=['PUT'])
 def Notice_change():
     id = request.json['id']
-    text = request.json['text']
+    text = request.json['text1']
     return jsonify(status=True, list=notice_change(id,text,db_session))
 
 @app.route('/vm/notice/<id>',methods=['DELETE'])

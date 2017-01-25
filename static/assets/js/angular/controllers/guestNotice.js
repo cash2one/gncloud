@@ -60,6 +60,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.noticeList($scope.data.page);
+                        $scope.data.title="";$scope.data.text="";
                     }else {
                         if (data.message != null) {
                             alert(data.message);
@@ -70,7 +71,7 @@ angular
 
         }
         $scope.changetext=function (id, text) {
-            $scope.data.text=text;
+            $scope.data.text1=text;
             $scope.data.id=id;
             $http({
                 method:'PUT',
@@ -98,6 +99,8 @@ angular
                     if (data.status == true) {
                         $scope.noticeList($scope.data.page);
                         alert("삭제 되었습니다.");
+
+
                     }else {
                         if (data.message != null) {
                             alert(data.message);
