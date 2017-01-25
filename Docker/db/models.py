@@ -18,12 +18,9 @@ class GnHostMachines(Base):
     cpu = Column(Integer, primary_key=False, nullable=False)
     mem = Column(Integer, primary_key=False, nullable=False)
     disk = Column(Integer, primary_key=False, nullable=False)
-    max_cpu = Column(Integer, primary_key=False, nullable=False)
-    max_mem = Column(Integer, primary_key=False, nullable=False)
-    max_disk = Column(Integer, primary_key=False, nullable=False)
     host_agent_port = Column(Integer, primary_key=False, nullable=False)
 
-    def __init__(self, id, name, ip, type, cpu="", mem="", disk="", max_cpu="", max_mem="", max_disk="", host_agent_port=""):
+    def __init__(self, id, name, ip, type, cpu="", mem="", disk="", host_agent_port=""):
         self.id = id
         self.name = name
         self.ip = ip
@@ -31,9 +28,6 @@ class GnHostMachines(Base):
         self.cpu = cpu
         self.mem = mem
         self.disk = disk
-        self.max_cpu = max_cpu
-        self.max_mem = max_mem
-        self.max_disk = max_disk
         self.host_agent_port = host_agent_port
 
     def __repr__(self):

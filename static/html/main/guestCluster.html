@@ -63,7 +63,6 @@
                                         <div class="form-group" ng-show="cluster.id != null">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">
                                                 노드 리스트
-                                                <button type="button" ng-click="add_node()">추가</button>
                                             </label>
                                             <div class="col-sm-9">
                                                 <span ng-repeat="gnHostMachine in cluster.gnHostMachines">{{gnHostMachine.ip}}
@@ -71,60 +70,12 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        </form>
-
-                                    <form name="hostForm" id="hostForm" class="form-horizontal"  ng-submit="submitForm(hostForm.$valid)">
-                                        <div id="input_host" style="display:none;">
-                                            <dl class="dl-horizontal gn-description-node">
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">IP</label>
-                                                    <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.mem.$invalid && !clusterForm.mem.$pristine }">
-                                                        <input type="text" name="ip" class="form-control gn-form-control" placeholder="192.168.1.100" ng-model="host.ip" required>
-                                                        <p ng-show="clusterForm.ip.$invalid && !clusterForm.mem.$pristine" class="help-block">IP를 입력하세요.</p>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">CPU</label>
-                                                    <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.mem.$invalid && !clusterForm.mem.$pristine }">
-                                                        <input type="text" name="cpu" class="form-control gn-form-control" placeholder="1" ng-model="host.cpu" required>
-                                                        <p ng-show="clusterForm.ip.$invalid && !clusterForm.mem.$pristine" class="help-block">CPU 개수를 입력하세요.</p>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">Memory</label>
-                                                    <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.mem.$invalid && !clusterForm.mem.$pristine }">
-                                                        <input type="text" class="form-control gn-form-control" placeholder="2" ng-model="host.mem" required>
-                                                        <p ng-show="clusterForm.ip.$invalid && !clusterForm.mem.$pristine" class="help-block">메모리 크기를 입력하세요.</p>
-                                                    </div>
-                                                     <span>
-                                                        <select class="gn-select gn-form-control col-sm-2" name="mem_size" ng-model="memsize" ng-options="mem.name for mem in mem" ng-change="sizemem(memsize)">
-                                                            <option value="">선택</option>
-                                                        </select>
-                                                    </span>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">Disk</label>
-                                                    <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.mem.$invalid && !clusterForm.mem.$pristine }">
-                                                        <input type="text" class="form-control gn-form-control" placeholder="10" ng-model="host.disk" required>
-                                                        <p ng-show="clusterForm.ip.$invalid && !clusterForm.mem.$pristine" class="help-block">디스크 크기를 입력하세요.</p>
-                                                    </div>
-                                                    <select class="gn-select gn-form-control col-sm-2" name="disk_size" ng-model="disksize" ng-options="disk.name for disk in disk" ng-change="sizedisk(disksize)">
-                                                        <option value="">선택</option>
-                                                    </select>
-                                                </div>
-                                                <p align="right">
-                                                    <button type="submit" style="width:50;" ng-click="saveHost()">저장</button>
-                                                </p>
-                                            </dl>
-
-                                        </div>
-
-
                                 </div>
 
                                 <div class="modal-footer gn-modal-footer">
                                     <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-disabled="clusterForm.$invalid" ng-click="saveCluster()">저장</button>
                                 </div>
+                                </form>
                             </div>
                         </div>
                     </div>  <!--class="modal fade" id="cluster"-->
@@ -140,15 +91,51 @@
 
                                 <div class="modal-body gn-modal-body">
 
-                                    <form class="form-horizontal" name="hostForm">
-                                        <dl class="dl-horizontal gn-description-node">
-                                            <dt class="">CPU</dt>
-                                            <dd><input type="text" name="cpu" class="form-control gn-form-control" placeholder="-" ng-model="host.cpu" required></dd>
-                                            <dt class="">MEMORY(GB)</dt>
-                                            <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.mem" required></dd>
-                                            <dt class="">DISK(GB)</dt>
-                                            <dd><input type="text" class="form-control gn-form-control" placeholder="-" ng-model="host.disk" required></dd>
-                                        </dl>
+                                    <form class="form-horizontal" name="hostForm" ng-submit="submitForm(hostForm.$valid)">
+                                        <div>
+                                            <dl class="dl-horizontal gn-description-node">
+                                                <div class="form-group">
+                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">IP</label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error' : hostForm.ip.$invalid && !hostForm.ip.$pristine }">
+                                                        <input type="text" name="ip" id="ip" class="form-control gn-form-control" placeholder="192.168.1.100" ng-model="host.ip" required>
+                                                        <p ng-show="hostForm.ip.$invalid && !hostForm.ip.$pristine" class="help-block">IP를 입력하세요.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">CPU</label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error' : hostForm.cpu.$invalid && !hostForm.cpu.$pristine }">
+                                                        <input type="text" name="cpu" id="cpu" class="form-control gn-form-control" placeholder="1" ng-model="host.cpu" required>
+                                                        <p ng-show="hostForm.cpu.$invalid && !hostForm.cpu.$pristine" class="help-block">CPU 개수를 입력하세요.</p>
+                                                    </div>
+                                                    <span>
+                                                        CORE
+                                                    </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">Memory</label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error' : hostForm.mem.$invalid && !hostForm.mem.$pristine }">
+                                                        <input type="text" id="mem" class="form-control gn-form-control" placeholder="2" ng-model="host.mem" required>
+                                                        <p ng-show="hostForm.mem.$invalid && !hostForm.mem.$pristine" class="help-block">메모리 크기를 입력하세요.</p>
+                                                    </div>
+                                                     <span>
+                                                        <select class="gn-select gn-form-control col-sm-2" name="mem_size" ng-model="memsize" ng-options="mem.name for mem in mem" ng-change="sizemem(memsize)">
+                                                            <option value="">선택</option>
+                                                        </select>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">Disk</label>
+                                                    <div class="col-sm-6" ng-class="{ 'has-error' : hostForm.disk.$invalid && !hostForm.disk.$pristine }">
+                                                        <input type="text" id="disk" class="form-control gn-form-control" placeholder="10" ng-model="host.disk" required>
+                                                        <p ng-show="hostForm.disk.$invalid && !hostForm.disk.$pristine" class="help-block">디스크 크기를 입력하세요.</p>
+                                                    </div>
+                                                    <select class="gn-select gn-form-control col-sm-2" name="disk_size" ng-model="disksize" ng-options="disk.name for disk in disk" ng-change="sizedisk(disksize)">
+                                                        <option value="">선택</option>
+                                                    </select>
+                                                </div>
+                                            </dl>
+
+                                        </div>
                                     </form>
                                 </div> <!--class="modal-body"-->
 
@@ -189,6 +176,7 @@
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
                                         <li><a href data-toggle="modal" data-target="#cluster" ng-click="getCluster(list.id)">수정</a></li>
+                                        <li><a href data-toggle="modal" data-target="#cluster-more" ng-click="addNode(list.type)">노드추가</a></li>
                                         <li><a href ng-click="deleteCluster(list.id)">삭제</a></li>
                                     </ul>
                                 </td>

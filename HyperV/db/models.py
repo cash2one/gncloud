@@ -216,20 +216,11 @@ class GnHostMachines(Base):
     cpu = Column(BigInteger, nullable=True, default=None)
     mem = Column(BigInteger, nullable=True, default=None)
     disk = Column(BigInteger, nullable=True, default=None)
-    max_cpu = Column(BigInteger, nullable=True, default=None)
-    max_mem = Column(BigInteger, nullable=True, default=None)
-    max_disk = Column(BigInteger, nullable=True, default=None)
-    cpu = Column(Integer, nullable=True, default=None)
-    # mem = Column(Integer, nullable=True, default=None)
-    # disk = Column(Integer, nullable=True, default=None)
-    # max_cpu = Column(Integer, nullable=True, default=None)
-    # max_mem = Column(Integer, nullable=True, default=None)
-    # max_disk = Column(Integer, nullable=True, default=None)
 
     host_agent_port = Column(Integer, nullable=True, default=None)
     image_path = Column(String(200), nullable=True, default='')
 
-    def __init__(self, id, name='', ip='', type='', cpu=None, mem=None, disk=None, max_cpu=None, max_mem=None, max_disk=None, host_agent_port=None, image_path = None):
+    def __init__(self, id, name='', ip='', type='', cpu=None, mem=None, disk=None, host_agent_port=None, image_path = None):
         self.id = id
         self.name = name
         self.ip = ip
@@ -237,9 +228,6 @@ class GnHostMachines(Base):
         self.cpu = cpu
         self.mem = mem
         self.disk = disk
-        self.max_cpu = max_cpu
-        self.max_mem = max_mem
-        self.max_disk = max_disk
         self.host_agent_port = host_agent_port
         self.image_path = image_path
 

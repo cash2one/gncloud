@@ -141,13 +141,6 @@ angular
                 });
         }
         $scope.saveHost=function(){
-
-            if($scope.host.ip == null){
-                alert("ip를 입력하세요");
-                return false;
-            }
-            $scope.host.type = $scope.cluster.type;
-
             $http({
                 method: 'POST',
                 url: '/api/manager/vm/host',
@@ -162,8 +155,7 @@ angular
                             $scope.cluster.node += $scope.host.ip;
                         }
                         $scope.host = {};
-                        $scope.getCluster($scope.cluster.id);
-                        $("#input_host").hide();
+                        $scope.getClusterList();
                     }
                     else {
                     }
@@ -179,9 +171,22 @@ angular
             $scope.cluster = {};
         }
 
-        $scope.add_node=function(){
-            $("#input_host").show();
+        //****노드 추가시 타입 셋팅****//
+        $scope.addNode=function(type){
+            $scope.host={};
+            $scope.memsize={};
+            $scope.disksize={};
+            $scope.host.type = type;
         }
+
+        //****라디오버튼*****//
+        $scope.sizemem=function (data) {
+            $scope.host.mem_size = data.name;
+        }
+        $scope.sizedisk=function (data) {
+            $scope.host.disk_size = data.name;
+        }
+
     }).directive('tooltip', function(){
         return {
             restrict: 'A',
