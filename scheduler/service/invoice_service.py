@@ -28,7 +28,7 @@ class Invoice:
         job_defaults = { 'coalesce': False, 'max_instances': 3 }
         self.scheduler = BackgroundScheduler()
         self.scheduler.configure(executors=executors, job_defaults=job_defaults)
-        self.scheduler.add_job(lambda : self.self.invoice_calc(), trigger='cron', day=1, hour=1)
+        self.scheduler.add_job(lambda : self.invoice_calc(), trigger='cron', day=1, hour=1)
         self.scheduler.start()
 
     def invoice_calc(self):
@@ -100,7 +100,7 @@ class Invoice:
             total_price += one_vm_price
 
             instance = " {'vm_id':'%s', 'price type': '%s', 'unit price':'%s', 'used':'%d', 'total price':'%d'}" \
-                            %(stat.vm_id, stat.price_type, stat.price, day_hour_count, one_vm_price)
+                       %(stat.vm_id, stat.price_type, stat.price, day_hour_count, one_vm_price)
 
             if author_id != stat.author_id and author_id is not None:
                 author_text = "{'user_id': '%s', 'instance_list': [%s] }" % (author_id, instance_list)
