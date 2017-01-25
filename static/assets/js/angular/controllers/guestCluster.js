@@ -141,29 +141,6 @@ angular
                 });
         }
         $scope.saveHost=function(){
-
-            if($scope.host.ip == null){
-                alert("ip를 입력하세요");
-                $("#ip").focus();
-                return false;
-            }
-            if($scope.host.cpu == null){
-                alert("CPU 개수를 입력하세요.");
-                $("#cpu").focus();
-                return false;
-            }
-            if($scope.host.mem == null){
-                alert("메모리 크기를 입력하세요.");
-                $("#mem").focus();
-                return false;
-            }
-            if($scope.host.disk == null){
-                alert("디스크 크기를 입력하세요.");
-                $("#disk").focus();
-                return false;
-            }
-            $scope.host.type = $scope.cluster.type;
-
             $http({
                 method: 'POST',
                 url: '/api/manager/vm/host',
@@ -178,8 +155,6 @@ angular
                             $scope.cluster.node += $scope.host.ip;
                         }
                         $scope.host = {};
-                        $scope.getCluster($scope.cluster.id);
-                        $scope.add_node();
                         $scope.getClusterList();
                     }
                     else {
@@ -196,17 +171,12 @@ angular
             $scope.cluster = {};
         }
 
-        //****host 추가 버튼****//
-        $scope.add_node=function(){
-            $("#input_host").toggle();
-            if($("#add_btn").html() == "추가") {
-                $("#add_btn").html("취소");
-            }else{
-               $("#add_btn").html("추가");
-            }
+        //****노드 추가시 타입 셋팅****//
+        $scope.addNode=function(type){
             $scope.host={};
             $scope.memsize={};
             $scope.disksize={};
+            $scope.host.type = type;
         }
 
         //****라디오버튼*****//
