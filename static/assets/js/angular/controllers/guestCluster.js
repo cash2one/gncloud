@@ -144,6 +144,22 @@ angular
 
             if($scope.host.ip == null){
                 alert("ip를 입력하세요");
+                $("#ip").focus();
+                return false;
+            }
+            if($scope.host.cpu == null){
+                alert("CPU 개수를 입력하세요.");
+                $("#cpu").focus();
+                return false;
+            }
+            if($scope.host.mem == null){
+                alert("메모리 크기를 입력하세요.");
+                $("#mem").focus();
+                return false;
+            }
+            if($scope.host.disk == null){
+                alert("디스크 크기를 입력하세요.");
+                $("#disk").focus();
                 return false;
             }
             $scope.host.type = $scope.cluster.type;
@@ -163,7 +179,8 @@ angular
                         }
                         $scope.host = {};
                         $scope.getCluster($scope.cluster.id);
-                        $("#input_host").hide();
+                        $scope.add_node();
+                        $scope.getClusterList();
                     }
                     else {
                     }
@@ -179,9 +196,27 @@ angular
             $scope.cluster = {};
         }
 
+        //****host 추가 버튼****//
         $scope.add_node=function(){
-            $("#input_host").show();
+            $("#input_host").toggle();
+            if($("#add_btn").html() == "추가") {
+                $("#add_btn").html("취소");
+            }else{
+               $("#add_btn").html("추가");
+            }
+            $scope.host={};
+            $scope.memsize={};
+            $scope.disksize={};
         }
+
+        //****라디오버튼*****//
+        $scope.sizemem=function (data) {
+            $scope.host.mem_size = data.name;
+        }
+        $scope.sizedisk=function (data) {
+            $scope.host.disk_size = data.name;
+        }
+
     }).directive('tooltip', function(){
         return {
             restrict: 'A',

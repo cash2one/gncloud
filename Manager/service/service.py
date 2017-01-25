@@ -799,9 +799,11 @@ def deleteCluster(id,sql_session):
     sql_session.commit()
 
 
-def insertHostInfo(ip,cpu,mem,disk,type,sql_session):
-    mem = int(mem)*1024**3
-    disk = int(disk)*1024**3
+def insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,sql_session):
+    mem=mem+mem_size
+    disk=disk+disk_size
+    byte_mem=convertsize(mem)
+    byte_disk=convertsize(disk)
 
     #insert host
     while True:
@@ -810,7 +812,7 @@ def insertHostInfo(ip,cpu,mem,disk,type,sql_session):
         if not check_info:
             break
 
-    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=mem,disk=disk,type=type)
+    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=byte_mem,disk=byte_disk,type=type)
     sql_session.add(host_info)
     sql_session.commit()
 
