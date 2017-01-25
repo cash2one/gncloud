@@ -57,8 +57,8 @@
 </div><!--div class="table-responsive gn-table-responsive" -->
 
 <!--이전/다음 버튼-->
-<input type="button" class="btn" ng-click="page(prev_page)" value="이전" ng-disabled="page_hist == 1">
-<input type="button" class="btn" style="float:right;" ng-click="page(next_page)" value="다음" ng-disabled="page_total==page_hist">
+<input type="button" class="btn" ng-click="noticeList(prev_page)" value="이전" ng-disabled="page_hist == 1">
+<input type="button" class="btn" style="float:right;" ng-click="noticeList(next_page)" value="다음" ng-disabled="page_total==page_hist">
 <!-- 공지 Modal -->
 <div class="modal fade" id="modal-noti" role="dialog">
     <div class="modal-backdrop fade in" style="height: 3000px;"></div>
@@ -83,7 +83,7 @@
                         </tr>
                         <td id="change" class="second-td-name gn-lead col-sm-8" ng-show="showData">
                             <textarea class="form-control gn-write" rows="6" ng-model="notice.text"></textarea></td>
-                        <td id="change_button" class="col-sm-1" ng-show="showData"><button  type="submit" class="btn btn-gn-sub btn-block pull-right" data-dismiss="modal" ng-click="changetext(notice.id, notice.text)">수정</button></td>
+                        <td id="change_button" class="col-sm-1" ng-show="showData"><button  type="submit" class="btn btn-gn-sub btn-block pull-right" data-dismiss="modal" ng-click="showData=!showData;changetext(notice.id, notice.text)">수정</button></td>
                         </tbody>
                     </table>
                 </div><!--div class="table-responsive gn-table-responsive" -->
@@ -91,7 +91,7 @@
             <div class="modal-footer gn-modal-footer">
                 <button type="submit" class="btn btn-gn-sub pull-left" ng-show="user_info.authority == 'sysowner' " ng-click="showData= !showData">수정</button>
                 <button type="submit" class="btn btn-gn-sub pull-left" data-dismiss="modal" ng-show="user_info.authority == 'sysowner' " ng-click="deletenoti(notice.id)">삭제</button>
-                <button type="submit" class="btn btn-gn-sub pull-right" data-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-gn-sub pull-right" data-dismiss="modal" ng-click="showData=!showData">닫기</button>
             </div>
         </div>
     </div>
