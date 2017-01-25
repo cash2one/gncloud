@@ -21,21 +21,22 @@
                 <li class="nav-link" ng-class="{'active':3 == selected}" ng-click="select(3)"><a href="#guestSnapList/">이미지</a></li>
             </ul><!--class="nav navbar-nav"-->
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="#/guestNotice" class="gn-noti"></a></li>
                 <!-- ========== 모바일에서 보여지는 dropdown ========== -->
                 <li class="dropdown mobile-head-dropdown">
                     <div href="#" class="dropdown-toggle mobile-user" data-toggle="dropdown" role="button" aria-expanded="false">
                         <a id="name">{{user_info.name}}</a>
                         <span class="gn-mobile-caret"></span>
                     </div>
+
                     <ul class="dropdown-menu gn-head-drop" role="menu">
-                        <li><a href="#/account/users/list">개인설정</a></li>
+                        <li><a href="#/account/users/list">개인설정</a> <a href="#/guestNotice" class="gn-noti"></a></li>
                         <li ng-show="user_info.authority == 'sysowner' "><a href="#/guestSystemList" id="system">시스템 설정</a></li>
-                        <li><a href="">묻고답하기</a></li>
+                        <li><a href="#/guestQna">묻고답하기</a></li>
                         <li><a href=javascript:logout();>로그아웃</a></li>
                     </ul>
                 </li>
                 <!-- ========== 모바일 dropdown END ========== -->
-                <li><a href="" class="gn-noti"></a></li>
                 <li>
                 <li class="dropdown head-dropdown">
                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -45,7 +46,7 @@
                     <ul class="dropdown-menu gn-head-drop" role="menu">
                         <li><a href="#/account/users/list">개인설정</a></li>
                         <li ng-show="user_info.authority == 'sysowner' "><a href="#/guestSystemList" id="system">시스템 설정</a></li>
-                        <li><a href="">묻고답하기</a></li>
+                        <li><a href="#/guestQna">묻고답하기</a></li>
                         <li><a href=javascript:logout();>로그아웃</a></li>
                     </ul>
                 </li>

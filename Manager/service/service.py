@@ -60,9 +60,9 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
                                          .filter(GnVmMachines.status != config.REMOVE_STATUS) \
                                          .filter(GnVmMachines.status != config.ERROR_STATUS) \
                                          .first()
-        rest_cpu = host_info.max_cpu - use_sum_info.sum_cpu
-        rest_mem = host_info.max_mem - use_sum_info.sum_mem
-        rest_disk = host_info.max_disk - use_sum_info.sum_disk
+        rest_cpu = host_info.cpu - use_sum_info.sum_cpu
+        rest_mem = host_info.mem - use_sum_info.sum_mem
+        rest_disk = host_info.disk - use_sum_info.sum_disk
 
         if type == "kvm" or type == "hyperv":
             if rest_cpu >= max_cpu and rest_mem >= max_mem and rest_disk >= max_disk:
@@ -73,7 +73,6 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
 
     if host_id is None and type != "docker":
         return {"status":False, "value":"HOST 머신 리소스가 부족합니다"}
-
 
     #backup imfo
     if(backup == True):
@@ -737,42 +736,18 @@ def deleteHostMachine(id,sql_session):
     sql_session.query(GnImagePool).filter(GnImagePool.host_id == id).delete()
     sql_session.commit()
 
-def updateClusterInfo(id,ip,port,node,sql_session):
+def updateClusterInfo(id,ip,sql_session):
     try:
         cluster_info = sql_session.query(GnCluster).filter(GnCluster.id == id).one()
         cluster_info.ip = ip
-        cluster_info.port = port
-
-        #node 부분
-        if node != "":
-            nodeArr = node.split('\n')
-            for str_node in nodeArr:
-                host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.ip == str_node).first()
-                host_info.type = cluster_info.type
-
-                #insert host pool
-                if type == "hyperv" or type == "kvm":
-                    while True:
-                        id = random_string(8)
-                        check_info = sql_session.query(GnImagePool).filter(GnImagePool.id == id).first();
-                        if not check_info:
-                            break
-                    if type == "hyperv":
-                        image_path = config.HYPERV_HOST_POOL_IMAGE_PATH
-                    else:
-                        image_path = config.KVM_HOST_POOL_IMAGE_PATH
-
-                    image_info = GnImagePool(id=id,type=host_info.type,image_path=image_path,host_id=host_info.id)
-                    sql_session.add(image_info)
+        cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
+        nginx_reload(cluster_list)
+        sql_session.commit()
     except:
         sql_session.rollback()
 
-    sql_session.commit()
-    cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
-    nginx_reload(cluster_list)
 
-
-def insertClusterInfo(type,ip,port,node,sql_session):
+def insertClusterInfo(type,ip,port,sql_session):
     try:
         while True:
             id = random_string(8)
@@ -780,32 +755,8 @@ def insertClusterInfo(type,ip,port,node,sql_session):
             if not check_info:
                 break
 
-        cluster_info =GnCluster(id=id,type=type, ip=ip, port=port, status=config.RUN_STATUS)
+        cluster_info =GnCluster(id=id,type=type, ip=ip, status=config.RUN_STATUS)
         sql_session.add(cluster_info)
-
-
-        #node 부분
-        if len(node) > 0:
-            nodeArr = node.split('\n')
-            for str_node in nodeArr:
-                host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.ip == str_node).first()
-                host_info.type = type
-
-                if type == "hyperv" or type == "kvm":
-                    #insert host pool
-                    while True:
-                        id = random_string(8)
-                        check_info = sql_session.query(GnImagePool).filter(GnImagePool.id == id).first();
-                        if not check_info:
-                            break
-                    if type == "hyperv":
-                        image_path = config.HYPERV_HOST_POOL_IMAGE_PATH
-                    else:
-                        image_path = config.KVM_HOST_POOL_IMAGE_PATH
-
-                    image_info = GnImagePool(id=id,type=type,image_path=image_path,host_id=host_info.id)
-                    sql_session.add(image_info)
-
         cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
         nginx_reload(cluster_list)
         sql_session.commit()
@@ -814,15 +765,25 @@ def insertClusterInfo(type,ip,port,node,sql_session):
 
 def nginx_reload(cluster_list):
     #nginx reload
-    kvm_info = [x for x in cluster_list if x.type == "kvm"].pop()
-    hyperv_info = [x for x in cluster_list if x.type == "hyperv"].pop()
-    docker_info = [x for x in cluster_list if x.type == "docker"].pop()
+    kvm_str = ""
+    hyper_str = ""
+    docker_str = ""
+    if any((e.type == "kvm") for e in cluster_list):
+        kvm_info = [x for x in cluster_list if x.type == "kvm"].pop()
+        kvm_str = kvm_info.ip
+    if any((e.type == "hyperv") for e in cluster_list):
+        hyperv_info = [x for x in cluster_list if x.type == "hyperv"].pop()
+        hyper_str = hyperv_info.ip
+    if any((e.type == "docker") for e in cluster_list):
+        docker_info = [x for x in cluster_list if x.type == "docker"].pop()
+        docker_str = docker_info.ip
+
     subprocess.check_output("cp "+config.NGINX_CONF_PATH+"nginx.conf "+config.NGINX_CONF_PATH+"nginx.conf_bak", shell=True)
     nginx_conf = render_template(
         "nginx.conf"
-        ,kvm_endpoint = kvm_info.ip +":"+ kvm_info.port
-        ,hyperv_endpoint = hyperv_info.ip +":"+ hyperv_info.port
-        ,docker_endpoint = docker_info.ip +":"+ docker_info.port
+        ,kvm_endpoint = kvm_str
+        ,hyperv_endpoint = hyper_str
+        ,docker_endpoint = docker_str
     );
     f = open("/usr/local/nginx/conf/nginx.conf", 'w')
     f.write(nginx_conf)
@@ -836,11 +797,11 @@ def deleteCluster(id,sql_session):
     sql_session.commit()
 
 
-def insertHostInfo(ip,cpu,mem,disk,max_cpu,max_mem,max_disk,sql_session):
-    mem = int(mem)*1024**3
-    max_mem = int(max_mem)*1024**3
-    disk = int(disk)*1024**3
-    max_disk = int(max_disk)*1024**3
+def insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,sql_session):
+    mem=mem+mem_size
+    disk=disk+disk_size
+    byte_mem=convertsize(mem)
+    byte_disk=convertsize(disk)
 
     #insert host
     while True:
@@ -849,7 +810,7 @@ def insertHostInfo(ip,cpu,mem,disk,max_cpu,max_mem,max_disk,sql_session):
         if not check_info:
             break
 
-    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=mem,disk=disk,max_cpu=max_cpu,max_mem=max_mem,max_disk=max_disk,type="")
+    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=byte_mem,disk=byte_disk,type=type)
     sql_session.add(host_info)
     sql_session.commit()
 
@@ -1126,11 +1087,11 @@ def logout_info(user_id, team_code, sql_session):
     sql_session.commit()
 
 def login_history(page, sql_session): #login history
-    page_size=30
+    page_size=10
     page=int(page)-1
     list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).limit(page_size).offset(page*page_size).all()
     total_page= sql_session.query(func.count(GnLoginHist.id).label("count")).one()
-    total = total_page.count /30
+    total = total_page.count /10
     login_info={};
     for login_hist in list:
         login_hist.action_time = login_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -1171,3 +1132,87 @@ def backup_time_change(type, day, sql_session):
     list.backup_schedule_type = type
     list.backup_schedule_period = day
     sql_session.commit()
+
+#-------------공지사항 관련 start ------------------------------------#
+
+def notice_list(page,sql_session):
+    page_size=10
+    page=int(page)-1
+    list = sql_session.query(GnNotice).order_by(GnNotice.write_date.desc()).limit(page_size).offset(page*page_size).all()
+    total_page= sql_session.query(func.count(GnNotice.id).label("count")).one()
+    total=int(total_page.count)/10
+    for vm in list:
+        vm.write_date = vm.write_date.strftime('%Y-%m-%d %H:%M')
+    return {"list":list, "total_page":total_page.count,"total":total, "page":page}
+
+def notice_info(id,sql_session):
+    list = sql_session.query(GnNotice).filter(GnNotice.id ==id).one()
+    list.write_date = list.write_date.strftime('%Y-%m-%d %H:%M')
+    return list
+
+def notice_create(title, text, sql_session):
+    notice_info = GnNotice(title=title, text=text,write_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(notice_info)
+    sql_session.commit()
+
+def notice_change(id ,text, sql_session):
+    notice_info=sql_session.query(GnNotice).filter(GnNotice.id == id).one()
+    notice_info.text = text
+    sql_session.commit()
+
+def notice_delete(id, sql_session):
+    sql_session.query(GnNotice).filter(GnNotice.id == id).delete()
+    sql_session.commit()
+
+#-------------공지사항 관련 END ------------------------------------#
+
+#-------------QNA START-------------------------------------#
+
+def qna_list(page,sql_session):
+    page_size=10
+    page=int(page)-1
+    qna_info = sql_session.query(GnQnA).filter(GnQnA.farent_id == None)\
+        .order_by(GnQnA.create_date.desc()).limit(page_size).offset(page*page_size).all()
+    total_page = total_page= sql_session.query(func.count(GnQnA.id).label("count")) \
+                                        .filter(GnQnA.farent_id==None).one()
+    total=int(total_page.count)/10
+    for qna in qna_info:
+        qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
+    return {"list":qna_info, "total_page":total_page.count,"total":total, "page":page}
+
+def qna_info_list(id, sql_session):
+    qna_info = sql_session.query(GnQnA).filter(GnQnA.id ==id).one()
+    qna_ask = sql_session.query(GnQnA).filter(GnQnA.farent_id ==id).all()
+    qna_info.create_date = qna_info.create_date.strftime('%Y-%m-%d %H:%M')
+    return {"qna_info":qna_info, "qna_ask":qna_ask}
+
+def qna_ask(title,text,user_id,sql_session):
+    qna_ask_inf = GnQnA(title=title, text=text,author_id=user_id, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(qna_ask_inf)
+    sql_session.commit()
+
+def qna_ask_reply(id, text, user_id ,sql_session):
+    qna_ask_replys=GnQnA(farent_id= id ,text=text,author_id=user_id,create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(qna_ask_replys)
+    sql_session.commit()
+
+def qna_ask_reply_change(id,user_id ,text, sql_session):
+    qna_ask_replys= sql_session.query(GnQnA).filter(GnQnA.farent_id==id).filter(GnQnA.author_id == user_id).one()
+    qna_ask_replys.text = text
+    sql_session.commit()
+
+def qna_ask_change(id, user_id , text, sql_session):
+    qna_ask_info = sql_session.query(GnQnA).filter(GnQnA.id == id).filter(GnQnA.farent_id == None).filter(GnQnA.author_id==user_id).one()
+    qna_ask_info.text =text
+    sql_session.commit()
+
+def qna_ask_delete(id, sql_session):
+    sql_session.query(GnQnA).filter(GnQnA.id==id).delete()
+    sql_session.query(GnQnA).filter(GnQnA.farent_id==id).delete()
+    sql_session.commit()
+
+def qna_ask_reply_delete(id , sql_session):
+    sql_session.query(GnQnA).filter(GnQnA.farent_id==id).delete()
+    sql_session.commit()
+
+#-------------QNA END-------------------------------------#

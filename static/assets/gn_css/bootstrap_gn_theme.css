@@ -165,7 +165,7 @@ textarea.gn-form-control{
 }
 
 .gn-description-list dd span{
-    margin-left: 10px;
+   /* margin-left: 10px;*/
     font-weight: 400;
     color: #7d7d7d;
 }
@@ -187,6 +187,7 @@ td:nth-of-type(1) img{width: 35px;}
     color: #fff;
     background-color: #15cd72;
     border-color: #15cd72;
+    border-radius: 3px;
 }
 .btn-success:hover,
 .btn-success:focus,
@@ -210,7 +211,6 @@ td:nth-of-type(1) img{width: 35px;}
     color: #E60202;
     border: 1px solid #E60202;
     border-radius: 3px; 
-    padding: 10px 50px;
 }
 
 .btn-delete:hover,
@@ -256,6 +256,8 @@ td:nth-of-type(1) img{width: 35px;}
 }
 
 .modal-open{padding-right: 15px;}
+
+.gn-btn-height{height: 37px;}
 
 /* ==================== gncloud HEADER STYLE ==================== */
 .gn-header{
@@ -483,10 +485,6 @@ li.nav-link.active>a:hover,
     vertical-align: middle;
 }
 
-.gn-table-responsive > .gn-table tbody.gn-tdody tr td:nth-of-type(1){
-    text-align: left;
-} 
-
 .gn-table-responsive > .gn-table tbody tr td > p{
     margin: 0;
 }
@@ -614,6 +612,7 @@ li.nav-link.active>a:hover,
 
 .gn-modal-header{
     border-bottom: none;
+    padding-bottom: 0;
 }
 
 .gn-modal-body{
@@ -625,6 +624,56 @@ li.nav-link.active>a:hover,
 }
 
 /*-----모달 공통 end-----*/
+
+/* ========== gncloud 공지 HTML ========== */
+.gn-table-responsive > .gn-table-noti thead tr th{
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    border-bottom: 2px solid rgba(215,215,215,.5);
+}
+.gn-table-responsive > .gn-table-noti tbody tr td{
+    text-align: center;
+    font-size: 14px;
+    height: 35px;
+    border-bottom: 1px solid rgba(215,215,215,.5);
+    vertical-align: middle;
+}
+
+.gn-table-responsive > .gn-table-noti tbody tr td.second-td-name,
+.gn-table-responsive > .gn-table-noti thead tr th.second-td-name{text-align: left;}
+.gn-modal-body > .gn-table-responsive  p{font-weight: 400; position: absolute; top: 5px; right: 10px;}
+.gn-modal-body > .gn-table-responsive  p span{padding: 0px 5px; color: #999999;}
+.gn-modal-body > .gn-table-responsive{margin-top: 30px;} 
+
+#modal-board > .modal-dialog,
+#modi-write > .modal-dialog,
+#modal-qna > .modal-dialog{width: 800px;}
+.noti-count{margin-right: 5px;}
+
+#modal-board p{border-bottom: 2px solid rgba(215,215,215,0.5); padding-bottom: 10px;}
+/*모달창*/
+.gn-write{font-weight: 200; color: #7d7d7d; line-height: 1.5;}
+#modal-board .gn-modal-footer{padding-top: 0;}
+
+.gn-page-btn .pull-left{margin-right: 5px;}
+.gn-content{padding-bottom: 50px;}
+
+/* ========== gncloud 묻고답하기 HTML ========== */
+h2 > .pull-right{margin-top: -6px;}
+#modal-qna .glyphicon{margin-left: 10px;}
+/*댓글(comment)있는 영역의 쓰기,삭제하기 아이콘에 마진값*/
+#modal-qna .glyphicon.glyphicon-trash.pull-right.comm{margin-right: -20px;}
+
+.gn-comment{background-color: #f8f8f8;}
+.gn-comment td{padding-bottom: 20px !important;}
+.gn-comment td div{padding: 20px;}
+.gn-answer td button.btn-gn-sub{height: 100%;}
+#modal-qna .gn-tdody-modal{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100px;
+}
 
 /* ========== gncloud 로그인 HTML ========== */
 .body-white{background-color: #ffffff; min-height: 100%;}
@@ -818,6 +867,28 @@ a.log-join-btn:focus{
     color: #00afb4;
     font-weight: 400;
 }
+
+/*대시보드 헬스체크*/
+.gn-health-check span.gn-health-name{
+    font-size: 16px;
+    color: #505050;
+    display: table;
+    line-height: 35px;
+}
+.gn-health-check span{
+    display: inline-block;
+}
+
+.gn-health-check ul li{
+    line-height: 35px;
+    text-align: left;
+}
+
+.gn-health-check .gn-dot-play{
+    margin-right: 10px;
+}
+
+.gn-health-name.center-block{width: 92px;}
 
 /* ========== gncloud 대시보드 HTML ========== */
 /*대시보드 TABLE STYLE*/
@@ -1021,6 +1092,7 @@ a.log-join-btn:focus{
 /* ========== gncloud 인스턴스 > 리스트 HTML ========== */
 .first-td{
     width: 65px;
+    text-align: left;
 }
 
 .gn-table-responsive > .gn-table tbody tr td.second-td-name{
@@ -1166,9 +1238,97 @@ ul.gn-tag-group > li{
 }
 
 .gn-detail-main{
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
+/*상세 백업 SWITCH STYLE*/
+.switch {
+  background: #fff;
+  border: 1px solid #dfdfdf;
+  position: relative;
+  display: inline-block;
+  box-sizing: content-box;
+  overflow: visible;
+  width: 52px;
+  height: 30px;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
+  transition: 0.3s ease-out all;
+  -webkit-transition: 0.3s ease-out all;
+  top: -1px;
+}
+/*adding a wide width for larger switch text*/
+.switch.wide {
+  width:80px;
+}
+.switch small {
+  background: #fff;
+  border-radius: 100%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transition: 0.3s ease-out all;
+  -webkit-transition: 0.3s ease-out all;
+}
+.switch.checked {
+  background: rgb(100, 189, 99);
+  border-color: rgb(100, 189, 99);
+}
+.switch.checked small {
+  left: 22px;
+}
+/*wider switch text moves small further to the right*/
+.switch.wide.checked small {
+  left:52px;
+}
+/*styles for switch-text*/
+.switch .switch-text {
+  font-family:Arial, Helvetica, sans-serif;
+  font-size:13px;
+}
+
+.switch .off {
+  display:block;
+  position: absolute;
+  right: 10%;
+  top: 25%;
+  z-index: 0;
+  color:#A9A9A9;
+}
+
+.switch .on {
+  display:none;
+   z-index: 0;
+  color:#fff;
+  position: absolute;
+  top: 25%;
+  left: 9%;
+}
+
+.switch.checked .off {
+  display:none;
+}
+
+.switch.checked .on {
+  display:block;
+
+}
+
+.switch.disabled {
+  opacity: .50;
+  cursor: not-allowed;
+}
+/*상세 백업 SWITCH STYLE end*/
+
+.gn-detail-main > .gn-margin-box > .gn-description-list dt{
+    width: 110px;
+}
 
 /* ========== gncloud 인스턴스 > 생성 HTML ========== */
 #snap > form > .btn-group,
@@ -1181,7 +1341,7 @@ form > .btn-group{
 }
 
 .height-auto{
-      height:auto !important;
+    height:auto !important;
 }
 
 .gn-btn-default{
@@ -1413,7 +1573,7 @@ li.active > .tab-sm-box{
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
 .fons-16{font-size: 16px;}
 .gn-ms-cursor{cursor: pointer;}
-.gn-ms-cursor:hover{color: #505050; background-color: rgba(215,215,215,0.5);}
+/*.gn-ms-cursor:hover{color: #505050; background-color: rgba(215,215,215,0.5);}*/
 
 /*.col-sm-11,
 .tab-content.col-sm-10{
@@ -1933,6 +2093,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
      
     
 }
+
 
 
 
