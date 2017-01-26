@@ -8,7 +8,7 @@
 <!-- 묻고 답하기 글쓰기 Modal -->
 <div class="modal fade" id="modi-write" role="dialog">
     <div class="modal-backdrop fade in" style="height: 3000px;"></div>
-    <div class="modal-dialog form-horizontal">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header gn-modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -17,13 +17,13 @@
             <div class="modal-body gn-modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-1 control-label">제목</label>
+                        <label class="col-sm-1 control-label">제목</label>
                         <div class="col-sm-11">
                             <input type="text" class="form-control" ng-model="data.title">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-1 control-label">내용</label>
+                        <label class="col-sm-1 control-label">내용</label>
                         <div class="col-sm-11">
                             <textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요." ng-model="data.text"></textarea>
                         </div>
@@ -38,7 +38,7 @@
 </div><!--<div class="modal fade" id="modi-write" role="dialog">-->
 <!--묻고 답하기 목록-->
 <div class="table-responsive gn-table-responsive">
-    <table class="table gn-table-noti table-condensed table-hover">
+    <table class="table gn-board-table table-condensed table-hover">
         <thead>
         <tr>
             <th class="col-sm-1">#</th>
@@ -64,7 +64,7 @@
 <!-- 묻고 답하기 내용 Modal -->
 <div class="modal fade" id="modal-board" role="dialog">
     <div class="modal-backdrop fade in" style="height: 3000px;"></div>
-    <div class="modal-dialog form-horizontal">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header gn-modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
