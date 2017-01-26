@@ -16,6 +16,7 @@
         <div id="navbar" class="navbar-collapse collapse gn-header-collapsed">
             <!--왼쪽메뉴-->
             <ul class="nav navbar-nav" id="navigation">
+                <a href="#/guestNotice" class="gn-noti-mobile"></a></li>
                 <li class="nav-link" ng-class="{'active':1 == selected}" ng-click="select(1)"><a href="#dashboard">대시보드</a></li>
                 <li class="nav-link" ng-class="{'active':2 == selected}" ng-click="select(2)"><a href="#/guestList">인스턴스</a></li>
                 <li class="nav-link" ng-class="{'active':3 == selected}" ng-click="select(3)"><a href="#guestSnapList/">이미지</a></li>
@@ -30,7 +31,7 @@
                     </div>
 
                     <ul class="dropdown-menu gn-head-drop" role="menu">
-                        <li><a href="#/account/users/list">개인설정</a> <a href="#/guestNotice" class="gn-noti"></a></li>
+                        <li><a href="#/account/users/list">개인설정</a>
                         <li ng-show="user_info.authority == 'sysowner' "><a href="#/guestSystemList" id="system">시스템 설정</a></li>
                         <li><a href="#/guestQna">묻고답하기</a></li>
                         <li><a href=javascript:logout(); class="gn-danger">로그아웃</a></li>
