@@ -4,7 +4,6 @@ import traceback
 
 from datetime import timedelta
 from flask import Flask, redirect, url_for
-from uwsgi_tasks import *
 
 from Docker.controller.dockerController import *
 from Docker.db.database import db_session
