@@ -183,7 +183,8 @@ textarea.gn-form-control{
 td:nth-of-type(1) img{width: 35px;}
 
 /* ============================= gncloud BUTTON STYLE ============================= */
-.btn-success {
+/*인스턴스 생성버튼*/
+/*.btn-success {
     color: #fff;
     background-color: #15cd72;
     border-color: #15cd72;
@@ -201,6 +202,29 @@ td:nth-of-type(1) img{width: 35px;}
 }
 .btn-success:active,
 .btn-success.active,
+.open > .dropdown-toggle.btn-success {
+    background-image: none;
+}*/
+
+/*인스턴스 생성버튼*/
+.btn-gn-primary {
+    color: #fff;
+    background-color: #58c4c6;
+    border-color: #58c4c6;
+    border-radius: 3px;
+}
+.btn-gn-primary:hover,
+.btn-gn-primary:focus,
+.btn-gn-primary.focus,
+.btn-gn-primary:active,
+.btn-gn-primary.active,
+.open > .dropdown-toggle.btn-gn-primary {
+    color: #ffffff;
+    background-color: #00afb4;
+    border-color: #00afb4;
+}
+.btn-gn-primary:active,
+.btn-gn-primary.active,
 .open > .dropdown-toggle.btn-success {
     background-image: none;
 }
@@ -293,7 +317,7 @@ td:nth-of-type(1) img{width: 35px;}
     background: url(../gn_images/gn-noti-img.png) no-repeat;    
     width: 23px;
     height: 21px;
-    margin: 29px 10px 29px 0px;
+    margin: 31px 10px 29px 0px;
 }
 
 .navbar-nav{
@@ -405,13 +429,8 @@ li.nav-link.active>a:hover,
     background-color: transparent;
 }
 
-.gn-head-drop > li:last-child,
-.gn-dropdown > li:last-child{
-    border-top: 1px solid #cccccc;
-}
-
-.gn-head-drop > li:last-child a:hover,
-.gn-dropdown > li:last-child a:hover{
+.gn-head-drop > li a.gn-danger:hover,
+.gn-dropdown > li a.gn-danger:hover{
     color: #E60202 !important;
 }
 
@@ -554,7 +573,6 @@ li.nav-link.active>a:hover,
 .dropdown-menu > li > a{
     display: block;
     padding: 8px 20px;
-    clear: both;
     font-weight: normal;
     line-height: 1.42857143;
     white-space: nowrap;
@@ -626,28 +644,28 @@ li.nav-link.active>a:hover,
 /*-----모달 공통 end-----*/
 
 /* ========== gncloud 공지 HTML ========== */
-.gn-table-responsive > .gn-table-noti thead tr th{
+.gn-table-responsive > .gn-board-table thead tr th{
     text-align: center;
     font-size: 14px;
     border: none;
     border-bottom: 2px solid rgba(215,215,215,.5);
 }
-.gn-table-responsive > .gn-table-noti tbody tr td{
+.gn-table-responsive > .gn-board-table tbody tr td{
     text-align: center;
     font-size: 14px;
-    height: 35px;
+    height: 45px;
     border-bottom: 1px solid rgba(215,215,215,.5);
     vertical-align: middle;
 }
 
-.gn-table-responsive > .gn-table-noti tbody tr td.second-td-name,
-.gn-table-responsive > .gn-table-noti thead tr th.second-td-name{text-align: left;}
+.gn-table-responsive > .gn-board-table tbody tr td.second-td-name,
+.gn-table-responsive > .gn-board-table thead tr th.second-td-name{text-align: left;}
 .gn-modal-body > .gn-table-responsive  p{font-weight: 400; position: absolute; top: 5px; right: 10px;}
 .gn-modal-body > .gn-table-responsive  p span{padding: 0px 5px; color: #999999;}
 .gn-modal-body > .gn-table-responsive{margin-top: 30px;} 
 
-#modal-board > .modal-dialog,
-#modi-write > .modal-dialog{width: 800px;}
+/*#modal-board > .modal-dialog,
+#modi-write > .modal-dialog{width: 800px;}*/
 
 #modal-board p{border-bottom: 2px solid rgba(215,215,215,0.5); padding-bottom: 10px;}
 /*모달창*/
@@ -661,7 +679,7 @@ li.nav-link.active>a:hover,
 
 #modal-board{overflow-y: auto;}
 
-#modal-board .glyphicon{margin-left: 10px;}
+#modal-board .glyphicon-trash{margin-left: 10px;}
 
 h2 > .pull-right{margin-top: -6px;}
 
@@ -939,7 +957,7 @@ a.log-join-btn:focus{
 }
 
 .gn-margin-box{
-    margin: 50px;
+    margin: 35px 50px;
 }
 
 .gn-sett-margin-box{
@@ -1118,6 +1136,14 @@ a.log-join-btn:focus{
 
 .gn-dot-error{
     background: url(../gn_images/gn_dot_error.png) no-repeat;
+    width: 20px;
+    height: 35px;
+    float: left;
+    margin-right: 10px;    
+}
+
+.gn-dot-suspend{
+    background: url(../gn_images/gn_dot_suspend.png) no-repeat;
     width: 20px;
     height: 35px;
     float: left;
@@ -1569,21 +1595,9 @@ li.active > .tab-sm-box{
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
 .fons-16{font-size: 16px;}
 .gn-ms-cursor{cursor: pointer;}
-/*.gn-ms-cursor:hover{color: #505050; background-color: rgba(215,215,215,0.5);}*/
+.gn-ms-cursor:hover{color: #58c4c6;}
 
-/*.col-sm-11,
-.tab-content.col-sm-10{
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.nav-pills.col-sm-1,
-.nav-pills.col-sm-2{
-    padding-right: 0;
-    padding-left: 0;
-}*/
-
-.gn-left-menu > li{padding: 3px 0;}
+.gn-left-menu > li{padding: 4px 0;}
 
 li.left-title{
     width: 100%;
