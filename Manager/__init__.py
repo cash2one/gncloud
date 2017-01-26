@@ -116,7 +116,9 @@ def create_snapshots():
 def change_status():
     id = request.json['id']
     status = request.json['status']
-    list=server_change_status(id, status, db_session)
+    team_code = session['teamCode']
+    user_id = session['userId']
+    list=server_change_status(id, status,team_code,user_id, db_session)
     if(list == True):
         return jsonify(status=True, message="success")
     else:
@@ -628,8 +630,16 @@ def billing_time():
 @app.route('/vm/backup', methods=['PUT'])
 def backup_time():
     type = request.json['type']
-    day= request.json['value']
+    day = request.json['value']
     return jsonify(status=True, list=backup_time_change(type, day, db_session))
+
+@app.route('/vm_hist/machines/<id>', methods=['POST'])
+def vm_hist(id):
+    action = request.json['type']
+    user_id = session['userId']
+    team_code = session['teamCode']
+    insertVmHist(id,action,user_id,team_code,db_session)
+    return jsonify(status=True)
 
 #-------------------------공지사항 시작--------------------------------
 @app.route('/vm/notice', methods=['GET'])

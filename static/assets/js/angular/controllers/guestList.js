@@ -50,6 +50,19 @@ angular
         ];
 
         $scope.update = function (id, action, sh, index) {
+
+            $http({
+                method: "POST",
+                url: "/api/manager/vm_hist/machines/" + id,
+                data: action,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function(data, status, headers, config) {
+                    if (data.status == true) {
+                    } else {
+                    }
+                })
+
             $http({
                 method: "PUT",
                 url: "/api/"+ sh +"/vm/machines/" + id,
