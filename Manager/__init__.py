@@ -719,7 +719,10 @@ def Qna_reply_delete(id):
 
 
 #-------------------------QnA 끝--------------------------------
-
+#-------------------------------------------------------------#
+@app.route('/vm/clustercheck',methods=['GET'])
+def Cluseter_check():
+    return jsonify(status=True, list=cluster_info(db_session))
 
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
