@@ -108,7 +108,7 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
     sql_session.add(vm_machine)
 
     # history 추가
-    action_hist = GnInstanceActionHist(user_id=user_id,team_code=team_code,action="Create")
+    action_hist = GnInstanceActionHist(user_id=user_id,team_code=team_code,action="Create",action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(action_hist)
 
     sql_session.commit()
