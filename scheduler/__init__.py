@@ -1,22 +1,24 @@
 # -*- coding: utf-8 -*-
 __author__ = 'nhcho'
+import json
+from datetime import timedelta
+from flask import Flask, jsonify
+from controller.schdule_controller import ScheduleController
+from util.config import config
 
-import daemon
-from daemon.pidfile import PIDLockFile
-from util.logger import file_handler
-from controller.scheduler import ScheduleController
 
-pidLockfile = PIDLockFile('.pid')
-if pidLockfile.is_locked():
-    print "running already (pid: %d)" % pidLockfile.read_pid()
-    exit(1)
+app = Flask(__name__)
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
-context = daemon.DaemonContext(pidfile=pidLockfile)
-logfile_fileno = file_handler.stream.fileno()
-context.files_preserve = [logfile_fileno]
+app.ScheduleController = ScheduleController()
+app.ScheduleController.run()
 
-app=ScheduleController()
+
+# 페이지 리스트
+@app.route("/")
+def index():
+    return jsonify(status=True, message='서비스 정상 작동')
 
 if __name__ == '__main__':
-    app.run()
-
+    app.run(host=config.CONTROLLER_HOST,port=int(config.CONTROLLER_PORT))

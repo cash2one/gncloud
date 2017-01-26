@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
-import time
-
-from util.logger import logger
-
 from util.config import config
 from db.database import db_session
 from db.models import GnSystemSetting
-from service.service import Monitoring
+from service.monitor_service import Monitoring
+from service.invoice_service import Invoice
 
 
 class ScheduleController:
@@ -16,13 +12,15 @@ class ScheduleController:
         self.monitor_period = self.get_monitoring_period()
         self.quit = False
         self.monitor = Monitoring(self.sql_session, self.monitor_period)
+        self.invoice = Invoice(self.sql_session)
 
     def run(self):
+        self.invoice.run()
         self.monitor.run()
-        while not self.quit:
-            self.check_change_monitor_period()
-            time.sleep(20)
-        return
+
+        #while not self.quit:
+        #    self.check_change_monitor_period()
+        #    time.sleep(20)
 
     def check_change_monitor_period(self):
         get_period = self.get_monitoring_period()
@@ -32,7 +30,6 @@ class ScheduleController:
             self.monitor.set_period(self.monitor_period)
             self.monitor.run()
             print 'change period'
-        return
 
     def get_monitoring_period(self):
         period = config.MONITOR_CYCLE_SEC
@@ -45,6 +42,6 @@ class ScheduleController:
                 break
             sql_session.commit()
         except Exception as message:
-            logger.error(message)
+            print (message)
         return period
 

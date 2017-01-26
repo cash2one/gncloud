@@ -159,7 +159,11 @@
                                                 <label class="col-sm-4 control-label gn-control-label">버전 정보</label>
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">
-                                                        <span ng-repeat="item in parent_history">{{$index+1}}.{{item}}<br/></span>
+                                                        <span ng-repeat="item in parent_history">{{parent_history.length - $index}}.
+                                                            <strong ng-show="parent_history.length == $index+1">{{item}}</strong>
+                                                            <span ng-if="parent_history.length != $index+1">{{item}}</span>
+                                                            <br/>
+                                                        </span>
                                                     </p>
                                                 </div>
                                             </div>

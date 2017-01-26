@@ -17,7 +17,7 @@ pip install flask
 pip install sqlalchemy
 pip install pexpect
 pip install ConfigParser
-pip install apscheduler==2.1.2
+pip install apscheduler
 pip install humanfriendly
 pip install logger
 yum -y install uwsgi-plugin-python

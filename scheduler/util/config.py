@@ -7,10 +7,12 @@ import sys
 
 class Config:
     CONTROLLER_HOST = None
+    CONTROLLER_PORT = None
     DB_URL = None
     SALT = None
     LOG_DIR=None
     MONITOR_CYCLE_SEC=None
+    INVOICE_VER=None
 
     def __init__(self, path="../conf/config.conf"):
         # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
@@ -29,10 +31,12 @@ class Config:
         result = parser.read(config_file)
 
         self.CONTROLLER_HOST = parser.get(config_section, "CONTROLLER_HOST")
+        self.CONTROLLER_PORT = parser.get(config_section, "CONTROLLER_PORT")
         self.DB_URL = parser.get(config_section, "DB_URL")
         self.SALT = parser.get(config_section, "SALT")
         self.LOG_DIR = parser.get(config_section, "LOG_DIR")
         self.MONITOR_CYCLE_SEC = parser.get(config_section, "MONITOR_CYCLE_SEC")
+        self.INVOICE_VER = parser.get(config_section, "INVOICE_VER")
 
 # 전역 공통사용 객체이다.
 config = Config()
