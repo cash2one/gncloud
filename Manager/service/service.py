@@ -1171,36 +1171,48 @@ def notice_delete(id, sql_session):
 
 #-------------QNA START-------------------------------------#
 
-def qna_list(page,sql_session):
-    page_size=10
-    page=int(page)-1
-    qna_info = sql_session.query(GnQnA).filter(GnQnA.farent_id == None)\
-        .order_by(GnQnA.create_date.desc()).limit(page_size).offset(page*page_size).all()
-    total_page = total_page= sql_session.query(func.count(GnQnA.id).label("count")) \
-                                        .filter(GnQnA.farent_id==None).one()
-    total=int(total_page.count)/10
-    for qna in qna_info:
-        qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
+def qna_list(page,team_code,syscheck,sql_session):
+    if syscheck =='sysowner':
+        page_size=10
+        page=int(page)-1
+        qna_info = sql_session.query(GnQnA).filter(GnQnA.farent_id == None)\
+            .order_by(GnQnA.create_date.desc()).limit(page_size).offset(page*page_size).all()
+        total_page = total_page= sql_session.query(func.count(GnQnA.id).label("count")) \
+                                            .filter(GnQnA.farent_id==None).one()
+        total=int(total_page.count)/10
+        for qna in qna_info:
+            qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
+    else:
+        page_size=10
+        page=int(page)-1
+        qna_info = sql_session.query(GnQnA).filter(GnQnA.farent_id == None) \
+            .order_by(GnQnA.create_date.desc()).filter(GnQnA.team_code==team_code).limit(page_size).offset(page*page_size).all()
+        total_page = total_page= sql_session.query(func.count(GnQnA.id).label("count")) \
+            .filter(GnQnA.farent_id==None).filter(GnQnA.team_code==team_code).one()
+        total=int(total_page.count)/10
+        for qna in qna_info:
+            qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
     return {"list":qna_info, "total_page":total_page.count,"total":total, "page":page}
-
-def qna_info_list(id, sql_session):
+def qna_info_list(id,sql_session):
     qna_info = sql_session.query(GnQnA).filter(GnQnA.id ==id).one()
     qna_ask = sql_session.query(GnQnA).filter(GnQnA.farent_id ==id).all()
+    for qna in qna_ask:
+       qna.author_id = qna.gnUser.user_name
     qna_info.create_date = qna_info.create_date.strftime('%Y-%m-%d %H:%M')
     return {"qna_info":qna_info, "qna_ask":qna_ask}
 
-def qna_ask(title,text,user_id,sql_session):
-    qna_ask_inf = GnQnA(title=title, text=text,author_id=user_id, create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+def qna_ask(title,text,user_id,team_code,sql_session):
+    qna_ask_inf = GnQnA(title=title, text=text,author_id=user_id, team_code=team_code,create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(qna_ask_inf)
     sql_session.commit()
 
-def qna_ask_reply(id, text, user_id ,sql_session):
-    qna_ask_replys=GnQnA(farent_id= id ,text=text,author_id=user_id,create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+def qna_ask_reply(id, text, user_id,team_code ,sql_session):
+    qna_ask_replys=GnQnA(farent_id=id ,text=text,author_id=user_id,team_code=team_code,create_date=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(qna_ask_replys)
     sql_session.commit()
 
 def qna_ask_reply_change(id,user_id ,text, sql_session):
-    qna_ask_replys= sql_session.query(GnQnA).filter(GnQnA.farent_id==id).filter(GnQnA.author_id == user_id).one()
+    qna_ask_replys= sql_session.query(GnQnA).filter(GnQnA.id==id).filter(GnQnA.author_id == user_id).one()
     qna_ask_replys.text = text
     sql_session.commit()
 
@@ -1215,7 +1227,7 @@ def qna_ask_delete(id, sql_session):
     sql_session.commit()
 
 def qna_ask_reply_delete(id , sql_session):
-    sql_session.query(GnQnA).filter(GnQnA.farent_id==id).delete()
+    sql_session.query(GnQnA).filter(GnQnA.id==id).delete()
     sql_session.commit()
 
 #-------------QNA END-------------------------------------#

@@ -606,20 +606,23 @@ class GnQnA(Base):
     title = Column(String(200), nullable=True)
     text = Column(nullable=True)
     farent_id = Column(Integer, nullable=True)
-    author_id = Column(String(50), nullable=True)
+    author_id = Column(String(50), ForeignKey('GN_USERS.user_id'))
     create_date = Column(DateTime, nullable=True)
+    team_code = Column(String(10), primary_key=False, nullable=False)
+    gnUser=relationship('GnUser')
 
-    def __init__(self, title=None, text=None, farent_id=None, author_id=None, create_date=None):
+    def __init__(self, title=None, text=None, farent_id=None, author_id=None, create_date=None, team_code =None):
         self.title=title
         self.text=text
         self.farent_id = farent_id
         self.author_id = author_id
         self.create_date = create_date
+        self.team_code = team_code
 
     def __repr__(self):
-        return '<Title %r / Text %r / Farent_id %r / author_id %r / Create_date %r />'\
-                %(self.title, self.text, self.farent_id, self.author_id, self.create_date)
+        return '<Title %r / Text %r / Farent_id %r / author_id %r / Create_date %r / Team_code %r />'\
+                %(self.title, self.text, self.farent_id, self.author_id, self.create_date, self.team_code)
 
     def __json__(self):
-        return ['id', 'title', 'text', 'farent_id', 'author_id', 'create_date']
+        return ['id', 'title', 'text', 'farent_id', 'author_id', 'create_date', 'team_code']
 

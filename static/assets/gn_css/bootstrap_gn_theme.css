@@ -647,9 +647,7 @@ li.nav-link.active>a:hover,
 .gn-modal-body > .gn-table-responsive{margin-top: 30px;} 
 
 #modal-board > .modal-dialog,
-#modi-write > .modal-dialog,
-#modal-qna > .modal-dialog{width: 800px;}
-.noti-count{margin-right: 5px;}
+#modi-write > .modal-dialog{width: 800px;}
 
 #modal-board p{border-bottom: 2px solid rgba(215,215,215,0.5); padding-bottom: 10px;}
 /*모달창*/
@@ -660,20 +658,18 @@ li.nav-link.active>a:hover,
 .gn-content{padding-bottom: 50px;}
 
 /* ========== gncloud 묻고답하기 HTML ========== */
-h2 > .pull-right{margin-top: -6px;}
-#modal-qna .glyphicon{margin-left: 10px;}
-/*댓글(comment)있는 영역의 쓰기,삭제하기 아이콘에 마진값*/
-#modal-qna .glyphicon.glyphicon-trash.pull-right.comm{margin-right: -20px;}
 
-.gn-comment{background-color: #f8f8f8;}
-.gn-comment td{padding-bottom: 20px !important;}
-.gn-comment td div{padding: 20px;}
-.gn-answer td button.btn-gn-sub{height: 100%;}
-#modal-qna .gn-tdody-modal{
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height: 100px;
-}
+#modal-board{overflow-y: auto;}
+
+#modal-board .glyphicon{margin-left: 10px;}
+
+h2 > .pull-right{margin-top: -6px;}
+
+.gn-comment{padding: 20px !important; background-color: #f8f8f8;}
+
+.gn-answer span,.gn-comment span{padding-right: 0; padding-left: 0;}
+
+
 
 /* ========== gncloud 로그인 HTML ========== */
 .body-white{background-color: #ffffff; min-height: 100%;}
