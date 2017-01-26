@@ -1226,7 +1226,7 @@ def qna_ask_reply(id, text, user_id,team_code ,sql_session):
     sql_session.commit()
 
 def qna_ask_reply_change(id,user_id ,text, sql_session):
-    qna_ask_replys= sql_session.query(GnQnA).filter(GnQnA.id==id).filter(GnQnA.author_id == user_id).one()
+    qna_ask_replys= sql_session.query(GnQnA).filter(GnQnA.id==id).one()
     qna_ask_replys.text = text
     sql_session.commit()
 
@@ -1245,4 +1245,9 @@ def qna_ask_reply_delete(id , sql_session):
     sql_session.commit()
 
 #-------------QNA END-------------------------------------#
-
+#_________________________________________________________#
+def cluster_info(sql_session):
+    hyperv = sql_session.query(GnCluster).filter(GnCluster.type =='hyperv').filter(GnCluster.status != 'Removed').one_or_none()
+    kvm = sql_session.query(GnCluster).filter(GnCluster.type =='kvm').filter(GnCluster.status != 'Removed').one_or_none()
+    docker = sql_session.query(GnCluster).filter(GnCluster.type =='docker').filter(GnCluster.status != 'Removed').one_or_none()
+    return {"hyper":hyperv,"kvm":kvm,"docker":docker}

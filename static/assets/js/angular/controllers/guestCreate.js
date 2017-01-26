@@ -23,6 +23,28 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
+
+        $http({
+            method: 'GET',
+            url: '/api/manager/vm/clustercheck',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data) {
+                    $scope.hyper = data.list.hyper;
+                    $scope.kvm = data.list.kvm;
+                    $scope.docker = data.list.docker;
+                }
+                else {
+                    if(data.message != null) {
+                        alert(data.message)
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
+
         $scope.selectType = function(type){
             if(type == 'docker'){
                 $http({

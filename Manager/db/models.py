@@ -488,7 +488,7 @@ class GnCluster(Base):
                % (self.id, self.name, self.ip, self.type, self.swarm_join)
 
     def __json__(self):
-        return ['id', 'name', 'ip', 'type', 'swarm_join', 'gnHostMachines', 'create_time']
+        return ['id', 'name', 'ip', 'type', 'swarm_join', 'gnHostMachines', 'create_time','status']
 
 
 class GnDockerImageDetail(Base):
