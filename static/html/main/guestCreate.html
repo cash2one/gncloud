@@ -15,17 +15,17 @@
         <h2>타입 선택</h2>
         <form>
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('hyperv')" ng-class="{'gn-input-error':data_value =='type'}">
+                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('hyperv')" ng-show="hyper.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input id="type" name="" value="" type="radio">
                     <span class="sprite-img sprite-hyperv"></span>
                     Hyper-V
                 </label>
-                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('kvm')" ng-class="{'gn-input-error':data_value =='type'}">
+                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('kvm')" ng-show="kvm.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input name="" value="" type="radio">
                     <span class="sprite-img sprite-kvm"></span>
                     KVM
                 </label>
-                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('docker')" ng-class="{'gn-input-error':data_value =='type'}">
+                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('docker')" ng-show="docker.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input name="" value="" class="active" type="radio">
                     <span class="sprite-img sprite-docker"></span>
                     docker
@@ -181,5 +181,5 @@
 <div class="container-fluid gn-container">
 
 </div>
-<button type="submit" value="submit" class="btn btn-success btn-block btn-lg" ng-click="submit()">인스턴스 생성</button>
+<button type="submit" value="submit" class="btn btn-gn-primary btn-block btn-lg" ng-click="submit()">인스턴스 생성</button>
 

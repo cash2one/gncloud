@@ -674,7 +674,9 @@ def Notice_delete(id):
 @app.route('/vm/qna', methods=['GET'])
 def Qna():
     page=request.args.get("page")
-    return jsonify(status=True, list=qna_list(page, db_session))
+    team_code = session['teamCode']
+    syscheck = session['teamOwner']
+    return jsonify(status=True, list=qna_list(page,team_code,syscheck, db_session))
 
 @app.route('/vm/qna/<id>', methods=['GET'])
 def Qna_info(id):
@@ -685,13 +687,15 @@ def Qna_create():
     title=request.json['title']
     text = request.json['text']
     user_id = session['userId']
-    return jsonify(status=True, list=qna_ask(title, text, user_id, db_session))
+    team_code = session['teamCode']
+    return jsonify(status=True, list=qna_ask(title, text, user_id,team_code, db_session))
 
 @app.route('/vm/qna/<id>', methods=['POST'])
 def Qna_reply_create(id):
-    text =request.json['text']
+    text =request.json['reply_text']
     user_id=session['userId']
-    return jsonify(status=True, list= qna_ask_reply(id, text, user_id, db_session))
+    team_code = session['teamCode']
+    return jsonify(status=True, list=qna_ask_reply(id, text, user_id,team_code, db_session))
 
 @app.route('/vm/qna/<id>', methods=['PUT'])
 def Qna_change(id):
@@ -715,7 +719,10 @@ def Qna_reply_delete(id):
 
 
 #-------------------------QnA 끝--------------------------------
-
+#-------------------------------------------------------------#
+@app.route('/vm/clustercheck',methods=['GET'])
+def Cluseter_check():
+    return jsonify(status=True, list=cluster_info(db_session))
 
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
