@@ -115,7 +115,6 @@ def server_delete(id,sql_session):
     guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one();
     status_info = sql_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == id).one();
 
-
     # vm 삭제
     kvm_vm_delete(guest_info.internal_name, guest_info.gnHostMachines.ip);
 
@@ -123,7 +122,6 @@ def server_delete(id,sql_session):
     sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
     #과금 테이블 업데이트
     status_info.delete_time = datetime.datetime.now()
-
     sql_session.commit()
 
 
@@ -276,7 +274,6 @@ def getsshkey_info(id):
 
 def vm_detail_info(id):
     db_session.query(GnVmMachines).filter(GnVmMachines.id == id).all()
-
 
 
 

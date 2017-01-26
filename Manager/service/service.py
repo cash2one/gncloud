@@ -106,6 +106,11 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
                                   , host_id="", backup_comfirm=backup,size_id=size_id)
                                 
     sql_session.add(vm_machine)
+
+    # history 추가
+    action_hist = GnInstanceActionHist(user_id=user_id,team_code=team_code,action="Create",action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(action_hist)
+
     sql_session.commit()
     return {"status":True, "value":id}
 
@@ -141,9 +146,13 @@ def snapshot_delete(id, sql_session):
         sql_session.commit()
         return True
 
-def server_change_status(id, status, sql_session):
+def server_change_status(id, status,team_code, user_id, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+
+    # history 데이터 생성
+    vm_hist = GnInstanceActionHist(user_id=user_id,team_code=team_code,action=status,action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(vm_hist)
     if(vm_info.status == "Error"):
         sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
         sql_session.commit()
@@ -1136,6 +1145,11 @@ def backup_time_change(type, day, sql_session):
     list.backup_schedule_period = day
     sql_session.commit()
 
+def insertVmHist(id,action,user_id,team_code,sql_session):
+    vm_hist = GnInstanceActionHist(user_id=user_id,team_code=team_code,action=action,action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+    sql_session.add(vm_hist)
+    sql_session.commit()
+
 #-------------공지사항 관련 start ------------------------------------#
 
 def notice_list(page,sql_session):
@@ -1231,3 +1245,4 @@ def qna_ask_reply_delete(id , sql_session):
     sql_session.commit()
 
 #-------------QNA END-------------------------------------#
+

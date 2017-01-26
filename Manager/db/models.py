@@ -626,3 +626,24 @@ class GnQnA(Base):
     def __json__(self):
         return ['id', 'title', 'text', 'farent_id', 'author_id', 'create_date', 'team_code']
 
+class GnInstanceActionHist(Base):
+    __tablename__='GN_INSTANCE_ACTION_HISTORY'
+    id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(String(50), primary_key=False, nullable=False)
+    team_code = Column(String(10), primary_key=False, nullable=False)
+    action = Column(String(7), primary_key=False, nullable=False)
+    action_time = Column(DateTime, nullable=False)
+
+    def __init__(self, user_id=None, team_code=None, action=None, action_time=None):
+        self.user_id = user_id
+        self.team_code = team_code
+        self.action = action
+        self.action_time = action_time
+
+    def __repr__(self):
+        return '<User_id %r / Team_code %r / Action %r / Action_time %r />' \
+               %(self.user_id, self.team_code, self.action, self.action_time)
+
+    def __json__(self):
+        return ['user_id', 'team_code', 'action', 'action_time','id']
+
