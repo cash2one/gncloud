@@ -1245,9 +1245,25 @@ def qna_ask_reply_delete(id , sql_session):
     sql_session.commit()
 
 #-------------QNA END-------------------------------------#
-#_________________________________________________________#
+
+#_______________클러스터 없을시 인스턴스생성부분 __________________________________________#
 def cluster_info(sql_session):
     hyperv = sql_session.query(GnCluster).filter(GnCluster.type =='hyperv').filter(GnCluster.status != 'Removed').one_or_none()
     kvm = sql_session.query(GnCluster).filter(GnCluster.type =='kvm').filter(GnCluster.status != 'Removed').one_or_none()
     docker = sql_session.query(GnCluster).filter(GnCluster.type =='docker').filter(GnCluster.status != 'Removed').one_or_none()
     return {"hyper":hyperv,"kvm":kvm,"docker":docker}
+
+#_________________________과금______________________________________________________________#
+
+def team_price_lsit(team_code,sql_session):
+    list = sql_session.query(GnInvoiceResult).all()
+    return list
+
+def team_price_lsit_info(year,month,team_code,sql_session):
+    list = sql_session.query(GnInvoiceResult).filter(GnInvoiceResult.year==year).filter(GnInvoiceResult.month == month)\
+                                            .filter(GnInvoiceResult.team_code==team_code).one()
+    # instance=json.loads(list.invoice_data)
+    # team = sql_session.query(GnTeam).filter(GnTeam.team_code == instance.team).one()
+    # instance.team = team.team_name
+    # vm = sql_session.query(GnVmMachines)
+    # return {"list":list, "instance":}

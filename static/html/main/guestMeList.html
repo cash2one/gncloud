@@ -10,6 +10,7 @@
     <li><a data-toggle="pill" ng-click="click('profile-team')">프로필</a></li>
     <li><a data-toggle="pill" ng-click="click('team-reso')">리소스</a></li>
     <li><a data-toggle="pill" ng-click="click('team-group')">팀원</a></li>
+    <li><a data-toggle="pill" ng-click="click('price')">과금</a></li>
 </ul>
 
 <div class="tab-content col-xs-12 col-sm-10">
@@ -253,56 +254,6 @@
                                     </ul>
                                 </td>
                             </tr>
-                            <!--<tr class="tr-on-me"> &lt;!&ndash;class="tr-on-me" 로그인 한 사람이 나일 때&ndash;&gt;-->
-                            <!--<td class="td-style cnt">2</td>-->
-                            <!--<td class="td-style cnt">팀원</td>-->
-                            <!--<td class="td-style cnt">홍길동<br><span>(you)</span></td>-->
-                            <!--<td class="td-style cnt">홍대리</td>-->
-                            <!--<td class="td-style cnt">010-1234-5678</td>-->
-                            <!--<td class="td-style cnt">1234@naver.com</td>-->
-                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">6일전</p></td>-->
-                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">6일전</p></td>-->
-                            <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;여기서부터 팀장 로그인 시 보이는 영역-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
-                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
-                            <!--<td class="td-style cnt">승인</td>-->
-                            <!--<td class="td-style cnt dropdown td-more">-->
-                            <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
-                            <!--더보기-->
-                            <!--<span class="caret" ></span>-->
-                            <!--</div>-->
-                            <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
-                            <!--<ul class="dropdown-menu-table" role="menu">-->
-                            <!--<li><a href="#">승인</a></li>-->
-                            <!--<li><a href="#">등급 변경</a></li>-->
-                            <!--<li><a href="#">비밀번호 초기화</a></li>-->
-                            <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
-                            <!--</ul>-->
-                            <!--</td>-->
-                            <!--</tr>-->
-                            <!--<tr class="tr-on-wait"> &lt;!&ndash;class="tr-on-road" 대기상태인 경우&ndash;&gt;-->
-                            <!--<td class="td-style cnt">1</td>-->
-                            <!--<td class="td-style cnt">팀원</td>-->
-                            <!--<td class="td-style cnt">김나리</td>-->
-                            <!--<td class="td-style cnt">나리김</td>-->
-                            <!--<td class="td-style cnt">010-9857-2222</td>-->
-                            <!--<td class="td-style cnt">-</td>-->
-                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">오늘</p></td>-->
-                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">오늘</p></td>-->
-                            <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;여기서부터 팀장 로그인 시 보이는 영역-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
-                            <!--<td class="td-style cnt"><p data-toggle="tooltip" title="2016-11-29 13:45:11">-</p></td>-->
-                            <!--<td class="td-style cnt">대기</td>-->
-                            <!--<td class="td-style cnt dropdown td-more">-->
-                            <!--<div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">-->
-                            <!--더보기-->
-                            <!--<span class="caret" ></span>-->
-                            <!--</div>-->
-                            <!--&lt;!&ndash;더보기>드롭다운&ndash;&gt;-->
-                            <!--<ul class="dropdown-menu-table" role="menu">-->
-                            <!--&lt;!&ndash;<li class="dropdown-header">더보기</li> 삭제합니다&ndash;&gt;-->
-                            <!--<li><a href="#">승인</a></li>-->
-                            <!--<li><a href="#">등급 변경</a></li>-->
-                            <!--<li><a href="#">비밀번호 초기화</a></li>-->
-                            <!--<li><a href="#" class="btn-modal-delete">팀 탈퇴</a></li>-->
                             </tbody>
                         </table>
                     <div class="modal fade" id="teamModal" role="dialog">
@@ -411,5 +362,91 @@
         </div> <!--class="gn-box profile-team"-->
     </div> <!--id="profile-team"  class="tab-pane fade"-->
 
-</div> <!--class="tab-content right-box fl" -->
+    <div class="tab-content col-xs-12 col-sm-10">
+        <!--시스템 > 가격 관리-->
+        <div id="price" class="">
+            <div class="gn-box">
+                <div class="gn-sett-margin-box">
+                    <div class="container-fluid">
+                        <h2>과금 조회</h2>
+                        <table class="table table gn-table">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">번호</th>
+                                <th class="col-sm-3 col-xs-9">과금월</th>
+                                <th class="col-sm-1 hidden-xs"></th>
+                            </tr>
+                            </thead>
+                            <tbody class="gn-tdody">
+                            <tr ng-repeat="price in price">
+                                <td>{{$index+1}}</td>
+                                <td>{{price.year}}-{{price.month}}</td>
+                                <td><button type="button" class="btn-default btn" data-toggle="modal" data-target="#priceModal" ng-click="price_list_info(price.year,price.month,price.team_code)">보기</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="modal fade" id="priceModal" role="dialog">
+                            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content col-sm-10 col-sm-offset-1">
+                                    <div class="modal-header gn-modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">과금 상세 정보</h4>
+                                    </div>
+                                    <div class="modal-body gn-modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">팀코드</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{price_invoice.team}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">과금월</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{price_invoice.year}}-{{price_invoice.month}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">가격</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{price_invoice.team_price}}원</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">계산일</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{price_invoice.calc_day}}</p>
+                                                </div>
+                                                <table class="table gn-board-table table-condensed table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="col-sm-3">인스턴스</th>
+                                                        <th class="col-sm-2">과금방법</th>
+                                                        <th class="col-sm-2">가격</th>
+                                                        <th class="col-sm-2">사용시간</th>
+                                                        <th class="col-sm-2">총가격</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="gn-tdody">
+                                                    <tr class="" ng-repeat="pr in price_invoice_info">
+                                                        <td>{{pr.vm_id}}</td>
+                                                        <td>{{pr.price_type}}</td>
+                                                        <td>{{pr.unit_price}}원</td>
+                                                        <td>{{pr.used}}시간</td>
+                                                        <td>{{pr.total_price}}원</td>
+                                                    </tr>
 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div> <!--class="modal-content"-->
+                            </div> <!--class="modal-dialog modal-sm"-->
+                        </div>
+                        <input type="button" class="btn"  style="" ng-click="page(prev_page)" value="이전" ng-show="page_hist != 1">
+                        <input type="button" class="btn" style="" ng-click="page(next_page)" value="다음" ng-show="page_total!=page_hist">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div><!--class="tab-content right-box fl" -->
