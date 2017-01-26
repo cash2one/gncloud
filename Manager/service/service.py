@@ -1226,7 +1226,7 @@ def qna_ask_reply(id, text, user_id,team_code ,sql_session):
     sql_session.commit()
 
 def qna_ask_reply_change(id,user_id ,text, sql_session):
-    qna_ask_replys= sql_session.query(GnQnA).filter(GnQnA.id==id).filter(GnQnA.author_id == user_id).one()
+    qna_ask_replys= sql_session.query(GnQnA).filter(GnQnA.id==id).one()
     qna_ask_replys.text = text
     sql_session.commit()
 
