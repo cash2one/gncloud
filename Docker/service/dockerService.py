@@ -3,9 +3,9 @@ __author__ = 'jhjeon'
 
 import json
 import time
+from datetime import datetime
 
 import requests
-from datetime import datetime
 from pexpect import pxssh
 
 from Docker.db.models import GnDockerContainers, GnDockerImages, GnDockerImageDetail, GnHostMachines, GnVmMachines
@@ -313,4 +313,5 @@ class DockerService(object):
         return json.loads(response.json())
 
     def logout(self):
-        self.cmd.close(self)
+        self.cmd.logout()
+        self.cmd.close()

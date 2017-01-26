@@ -2,13 +2,14 @@
 __author__ = 'jhjeon'
 
 import time
-
 from datetime import datetime
+
 from flask import jsonify, request, session
 
 from Docker.db.database import db_session
 from Docker.db.models import GnDockerContainers, GnDockerVolumes, GnDockerImageDetail, \
-    GnDockerServices, GnHostMachines, GnDockerPorts, GnVmMachines, GnDockerImages
+    GnDockerServices, GnHostMachines, GnDockerPorts, GnVmMachines, GnDockerImages, GnVmSize, \
+    GnInstanceStatus, GnSystemSetting
 from Docker.service.dockerService import DockerService
 from Docker.util.config import config
 from Docker.util.hash import random_string
@@ -106,9 +107,26 @@ def doc_create(id,sql_session):
             docker_info.internal_id = docker_service[0]['ID']
             docker_info.internal_name = docker_service[0]['Spec']['Name']
             #docker_info.create_time = datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+            docker_info.create_time = datetime.now().strftime('%Y%m%d%H%M%S')
             docker_info.os = "docker"
             docker_info.os_ver = image.os
             docker_info.os_sub_ver = image.os_ver
+
+            # for insert of GN_INSTANCE_STATUS table
+            vm_size = sql_session.query(GnVmSize).filter(GnVmSize.id == docker_info.size_id).first()
+            instance_status_price = None
+            system_setting = sql_session.query(GnSystemSetting).first()
+            if system_setting.billing_type == 'D':
+                instance_status_price = vm_size.day_price
+            elif system_setting.billing_type == 'H':
+                instance_status_price = vm_size.hour_price
+            else:
+                logger.error('invalid price_type : system_setting.billing_type %s' % system_setting.billing_type)
+
+            insert_instance_status = GnInstanceStatus(vm_id=docker_info.id, author_id=docker_info.author_id, team_code=docker_info.team_code
+                                                      , price=instance_status_price,price_type=system_setting.billing_type
+                                                      , cpu=docker_info.cpu, memory=docker_info.memory,disk=docker_info.disk)
+            sql_session.add(insert_instance_status)
 
             sql_session.commit()
             ds.logout()
@@ -312,13 +330,19 @@ def doc_delete(id,sql_session):
         # DB에 삭제된 내용을 업데이트한다.
         if service is not None:
             # 서비스 상태 수정
-            service.status = "Removed"
+            #service.status = "Removed"
+            db_session.query(GnVmMachines).filter(GnVmMachines.id == service.id).delete()
+
             # 컨테이너 상태 수정
             for container in service.gnDockerContainers:
                 container.status = "Removed"
             # 볼륨 상태 수정
             for volume in service.gnDockerVolumes:
                 volume.status = "Removed"
+
+            update_instance_status = db_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == service.id) \
+                .update({"delete_time": datetime.now().strftime('%Y%m%d%H%M%S')})
+
             sql_session.commit()
         ds.logout()
     except Exception as err:
