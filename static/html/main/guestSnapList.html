@@ -84,8 +84,8 @@
                                 <th></th>
                                 <th class="">이름</th>
                                 <th class="col-sm-2 hidden-xs">OS</th>
-                                
                                 <th class="col-sm-2 hidden-sm hidden-xs">타입</th>
+                                <th class="hidden-xs" ng-show="user_info.authority == 'sysowner'" >팀</th>
                                 <th class="col-sm-1 hidden-sm hidden-xs">생성일<div class="refresh" ng-click="refresh()"></div></th>
                                 <th class="col-sm-1"><!--더보기--></th>
                             </tr>
@@ -102,6 +102,7 @@
                                 <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
                                 
                                 <td class="hidden-sm hidden-xs">{{snap.type}}</td>
+                                <td class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >{{ snap.gnTeam.team_name }}</td>
                                 <td class="hidden-sm hidden-xs">{{snap.create_time_diff}}</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">

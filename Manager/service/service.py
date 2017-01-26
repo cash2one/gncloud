@@ -7,11 +7,11 @@ import subprocess
 import humanfriendly
 from flask import render_template
 from sqlalchemy import func
-
 from Manager.db.database import db_session
 from Manager.db.models import *
 from Manager.util.config import config
 from Manager.util.hash import random_string, convertToHashValue, convertsize
+import os
 
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, backup ,sql_session):
@@ -1252,6 +1252,23 @@ def cluster_info(sql_session):
     kvm = sql_session.query(GnCluster).filter(GnCluster.type =='kvm').filter(GnCluster.status != 'Removed').one_or_none()
     docker = sql_session.query(GnCluster).filter(GnCluster.type =='docker').filter(GnCluster.status != 'Removed').one_or_none()
     return {"hyper":hyperv,"kvm":kvm,"docker":docker}
+
+def healthcheck_info(team_code,sql_session):
+    cluster_list = sql_session.query(GnCluster).filter(GnCluster.status != 'Removed')
+    result_list = []
+    for e in cluster_list:
+        response = 1
+        host_list = []
+        for host in e.gnHostMachines:
+            if e.gnHostMachines:
+                response = os.system("ping -c 1 " + host.ip)
+                host_list.append({"host_check":response,"host_ip":host.ip})
+
+        result_list.append({"cluster_info":e,"host_list":host_list})
+
+    return result_list
+
+
 
 #_________________________과금______________________________________________________________#
 

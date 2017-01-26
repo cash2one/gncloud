@@ -135,5 +135,26 @@ angular
             return config;
         }
 
+        $scope.cluster_list = function () {
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/healthcheck',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        $scope.cluster_list = data.list;
+                    }
+                    else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+        $scope.cluster_list();
 
     });

@@ -1,6 +1,10 @@
 angular
     .module('gncloud')
-    .controller('guestSnapListCtrl', function ($scope, $http, dateModifyService, $timeout, $interval) {
+    .controller('guestSnapListCtrl', function ($scope, $http, dateModifyService, $timeout, $interval, $rootScope) {
+        $scope.user_info = $rootScope.user_info;
+        $rootScope.$on('init', function () {
+            $scope.user_info = $rootScope.user_info;
+        });
 
         //탭이동
         $('.nav-sidebar li').removeClass('active');

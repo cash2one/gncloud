@@ -1,7 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestListCtrl', function ($scope, $http, $interval, dateModifyService) {
-
+    .controller('guestListCtrl', function ($scope, $http, $interval, dateModifyService, $rootScope) {
         var stop;
         $scope.selectGuestList = function() {
             $http({
