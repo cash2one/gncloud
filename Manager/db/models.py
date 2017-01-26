@@ -51,7 +51,7 @@ class GnVmMachines(Base):
     os_ver = Column(String(20), primary_key=False, nullable=True)
     os_sub_ver = Column(String(20), primary_key=False, nullable=True)
     os_bit = Column(String(2), primary_key=False, nullable=True)
-    team_code = Column(String(50), primary_key=False, nullable=True)
+    team_code = Column(String(50), ForeignKey('GN_TEAM.team_code'))
     author_id = Column(String(15), ForeignKey('GN_USERS.user_id'))
     create_time = Column(DateTime, default=datetime.datetime.now())
     start_time = Column(DateTime, default=datetime.datetime.now())
@@ -65,6 +65,7 @@ class GnVmMachines(Base):
     size_id = Column(String(8), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
     gnUser = relationship('GnUser')
+    gnTeam = relationship('GnTeam')
 
     def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None
                  , cpu=None, memory=None, disk=None, ip=None, host_id=None
@@ -105,7 +106,7 @@ class GnVmMachines(Base):
 
     def __json__(self):
         return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu'
-            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id','backup_comfirm', 'size_id']
+            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id','backup_comfirm', 'size_id','gnTeam']
 
 
 class GnUser(Base):
@@ -196,7 +197,7 @@ class GnVmImages(Base):
     os_ver = Column(String(20), primary_key=False, nullable=False)
     os_subver = Column(String(20), primary_key=False, nullable=False)
     os_bit = Column(String(2), primary_key=False, nullable=False)
-    team_code = Column(String(10), primary_key=False, nullable=False)
+    team_code = Column(String(50), ForeignKey('GN_TEAM.team_code'))
     author_id = Column(String(15), primary_key=False, nullable=False)
     create_time = Column(DateTime, default=datetime.datetime.now())
     pool_id = Column(String(8), primary_key=False, nullable=False)
@@ -204,6 +205,7 @@ class GnVmImages(Base):
     ssh_id = Column(String(10), primary_key=False, nullable=False)
     host_id = Column(String(8), primary_key=False, nullable=False)
     parent_id = Column(String(8), primary_key=False, nullable=False)
+    gnTeam = relationship('GnTeam')
 
 
     def __init__(self,id=id, name=None, filename=None, type=None, ssh_id=None
@@ -235,7 +237,7 @@ class GnVmImages(Base):
         return '< ID %r / Name %r / Filename %r / Type %r / Sub_type %r / Icon %r / Os %r / Os_Ver %r / Os_subVer %r / Os_bit %r / Team_code %r / Author_id %r / Create_time %r / Pool_id %r/ Status %r / Host_id %r/ Ssh_id %r/ >'\
                 % (self.id, self.name, self.filename, self.type, self.sub_type, self.icon, self.os, self.os_ver, self.os_subver, self.os_bit, self.team_code, self.author_id, self.create_time, self.pool_id, self.status, self.host_id, self.ssh_id)
     def __json__(self):
-        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id', 'status', 'host_id', 'ssh_id']
+        return ['id', 'name', 'filename', 'type', 'sub_type', 'icon', 'os', 'os_ver', 'os_subver', 'os_bit','team_code', 'author_id', 'create_time', 'pool_id', 'status', 'host_id', 'ssh_id','gnTeam']
 
 
 class GnSshKeys(Base):
