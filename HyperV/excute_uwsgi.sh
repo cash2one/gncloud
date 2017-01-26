@@ -1,1 +1,1 @@
-nohup uwsgi --http-socket :8082 --plugin python --wsgi-file __init__.py --enable-threads --logto hyperv.log --callable app &
+nohup uwsgi --http-socket :8082 --plugin python --wsgi-file __init__.py --processes 4 --threads 2 --logto hyperv.log --callable app &
