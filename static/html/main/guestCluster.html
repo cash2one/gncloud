@@ -40,7 +40,7 @@
                                             <div class="col-sm-9"  ng-class="{ 'has-error' : clusterForm.type.$invalid && !clusterForm.type.$pristine }">
 
                                                 <label class="radio-inline mod-input-name" ng-repeat="list in cluster_type_list" ng-if="list.viewYn == 'Y'">
-                                                    <input type="radio" name="type" ng-model="list.type" value="{{list.type}}">{{list.name}}
+                                                    <input type="radio" name="type" ng-model="cluster.type" value="{{list.type}}" ng-required="!cluster.type">{{list.name}}
                                                 </label>
                                                 <p ng-show="clusterForm.type.$invalid && !clusterForm.type.$pristine" class="help-block">type를 입력하세요.</p>
 

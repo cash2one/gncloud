@@ -761,7 +761,7 @@ def updateClusterInfo(id,ip,sql_session):
         sql_session.rollback()
 
 
-def insertClusterInfo(type,ip,port,sql_session):
+def insertClusterInfo(type,ip,sql_session):
     try:
         while True:
             id = random_string(8)
