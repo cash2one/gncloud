@@ -143,6 +143,8 @@ def doc_create(id,sql_session):
         docker_info.status = "Error"
         sql_session.commit()
         logger.error(e)
+        if ds is not None or len(ds) > 0 :
+            ds.logout()
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
 
@@ -316,6 +318,8 @@ def doc_snap():
         ds.logout()
         return jsonify(status=True, message="Success")
     except Exception as err:
+        if ds is not None or len(ds) != 0:
+            ds.logout()
         return jsonify(status=False, message="Error: %s" % err)
 
 

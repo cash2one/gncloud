@@ -24,7 +24,17 @@ class DockerService(object):
             self.cmd.prompt()
         except Exception as e:
             logger.error(e)
-            self.login_check = False
+            # self.logout()
+            print ('retry login')
+            time.sleep(5)
+            try:
+                self.login_check = self.cmd.login(addr, id, passwd)
+                if not self.login_check:
+                    logger.error("SSH 로그인 에러")
+                self.cmd.prompt()
+            except Exception as e2:
+                self.login_check = False
+                logger.error("SSH 로그인 에러 %s" % e2)
 
     # Docker 서비스를 생성한다.
     def docker_service_create(self, id, image_id, cpu, memory):
