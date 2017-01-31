@@ -730,6 +730,19 @@ def cluster_healthcheck():
     team_code = session['teamCode']
     return jsonify(status=True, list=healthcheck_info(team_code, db_session))
 
+@app.route('/price',methods=['GET'])
+def Price_list():
+    team_code = session['teamCode']
+    return jsonify(status=True, list=team_price_lsit(team_code,db_session))
+
+@app.route('/price/list',methods=['GET'])
+def Price_list_info():
+    year = request.args.get('year')
+    month = request.args.get('month')
+    team_code= request.args.get('team_code')
+    return jsonify(status=True, list=team_price_lsit_info(year,month,team_code,db_session))
+#________________________________________________________________________
+
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
 

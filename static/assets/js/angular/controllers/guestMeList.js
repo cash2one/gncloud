@@ -12,6 +12,7 @@ angular
         $("#profile-team").hide();
         $("#team-reso").hide();
         $("#team-group").hide();
+        $("#price").hide();
         $scope.profile=function(){
             $http({
                 method: 'GET',
@@ -397,6 +398,7 @@ angular
                 $("#profile-team").hide();
                 $("#team-reso").hide();
                 $("#team-group").hide();
+                $("#price").hide();
 
             }
             else if(ty == 'key-sett'){
@@ -405,6 +407,7 @@ angular
                 $("#profile-team").hide();
                 $("#team-reso").hide();
                 $("#team-group").hide();
+                $("#price").hide();
                 $scope.sshkey();
             }
             else if(ty == 'profile-team'){
@@ -413,6 +416,7 @@ angular
                 $("#profile-team").fadeIn();
                 $("#team-reso").hide();
                 $("#team-group").hide();
+                $("#price").hide();
                 $scope.team_profile();
 
             }
@@ -422,6 +426,7 @@ angular
                 $("#profile-team").hide();
                 $("#team-reso").fadeIn();
                 $("#team-group").hide();
+                $("#price").hide();
                 $scope.reso();
 
             }
@@ -431,8 +436,17 @@ angular
                 $("#profile-team").hide();
                 $("#team-reso").hide();
                 $("#team-group").fadeIn();
+                $("#price").hide();
                 $scope.teamtable();
 
+            }else if(ty == 'price'){
+                $("#profile").hide();
+                $("#key-sett").hide();
+                $("#profile-team").hide();
+                $("#team-reso").hide();
+                $("#team-group").hide();
+                $("#price").fadeIn();
+                $scope.price();
             }
 
         }
@@ -508,7 +522,45 @@ angular
                 return config;
             }
         }
+        $scope.price=function () {
+            $http({
+                method: 'GET',
+                url: '/api/manager/price',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        $scope.price =data.list;
+                    } else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
+                    }
+                });
+        }
+        $scope.price_list_info=function (year, month, team_code) {
+            $scope.data={};
+            $scope.data.year = year;
+            $scope.data.month = month;
+            $scope.data.team_code = team_code;
+            $http({
+                method: 'GET',
+                url: '/api/manager/price/list',
+                params:$scope.data,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        $scope.price_list =data.list.list;
+                        $scope.price_invoice = data.list.instance;
 
+                    } else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
+                    }
+                });
+        }
         $scope.user_info = $rootScope.user_info;
 
         $rootScope.$on('init', function () {
