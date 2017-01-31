@@ -447,8 +447,9 @@ def getQuotaOfTeam(team_code, sql_session):
     team_user_cnt = team_user_query.one()
 
     #유저별 vm리스트
-    user_list_query = sql_session.query(GnVmMachines.author_id,GnUser.user_name,func.count().label("count")) \
+    user_list_query = sql_session.query(GnVmMachines.author_id,GnUser.user_name, GnTeam.team_name,func.count().label("count")) \
                                  .outerjoin(GnUser, GnVmMachines.author_id == GnUser.user_id) \
+                                 .join(GnTeam, GnVmMachines.team_code == GnTeam.team_code) \
                                  .filter(GnVmMachines.status != config.REMOVE_STATUS) \
                                  .filter(GnVmMachines.type != "docker")\
                                  .filter(GnVmMachines.status != config.ERROR_STATUS) \
@@ -459,8 +460,9 @@ def getQuotaOfTeam(team_code, sql_session):
     user_list = user_list_query.all()
 
     #이미지별 vm리스트
-    image_type_query = sql_session.query(GnVmImages.name, func.count().label("count")) \
+    image_type_query = sql_session.query(GnVmImages.name,GnTeam.team_name, func.count().label("count")) \
                                   .join(GnVmMachines, GnVmImages.id == GnVmMachines.image_id) \
+                                  .join(GnTeam, GnVmMachines.team_code == GnTeam.team_code) \
                                   .filter(GnVmMachines.status != config.REMOVE_STATUS) \
                                   .filter(GnVmMachines.status != config.ERROR_STATUS) \
                                   .group_by(GnVmImages.id) \
