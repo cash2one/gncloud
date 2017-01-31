@@ -377,14 +377,18 @@ def doc_delete(id,sql_session):
         if service is not None:
             # 서비스 상태 수정
             #service.status = "Removed"
-            db_session.query(GnVmMachines).filter(GnVmMachines.id == service.id).delete()
+            sql_session.query(GnVmMachines).filter(GnVmMachines.id == service.id).delete()
 
             # 컨테이너 상태 수정
             for container in service.gnDockerContainers:
-                container.status = "Removed"
+                sql_session.query(GnDockerContainers).filter(GnDockerContainers.service_id == container.service_id).delete()
+                # container.status = "Removed"
             # 볼륨 상태 수정
             for volume in service.gnDockerVolumes:
-                volume.status = "Removed"
+                sql_session.query(GnDockerVolumes).filter(GnDockerVolumes.service_id == volume.service_id).delete()
+                #volume.status = "Removed"
+
+            sql_session.query(GnDockerServices).filter(GnDockerServices.service_id == service.id).delete()
 
             update_instance_status = db_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == service.id) \
                 .update({"delete_time": datetime.now().strftime('%Y%m%d%H%M%S')})
