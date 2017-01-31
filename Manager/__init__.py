@@ -472,8 +472,14 @@ def saveHostMachine():
     disk = request.json['disk']
     ip = request.json['ip']
     type = request.json['type']
-    disk_size = request.json['disk_size']
-    mem_size = request.json['mem_size']
+    mem_size = "GB"
+    disk_size = "GB"
+    if 'mem_size' in request.json:
+        mem_size = request.json['mem_size']
+
+    if 'disk_size' in request.json:
+        disk_size = request.json['disk_size']
+
     insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,db_session)
     return jsonify(status=True, message="success")
 
@@ -610,7 +616,7 @@ def login_hist():
 
 @app.route('/vm/backup/<id>', methods=['PUT'])
 def backup_change(id):
-    backup=['backup']
+    backup=request.json['backup']
     return jsonify(status=True, list=backupchnage(id, backup, db_session))
 
 @app.route('/vm/money',methods=['GET'])

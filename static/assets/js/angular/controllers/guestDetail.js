@@ -112,13 +112,12 @@ angular
                 });
         }
         $scope.backupchange=function (data) {
-            console.log(data);
             $scope.data = {};
             $scope.data.backup = data;
             $http({
                 method: 'PUT',
                 url:'/api/manager/vm/backup/'+$routeParams.id,
-                data:$scope.data,
+                data:'{"backup":"'+data+'"}',
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {

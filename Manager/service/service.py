@@ -1113,10 +1113,7 @@ def login_history(page, sql_session): #login history
 
 def backupchnage(id, backup, sql_sseion): #백업 수정
     list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    if(backup == False):
-        list.backup_comfirm = "false"
-    else:
-        list.backup_comfirm = "true"
+    list.backup_comfirm = backup
     sql_sseion.commit()
 
 def setting_list(sql_ssesion):
@@ -1231,7 +1228,7 @@ def qna_ask_reply_change(id,user_id ,text, sql_session):
     sql_session.commit()
 
 def qna_ask_change(id, user_id , text, sql_session):
-    qna_ask_info = sql_session.query(GnQnA).filter(GnQnA.id == id).filter(GnQnA.farent_id == None).filter(GnQnA.author_id==user_id).one()
+    qna_ask_info = sql_session.query(GnQnA).filter(GnQnA.id == id).filter(GnQnA.farent_id == None).one()
     qna_ask_info.text =text
     sql_session.commit()
 
