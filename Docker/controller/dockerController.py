@@ -39,12 +39,16 @@ def doc_create(id,sql_session):
         # --- //파라미터 정리 ---
         # --- Docker Service (밖에서 보기엔 컨테이너 생성) 생성 ---
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-        if ds is None :
-            ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-            if ds is None :
+        login_check = ds.docker_login()
+        login_count = 0
+        while not login_check:
+            if login_count > 5:
                 docker_info.status = 'Error'
                 sql_session.commit()
-                return
+                return jsonify(status=False, message="login failure")
+            time.sleep(10)
+            login_check = ds.docker_login()
+            login_count += 1
 
         print(docker_info.id+":get class ok")
 
@@ -168,10 +172,17 @@ def doc_state(id):
     #     team_code = session['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-    if ds is None:
-        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-        if ds is None:
-            return
+    login_check = ds.docker_login()
+    login_count = 0
+    while not login_check:
+        if login_count > 5:
+            docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+            docker_info.status = 'Error'
+            sql_session.commit()
+            return jsonify(status=False, message="login failure")
+        time.sleep(10)
+        login_check = ds.docker_login()
+        login_count += 1
     # 서비스 DB 데이터 가져오기
     service = GnVmMachines.query.filter_by(id=id, type="docker").one()
     # -- 시작 (start)
@@ -189,6 +200,12 @@ def doc_state(id):
                 id=id, image=service.gnDockerServices[0].image, backup_image=image,
                 cpu=service.cpu, memory=str(service.memory)+"MB")
             logger.debug(restart_service)
+            if restart_service == 'error':
+                service.status = 'Error'
+                sql_session.commit()
+                ds.logout()
+                return jsonify(status=False, message="error", result=None)
+
             # 변경된 내용을 DB에 Update
             # 서비스쪽 데이터 수정
             service.internal_id = restart_service[0]["ID"]
@@ -333,10 +350,17 @@ def doc_delete(id,sql_session):
     logger.debug('delete docker start ~~~')
     try:
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-        if ds is None:
-            ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
-            if ds is None:
-                return
+        login_check = ds.docker_login()
+        login_count = 0
+        while not login_check:
+            if login_count > 5:
+                docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+                docker_info.status = 'Error'
+                sql_session.commit()
+                return jsonify(status=False, message="login failure")
+            time.sleep(10)
+            login_check = ds.docker_login()
+            login_count += 1
 
         logger.debug('after ssh shell prompt')
         service = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
@@ -523,6 +547,18 @@ def doc_delete_image_detail(image_id, id):
 def doc_delete_image(id):
     sql_session = db_session
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+    login_check = ds.docker_login()
+    login_count = 0
+    while not login_check:
+        if login_count > 5:
+            docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+            docker_info.status = 'Error'
+            sql_session.commit()
+            return jsonify(status=False, message="login failure")
+        time.sleep(10)
+        login_check = ds.docker_login()
+        login_count += 1
+
     version = "v1"
     repositories = "repositories"
     namespace = "library"

@@ -16,31 +16,34 @@ from Docker.util.logger import logger
 class DockerService(object):
 
     def __init__(self, addr, id, passwd):
+        self.addr = addr
+        self.id = id
+        self.passwd = passwd
+        self.login_check = False
+        self.cmd = None
+
+    def docker_login(self):
         try:
+            print('ssh login start')
+            if self.cmd is not None:
+                self.cmd.close()
+
             self.cmd = pxssh.pxssh()
-            self.login_check = self.cmd.login(addr, id, passwd)
-            if not self.login_check:
-                logger.error("SSH 로그인 에러")
+            self.login_check = self.cmd.login(self.addr, self.id, self.passwd)
             self.cmd.prompt()
+            self.login_check = True
+            print ('login success')
+            return True
         except Exception as e:
             logger.error(e)
-            self.cmd.close()
-            print ('retry login')
-            time.sleep(10)
-            try:
-                self.login_check = self.cmd.login(addr, id, passwd)
-                if not self.login_check:
-                    logger.error("SSH 로그인 에러")
-                self.cmd.prompt()
-            except Exception as e2:
-                self.login_check = False
-                logger.error("SSH 로그인 에러 %s" % e2)
+            return False
+
 
     # Docker 서비스를 생성한다.
     def docker_service_create(self, id, image_id, cpu, memory):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
 
         dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
         if dockerimage is None:
@@ -78,7 +81,7 @@ class DockerService(object):
     def docker_service_start(self, id, image, backup_image, cpu, memory):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
 
         dockerimage = GnDockerImages.query.filter_by(name=image).first()
         if dockerimage is None:
@@ -109,7 +112,7 @@ class DockerService(object):
     def docker_service_stop(self, service):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         # 컨테이너를 commit하여 저장
         # commit_result = ds.commit_containers(id)
         self.commit_containers(service.id)
@@ -121,7 +124,7 @@ class DockerService(object):
     def docker_service_ps(self, internal_id):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         command = "docker service inspect %s" % internal_id
         try:
             # docker swarm manager need a second for assigning to service port
@@ -136,7 +139,7 @@ class DockerService(object):
     def docker_service_rm(self, internal_id):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         command = "docker service rm %s" % internal_id
         return self.send_command(command)
 
@@ -144,7 +147,7 @@ class DockerService(object):
     def docker_volume_rm(self, host_id, volumes):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         node = GnHostMachines.query.filter_by(id=host_id).first()
         volume_list = ""
         for volume in volumes:
@@ -156,7 +159,7 @@ class DockerService(object):
     def get_service_containers(self, internal_id):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         container_list = []
         command = "docker service ps %s" % internal_id
         result = self.send_command_return_all_line(command)
@@ -187,7 +190,7 @@ class DockerService(object):
     def get_service_volumes(self, internal_id):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         command = "docker service inspect %s" % internal_id
         # 서비스 내의 Mounts 정보 가져오기
         service = self.send_command_return_json(command)
@@ -208,7 +211,7 @@ class DockerService(object):
     def commit_containers(self, id):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         # Service internal id 가지고 오기
         service = GnVmMachines.query.filter_by(id=id).first()
         service_internal_name = service.internal_name
@@ -236,7 +239,7 @@ class DockerService(object):
     def snap_containers(self, id):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         sub_type = "snap"
         # Service internal id 가지고 오기
         service = GnVmMachines.query.filter_by(id=id, type="docker").first()
@@ -276,7 +279,7 @@ class DockerService(object):
     def send_command(self, command):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         self.cmd.sendline(command)
         self.cmd.prompt()
         result = self.cmd.before.split("\r\n", 1)[1]
@@ -286,7 +289,7 @@ class DockerService(object):
     def send_command_return_all_line(self, command):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         self.cmd.sendline(command)
         self.cmd.prompt()
         return self.cmd.before.split("\r\n")
@@ -295,7 +298,7 @@ class DockerService(object):
     def send_command_return_json(self, command):
         if not self.login_check:
             logger.error("SSH 로그인 에러")
-            return "SSH 로그인 에러"
+            return "error"
         try:
             self.cmd.sendline(command)
             self.cmd.prompt()
