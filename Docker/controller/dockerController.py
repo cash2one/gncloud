@@ -164,6 +164,10 @@ def doc_state(id):
     #     team_code = session['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+    if ds is None or len(ds) == 0:
+        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        if ds is None or len(ds) == 0:
+            return
     # 서비스 DB 데이터 가져오기
     service = GnVmMachines.query.filter_by(id=id, type="docker").one()
     # -- 시작 (start)
@@ -323,6 +327,11 @@ def doc_delete(id,sql_session):
     logger.debug('delete docker start ~~~')
     try:
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        if ds is None or len(ds) == 0:
+            ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+            if ds is None or len(ds) == 0:
+                return
+
         logger.debug('after ssh shell prompt')
         service = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
 
