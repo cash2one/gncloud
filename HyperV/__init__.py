@@ -96,4 +96,4 @@ def cronMnitor():
 
 if __name__ == '__main__':
     #app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
-    app.run(port=8082)
+    app.run(port=int(config.CONTROLLER_PORT))
