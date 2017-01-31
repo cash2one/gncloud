@@ -610,7 +610,7 @@ def login_hist():
 
 @app.route('/vm/backup/<id>', methods=['PUT'])
 def backup_change(id):
-    backup=['backup']
+    backup=request.json['backup']
     return jsonify(status=True, list=backupchnage(id, backup, db_session))
 
 @app.route('/vm/money',methods=['GET'])
