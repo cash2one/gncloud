@@ -20,5 +20,12 @@ app.ScheduleController.run()
 def index():
     return jsonify(status=True, message='서비스 정상 작동')
 
+@app.route("/invoice_calc/force")
+def invoice_calc_force():
+    return app.ScheduleController.invoice.invoice_calc()
+
+
+
 if __name__ == '__main__':
-    app.run(host=config.CONTROLLER_HOST,port=int(config.CONTROLLER_PORT))
+    #app.run(host=config.CONTROLLER_HOST,port=int(config.CONTROLLER_PORT))
+    app.run(port=int(config.CONTROLLER_PORT))
