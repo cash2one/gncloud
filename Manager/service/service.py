@@ -771,9 +771,9 @@ def insertClusterInfo(type,ip,sql_session):
 
         cluster_info =GnCluster(id=id,type=type, ip=ip, status=config.RUN_STATUS)
         sql_session.add(cluster_info)
-        cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
-        nginx_reload(cluster_list)
         sql_session.commit()
+        cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS).all()
+        nginx_reload(cluster_list)
     except:
         sql_session.rollback()
 
