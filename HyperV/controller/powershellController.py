@@ -30,6 +30,7 @@ def manual():
 
 # VM 생성 및 실행
 def hvm_create(id, sql_session):
+    vm_info = None
     try:
         vm_id = id
         vm_info =sql_session.query(GnVmMachines).filter(GnVmMachines.id == vm_id).first()
@@ -140,6 +141,8 @@ def hvm_create(id, sql_session):
             return True
     except Exception as e:
         print(e.message)
+        if vm_info is None or len(vm_info) == 0:
+            vm_info =sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
         vm_info.status = "Error"
         sql_session.commit()
         # sql_session.remove()
