@@ -773,7 +773,7 @@ def insertClusterInfo(type,ip,sql_session):
         sql_session.add(cluster_info)
         sql_session.commit()
         cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS).all()
-        nginx_reload(cluster_list)
+        #nginx_reload(cluster_list)
     except:
         sql_session.rollback()
 

@@ -35,6 +35,7 @@ angular
                         for(var j =0 ; j < $scope.cluster_type_list.length ; j++){
                             $scope.cluster_type_list[j].viewYn = "Y";
                         }
+                        $scope.registYn = "N";
 
                         for (var i = 0; i < $scope.cluster_list.length; i++) {
                             $scope.cluster_list[i].create_time_diff = dateModifyService.modifyDate(data.info[i].create_time);
