@@ -80,7 +80,7 @@ def server_create(team_code, user_id, id, sql_session):
 def setSsh(host_ip, path, ip, ssh_id):
     try:
         print(":processing set sshkey!!!")
-        s = pxssh.pxssh()
+        s = pxssh.pxssh(timeout=1200)
         s.login(host_ip, USER)
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(path) + "' " + str(ip) + " "+ssh_id)
         s.logout()
@@ -90,7 +90,7 @@ def setSsh(host_ip, path, ip, ssh_id):
         pass
 
 def getIpAddress(name, host_ip):
-    s = pxssh.pxssh()
+    s = pxssh.pxssh(timeout=1200)
     s.login(host_ip, USER)
     s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
     s.prompt()
