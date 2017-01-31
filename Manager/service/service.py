@@ -1083,14 +1083,14 @@ def snap_list_info(id, sql_session):
     user_info = sql_session.query(GnUser).filter(GnUser.user_id == snap_info.author_id).one()
     snap_info.create_time = snap_info.create_time.strftime('%Y-%m-%d %H:%M:%S')
     parent_history = selectParentImageInfo(snap_info.parent_id,sql_session)
-    info={"snap_info":snap_info, "user_info":user_info, "parent_history":snap_info.name +","+ parent_history[:-1]}
+    info={"snap_info":snap_info, "user_info":user_info, "parent_history":snap_info.name + parent_history}
     return info
 
 def selectParentImageInfo(parent_id,sql_session):
     parent_info = sql_session.query(GnVmImages).filter(GnVmImages.id == parent_id).one_or_none()
 
     if parent_info != None:
-        return parent_info.name +"," +selectParentImageInfo(parent_info.parent_id,sql_session);
+        return "," + parent_info.name +selectParentImageInfo(parent_info.parent_id,sql_session);
     else:
         return ""
 
