@@ -39,6 +39,13 @@ def doc_create(id,sql_session):
         # --- //파라미터 정리 ---
         # --- Docker Service (밖에서 보기엔 컨테이너 생성) 생성 ---
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        if ds is None or len(ds) == 0:
+            ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+            if ds is None or len(ds) == 0:
+                docker_info.status = 'Error'
+                sql_session.commit()
+                return
+
         print(docker_info.id+":get class ok")
 
         # Docker Swarm manager 값을 가져온다.
