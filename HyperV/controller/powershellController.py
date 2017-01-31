@@ -395,7 +395,7 @@ def hvm_modify_image(id):
     return jsonify(status=False, message="미구현")
 
 
-# REST. VM 이미지 삭제
+# REST. VM 이미지 삭제 (snapshot)
 # 이미지를 백업 폴더로 옮긴다
 # 이미지 따로 관리
 def hvm_delete_image(id):
@@ -409,7 +409,8 @@ def hvm_delete_image(id):
     json_obj = json.dumps(image_delete)
     json_size = len(json_obj)
     if json_size <= 2: #json 크기는 '{}' 포함
-        delete_vm = db_session.query(GnVmImages).filter(GnVmImages.id == id).update({"status": "Removed"})
+        #delete_vm = db_session.query(GnVmImages).filter(GnVmImages.id == id).update({"status": "Removed"})
+        delete_vm = db_session.query(GnVmImages).filter(GnVmImages.id == id).delete()
         db_session.commit()
         #update 완료시 리턴값은 1
         if delete_vm == 1:
