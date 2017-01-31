@@ -36,12 +36,14 @@ angular
                     for (var i = 0; i < data.list.user_list.length; i++) {
                         $scope.user_list[i].user_id = data.list.user_list[i][0];
                         $scope.user_list[i].user_name = data.list.user_list[i][1];
-                        $scope.user_list[i].cnt = data.list.user_list[i][2];
+                        $scope.user_list[i].team_name = data.list.user_list[i][2];
+                        $scope.user_list[i].cnt = data.list.user_list[i][3];
                     }
                     $scope.image_type_list=data.list.image_type_list;
                     for (var i = 0; i < data.list.image_type_list.length; i++) {
                         $scope.image_type_list[i].name = data.list.image_type_list[i][0];
-                        $scope.image_type_list[i].cnt = data.list.image_type_list[i][1];
+                        $scope.image_type_list[i].team_name = data.list.image_type_list[i][1];
+                        $scope.image_type_list[i].cnt = data.list.image_type_list[i][2];
                     }
 
                 }
