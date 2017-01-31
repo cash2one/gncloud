@@ -24,9 +24,9 @@ class DockerService(object):
             self.cmd.prompt()
         except Exception as e:
             logger.error(e)
-            # self.logout()
+            self.cmd.close()
             print ('retry login')
-            time.sleep(5)
+            time.sleep(10)
             try:
                 self.login_check = self.cmd.login(addr, id, passwd)
                 if not self.login_check:
