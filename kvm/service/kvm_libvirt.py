@@ -34,10 +34,10 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
         instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
         defaultVol.delete()
     else:
-        s.sendline("\cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name+".img")
-        instance_POOL.refresh()
+        s.sendline("\cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name + ".img")
         s.logout()
-
+        instance_POOL.refresh()
+        instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
 
     # vm 생성
     guest = render_template(
