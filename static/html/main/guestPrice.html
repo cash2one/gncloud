@@ -24,7 +24,6 @@
 
                     <!-- 가격 Modal -->
                     <div class="modal fade" id="cluster" role="dialog">
-                        <div class="modal-backdrop fade in" style="height: 3000px;"></div>
                         <div class="modal-dialog form-horizontal">
                             <div class="modal-content col-sm-10 col-sm-offset-1">
                                 <div class="modal-header gn-modal-header">
@@ -32,7 +31,7 @@
                                     <h4 class="modal-title">등록</h4>
                                 </div>
 
-                                <div class="modal-body gn-modal-body">
+                                <div class="modal-body gn-modal-body price-mod">
 
                                     <form name="clusterForm" class="form-horizontal">
                                         <div class="form-group">
@@ -49,11 +48,11 @@
                                                 <input type="text" class="form-control gn-form-control" name="mem" placeholder="2" ng-model="data.mem" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.mem.$pristine" class="help-block">메모리 크기를 입력하세요.</p>
                                             </div>
-                                            <span>
+                                            <p>
                                                 <select class="gn-select gn-form-control col-sm-2" name="mem_size" ng-model="memsize" ng-options="mem.name for mem in mem" ng-change="sizemem(memsize)">
                                                     <option value="">선택</option>
-                                            </select>
-                                            </span>
+                                                </select>
+                                            </p>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputtext" class="col-sm-3 control-label gn-control-label">Disk</label>
@@ -61,11 +60,11 @@
                                                 <input type="text" class="form-control gn-form-control" name="disk" placeholder="10" ng-model="data.disk" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.disk.$pristine" class="help-block">디스크 크기를 입력하세요.</p>
                                             </div>
-                                            <span>
-                                            <select class="gn-select gn-form-control col-sm-2" name="disk_size" ng-model="disksize" ng-options="disk.name for disk in disk" ng-change="sizedisk(disksize)">
-                                                <option value="">선택</option>
-                                            </select>
-                                        </span>
+                                            <p>
+                                                <select class="gn-select gn-form-control col-sm-2" name="disk_size" ng-model="disksize" ng-options="disk.name for disk in disk" ng-change="sizedisk(disksize)">
+                                                    <option value="">선택</option>
+                                                </select>
+                                            </p>
                                         </div>
 
                                         <div class="form-group">
@@ -101,7 +100,7 @@
                             <thead>
                             <tr>
                                 <th class="">번호</th>
-                                <th class="hidden-xs">정보</th>
+                                <th class="">정보</th>
                                 <th class="hidden-xs">시간 가격</th>
                                 <th class="hidden-xs">일 가격</th>
                                 <th class="hidden-xs"></th>
@@ -110,7 +109,7 @@
                             <tbody>
                             <tr ng-repeat="price in price_list">
                                 <td>{{$index+1}}</td>
-                                <td class="hidden-xs">{{price.cpu}} CPU/ {{price.mem}} / {{price.disk}}</td>
+                                <td class="">{{price.cpu}} CPU/ {{price.mem}} / {{price.disk}}</td>
                                 <td class="hidden-xs">{{price.hour_price}}원</td>
                                 <td class="hidden-xs">{{price.day_price}}원</td>
                                 <td class="dropdown">

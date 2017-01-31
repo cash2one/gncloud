@@ -69,7 +69,7 @@
             <div class="modal-header gn-modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">{{notice.title}}</h4>
-                <p>작성일<span class="gn-write">&nbsp;{{notice.create_date}}</span></p>
+                <p><span class="gn-write">&nbsp;{{notice.create_date}}</span></p>
             </div>
             <div class="modal-body gn-modal-body">
 
@@ -78,43 +78,42 @@
                     <div class="form-group gn-content">
                         <div class="container-fluid">
                             <span class="gn-write" ng-show="showData == '1'">{{notice.text}}</span>
-                            <div id="change" class="second-td-name gn-lead col-sm-8" ng-show="showData=='2'">
+                            <div id="change" class="second-td-name gn-lead col-sm-9" ng-show="showData=='2'">
                                 <textarea class="form-control gn-write" rows="6" ng-model="notice.text"></textarea></div>
                         </div>
                     </div>
                     <!--댓글 : 사용자이름-->
                     <div class="form-group">
                         <div ng-repeat="reply in reply">
-                        <div class="gn-comment container-fluid">
-                            <span class="col-sm-2">{{reply.author_id}}</span>
-                            <span class="col-sm-9" ng-show="showData=='1' || showData=='2'">{{reply.text}}</span>
-                            <div id="changereply" class="second-td-name gn-lead col-sm-8" ng-show="showData=='3'">
-                                <textarea class="form-control gn-write" rows="6" ng-model="reply.text"></textarea></div>
+                            <div class="gn-comment container-fluid">
+                                <span class="col-sm-2">{{reply.author_id}}</span>
+                                <span class="col-sm-9" ng-show="showData=='1' || showData=='2'">{{reply.text}}</span>
+                                <div id="changereply" class="second-td-name gn-lead col-sm-9" ng-show="showData=='3'">
+                                    <textarea class="form-control gn-write" rows="6" ng-model="reply.text"></textarea></div>
 
-                            <span class="col-sm-1">
-                                    <a class="glyphicon glyphicon-trash pull-right" data-dismiss="modal" ng-show="user_info.authority == 'sysowner'|| user_info.name == reply.author_id" ng-click="delete_reply(reply.id)"></a>
-                                    <a class="glyphicon glyphicon-pencil pull-right" ng-show="user_info.authority == 'sysowner'|| user_info.name == reply.author_id" ng-click="showData='3'"></a>
-                                <button type="submit" style="margin-top:90px" class="btn btn-default pull-right" data-dismiss="modal" ng-show="showData=='3'" ng-click="showData='1';changereply(reply.id,reply.text)">저장</button>
+                                <span class="col-sm-1">
+                                        <a class="glyphicon glyphicon-trash pull-right" data-dismiss="modal" ng-show="user_info.authority == 'sysowner'|| user_info.name == reply.author_id" ng-click="delete_reply(reply.id)"></a>
+                                        <a class="glyphicon glyphicon-pencil pull-right" ng-show="user_info.authority == 'sysowner'|| user_info.name == reply.author_id" ng-click="showData='3'"></a>
+                                    <button type="submit" style="margin-top:90px" class="btn btn-default pull-right" data-dismiss="modal" ng-show="showData=='3'" ng-click="showData='1';changereply(reply.id,reply.text)">저장</button>
                                 </span>
-
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <!--댓글달기 영역-->
                     <div class="form-group">
                         <div class="gn-answer container-fluid">
                             <span class="col-sm-2">답변</span>
-                            <span class="col-sm-10">1
+                            <span class="col-sm-10">
                                     <textarea class="form-control gn-write gn-margin-bott10" ng-model="data.reply_text" rows="6" placeholder="내용을 입력하여주세요."></textarea>
                                     <button type="submit" class="btn btn-default gn-btn-height btn-block" data-dismiss="modal" ng-click="qna_reply_create(notice.id)">저장</button>
                                 </span>
                         </div>
                     </div>
                 </form>
-
             </div>
 
             <div class="modal-footer gn-modal-footer">
+                <p><!--구분선--></p>
                 <button type="submit" class="btn btn-default btn-delete pull-left" data-dismiss="modal" ng-show="user_info.authority == 'sysowner' || user_info.user_id == notice.author_id" ng-click="deleteqna(notice.id)">삭제</button>
                 <button type="submit" class="btn btn-default pull-left" ng-show="(user_info.authority == 'sysowner'|| user_info.user_id == notice.author_id )&& showData =='1' " ng-click="showData= '2'">수정</button>
                 <button type="submit" class="btn btn-default pull-left" data-dismiss="modal" ng-show="(user_info.authority == 'sysowner'|| user_info.user_id == notice.author_id) && showData=='2' " ng-click="showData='1';changeqna(notice.id, notice.text)">저장</button>

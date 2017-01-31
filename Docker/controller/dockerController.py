@@ -39,6 +39,13 @@ def doc_create(id,sql_session):
         # --- //파라미터 정리 ---
         # --- Docker Service (밖에서 보기엔 컨테이너 생성) 생성 ---
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        if ds is None :
+            ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+            if ds is None :
+                docker_info.status = 'Error'
+                sql_session.commit()
+                return
+
         print(docker_info.id+":get class ok")
 
         # Docker Swarm manager 값을 가져온다.
@@ -107,7 +114,8 @@ def doc_create(id,sql_session):
             docker_info.internal_id = docker_service[0]['ID']
             docker_info.internal_name = docker_service[0]['Spec']['Name']
             #docker_info.create_time = datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
-            docker_info.create_time = datetime.now().strftime('%Y%m%d%H%M%S')
+            now_time = datetime.now().strftime('%Y%m%d%H%M%S')
+            docker_info.create_time = now_time
             docker_info.os = "docker"
             docker_info.os_ver = image.os
             docker_info.os_sub_ver = image.os_ver
@@ -123,7 +131,8 @@ def doc_create(id,sql_session):
             else:
                 logger.error('invalid price_type : system_setting.billing_type %s' % system_setting.billing_type)
 
-            insert_instance_status = GnInstanceStatus(vm_id=docker_info.id, author_id=docker_info.author_id, team_code=docker_info.team_code
+            insert_instance_status = GnInstanceStatus(vm_id=docker_info.id, create_time=now_time, delete_time=None
+                                                      , author_id=docker_info.author_id, team_code=docker_info.team_code
                                                       , price=instance_status_price,price_type=system_setting.billing_type
                                                       , cpu=docker_info.cpu, memory=docker_info.memory,disk=docker_info.disk)
             sql_session.add(insert_instance_status)
@@ -136,6 +145,8 @@ def doc_create(id,sql_session):
         docker_info.status = "Error"
         sql_session.commit()
         logger.error(e)
+        if ds is not None :
+            ds.logout()
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
 
 
@@ -157,6 +168,10 @@ def doc_state(id):
     #     team_code = session['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
     ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+    if ds is None:
+        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        if ds is None:
+            return
     # 서비스 DB 데이터 가져오기
     service = GnVmMachines.query.filter_by(id=id, type="docker").one()
     # -- 시작 (start)
@@ -305,6 +320,8 @@ def doc_snap():
         ds.logout()
         return jsonify(status=True, message="Success")
     except Exception as err:
+        if ds is not None:
+            ds.logout()
         return jsonify(status=False, message="Error: %s" % err)
 
 
@@ -316,6 +333,11 @@ def doc_delete(id,sql_session):
     logger.debug('delete docker start ~~~')
     try:
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        if ds is None:
+            ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+            if ds is None:
+                return
+
         logger.debug('after ssh shell prompt')
         service = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
 
