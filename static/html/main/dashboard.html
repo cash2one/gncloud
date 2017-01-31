@@ -9,7 +9,7 @@
                 <div class="dash-margin-box">
                     <h3>CPU</h3>
                     <div class="col-sm-6">
-                        <canvas id="cpu_chart" height="250"></canvas>
+                        <canvas id="cpu_chart" height="300"></canvas>
                     </div>
                     <div class="col-sm-6">
                         <div><span class="cpu-color">{{cpu_use_per}}</span>%</div>
@@ -25,7 +25,7 @@
                 <div class="dash-margin-box">
                     <h3>MEMORY</h3>
                     <div class="col-sm-6">
-                        <canvas id="mem_chart" height="250"></canvas>
+                        <canvas id="mem_chart" height="300"></canvas>
                     </div>
                     <div class="col-sm-6">
                         <div><span class="memo-color">{{mem_use_per}}</span>%</div>
@@ -41,7 +41,7 @@
                 <div class="dash-margin-box">
                     <h3>DISK</h3>
                     <div class="col-sm-6">
-                        <canvas id="disk_chart" height="250"></canvas>
+                        <canvas id="disk_chart" height="300"></canvas>
                     </div>
                     <div class="col-sm-6">
                         <div><span class="disk-color">{{disk_use_per}}</span>%</div>
@@ -64,7 +64,7 @@
                 <div class="dash-margin-box">
                     <h3>가상머신 개수</h3>
                     <div class="col-sm-6">
-                        <canvas id="status_chart" height="250"></canvas>
+                        <canvas id="status_chart" height="300"></canvas>
                     </div>
                     <div class="col-sm-6 gn-dash-vm-right">
                         <div><span class="vm-color">{{tot_cnt}}</span>개</div>
@@ -90,7 +90,7 @@
                 <div class="dash-margin-box">
                     <h3>하이퍼 바이저 종류</h3>
                     <div class="col-sm-6">
-                        <canvas id="type_chart" height="250"></canvas>
+                        <canvas id="type_chart" height="300"></canvas>
                     </div>
                     <div class="col-sm-6 gn-dash-hyp-right">
                         <ul>
@@ -235,15 +235,14 @@
                                         <td class="col-sm-4">
                                             <ul>
                                                 <li ng-repeat="host in list.host_list">
-                                                    <span class="gn-dot-play"></span>
+                                                    <span class="gn-dot-play" ng-show="host.host_check == 0"></span>
+                                                    <span class="gn-dot-stop" ng-show="host.host_check != 0"></span>
                                                     <span>Host-{{$index+1}}</span>
                                                     <p class="gn-write">{{host.host_ip}}</p>
                                                 </li>
                                             </ul>
                                         </td>
                                     </tr>
-
-
                                     </tbody>
                                 </table>
                             </div> <!--class="table-responsive gn-table-responsive"  -->
@@ -252,7 +251,8 @@
                     </div>  <!--class="gn-box"-->
                 </div> <!--class="gn-box"-->
 
-</div> <!--class="row"-->
+
+            </div> <!--class="row"-->
 </div> <!-- class="container-fluid dash-body"  -->
 
 

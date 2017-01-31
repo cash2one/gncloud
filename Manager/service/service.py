@@ -1256,7 +1256,7 @@ def healthcheck_info(team_code,sql_session):
     cluster_list = sql_session.query(GnCluster).filter(GnCluster.status != 'Removed')
     result_list = []
     for e in cluster_list:
-        response = 1
+        e.append = "1"
         host_list = []
         for host in e.gnHostMachines:
             if e.gnHostMachines:
