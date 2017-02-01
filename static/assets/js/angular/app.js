@@ -13,6 +13,12 @@ var serviceAddModules = [
                 templateUrl:'/main/navbar.html',
                 controller:'navbarCtrl'
             }
+        }).directive('navleft', function (){
+            return{
+                restrict: 'E',
+                templateUrl:'/main/navleft.html',
+                controller:'navleftCtrl'
+            }
         });
 
     app.run(function($rootScope,$http){

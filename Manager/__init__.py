@@ -726,6 +726,11 @@ def Qna_reply_delete(id):
 #-------------------------QnA 끝--------------------------------
 #-------------------------------------------------------------#
 
+@app.route('/vm/usehist', methods=['GET']) #login hist
+def use_hist():
+    page= request.args.get("page")
+    return jsonify(status=True, message="success", list=use_history(page,db_session))
+
 @app.route('/vm/clustercheck',methods=['GET'])
 def Cluseter_check():
     return jsonify(status=True, list=cluster_info(db_session))
