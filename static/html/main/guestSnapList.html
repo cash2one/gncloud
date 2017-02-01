@@ -78,7 +78,7 @@
                     <!--컨테이너 tab-->
                     <div class="table-responsive gn-table-responsive gn-margin-box">
                         <h2>목록</h2>
-                        <table class="table table gn-table">
+                        <table class="table gn-table">
                             <thead>
                             <tr>
                                 <th class="first-td"></th> 
@@ -92,12 +92,13 @@
                             </thead>
                             <tbody class="gn-tdody">
                             <tr ng-repeat="snap in snap_list" ng-class="{'tr-on-error':snap.status =='Error'}">
-                                <td><img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
+                                <td>
+                                    <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                                     <img ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
                                     <img ng-show="list.status != 'Error'" src="/gn_images/gn_icon_{{snap.os}}.png" alt="">
                                 </td>
-                                <td class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="snap_list_info(snap.id)">
-                                    <a>{{snap.name}}</a>
+                                <td class="second-td-name" data-toggle="modal" data-target="#teamModal" ng-click="snap_list_info(snap.id)">
+                                    <a class="gn-ms-cursor second-td-name">{{snap.name}}</a>
                                 </td>
                                 <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
                                 
