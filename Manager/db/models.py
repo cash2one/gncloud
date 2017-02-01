@@ -632,9 +632,10 @@ class GnInstanceActionHist(Base):
     __tablename__='GN_INSTANCE_ACTION_HISTORY'
     id = Column(Integer, primary_key=True, nullable=False)
     user_id = Column(String(50), primary_key=False, nullable=False)
-    team_code = Column(String(10), primary_key=False, nullable=False)
+    team_code = Column(String(10), ForeignKey('GN_TEAM.team_code'))
     action = Column(String(7), primary_key=False, nullable=False)
     action_time = Column(DateTime, nullable=False)
+    gnTeam = relationship('GnTeam')
 
     def __init__(self, user_id=None, team_code=None, action=None, action_time=None):
         self.user_id = user_id
@@ -647,16 +648,15 @@ class GnInstanceActionHist(Base):
                %(self.user_id, self.team_code, self.action, self.action_time)
 
     def __json__(self):
-        return ['user_id', 'team_code', 'action', 'action_time','id']
+        return ['user_id', 'team_code', 'action', 'action_time','id','gnTeam']
 
 
 class GnInvoiceResult(Base):
     __tablename__='GN_INVOICE_RESULT'
     year = Column(String(4), primary_key=True, nullable=False)
     month = Column(String(2), primary_key=True, nullable=False)
-    team_code = Column(String(10), ForeignKey('GN_TEAM.team_code'))
+    team_code = Column(String(10), primary_key=True, nullable=False)
     invoice_data = Column(String(15000), nullable=True)
-    gnTeam=relationship('GnTeam')
 
     def __init__(self, year=None, month=None, team_code=None, invoice_data=None):
         self.year=year

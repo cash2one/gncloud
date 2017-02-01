@@ -2,14 +2,16 @@
 
 __author__ = 'NaDa'
 
+import json
 import os
 import subprocess
-import requests
+
 import humanfriendly
-from flask import json
+import requests
 from flask import render_template
-from sqlalchemy import func
 from pexpect import pxssh
+from sqlalchemy import func
+
 from Manager.db.database import db_session
 from Manager.db.models import *
 from Manager.util.config import config
@@ -1114,6 +1116,19 @@ def login_history(page, sql_session): #login history
     login_info={"list":list,"page":page,"total":total}
     return login_info
 
+def use_history(page, sql_session):
+    page_size=10
+    page=int(page)-1
+    list=sql_session.query(GnInstanceActionHist)\
+                    .order_by(GnInstanceActionHist.action_time.desc())\
+                    .limit(page_size).offset(page*page_size).all()
+    total_page= sql_session.query(func.count(GnInstanceActionHist.id).label("count")).one()
+    total = total_page.count /10
+    for use_hist in list:
+        use_hist.action_time = use_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
+    use_info={"list":list,"page":page,"total":total}
+    return use_info
+
 
 def backupchnage(id, backup, sql_sseion): #백업 수정
     list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
@@ -1296,9 +1311,5 @@ def team_price_lsit_info(year,month,team_code,sql_session):
     list = sql_session.query(GnInvoiceResult).filter(GnInvoiceResult.year==year).filter(GnInvoiceResult.month == month)\
                                             .filter(GnInvoiceResult.team_code==team_code).one()
     instance=json.loads(list.invoice_data)
-    for inst in instance.each_user:
-        name =sql_session.query(GnVmMachines).filter(GnVmMachines.id ==inst.instance_list.vm_id).one()
-        inst.instance_list.vm_id = name.vm_name
-    team = sql_session.query(GnTeam).filter(GnTeam.team_code == instance.team).one()
-    instance.team = team.team_name
+    team = sql_session.query(GnTeam).filter(GnTeam.team_code == list.team_code).one()
     return {"list":list, "instance":instance}

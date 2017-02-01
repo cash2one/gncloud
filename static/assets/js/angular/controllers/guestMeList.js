@@ -528,45 +528,7 @@ angular
                 return config;
             }
         }
-        $scope.price=function () {
-            $http({
-                method: 'GET',
-                url: '/api/manager/price',
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data.status == true) {
-                        $scope.price =data.list;
-                    } else {
-                        if(data.message != null) {
-                            alert(data.message)
-                        }
-                    }
-                });
-        }
-        $scope.price_list_info=function (year, month, team_code) {
-            $scope.data={};
-            $scope.data.year = year;
-            $scope.data.month = month;
-            $scope.data.team_code = team_code;
-            $http({
-                method: 'GET',
-                url: '/api/manager/price/list',
-                params:$scope.data,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data.status == true) {
-                        $scope.price_list =data.list.list;
-                        $scope.price_invoice = data.list.instance;
 
-                    } else {
-                        if(data.message != null) {
-                            alert(data.message)
-                        }
-                    }
-                });
-        }
         $scope.user_info = $rootScope.user_info;
 
         $rootScope.$on('init', function () {
