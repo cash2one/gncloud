@@ -133,7 +133,6 @@
                         <table class="table table-striped table-dash">
                             <thead>
                             <tr>
-                                <!--<th class="" ng-show="user_info.authority == 'sysowner'" >팀</th>-->
                                 <th class="">이름</th>
                                 <th class="">아이디</th>
                                 <th class="">개수</th>
@@ -141,7 +140,6 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="list in user_list">
-                                <!--<td ng-show="user_info.authority == 'sysowner'" >{{list.team_name}}</td>-->
                                 <td>{{list.user_name}}</td>
                                 <td>{{list.user_id}}</td>
                                 <td>{{list.cnt}}개</td>
@@ -196,7 +194,7 @@
         </div> <!--class="col-sm-4"-->
 
         <!-- 대시보드 헬스체크 -->
-        <!--<div class="container-fluid dash-body">
+        <div class="container-fluid dash-body">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="gn-box">
@@ -220,19 +218,20 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr ng-repeat="list in cluster_list" ng-if="list.cluster_info.type == 'scheduler'">
                                         <td colspan="2">
                                             <div class="">
-                                                <span class="gn-dot-play"></span>
-                                                <span>Scheduler</span>
+                                                <span class="gn-dot-play" ng-show="list.status == 200"></span>
+                                                <span class="gn-dot-stop" ng-show="list.status != 200"></span>
+                                                <span>{{list.cluster_info.type}}</span>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr ng-repeat="list in cluster_list">
+                                    <tr ng-repeat="list in cluster_list" ng-if="list.cluster_info.type != 'scheduler'">
                                         <td class="col-sm-4">
                                             <div class=" ">
-                                                <span class="gn-dot-play" ng-show="list.status == 0"></span>
-                                                <span class="gn-dot-stop" ng-show="list.status != 0"></span>
+                                                <span class="gn-dot-play" ng-show="list.status == 200"></span>
+                                                <span class="gn-dot-stop" ng-show="list.status != 200"></span>
                                                 <span>{{list.cluster_info.type}}</span>
                                                 <p class="gn-write">{{list.cluster_info.ip}}</p>
                                             </div>
@@ -258,7 +257,6 @@
 
 
             </div>
--->
 
         </div> <!-- class="container-fluid dash-body"  -->
 

@@ -35,7 +35,7 @@ def monitor():
 
 @app.before_request
 def before_request():
-    if ('userId' not in session) and request.path != '/monitor':
+    if ('userId' not in session) and request.path != '/monitor' and request.path != '/service/isAlive':
         return make_response(jsonify(status=False),401)
 
 
@@ -123,6 +123,11 @@ def download_sshKey(id):
 def cronMnitor():
     server_monitor(db_session)
     return jsonify(status=True, message="success")
+
+@app.route('/service/isAlive', methods=['GET'])
+def cluster_healthCheck():
+    return jsonify(status=True, message="success")
+
 
 #### rest end ####
 
