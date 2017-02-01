@@ -135,7 +135,7 @@ def doc_create(id,sql_session):
             else:
                 logger.error('invalid price_type : system_setting.billing_type %s' % system_setting.billing_type)
 
-            insert_instance_status = GnInstanceStatus(vm_id=docker_info.id, create_time=now_time, delete_time=None
+            insert_instance_status = GnInstanceStatus(vm_id=docker_info.id,vm_name=docker_info.name, create_time=now_time, delete_time=None
                                                       , author_id=docker_info.author_id, team_code=docker_info.team_code
                                                       , price=instance_status_price,price_type=system_setting.billing_type
                                                       , cpu=docker_info.cpu, memory=docker_info.memory,disk=docker_info.disk)
