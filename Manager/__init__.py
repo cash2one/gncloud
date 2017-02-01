@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
 import traceback
 
 from datetime import timedelta
@@ -402,7 +401,7 @@ def changeteamnamesystem(code):
     team_memory = request.json['mem']
     team_disk = request.json['disk']
     list=select_putsys(team_name,code,team_cpu, team_memory, team_disk)
-    if(list == 'True'):
+    if(list == True):
         return jsonify(status=True, message="success")
     else:
         return jsonify(status=False)
