@@ -914,10 +914,13 @@ a.log-join-btn:focus{
     padding-bottom: 10px;
 }
 
+<<<<<<< HEAD
+=======
 /*.dash-body > .row > .col-sm-4{
     padding: 0;
 }*/
 
+>>>>>>> 44032dc095152d02b80c4ea552230513b878b430
 .dash-body > .row > div{
     padding: 0;
 }
@@ -1050,6 +1053,35 @@ a.log-join-btn:focus{
     font-weight: 600;
 }
  
+/*대시보드 헬스체크*/
+.gn-health-check div,
+.gn-health-check ul{display: table; margin: auto;}
+.gn-health-check span{
+    font-size: 16px;
+    color: #505050;
+    line-height: 35px;
+    margin-right: 10px;
+}
+.gn-health-check ul{
+    padding: 0;
+}
+.gn-health-check ul li{
+    line-height: 35px;
+    text-align: left;
+}
+.gn-health-check tr td{
+    border: 2px dashed rgba(215,215,215,.5) ; 
+    vertical-align: middle !important;
+}
+.gn-health-check th{border-bottom:  2px dashed rgba(215,215,215,.5) !important;}
+.gn-health-check .gn-write{
+    font-size: 14px; 
+    display: inline-block; 
+    margin-bottom: 0; 
+    background-color: rgba(238,238,238,50); 
+    padding: 2px;
+    border-radius: 3px;}
+
 /*대시보드 헬스체크*/
 .gn-health-check div,
 .gn-health-check ul{display: table; margin: auto;}
@@ -1788,7 +1820,10 @@ ul.gn-sett-graph > li:nth-of-type(3){
 .gn-sys-sett form .list-inline{margin-left: 0;}
 
 .gn-sys-sett input[type=text]{padding-left: 10px;}
+<<<<<<< HEAD
+=======
 
+>>>>>>> 44032dc095152d02b80c4ea552230513b878b430
 
 /* ================================================= 반응형 ================================================= */
 /* 세로 방향 타블렛부터 가로 방향 타블렛과 데스크탑까지 */
