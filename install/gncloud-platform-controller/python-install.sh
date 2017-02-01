@@ -22,4 +22,5 @@ pip install humanfriendly
 pip install logger
 yum -y install uwsgi-plugin-python
 pip install --upgrade Flask-SQLAlchemy
+yum -y install python-dateutil
 

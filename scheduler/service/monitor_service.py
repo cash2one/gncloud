@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-from apscheduler.executors.pool import ProcessPoolExecutor
+from datetime import *
+from flask import jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.executors.pool import ProcessPoolExecutor
 
-from scheduler.db.models import *
-from scheduler.db.models import GnCluster
+from db.models import *
+from db.models import GnCluster
+from util.config import config
 
 __author__ = 'nhcho'
 
@@ -18,6 +21,7 @@ class Monitoring:
 
     def run(self):
         sql_session = self.sql_session
+        self.period = self.get_monitoring_period()
 
         executors = {
             'default': {'type': 'threadpool', 'max_workers': 20},
@@ -39,7 +43,7 @@ class Monitoring:
                 hyperv_url = 'http://%s/monitor' % (str(cluster.ip))
                 self.scheduler.add_job(lambda : self.hyperv_monitor(hyperv_url), trigger='interval', seconds=int(self.period))
             else:
-                print 'type is error = %s' % cluster.type
+                print 'type = %s is not scheduling' % cluster.type
         self.scheduler.start()
         sql_session.commit()
 
@@ -48,6 +52,20 @@ class Monitoring:
 
     def shutdown(self):
         self.scheduler.shutdown()
+
+    def get_monitoring_period(self):
+        period = config.MONITOR_CYCLE_SEC
+        sql_session = self.sql_session
+
+        try:
+            get_val= sql_session.query(GnSystemSetting).all()
+            for first in get_val:
+                period = first.monitor_period
+                break
+            sql_session.commit()
+        except Exception as message:
+            print (message)
+        return period
 
     def hyperv_monitor(self, hyperv_url):
         try:
@@ -81,3 +99,8 @@ class Monitoring:
         insert_alert = GnAlert(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), type, sub_type, status, msg)
         sql_session.add(insert_alert)
         sql_session.commit()
+
+    def restart_monitor(self):
+        self.shutdown()
+        self.run()
+        return jsonify(status=True, message='success changing monitoring')
