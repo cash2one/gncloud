@@ -36,7 +36,8 @@ angular
                         }else{
                             $scope.day = data.list.backup_week;
                         }
-
+                        $("#day").val($scope.day);
+                        $("#monitor").val($scope.monitor);
                     } else {
                         if (data.message != null) {
                             alert(data.message);

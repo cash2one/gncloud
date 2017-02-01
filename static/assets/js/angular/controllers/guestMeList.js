@@ -13,6 +13,9 @@ angular
         $("#team-reso").hide();
         $("#team-group").hide();
         $("#price").hide();
+        $scope.close=function () {
+            $(':input').val('');
+        }
         $scope.profile=function(){
             $http({
                 method: 'GET',

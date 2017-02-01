@@ -12,7 +12,7 @@
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header gn-modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
                             <h4 class="modal-title">이름 수정</h4>
                         </div>
                         <form name="vm_nameForm" ng-submit="submitForm(vm_nameForm.$valid)" novalidate>
@@ -65,7 +65,7 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header gn-modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
                     <h4 class="modal-title">태그 수정</h4>
                     <span class="gn-lead">태그와 태그는 쉼표로 구분됩니다.</span>
                 </div>
@@ -89,7 +89,7 @@
     <div class="gn-margin-box">
         <dl class="dl-horizontal gn-description-list">
             <h2>정보</h2>
-            <dt>IP</dt>
+            <dt>아이피주소</dt>
             <dd><span ng-bind="vm_data.ip"></span></dd>
             <dt>운영체제</dt>
             <dd><spna ng-bind="vm_data.os"></spna></dd>
@@ -159,7 +159,7 @@
         <label class="gn-lead">백업주기는 시스템 관리자가 설정합니다.</label>
         <div class="checkbox-switch" style="float:right;">
             <form>
-                <switch id="data.backup" name="data.backup" ng-model="vm_data.backup_comfirm" on="On" off="Off" class="green" ng-change="backupchange(vm_data.backup_confirm)" ></switch>
+                <switch id="data.backup" name="data.backup" ng-model="vm_data.backup_comfirm" on="ON" off="OFF" class="wide" ng-change="backupchange(vm_data.backup_confirm)" ></switch>
 
             </form>
         </div>
