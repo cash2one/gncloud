@@ -1258,9 +1258,12 @@ def healthcheck_info(team_code,sql_session):
     result_list = []
     for e in cluster_list:
         host_list = []
-        URL = 'http://'+e.ip+"/service/isAlive"
-        response = requests.get(URL)
-        response_cluster = response.status_code
+        try:
+            URL = 'http://'+e.ip+"/service/isAlive"
+            response = requests.get(URL)
+            response_cluster = response.status_code
+        except:
+            response_cluster = 0
 
         for host in e.gnHostMachines:
             if e.gnHostMachines:
