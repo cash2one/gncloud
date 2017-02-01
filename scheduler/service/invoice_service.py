@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 import calendar
-from datetime import *
-from flask import jsonify
-from dateutil.relativedelta import relativedelta
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.executors.pool import ProcessPoolExecutor
-from sqlalchemy import or_
+import sys
 
+from apscheduler.executors.pool import ProcessPoolExecutor
+from apscheduler.schedulers.background import BackgroundScheduler
+from dateutil.relativedelta import relativedelta
 from db.models import *
-from db.models import GnInstanceStatus, GnUsers, GnTeam
+from db.models import GnInstanceStatus
+from flask import jsonify
+from sqlalchemy import or_
 from util.config import config
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 __author__ = 'nhcho'
 
@@ -107,8 +109,8 @@ class Invoice:
                 one_vm_price = day_hour_count * stat.price
                 total_price += one_vm_price
 
-                instance = ' {"vm_id":"%s", "price_type": "%s", "unit_price":"%s", "used":"%d", "total_price":"%d"} ' \
-                           %(stat.vm_id, stat.price_type, stat.price, day_hour_count, one_vm_price)
+                instance = ' {"vm_id":"%s","vm_name":"%s" ,"price_type": "%s", "unit_price":"%s", "used":"%d", "total_price":"%d"} ' \
+                           %(stat.vm_id,stat.vm_name ,stat.price_type, stat.price, day_hour_count, one_vm_price)
 
                 if author_id != stat.author_id and author_id is not None:
                     author_text = '{"user_id": "%s", "instance_list": [%s] }' % (author_id, instance_list)
