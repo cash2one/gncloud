@@ -24,6 +24,9 @@ def index():
 def invoice_calc_force():
     return app.ScheduleController.invoice.invoice_calc()
 
+@app.route('/service/isAlive', methods=['GET'])
+def cluster_healthCheck():
+    return jsonify(status=True, message="success")
 
 
 if __name__ == '__main__':
