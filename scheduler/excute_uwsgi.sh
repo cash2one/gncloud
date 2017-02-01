@@ -1,1 +1,1 @@
-nohup uwsgi --http-socket :8084 --plugin python --wsgi-file __init__.py --logto scheduler.log --callable app &
+nohup uwsgi --http-socket :8084 --plugin python --wsgi-file __init__.py --logto scheduler.log --callable app --enable-threads &
