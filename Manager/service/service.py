@@ -1256,14 +1256,15 @@ def healthcheck_info(team_code,sql_session):
     cluster_list = sql_session.query(GnCluster).filter(GnCluster.status != 'Removed')
     result_list = []
     for e in cluster_list:
-        e.append = "1"
         host_list = []
+        ipArr = e.ip.split(':')
+        response_cluster = os.system("ping -c 1 -p " + ipArr[1]+" "+ipArr[0])
         for host in e.gnHostMachines:
             if e.gnHostMachines:
-                response = os.system("ping -c 1 " + host.ip)
-                host_list.append({"host_check":response,"host_ip":host.ip})
+                response_host = os.system("ping -c 1 " + host.ip)
+                host_list.append({"host_check":response_host,"host_ip":host.ip})
 
-        result_list.append({"cluster_info":e,"host_list":host_list})
+        result_list.append({"cluster_info":e,"status":response_cluster,"host_list":host_list})
 
     return result_list
 

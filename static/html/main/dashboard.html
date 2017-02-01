@@ -196,7 +196,7 @@
         </div> <!--class="col-sm-4"-->
 
         <!-- 대시보드 헬스체크 -->
-        <div class="container-fluid dash-body" style="display:none;">
+        <!--<div class="container-fluid dash-body">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="gn-box">
@@ -231,7 +231,8 @@
                                     <tr ng-repeat="list in cluster_list">
                                         <td class="col-sm-4">
                                             <div class=" ">
-                                                <span class="gn-dot-play"></span>
+                                                <span class="gn-dot-play" ng-show="list.status == 0"></span>
+                                                <span class="gn-dot-stop" ng-show="list.status != 0"></span>
                                                 <span>{{list.cluster_info.type}}</span>
                                                 <p class="gn-write">{{list.cluster_info.ip}}</p>
                                             </div>
@@ -249,15 +250,17 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div> <!--class="table-responsive gn-table-responsive"  -->
+                            </div>
 
-                        </div> <!--class="dash-margin-box"-->
-                    </div>  <!--class="gn-box"-->
-                </div> <!--class="gn-box"-->
+                        </div>
+                    </div>
+                </div>
 
 
-            </div> <!--class="row"-->
-</div> <!-- class="container-fluid dash-body"  -->
+            </div>
+-->
+
+        </div> <!-- class="container-fluid dash-body"  -->
 
 
 
