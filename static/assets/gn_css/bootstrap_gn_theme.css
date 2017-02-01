@@ -69,7 +69,8 @@ li{
 .container-fluid:after,
 .container-login:after,
 .sett-detail:after,
-.gn-container:after
+.gn-container:after,
+.gn-select-error:after
 { content:""; clear:both; display:block; }
 
 .logo h1{
@@ -149,7 +150,7 @@ textarea.gn-form-control{
 }
 
 .gn-description-list{
-    font-size: 16px;
+    font-size: 15px;
 }  
 .gn-description-list dt{
     width: 70px;
@@ -494,12 +495,13 @@ li.nav-link.active>a:hover,
     text-align: center;
     font-size: 14px;
     border: none;
+    border-bottom: 2px solid rgba(215,215,215,.5);
 }
 
 .gn-table-responsive > .gn-table tbody tr td{
     text-align: center;
     font-size: 14px;
-    border-top: 2px solid rgba(215,215,215,.5);
+    border-bottom: 1px solid rgba(215,215,215,.5);
     height: 70px;
     vertical-align: middle;
 }
@@ -518,9 +520,9 @@ li.nav-link.active>a:hover,
 
 .tag{
     padding: 2px;
+    border-radius: 3px;
     background-color: rgba(238,238,238,50);
     color: #58c4c6;
-    border-radius: 3px;
     margin-right: 5px;
 }
 
@@ -647,7 +649,7 @@ li.nav-link.active>a:hover,
 .gn-table-responsive > .gn-board-table thead tr th{
     text-align: center;
     font-size: 14px;
-    border: none;
+    /*border: none;*/
     border-bottom: 2px solid rgba(215,215,215,.5);
 }
 .gn-table-responsive > .gn-board-table tbody tr td{
@@ -667,7 +669,7 @@ li.nav-link.active>a:hover,
 /*#modal-board > .modal-dialog,
 #modi-write > .modal-dialog{width: 800px;}*/
 
-#modal-board p{border-bottom: 2px solid rgba(215,215,215,0.5); padding-bottom: 10px;}
+#modal-board p{border-bottom: 1px solid rgba(215,215,215,0.5); padding-bottom: 10px;}
 /*모달창*/
 .gn-write{font-weight: 200; color: #7d7d7d; line-height: 1.5;}
 #modal-board .gn-modal-footer{padding-top: 0;}
@@ -683,7 +685,7 @@ li.nav-link.active>a:hover,
 
 h2 > .pull-right{margin-top: -6px;}
 
-.gn-comment{padding: 20px !important; background-color: #f8f8f8;}
+.gn-comment{padding: 20px 15px !important; background-color: #f8f8f8;}
 
 .gn-answer span,.gn-comment span{padding-right: 0; padding-left: 0;}
 
@@ -882,28 +884,6 @@ a.log-join-btn:focus{
     font-weight: 400;
 }
 
-/*대시보드 헬스체크*/
-.gn-health-check span.gn-health-name{
-    font-size: 16px;
-    color: #505050;
-    display: table;
-    line-height: 35px;
-}
-.gn-health-check span{
-    display: inline-block;
-}
-
-.gn-health-check ul li{
-    line-height: 35px;
-    text-align: left;
-}
-
-.gn-health-check .gn-dot-play{
-    margin-right: 10px;
-}
-
-.gn-health-name.center-block{width: 92px;}
-
 /* ========== gncloud 대시보드 HTML ========== */
 /*대시보드 TABLE STYLE*/
 .table-dash thead tr th{
@@ -921,14 +901,6 @@ a.log-join-btn:focus{
     vertical-align: middle;
 }
 
-.table-dash tbody tr:nth-of-type(odd){
-    background-color: transparent;
-} 
-
-.table-dash tbody.gn-tdody tr td:nth-of-type(1){
-    text-align: left;
-} 
-
 .gn-table-responsive{
     height: auto;
     overflow-x: visible;
@@ -942,11 +914,18 @@ a.log-join-btn:focus{
     padding-bottom: 10px;
 }
 
-.dash-body > .row > .col-sm-4{
+<<<<<<< HEAD
+=======
+/*.dash-body > .row > .col-sm-4{
+    padding: 0;
+}*/
+
+>>>>>>> 44032dc095152d02b80c4ea552230513b878b430
+.dash-body > .row > div{
     padding: 0;
 }
 
-.dash-body > .row > .col-sm-4 > .gn-box{
+.dash-body > .row .gn-box{
     margin-left: 7.5px;
     margin-right: 7.5px;
     margin-bottom: 10px;
@@ -970,65 +949,41 @@ a.log-join-btn:focus{
     content:""; clear:both; display:block; 
 }
 
-.dash-margin-box .table-dash{
-    margin-bottom: 0;
-}
+.dash-margin-box .table-dash{margin-bottom: 0;}
 
-.dash-margin-box .table-responsive{
-    padding: 0px 15px;
-}
+.dash-margin-box .table-responsive{padding: 0px 15px;}
 
 /*박스 왼쪽*/
-.dash-margin-box > div.col-sm-6:nth-of-type(1){
-    border-right: 2px solid rgba(215,215,215,.5);    
-}
+.dash-margin-box > .gn-dash-graph-box{border-right: 2px solid rgba(215,215,215,.5);}
 
-.dash-margin-box > div.col-sm-6:nth-of-type(1) img{
-    /*max-width: 155px;*/
-    width: 100%;
-}
+.dash-margin-box > .gn-dash-graph-box img{width: 100%;}
 
 /*박스 오른쪽*/
-.dash-margin-box > div.col-sm-6:nth-of-type(2) > div:nth-of-type(1){
+.dash-margin-box .gn-dash-per{
     font-size: 40px; 
     font-weight: 600;
     letter-spacing: 2px;
 }
 
-.dash-margin-box > div.col-sm-6:nth-of-type(2) > div:nth-of-type(2){
+.dash-margin-box > div.col-sm-6 p{
     font-size: 24px;
     font-weight: 400;  
     margin-bottom: 10px;
 }
 
-.dash-margin-box > div.col-sm-6:nth-of-type(2) > div:nth-of-type(3){
-    font-size: 16px;
-    font-weight: 400;    
-}
+.dash-margin-box > div{font-size: 16px; font-weight: 400;}
 
-.cpu-color{
-   color: #FFA716; 
-}
+.cpu-color{color: #FFA716;}
 
-.memo-color{
-    color: #53C8AD;
-}
+.memo-color{color: #53C8AD;}
 
-.disk-color{
-    color: #57A1F6;
-}
+.disk-color{color: #57A1F6;}
 
-.vm-color{
-    color: #E27560;
-}
+.vm-color{color: #E27560;}
 
-.hyp-color{
-    color: #3B5C91;
-}
+.hyp-color{color: #3B5C91;}
 
-.on-color{
-   color: #FFA716;    
-}
+.on-color{color: #FFA716;}
 
 /*가상머신 개수*/
 .gn-dash-vm-right{  
@@ -1038,7 +993,7 @@ a.log-join-btn:focus{
     clear: both;
 }
 .gn-dash-vm-right ul li{
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     display: block;
     margin: auto;  
@@ -1062,6 +1017,7 @@ a.log-join-btn:focus{
     padding: 0;
     margin: auto;
     display: inline-block;
+    margin-top: 5px;
 }
 
 /*하이퍼 바이저 종류*/
@@ -1070,10 +1026,7 @@ a.log-join-btn:focus{
     margin: 10px 0;
 }
 
-.gn-dash-hyp-right ul li{
-    font-size: 16px;
-    
-}
+.gn-dash-hyp-right ul li{font-size: 16px;}
 
 .gn-dash-hyp-right ul li.memo-color,
 .gn-dash-hyp-right ul li.hyp-color{
@@ -1083,12 +1036,9 @@ a.log-join-btn:focus{
 
 /*컨테이너 개수/총 사용자*/
 /*박스 왼쪽*/
-.dash-box-6{
-    position: relative;     
-}
+.dash-box-6{position: relative;}
 
 .dash-box-6 img{
-    /*height: 142px;*/
     max-height: 100%;
     max-width: 100%;
 }
@@ -1102,6 +1052,64 @@ a.log-join-btn:focus{
     font-size: 40px;
     font-weight: 600;
 }
+ 
+/*대시보드 헬스체크*/
+.gn-health-check div,
+.gn-health-check ul{display: table; margin: auto;}
+.gn-health-check span{
+    font-size: 16px;
+    color: #505050;
+    line-height: 35px;
+    margin-right: 10px;
+}
+.gn-health-check ul{
+    padding: 0;
+}
+.gn-health-check ul li{
+    line-height: 35px;
+    text-align: left;
+}
+.gn-health-check tr td{
+    border: 2px dashed rgba(215,215,215,.5) ; 
+    vertical-align: middle !important;
+}
+.gn-health-check th{border-bottom:  2px dashed rgba(215,215,215,.5) !important;}
+.gn-health-check .gn-write{
+    font-size: 14px; 
+    display: inline-block; 
+    margin-bottom: 0; 
+    background-color: rgba(238,238,238,50); 
+    padding: 2px;
+    border-radius: 3px;}
+
+/*대시보드 헬스체크*/
+.gn-health-check div,
+.gn-health-check ul{display: table; margin: auto;}
+.gn-health-check span{
+    font-size: 16px;
+    color: #505050;
+    line-height: 35px;
+    margin-right: 10px;
+}
+.gn-health-check ul{
+    padding: 0;
+}
+.gn-health-check ul li{
+    line-height: 35px;
+    text-align: left;
+}
+.gn-health-check tr td{
+    border: 2px dashed rgba(215,215,215,.5) ; 
+    vertical-align: middle !important;
+}
+.gn-health-check th{border-bottom:  2px dashed rgba(215,215,215,.5) !important;}
+.gn-health-check .gn-write{
+    font-size: 14px; 
+    display: inline-block; 
+    margin-bottom: 0; 
+    background-color: rgba(238,238,238,50); 
+    padding: 2px;
+    border-radius: 3px;}
 
 /* ========== gncloud 인스턴스 > 리스트 HTML ========== */
 .first-td{
@@ -1109,8 +1117,8 @@ a.log-join-btn:focus{
     text-align: left;
 }
 
-.gn-table-responsive > .gn-table tbody tr td.second-td-name{
-    text-align: left;
+.second-td-name{
+    text-align: left !important;
 }
 
 .gn-tdody > tr > td.visible-xs-3 > a{
@@ -1139,15 +1147,15 @@ a.log-join-btn:focus{
     width: 20px;
     height: 35px;
     float: left;
-    margin-right: 10px;    
+    margin-right: 5px;    
 }
 
 .gn-dot-suspend{
     background: url(../gn_images/gn_dot_suspend.png) no-repeat;
-    width: 20px;
+    width: 15px;
     height: 35px;
     float: left;
-    margin-right: 10px;    
+    margin-right: 5px;    
 }
 
 .gn-working{
@@ -1186,10 +1194,6 @@ a.log-join-btn:focus{
     font-size: 16px;
     font-weight: 300;
     margin: 0 px 3px;
-}
-
-ul.gn-tag-group{
-        
 }
 
 ul.gn-tag-group > li:nth-of-type(1){
@@ -1263,90 +1267,6 @@ ul.gn-tag-group > li{
     margin-bottom: 30px;
 }
 
-/*상세 백업 SWITCH STYLE*/
-.switch {
-  background: #fff;
-  border: 1px solid #dfdfdf;
-  position: relative;
-  display: inline-block;
-  box-sizing: content-box;
-  overflow: visible;
-  width: 52px;
-  height: 30px;
-  padding: 0px;
-  margin: 0px;
-  border-radius: 20px;
-  cursor: pointer;
-  box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
-  transition: 0.3s ease-out all;
-  -webkit-transition: 0.3s ease-out all;
-  top: -1px;
-}
-/*adding a wide width for larger switch text*/
-.switch.wide {
-  width:80px;
-}
-.switch small {
-  background: #fff;
-  border-radius: 100%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  transition: 0.3s ease-out all;
-  -webkit-transition: 0.3s ease-out all;
-}
-.switch.checked {
-  background: rgb(100, 189, 99);
-  border-color: rgb(100, 189, 99);
-}
-.switch.checked small {
-  left: 22px;
-}
-/*wider switch text moves small further to the right*/
-.switch.wide.checked small {
-  left:52px;
-}
-/*styles for switch-text*/
-.switch .switch-text {
-  font-family:Arial, Helvetica, sans-serif;
-  font-size:13px;
-}
-
-.switch .off {
-  display:block;
-  position: absolute;
-  right: 10%;
-  top: 25%;
-  z-index: 0;
-  color:#A9A9A9;
-}
-
-.switch .on {
-  display:none;
-   z-index: 0;
-  color:#fff;
-  position: absolute;
-  top: 25%;
-  left: 9%;
-}
-
-.switch.checked .off {
-  display:none;
-}
-
-.switch.checked .on {
-  display:block;
-
-}
-
-.switch.disabled {
-  opacity: .50;
-  cursor: not-allowed;
-}
-/*상세 백업 SWITCH STYLE end*/
 
 .gn-detail-main > .gn-margin-box > .gn-description-list dt{
     width: 110px;
@@ -1700,8 +1620,8 @@ ul.gn-sett-graph > li:nth-of-type(3){
 .sett-detail dt{text-align: right; width: 77px;}
 .sett-detail dd{margin-left: 32px; width: 50px;}
 .gn-description-list.sett-detail > div{padding: 2px 0; margin-left: 5px;}
-.gn-description-list.sett-detail > div > span{margin-right: 41px;}
-.gn-description-list.sett-detail > div > span.sett-detail-span{width: 63px; margin-right: 5px;}
+.gn-description-list.sett-detail > div > span{margin-right: 35px;}
+.gn-description-list.sett-detail > div > span.sett-detail-span{width: 63px; margin-right: 5px; text-align: right;}
 .gn-description-list.sett-detail > div > input{width: 120px;  margin: 0px 5px; float: right;} 
 
 /*시스템 > 이미지 관리*/
@@ -1875,6 +1795,35 @@ ul.gn-sett-graph > li:nth-of-type(3){
     border: 0;
 }
 
+/*리소스단위설정*/
+.price-mod form span{line-height: 37px;}
+
+/*장애현황*/
+.gn-total-error div{padding-right: 5px; padding-left: 5px;}
+.gn-total-error > div > div > div{margin: 10px;}
+.gn-total-error span{color: #aaaaaa;}
+
+.gn-select-error .pull-right{line-height: 37px; display: flex; padding: 0;}
+.gn-select-error span{margin: 0px 10px;}
+.gn-select-error input{margin-top: 11px}
+.gn-select-error p{margin-right: 10px;}
+
+/*시스템관리자 > 설정*/
+.gn-sys-sett input[type=radio]{margin-right: 10px;}
+
+.gn-sys-sett .list-inline{/*margin-left: 20px;*/ margin-top: 5px;}
+.gn-sys-sett .list-inline span{margin-left: 10px;}
+
+.gn-sys-sett label{margin-right: 10px; font-weight: 200;}
+.gn-sys-sett label input[type=checkbox]{margin-right: 5px;}
+
+.gn-sys-sett form .list-inline{margin-left: 0;}
+
+.gn-sys-sett input[type=text]{padding-left: 10px;}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 44032dc095152d02b80c4ea552230513b878b430
 
 /* ================================================= 반응형 ================================================= */
 /* 세로 방향 타블렛부터 가로 방향 타블렛과 데스크탑까지 */
@@ -2083,6 +2032,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
     .form-group > .col-sm-8 > .form-control{
         margin-bottom: 10px;
     }    
+
     
 }
 
