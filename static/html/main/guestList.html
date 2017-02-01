@@ -19,8 +19,8 @@
                     <th class="hidden-xs">사양</th>
                     <th class="hidden-sm hidden-xs">타입</th>
                     <th class="hidden-md hidden-sm hidden-xs">IP</th>
-                    <th class="hidden-xs" ng-show="user_info.authority == 'sysowner'" >팀</th>
-                    <th class="hidden-xs">소유자</th>
+                    <th class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >팀</th>
+                    <th class="hidden-md hidden-sm hidden-xs">소유자</th>
                     <th class="hidden-md hidden-sm hidden-xs">생성일
                         <div class="refresh" ng-click="refresh()"></div>
                     </th>
@@ -41,7 +41,7 @@
                 <td class="visible-xs-3 second-td-name">
                     <a href="#/guestDetail?id={{list.id}}" class="gn-table-ellip"> {{ list.name }} </a>
                 </td>
-                <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }} /{{ list.disk }} Disk</td>
+                <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }}/{{ list.disk }} Disk</td>
                 <td class="hidden-sm hidden-xs">{{ list.type }}</td>
                 <td class="hidden-md hidden-sm hidden-xs">{{ list.ip }}</td>
                 <td class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >{{ list.gnTeam.team_name }}</td>
