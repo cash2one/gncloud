@@ -63,7 +63,6 @@ angular
                     if (data.status == true) {
                         alert("저장되었습니다.");
                         $scope.List();
-                        window.location.reload();
 
                     } else {
                         if (data.message != null) {
@@ -87,7 +86,6 @@ angular
                     if (data.status == true) {
                         alert("저장되었습니다.");
                         $scope.List();
-                        window.location.reload();
 
                     } else {
                         if (data.message != null) {
@@ -119,7 +117,6 @@ angular
                     if (data.status == true) {
                         alert("저장되었습니다.");
                         $scope.List();
-                        window.location.reload();
 
                     } else {
                         if (data.message != null) {
