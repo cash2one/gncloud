@@ -6,6 +6,7 @@ import os
 import subprocess
 import requests
 import humanfriendly
+from flask import json
 from flask import render_template
 from sqlalchemy import func
 from pexpect import pxssh
@@ -1294,8 +1295,10 @@ def team_price_lsit(team_code,sql_session):
 def team_price_lsit_info(year,month,team_code,sql_session):
     list = sql_session.query(GnInvoiceResult).filter(GnInvoiceResult.year==year).filter(GnInvoiceResult.month == month)\
                                             .filter(GnInvoiceResult.team_code==team_code).one()
-    # instance=json.loads(list.invoice_data)
-    # team = sql_session.query(GnTeam).filter(GnTeam.team_code == instance.team).one()
-    # instance.team = team.team_name
-    # vm = sql_session.query(GnVmMachines)
-    # return {"list":list, "instance":}
+    instance=json.loads(list.invoice_data)
+    for inst in instance.each_user:
+        name =sql_session.query(GnVmMachines).filter(GnVmMachines.id ==inst.instance_list.vm_id).one()
+        inst.instance_list.vm_id = name.vm_name
+    team = sql_session.query(GnTeam).filter(GnTeam.team_code == instance.team).one()
+    instance.team = team.team_name
+    return {"list":list, "instance":instance}

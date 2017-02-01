@@ -2,9 +2,8 @@
 __author__ = 'nhcho'
 
 import datetime
-from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Numeric, BigInteger
-
 from db.database import Base
+from sqlalchemy import Column, Integer, String, DateTime, Numeric
 
 
 class GnCluster(Base):
@@ -191,3 +190,62 @@ class GnAlert(Base):
     def __repr__(self):
         return "<GnAlert(create_time='%r', type='%r', sub_type='%r', status='%r', description='%r')>" \
             % (self.create_time, self.type, self.sub_type, self.status, self.description)
+
+
+class GnVmMachines(Base):
+    __tablename__ = 'GN_VM_MACHINES'
+    id = Column(String(30), primary_key=True, nullable=False)
+    name = Column(String(50), primary_key=True, nullable=False)
+    type = Column(String(50), primary_key=False, nullable=False)
+    internal_id = Column(String(100), primary_key=False, nullable=False)
+    internal_name = Column(String(100), primary_key=False, nullable=False)
+    cpu = Column(Integer, primary_key=False, nullable=False)
+    memory = Column(Integer, primary_key=False, nullable=False)
+    disk = Column(Integer, primary_key=False, nullable=False)
+    ip = Column(String(20), primary_key=False, nullable=False)
+    host_id = Column(String(8), primary_key=False, nullable=False)
+    os = Column(String(10), primary_key=False, nullable=True)
+    os_ver = Column(String(20), primary_key=False, nullable=True)
+    os_sub_ver = Column(String(20), primary_key=False, nullable=True)
+    os_bit = Column(String(2), primary_key=False, nullable=True)
+    team_code = Column(String(50), primary_key=False, nullable=False)
+    author_id = Column(String(15), primary_key=False, nullable=False)
+    create_time = Column(DateTime, default=datetime.datetime.now())
+    start_time = Column(DateTime, default=datetime.datetime.now())
+    stop_time = Column(DateTime, default=datetime.datetime.now())
+    status = Column(String(10), primary_key=False, nullable=False)
+    tag = Column(String(100), primary_key=False, nullable=False)
+    image_id = Column(String(8), primary_key=False, nullable=False)
+    ssh_key_id = Column(Integer, primary_key=False, nullable=False)
+    hyperv_pass= Column(String(50), primary_key=False, nullable=False)
+    backup_confirm =Column(String(5), primary_key=False, nullable=False)
+    size_id = Column(String(8), primary_key=False, nullable=False)
+
+    def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None
+                 , cpu=None, memory=None, disk=None, ip=None, host_id=None
+                 , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
+                 , author_id=None, status=None, tag=None, image_id=None, ssh_key_id=None, hyperv_pass=None, create_time=None, backup_confirm=None, size_id=None):
+        self.id = id
+        self.name = name
+        self.type = type
+        self.internal_id = internal_id
+        self.internal_name = internal_name
+        self.cpu = cpu
+        self.memory = memory
+        self.disk = disk
+        self.ip = ip
+        self.host_id = host_id
+        self.os = os
+        self.os_ver = os_ver
+        self.os_sub_ver = os_sub_ver
+        self.os_bit = os_bit
+        self.team_code = team_code
+        self.author_id = author_id
+        self.status = status
+        self.tag = tag
+        self.image_id = image_id
+        self.ssh_key_id = ssh_key_id
+        self.hyperv_pass = hyperv_pass
+        self.create_time = create_time
+        self.backup_confirm = backup_confirm
+        self.size_id = size_id
