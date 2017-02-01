@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from datetime import *
-from db.models import *
-from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ProcessPoolExecutor
-from db.models import GnCluster
+from apscheduler.schedulers.background import BackgroundScheduler
 
+from scheduler.db.models import *
+from scheduler.db.models import GnCluster
 
 __author__ = 'nhcho'
 

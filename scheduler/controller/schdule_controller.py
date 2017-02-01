@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from util.config import config
-from db.database import db_session
-from db.models import GnSystemSetting
-from service.monitor_service import Monitoring
-from service.invoice_service import Invoice
+from scheduler.db.database import db_session
+from scheduler.db.models import GnSystemSetting
+from scheduler.service.invoice_service import Invoice
+from scheduler.service.monitor_service import Monitoring
+from scheduler.util.config import config
 
 
 class ScheduleController:
