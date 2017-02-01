@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="modal-body gn-modal-body">
 
-                                    <form class="form-horizontal" name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
+                                    <form class="form-horizontal" id="userForm" name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label gn-control-label">팀 코드</label>
                                             <div class="col-sm-9">
@@ -41,7 +41,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label gn-control-label">팀명</label>
                                             <div class="col-sm-9" ng-class="{ 'has-error' : userForm.team_name.$invalid && !userForm.team_name.$pristine }">
-                                                <input type="text" class="form-control gn-form-control" name="team_name" ng-model="data.team_name" placeholder="{{teamname.team_name}}" ng-pattern="/^[가-힣0-9]+$/" ng-keyup="keyup()" required>
+                                                <input type="text" class="form-control gn-form-control" id="team_name" name="team_name" ng-model="data.team_name" placeholder="{{teamname.team_name}}" ng-pattern="/^[가-힣0-9]+$/" ng-keyup="keyup()" required>
                                                 <p ng-show="userForm.team_name.$invalid && !userForm.team_name.$pristine" class="help-block">한글과 숫자만 사용할수 있습니다.</p>
                                             </div>
                                         </div>
@@ -54,7 +54,7 @@
                                           <div>
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.cpu_use_cnt}} / </span>
-                                              <input type="text" ng-model="data.cpu" class="form-control gn-form-control" placeholder="{{total.cpu_total_cnt}}CORE">
+                                              <input type="text" ng-model="data.cpu" id="cpu" class="form-control gn-form-control" placeholder="{{total.cpu_total_cnt}}CORE">
 
                                           </div>  
                                           
@@ -63,14 +63,14 @@
                                           <div>
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.mem_use_cnt}} / </span>
-                                              <input type="text" ng-model="data.mem" class="form-control gn-form-control" placeholder="{{total.mem_total_cnt}}">
+                                              <input type="text" ng-model="data.mem" id="mem" class="form-control gn-form-control" placeholder="{{total.mem_total_cnt}}">
                                           </div>                                                                                  
                                           <dt>DISK</dt>
                                           <dd>{{total.disk_per}}%</dd>
                                           <div>
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.disk_use_cnt}} / </span>
-                                              <input type="text" ng-model="data.disk" class="form-control gn-form-control" placeholder="{{total.disk_total_cnt}}">
+                                              <input type="text" ng-model="data.disk" id="disk" class="form-control gn-form-control" placeholder="{{total.disk_total_cnt}}">
                                           </div>
                                         </dl>                                         
                                         
