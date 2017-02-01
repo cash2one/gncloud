@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('dashboardCtrl', function ($scope, $http, $rootScope) {
+    .controller('dashboardCtrl', function ($scope, $http, $rootScope, $interval) {
         $http({
             method: 'GET',
             url: '/api/manager/useinfo',
@@ -137,7 +137,7 @@ angular
             return config;
         }
 
-        /*$scope.cluster_list = function () {
+        $scope.cluster_list = function () {
             $http({
                 method: 'GET',
                 url: '/api/manager/vm/healthcheck',
@@ -157,6 +157,12 @@ angular
                     console.log(status);
                 });
         }
-        $scope.cluster_list();*/
+
+        $rootScope.$on('init', function () {
+            if($rootScope.user_info.authority == 'sysowner') {
+                $scope.cluster_list();
+                stop = $interval($scope.cluster_list, 60000);
+            }
+        });
 
     });

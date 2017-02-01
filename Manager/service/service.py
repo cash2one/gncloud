@@ -4,11 +4,12 @@ __author__ = 'NaDa'
 
 import os
 import subprocess
-
+import requests
 import humanfriendly
+from flask import json
 from flask import render_template
 from sqlalchemy import func
-
+from pexpect import pxssh
 from Manager.db.database import db_session
 from Manager.db.models import *
 from Manager.util.config import config
@@ -1254,15 +1255,29 @@ def cluster_info(sql_session):
     return {"hyper":hyperv,"kvm":kvm,"docker":docker}
 
 def healthcheck_info(team_code,sql_session):
-    cluster_list = sql_session.query(GnCluster).filter(GnCluster.status != 'Removed')
+    cluster_list = sql_session.query(GnCluster).filter(GnCluster.status != 'Removed').all()
     result_list = []
     for e in cluster_list:
         host_list = []
-        ipArr = e.ip.split(':')
-        response_cluster = os.system("ping -c 1 -p " + ipArr[1]+" "+ipArr[0])
+        try:
+            URL = 'http://'+e.ip+"/service/isAlive"
+            response = requests.get(URL)
+            response_cluster = response.status_code
+        except:
+            response_cluster = 0
+
         for host in e.gnHostMachines:
             if e.gnHostMachines:
-                response_host = os.system("ping -c 1 " + host.ip)
+                if e.type == 'kvm' or e.type == 'docker':
+                    try:
+                        s = pxssh.pxssh(timeout=1)
+                        s.login(host.ip, "root")
+                        response_host = 0
+                    except:
+                        response_host = 1
+                else:
+                    response_host = response_host = os.system("ping -c 1 -p "+ str(host.host_agent_port) +" "+ host.ip)
+
                 host_list.append({"host_check":response_host,"host_ip":host.ip})
 
         result_list.append({"cluster_info":e,"status":response_cluster,"host_list":host_list})
@@ -1280,8 +1295,10 @@ def team_price_lsit(team_code,sql_session):
 def team_price_lsit_info(year,month,team_code,sql_session):
     list = sql_session.query(GnInvoiceResult).filter(GnInvoiceResult.year==year).filter(GnInvoiceResult.month == month)\
                                             .filter(GnInvoiceResult.team_code==team_code).one()
-    # instance=json.loads(list.invoice_data)
-    # team = sql_session.query(GnTeam).filter(GnTeam.team_code == instance.team).one()
-    # instance.team = team.team_name
-    # vm = sql_session.query(GnVmMachines)
-    # return {"list":list, "instance":}
+    instance=json.loads(list.invoice_data)
+    for inst in instance.each_user:
+        name =sql_session.query(GnVmMachines).filter(GnVmMachines.id ==inst.instance_list.vm_id).one()
+        inst.instance_list.vm_id = name.vm_name
+    team = sql_session.query(GnTeam).filter(GnTeam.team_code == instance.team).one()
+    instance.team = team.team_name
+    return {"list":list, "instance":instance}

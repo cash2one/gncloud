@@ -64,7 +64,7 @@ def server_create(team_code, user_id, id, sql_session):
         elif system_setting.billing_type == 'H':
             instance_status_price = vm_size.hour_price
 
-        insert_instance_status = GnInstanceStatus(vm_id=vm_info.id, author_id=vm_info.author_id, team_code=vm_info.team_code
+        insert_instance_status = GnInstanceStatus(vm_id=vm_info.id,vm_name=vm_info.name,author_id=vm_info.author_id, team_code=vm_info.team_code
                                                   , price=instance_status_price,price_type=system_setting.billing_type
                                                   , cpu=vm_info.cpu, memory=vm_info.memory,disk=vm_info.disk)
         sql_session.add(insert_instance_status)

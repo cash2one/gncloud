@@ -21,18 +21,18 @@
                     <table class="table table gn-table">
                         <thead>
                         <tr>
-                            <th class="col-xs-3">OS</th>
-                            <th class="col-sm-2">버전</th>
-                            <th class="col-sm-2 hidden-xs">Bit</th>
-                            <th class="col-sm-2 hidden-xs">타입</th>
+                            <th class="first-td"></th>
+                            <th class="">OS</th>
+                            <th class="">버전</th>
+                            <th class="hidden-xs">Bit</th>
+                            <th class="hidden-xs">타입</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody class="gn-tdody">
                         <tr ng-repeat="base in base_list">
-                            <td>
-                                <img src="/gn_images/gn_icon_{{base.os}}.png" alt="">
-                                {{base.os}}
-                            </td>
+                            <td><img src="/gn_images/gn_icon_{{base.os}}.png" alt=""></td>
+                            <td>{{base.os}}</td>
                             <td>{{base.os_ver}}{{base.os_subver}}</td>
                             <td class="hidden-xs">{{base.os_bit}}</td>
                             <td class="hidden-xs">{{base.type}}</td>
@@ -78,26 +78,27 @@
                     <!--컨테이너 tab-->
                     <div class="table-responsive gn-table-responsive gn-margin-box">
                         <h2>목록</h2>
-                        <table class="table table gn-table">
+                        <table class="table gn-table">
                             <thead>
                             <tr>
-                                <th></th>
+                                <th class="first-td"></th> 
                                 <th class="">이름</th>
-                                <th class="col-sm-2 hidden-xs">OS</th>
-                                <th class="col-sm-2 hidden-sm hidden-xs">타입</th>
-                                <th class="hidden-xs" ng-show="user_info.authority == 'sysowner'" >팀</th>
-                                <th class="col-sm-1 hidden-sm hidden-xs">생성일<div class="refresh" ng-click="refresh()"></div></th>
-                                <th class="col-sm-1"><!--더보기--></th>
+                                <th class="hidden-xs">OS</th>
+                                <th class="hidden-xs">타입</th>
+                                <th class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >팀</th>
+                                <th class="hidden-sm hidden-xs">생성일<div class="refresh" ng-click="refresh()"></div></th>
+                                <th class=""><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody class="gn-tdody">
                             <tr ng-repeat="snap in snap_list" ng-class="{'tr-on-error':snap.status =='Error'}">
-                                <td><img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
+                                <td>
+                                    <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                                     <img ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
                                     <img ng-show="list.status != 'Error'" src="/gn_images/gn_icon_{{snap.os}}.png" alt="">
                                 </td>
-                                <td class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="snap_list_info(snap.id)">
-                                    <a>{{snap.name}}</a>
+                                <td class="second-td-name" data-toggle="modal" data-target="#teamModal" ng-click="snap_list_info(snap.id)">
+                                    <a class="gn-ms-cursor second-td-name">{{snap.name}}</a>
                                 </td>
                                 <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
                                 
@@ -118,6 +119,7 @@
                             </tr>
                             </tbody>
                         </table>
+                        <!--스냅샷 목록 - modal-->
                         <div class="modal fade" id="teamModal" role="dialog">
                             <div class="modal-backdrop fade in" style="height: 3000px;"></div>
                             <div class="modal-dialog form-horizontal">
@@ -133,10 +135,6 @@
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{snapshot.name}}</p>
                                                 </div>
-                                                <!--<label class="col-sm-4 control-label gn-control-label">파일 이름</label>
-                                                <div class="col-sm-8">
-                                                    <p class="form-control-static">{{snapshot.filename}}</p>
-                                                </div>-->
                                                 <label class="col-sm-4 control-label gn-control-label">OS</label>
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{snapshot.os}}</p>
@@ -145,10 +143,6 @@
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{snapshot.os_bit}}</p>
                                                 </div>
-                                                <!--<label class="col-sm-4 control-label gn-control-label">SSH_ID</label>
-                                                <div class="col-sm-8">
-                                                    <p class="form-control-static">{{snapshot.ssh_id}}</p>
-                                                </div>-->
                                                 <label class="col-sm-4 control-label gn-control-label">생성자</label>
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{snapshot.user_name}}</p>
@@ -158,14 +152,14 @@
                                                     <p class="form-control-static">{{snapshot.create_time}}</p>
                                                 </div>
                                                 <label class="col-sm-4 control-label gn-control-label">버전 정보</label>
-                                                <div class="col-sm-8">
-                                                    <p class="form-control-static">
-                                                        <span ng-repeat="item in parent_history">{{parent_history.length - $index}}.
-                                                            <strong ng-show="parent_history.length == $index+1">{{item}}</strong>
-                                                            <span ng-if="parent_history.length != $index+1">{{item}}</span>
-                                                            <br/>
-                                                        </span>
-                                                    </p>
+                                                <div class="col-sm-8 form-control-static">                                             
+                                                    <span ng-repeat="item in parent_history" ng-style="{'margin-left': $index*10}">
+                                                        <i class="xi-subdirectory-arrow" ng-show="$index > 0"></i>
+
+                                                        <strong ng-show="parent_history.length == $index+1">{{item}}</strong>
+                                                        <span ng-if="parent_history.length != $index+1">{{item}}</span>
+                                                        <br/>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </form>
