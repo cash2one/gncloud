@@ -115,6 +115,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data) {
                         $scope.sshkey();
+                        $(':input').val('');
                     }
                     else {
                     }
@@ -225,6 +226,7 @@ angular
                     if (data.status == 2) {
                         alert("변경되었습니다.");
                         $scope.profile();
+                        $(':input').val('');
                     }
                     else if(data.status == 1){
                         alert("비밀번호가 틀렸습니다");
@@ -342,6 +344,7 @@ angular
                     if (data.status == true) {
                         alert("변경되었습니다");
                         $scope.team_profile();
+                        $(':input').val('');
                     }
                     else {
                         if(data.message != null) {
