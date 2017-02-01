@@ -159,10 +159,16 @@ angular
         }
 
         $rootScope.$on('init', function () {
-            if($rootScope.user_info.authority == 'sysowner') {
+            $scope.user_info = $rootScope.user_info;
+            if($scope.user_info.authority == 'sysowner') {
                 $scope.cluster_list();
                 stop = $interval($scope.cluster_list, 60000);
             }
         });
 
+        if($scope.user_info != undefined){
+            if($scope.user_info.authority == 'sysowner') {
+                $scope.cluster_list();
+            }
+        }
     });
