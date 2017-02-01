@@ -13,6 +13,12 @@ class Config:
     LOG_DIR=None
     MONITOR_CYCLE_SEC=None
     INVOICE_VER=None
+    LOCAL_PATH=None
+    NAS_PATH=None
+    MANAGER_PATH=None
+    BACKUP_PATH=None
+    LIVERT_IMAGE_BACKUP_PATH=None
+    LIVERT_IMAGE_LOCAL_PATH=None
 
     def __init__(self, path="../conf/config.conf"):
         # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
@@ -37,6 +43,12 @@ class Config:
         self.LOG_DIR = parser.get(config_section, "LOG_DIR")
         self.MONITOR_CYCLE_SEC = parser.get(config_section, "MONITOR_CYCLE_SEC")
         self.INVOICE_VER = parser.get(config_section, "INVOICE_VER")
+        self.LOCAL_PATH = parser.get(config_section, "LOCAL_PATH")
+        self.NAS_PATH = parser.get(config_section, "NAS_PATH")
+        self.MANAGER_PATH = parser.get(config_section, "MANAGER_PATH")
+        self.BACKUP_PATH = parser.get(config_section, "BACKUP_PATH")
+        self.LIVERT_IMAGE_BACKUP_PATH = parser.get(config_section, "LIVERT_IMAGE_BACKUP_PATH")
+        self.LIVERT_IMAGE_LOCAL_PATH = parser.get(config_section, "LIVERT_IMAGE_LOCAL_PATH")
 
 # 전역 공통사용 객체이다.
 config = Config()

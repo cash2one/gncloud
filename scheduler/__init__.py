@@ -14,18 +14,22 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 app.ScheduleController = ScheduleController()
 app.ScheduleController.run()
 
-
 # 페이지 리스트
 @app.route("/")
 def index():
     return jsonify(status=True, message='서비스 정상 작동')
 
+@app.route("/monitor/restart")
+def monitor_restart():
+    return app.ScheduleController.monitor.restart_monitor()
+
 @app.route("/invoice_calc/force")
 def invoice_calc_force():
     return app.ScheduleController.invoice.invoice_calc()
 
-
+@app.route("/daybackup/force")
+def backup_force():
+    return app.ScheduleController.backup.backup()
 
 if __name__ == '__main__':
-    #app.run(host=config.CONTROLLER_HOST,port=int(config.CONTROLLER_PORT))
-    app.run(port=int(config.CONTROLLER_PORT))
+    app.run(host=config.CONTROLLER_HOST,port=int(config.CONTROLLER_PORT))
