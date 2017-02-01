@@ -13,38 +13,37 @@
 </ul>
 
 <!--오른쪽 메뉴-->
-<div class="tab-content col-xs-12 col-sm-10">
+<div id="guestSetting" class="tab-pane col-xs-12 col-sm-10 gn-sys-sett">
+
     <div class="gn-box gn-detail-main">
         <div class="gn-sett-margin-box">
             <h2>과금</h2>
             <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-click="day_submit()">저장</button>
-            <div style="float:left">
-                <input type="radio" value="D" name="day" style="float:left" ng-checked="bills=='D'">
-                 일단위
-            </div>
-            <div style="float:left">
-                <input type="radio" value="H" name="day" style="float:left" ng-checked="bills=='H'">
-                시간단위
-            </div>
+            <div class="gn-margin-bott10"><input type="radio" value="D" name="day" style="float:left" ng-checked="bills=='D'">일단위</div>
+            <div><input type="radio" value="H" name="day" style="float:left" ng-checked="bills=='H'">시간단위</div>
         </div>
     </div>
     <div class="gn-box gn-detail-main">
         <div class="gn-sett-margin-box">
-            <h2>백업 기준</h2>
+            <h2>백업주기</h2>
             <form>
-            <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-click="backup_day()">저장</button>
-            <div class="gn-margin-bott10" style="float:left">
-                <input type="radio" name="select" value="D" style="float:left" ng-model="data.day" ng-checked="backup_type == 'D'">
-                <input type="text" id="day" ng-model="changeday"  style="float:left" placeholder="{{day}}">
-                <span>일마다</span>
-            </div><br><br>
-            <div style="float:left">
-                <input type="radio" name="select" value="W" ng-checked="backup_type == 'W'" >
-                <label ng-repeat="days in weeked" >
-                    <input type="checkbox" name="week" ng-model="days.checked" value="{{days.checked}}">
-                    {{days.name}}
-                </label>
-            </div>
+                <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-click="backup_day()">저장</button>
+                <div class="gn-margin-bott10">
+                    <input type="radio" name="select" value="D" style="float:left" ng-model="data.day" ng-checked="backup_type == 'D'"><span>일별</span>
+                    <div class="list-inline">
+                        <input type="text" class="gn-form-control" placeholder="{{day}}" id="day" ng-model="changeday"><span class="gn-write">일마다</span>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <input type="radio" name="select" value="W" ng-checked="backup_type == 'W'"><span>요일별</span>
+                    <div class="list-inline">
+                        <label ng-repeat="days in weeked" >
+                            <input type="checkbox" name="week" ng-model="days.checked" value="{{days.checked}}">
+                            {{days.name}}
+                        </label>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -53,9 +52,12 @@
             <h2>모니터링 기준</h2>
             <form>
                 <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-click="submit(data.monitor_period)">저장</button>
-                    <input type="text"  style="float:left" ng-model="data.monitor_period" placeholder="{{monitor}}">
-                    <span>초마다</span>
+                <div class="list-inline">
+                    <input type="text" class="gn-form-control" ng-model="data.monitor_period" placeholder="{{monitor}}"><span class="gn-write">초마다</span>
+                </div>
             </form>
         </div>
     </div>
+
 </div>
+

@@ -914,6 +914,13 @@ a.log-join-btn:focus{
     padding-bottom: 10px;
 }
 
+<<<<<<< HEAD
+=======
+/*.dash-body > .row > .col-sm-4{
+    padding: 0;
+}*/
+
+>>>>>>> 44032dc095152d02b80c4ea552230513b878b430
 .dash-body > .row > div{
     padding: 0;
 }
@@ -1045,6 +1052,35 @@ a.log-join-btn:focus{
     font-size: 40px;
     font-weight: 600;
 }
+ 
+/*대시보드 헬스체크*/
+.gn-health-check div,
+.gn-health-check ul{display: table; margin: auto;}
+.gn-health-check span{
+    font-size: 16px;
+    color: #505050;
+    line-height: 35px;
+    margin-right: 10px;
+}
+.gn-health-check ul{
+    padding: 0;
+}
+.gn-health-check ul li{
+    line-height: 35px;
+    text-align: left;
+}
+.gn-health-check tr td{
+    border: 2px dashed rgba(215,215,215,.5) ; 
+    vertical-align: middle !important;
+}
+.gn-health-check th{border-bottom:  2px dashed rgba(215,215,215,.5) !important;}
+.gn-health-check .gn-write{
+    font-size: 14px; 
+    display: inline-block; 
+    margin-bottom: 0; 
+    background-color: rgba(238,238,238,50); 
+    padding: 2px;
+    border-radius: 3px;}
 
 /*대시보드 헬스체크*/
 .gn-health-check div,
@@ -1231,90 +1267,6 @@ ul.gn-tag-group > li{
     margin-bottom: 30px;
 }
 
-/*상세 백업 SWITCH STYLE*/
-.switch {
-  background: #fff;
-  border: 1px solid #dfdfdf;
-  position: relative;
-  display: inline-block;
-  box-sizing: content-box;
-  overflow: visible;
-  width: 52px;
-  height: 30px;
-  padding: 0px;
-  margin: 0px;
-  border-radius: 20px;
-  cursor: pointer;
-  box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;
-  transition: 0.3s ease-out all;
-  -webkit-transition: 0.3s ease-out all;
-  top: -1px;
-}
-/*adding a wide width for larger switch text*/
-.switch.wide {
-  width:80px;
-}
-.switch small {
-  background: #fff;
-  border-radius: 100%;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  transition: 0.3s ease-out all;
-  -webkit-transition: 0.3s ease-out all;
-}
-.switch.checked {
-  background: rgb(100, 189, 99);
-  border-color: rgb(100, 189, 99);
-}
-.switch.checked small {
-  left: 22px;
-}
-/*wider switch text moves small further to the right*/
-.switch.wide.checked small {
-  left:52px;
-}
-/*styles for switch-text*/
-.switch .switch-text {
-  font-family:Arial, Helvetica, sans-serif;
-  font-size:13px;
-}
-
-.switch .off {
-  display:block;
-  position: absolute;
-  right: 10%;
-  top: 25%;
-  z-index: 0;
-  color:#A9A9A9;
-}
-
-.switch .on {
-  display:none;
-   z-index: 0;
-  color:#fff;
-  position: absolute;
-  top: 25%;
-  left: 9%;
-}
-
-.switch.checked .off {
-  display:none;
-}
-
-.switch.checked .on {
-  display:block;
-
-}
-
-.switch.disabled {
-  opacity: .50;
-  cursor: not-allowed;
-}
-/*상세 백업 SWITCH STYLE end*/
 
 .gn-detail-main > .gn-margin-box > .gn-description-list dt{
     width: 110px;
@@ -1868,6 +1820,10 @@ ul.gn-sett-graph > li:nth-of-type(3){
 .gn-sys-sett form .list-inline{margin-left: 0;}
 
 .gn-sys-sett input[type=text]{padding-left: 10px;}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 44032dc095152d02b80c4ea552230513b878b430
 
 /* ================================================= 반응형 ================================================= */
 /* 세로 방향 타블렛부터 가로 방향 타블렛과 데스크탑까지 */
@@ -2076,6 +2032,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
     .form-group > .col-sm-8 > .form-control{
         margin-bottom: 10px;
     }    
+
     
 }
 
