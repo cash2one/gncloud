@@ -342,6 +342,9 @@ angular
         $scope.refresh = function(){
             $scope.won_list = Array.prototype.slice.call($scope.won_list).reverse();
         }
+        $scope.close=function () {
+            $(':input').val('');
+        }
     }).directive('tooltip', function(){
         return {
             restrict: 'A',

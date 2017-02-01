@@ -41,7 +41,7 @@
                 <td class="visible-xs-3 second-td-name">
                     <a href="#/guestDetail?id={{list.id}}" class="gn-table-ellip"> {{ list.name }} </a>
                 </td>
-                <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }} Memory/{{ list.disk }} Disk</td>
+                <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }} /{{ list.disk }} Disk</td>
                 <td class="hidden-sm hidden-xs">{{ list.type }}</td>
                 <td class="hidden-md hidden-sm hidden-xs">{{ list.ip }}</td>
                 <td class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >{{ list.gnTeam.team_name }}</td>

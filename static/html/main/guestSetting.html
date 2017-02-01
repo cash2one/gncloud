@@ -31,7 +31,7 @@
                 <div class="gn-margin-bott10">
                     <input type="radio" name="select" value="D" style="float:left" ng-model="data.day" ng-checked="backup_type == 'D'"><span>일별</span>
                     <div class="list-inline">
-                        <input type="text" class="gn-form-control" placeholder="{{day}}" id="day" ng-model="changeday"><span class="gn-write">일마다</span>
+                        <input type="text" class="gn-form-control"  id="day" ng-model="changeday" ><span class="gn-write">일마다</span>
                     </div>
                 </div>
                 <br>
@@ -53,7 +53,7 @@
             <form>
                 <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-click="submit(data.monitor_period)">저장</button>
                 <div class="list-inline">
-                    <input type="text" class="gn-form-control" ng-model="data.monitor_period" placeholder="{{monitor}}"><span class="gn-write">초마다</span>
+                    <input type="text" class="gn-form-control" ng-model="data.monitor_period" id="monitor"><span class="gn-write">초마다</span>
                 </div>
             </form>
         </div>

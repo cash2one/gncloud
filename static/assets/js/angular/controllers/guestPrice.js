@@ -43,7 +43,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status==true) {
                         $scope.price();
-                        $scope.data={};
+                        $(':input').val('');
                     } else {
                     }
                 })
@@ -72,5 +72,8 @@ angular
                 .error(function(data, status, headers, config) {
                     console.log(status);
                 });
+        }
+        $scope.close=function () {
+            $(':input').val('');
         }
     });

@@ -169,5 +169,9 @@ angular
 
                 })
         }
-
+        $scope.close=function () {
+            $("#title").val('');
+            $("#text").val('');
+            $("#replytext").val('');
+        }
     });
