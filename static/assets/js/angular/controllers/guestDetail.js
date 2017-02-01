@@ -24,8 +24,8 @@ angular
                         $scope.image_data = data.info.image_info;
                         $scope.image_data.name = data.info.image_info.view_name;
                     }
-                    if($scope.vm_data.backup_comfirm == 'false')
-                    $scope.vm_data.backup_comfirm=0;
+                    if($scope.vm_data.backup_confirm == 'false')
+                    $scope.vm_data.backup_confirm=0;
                 }
                 else {
                     alert(data.message)

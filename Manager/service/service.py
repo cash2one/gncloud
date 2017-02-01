@@ -2,16 +2,17 @@
 
 __author__ = 'NaDa'
 
+import os
 import subprocess
 
 import humanfriendly
 from flask import render_template
 from sqlalchemy import func
+
 from Manager.db.database import db_session
 from Manager.db.models import *
 from Manager.util.config import config
 from Manager.util.hash import random_string, convertToHashValue, convertsize
-import os
 
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, backup ,sql_session):
@@ -93,17 +94,17 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                              , host_id=host_id, hyperv_pass=password, backup_comfirm=backup, size_id=size_id)
+                              , host_id=host_id, hyperv_pass=password, backup_confirm=backup, size_id=size_id)
     elif(type=="kvm"):
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id=host_id, ssh_key_id=sshkeys, backup_comfirm=backup,size_id=size_id)
+                                  , host_id=host_id, ssh_key_id=sshkeys, backup_confirm=backup,size_id=size_id)
     else:
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id="", backup_comfirm=backup,size_id=size_id)
+                                  , host_id="", backup_confirm=backup,size_id=size_id)
                                 
     sql_session.add(vm_machine)
 
@@ -1052,7 +1053,7 @@ def create_size(sql_session): # 인스턴스 생성 size
     return list
 
 def price_list(sql_seesion):
-    price_info = sql_seesion.query(GnVmSize).all()
+    price_info = sql_seesion.query(GnVmSize).order_by(GnVmSize.cpu.desc()).all()
     for price in price_info:
         price.mem = convertHumanFriend(price.mem)
         price.disk = convertHumanFriend(price.disk)
@@ -1115,7 +1116,7 @@ def login_history(page, sql_session): #login history
 
 def backupchnage(id, backup, sql_sseion): #백업 수정
     list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    list.backup_comfirm = backup
+    list.backup_confirm = backup
     sql_sseion.commit()
 
 def setting_list(sql_ssesion):

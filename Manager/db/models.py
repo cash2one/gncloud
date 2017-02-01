@@ -61,7 +61,7 @@ class GnVmMachines(Base):
     image_id = Column(String(8), primary_key=False, nullable=False)
     ssh_key_id = Column(Integer, primary_key=False, nullable=False)
     hyperv_pass= Column(String(50), primary_key=False, nullable=False)
-    backup_comfirm =Column(String(5), primary_key=False, nullable=False)
+    backup_confirm =Column(String(5), primary_key=False, nullable=False)
     size_id = Column(String(8), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
     gnUser = relationship('GnUser')
@@ -70,7 +70,7 @@ class GnVmMachines(Base):
     def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None
                  , cpu=None, memory=None, disk=None, ip=None, host_id=None
                  , os=None, os_ver=None, os_sub_ver=None, os_bit=None, team_code=None
-                 , author_id=None, status=None, tag=None, image_id=None, ssh_key_id=None, hyperv_pass=None, create_time=None, backup_comfirm=None, size_id=None):
+                 , author_id=None, status=None, tag=None, image_id=None, ssh_key_id=None, hyperv_pass=None, create_time=None, backup_confirm=None, size_id=None):
         self.id = id
         self.name = name
         self.type = type
@@ -93,20 +93,20 @@ class GnVmMachines(Base):
         self.ssh_key_id = ssh_key_id
         self.hyperv_pass = hyperv_pass
         self.create_time = create_time
-        self.backup_comfirm = backup_comfirm
+        self.backup_confirm = backup_confirm
         self.size_id = size_id
 
 
     def __repr__(self):
         return '<Id %r / Name %r / Type %r / Internal_id %r / Internal_name %r / ' \
                'Cpu %r / Memory %r / Disk %r / Ip %r / Status %r / Tag %r / Create_time %r / ' \
-               'Ssh_key_id %r / Hyperv_pass %r/ Author_id %r / Backup_comfirm %r / Size_id %r  >' \
+               'Ssh_key_id %r / Hyperv_pass %r/ Author_id %r / Backup_confirm %r / Size_id %r  >' \
                % (self.id, self.name, self.type, self.internal_id, self.internal_name, self.cpu, self.memory, self.disk,
-                  self.ip, self.status, self.tag, self.create_time, self.ssh_key_id, self.hyperv_pass, self.author_id, self.backup_comfirm, self.size_id)
+                  self.ip, self.status, self.tag, self.create_time, self.ssh_key_id, self.hyperv_pass, self.author_id, self.backup_confirm, self.size_id)
 
     def __json__(self):
         return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu'
-            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id','backup_comfirm', 'size_id','gnTeam']
+            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id','backup_confirm', 'size_id','gnTeam']
 
 
 class GnUser(Base):
