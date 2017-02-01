@@ -484,6 +484,7 @@ class GnVmSize(Base):
 class GnInstanceStatus(Base):
     __tablename__ = 'GN_INSTANCE_STATUS'
     vm_id = Column(String(8), primary_key=True, nullable=False, default='')
+    vm_name = Column(String(50), nullable=True, default='')
     create_time = Column(DateTime, nullable=False, default='')
     delete_time = Column(DateTime, nullable=True)
     author_id = Column(String(50), nullable=False, default='')
@@ -494,9 +495,10 @@ class GnInstanceStatus(Base):
     memory = Column( nullable=True, default='')
     disk = Column( nullable=True, default='')
 
-    def __init__(self, vm_id=None, create_time=None, delete_time=None, author_id=None, team_code=None
+    def __init__(self, vm_id=None,vm_name=None,create_time=None, delete_time=None, author_id=None, team_code=None
                  , price=None, price_type=None, cpu=None, memory=None, disk=None):
         self.vm_id = vm_id
+        self.vm_name = vm_name
         self.create_time = create_time
         self.delete_time = delete_time
         self.author_id = author_id

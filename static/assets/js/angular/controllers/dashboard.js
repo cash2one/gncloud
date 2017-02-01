@@ -157,7 +157,12 @@ angular
                     console.log(status);
                 });
         }
-        $scope.cluster_list();
-        stop = $interval($scope.cluster_list,60000);
+
+        $rootScope.$on('init', function () {
+            if($rootScope.user_info.authority == 'sysowner') {
+                $scope.cluster_list();
+                stop = $interval($scope.cluster_list, 60000);
+            }
+        });
 
     });
