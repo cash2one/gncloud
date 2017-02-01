@@ -9,13 +9,14 @@
         <div class="gn-box">
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
-                    <h2>로그인 이력 조회</h2>
+                    <h2>사용 이력 조회</h2>
                        <div class="container-fluid">
                             <div class="table-responsive gn-table-responsive">
                                 <table class="table gn-board-table">
                                     <thead>
                                     <tr>
                                         <th class="col-sm-2">#</th>
+                                        <th class="col-sm-3 col-xs-9">팀</th>
                                         <th class="col-sm-3 col-xs-9">아이디</th>
                                         <th class="col-sm-1 hidden-xs">액션</th>
                                         <th class="col-sm-3 hidden-sm hidden-xs">날짜</th>
@@ -24,6 +25,7 @@
                                     <tbody class="gn-tdody">
                                     <tr ng-repeat="list in login_hist">
                                         <td>{{list.id}}</td>
+                                        <td>{{list.gnTeam.team_name}}</td>
                                         <td>{{list.user_id}}</td>
                                         <td>{{list.action}}</td>
                                         <td>{{list.action_time}}</td> <!--초 빼고-->

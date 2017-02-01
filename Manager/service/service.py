@@ -1114,6 +1114,19 @@ def login_history(page, sql_session): #login history
     login_info={"list":list,"page":page,"total":total}
     return login_info
 
+def use_history(page, sql_session):
+    page_size=10
+    page=int(page)-1
+    list=sql_session.query(GnInstanceActionHist)\
+                    .order_by(GnInstanceActionHist.action_time.desc())\
+                    .limit(page_size).offset(page*page_size).all()
+    total_page= sql_session.query(func.count(GnInstanceActionHist.id).label("count")).one()
+    total = total_page.count /10
+    for use_hist in list:
+        use_hist.action_time = use_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
+    use_info={"list":list,"page":page,"total":total}
+    return use_info
+
 
 def backupchnage(id, backup, sql_sseion): #백업 수정
     list = sql_sseion.query(GnVmMachines).filter(GnVmMachines.id == id).one()
