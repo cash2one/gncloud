@@ -103,11 +103,11 @@ class Invoice:
             one_vm_price = day_hour_count * stat.price
             total_price += one_vm_price
 
-            instance = " {'vm_id':'%s','vm_name':'%s' ,'price type': '%s', 'unit price':'%s', 'used':'%d', 'total price':'%d'}" \
+            instance = ' {"vm_id":"%s","vm_name":"%s" ,"price_type": "%s", "unit_price":"%s", "used":"%d", "total_price":"%d"}' \
                        %(stat.vm_id, stat.vm_name ,stat.price_type, stat.price, day_hour_count, one_vm_price)
 
             if author_id != stat.author_id and author_id is not None:
-                author_text = "{'user_id': '%s', 'instance_list': [%s] }" % (author_id, instance_list)
+                author_text = '{"user_id": "%s", "instance_list": [%s] }' % (author_id, instance_list)
                 if json_text is None:
                     json_text = "%s" % (author_text)
                 else:
@@ -122,10 +122,10 @@ class Invoice:
                 if instance_list is None:
                     instance_list = instance
                 else:
-                    instance_list = '%s,%s' % (instance_list, instance)
+                    instance_list = "%s,%s" % (instance_list, instance)
 
             if team.team_code != team_code and team_code is not None:
-                all_text = ("{'version':'%s', 'year':'%s', 'month':'%s', 'calc day':'%s', 'team':'%s', 'team price':'%d', 'each user':[%s] }") \
+                all_text = ('{"version":"%s", "year":"%s", "month":"%s", "calc_day":"%s", "team":"%s", "team_price":"%d", "each_user":[%s] }') \
                            % (version, year, month, today, team_code, total_price, json_text)
                 invoid_result = GnInvoiceResult(year, month, team_code, all_text)
                 sql_session.add(invoid_result)
@@ -144,13 +144,13 @@ class Invoice:
                 author_id = stat.author_id
                 instance = None
 
-        author_text = "{'user_id': '%s', 'instance_list': [%s] }" % (author_id, instance_list)
+        author_text = '{"user_id": "%s", "instance_list": [%s] }' % (author_id, instance_list)
         if json_text is None:
             json_text = "%s" % (author_text)
         else:
             json_text = "%s,%s" % (json_text, author_text)
 
-        all_text = ("{'version':'%s', 'year':'%s', 'month':'%s', 'calc day':'%s', 'team':'%s', 'team price':'%d', 'each user':[%s] }") \
+        all_text = ('{"version":"%s", "year":"%s", "month":"%s", "calc_day":"%s", "team":"%s", "team_price":"%d", "each_user":[%s] }') \
                    % (version, year, month, today, team_code, total_price, json_text)
         invoid_result = GnInvoiceResult(year, month, team_code, all_text)
         sql_session.add(invoid_result)
