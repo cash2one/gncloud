@@ -162,7 +162,7 @@ angular
             $scope.user_info = $rootScope.user_info;
             if($scope.user_info.authority == 'sysowner') {
                 $scope.cluster_list();
-                stop = $interval($scope.cluster_list, 10000);
+                stop = $interval($scope.cluster_list, 60000);
             }
         });
 
