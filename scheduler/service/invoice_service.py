@@ -5,10 +5,11 @@ import sys
 from apscheduler.executors.pool import ProcessPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
 from dateutil.relativedelta import relativedelta
-from db.models import *
-from models import GnInstanceStatus, GnTeam, GnVmMachines
 from sqlalchemy import or_
-from util.config import config
+
+from scheduler.db.models import *
+from scheduler.db.models import GnInstanceStatus, GnTeam
+from scheduler.util.config import config
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -77,7 +78,6 @@ class Invoice:
 
         for stat in status:
             team = sql_session.query(GnTeam).filter(GnTeam.team_code == stat.team_code).first()
-            vm_name = sql_session.query(GnVmMachines).filter(GnVmMachines.id == stat.vm_id).first()
 
             count_start_day = None
             count_end_day = None
@@ -104,7 +104,7 @@ class Invoice:
             total_price += one_vm_price
 
             instance = " {'vm_id':'%s','vm_name':'%s' ,'price type': '%s', 'unit price':'%s', 'used':'%d', 'total price':'%d'}" \
-                       %(stat.vm_id, vm_name.vm_name ,stat.price_type, stat.price, day_hour_count, one_vm_price)
+                       %(stat.vm_id, stat.vm_name ,stat.price_type, stat.price, day_hour_count, one_vm_price)
 
             if author_id != stat.author_id and author_id is not None:
                 author_text = "{'user_id': '%s', 'instance_list': [%s] }" % (author_id, instance_list)

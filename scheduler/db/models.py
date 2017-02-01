@@ -2,8 +2,9 @@
 __author__ = 'nhcho'
 
 import datetime
-from db.database import Base
 from sqlalchemy import Column, Integer, String, DateTime, Numeric
+
+from scheduler.db.database import Base
 
 
 class GnCluster(Base):
@@ -55,6 +56,7 @@ class GnSystemSetting(Base):
 class GnInstanceStatus(Base):
     __tablename__ = 'GN_INSTANCE_STATUS'
     vm_id = Column(String(8), primary_key=True, nullable=False, default='')
+    vm_name = Column(String(50),primary_key=False, nullable=False, default='')
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     delete_time = Column(DateTime, nullable=True, default='')
     author_id = Column(String(50), nullable=False, default='')
@@ -65,7 +67,7 @@ class GnInstanceStatus(Base):
     memory = Column( nullable=True, default='')
     disk = Column( nullable=True, default='')
 
-    def __init__(self, vm_id, create_time, delete_time=None, author_id=None, team_code=None, price=None, price_type=None, cpu=None, memory=None, disk=None):
+    def __init__(self, vm_id, create_time, delete_time=None, author_id=None, team_code=None, price=None, price_type=None, cpu=None, memory=None, disk=None, vm_name =None):
         self.vm_id = vm_id
         self.create_time = create_time
         self.delete_time = delete_time
@@ -76,12 +78,13 @@ class GnInstanceStatus(Base):
         self.cpu = cpu
         self.memory = memory
         self.disk = disk
+        self.vm_name = vm_name
 
     def __repr__(self):
         return "<GnInstanceStatus(vm_id='%r', create_time='%r', delete_time='%r', author_id='%r', team_code='%r'," \
-               "price='%r', price_type='%r', cpu='%r', memory='%r', disk='%r')>" \
+               "price='%r', price_type='%r', cpu='%r', memory='%r', disk='%r', vm_name='%r')>" \
                % (self.vm_id, self.create_time, self.delete_time, self.author_id, self.team_code, self.price,
-                  self.price_type, self.cpu, self.memory, self.disk)
+                  self.price_type, self.cpu, self.memory, self.disk, self.vm_name)
 
 
 class GnInvoiceResult(Base):

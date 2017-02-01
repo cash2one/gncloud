@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 __author__ = 'nhcho'
-import json
 from datetime import timedelta
 from flask import Flask, jsonify
-from controller.schdule_controller import ScheduleController
-from util.config import config
 
+from controller.schdule_controller import ScheduleController
+from scheduler.util.config import config
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
