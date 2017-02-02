@@ -20,7 +20,7 @@ from Manager.util.hash import random_string, convertToHashValue, convertsize
 def saveErrorTrace(id, action, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    error_hist = GnErrorHist(type=vm_info.type,action=action,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id)
+    error_hist = GnErrorHist(type=vm_info.type,action=action,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
     sql_session.add(error_hist)
     sql_session.commit()
 
@@ -1136,6 +1136,21 @@ def use_history(page, sql_session):
         use_hist.action_time = use_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
     use_info={"list":list,"page":page,"total":total}
     return use_info
+
+def error_history(page, sql_session):
+    page_size=10
+    page=int(page)-1
+    list=sql_session.query(GnErrorHist) \
+        .order_by(GnErrorHist.action_time.desc()) \
+        .limit(page_size).offset(page*page_size).all()
+    total_count= sql_session.query(func.count(GnErrorHist.id).label("count")).one()
+    solve_count= sql_session.query(func.count(GnErrorHist.id).label("count")).filter(GnErrorHist.solver_name != None).one()
+    not_solve_count= sql_session.query(func.count(GnErrorHist.id).label("count")).filter(GnErrorHist.solver_name == None).one()
+    total = total_count.count /10
+    for error_hist in list:
+        error_hist.action_time = error_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
+    error_info={"list":list,"page":page,"total":total, "total_count":total_count.count,"solve_count":solve_count.count, "not_solve_count":not_solve_count.count}
+    return error_info
 
 
 def backupchnage(id, backup, sql_sseion): #백업 수정
