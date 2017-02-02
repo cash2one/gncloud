@@ -22,12 +22,11 @@ class BackupPowerShell(object):
     PASSTHRU = " -Passthru"
     VERBOSE = " -Verbose"
 
-    def __init__(self, address, port, uri):
+    def __init__(self, address, uri):
         self.address = address
-        self.port = port
         self.uri = uri
 
-    #스냅샷 생성
+    # create backup
     def create_backup(self, vm_Id, local_path, backup_path):
         backup_id = "_"+datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         script = '$vm = Get-VM -Id '
@@ -44,21 +43,19 @@ class BackupPowerShell(object):
         # print script
         return self.send(script)
 
+    # delete backup
+    def delete_backup(self, filename, path):
+        script = 'Remove-Item -Path %s/%s ;' % (path, filename)
+        return self.send(script)
+
     # agent 모듈에 파워쉘 스크립트를 전달하여 실행하고 결과를 받아온다.
     def send(self, script):
         address = self.address
-        port = str(self.port)
         uri = self.uri
         url = "http://" + address
-        url += ":"
-        url += port
         url += "/"
         url += uri
         url += "?script=" + script
         data = {'script': script}
         response = requests.post(url, data=json.dumps(data), timeout=1000 * 60 * 20)
         return json.loads(response.json())
-
-
-
-

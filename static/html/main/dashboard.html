@@ -55,7 +55,6 @@
     </div> <!--class="row" -->
 </div>  <!-- container-body  -->
 
-
 <!--가상머신 개수  |  하이퍼바이저 종류  |  컨테이너 개수-->
 <div class="container-fluid dash-body">
     <div class="row">
@@ -119,7 +118,6 @@
         </div>
     </div>
 </div> <!-- container-body   -->
-
 
 <!--사용자별 가상머신 수  |  가상머신 종류  |  총 사용자 수-->
 <div class="container-fluid dash-body">
@@ -192,9 +190,11 @@
                 </div>
             </div>  <!--class="gn-box"-->
         </div> <!--class="col-sm-4"-->
+    </div><!--row-->
+</div><!--class="container-fluid dash-body"-->
 
-        <!-- 대시보드 헬스체크 -->
-        <div class="container-fluid dash-body" ng-show="user_info.authority == 'sysowner' ">
+<!-- 대시보드 헬스체크 -->
+<div class="container-fluid dash-body" ng-show="user_info.authority == 'sysowner' ">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="gn-box">

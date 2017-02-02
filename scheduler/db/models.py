@@ -56,6 +56,7 @@ class GnSystemSetting(Base):
 class GnInstanceStatus(Base):
     __tablename__ = 'GN_INSTANCE_STATUS'
     vm_id = Column(String(8), primary_key=True, nullable=False, default='')
+    vm_name = Column(String(50),nullable=True, default='' )
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     delete_time = Column(DateTime, nullable=True, default='')
     author_id = Column(String(50), nullable=False, default='')
@@ -68,7 +69,7 @@ class GnInstanceStatus(Base):
     disk = Column( nullable=True, default='')
 
 
-    def __init__(self, vm_id, create_time, delete_time=None, author_id=None, team_code=None, price=None, price_type=None, cpu=None, memory=None, disk=None, author_name=None):
+    def __init__(self, vm_id, create_time, delete_time=None, author_id=None, team_code=None, price=None, price_type=None, cpu=None, memory=None, disk=None, author_name=None, vm_name=None):
         self.vm_id = vm_id
         self.create_time = create_time
         self.delete_time = delete_time
@@ -80,12 +81,13 @@ class GnInstanceStatus(Base):
         self.memory = memory
         self.disk = disk
         self.author_name = author_name
+        self.vm_name =vm_name
 
     def __repr__(self):
         return "<GnInstanceStatus(vm_id='%r', create_time='%r', delete_time='%r', author_id='%r', team_code='%r'," \
-               "price='%r', price_type='%r', cpu='%r', memory='%r', disk='%r', author_name = '%r')>" \
+               "price='%r', price_type='%r', cpu='%r', memory='%r', disk='%r', author_name = '%r', vm_name='%r')>" \
                % (self.vm_id, self.create_time, self.delete_time, self.author_id, self.team_code, self.price,
-                  self.price_type, self.cpu, self.memory, self.disk, self.author_name)
+                  self.price_type, self.cpu, self.memory, self.disk, self.author_name, self.vm_name)
 
 
 class GnInvoiceResult(Base):
@@ -337,16 +339,18 @@ class GnBackup(Base):
     backup_time = Column(DateTime, nullable=True, default=None)
     team_code = Column(String(10), nullable=True, default='')
     author_id = Column(String(50), nullable=True, default='')
+    vm_type = Column(String(10), nullable=True, default='')
 
-    def __init__(self, vm_id, backup_time=None, team_code=None, author_id=None):
+    def __init__(self, vm_id, backup_time=None, team_code=None, author_id=None, vm_type=None):
         self.vm_id = vm_id
         self.backup_time = backup_time
         self.team_code = team_code
         self.author_id = author_id
+        self.vm_type = vm_type
 
     def __repr__(self):
-        return "<GnBackup(vm_id='%r', backup_time='%r', team_code='%r', author_id='%r'" \
-               % (self.vm_id, self.backup_time, self.team_code, self.author_id)
+        return "<GnBackup(vm_id='%r', backup_time='%r', team_code='%r', author_id='%r', vm_type='%r' " \
+               % (self.vm_id, self.backup_time, self.team_code, self.author_id, self.vm_type)
 
 
 class GnBackupHist(Base):
@@ -354,15 +358,19 @@ class GnBackupHist(Base):
     vm_id = Column(String(8), primary_key=True, nullable=False)
     filename = Column(String(150), primary_key=True, nullable=False, default='')
     backup_time = Column(DateTime, nullable=True, default=datetime.datetime.now())
+    vm_type = Column(String(10), nullable=True, default='')
+    host_ip = Column(String(50), nullable=True, default='')
 
-    def __init__(self, vm_id, filename, backup_time):
+    def __init__(self, vm_id, filename, backup_time, vm_type=None, host_ip=None):
         self.vm_id = vm_id
         self.filename = filename
         self.backup_time = backup_time
+        self.vm_type = vm_type
+        self.host_ip = host_ip
 
     def __repr__(self):
-        return "<GnBackupHist(vm_id='r', filename='%r', backup_time='%r' " \
-               % (self.vm_id, self.filename, self.backup_time)
+        return "<GnBackupHist(vm_id='r', filename='%r', backup_time='%r', vm_type='%r', host_ip='%r' " \
+               % (self.vm_id, self.filename, self.backup_time, self.vm_type, self.host_ip)
 
 
 class GnHostMachines(Base):

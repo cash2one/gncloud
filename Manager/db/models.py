@@ -655,9 +655,9 @@ class GnInvoiceResult(Base):
     __tablename__='GN_INVOICE_RESULT'
     year = Column(String(4), primary_key=True, nullable=False)
     month = Column(String(2), primary_key=True, nullable=False)
-    team_code = Column(String(10), primary_key=True, nullable=False)
+    team_code = Column(String(10), ForeignKey('GN_TEAM.team_code'), primary_key=True)
     invoice_data = Column(String(15000), nullable=True)
-
+    gnTeam = relationship('GnTeam')
     def __init__(self, year=None, month=None, team_code=None, invoice_data=None):
         self.year=year
         self.month= month
@@ -669,6 +669,6 @@ class GnInvoiceResult(Base):
                 %(self.year, self.month, self.team_code, self.invoice_data)
 
     def __json__(self):
-        return ['year', 'month', 'team_code','invoice_data']
+        return ['year', 'month', 'team_code','invoice_data','gnTeam']
 
 

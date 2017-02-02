@@ -61,6 +61,7 @@ class Backup:
                     self.kvm_backup(vm_info)
                 elif vm_info.type == 'hyperv':
                     self.hyperv_backup(vm_info)
+            sql_session.commit()
             return jsonify(status=True, message='success backup')
         except Exception as message:
             print(message)
@@ -104,7 +105,7 @@ class Backup:
             # new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             # 디스크 복사
             kvm = KvmShell()
-            filename = kvm.send(guest_info, host_info.ip, config.LIVERT_IMAGE_BACKUP_PATH)
+            filename = kvm.backup_send(guest_info, host_info.ip, config.LIVERT_IMAGE_BACKUP_PATH)
             if filename == 'error':
                 return jsonify(status=False, message='failure backup')
 
@@ -115,13 +116,13 @@ class Backup:
             # insert into GN_BACKUP_HIST, update or insert into GN_BACKUP
             backup = sql_session.query(GnBackup).filter(GnBackup.vm_id == vm_info.id).first()
             if backup is None:
-                backup_insert = GnBackup(vm_info.id, date_create_time,
-                                         vm_info.team_code, vm_info.author_id)
+                backup_insert = GnBackup(vm_info.id, date_create_time, vm_info.team_code,
+                                         vm_info.author_id, vm_info.type)
                 sql_session.add(backup_insert)
             else:
                 backup.backup_time = date_create_time
 
-            backup_hist = GnBackupHist(vm_info.id, filename, date_create_time)
+            backup_hist = GnBackupHist(vm_info.id, filename, date_create_time, vm_info.type, host_info.ip)
             sql_session.add(backup_hist)
             sql_session.commit()
 
@@ -134,8 +135,8 @@ class Backup:
         ps_exec = 'powershell/execute'
         sql_session = self.sql_session
         host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).first()
-
-        ps = BackupPowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+        host_ip= '%s:%d' % (host_machine.ip, host_machine.host_agent_port)
+        ps = BackupPowerShell(host_ip, ps_exec)
         backup_info = ps.create_backup(vm_info.internal_id, config.MANAGER_PATH, config.BACKUP_PATH)
         try:
             if backup_info['Name'] is not None:
@@ -147,16 +148,17 @@ class Backup:
                 org_vm_id=info[3]
                 create_time=(info[4]).split('.')[0]
                 date_create_time = datetime.datetime.strptime(create_time,'%Y%m%d%H%M%S')
+
                 # insert into GN_BACKUP_HIST, update or insert into GN_BACKUP
                 backup = sql_session.query(GnBackup).filter(GnBackup.vm_id == org_vm_id).first()
                 if backup is None:
                     backup_insert = GnBackup(org_vm_id, date_create_time,
-                                             vm_info.team_code, vm_info.author_id)
+                                             vm_info.team_code, vm_info.author_id, vm_info.type)
                     sql_session.add(backup_insert)
                 else:
                     backup.backup_time = date_create_time
 
-                backup_hist = GnBackupHist(org_vm_id, filename, date_create_time)
+                backup_hist = GnBackupHist(org_vm_id, filename, date_create_time, vm_info.type, host_ip)
                 sql_session.add(backup_hist)
                 sql_session.commit()
                 return jsonify(status=True)
@@ -164,4 +166,3 @@ class Backup:
             sql_session.rollback()
             print (e)
             return jsonify(status=False)
-

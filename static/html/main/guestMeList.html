@@ -347,7 +347,7 @@
                             <dt>팀 코드</dt>
                             <dd>{{teamname.team_code}}</dd>
                             <dt>관리자</dt>
-                            <dd ng-repeat="team in team_list">{{team.user_id}}</dd>
+                            <dd ng-show="check_list==2" ng-repeat="team in team_list">{{team.user_id}}</dd><dd ng-show="check_list ==1">-</dd>
                             <dt>팀 생성일</dt>
                             <dd>{{teamname.create_date}}</dd>
                             <dt>총원</dt>
