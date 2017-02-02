@@ -890,14 +890,15 @@ a.log-join-btn:focus{
     text-align: center;
     font-size: 14px;
     border: none;
+    border-bottom: 1px solid rgba(215,215,215,.5);
     height: 45px;
 }
 
 .table-dash tbody tr td{
     text-align: center;
     font-size: 14px;
-    border-top: 2px solid rgba(215,215,215,.5);
-    height: 55px;
+    border-bottom: 1px solid rgba(215,215,215,.5);
+    height: 50px;
     vertical-align: middle;
 }
 
@@ -944,10 +945,10 @@ a.log-join-btn:focus{
 
 .dash-margin-box .table-dash{margin-bottom: 0;}
 
-.dash-margin-box .table-responsive{padding: 0px 15px;}
+.dash-margin-box .table-responsive{padding: 0px 5px;}
 
 /*박스 왼쪽*/
-.dash-margin-box > .gn-dash-graph-box{border-right: 2px solid rgba(215,215,215,.5);}
+.dash-margin-box > .gn-dash-graph-box{border-right: 1px solid rgba(215,215,215,.5);}
 
 .dash-margin-box > .gn-dash-graph-box img{width: 100%;}
 
