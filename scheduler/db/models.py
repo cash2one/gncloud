@@ -56,12 +56,13 @@ class GnSystemSetting(Base):
 class GnInstanceStatus(Base):
     __tablename__ = 'GN_INSTANCE_STATUS'
     vm_id = Column(String(8), primary_key=True, nullable=False, default='')
-    vm_name = Column(String(50),nullable=True, default='' )
-    create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
-    delete_time = Column(DateTime, nullable=True, default='')
+    vm_name = Column(String(50), nullable=True, default='')
+    create_time = Column(DateTime, nullable=False, default='')
+    delete_time = Column(DateTime, nullable=True)
     author_id = Column(String(50), nullable=False, default='')
     author_name = Column(String(20), nullable=False, default='')
     team_code = Column(String(10), nullable=True, default='')
+    team_name = Column(String(50), nullable=True, default=None)
     price = Column(Integer, nullable=True, default='')
     price_type = Column(String(2), nullable=True, default='')
     cpu = Column( nullable=True, default='')
@@ -69,25 +70,28 @@ class GnInstanceStatus(Base):
     disk = Column( nullable=True, default='')
 
 
-    def __init__(self, vm_id, create_time, delete_time=None, author_id=None, team_code=None, price=None, price_type=None, cpu=None, memory=None, disk=None, author_name=None, vm_name=None):
+    def __init__(self, vm_id=None,vm_name=None,create_time=None, delete_time=None, author_id=None, author_name=None
+                 ,team_code=None, team_name=None, price=None, price_type=None, cpu=None, memory=None, disk=None):
         self.vm_id = vm_id
+        self.vm_name = vm_name
         self.create_time = create_time
         self.delete_time = delete_time
         self.author_id = author_id
+        self.author_name = author_name
         self.team_code = team_code
+        self.team_name = team_name
         self.price = price
         self.price_type = price_type
         self.cpu = cpu
         self.memory = memory
         self.disk = disk
-        self.author_name = author_name
-        self.vm_name =vm_name
 
     def __repr__(self):
         return "<GnInstanceStatus(vm_id='%r', create_time='%r', delete_time='%r', author_id='%r', team_code='%r'," \
-               "price='%r', price_type='%r', cpu='%r', memory='%r', disk='%r', author_name = '%r', vm_name='%r')>" \
+               "price='%r', price_type='%r', cpu='%r', memory='%r', disk='%r')" \
                % (self.vm_id, self.create_time, self.delete_time, self.author_id, self.team_code, self.price,
-                  self.price_type, self.cpu, self.memory, self.disk, self.author_name, self.vm_name)
+                  self.price_type, self.cpu, self.memory, self.disk)
+
 
 
 class GnInvoiceResult(Base):
