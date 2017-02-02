@@ -109,8 +109,8 @@ class Invoice:
                 one_vm_price = day_hour_count * stat.price
                 total_price += one_vm_price
 
-                instance = ' {"vm_id":"%s","vm_name":"%s" ,"price_type": "%s", "unit_price":"%s", "used":"%d", "total_price":"%d"} ' \
-                           %(stat.vm_id,stat.vm_name ,stat.price_type, stat.price, day_hour_count, one_vm_price)
+                instance = ' {"vm_id":"%s","author_name":"%s","vm_name":"%s" ,"price_type": "%s", "unit_price":"%s", "used":"%d", "total_price":"%d"} ' \
+                           %(stat.vm_id,stat.author_name,stat.vm_name ,stat.price_type, stat.price, day_hour_count, one_vm_price)
 
                 if author_id != stat.author_id and author_id is not None:
                     author_text = '{"user_id": "%s", "instance_list": [%s] }' % (author_id, instance_list)

@@ -2,9 +2,9 @@
 __author__ = 'nhcho'
 
 import datetime
-from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Numeric, BigInteger, ForeignKey
-from sqlalchemy.orm import relationship
 from db.database import Base
+from sqlalchemy import Column, Integer, String, DateTime, Numeric, BigInteger, ForeignKey
+from sqlalchemy.orm import relationship
 
 
 class GnCluster(Base):
@@ -59,6 +59,7 @@ class GnInstanceStatus(Base):
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     delete_time = Column(DateTime, nullable=True, default='')
     author_id = Column(String(50), nullable=False, default='')
+    author_name = Column(String(20), nullable=False, default='')
     team_code = Column(String(10), nullable=True, default='')
     price = Column(Integer, nullable=True, default='')
     price_type = Column(String(2), nullable=True, default='')
@@ -66,7 +67,8 @@ class GnInstanceStatus(Base):
     memory = Column( nullable=True, default='')
     disk = Column( nullable=True, default='')
 
-    def __init__(self, vm_id, create_time, delete_time=None, author_id=None, team_code=None, price=None, price_type=None, cpu=None, memory=None, disk=None):
+
+    def __init__(self, vm_id, create_time, delete_time=None, author_id=None, team_code=None, price=None, price_type=None, cpu=None, memory=None, disk=None, author_name=None):
         self.vm_id = vm_id
         self.create_time = create_time
         self.delete_time = delete_time
@@ -77,12 +79,13 @@ class GnInstanceStatus(Base):
         self.cpu = cpu
         self.memory = memory
         self.disk = disk
+        self.author_name = author_name
 
     def __repr__(self):
         return "<GnInstanceStatus(vm_id='%r', create_time='%r', delete_time='%r', author_id='%r', team_code='%r'," \
-               "price='%r', price_type='%r', cpu='%r', memory='%r', disk='%r')>" \
+               "price='%r', price_type='%r', cpu='%r', memory='%r', disk='%r', author_name = '%r')>" \
                % (self.vm_id, self.create_time, self.delete_time, self.author_id, self.team_code, self.price,
-                  self.price_type, self.cpu, self.memory, self.disk)
+                  self.price_type, self.cpu, self.memory, self.disk, self.author_name)
 
 
 class GnInvoiceResult(Base):
