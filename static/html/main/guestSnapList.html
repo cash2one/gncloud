@@ -191,8 +191,8 @@
                 <tbody class="gn-tdody">
                 <tr ng-repeat="con in contain_list">
                     <td>
-                        <img src="/gn_images/gn_icon_{{con.os}}.png" alt="postgres">
-                        <a>{{con.view_name}}</a>
+                        <img src="/gn_images/gn_icon_{{con.os}}.png">
+                        {{con.view_name}}
                     </td>
                     <td>{{con.os_ver}}</td>
                     <td class="hidden-xs">{{con.tagFirst}}<span ng-show="con.tag.length > 1" data-toggle="tooltip" title="{{con.tag}}" tooltip><span class="tag">{{con.tagcount}}</span></span></td>

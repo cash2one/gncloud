@@ -12,23 +12,23 @@
                 <h4 class="modal-title">작성하기</h4>
             </div>
             <div class="modal-body gn-modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" name="noticeForm" ng-submit="submitForm(noticeForm.$valid)" novalidate>
                     <div class="form-group">
                         <label class="col-sm-1 control-label">제목</label>
                         <div class="col-sm-11">
-                            <input type="text" ng-model="data.title" id="title" class="form-control">
+                            <input type="text" ng-model="data.title" id="title" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-1 control-label">내용</label>
                         <div class="col-sm-11">
-                            <textarea class="form-control gn-write" rows="6" ng-model="data.text" id="text" placeholder="내용을 입력하여주세요."></textarea>
+                            <textarea class="form-control gn-write" name="text" rows="6" ng-model="data.text" id="text" placeholder="내용을 입력하여주세요." required></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer gn-modal-footer">
-                <button type="submit" class="btn btn-default" data-dismiss="modal" ng-click="notice_create()">등록</button>
+                <button type="submit" class="btn btn-default" data-dismiss="modal" ng-click="notice_create()" ng-disabled="noticeForm.$invalid">등록</button>
             </div>
         </div>
     </div>

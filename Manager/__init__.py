@@ -216,7 +216,7 @@ def repair_list():
     tel=""
     email=""
     if request.json == None:
-        return jsonify(status=False, message='False')
+        return jsonify(status=False, message='아무것도 입력하지 않았습니다.')
     if 'password' in request.json:
         password = request.json['password']
     if 'password_new' in request.json:
@@ -697,7 +697,11 @@ def Qna_create():
 
 @app.route('/vm/qna/<id>', methods=['POST'])
 def Qna_reply_create(id):
-    text =request.json['reply_text']
+    text=""
+    if 'reply_text' in request.json:
+        text = request.json['reply_text']
+    if text == "":
+        return jsonify(status=False, message='아무것도 입력하지 않았습니다.')
     user_id=session['userId']
     team_code = session['teamCode']
     return jsonify(status=True, list=qna_ask_reply(id, text, user_id,team_code, db_session))
