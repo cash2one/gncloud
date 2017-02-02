@@ -18,7 +18,7 @@ class KvmShell:
         self.sql_session = db_session
         self.USER = "root"
 
-    def send(self, guest_info, dest_ip, dest_path):
+    def bakup_send(self, guest_info, dest_ip, dest_path):
         try:
             new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             # 디스크 복사
@@ -30,3 +30,14 @@ class KvmShell:
         except Exception as e:
             print(e.message)
             return 'error'
+
+    def backup_delete_send(self, dest_ip, filename, path):
+        try:
+            s = pxssh.pxssh(timeout=1200)
+            s.login(dest_ip, self.USER)
+            s.sendline("rm -f "+path+filename)
+            s.logout()
+            return True
+        except Exception as e:
+            print(e.message)
+            return False
