@@ -762,7 +762,14 @@ def Price_list_info():
     month = request.args.get('month')
     team_code= request.args.get('team_code')
     return jsonify(status=True, list=team_price_lsit_info(year,month,team_code,db_session))
+
+#백업
+@app.route('/vm/backuphist', methods=['GET'])
+def Backuphist():
+    page = request.args.get("page")
+    return jsonify(status=True, list=backup_list(page,db_session))
 #________________________________________________________________________
+
 
 
 def secure_filename(filename):

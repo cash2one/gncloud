@@ -17,6 +17,7 @@ from Manager.db.models import *
 from Manager.util.config import config
 from Manager.util.hash import random_string, convertToHashValue, convertsize
 
+
 def saveErrorTrace(id, action, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
@@ -1323,3 +1324,15 @@ def team_price_lsit_info(year,month,team_code,sql_session):
     instance=json.loads(list.invoice_data)
     team = sql_session.query(GnTeam).filter(GnTeam.team_code == list.team_code).one()
     return {"list":list, "instance":instance, "team_code":team_name}
+
+
+#_________________________백업______________________________________________________________#
+def backup_list(page,sql_session):
+    page_size = 30
+    page = int(page)-1
+    total_page= sql_session.query(func.count(GnBackup.vm_id).label("count")).one()
+    list=sql_session.query(GnBackup).order_by(GnBackup.backup_time.desc()).limit(page_size).offset(page*page_size).all()
+    total=int(total_page.count)/30
+    for vm in list:
+        vm.backup_time = vm.backup_time.strftime('%Y.%m.%d.%H:%M')
+    return {"list":list, "total_page":total_page.count,"total":total, "page":page}

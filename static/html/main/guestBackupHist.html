@@ -1,0 +1,119 @@
+<h1>설정</h1>
+<navleft></navleft>
+<!--시스템 > 백업현황-->
+<div id="backuplist" class="tab-pane col-xs-12 col-sm-10">
+    <div class="gn-box">
+        <div class="gn-sett-margin-box">
+            <div class="container-fluid">
+                <h2>백업현황</h2>
+
+                <!--백업현황 목록-->
+                <div class="table-responsive gn-table-responsive">
+                    <table class="table gn-board-table table-hover">
+                        <thead>
+                        <tr>
+                            <th class="">#</th>
+                            <th class="hidden-xs">시간</th>
+                            <th class="hidden-xs">팀</th>
+                            <th class="">인스턴스</th>
+                            <th class="">소유자</th>
+                        </tr>
+                        </thead>
+                        <tbody class="gn-tdody">
+                        <tr class="" ng-repeat="backup in backup">
+                            <td>{{total_page-($index+this_page)}}</td>
+                            <td class="hidden-xs">{{backup.backup_time}}</td>
+                            <td class="hidden-xs">{{backup.team_name}}</td>
+                            <td class="second-td-name">
+                                <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-backup">{{backup.vm_name}}</a>
+                            </td>
+                            <td>{{backup.author_name}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!--div class="table-responsive gn-table-responsive" -->
+
+                <!--이전/다음 버튼-->
+                <div class="gn-page-btn">
+                    <input type="button" class="btn btn-default pull-left" value="이전">
+                    <input type="button" class="btn btn-default" value="다음">
+                </div>
+
+                <!-- 백업현황 Modal -->
+                <div class="modal fade" id="modal-backup" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header gn-modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">백업정보</h4>
+                            </div>
+                            <div class="modal-body gn-modal-body">
+
+                                <form class="form-horizontal">
+                                    <dl class="dl-horizontal gn-description-list">
+                                        <dt>팀</dt>
+                                        <dd>연구1팀</dd>
+                                        <dt>인스턴스</dt>
+                                        <dd>Hyper#002</dd>
+                                        <dt>소유자</dt>
+                                        <dd>홍길동</dd>
+                                        <dt>히스토리</dt>
+                                        <dd>
+                                            <div class="table-responsive gn-table-responsive">
+                                                <table class="table table-bordered gn-board-table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th class="">백업시간</th>
+                                                        <th class="">파일</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody class="gn-tdody">
+                                                    <tr>
+                                                        <td>5</td>
+                                                        <td>2017-01-28 16:42</td>
+                                                        <td>Hyper#002_5</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>4</td>
+                                                        <td>2017-01-21 12:02</td>
+                                                        <td>Hyper#002_4</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>2017-01-14 12:02</td>
+                                                        <td>Hyper#002_3</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>2017-01-07 12:02</td>
+                                                        <td>Hyper#002_2</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>2017-01-01 12:02</td>
+                                                        <td>Hyper#002_1</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </dd>
+                                    </dl>
+
+
+                                </form>
+
+                            </div>
+
+                            <div class="modal-footer gn-modal-footer">
+                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">닫기</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div><!--<div class="container-fluid">-->
+        </div> <!--class="gn-sett-margin-box"-->
+    </div> <!--class="gn-box profile-team"-->
+</div> <!--id="image-sett"  class="tab-pane fade"-->

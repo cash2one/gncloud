@@ -700,3 +700,52 @@ class GnErrorHist(Base):
         return ['id', 'type', 'action','team_code','author_id','solve_time','solver_name']
 
 
+class GnBackup(Base):
+    __tablename__='GN_BACKUP'
+    vm_id = Column(String(8), primary_key=True, nullable=False)
+    backup_time = Column(DateTime, nullable=False)
+    team_code = Column(String(10), nullable=False)
+    author_id = Column(String(50), nullable=False)
+    vm_type = Column(String(10), nullable=False)
+    vm_name = Column(String(50), nullable=False)
+    team_name = Column(String(10), nullable=False)
+    author_name = Column(String(20), nullable=False)
+
+    def __init__(self,vm_id=vm_id, backup_time = None, team_code =None, author_id=None, vm_type=None, vm_name=None, team_name=None,author_name=None ):
+        self.vm_id = vm_id
+        self.vm_name = vm_name
+        self.backup_time = backup_time
+        self.team_code = team_code
+        self.team_name = team_name
+        self.author_id = author_id
+        self.vm_type = vm_type
+        self.author_name = author_name
+
+    def __repr__(self):
+        return '< Vm_id %r / Vm_name %r / Backup_time %r / Team_code %r / Team_name %r / Author_id %r / Vm_type %r / Author_name %r / >' \
+               %(self.vm_id, self.vm_name, self.backup_time, self.team_code, self.team_name, self.author_id, self.vm_type, self.author_name)
+
+    def __json__(self):
+        return ['vm_id', 'vm_name', 'backup_time','team_code','team_name','author_id','vm_type', 'author_name']
+
+class GnBackupHist(Base):
+    __tablename__="GN_BACKUP_HIST"
+    vm_id = Column(String(8), primary_key=True, nullable=False)
+    filename = Column(String(150), primary_key=True, nullable=False)
+    backup_time = Column(DateTime, nullable=True, default=datetime.datetime.now())
+    vm_type = Column(String(10), nullable=False)
+    host_ip = Column(String(50), nullable=False)
+
+    def __init__(self, vm_id=vm_id, filename=None, backup_time=None, vm_type=None, host_ip=None):
+        self.vm_id =vm_id
+        self. filename = filename
+        self.backup_time = backup_time
+        self.vm_type = vm_type
+        self.host_ip =host_ip
+
+    def __repr__(self):
+        return '<Vm_id %r / Filename %r / Backup_time %r / Vm_type %r / Host_ip %r / >' \
+               %(self.vm_id, self.filename, self.backup_time, self.vm_type, self.host_ip)
+
+    def __json__(self):
+        return ['vm_id', 'filename', 'backup_time', 'vm_type', 'host_ip']
