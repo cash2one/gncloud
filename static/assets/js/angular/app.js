@@ -30,8 +30,10 @@ var serviceAddModules = [
                 if($location.path() == "/guestPrice") $scope.menu = 5;
                 if($location.path() == "/guestLoginHist") $scope.menu = 6;
                 if($location.path() == "/guestUseHist") $scope.menu = 7;
-                if($location.path() == "/guestInvoice") $scope.menu = 8;
-                if($location.path() == "/guestSetting") $scope.menu = 9;
+                if($location.path() == "/guestBackupHist") $scope.menu = 8;
+                if($location.path() == "/guestProblemHist") $scope.menu = 9;
+                if($location.path() == "/guestInvoice") $scope.menu = 10;
+                if($location.path() == "/guestSetting") $scope.menu = 11;
             }
         };
     });

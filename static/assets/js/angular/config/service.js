@@ -24,6 +24,8 @@ var serviceConfig = function ($routeProvider, $httpProvider) {
         .when('/guestPrice', {templateUrl: '/main/guestPrice.html', controller: 'guestPriceCtrl'})
         .when('/guestLoginHist', {templateUrl: '/main/guestLoginHist.html', controller: 'guestLoginHistCtrl'})
         .when('/guestUseHist', {templateUrl: '/main/guestUseHist.html', controller: 'guestUseHistCtrl'})
+        .when('/guestBackupHist', {templateUrl: '/main/guestBackupHist.html', controller: 'guestBackupHistCtrl'})
+        .when('/guestProblemHist', {templateUrl: '/main/guestProblemHist.html', controller: 'guestProblemHistCtrl'})
         .when('/guestSetting', {templateUrl: '/main/guestSetting.html', controller: 'guestSettingCtrl'})
         .when('/guestNotice', {templateUrl: '/main/guestNotice.html', controller: 'guestNoticeCtrl'})
         .when('/guestQna', {templateUrl: '/main/guestQna.html', controller: 'guestQnaCtrl'})
