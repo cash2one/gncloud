@@ -545,25 +545,23 @@ class GnUsers(Base):
     user_id = Column(String(50), primary_key=True, nullable=False)
     user_name = Column(String(20), primary_key=True, nullable=False)
     privilege = Column(String(4), nullable=True, default=None)
-    dept_code = Column(String(3), nullable=True, default=None)
     tel = Column(String(15), nullable=True, default=None)
     email = Column(String(15), nullable=True, default=None)
     start_date = Column(DateTime, nullable=False, default=datetime.datetime.now())
     end_date = Column(DateTime, nullable=True, default=None)
 
-    def __init__(self, user_id, user_name, privilege=None, dept_code=None, tel=None, email=None, start_date=datetime.datetime.now(), end_date=None):
+    def __init__(self, user_id, user_name, privilege=None, tel=None, email=None, start_date=datetime.datetime.now(), end_date=None):
         self.user_id = user_id
         self.user_name = user_name
         self.privilege = privilege
-        self.dept_code = dept_code
         self.tel = tel
         self.email = email
         self.start_date = start_date
         self.end_date = end_date
 
     def __repr__(self):
-        return "<GnUsers(user_id='%r', user_name='%r', privilege='%r', dept_code='%r', tel='%r', email='%r', start_date='%r', end_date='%r')>" \
-               % (self.user_id, self.user_name, self.privilege, self.dept_code, self.tel, self.email, self.start_date, self.end_date)
+        return "<GnUsers(user_id='%r', user_name='%r', privilege='%r', tel='%r', email='%r', start_date='%r', end_date='%r')>" \
+               % (self.user_id, self.user_name, self.privilege, self.tel, self.email, self.start_date, self.end_date)
 
 
 class GnTeam(Base):
@@ -574,16 +572,18 @@ class GnTeam(Base):
     cpu_quota = Column(Integer, nullable=True, default=None)
     mem_quota = Column(Integer, nullable=True, default=None)
     disk_quota = Column(Integer, nullable=True, default=None)
+    create_date = Column(DateTime, nullable=False, default=datetime.datetime.now())
 
-    def __init__(self, team_code, team_name, author_id, cpu_quota, mem_quota, disk_quota):
+    def __init__(self, team_code, team_name, author_id, cpu_quota, mem_quota, disk_quota, create_date):
         self.team_code = team_code
         self.team_name = team_name
         self.author_id = author_id
         self.cpu_quota = cpu_quota
         self.mem_quota = mem_quota
         self.disk_quota = disk_quota
+        self.create_date = create_date
 
     def __repr__(self):
         return "<GnTeam(team_code='%r', team_name='%r', author_id='%r', cpu_quota='%r'," \
-               " mem_quota='%r', disk_quota='%r')>" \
-               % (self.team_code, self.team_name, self.author_id, self.cpu_quota, self.mem_quota , self.disk_quota)
+               " mem_quota='%r', disk_quota='%r', create_date='%r')>" \
+               % (self.team_code, self.team_name, self.author_id, self.cpu_quota, self.mem_quota , self.disk_quota, self.create_date)

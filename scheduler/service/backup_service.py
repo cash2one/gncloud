@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 import datetime
 from flask import jsonify
 from db.models import *
@@ -9,6 +10,8 @@ from util.config import config
 from service.powershell import BackupPowerShell
 from service.kvmshell import KvmShell
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 class Backup:
     def __init__(self, db_session=None):
@@ -107,17 +110,22 @@ class Backup:
             kvm = KvmShell()
             filename = kvm.backup_send(guest_info, host_info.ip, config.LIVERT_IMAGE_BACKUP_PATH)
             if filename == 'error':
+                print 'backup error'
+                sql_session.rollback()
                 return jsonify(status=False, message='failure backup')
 
             create_time = filename.split('_')[1]
             filename = '%s%s' % (filename, '.img')
             date_create_time = datetime.datetime.strptime(create_time,'%Y%m%d%H%M%S')
 
+            team = sql_session.query(GnTeam).filter(GnTeam.team_code == vm_info.team_code).one()
+            user = sql_session.query(GnUsers).filter(GnUsers.user_id == vm_info.author_id).one()
             # insert into GN_BACKUP_HIST, update or insert into GN_BACKUP
             backup = sql_session.query(GnBackup).filter(GnBackup.vm_id == vm_info.id).first()
             if backup is None:
                 backup_insert = GnBackup(vm_info.id, date_create_time, vm_info.team_code,
-                                         vm_info.author_id, vm_info.type)
+                                         vm_info.author_id, vm_info.type, guest_info.name,
+                                         team.team_name, user.user_name)
                 sql_session.add(backup_insert)
             else:
                 backup.backup_time = date_create_time
@@ -128,7 +136,9 @@ class Backup:
 
             return jsonify(status=True, message='success backup')
         except Exception as e:
-            print(e.message)
+            print 'kvm backup error : %s' % e
+            sql_session.rollback()
+            return jsonify(status=False, message='failure backup')
 
     def hyperv_backup(self, vm_info):
         # In case of vm status is running or suspend, it will be started backup
@@ -149,11 +159,14 @@ class Backup:
                 create_time=(info[4]).split('.')[0]
                 date_create_time = datetime.datetime.strptime(create_time,'%Y%m%d%H%M%S')
 
+                team = sql_session.query(GnTeam).filter(GnTeam.team_code == vm_info.team_code).one()
+                user = sql_session.query(GnUsers).filter(GnUsers.user_id == vm_info.author_id).one()
                 # insert into GN_BACKUP_HIST, update or insert into GN_BACKUP
                 backup = sql_session.query(GnBackup).filter(GnBackup.vm_id == org_vm_id).first()
                 if backup is None:
                     backup_insert = GnBackup(org_vm_id, date_create_time,
-                                             vm_info.team_code, vm_info.author_id, vm_info.type)
+                                             vm_info.team_code, vm_info.author_id, vm_info.type, host_machine.name,
+                                             team.team_name, user.user_name)
                     sql_session.add(backup_insert)
                 else:
                     backup.backup_time = date_create_time
@@ -161,8 +174,8 @@ class Backup:
                 backup_hist = GnBackupHist(org_vm_id, filename, date_create_time, vm_info.type, host_ip)
                 sql_session.add(backup_hist)
                 sql_session.commit()
-                return jsonify(status=True)
+                return jsonify(status=True, message='success backup')
         except Exception as e:
+            print 'hyperv backup error : %s' % e
             sql_session.rollback()
-            print (e)
-            return jsonify(status=False)
+            return jsonify(status=False, message='failure backup')
