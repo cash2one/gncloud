@@ -261,11 +261,25 @@ angular
                 .success(function(data) {
                     if (data.status == true) {
 
-                    }
-                     else {
+                    }else {
+                        $scope.errorTrace(id,"Create");
                     }
                 });
         };
+
+        $scope.errorTrace = function(id,action){
+            $http({
+                method  : 'POST',
+                url: '/api/manager/vm/error',
+                data: '{"id":"'+id+'","action":"'+action+'"}',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            })
+                .success(function(data) {
+
+                });
+        }
 
     })
     .directive("checkboxGroup", function() {

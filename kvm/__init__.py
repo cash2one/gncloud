@@ -4,13 +4,10 @@ import traceback
 from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta, datetime
 from kvm.db.database import db_session
-from kvm.service.service import server_create, server_change_status, server_monitor \
-    , add_user_sshkey, delete_user_sshkey, list_user_sshkey, server_delete, server_create_snapshot \
-    , server_image_delete, getsshkey_info
+from kvm.service.service import *
 from kvm.util.json_encoder import AlchemyEncoder
 from kvm.util.logger import logger
 from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
-#from apscheduler.scheduler import Scheduler
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)

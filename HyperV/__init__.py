@@ -9,6 +9,7 @@ from flask import Flask, redirect, url_for
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
 from HyperV.db.database import db_session
+import traceback
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -93,6 +94,11 @@ def hvmcreate():
 def cronMnitor():
     vm_monitor(db_session)
     return jsonify(status=True, message="success")
+
+@app.errorhandler(500)
+def internal_error(error):
+    print(traceback.format_exc())
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 if __name__ == '__main__':
     #app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
