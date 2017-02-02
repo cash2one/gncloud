@@ -30,8 +30,8 @@
                         </thead>
                         <tbody class="gn-tdody">
                         <tr ng-repeat="base in base_list">
-                            <td class="second-td-name"><img src="/gn_images/gn_icon_{{base.os}}.png" alt=""></td>
-                            <td>{{base.os}}</td>
+                            <td class="first-td"><img src="/gn_images/gn_icon_{{base.os}}.png" alt=""></td>
+                            <td class="second-td-name">{{base.os}}</td>
                             <td>{{base.os_ver}}{{base.os_subver}}</td>
                             <td class="hidden-xs">{{base.os_bit}}</td>
                             <td class="hidden-xs">{{base.type}}</td>                            
@@ -90,13 +90,13 @@
                             </thead>
                             <tbody class="gn-tdody">
                             <tr ng-repeat="snap in snap_list" ng-class="{'tr-on-error':snap.status =='Error'}">
-                                <td>
+                                <td class="first-td">
                                     <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
                                     <img ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
                                     <img ng-show="list.status != 'Error'" src="/gn_images/gn_icon_{{snap.os}}.png" alt="">
                                 </td>
                                 <td class="second-td-name" data-toggle="modal" data-target="#teamModal" ng-click="snap_list_info(snap.id)">
-                                    <a class="gn-ms-cursor second-td-name">{{snap.name}}</a>
+                                    <a class="gn-ms-cursor">{{snap.name}}</a>
                                 </td>
                                 <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
                                 
@@ -189,7 +189,7 @@
                 </thead>
                 <tbody class="gn-tdody">
                 <tr ng-repeat="con in contain_list">
-                    <td><img src="/gn_images/gn_icon_{{con.os}}.png"></td>
+                    <td class="first-td"><img src="/gn_images/gn_icon_{{con.os}}.png"></td>
                     <td class="second-td-name">{{con.view_name}}</td>
                     <td>{{con.os_ver}}</td>
                     <td class="hidden-xs">{{con.tagFirst}}<span ng-show="con.tag.length > 1" data-toggle="tooltip" title="{{con.tag}}" tooltip><span class="tag">{{con.tagcount}}</span></span></td>
