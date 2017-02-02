@@ -110,24 +110,25 @@
 
                             <div class="container-fluid">
                                 <div class="table-responsive gn-table-responsive">
-                                    <table class="table table gn-table gn-top">
+                                    <table class="table gn-table gn-top">
                                         <thead>
                                         <tr>
+                                            <th class="first-td"></th>
                                             <th class="">OS</th>
                                             <th class="">버전</th>
                                             <th class="hidden-xs">BIT</th>
                                             <th class="hidden-xs">타입</th>
-                                            <th class="hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('image')"></div></th>
+                                            <th class="hidden-xs hidden-sm">
+                                                생성일
+                                                <div class="refresh" ng-click="refresh('image')"></div>
+                                            </th>
                                             <th><!--더보기--></th>
                                         </tr>
                                         </thead>
                                         <tbody class="gn-tdody">
                                         <tr ng-repeat="path in images_list">
-                                            <td>
-                                                <img src="/gn_images/{{path.icon}}" alt="" ng-show="path.icon != ''">
-
-                                                {{path.os}}
-                                            </td>
+                                            <td><img src="/gn_images/{{path.icon}}" alt="" ng-show="path.icon != ''"></td>
+                                            <td class="second-td-name">{{path.os}}</td>
                                             <td class="hidden-xs">{{path.os_ver}}</td>
                                             <td class="hidden-xs">{{path.os_bit}}</td>
                                             <td>{{path.type}}</td>
@@ -258,25 +259,30 @@
 
                             <div class="container-fluid row">
                                 <div class="table-responsive gn-table-responsive">
-                                    <table class="table table gn-table gn-top">
+                                    <table class="table gn-table gn-top">
                                         <thead>
                                         <tr>
+                                            <th class="first-td"></th>
                                             <th class="">이름</th>
                                             <th class="">버전</th>
                                             <th class="">태그</th>
-                                            <th class="hidden-xs hidden-sm">생성일<div class="refresh" ng-click="refresh('contain')"></div></th>
+                                            <th class="hidden-xs hidden-sm">
+                                                생성일
+                                                <div class="refresh" ng-click="refresh('contain')"></div>
+                                            </th>
                                             <th class=""><!--더보기--></th>
                                         </tr>
                                         </thead>
                                         <tbody class="gn-tdody">
                                         <tr ng-repeat="contain in contain_list">
-                                            <td>
-                                                <img src="/gn_images/{{contain.icon}}" alt="" ng-show="contain.icon != '' ">
-                                                {{contain.view_name}}
-                                            </td>
+                                            <td><img src="/gn_images/{{contain.icon}}" alt="" ng-show="contain.icon != '' "></td>
+                                            <td class="second-td-name">{{contain.view_name}}</td>
                                             <td>{{contain.os_ver}}</td>
                                             <td class="hidden-xs">{{contain.tagFirst}}
-                                                <span ng-show="contain.tag.length > 1" data-toggle="tooltip" title="{{contain.tag}}" tooltip><span class="tag">{{contain.tagcount}}</span></span></td>
+                                                <span ng-show="contain.tag.length > 1" data-toggle="tooltip" title="{{contain.tag}}" tooltip>
+                                                    <span class="tag">{{contain.tagcount}}</span>
+                                                </span>
+                                            </td>
                                             <td class="hidden-xs hidden-sm">{{contain.create_time_diff}}</td>
                                             <td class="dropdown">
                                                 <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
