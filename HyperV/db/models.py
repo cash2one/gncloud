@@ -47,6 +47,7 @@ class GnImagesPool(Base):
         return "<GnImagesPool(_hostid='%r', type='%r', local_path='%r', nas_path='%r', manager_path = '%r')>" \
                % (self._hostid, self.type, self.local_path, self.nas_path, self.manager_path)
 
+
 class GnTeam(Base):
     __tablename__ = 'GN_TEAM'
     team_code = Column(String(10), primary_key=True, nullable=False)
@@ -55,20 +56,21 @@ class GnTeam(Base):
     cpu_quota = Column(Integer, nullable=True, default=None)
     mem_quota = Column(Integer, nullable=True, default=None)
     disk_quota = Column(Integer, nullable=True, default=None)
+    create_date = Column(DateTime, nullable=False, default=datetime.datetime.now())
 
-    def __init__(self, team_code, team_name, author_id, cpu_quota, mem_quota, disk_quota):
+    def __init__(self, team_code, team_name, author_id, cpu_quota, mem_quota, disk_quota, create_date):
         self.team_code = team_code
         self.team_name = team_name
         self.author_id = author_id
         self.cpu_quota = cpu_quota
         self.mem_quota = mem_quota
         self.disk_quota = disk_quota
+        self.create_date = create_date
 
     def __repr__(self):
         return "<GnTeam(team_code='%r', team_name='%r', author_id='%r', cpu_quota='%r'," \
-               " mem_quota='%r', disk_quota='%r')>" \
-               % (self.team_code, self.team_name, self.author_id, self.cpu_quota, self.mem_quota , self.disk_quota)
-
+               " mem_quota='%r', disk_quota='%r', create_date='%r')>" \
+               % (self.team_code, self.team_name, self.author_id, self.cpu_quota, self.mem_quota , self.disk_quota, self.create_date)
 
 
 class GnEndPointMap(Base):
@@ -284,25 +286,23 @@ class GnUsers(Base):
     user_id = Column(String(50), primary_key=True, nullable=False)
     user_name = Column(String(20), primary_key=True, nullable=False)
     privilege = Column(String(4), nullable=True, default=None)
-    dept_code = Column(String(3), nullable=True, default=None)
     tel = Column(String(15), nullable=True, default=None)
     email = Column(String(15), nullable=True, default=None)
     start_date = Column(DateTime, nullable=False, default=datetime.datetime.now())
     end_date = Column(DateTime, nullable=True, default=None)
 
-    def __init__(self, user_id, user_name, privilege=None, dept_code=None, tel=None, email=None, start_date=datetime.datetime.now(), end_date=None):
+    def __init__(self, user_id, user_name, privilege=None, tel=None, email=None, start_date=datetime.datetime.now(), end_date=None):
         self.user_id = user_id
         self.user_name = user_name
         self.privilege = privilege
-        self.dept_code = dept_code
         self.tel = tel
         self.email = email
         self.start_date = start_date
         self.end_date = end_date
 
     def __repr__(self):
-        return "<GnUsers(user_id='%r', user_name='%r', privilege='%r', dept_code='%r', tel='%r', email='%r', start_date='%r', end_date='%r')>" \
-               % (self.user_id, self.user_name, self.privilege, self.dept_code, self.tel, self.email, self.start_date, self.end_date)
+        return "<GnUsers(user_id='%r', user_name='%r', privilege='%r', tel='%r', email='%r', start_date='%r', end_date='%r')>" \
+               % (self.user_id, self.user_name, self.privilege, self.tel, self.email, self.start_date, self.end_date)
 
 
 class GnVmImages(Base):
@@ -572,92 +572,3 @@ class GnSystemSetting(Base):
     def __json__(self):
         return ['billing_type', 'backup_schedule_type', 'backup_schedule_period', 'monitor_period']
 
-
-    # GN_VM_MONITOR 아직 작업 못함
-# class GN_VM_MONITOR(Base):
-#     __tablename__ = 'GN_VM_MONITOR'
-#     vm_id = Column(String(100), primary_key=True, nullable=False)
-#     cpu_usage = Column(DECIMAL(11, 4), nullable=True, default=None)
-#     mem_usage = Column(DECIMAL(11, 4), nullable=True, default=None)
-#     disk_usage = Column(DECIMAL(11, 4), nullable=True, default=None)
-#     net_usage = Column(DECIMAL(11, 4), nullable=True, default=None)
-#
-#     def __init__(self, vm_id, time_stamp, cpu_usage, mem_usage, disk_usage, net_usage):
-#         self.vm_id = vm_id
-#         self.time_stamp = time_stamp
-#         self.cpu_usage = cpu_usage
-#         self.mem_usage = mem_usage
-#         self.disk_usage = disk_usage
-#         self.net_usage = net_usage
-#
-#     def __repr__(self):
-#         return "<GnHostMonitor(vm_id='%r', cpu_usage='%r', mem_usage='%r', disk_usage='%r', net_usage='%r')>" \
-#                % (self.vm_id, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
-
-# GN_VM_MONITOR_HISTGN_VM_MONITOR_HIST
-
-# GN_IMAGES_POOLGN_IMAGES_POOL
-
-# class GnVmMachines(Base):
-#     __tablename__ = 'GN_VM_MACHINES'
-#     id = Column(String(30), primary_key=True, nullable=False)
-#     name = Column(String(50), primary_key=True, nullable=False)
-#     type = Column(String(50), primary_key=False, nullable=False)
-#     cpu = Column(Integer, primary_key=False, nullable=False)
-#     memory = Column(Integer, primary_key=False, nullable=False)
-#     hdd = Column(Integer, primary_key=False, nullable=False)
-#     ip = Column(String(20), primary_key=False, nullable=False)
-#     host_id = Column(Integer, primary_key=False, nullable=False)
-#     os = Column(String(10), primary_key=False, nullable=True)
-#     os_ver = Column(String(20), primary_key=False, nullable=True)
-#     os_sub_ver = Column(String(20), primary_key=False, nullable=True)
-#     bit = Column(String(2), primary_key=False, nullable=True)
-#     author = Column(String(15), primary_key=False, nullable=False)
-#     create_time = Column(DateTime, default=datetime.datetime.utcnow)
-#     start_time = Column(DateTime, default=datetime.datetime.utcnow)
-#     stop_time = Column(DateTime, default=datetime.datetime.utcnow)
-#     status = Column(String(10), primary_key=False, nullable=False)
-#
-#     def __init__(self, id=id, name=None, type=None, cpu=None, memory=None, hdd=None, ip=None, host_id=None, os=None,
-#                  os_ver=None, os_sub_ver=None, bit=None, author=None, status=None):
-#         self.id = id
-#         self.name = name
-#         self.type = type
-#         self.cpu = cpu
-#         self.memory = memory
-#         self.hdd = hdd
-#         self.ip = ip
-#         self.host_id = host_id
-#         self.os = os
-#         self.os_ver = os_ver
-#         self.os_sub_ver = os_sub_ver
-#         self.bit = bit
-#         self.author = author
-#         self.status = status
-#
-#     def __repr__(self):
-#         return '<ID %r / Name %r / Type %r / Cpu %r / Memory %r / Hdd %r / Ip %r / Status %r>' \
-#                % (self.id, self.name, self.type, self.cpu, self.memory, self.hdd, self.ip, self.status)
-#
-#     def __json__(self):
-#         return ['id', 'name', 'type', 'cpu', 'memory', 'hdd', 'ip', 'status']
-#
-#
-# class GnVmImages(Base):
-#     __tablename__ = 'GN_VM_IMAGES'
-#     id = Column(Integer, primary_key=True, nullable=False)
-#     name = Column(String(50), primary_key=False, nullable=False)
-#     type = Column(String(20), primary_key=False, nullable=False)
-#     reg_dt = Column(DateTime, primary_key=False, nullable=False)
-#
-#     def __init__(self, name=None, type=None, reg_dt=None):
-#         self.name = name
-#         self.type = type
-#         self.reg_dt = reg_dt
-#
-#     def __repr__(self):
-#         return '<ID %r / Name %r / Type %r / Reg_dt %r>' \
-#                % (self.id, self.name, self.type, self.reg_dt)
-#
-#     def __json__(self):
-#         return ['id', 'name', 'type', 'reg_dt']

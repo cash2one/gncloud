@@ -81,6 +81,7 @@ class Invoice:
             author_id = None
             author_text = None
             instance_list = None
+            one_vm_price = 0
 
             print ('year : %s, months : %s') % (year, month)
 
@@ -131,16 +132,16 @@ class Invoice:
                         instance_list = '%s,%s' % (instance_list, instance)
 
                 if stat.team_code != team_code and team_code is not None:
-                    all_text = '{"version":"%s", "year":"%s", "month":"%s", "calc_day":"%s", "team":"%s", "team_price":"%d", "each_user":[%s] }' \
-                               % (version, year, month, today, team_code, total_price, json_text)
+                    all_text = '{"version":"%s", "year":"%s", "month":"%s", "calc_day":"%s", "team":"%s","team_name":"%s", "team_price":"%d", "each_user":[%s] }' \
+                               % (version, year, month, today, team_code, stat.team_name, total_price, json_text)
 
                     invoid_result = GnInvoiceResult(year, month, team_code, all_text)
                     sql_session.add(invoid_result)
 
                     team_code = stat.team_code
                     day_count = 0;
+                    total_price = one_vm_price;
                     one_vm_price = 0;
-                    total_price = 0;
                     json_text = None
                     print(all_text)
                 elif team_code is None:
@@ -154,8 +155,8 @@ class Invoice:
             else:
                 json_text = "%s,%s" % (json_text, author_text)
 
-            all_text = '{"version":"%s", "year":"%s", "month":"%s", "calc_day":"%s", "team":"%s", "team_price":"%d", "each_user":[%s] }' \
-                       % (version, year, month, today, team_code, total_price, json_text)
+            all_text = '{"version":"%s", "year":"%s", "month":"%s", "calc_day":"%s", "team":"%s","team_name":"%s", "team_price":"%d", "each_user":[%s] }' \
+                       % (version, year, month, today, team_code, stat.team_name, total_price, json_text)
 
             invoid_result = GnInvoiceResult(year, month, team_code, all_text)
             sql_session.add(invoid_result)
