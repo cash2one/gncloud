@@ -57,6 +57,7 @@ def create_vm():
     backup="false"
     team_code = session['teamCode']
     user_id = session['userId']
+
     if 'backup' in request.json:
         backup = request.json['backup']
     if 'vm_name' in request.json:
