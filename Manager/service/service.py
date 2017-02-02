@@ -1305,11 +1305,13 @@ def healthcheck_info(team_code,sql_session):
 
 def team_price_lsit(team_code,sql_session):
     list = sql_session.query(GnInvoiceResult).all()
+
     return list
 
 def team_price_lsit_info(year,month,team_code,sql_session):
     list = sql_session.query(GnInvoiceResult).filter(GnInvoiceResult.year==year).filter(GnInvoiceResult.month == month)\
                                             .filter(GnInvoiceResult.team_code==team_code).one()
+    team_name = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
     instance=json.loads(list.invoice_data)
     team = sql_session.query(GnTeam).filter(GnTeam.team_code == list.team_code).one()
-    return {"list":list, "instance":instance}
+    return {"list":list, "instance":instance, "team_code":team_name}

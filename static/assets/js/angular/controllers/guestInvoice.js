@@ -32,6 +32,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.price_list =data.list.list;
+                        $scope.team_code = data.list.team_code;
                         $scope.price_invoice = data.list.instance;
                         var pricInfo = new Array;
                         for(var i = 0 ;i< data.list.instance.each_user.length;i++){
