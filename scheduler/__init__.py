@@ -27,9 +27,13 @@ def monitor_restart():
 def invoice_calc_force():
     return app.ScheduleController.invoice.invoice_calc()
 
-@app.route("/daybackup/force")
+@app.route("/backup/force")
 def backup_force():
     return app.ScheduleController.backup.backup()
+
+@app.route("/backupdelete/force")
+def backup_delete_force():
+    return app.ScheduleController.backup_delete.backup_delete()
 
 if __name__ == '__main__':
     app.run(host=config.CONTROLLER_HOST,port=int(config.CONTROLLER_PORT))
