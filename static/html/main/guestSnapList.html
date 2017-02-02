@@ -25,18 +25,16 @@
                             <th class="">OS</th>
                             <th class="">버전</th>
                             <th class="hidden-xs">Bit</th>
-                            <th class="hidden-xs">타입</th>
-                            <th></th>
+                            <th class="hidden-xs">타입</th>                            
                         </tr>
                         </thead>
                         <tbody class="gn-tdody">
                         <tr ng-repeat="base in base_list">
-                            <td><img src="/gn_images/gn_icon_{{base.os}}.png" alt=""></td>
+                            <td class="second-td-name"><img src="/gn_images/gn_icon_{{base.os}}.png" alt=""></td>
                             <td>{{base.os}}</td>
                             <td>{{base.os_ver}}{{base.os_subver}}</td>
                             <td class="hidden-xs">{{base.os_bit}}</td>
-                            <td class="hidden-xs">{{base.type}}</td>
-                            <td></td>
+                            <td class="hidden-xs">{{base.type}}</td>                            
                         </tr>
                         </tbody>
                     </table>
@@ -182,18 +180,17 @@
             <table class="table table gn-table">
                 <thead>
                 <tr>
-                    <th class="col-xs-8 col-sm-4">OS</th>
-                    <th class="col-sm-3">버전</th>
-                    <th class="col-sm-4 hidden-xs">태그</th>
-                    <th class="col-sm-1 hidden-xs"></th>
+                    <th class="first-td"></th> 
+                    <th class="">OS</th>
+                    <th class="">버전</th>
+                    <th class="hidden-xs">태그</th>
+                    <th class="hidden-xs"></th>
                 </tr>
                 </thead>
                 <tbody class="gn-tdody">
                 <tr ng-repeat="con in contain_list">
-                    <td>
-                        <img src="/gn_images/gn_icon_{{con.os}}.png">
-                        {{con.view_name}}
-                    </td>
+                    <td><img src="/gn_images/gn_icon_{{con.os}}.png"></td>
+                    <td class="second-td-name">{{con.view_name}}</td>
                     <td>{{con.os_ver}}</td>
                     <td class="hidden-xs">{{con.tagFirst}}<span ng-show="con.tag.length > 1" data-toggle="tooltip" title="{{con.tag}}" tooltip><span class="tag">{{con.tagcount}}</span></span></td>
                     <td class="hidden-xs"></td>

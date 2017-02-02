@@ -9,7 +9,7 @@ from flask import jsonify, request, session
 from Docker.db.database import db_session
 from Docker.db.models import GnDockerContainers, GnDockerVolumes, GnDockerImageDetail, \
     GnDockerServices, GnHostMachines, GnDockerPorts, GnVmMachines, GnDockerImages, GnVmSize, \
-    GnInstanceStatus, GnSystemSetting
+    GnInstanceStatus, GnSystemSetting, GnTeam, GnUsers
 from Docker.service.dockerService import DockerService
 from Docker.util.config import config
 from Docker.util.hash import random_string
@@ -19,10 +19,15 @@ from Docker.util.logger import logger
 # Docker Service 생성 및 실행
 # 서비스 생성 시에는 실행은 자동이다.
 def doc_create(id,sql_session):
-
+    team_name = None
+    user_name = None
     #로직 변경
     print("get id"+id)
     docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    if docker_info is not None:
+        team_name = sql_session.query(GnTeam).filter(GnTeam.team_code == docker_info.team_code).one()
+        user_name = sql_session.query(GnUsers).filter(GnUsers.user_id == docker_info.author_id).one()
+
     ds = None
 
     try:
@@ -135,8 +140,9 @@ def doc_create(id,sql_session):
             else:
                 logger.error('invalid price_type : system_setting.billing_type %s' % system_setting.billing_type)
 
-            insert_instance_status = GnInstanceStatus(vm_id=docker_info.id,vm_name=docker_info.name, create_time=now_time, delete_time=None
-                                                      , author_id=docker_info.author_id, team_code=docker_info.team_code
+            insert_instance_status = GnInstanceStatus(vm_id=docker_info.id,vm_name=docker_info.name, create_time=now_time
+                                                      , delete_time=None, author_id=docker_info.author_id, author_name=user_name.user_name
+                                                      , team_code=docker_info.team_code, team_name=team_name.team_name
                                                       , price=instance_status_price,price_type=system_setting.billing_type
                                                       , cpu=docker_info.cpu, memory=docker_info.memory,disk=docker_info.disk)
             sql_session.add(insert_instance_status)

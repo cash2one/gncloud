@@ -40,42 +40,40 @@ class GnHostMachines(Base):
                     host_agent_port=self.host_agent_port)
 
 
-# class GnHostDocker(Base):
-#     __tablename__ = 'GN_HOST_DOCKER'
-#     id = Column(String(8), primary_key=True, nullable=False, default='')
-#     type = Column(String(10), nullable=True, default='')
-#     cpu = Column(Integer, nullable=True, default='')
-#     mem = Column(Integer, nullable=True, default='')
-#     disk = Column(Integer, nullable=True, default='')
-#     max_cpu = Column(Integer, nullable=True, default='')
-#     max_mem = Column(Integer, nullable=True, default='')
-#     max_disk = Column(Integer, nullable=True, default='')
-#     host_agent_port = Column(Integer, nullable=True, default='')
-#
-#     def __init__(
-#             self,
-#             id, name, ip, type, cpu, mem,
-#             disk, max_cpu, max_mem, max_disk, host_agent_port
-#     ):
-#         self.id = id
-#         self.name = name
-#         self.ip = ip
-#         self.type = type
-#         self.cpu = cpu
-#         self.mem = mem
-#         self.disk = disk
-#         self.max_cpu = max_cpu
-#         self.max_mem = max_mem
-#         self.max_disk = max_disk
-#         self.host_agent_port = host_agent_port
-#
-#     def __repr__(self):
-#         return "<GnHostDocker %r>" % self.id
-#
-#     def to_json(self):
-#         return dict(id=self.id, name=self.name, ip=self.ip, type=self.type, cpu=self.cpu, mem=self.mem,
-#                     disk=self.disk, max_cpu=self.max_cpu, max_mem=self.max_mem, max_disk=self.max_disk,
-#                     host_agent_port=self.host_agent_port)
+class GnHostDocker(Base):
+    __tablename__ = 'GN_HOST_DOCKER'
+    id = Column(String(8), primary_key=True, nullable=False, default='')
+    name = Column(String(100), nullable=True, default='')
+    ip = Column(String(50), nullable=True, default='')
+    type = Column(String(10), nullable=True, default='')
+    cpu = Column(Integer, nullable=True, default='')
+    mem = Column(Integer, nullable=True, default='')
+    disk = Column(Integer, nullable=True, default='')
+    max_cpu = Column(Integer, nullable=True, default='')
+    max_mem = Column(Integer, nullable=True, default='')
+    max_disk = Column(Integer, nullable=True, default='')
+    host_agent_port = Column(Integer, nullable=True, default='')
+
+    def __init__(self, id, name, ip, type, cpu, mem, disk, max_cpu, max_mem, max_disk, host_agent_port):
+        self.id = id
+        self.name = name
+        self.ip = ip
+        self.type = type
+        self.cpu = cpu
+        self.mem = mem
+        self.disk = disk
+        self.max_cpu = max_cpu
+        self.max_mem = max_mem
+        self.max_disk = max_disk
+        self.host_agent_port = host_agent_port
+
+    def __repr__(self):
+        return "<GnHostDocker %r>" % self.id
+
+    def to_json(self):
+        return dict(id=self.id, name=self.name, ip=self.ip, type=self.type, cpu=self.cpu, mem=self.mem,
+                    disk=self.disk, max_cpu=self.max_cpu, max_mem=self.max_mem, max_disk=self.max_disk,
+                    host_agent_port=self.host_agent_port)
 
 
 class GnVmMachines(Base):
@@ -488,21 +486,26 @@ class GnInstanceStatus(Base):
     create_time = Column(DateTime, nullable=False, default='')
     delete_time = Column(DateTime, nullable=True)
     author_id = Column(String(50), nullable=False, default='')
+    author_name = Column(String(20), nullable=False, default='')
     team_code = Column(String(10), nullable=True, default='')
+    team_name = Column(String(50), nullable=True, default=None)
     price = Column(Integer, nullable=True, default='')
     price_type = Column(String(2), nullable=True, default='')
     cpu = Column( nullable=True, default='')
     memory = Column( nullable=True, default='')
     disk = Column( nullable=True, default='')
 
-    def __init__(self, vm_id=None,vm_name=None,create_time=None, delete_time=None, author_id=None, team_code=None
-                 , price=None, price_type=None, cpu=None, memory=None, disk=None):
+
+    def __init__(self, vm_id=None,vm_name=None,create_time=None, delete_time=None, author_id=None, author_name=None
+                 ,team_code=None, team_name=None, price=None, price_type=None, cpu=None, memory=None, disk=None):
         self.vm_id = vm_id
         self.vm_name = vm_name
         self.create_time = create_time
         self.delete_time = delete_time
         self.author_id = author_id
+        self.author_name = author_name
         self.team_code = team_code
+        self.team_name = team_name
         self.price = price
         self.price_type = price_type
         self.cpu = cpu
@@ -535,3 +538,52 @@ class GnSystemSetting(Base):
 
     def __json__(self):
         return ['billing_type', 'backup_schedule_type', 'backup_schedule_period', 'monitor_period']
+
+
+class GnUsers(Base):
+    __tablename__ = 'GN_USERS'
+    user_id = Column(String(50), primary_key=True, nullable=False)
+    user_name = Column(String(20), primary_key=True, nullable=False)
+    privilege = Column(String(4), nullable=True, default=None)
+    dept_code = Column(String(3), nullable=True, default=None)
+    tel = Column(String(15), nullable=True, default=None)
+    email = Column(String(15), nullable=True, default=None)
+    start_date = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    end_date = Column(DateTime, nullable=True, default=None)
+
+    def __init__(self, user_id, user_name, privilege=None, dept_code=None, tel=None, email=None, start_date=datetime.datetime.now(), end_date=None):
+        self.user_id = user_id
+        self.user_name = user_name
+        self.privilege = privilege
+        self.dept_code = dept_code
+        self.tel = tel
+        self.email = email
+        self.start_date = start_date
+        self.end_date = end_date
+
+    def __repr__(self):
+        return "<GnUsers(user_id='%r', user_name='%r', privilege='%r', dept_code='%r', tel='%r', email='%r', start_date='%r', end_date='%r')>" \
+               % (self.user_id, self.user_name, self.privilege, self.dept_code, self.tel, self.email, self.start_date, self.end_date)
+
+
+class GnTeam(Base):
+    __tablename__ = 'GN_TEAM'
+    team_code = Column(String(10), primary_key=True, nullable=False)
+    team_name = Column(String(50), nullable=True, default=None)
+    author_id = Column(String(50), nullable=True, default=None)
+    cpu_quota = Column(Integer, nullable=True, default=None)
+    mem_quota = Column(Integer, nullable=True, default=None)
+    disk_quota = Column(Integer, nullable=True, default=None)
+
+    def __init__(self, team_code, team_name, author_id, cpu_quota, mem_quota, disk_quota):
+        self.team_code = team_code
+        self.team_name = team_name
+        self.author_id = author_id
+        self.cpu_quota = cpu_quota
+        self.mem_quota = mem_quota
+        self.disk_quota = disk_quota
+
+    def __repr__(self):
+        return "<GnTeam(team_code='%r', team_name='%r', author_id='%r', cpu_quota='%r'," \
+               " mem_quota='%r', disk_quota='%r')>" \
+               % (self.team_code, self.team_name, self.author_id, self.cpu_quota, self.mem_quota , self.disk_quota)
