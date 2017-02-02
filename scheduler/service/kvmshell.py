@@ -18,7 +18,7 @@ class KvmShell:
         self.sql_session = db_session
         self.USER = "root"
 
-    def bakup_send(self, guest_info, dest_ip, dest_path):
+    def backup_send(self, guest_info, dest_ip, dest_path):
         try:
             new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             # 디스크 복사

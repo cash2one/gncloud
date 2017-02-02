@@ -61,6 +61,7 @@ class Backup:
                     self.kvm_backup(vm_info)
                 elif vm_info.type == 'hyperv':
                     self.hyperv_backup(vm_info)
+            sql_session.commit()
             return jsonify(status=True, message='success backup')
         except Exception as message:
             print(message)
