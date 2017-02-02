@@ -16,7 +16,7 @@ import time
 from flask import request, jsonify
 from HyperV.service.powershellService import PowerShell
 from HyperV.db.database import db_session
-from HyperV.db.models import GnVmMachines, GnVmImages, GnMonitor
+from HyperV.db.models import GnVmMachines, GnVmImages, GnMonitor, GnUsers, GnTeam
 
 from HyperV.util.config import config
 from HyperV.util.hash import random_string
@@ -31,9 +31,15 @@ def manual():
 # VM 생성 및 실행
 def hvm_create(id, sql_session):
     vm_info = None
+    team_name = None
+    user_name = None
     try:
         vm_id = id
         vm_info =sql_session.query(GnVmMachines).filter(GnVmMachines.id == vm_id).first()
+
+        if vm_info is not None:
+            team_name = sql_session.query(GnTeam).filter(GnTeam.team_code == vm_info.team_code).one()
+            user_name = sql_session.query(GnUsers).filter(GnUsers.user_id == vm_info.author_id).one()
 
         host_id =vm_info.host_id
         host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
@@ -131,9 +137,13 @@ def hvm_create(id, sql_session):
             else:
                 logger.error('invalid price_type : system_setting.billing_type %s' % system_setting.billing_type)
 
-            insert_instance_status = GnInstanceStatus(vm_id=vm_info.id,vm_name=vm_info.name, author_id=vm_info.author_id, team_code=vm_info.team_code
+            now_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            insert_instance_status = GnInstanceStatus(vm_id=vm_info.id,vm_name=vm_info.name, create_time=now_time
+                                                      , delete_time=None, author_id=vm_info.author_id, author_name=user_name.user_name
+                                                      , team_code=vm_info.team_code, team_name=team_name.team_name
                                                       , price=instance_status_price,price_type=system_setting.billing_type
                                                       , cpu=vm_info.cpu, memory=vm_info.memory,disk=vm_info.disk)
+
             sql_session.add(insert_instance_status)
 
             sql_session.commit()
