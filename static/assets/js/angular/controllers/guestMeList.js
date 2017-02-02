@@ -68,13 +68,17 @@ angular
                     if (data.status == true) {
                         var newArr = new Array();
                         var team_code="";
-
-                        for(var i = 0 ; i < data.list.list.length ; i++) {
-                            data.list.list[i].user_id = data.list.list[i][0].user_name;
-                            newArr.push(data.list.list[i]);
+                        if(data.list.list !=null){
+                            for(var i = 0 ; i < data.list.list.length ; i++) {
+                                data.list.list[i].user_id = data.list.list[i][0].user_name;
+                                newArr.push(data.list.list[i]);
+                            }
+                            $scope.check_list = 2;
+                            $scope.team_list = newArr; // 팀원들에 대한 정보
+                        }else{
+                            $scope.check_list = 1;
                         }
 
-                        $scope.team_list = newArr; // 팀원들에 대한 정보
                         $scope.team_list.total = data.list.info
 
                     } else {

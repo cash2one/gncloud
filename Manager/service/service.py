@@ -265,6 +265,8 @@ def login_list(user_id, password, sql_session):
 def teamwon_list(user_id,team_code,team,sql_session):
     list =sql_session.query(GnUser, GnUserTeam).join(GnUserTeam, GnUserTeam.user_id == GnUser.user_id).filter(GnUserTeam.team_code == team_code)\
                     .filter(GnUserTeam.team_owner==team).order_by(GnUserTeam.team_owner.desc()).all()
+    if len(list) ==0:
+        list = None
     team_list = len(sql_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).all())
     infor = {"list":list, "info":team_list}
     return infor
