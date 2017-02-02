@@ -12,7 +12,7 @@ from kvm.util.config import config
 
 USER = "root"
 
-def server_create(team_code, user_id,user_name, id, sql_session):
+def server_create(team_code, user_id, user_name, id, sql_session):
     try:
         #vm 조회
         vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()

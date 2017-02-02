@@ -56,6 +56,7 @@ def internal_error(error):
 def create_vm():
     team_code = session['teamCode']
     user_id = session['userId']
+    user_id = session['userName']
     id = request.json['id']
     server_create(team_code, user_id, id, db_session)
     return jsonify(status=True)
