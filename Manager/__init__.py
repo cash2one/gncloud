@@ -51,6 +51,11 @@ def vm_error_trace():
     saveErrorTrace(id,action,db_session)
     return jsonify(status=True)
 
+@app.route('/vm/errorhist',methods=['GET'])
+def vm_error_list():
+    page= request.args.get("page")
+    return jsonify(status=True, message="success", list=error_history(page,db_session))
+
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
     password=""
