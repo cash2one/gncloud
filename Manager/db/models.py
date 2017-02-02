@@ -665,10 +665,38 @@ class GnInvoiceResult(Base):
         self.invoice_data = invoice_data
 
     def __repr__(self):
-        return '<Year %r / Month %r / Team_code %r / Invoice data %r />'\
-                %(self.year, self.month, self.team_code, self.invoice_data)
+        return '<Year %r / Month %r / Team_code %r / Invoice data %r />' \
+               %(self.year, self.month, self.team_code, self.invoice_data)
 
     def __json__(self):
         return ['year', 'month', 'team_code','invoice_data','gnTeam']
+
+class GnErrorHist(Base):
+    __tablename__='GN_ERROR_HIST'
+    id = Column(Integer, primary_key=True, nullable=False)
+    type = Column(String(10), primary_key=False, nullable=False)
+    action = Column(String(10), primary_key=False, nullable=False)
+    team_code = Column(String(10), primary_key=False, nullable=False)
+    author_id = Column(String(50), primary_key=False, nullable=False)
+    create_time = Column(DateTime, primary_key=False, default=datetime.datetime.now())
+    solve_time = Column(DateTime, primary_key=False, nullable=True)
+    solver_name = Column(String(10), primary_key=False, nullable=True)
+    vm_id = Column(String(8), primary_key=False, nullable=False)
+
+    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_name=None, vm_id=None):
+        self.type = type
+        self.action = action
+        self.team_code = team_code
+        self.author_id = author_id
+        self.solve_time = solve_time
+        self.solver_name = solver_name
+        self.vm_id = vm_id
+
+    def __repr__(self):
+        return '<Type %r / Action %r / Team_code %r / Author id %r / Solve time %r / Solver name %r >' \
+               %(self.type, self.action, self.team_code, self.author_id, self.solve_time, self.solver_name)
+
+    def __json__(self):
+        return ['id', 'type', 'action','team_code','author_id','solve_time','solver_name']
 
 
