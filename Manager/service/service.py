@@ -17,6 +17,13 @@ from Manager.db.models import *
 from Manager.util.config import config
 from Manager.util.hash import random_string, convertToHashValue, convertsize
 
+def saveErrorTrace(id, action, sql_session):
+    #vm 조회
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    error_hist = GnErrorHist(type=vm_info.type,action=action,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id)
+    sql_session.add(error_hist)
+    sql_session.commit()
+
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, backup ,sql_session):
 
@@ -114,7 +121,6 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
     # history 추가
     action_hist = GnInstanceActionHist(user_id=user_id,team_code=team_code,action="Create",action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
     sql_session.add(action_hist)
-
     sql_session.commit()
     return {"status":True, "value":id}
 

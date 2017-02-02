@@ -44,6 +44,12 @@ def internal_error(error):
 def index():
     return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
 
+@app.route('/vm/error',methods=['POST'])
+def vm_error_trace():
+    id = request.json['id']
+    action = request.json['action']
+    saveErrorTrace(id,action,db_session)
+    return jsonify(status=True)
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
@@ -757,6 +763,7 @@ def Price_list_info():
     team_code= request.args.get('team_code')
     return jsonify(status=True, list=team_price_lsit_info(year,month,team_code,db_session))
 #________________________________________________________________________
+
 
 def secure_filename(filename):
     return datetime.datetime.now().strftime('%Y%m%d%H%M%S') +"."+ filename.rsplit('.', 1)[1]
