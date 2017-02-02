@@ -38,7 +38,7 @@ class BackupDelete:
             backup_hist_list = sql_session.query(GnBackupHist).all()
             for hist in backup_hist_list:
                 backup_date = hist.backup_time.date()
-                if backup_date < backup_delta:
+                if backup_date <= backup_delta:
                     #delete backup history
                     if hist.vm_type == 'kvm' :
                         if self.kvm_delete_backup_hist(hist):
@@ -46,7 +46,7 @@ class BackupDelete:
                                                                         GnBackupHist.backup_time == hist.backup_time)).delete()
                             backup_org = sql_session.query(GnBackup).filter(and_(GnBackup.vm_id == hist.vm_id,
                                                                                  GnBackup.backup_time == hist.backup_time)).first()
-                            if backup_org is None:
+                            if backup_org is not None:
                                 sql_session.query(GnBackup).filter(GnBackup.vm_id == hist.vm_id).delete()
                         else:
                             print 'kvm_delete_backup_hist error'
@@ -58,7 +58,7 @@ class BackupDelete:
                                                                         GnBackupHist.backup_time == hist.backup_time)).delete()
                             backup_org = sql_session.query(GnBackup).filter(and_(GnBackup.vm_id == hist.vm_id,
                                                                                  GnBackup.backup_time == hist.backup_time)).first()
-                            if backup_org is None:
+                            if backup_org is not None:
                                 sql_session.query(GnBackup).filter(GnBackup.vm_id == hist.vm_id).delete()
                         else:
                             print 'hyperv_delete_backup_hist error'

@@ -39,18 +39,21 @@ class GnSystemSetting(Base):
     backup_schedule_type = Column(String(2), nullable=True, default='')
     backup_schedule_period = Column(String(13), nullable=True, default='')
     monitor_period = Column(String(4), nullable=True, default='')
+    backup_day = Column(String(11), nullable=True, default='')
 
-    def __init__(self, billing_type=None, backup_schedule_type=None, backup_schedule_period=None, monitor_period=None):
+    def __init__(self, billing_type=None, backup_schedule_type=None, backup_schedule_period=None,
+                 monitor_period=None, backup_day=None):
         self.billing_type=billing_type
         self.backup_schedule_type=backup_schedule_type
         self.backup_schedule_period=backup_schedule_period
         self.monitor_period=monitor_period
+        self.backup_day=backup_day
 
     def __repr__(self):
         return '<GnSystemSetting %r>' % self.billing_type
 
     def __json__(self):
-        return ['billing_type','backup_schedule_type','backup_schedule_period','monitor_period']
+        return ['billing_type','backup_schedule_type','backup_schedule_period','monitor_period', 'backup_day']
 
 
 class GnInstanceStatus(Base):
