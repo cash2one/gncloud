@@ -233,16 +233,16 @@ td:nth-of-type(1) img{width: 35px;}
 /*삭제버튼*/
 .btn-delete{
     background-color: #ffffff;
-    color: #E60202;
-    border: 1px solid #E60202;
+    color: rgba(255, 0, 0, 0.75);
+    border: 1px solid rgba(255, 0, 0, 0.75);
     border-radius: 3px; 
 }
 
 .btn-delete:hover,
 .btn-delete:active{
-    background-color: #E60202;    
+    background-color: rgba(255, 0, 0, 0.75);    
     color: #ffffff;
-    border: 1px solid #E60202;
+    border: 1px solid rgba(255, 0, 0, 0.75);
     border-radius: 3px; 
     text-decoration: none;
 }
@@ -250,8 +250,8 @@ td:nth-of-type(1) img{width: 35px;}
 .btn-delete:focus{
     text-decoration: none;
     background-color: #ffffff;
-    color: #E60202;
-    border: 1px solid #E60202;
+    color: rgba(255, 0, 0, 0.75);
+    border: 1px solid rgba(255, 0, 0, 0.75);
     border-radius: 3px; 
 }
 
@@ -432,7 +432,8 @@ li.nav-link.active>a:hover,
 
 .gn-head-drop > li a.gn-danger:hover,
 .gn-dropdown > li a.gn-danger:hover{
-    color: #E60202 !important;
+    color: rgba(255, 0, 0, 0.75) !important;
+    font-weight: 600;
 }
 
 .gn-head-drop > li > a:hover,
@@ -614,7 +615,6 @@ li.nav-link.active>a:hover,
     left: 0;
     z-index: 1040;
     display: none;
-    /* overflow: hidden; */
     -webkit-overflow-scrolling: touch;
     outline: 0;
 }
@@ -686,6 +686,7 @@ li.nav-link.active>a:hover,
 h2 > .pull-right{margin-top: -6px;}
 
 .gn-comment{padding: 20px 15px !important; background-color: #f8f8f8;}
+.comment-border{border-bottom: 1px solid rgba(215,215,215,0.5); padding: 0; margin: 0}
 
 .gn-answer span,.gn-comment span{padding-right: 0; padding-left: 0;}
 
@@ -740,7 +741,7 @@ h2 > .pull-right{margin-top: -6px;}
     line-height: 20px;
     font-size:12px; 
     text-align: left;
-    color: #ff0000;
+    color: rgba(255, 0, 0, 0.75);
     margin: 5px 0 2px 0;
 }
 
@@ -749,16 +750,16 @@ p.error-message{
 }
 
 .gn-input-error{
-    border: 1px solid #ff0000;
+    border: 1px solid rgba(255, 0, 0, 0.75);
     box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);    
 }
 
 input.error{
-    border: 1px solid #ff0000;
+    border: 1px solid rgba(255, 0, 0, 0.75);
     
 }
 form.signupForm label.error, label.error{
-    color :#ff0000;
+    color :rgba(255, 0, 0, 0.75);
 }
 /*지앤클라우드 로그인버튼 < btn-gn-login > STYLE*/
 .btn-gn-login {
@@ -873,7 +874,7 @@ a.log-join-btn:focus{
     -moz-appearance: none;
     appearance: none;
     margin-right: 10px;
-    font-size: 15px;
+    font-size: 14px;
 }
 .gn-box-login span a{
     color: #58c4c6;
@@ -890,7 +891,7 @@ a.log-join-btn:focus{
     text-align: center;
     font-size: 14px;
     border: none;
-    border-bottom: 1px solid rgba(215,215,215,.5);
+    border-bottom: 2px solid rgba(215,215,215,.5);
     height: 45px;
 }
 
@@ -1024,7 +1025,7 @@ a.log-join-btn:focus{
 
 .gn-dash-hyp-right ul li.memo-color,
 .gn-dash-hyp-right ul li.hyp-color{
-    font-size: 24px;
+    font-size: 23px;
     font-weight: 600; 
 }
 
@@ -1039,7 +1040,7 @@ a.log-join-btn:focus{
 
 .dash-box-6 div{
     position: absolute;
-    top: 50px;
+    top: 47px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -1047,35 +1048,6 @@ a.log-join-btn:focus{
     font-weight: 600;
 }
  
-/*대시보드 헬스체크*/
-.gn-health-check div,
-.gn-health-check ul{display: table; margin: auto;}
-.gn-health-check span{
-    font-size: 16px;
-    color: #505050;
-    line-height: 35px;
-    margin-right: 10px;
-}
-.gn-health-check ul{
-    padding: 0;
-}
-.gn-health-check ul li{
-    line-height: 35px;
-    text-align: left;
-}
-.gn-health-check tr td{
-    border: 2px dashed rgba(215,215,215,.5) ; 
-    vertical-align: middle !important;
-}
-.gn-health-check th{border-bottom:  2px dashed rgba(215,215,215,.5) !important;}
-.gn-health-check .gn-write{
-    font-size: 14px; 
-    display: inline-block; 
-    margin-bottom: 0; 
-    background-color: rgba(238,238,238,50); 
-    padding: 2px;
-    border-radius: 3px;}
-
 /*대시보드 헬스체크*/
 .gn-health-check div,
 .gn-health-check ul{display: table; margin: auto;}
@@ -1218,7 +1190,7 @@ ul.gn-tag-group > li{
 
 /*DISK 막대 그래프*/
 .gn-graph > .progress{
-    height: 50px;
+    height: 50px !important;
     margin-bottom: 10px;
 }
 
@@ -1233,7 +1205,7 @@ ul.gn-tag-group > li{
     background-color: #58c4c6;
 }
 
-.graph-sm-box > .col-sm-2 > i{
+.graph-sm-box i{
     width: 20px;
     height: 20px;
     float: left;
@@ -1241,11 +1213,11 @@ ul.gn-tag-group > li{
     margin-right: 10px;    
 }
 
-.graph-sm-box > .col-sm-2:nth-of-type(1) > i{
+.graph-sm-box .box-used i{
     background-color: #58c4c6;   
 }
 
-.graph-sm-box > .col-sm-2:nth-of-type(2) > i{
+.graph-sm-box i{
     background-color: #cccccc;   
 }
 
@@ -1261,6 +1233,95 @@ ul.gn-tag-group > li{
     margin-bottom: 30px;
 }
 
+.gn-detail-main .gn-margin-box > div{padding-left: 0; padding-right: 0;}
+
+/*=======================SWITCH==========================*/
+.switch {
+  background: rgba(255, 0, 0, 0.75);
+  border: 1px solid rgba(255, 0, 0, 0.75);
+  position: relative;
+  display: inline-block;
+  box-sizing: content-box;
+  overflow: visible;
+  width: 52px;
+  height: 30px;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  /*box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset;*/
+  transition: 0.3s ease-out all;
+  -webkit-transition: 0.3s ease-out all;
+  top: -1px;
+}
+/*adding a wide width for larger switch text*/
+.switch.wide {
+    width: 83px;
+    height: 32px;
+    margin-top: 5px;
+}
+.switch small {
+  background: #fff;
+  border-radius: 100%;
+  /*box-shadow: 0 1px 3px rgba(0,0,0,0.4);*/
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transition: 0.3s ease-out all;
+  -webkit-transition: 0.3s ease-out all;
+}
+.switch.checked {
+/*  background: rgb(100, 189, 99);
+  border-color: rgb(100, 189, 99);*/
+/*gn-switch-style*/
+  background: rgb(52,200,74);
+  border-color: rgb(52,200,74);
+}
+.switch.checked small {
+  left: 22px;
+}
+/*wider switch text moves small further to the right*/
+.switch.wide.checked small {
+  left: 51px;
+}
+/*styles for switch-text*/
+.switch .switch-text {font-size:14px;}
+
+.switch .off {
+  display:block;
+  position: absolute;
+  right: 15%;
+  top: 21%;
+  z-index: 0;
+  color:#ffffff;
+}
+
+.switch .on {
+  display:none;
+   z-index: 0;
+  color:#fff;
+  position: absolute;
+  top: 21%;
+  left: 15%;
+}
+
+.switch.checked .off {
+  display:none;
+}
+
+.switch.checked .on {
+  display:block;
+
+}
+
+.switch.disabled {
+  opacity: .50;
+  cursor: not-allowed;
+}
+
+/*=======================SWITCH=================END=========*/
 
 .gn-detail-main > .gn-margin-box > .gn-description-list dt{
     width: 110px;
@@ -1321,16 +1382,6 @@ form > .btn-group{
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-
-/*.gn-btn-snap:nth-child(3n-1),
-.gn-btn-snap:nth-child(3n-2){
-    margin-right: 1%;
-    margin-bottom: 10px;
-}*/
-
-/*.gn-btn-snap:nth-child(3n){
-    margin-bottom: 10px;
-}*/
 
 .gn-btn-snap > input[type=radio]{
     display: none;
@@ -1814,10 +1865,6 @@ ul.gn-sett-graph > li:nth-of-type(3){
 .gn-sys-sett form .list-inline{margin-left: 0;}
 
 .gn-sys-sett input[type=text]{padding-left: 10px;}
-<<<<<<< HEAD
-=======
-
->>>>>>> 44032dc095152d02b80c4ea552230513b878b430
 
 /* ================================================= 반응형 ================================================= */
 /* 세로 방향 타블렛부터 가로 방향 타블렛과 데스크탑까지 */

@@ -1,12 +1,14 @@
-<ul class="nav nav-pills gn-left-menu col-xs-12 col-sm-2" ng-controller="navleftCtrl">
-    <li class="left-title">시스템</li>
-    <li ng-class="{'active':selected == 'pro'}" ng-click="selecte('pro')"><a data-toggle="pill" href="#guestSystemList">프로필</a></li>
-    <li ng-class="{'active':selected == 'team'}" ng-click="selecte('team')"><a data-toggle="pill" href="#guestTeamList">팀 관리</a></li>
-    <li ng-class="{'active':selected == 'cluster'}" ng-click="selecte('cluster')"><a data-toggle="pill" href="#guestCluster">클러스터 관리</a></li>
-    <li ng-class="{'active':selected == 'image'}" ng-click="selecte('image')"><a data-toggle="pill" href="#guestImage">이미지 관리</a></li>
-    <li ng-class="{'active':selected == 'price'}" ng-click="selecte('price')"><a data-toggle="pill" href="#guestPrice">리소스 단위 관리</a></li>
-    <li ng-class="{'active':selected == 'login'}" ng-click="selecte('login')"><a data-toggle="pill" href="#guestLoginHist">로그인 이력 조회</a></li>
-    <li ng-class="{'active':selected == 'usehist'}" ng-click="selecte('usehist')"><a data-toggle="pill" href="#guestUseHist">사용 이력 조회</a></li>
-    <li ng-class="{'active':selected == 'invoice'}" ng-click="selecte('invoice')"><a data-toggle="pill" href="#guestInvoice">과금</a></li>
-    <li ng-class="{'active':selected == 'setting'}" ng-click="selecte('setting')"><a data-toggle="pill" href="#guestSetting">설정</a></li>
+<nav>
+<ul class="nav nav-pills gn-left-menu col-xs-12 col-sm-2">
+    <li class="left-title">시스템  </li>
+    <li ng-class="{'active':menu == 1}"><a data-toggle="pill" href="#guestSystemList">프로필</a></li>
+    <li ng-class="{'active':menu == 2}"><a data-toggle="pill" href="#guestTeamList">팀 관리</a></li>
+    <li ng-class="{'active':menu == 3}"><a data-toggle="pill" href="#guestCluster">클러스터 관리</a></li>
+    <li ng-class="{'active':menu == 4}"><a data-toggle="pill" href="#guestImage">이미지 관리</a></li>
+    <li ng-class="{'active':menu == 5}"><a data-toggle="pill" href="#guestPrice">리소스 단위 관리</a></li>
+    <li ng-class="{'active':menu == 6}"><a data-toggle="pill" href="#guestLoginHist">로그인 이력 조회</a></li>
+    <li ng-class="{'active':menu == 7}"><a data-toggle="pill" href="#guestUseHist">사용 이력 조회</a></li>
+    <li ng-class="{'active':menu == 8}"><a data-toggle="pill" href="#guestInvoice">과금</a></li>
+    <li ng-class="{'active':menu == 9}"><a data-toggle="pill" href="#guestSetting">설정</a></li>
 </ul>
+</nav>

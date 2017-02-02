@@ -85,7 +85,7 @@
                     <!--댓글 : 사용자이름-->
                     <div class="form-group">
                         <div ng-repeat="reply in reply">
-                            <div class="gn-comment container-fluid">
+                            <div class="gn-comment container-fluid comment-border">
                                 <span class="col-sm-2">{{reply.author_id}}</span>
                                 <span class="col-sm-9" ng-show="showData=='1' || showData=='2'">{{reply.text}}</span>
                                 <div id="changereply" class="second-td-name gn-lead col-sm-9" ng-show="showData=='3'">
@@ -106,7 +106,7 @@
                                 <span class="col-sm-2">답변</span>
                                 <span class="col-sm-10" ng-class="{ 'has-error' : replyForm.replytext.$invalid && !replyForm.replytext.$pristine }">
                                         <textarea class="form-control gn-write gn-margin-bott10" name="replytext" ng-model="data.reply_text" rows="6" id="replytext" placeholder="내용을 입력하여주세요." required></textarea>
-                                        <button type="submit" class="btn btn-default gn-btn-height btn-block" data-dismiss="modal" ng-click="qna_reply_create(notice.id)" ng-disabled="replyForm.$invalid">저장</button>
+                                        <button type="submit" class="btn btn-gn-sub gn-btn-height btn-block" data-dismiss="modal" ng-click="qna_reply_create(notice.id)" ng-disabled="replyForm.$invalid">저장</button>
                                 </span>
                             </form>
                         </div>
@@ -117,9 +117,9 @@
             <div class="modal-footer gn-modal-footer">
                 <p><!--구분선--></p>
                 <button type="submit" class="btn btn-default btn-delete pull-left" data-dismiss="modal" ng-show="user_info.authority == 'sysowner' || user_info.user_id == notice.author_id" ng-click="deleteqna(notice.id)">삭제</button>
-                <button type="submit" class="btn btn-default pull-left" ng-show="(user_info.authority == 'sysowner'|| user_info.user_id == notice.author_id )&& showData =='1' " ng-click="showData= '2'">수정</button>
-                <button type="submit" class="btn btn-default pull-left" data-dismiss="modal" ng-show="(user_info.authority == 'sysowner'|| user_info.user_id == notice.author_id) && showData=='2' " ng-click="showData='1';changeqna(notice.id, notice.text)">저장</button>
                 <button type="submit" class="btn btn-default pull-right" data-dismiss="modal" ng-click="showData='1';close()">닫기</button>
+                <button type="submit" class="btn btn-gn-primary pull-right" ng-show="(user_info.authority == 'sysowner'|| user_info.user_id == notice.author_id )&& showData =='1' " ng-click="showData= '2'">수정</button>
+                <button type="submit" class="btn btn-gn-primary pull-right" data-dismiss="modal" ng-show="(user_info.authority == 'sysowner'|| user_info.user_id == notice.author_id) && showData=='2' " ng-click="showData='1';changeqna(notice.id, notice.text)">저장</button>
             </div>
         </div>
     </div>
