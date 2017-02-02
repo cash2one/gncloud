@@ -158,7 +158,4 @@ angular
                 });
         }
 
-        $scope.close=function () {
-            $(':input').val('');
-        }
     });
