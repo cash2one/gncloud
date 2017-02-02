@@ -57,6 +57,8 @@ def create_vm():
     backup="false"
     team_code = session['teamCode']
     user_id = session['userId']
+    user_name = session['userName']
+
     if 'backup' in request.json:
         backup = request.json['backup']
     if 'vm_name' in request.json:
@@ -79,16 +81,16 @@ def create_vm():
             if image_id !="":
                 if size_id !="":
                     if type=="hyperv" and password != "" and sub_type=="base":
-                        result = server_create(name,size_id, image_id, team_code, user_id, sshkeys, tag, type, password,backup ,db_session)
+                        result = server_create(name,size_id, image_id, team_code, user_id,user_name, sshkeys, tag, type, password,backup ,db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="kvm" and sshkeys != "":
-                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password,backup, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id,user_name, sshkeys, tag, type, password,backup, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="docker":
-                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password,backup, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id,user_name, sshkeys, tag, type, password,backup, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     elif type =="hyperv" and sub_type=="snap":
-                        result = server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password,backup, db_session)
+                        result = server_create(name, size_id, image_id, team_code, user_id,user_name, sshkeys, tag, type, password,backup, db_session)
                         return jsonify(status=result["status"], value=result["value"])
                     else:
                         return jsonify(status=True, value="password")

@@ -243,7 +243,8 @@ class GnInstanceStatus(Base):
     vm_name = Column(String(50), nullable=True, default='')
     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
     delete_time = Column(DateTime, nullable=True)
-    author_id = Column(String(50), nullable=False, default='')
+    author_id = Column(String(50), nullable=False)
+    author_name = Column(String(20), nullable=False)
     team_code = Column(String(10), nullable=True, default='')
     price = Column(Integer, nullable=True, default='')
     price_type = Column(String(2), nullable=True, default='')
@@ -251,13 +252,14 @@ class GnInstanceStatus(Base):
     memory = Column( nullable=True, default='')
     disk = Column( nullable=True, default='')
 
-    def __init__(self, vm_id=None,vm_name=None,create_time=None, delete_time=None, author_id=None, team_code=None
+    def __init__(self, vm_id=None,vm_name=None,create_time=None, delete_time=None, author_id=None, author_name=None, team_code=None
                  , price=None, price_type=None, cpu=None, memory=None, disk=None):
         self.vm_id = vm_id
         self.vm_name = vm_name
         self.create_time = create_time
         self.delete_time = delete_time
         self.author_id = author_id
+        self.author_name = author_name
         self.team_code = team_code
         self.price = price
         self.price_type = price_type
