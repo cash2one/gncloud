@@ -25,7 +25,7 @@
                             <td class="hidden-xs">{{backup.backup_time}}</td>
                             <td class="hidden-xs">{{backup.team_name}}</td>
                             <td class="second-td-name">
-                                <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-backup">{{backup.vm_name}}</a>
+                                <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-backup" ng-click="backuphist(backup.vm_id)">{{backup.vm_name}}</a>
                             </td>
                             <td>{{backup.author_name}}</td>
                         </tr>
@@ -41,6 +41,7 @@
 
                 <!-- 백업현황 Modal -->
                 <div class="modal fade" id="modal-backup" role="dialog">
+                    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header gn-modal-header">
@@ -52,11 +53,11 @@
                                 <form class="form-horizontal">
                                     <dl class="dl-horizontal gn-description-list">
                                         <dt>팀</dt>
-                                        <dd>연구1팀</dd>
+                                        <dd>{{vm_info.team_name}}</dd>
                                         <dt>인스턴스</dt>
-                                        <dd>Hyper#002</dd>
+                                        <dd>{{vm_info.vm_name}}</dd>
                                         <dt>소유자</dt>
-                                        <dd>홍길동</dd>
+                                        <dd>{{vm_info.author_name}}</dd>
                                         <dt>히스토리</dt>
                                         <dd>
                                             <div class="table-responsive gn-table-responsive">
@@ -69,30 +70,10 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody class="gn-tdody">
-                                                    <tr>
-                                                        <td>5</td>
-                                                        <td>2017-01-28 16:42</td>
-                                                        <td>Hyper#002_5</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>4</td>
-                                                        <td>2017-01-21 12:02</td>
-                                                        <td>Hyper#002_4</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>2017-01-14 12:02</td>
-                                                        <td>Hyper#002_3</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>2017-01-07 12:02</td>
-                                                        <td>Hyper#002_2</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>2017-01-01 12:02</td>
-                                                        <td>Hyper#002_1</td>
+                                                    <tr ng-repeat="hist in hist_info">
+                                                        <td>{{total-$index}}</td>
+                                                        <td>{{hist.backup_time}}</td>
+                                                        <td>{{hist.filename}}</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>

@@ -29,4 +29,25 @@ angular
         }
         $scope.page(1);
 
+        $scope.backuphist=function (vm_id) {
+            $scope.data.vm_id=vm_id;
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/backuphistory',
+                params:$scope.data//,
+                //headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.vm_info = data.list.vm_info;
+                        $scope.hist_info = data.list.hist_info;
+                        $scope.total = data.list.total;
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
     });

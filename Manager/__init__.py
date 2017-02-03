@@ -773,6 +773,17 @@ def Price_list_info():
 def Backuphist():
     page = request.args.get("page")
     return jsonify(status=True, list=backup_list(page,db_session))
+
+@app.route('/vm/backuphistory', methods=['GET'])
+def Backuphist_history():
+    vm_id = request.args.get("vm_id")
+    return jsonify(status=True, list=backup_hist(vm_id,db_session))
+
+@app.route('/vm/teambackup',methods=['GET'])
+def TeamBackup():
+    page = request.args.get("page")
+    team_code = session['teamCode']
+    return jsonify(status=True, list=team_backup_list(page,team_code,db_session))
 #________________________________________________________________________
 
 
