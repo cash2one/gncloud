@@ -7,9 +7,7 @@ from datetime import datetime
 from flask import jsonify, request, session
 
 from Docker.db.database import db_session
-from Docker.db.models import GnDockerContainers, GnDockerVolumes, GnDockerImageDetail, \
-    GnDockerServices, GnHostMachines, GnDockerPorts, GnVmMachines, GnDockerImages, GnVmSize, \
-    GnInstanceStatus, GnSystemSetting, GnTeam, GnUsers
+from Docker.db.models import *
 from Docker.service.dockerService import DockerService
 from Docker.util.config import config
 from Docker.util.hash import random_string
@@ -29,7 +27,6 @@ def doc_create(id,sql_session):
         user_name = sql_session.query(GnUsers).filter(GnUsers.user_id == docker_info.author_id).one()
 
     ds = None
-
     try:
         image_id = docker_info.image_id
         name = docker_info.name
@@ -40,7 +37,7 @@ def doc_create(id,sql_session):
         print(docker_info.id+":request ok")
 
         print("id: %s, image_id: %s, name: %s, tag: %s, cpu: %s, disk: %s, memory: %s" %
-                     (id, image_id, name, tag, cpu, disk, memory))
+              (id, image_id, name, tag, cpu, disk, memory))
         # --- //파라미터 정리 ---
         # --- Docker Service (밖에서 보기엔 컨테이너 생성) 생성 ---
         ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
@@ -152,6 +149,8 @@ def doc_create(id,sql_session):
             return jsonify(status=True, message="서비스를 생성하였습니다.", result=docker_info.to_json())
     except Exception as e:
         sql_session.rollback()
+        error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
+        sql_session.add(error_hist)
         docker_info.status = "Error"
         sql_session.commit()
         logger.error(e)
