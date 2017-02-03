@@ -35,8 +35,8 @@
 
                 <!--이전/다음 버튼-->
                 <div class="gn-page-btn">
-                    <input type="button" class="btn btn-default pull-left" value="이전">
-                    <input type="button" class="btn btn-default" value="다음">
+                    <input type="button" class="btn btn-default pull-left" ng-click="page(prev_page)" value="이전" ng-show="page_hist != 1">
+                    <input type="button" class="btn btn-default" ng-click="page(next_page)" value="다음" ng-show="page_total!=page_hist">
                 </div>
 
                 <!-- 백업현황 Modal -->
