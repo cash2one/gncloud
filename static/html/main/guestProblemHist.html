@@ -68,7 +68,7 @@
                             <th class="">소유자</th>
                             <th class="hidden-xs hidden-sm">에러항목</th>
                             <th class="hidden-xs hidden-sm">해결자</th>
-                            <th class="hidden-xs">해결여부</th>
+                            <th class="hidden-xs"><input type="checkbox" ng-model="selectedAll" ng-click="checkAll()"></th>
                         </tr>
                         </thead>
                         <tbody class="gn-tdody">
@@ -90,8 +90,8 @@
                                 <span ng-if="list.action == 'Deleting'">삭제</span>
                                 <span ng-if="list.action == 'Reboot'">재시작</span>
                             </td>
-                            <td class="hidden-xs hidden-sm">{{list.gnUsers.name}}</td>
-                            <td class="hidden-xs"><input type="checkbox" value=""></td>
+                            <td class="hidden-xs hidden-sm">{{list.solver_id}}</td>
+                            <td class="hidden-xs"><input type="checkbox" ng-model="list.Selected"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -101,6 +101,7 @@
                 <div class="gn-page-btn">
                     <input type="button" class="btn btn-default pull-left" value="이전" ng-show="page_hist != 1">
                     <input type="button" class="btn btn-default" value="다음" ng-show="page_total!=page_hist">
+                    <input type="button" class="btn btn-default" value="저장"  data-toggle="modal" data-target="#modal-error-arr" ng-click="">
                 </div>
 
                 <!-- 장애현황 Modal -->
@@ -133,23 +134,50 @@
                                             <span ng-if="error_info.action == 'Reboot'">재시작</span>
                                         </dd>
                                         <dt>해결자</dt>
-                                        <dd>{{error_info.solver_name}}</dd>
+                                        <dd>{{error_info.solver_id}}</dd>
                                         <dt>해결시간</dt>
                                         <dd>{{error_info.solve_time}}</dd>
                                         <dt>해결내용</dt>
-                                        <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요.">{{error_info.solve_content}}</textarea></dd>
+                                        <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요." ng-model="error_info.solve_content"></textarea></dd>
                                     </dl>
                                 </form>
 
                             </div>
                             <div class="modal-footer gn-modal-footer">
-                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">저장</button>
+                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="save_one()">저장</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div><!--<div class="container-fluid">-->
+
+            <!-- 장애현황 Modal -->
+            <div class="modal fade" id="modal-error-arr" role="dialog">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header gn-modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">장애현황 해결정보</h4>
+                        </div>
+                        <div class="modal-body gn-modal-body">
+
+                            <form class="form-horizontal">
+                                <dl class="dl-horizontal gn-description-list">
+                                    <dt>해결내용</dt>
+                                    <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요.">{{error_info.solve_content}}</textarea></dd>
+                                </dl>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer gn-modal-footer">
+                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">저장</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div><!--<div class="container-fluid">-->
         </div> <!--class="gn-sett-margin-box"-->
     </div> <!--class="gn-box profile-team"-->
 </div> <!--id="image-sett"  class="tab-pane fade"-->
