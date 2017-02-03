@@ -44,12 +44,6 @@ def internal_error(error):
 def index():
     return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
 
-@app.route('/vm/error',methods=['POST'])
-def vm_error_trace():
-    id = request.json['id']
-    action = request.json['action']
-    saveErrorTrace(id,action,db_session)
-    return jsonify(status=True)
 
 @app.route('/vm/errorhist',methods=['GET'])
 def vm_error_list():

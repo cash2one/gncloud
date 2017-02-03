@@ -663,9 +663,9 @@ li.nav-link.active>a:hover,
 
 .gn-table-responsive > .gn-board-table tbody tr td.second-td-name,
 .gn-table-responsive > .gn-board-table thead tr th.second-td-name{text-align: left;}
-.gn-modal-body > .gn-table-responsive  p{font-weight: 400; position: absolute; top: 5px; right: 10px;}
+/*.gn-modal-body > .gn-table-responsive  p{font-weight: 400; position: absolute; top: 5px; right: 10px;}
 .gn-modal-body > .gn-table-responsive  p span{padding: 0px 5px; color: #999999;}
-.gn-modal-body > .gn-table-responsive{margin-top: 30px;} 
+.gn-modal-body > .gn-table-responsive{margin-top: 30px;} */
 
 /*#modal-board > .modal-dialog,
 #modi-write > .modal-dialog{width: 800px;}*/
@@ -1858,6 +1858,9 @@ ul.gn-sett-graph > li:nth-of-type(3){
     border: none !important;
 }
 
+/*백업현황*/
+#modal-backup dl.gn-description-list{margin-bottom: 5px;}
+
 /*장애현황*/
 .gn-total-error div{padding-right: 5px; padding-left: 5px;}
 .gn-total-error > div > div > div{margin: 10px;}
@@ -1867,6 +1870,7 @@ ul.gn-sett-graph > li:nth-of-type(3){
 .gn-select-error span{margin: 0px 10px;}
 .gn-select-error input{margin-top: 11px}
 .gn-select-error p{margin-right: 10px;}
+
 
 /*시스템관리자 > 설정*/
 .gn-sys-sett input[type=radio]{margin-right: 10px;}

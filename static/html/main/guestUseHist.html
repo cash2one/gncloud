@@ -27,7 +27,13 @@
                                         <td>{{list.id}}</td>
                                         <td>{{list.gnTeam.team_name}}</td>
                                         <td>{{list.user_id}}</td>
-                                        <td>{{list.action}}</td>
+                                        <td>
+                                            <span ng-if="list.action == 'Create'">생성</span>
+                                            <span ng-if="list.action == 'Suspend'">정지</span>
+                                            <span ng-if="list.action == 'Resume'">시작</span>
+                                            <span ng-if="list.action == 'Deleting'">삭제</span>
+                                            <span ng-if="list.action == 'Reboot'">재시작</span>
+                                        </td>
                                         <td>{{list.action_time}}</td> <!--초 빼고-->
                                     </tr>
                                     </tbody>
