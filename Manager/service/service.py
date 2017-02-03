@@ -1359,11 +1359,11 @@ def team_price_lsit_info(year,month,team_code,sql_session):
 
 #_________________________백업______________________________________________________________#
 def backup_list(page,sql_session):
-    page_size = 30
+    page_size = 10
     page = int(page)-1
     total_page= sql_session.query(func.count(GnBackup.vm_id).label("count")).one()
     list=sql_session.query(GnBackup).order_by(GnBackup.backup_time.desc()).limit(page_size).offset(page*page_size).all()
-    total=int(total_page.count)/30
+    total=int(total_page.count)/10
     for vm in list:
         vm.backup_time = vm.backup_time.strftime('%Y-%m-%d %H:%M')
     return {"list":list, "total_page":total_page.count,"total":total, "page":page}
@@ -1377,11 +1377,11 @@ def backup_hist(vm_id, sql_session):
     return {"vm_info":vm_info,"hist_info":hist_info,"total":total}
 
 def team_backup_list(page,team_code,sql_session):
-    page_size = 30
+    page_size = 10
     page = int(page)-1
     total_page= sql_session.query(func.count(GnBackup.vm_id).label("count")).filter(GnBackup.team_code == team_code).one()
     list=sql_session.query(GnBackup).filter(GnBackup.team_code == team_code).order_by(GnBackup.backup_time.desc()).limit(page_size).offset(page*page_size).all()
-    total=int(total_page.count)/30
+    total=int(total_page.count)/10
     for vm in list:
         vm.backup_time = vm.backup_time.strftime('%Y-%m-%d %H:%M')
     return {"list":list, "total_page":total_page.count,"total":total, "page":page}
