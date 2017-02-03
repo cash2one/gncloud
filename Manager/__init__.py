@@ -44,12 +44,15 @@ def internal_error(error):
 def index():
     return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
 
-@app.route('/vm/error',methods=['POST'])
-def vm_error_trace():
-    id = request.json['id']
-    action = request.json['action']
-    saveErrorTrace(id,action,db_session)
-    return jsonify(status=True)
+
+@app.route('/vm/errorhist',methods=['GET'])
+def vm_error_list():
+    page = request.args.get("page")
+    year = request.args.get("year")
+    month = request.args.get("month")
+    solve = request.args.get("solve")
+    notsolve = request.args.get("notsolve")
+    return jsonify(status=True, message="success", list=error_history(page,year,month,solve,notsolve,db_session))
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
@@ -643,7 +646,8 @@ def billing_time():
 def backup_time():
     type = request.json['type']
     day = request.json['value']
-    return jsonify(status=True, list=backup_time_change(type, day, db_session))
+    backday = request.json['backday']
+    return jsonify(status=True, list=backup_time_change(type, day, backday,db_session))
 
 @app.route('/vm_hist/machines/<id>', methods=['POST'])
 def vm_hist(id):
@@ -762,7 +766,25 @@ def Price_list_info():
     month = request.args.get('month')
     team_code= request.args.get('team_code')
     return jsonify(status=True, list=team_price_lsit_info(year,month,team_code,db_session))
+
+#백업
+@app.route('/vm/backuphist', methods=['GET'])
+def Backuphist():
+    page = request.args.get("page")
+    return jsonify(status=True, list=backup_list(page,db_session))
+
+@app.route('/vm/backuphistory', methods=['GET'])
+def Backuphist_history():
+    vm_id = request.args.get("vm_id")
+    return jsonify(status=True, list=backup_hist(vm_id,db_session))
+
+@app.route('/vm/teambackup',methods=['GET'])
+def TeamBackup():
+    page = request.args.get("page")
+    team_code = session['teamCode']
+    return jsonify(status=True, list=team_backup_list(page,team_code,db_session))
 #________________________________________________________________________
+
 
 
 def secure_filename(filename):

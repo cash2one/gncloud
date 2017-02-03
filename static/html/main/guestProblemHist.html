@@ -1,0 +1,146 @@
+<h1>설정</h1>
+<navleft></navleft>
+
+<div class="tab-content col-xs-12 col-sm-10">
+<!--시스템 > 장애현황-->
+<div id="errorlist">
+    <div class="gn-box">
+        <div class="gn-sett-margin-box">
+            <div class="container-fluid">
+                <h2>장애현황</h2>
+
+                <!--전체/해결/미해결 카운트-->
+                <div class="gn-total-error gn-margin-bott10 row">
+                    <div class="col-xs-4 text-center">
+                        <div class="gn-box">
+                            <div>
+                                <span>전체</span>
+                                <h4>{{total_count}}개</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                        <div class="gn-box">
+                            <div>
+                                <span>해결</span>
+                                <h4>{{solve_count}}개</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                        <div class="gn-box">
+                            <div>
+                                <span>미해결</span>
+                                <h4>{{not_solve_count}}개</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!--전체/해결/미해결 카운트-->
+
+                <div class="row">
+                    <div class="gn-select-error gn-margin-bott10 col-xs-12 col-sm-8 pull-right">
+                        <div class="pull-right"><span>미완료</span><input type="checkbox" ng-model="data.notsolve" ng-change="page(1)"></div>
+                        <div class="pull-right"><span>완료</span><input type="checkbox" ng-model="data.solve" ng-change="page(1)"></div>
+                        <div class="pull-right col-xs-4">
+                            <select class="gn-select form-control gn-form-control" ng-model="data.month" ng-options="month.value as month.value for month in month_list" ng-change="page(1)">
+                                <option value="">선택</option>
+                            </select>
+                            <p class="">월</p>
+                        </div>
+                        <div class="pull-right col-xs-4">
+                            <select class="gn-select form-control gn-form-control" ng-model="data.year" ng-options="year.name as year.value for year in year_list" ng-change="page(1)">
+                                <option value="">선택</option>
+                            </select>
+                            <p class="">년</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!--장애현황 목록-->
+                <div class="table-responsive gn-table-responsive">
+                    <table class="table gn-board-table table-hover">
+                        <thead>
+                        <tr>
+                            <th class="">#</th>
+                            <th class="hidden-xs hidden-sm">시간</th>
+                            <th class="hidden-xs hidden-sm">팀</th>
+                            <th class="">인스턴스</th>
+                            <th class="">소유자</th>
+                            <th class="hidden-xs hidden-sm">에러항목</th>
+                            <th class="hidden-xs hidden-sm">해결자</th>
+                            <th class="hidden-xs">해결여부</th>
+                        </tr>
+                        </thead>
+                        <tbody class="gn-tdody">
+                        <tr class="" ng-repeat="list in error_hist">
+                            <td>{{(total_count - (page_hist - 1)) - $index }}</td>
+                            <td class="hidden-xs hidden-sm">{{list.action_time}}</td>
+                            <td class="hidden-xs hidden-sm">{{list.gnTeam.team_name}}</td>
+                            <td class="second-td-name">
+                                <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-error">
+                                    <span ng-if="list.gnVmMachines == null">{{list.vm_name}}</span>
+                                    <span ng-if="list.gnVmMachines != null">{{list.gnVmMachines.name}}</span>
+                                </a>
+                            </td>
+                            <td>홍길동</td>
+                            <td class="hidden-xs hidden-sm">
+                                <span ng-if="list.action == 'Create'">생성</span>
+                            </td>
+                            <td class="hidden-xs hidden-sm">{{list.gnUsers.name}}</td>
+                            <td class="hidden-xs"><input type="checkbox" value=""></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!--div class="table-responsive gn-table-responsive" -->
+
+                <!--이전/다음 버튼-->
+                <div class="gn-page-btn">
+                    <input type="button" class="btn btn-default pull-left" value="이전" ng-show="page_hist != 1">
+                    <input type="button" class="btn btn-default" value="다음" ng-show="page_total!=page_hist">
+                </div>
+
+                <!-- 장애현황 Modal -->
+                <div class="modal fade" id="modal-error" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header gn-modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">장애현황 해결정보</h4>
+                            </div>
+                            <div class="modal-body gn-modal-body">
+
+                                <form class="form-horizontal">
+                                    <dl class="dl-horizontal gn-description-list">
+                                        <dt>팀</dt>
+                                        <dd>개발1팀</dd>
+                                        <dt>인스턴스</dt>
+                                        <dd>Hyper#002</dd>
+                                        <dt>소유자</dt>
+                                        <dd>홍길동</dd>
+                                        <dt>시간</dt>
+                                        <dd>2017.01.23 13:00</dd>
+                                        <hr>
+                                        <dt>에러항목</dt>
+                                        <dd>정지</dd>
+                                        <dt>해결자</dt>
+                                        <dd>홍길동</dd>
+                                        <dt>해결시간</dt>
+                                        <dd>2017.01.23 16:34</dd>
+                                        <dt>해결내용</dt>
+                                        <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요."></textarea></dd>
+                                    </dl>
+                                </form>
+
+                            </div>
+                            <div class="modal-footer gn-modal-footer">
+                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">저장</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!--<div class="container-fluid">-->
+        </div> <!--class="gn-sett-margin-box"-->
+    </div> <!--class="gn-box profile-team"-->
+</div> <!--id="image-sett"  class="tab-pane fade"-->
+</div>

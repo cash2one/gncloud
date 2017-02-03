@@ -74,7 +74,9 @@ def server_create(team_code, user_id, user_name, id, sql_session):
     except Exception as e:
         print(id+":init vm error!!!")
         print("error:"+e.message)
-        vm_info.status="Error"
+        error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        sql_session.add(error_hist)
+        vm_info.status = "Error"
         sql_session.commit()
 
 def setSsh(host_ip, path, ip, ssh_id):
