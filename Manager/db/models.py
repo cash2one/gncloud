@@ -683,6 +683,8 @@ class GnErrorHist(Base):
     solver_name = Column(String(10), primary_key=False, nullable=True)
     vm_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'))
     vm_name = Column(String(50), primary_key=False, nullable=True)
+    action_year = Column(String(4), primary_key=False, default=datetime.date.today().year)
+    action_month = Column(String(4), primary_key=False, default=datetime.date.today().month)
     gnTeam = relationship('GnTeam')
     gnVmMachines = relationship('GnVmMachines')
     gnUsers = relationship('GnUser')

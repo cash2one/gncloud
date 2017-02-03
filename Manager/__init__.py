@@ -53,8 +53,12 @@ def vm_error_trace():
 
 @app.route('/vm/errorhist',methods=['GET'])
 def vm_error_list():
-    page= request.args.get("page")
-    return jsonify(status=True, message="success", list=error_history(page,db_session))
+    page = request.args.get("page")
+    year = request.args.get("year")
+    month = request.args.get("month")
+    solve = request.args.get("solve")
+    notsolve = request.args.get("notsolve")
+    return jsonify(status=True, message="success", list=error_history(page,year,month,solve,notsolve,db_session))
 
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():

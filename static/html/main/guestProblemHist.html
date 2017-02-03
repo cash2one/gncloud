@@ -39,33 +39,19 @@
 
                 <div class="row">
                     <div class="gn-select-error gn-margin-bott10 col-xs-12 col-sm-8 pull-right">
-                        <div class="pull-right"><span>미완료</span><input type="checkbox" ng-data="data.solve"></div>
-                        <div class="pull-right"><span>완료</span><input type="checkbox" ng-data="data.not_solve"></div>
+                        <div class="pull-right"><span>미완료</span><input type="checkbox" ng-model="data.notsolve" ng-change="page(1)"></div>
+                        <div class="pull-right"><span>완료</span><input type="checkbox" ng-model="data.solve" ng-change="page(1)"></div>
                         <div class="pull-right col-xs-4">
-                            <select class="gn-select form-control gn-form-control" ng-data="data.month">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                                <option>11</option>
-                                <option>12</option>
-                            </select>
-                            <p class="">년</p>
-                        </div>
-                        <div class="pull-right col-xs-4">
-                            <select class="gn-select form-control gn-form-control" ng-data="data.year">
-                                <option>2017</option>
-                                <option>2016</option>
-                                <option>2015</option>
-                                <option>2014</option>
+                            <select class="gn-select form-control gn-form-control" ng-model="data.month" ng-options="month.value as month.value for month in month_list" ng-change="page(1)">
+                                <option value="">선택</option>
                             </select>
                             <p class="">월</p>
+                        </div>
+                        <div class="pull-right col-xs-4">
+                            <select class="gn-select form-control gn-form-control" ng-model="data.year" ng-options="year.name as year.value for year in year_list" ng-change="page(1)">
+                                <option value="">선택</option>
+                            </select>
+                            <p class="">년</p>
                         </div>
                     </div>
                 </div>

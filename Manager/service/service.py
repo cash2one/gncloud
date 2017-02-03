@@ -1137,19 +1137,34 @@ def use_history(page, sql_session):
     use_info={"list":list,"page":page,"total":total}
     return use_info
 
-def error_history(page, sql_session):
-    page_size=10
-    page=int(page)-1
-    list=sql_session.query(GnErrorHist) \
-        .order_by(GnErrorHist.action_time.desc()) \
-        .limit(page_size).offset(page*page_size).all()
-    total_count= sql_session.query(func.count(GnErrorHist.id).label("count")).one()
-    solve_count= sql_session.query(func.count(GnErrorHist.id).label("count")).filter(GnErrorHist.solver_name != None).one()
-    not_solve_count= sql_session.query(func.count(GnErrorHist.id).label("count")).filter(GnErrorHist.solver_name == None).one()
+def error_history(page,year,month,solve,notsolve,sql_session):
+    page_size = 10
+    page = int(page)-1
+
+    list_query = sql_session.query(GnErrorHist) \
+                            .filter(GnErrorHist.action_year == year) \
+                            .filter(GnErrorHist.action_month == month)
+
+
+    if solve == 'true' and notsolve == 'false':
+        list_query = list_query.filter(GnErrorHist.solver_name != None)
+    elif solve == 'false' and notsolve == 'true':
+        list_query = list_query.filter(GnErrorHist.solver_name == None)
+    elif solve == 'false' and notsolve == 'false':
+        list_query = list_query.filter(GnErrorHist.solver_name != None).filter(GnErrorHist.solver_name == None)
+
+    list = list_query.order_by(GnErrorHist.action_time.desc()) \
+                     .limit(page_size).offset(page*page_size).all()
+
+    total_count = sql_session.query(func.count(GnErrorHist.id).label("count")).one()
+    solve_count = sql_session.query(func.count(GnErrorHist.id).label("count"))\
+                             .filter(GnErrorHist.solver_name != None).one()
+    not_solve_count = sql_session.query(func.count(GnErrorHist.id).label("count"))\
+                                 .filter(GnErrorHist.solver_name == None).one()
     total = total_count.count /10
     for error_hist in list:
         error_hist.action_time = error_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')
-    error_info={"list":list,"page":page,"total":total, "total_count":total_count.count,"solve_count":solve_count.count, "not_solve_count":not_solve_count.count}
+    error_info = {"list":list,"page":page,"total":total, "total_count":total_count.count,"solve_count":solve_count.count, "not_solve_count":not_solve_count.count}
     return error_info
 
 

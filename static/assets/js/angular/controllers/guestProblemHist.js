@@ -1,9 +1,31 @@
 angular
     .module('gncloud')
     .controller('guestProblemHistCtrl', function ($scope, $http) {
+        var d = new Date();
 
-        $scope.data={};
+        $scope.data={"year":d.getFullYear(),"month":(d.getMonth() + 1), "solve":true, "notsolve":true};
+        $scope.month_list = [
+            {value: 1},
+            {value: 2},
+            {value: 3},
+            {value: 4},
+            {value: 5},
+            {value: 6},
+            {value: 7},
+            {value: 8},
+            {value: 9},
+            {value: 10},
+            {value: 11},
+            {value: 12}
+        ];
+        $scope.year_list = [
+            {name: d.getFullYear() - 1 , value: d.getFullYear() - 1},
+            {name: d.getFullYear(), value: d.getFullYear()}
+        ];
+
+
         $scope.page=function(page) {
+            console.log("aaa");
             $scope.data.page=page;
             $http({
                 method: 'GET',
