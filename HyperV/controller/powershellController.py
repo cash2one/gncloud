@@ -6,7 +6,7 @@ Hyper-V를 컨트롤 할 PowerShell Script(서비스의 powershellSerivce에서 
 import json
 
 from HyperV.util.json_encoder import AlchemyEncoder
-from HyperV.db.models import GnHostMachines, GnMonitorHist, GnVmSize, GnInstanceStatus, GnSystemSetting
+from HyperV.db.models import *
 from HyperV.util.logger import logger
 
 __author__ = 'jhjeon'
@@ -151,8 +151,10 @@ def hvm_create(id, sql_session):
             return True
     except Exception as e:
         print(e.message)
-        if vm_info is None or len(vm_info) == 0:
+        if vm_info is None:
             vm_info =sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
+        error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        sql_session.add(error_hist)
         vm_info.status = "Error"
         sql_session.commit()
         # sql_session.remove()
