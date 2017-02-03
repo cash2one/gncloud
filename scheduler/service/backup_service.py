@@ -166,7 +166,7 @@ class Backup:
                 backup = sql_session.query(GnBackup).filter(GnBackup.vm_id == org_vm_id).first()
                 if backup is None:
                     backup_insert = GnBackup(org_vm_id, date_create_time,
-                                             vm_info.team_code, vm_info.author_id, vm_info.type, host_machine.name,
+                                             vm_info.team_code, vm_info.author_id, vm_info.type, vm_info.name,
                                              team.team_name, user.user_name)
                     sql_session.add(backup_insert)
                 else:
