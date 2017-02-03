@@ -23,6 +23,7 @@ angular
                         $scope.monitor = data.list.list;
                         $scope.bills = data.list.billing;
                         $scope.backup_type= data.list.backup_type;
+                        $scope.backup_days = data.list.backup_days;
                         if(data.list.backup_type == 'W'){
                             for(var i=0;i<data.list.backup_week.length;i++){
                                 if(data.list.backup_week[i] == 1){
@@ -38,6 +39,7 @@ angular
                         }
                         $("#day").val($scope.day);
                         $("#monitor").val($scope.monitor);
+                        $("#dayforback").val($scope.backup_days);
                     } else {
                         if (data.message != null) {
                             alert(data.message);
@@ -105,9 +107,11 @@ angular
                 for(var i=0;i<$scope.weeked.length;i++){
                     $scope.data.value += $scope.weeked[i].checked == true ? "1":"0";
                 }
+                $scope.data.backday= $scope.backday;
             }else{
                 $scope.data.type=type;
                 $scope.data.value= $scope.changeday;
+                $scope.data.backday= $scope.backday;
             }
             $http({
                 method:'PUT',

@@ -1163,11 +1163,11 @@ def setting_list(sql_ssesion):
     setting_info = sql_ssesion.query(GnSystemSetting).one()
     if(setting_info.backup_schedule_type == 'D'):
         return {"billing":setting_info.billing_type,"list":setting_info.monitor_period, "backup_type":setting_info.backup_schedule_type
-                ,"backup_week":setting_info.backup_schedule_period}
+                ,"backup_week":setting_info.backup_schedule_period,"backup_days":setting_info.backup_day}
     else:
         week_info = list(str(setting_info.backup_schedule_period))
         return {"billing":setting_info.billing_type,"list":setting_info.monitor_period, "backup_type":setting_info.backup_schedule_type
-            ,"backup_week":week_info}
+            ,"backup_week":week_info,"backup_days":setting_info.backup_day}
 
 def monitoring_time_change(monitor_period, sql_session):
     list = sql_session.query(GnSystemSetting).one()
@@ -1179,10 +1179,11 @@ def billing_time_change(bills, sql_session):
     list.billing_type = bills
     sql_session.commit()
 
-def backup_time_change(type, day, sql_session):
+def backup_time_change(type, day,backday ,sql_session):
     list=sql_session.query(GnSystemSetting).one()
     list.backup_schedule_type = type
     list.backup_schedule_period = day
+    list.backup_day =backday
     sql_session.commit()
 
 def insertVmHist(id,action,user_id,team_code,sql_session):
