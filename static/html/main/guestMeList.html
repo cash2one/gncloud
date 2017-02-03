@@ -323,7 +323,7 @@
                                 <th class="hidden-xs">아이디</th>
                                 <th class="hidden-xs">상태</th>
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                                <th class=""><!--더보기--></th>
+                                <th class="" ng-show="user_info.authority == 'owner' "><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody>
