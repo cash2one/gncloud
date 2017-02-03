@@ -692,7 +692,7 @@ h2 > .pull-right{margin-top: -6px;}
 .gn-answer span,.gn-comment span{padding-right: 0; padding-left: 0;}
 
 /*개발*/
-#changereply > textarea{padding: 0;}
+#changereply{padding-left: 0;}
 
 /* ========== gncloud 로그인 HTML ========== */
 .body-white{background-color: #ffffff; min-height: 100%;}
@@ -1079,6 +1079,11 @@ a.log-join-btn:focus{
     background-color: rgba(238,238,238,50); 
     padding: 2px;
     border-radius: 3px;}
+
+/* 고정된 높이값 */
+.dash-body .dash-margin-box{min-height: 172px;} 
+.dash-body .dash-margin-box .gn-table-responsive{min-height: 296px;}
+
 
 /* ========== gncloud 인스턴스 > 리스트 HTML ========== */
 th.first-td{width: 65px;}
@@ -2020,6 +2025,15 @@ ul.gn-sett-graph > li:nth-of-type(3){
     
     .dash-margin-box > .gn-dash-graph-box img{
         width: 30%;
+        margin-bottom: 10px;}
+    
+
+    
+    /*개발*/
+    .dash-margin-box > .gn-dash-graph-box canvas{
+        width: 30%;
+        height: inherit;
+        margin: inherit;
         margin-bottom: 10px;} 
     
     /*사용자*/
@@ -2058,10 +2072,13 @@ ul.gn-sett-graph > li:nth-of-type(3){
     .form-group > .col-sm-7 > .form-control,
     .form-group > .col-sm-8 > .form-control{
         margin-bottom: 10px;
-    }    
-
+    }
     
+    /*개발*/
+    #changereply{margin: 10px 0; padding-right: 0;}
+
 }
+
 
 /* 가로 방향 전화기 이하 */
 @media (max-width: 480px) {
