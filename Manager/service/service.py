@@ -25,6 +25,11 @@ def saveErrorTrace(id, action, sql_session):
     sql_session.add(error_hist)
     sql_session.commit()
 
+def error_history_info(id, sql_session):
+    info = sql_session.query(GnErrorHist)\
+                      .filter(GnErrorHist.id == id).one()
+    return info
+
 
 def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, type, password, backup ,sql_session):
 

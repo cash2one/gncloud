@@ -54,6 +54,10 @@ def vm_error_list():
     notsolve = request.args.get("notsolve")
     return jsonify(status=True, message="success", list=error_history(page,year,month,solve,notsolve,db_session))
 
+@app.route('/vm/errorhist/<id>',methods=['GET'])
+def vm_error_info(id):
+    return jsonify(status=True, message="success", info=error_history_info(id,db_session))
+
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
     password=""

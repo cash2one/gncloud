@@ -25,7 +25,6 @@ angular
 
 
         $scope.page=function(page) {
-            console.log("aaa");
             $scope.data.page=page;
             $http({
                 method: 'GET',
@@ -52,4 +51,23 @@ angular
                 });
         }
         $scope.page(1);
+
+        $scope.select_error_info=function(id) {
+            $http({
+                method: 'GET',
+                url: '/api/manager/vm/errorhist/'+id,
+                params:$scope.select_data,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.error_info = data.info;
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
     });

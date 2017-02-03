@@ -77,7 +77,7 @@
                             <td class="hidden-xs hidden-sm">{{list.action_time}}</td>
                             <td class="hidden-xs hidden-sm">{{list.gnTeam.team_name}}</td>
                             <td class="second-td-name">
-                                <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-error">
+                                <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-error" ng-click="select_error_info(list.id)">
                                     <span ng-if="list.gnVmMachines == null">{{list.vm_name}}</span>
                                     <span ng-if="list.gnVmMachines != null">{{list.gnVmMachines.name}}</span>
                                 </a>
@@ -85,6 +85,10 @@
                             <td>홍길동</td>
                             <td class="hidden-xs hidden-sm">
                                 <span ng-if="list.action == 'Create'">생성</span>
+                                <span ng-if="list.action == 'Suspend'">정지</span>
+                                <span ng-if="list.action == 'Resume'">시작</span>
+                                <span ng-if="list.action == 'Deleting'">삭제</span>
+                                <span ng-if="list.action == 'Reboot'">재시작</span>
                             </td>
                             <td class="hidden-xs hidden-sm">{{list.gnUsers.name}}</td>
                             <td class="hidden-xs"><input type="checkbox" value=""></td>
@@ -112,22 +116,28 @@
                                 <form class="form-horizontal">
                                     <dl class="dl-horizontal gn-description-list">
                                         <dt>팀</dt>
-                                        <dd>개발1팀</dd>
+                                        <dd>{{error_info.gnTeam.team_name}}</dd>
                                         <dt>인스턴스</dt>
-                                        <dd>Hyper#002</dd>
+                                        <dd>{{error_info.vm_name}}</dd>
                                         <dt>소유자</dt>
-                                        <dd>홍길동</dd>
+                                        <dd>{{error_info.gnUsers.user_name}}</dd>
                                         <dt>시간</dt>
-                                        <dd>2017.01.23 13:00</dd>
+                                        <dd>{{error_info.action_time}}</dd>
                                         <hr>
                                         <dt>에러항목</dt>
-                                        <dd>정지</dd>
+                                        <dd>
+                                            <span ng-if="error_info.action == 'Create'">생성</span>
+                                            <span ng-if="error_info.action == 'Suspend'">정지</span>
+                                            <span ng-if="error_info.action == 'Resume'">시작</span>
+                                            <span ng-if="error_info.action == 'Deleting'">삭제</span>
+                                            <span ng-if="error_info.action == 'Reboot'">재시작</span>
+                                        </dd>
                                         <dt>해결자</dt>
-                                        <dd>홍길동</dd>
+                                        <dd>{{error_info.solver_name}}</dd>
                                         <dt>해결시간</dt>
-                                        <dd>2017.01.23 16:34</dd>
+                                        <dd>{{error_info.solve_time}}</dd>
                                         <dt>해결내용</dt>
-                                        <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요."></textarea></dd>
+                                        <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요.">{{error_info.solve_content}}</textarea></dd>
                                     </dl>
                                 </form>
 

@@ -158,4 +158,70 @@ angular
                 });
         }
 
+        $scope.getParameter = function (param) {
+            var returnValue;
+            var url = location.href;
+            var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+            for (var i = 0; i < parameters.length; i++) {
+                var varName = parameters[i].split('=')[0];
+                if (varName.toUpperCase() == param.toUpperCase()) {
+                    returnValue = parameters[i].split('=')[1];
+                    return decodeURIComponent(returnValue);
+                }
+            }
+        };
+
+        $scope.getChartJs = function () {
+            var data_info = null;
+            $.ajax({
+                type: "GET",
+                url: '/api/manager/vm/machines/'+ $scope.getParameter('id')+'/graph',
+                headers: {'Content-Type': 'application/json; charset=utf-8'},
+                async:false,
+                success: function (data) {
+                    data_info = data.info;
+                    new Chart(document.getElementById("line_chart").getContext("2d"), $scope.getConfig(data_info));
+                }
+            })
+        }
+
+        $scope.getConfig = function (data_info) {
+            config = {
+                type: 'line',
+                data: {
+                    labels: data_info.x_info,
+                    datasets: [{
+                        label: "Value",
+                        data: data_info.cpu_per_info,
+                        borderColor: 'rgba(233, 30, 99, 0.75)',
+                        backgroundColor: 'rgba(233, 30, 99, 0.3)',
+                        pointBorderColor: 'rgba(233, 30, 99, 0)',
+                        pointBackgroundColor: 'rgba(233, 30, 99, 0.9)',
+                        pointBorderWidth: 1,
+                        lineTension:0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    legend: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                max:100,
+                                min:0,
+                                callback: function(label) {
+                                    return label+'%';
+                                },
+                            }
+
+                        }]
+                    }
+                }
+
+            }
+            return config;
+        }
+
+        $scope.getChartJs();
+
     });
