@@ -17,6 +17,7 @@ from Manager.db.models import *
 from Manager.util.config import config
 from Manager.util.hash import random_string, convertToHashValue, convertsize
 
+
 def saveErrorTrace(id, action, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
@@ -1177,11 +1178,11 @@ def setting_list(sql_ssesion):
     setting_info = sql_ssesion.query(GnSystemSetting).one()
     if(setting_info.backup_schedule_type == 'D'):
         return {"billing":setting_info.billing_type,"list":setting_info.monitor_period, "backup_type":setting_info.backup_schedule_type
-                ,"backup_week":setting_info.backup_schedule_period}
+                ,"backup_week":setting_info.backup_schedule_period,"backup_days":setting_info.backup_day}
     else:
         week_info = list(str(setting_info.backup_schedule_period))
         return {"billing":setting_info.billing_type,"list":setting_info.monitor_period, "backup_type":setting_info.backup_schedule_type
-            ,"backup_week":week_info}
+            ,"backup_week":week_info,"backup_days":setting_info.backup_day}
 
 def monitoring_time_change(monitor_period, sql_session):
     list = sql_session.query(GnSystemSetting).one()
@@ -1193,10 +1194,11 @@ def billing_time_change(bills, sql_session):
     list.billing_type = bills
     sql_session.commit()
 
-def backup_time_change(type, day, sql_session):
+def backup_time_change(type, day,backday ,sql_session):
     list=sql_session.query(GnSystemSetting).one()
     list.backup_schedule_type = type
     list.backup_schedule_period = day
+    list.backup_day =backday
     sql_session.commit()
 
 def insertVmHist(id,action,user_id,team_code,sql_session):
@@ -1353,3 +1355,33 @@ def team_price_lsit_info(year,month,team_code,sql_session):
     instance=json.loads(list.invoice_data)
     team = sql_session.query(GnTeam).filter(GnTeam.team_code == list.team_code).one()
     return {"list":list, "instance":instance, "team_code":team_name}
+
+
+#_________________________백업______________________________________________________________#
+def backup_list(page,sql_session):
+    page_size = 30
+    page = int(page)-1
+    total_page= sql_session.query(func.count(GnBackup.vm_id).label("count")).one()
+    list=sql_session.query(GnBackup).order_by(GnBackup.backup_time.desc()).limit(page_size).offset(page*page_size).all()
+    total=int(total_page.count)/30
+    for vm in list:
+        vm.backup_time = vm.backup_time.strftime('%Y-%m-%d %H:%M')
+    return {"list":list, "total_page":total_page.count,"total":total, "page":page}
+
+def backup_hist(vm_id, sql_session):
+    vm_info = sql_session.query(GnBackup).filter(GnBackup.vm_id == vm_id).one()
+    hist_info = sql_session.query(GnBackupHist).filter(GnBackupHist.vm_id == vm_id).order_by(GnBackupHist.backup_time.desc()).all()
+    total = len(hist_info)
+    for hist in hist_info:
+        hist.backup_time = hist.backup_time.strftime('%Y-%m-%d %H:%M')
+    return {"vm_info":vm_info,"hist_info":hist_info,"total":total}
+
+def team_backup_list(page,team_code,sql_session):
+    page_size = 30
+    page = int(page)-1
+    total_page= sql_session.query(func.count(GnBackup.vm_id).label("count")).filter(GnBackup.team_code == team_code).one()
+    list=sql_session.query(GnBackup).filter(GnBackup.team_code == team_code).order_by(GnBackup.backup_time.desc()).limit(page_size).offset(page*page_size).all()
+    total=int(total_page.count)/30
+    for vm in list:
+        vm.backup_time = vm.backup_time.strftime('%Y-%m-%d %H:%M')
+    return {"list":list, "total_page":total_page.count,"total":total, "page":page}
