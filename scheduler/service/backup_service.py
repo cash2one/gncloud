@@ -49,6 +49,7 @@ class Backup:
             elif backup_settings.backup_schedule_type == 'D':
                 return self.day_backup_process(backup_settings.backup_schedule_period)
 
+            return jsonify(status=True, message='success backup')
         except Exception as message:
             print(message)
             return jsonify(status=False, message='failure backup')
