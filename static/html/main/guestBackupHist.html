@@ -35,8 +35,8 @@
 
                 <!--이전/다음 버튼-->
                 <div class="gn-page-btn">
-                    <input type="button" class="btn btn-default pull-left" value="이전">
-                    <input type="button" class="btn btn-default" value="다음">
+                    <input type="button" class="btn btn-default pull-left" ng-click="page(prev_page)" value="이전" ng-show="page_hist != 1">
+                    <input type="button" class="btn btn-default" ng-click="page(next_page)" value="다음" ng-show="page_total!=page_hist">
                 </div>
 
                 <!-- 백업현황 Modal -->
@@ -59,29 +59,27 @@
                                         <dt>소유자</dt>
                                         <dd>{{vm_info.author_name}}</dd>
                                         <dt>히스토리</dt>
-                                        <dd>
-                                            <div class="table-responsive gn-table-responsive">
-                                                <table class="table table-bordered gn-board-table">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th class="">백업시간</th>
-                                                        <th class="">파일</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody class="gn-tdody">
-                                                    <tr ng-repeat="hist in hist_info">
-                                                        <td>{{total-$index}}</td>
-                                                        <td>{{hist.backup_time}}</td>
-                                                        <td>{{hist.filename}}</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </dd>
+                                        <dd></dd>
                                     </dl>
-
-
+                                    
+                                    <div class="table-responsive gn-table-responsive">
+                                        <table class="table table-bordered gn-board-table">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th class="">백업시간</th>
+                                                <th class="">파일</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="gn-tdody">
+                                            <tr ng-repeat="hist in hist_info">
+                                                <td>{{total-$index}}</td>
+                                                <td>{{hist.backup_time}}</td>
+                                                <td>{{hist.filename}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </form>
 
                             </div>
