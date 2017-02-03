@@ -68,29 +68,27 @@
                                         <dt>소유자</dt>
                                         <dd>{{vm_info.author_name}}</dd>
                                         <dt>히스토리</dt>
-                                        <dd>
-                                            <div class="table-responsive gn-table-responsive">
-                                                <table class="table table-bordered gn-board-table">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th class="">백업시간</th>
-                                                        <th class="">파일</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody class="gn-tdody">
-                                                    <tr ng-repeat="hist in hist_info">
-                                                        <td>{{total-$index}}</td>
-                                                        <td>{{hist.backup_time}}</td>
-                                                        <td>{{hist.filename}}</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </dd>
+                                        <dd></dd>
                                     </dl>
-
-
+                                    
+                                    <div class="table-responsive gn-table-responsive">
+                                        <table class="table table-bordered gn-board-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th class="">백업시간</th>
+                                                    <th class="">파일</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="gn-tdody">
+                                                <tr ng-repeat="hist in hist_info">
+                                                    <td>{{total-$index}}</td>
+                                                    <td>{{hist.backup_time}}</td>
+                                                    <td>{{hist.filename}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </form>
 
                             </div>
@@ -323,7 +321,7 @@
                                 <th class="hidden-xs">아이디</th>
                                 <th class="hidden-xs">상태</th>
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                                <th class=""><!--더보기--></th>
+                                <th class="" ng-show="user_info.authority == 'owner' "><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody>

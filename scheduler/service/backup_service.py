@@ -48,7 +48,8 @@ class Backup:
                         week_day += 1
             elif backup_settings.backup_schedule_type == 'D':
                 return self.day_backup_process(backup_settings.backup_schedule_period)
-
+            sql_session.commit()
+            return jsonify(status=True, message='success backup')
         except Exception as message:
             print(message)
             return jsonify(status=False, message='failure backup')
@@ -165,7 +166,7 @@ class Backup:
                 backup = sql_session.query(GnBackup).filter(GnBackup.vm_id == org_vm_id).first()
                 if backup is None:
                     backup_insert = GnBackup(org_vm_id, date_create_time,
-                                             vm_info.team_code, vm_info.author_id, vm_info.type, host_machine.name,
+                                             vm_info.team_code, vm_info.author_id, vm_info.type, vm_info.name,
                                              team.team_name, user.user_name)
                     sql_session.add(backup_insert)
                 else:
