@@ -48,7 +48,7 @@ class Backup:
                         week_day += 1
             elif backup_settings.backup_schedule_type == 'D':
                 return self.day_backup_process(backup_settings.backup_schedule_period)
-
+            sql_session.commit()
             return jsonify(status=True, message='success backup')
         except Exception as message:
             print(message)
