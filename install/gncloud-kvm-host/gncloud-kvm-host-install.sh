@@ -30,12 +30,12 @@ virsh net-undefine default
 systemctl restart libvirtd
 
 #ifcfg-br0 설정
-> /etc/sysconfig/network-script/ifcfg-br0
-echo "DEVICE=br0" >> /etc/sysconfig/network-script/ifcfg-br0
-echo "TYPE=Bridge" >> /etc/sysconfig/network-script/ifcfg-br0
-echo "BOOTPROTO=dhcp" >> /etc/sysconfig/network-script/ifcfg-br0
-echo "ONBOOT=yes" >> /etc/sysconfig/network-script/ifcfg-br0
-echo "DELAY=0" >> /etc/sysconfig/network-script/ifcfg-br0
+> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "DEVICE=br0" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "TYPE=Bridge" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "BOOTPROTO=dhcp" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "ONBOOT=yes" >> /etc/sysconfig/network-scripts/ifcfg-br0
+echo "DELAY=0" >> /etc/sysconfig/network-scripts/ifcfg-br0
 
 #ifcfg-eth? 또는 ifcfg-enp???
 if [ -e /etc/sysconfig/network-scripts/ifcfg-eth0 ]
@@ -47,6 +47,7 @@ then
 	echo "BRIDGE=br0" >> /etc/sysconfig/network-scripts/ifcfg-eth0
 	echo "NM_CONTROLLED=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
 elif [ -e /etc/sysconfig/network-scripts/ifcfg-enp3s0 ]
+then
 	sed -i "s/^/#/g" /etc/sysconfig/network-scripts/ifcfg-enp3s0
 	sed -i "s/#UUID/UUID/g" /etc/sysconfig/network-scripts/ifcfg-enp3s0
 	echo "DEVICE=eth0" >> /etc/sysconfig/network-scripts/ifcfg-enp3s0
