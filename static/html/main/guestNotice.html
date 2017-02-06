@@ -64,13 +64,13 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">{{notice.title}}</h4>
                 <p>작성일<span class="noti-count">&nbsp;{{notice.write_date}}</span></p>
-            <div class="modal-body gn-modal-body gn-content">
+            <div class="modal-body gn-modal-body" ng-class="{'gn-content':showData !=1}">
                     <form class="form-horizontal">
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <span class="gn-write" ng-show="showData=='2'">{{notice.text}}</span>
                             </div>
-                            <div id="change" class="second-td-name gn-lead col-sm-8" ng-show="showData=='1'">
+                            <div id="change" class="second-td-name gn-lead" ng-show="showData=='1'">
                                 <textarea class="form-control gn-write" rows="6" ng-model="notice.text"></textarea></div>
                         </div>
                     </form>
