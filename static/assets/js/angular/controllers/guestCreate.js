@@ -236,6 +236,7 @@ angular
                             $("#type").focus();
                         }else{
                             $scope.createInstance(data.value);
+                            $scope.checkdisabled();
                         }
                     } else {
                         if(data.value != null) {
@@ -266,6 +267,10 @@ angular
                     }
                 });
         };
+        $scope.isAlive = false;
+        $scope.checkdisabled=function () {
+            $scope.isAlive = true;
+        }
 
     })
     .directive("checkboxGroup", function() {

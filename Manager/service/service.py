@@ -677,10 +677,14 @@ def select_put(team_name, team_code): #팀 수정
 def select_putsys(team_name, team_code, team_cpu, team_memory, team_disk): #팀 시스템 수정 / cpu / memory / disk
     lit =db_session.query(GnTeam).filter(GnTeam.team_code== team_code).one()
     try:
-        lit.team_name = team_name
-        lit.cpu_quota = team_cpu
-        lit.mem_quota = convertsize(team_memory)
-        lit.disk_quota = convertsize(team_disk)
+        if team_name != "":
+            lit.team_name = team_name
+        if team_cpu !="":
+            lit.cpu_quota = team_cpu
+        if team_memory != "":
+            lit.mem_quota = convertsize(team_memory)
+        if team_disk != "":
+            lit.disk_quota = convertsize(team_disk)
         db_session.commit()
         return True
     except:
@@ -746,7 +750,7 @@ def pathimage(sql_session): #시스템 이미지 리스트 path 쿼리
     return list
 
 def delteam_list(team_code, sql_session): #팀삭제 쿼리
-    if((sql_session.query(GnVmMachines).filter(GnVmMachines.team_code == team_code).filter(GnVmMachines.status != config.REMOVE_STATUS).one_or_none())==None):
+    if len(sql_session.query(GnVmMachines).filter(GnVmMachines.team_code == team_code).all()) == 0:
         user_list =sql_session.query(GnUserTeam).filter(GnUserTeam.team_code == team_code).all()
         while True:
             del_code=random_string(8)
@@ -1223,9 +1227,11 @@ def billing_time_change(bills, sql_session):
 
 def backup_time_change(type, day,backday ,sql_session):
     list=sql_session.query(GnSystemSetting).one()
-    list.backup_schedule_type = type
-    list.backup_schedule_period = day
-    list.backup_day =backday
+    if type != "" and day != "":
+        list.backup_schedule_type = type
+        list.backup_schedule_period = day
+    if backday != "":
+        list.backup_day =backday
     sql_session.commit()
 
 def insertVmHist(id,action,user_id,team_code,sql_session):

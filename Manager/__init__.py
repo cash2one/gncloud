@@ -426,15 +426,25 @@ def changeteamname():
 
 @app.route('/vm/account/teamname/<code>', methods=['PUT'])
 def changeteamnamesystem(code):
-    team_name=request.json['team_name']
-    team_cpu =request.json['cpu']
-    team_memory = request.json['mem']
-    team_disk = request.json['disk']
+    team_name=""
+    team_cpu=""
+    team_memory=""
+    team_disk=""
+    if request.json == None:
+        return jsonify(status=False, message='아무것도 입력하지 않았습니다.')
+    if 'team_name' in request.json:
+        team_name=request.json['team_name']
+    if 'cpu' in request.json:
+        team_cpu =request.json['cpu']
+    if 'mem' in request.json:
+        team_memory = request.json['mem']
+    if 'disk' in request.json:
+        team_disk = request.json['disk']
     list=select_putsys(team_name,code,team_cpu, team_memory, team_disk)
     if(list == True):
         return jsonify(status=True, message="success")
     else:
-        return jsonify(status=False)
+        return jsonify(status=False, message="잘못입력하셨습니다.")
 
 @app.route('/vm/account/teamtable', methods=['GET'])
 def teamshow():
@@ -664,9 +674,15 @@ def billing_time():
 
 @app.route('/vm/backup', methods=['PUT'])
 def backup_time():
-    type = request.json['type']
-    day = request.json['value']
-    backday = request.json['backday']
+    type=""
+    day =""
+    backday=""
+    if 'type' in request.json:
+        type = request.json['type']
+    if 'value' in request.json:
+        day = request.json['value']
+    if 'backday' in request.json:
+        backday = request.json['backday']
     return jsonify(status=True, list=backup_time_change(type, day, backday,db_session))
 
 @app.route('/vm_hist/machines/<id>', methods=['POST'])
