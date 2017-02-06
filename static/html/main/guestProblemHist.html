@@ -73,7 +73,7 @@
                         </thead>
                         <tbody class="gn-tdody">
                         <tr class="" ng-repeat="list in error_hist">
-                            <td>{{(total_count - (page_hist - 1)) - $index }}</td>
+                            <td>{{(total_count - ((page_hist - 1)*10)) - $index }}</td>
                             <td class="hidden-xs hidden-sm">{{list.action_time}}</td>
                             <td class="hidden-xs hidden-sm">{{list.gnTeam.team_name}}</td>
                             <td class="second-td-name">
@@ -82,7 +82,7 @@
                                     <span ng-if="list.gnVmMachines != null">{{list.gnVmMachines.name}}</span>
                                 </a>
                             </td>
-                            <td>홍길동</td>
+                            <td>{{list.gnUsers.user_name}}</td>
                             <td class="hidden-xs hidden-sm">
                                 <span ng-if="list.action == 'Create'">생성</span>
                                 <span ng-if="list.action == 'Suspend'">정지</span>
@@ -100,8 +100,8 @@
 
                 <!--이전/다음 버튼-->
                 <div class="gn-page-btn">
-                    <input type="button" class="btn btn-default pull-left" value="이전" ng-show="page_hist != 1">
-                    <input type="button" class="btn btn-default" value="다음" ng-show="page_total!=page_hist">
+                    <input type="button" class="btn btn-default pull-left" value="이전" ng-click="page(prev_page)" ng-show="page_hist != 1">
+                    <input type="button" class="btn btn-default" value="다음" ng-click="page(next_page)" ng-show="page_total!=page_hist" >
                 </div>
 
                 <!-- 장애현황 Modal -->

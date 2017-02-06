@@ -1177,18 +1177,24 @@ def error_history(page,year,month,solve,notsolve,sql_session):
                             .filter(GnErrorHist.action_year == year) \
                             .filter(GnErrorHist.action_month == month)
 
+    total_query = sql_session.query(func.count(GnErrorHist.id).label("count"))
+
 
     if solve == 'true' and notsolve == 'false':
         list_query = list_query.filter(GnErrorHist.solver_id != None)
+        total_query = total_query.filter(GnErrorHist.solver_id != None)
     elif solve == 'false' and notsolve == 'true':
         list_query = list_query.filter(GnErrorHist.solver_id == None)
+        total_query = total_query.filter(GnErrorHist.solver_id == None)
     elif solve == 'false' and notsolve == 'false':
         list_query = list_query.filter(GnErrorHist.solver_id != None).filter(GnErrorHist.solver_id == None)
+        total_query = total_query.filter(GnErrorHist.solver_id != None).filter(GnErrorHist.solver_id == None)
 
     list = list_query.order_by(GnErrorHist.action_time.desc()) \
                      .limit(page_size).offset(page*page_size).all()
 
-    total_count = sql_session.query(func.count(GnErrorHist.id).label("count")).one()
+
+    total_count = total_query.one()
     solve_count = sql_session.query(func.count(GnErrorHist.id).label("count"))\
                              .filter(GnErrorHist.solver_id != None).one()
     not_solve_count = sql_session.query(func.count(GnErrorHist.id).label("count"))\

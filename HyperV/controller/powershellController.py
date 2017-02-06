@@ -320,7 +320,6 @@ def hvm_state(id):
     elif type == "Suspend":
         try:
             suspend = ps.suspend_vm(vmid.internal_id)
-            1/0
             if suspend['State'] is 9:
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id'])\
                     .update({"status": "Suspend"})
