@@ -20,7 +20,7 @@ def index():
     return jsonify(status=True, message='서비스 정상 작동')
 
 @app.route('/service/isAlive', methods=['GET'])
-def index():
+def index_isalive():
     return jsonify(status=True, message='서비스 정상 작동')
 
 @app.route("/monitor/restart")
