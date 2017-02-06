@@ -1209,9 +1209,11 @@ def billing_time_change(bills, sql_session):
 
 def backup_time_change(type, day,backday ,sql_session):
     list=sql_session.query(GnSystemSetting).one()
-    list.backup_schedule_type = type
-    list.backup_schedule_period = day
-    list.backup_day =backday
+    if type != "" and day != "":
+        list.backup_schedule_type = type
+        list.backup_schedule_period = day
+    if backday != "":
+        list.backup_day =backday
     sql_session.commit()
 
 def insertVmHist(id,action,user_id,team_code,sql_session):

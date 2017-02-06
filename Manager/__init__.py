@@ -658,9 +658,15 @@ def billing_time():
 
 @app.route('/vm/backup', methods=['PUT'])
 def backup_time():
-    type = request.json['type']
-    day = request.json['value']
-    backday = request.json['backday']
+    type=""
+    day =""
+    backday=""
+    if 'type' in request.json:
+        type = request.json['type']
+    if 'value' in request.json:
+        day = request.json['value']
+    if 'backday' in request.json:
+        backday = request.json['backday']
     return jsonify(status=True, list=backup_time_change(type, day, backday,db_session))
 
 @app.route('/vm_hist/machines/<id>', methods=['POST'])
