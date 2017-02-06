@@ -90,6 +90,7 @@ li{
     color: #7d7d7d;
     border-radius: 3px;
     border: 1px solid rgba(215,215,215,1);
+    padding-left: 10px;
 }
 
 textarea.gn-form-control{
@@ -966,7 +967,7 @@ a.log-join-btn:focus{
     margin-bottom: 10px;
 }
 
-.dash-margin-box > div{font-size: 14px; font-weight: 400;}
+.dash-margin-box > div{font-size: 16px; font-weight: 400;}
 
 .cpu-color{color: #FFA716;}
 
@@ -1032,14 +1033,14 @@ a.log-join-btn:focus{
 
 /*컨테이너 개수/총 사용자*/
 /*박스 왼쪽*/
-.dash-box-6{position: relative;}
+.dash-count{position: relative;}
 
-.dash-box-6 img{
+.dash-count img{
     max-height: 100%;
     max-width: 100%;
 }
 
-.dash-box-6 div{
+.dash-count div{
     position: absolute;
     top: 47px;
     bottom: 0;
@@ -1048,6 +1049,9 @@ a.log-join-btn:focus{
     font-size: 40px;
     font-weight: 600;
 }
+
+/*사용자(총 사용자 수 dash-count)*/
+.total-user .dash-count{min-height: 296px;}
  
 /*대시보드 헬스체크*/
 .gn-health-check div,
@@ -1628,6 +1632,7 @@ ul.gn-sett-graph li.cpu-color,
 ul.gn-sett-graph li.memo-color,
 ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 
+
 /*목록에서 나(you)일 때 bg-color*/
 .tr-on-me{
     background-color: rgba(170,225,226,.2);
@@ -1855,9 +1860,11 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 
 
 /*시스템관리자 > 설정*/
+.gn-sett-margin-box > h4{margin-top: 25px;}
+
 .gn-sys-sett input[type=radio]{margin-right: 10px;}
 
-.gn-sys-sett .list-inline{/*margin-left: 20px;*/ margin-top: 5px;}
+.gn-sys-sett .list-inline{margin-left: 0px; margin-top: 5px;}
 .gn-sys-sett .list-inline span{margin-left: 10px;}
 
 .gn-sys-sett label{margin-right: 10px; font-weight: 200;}
@@ -1903,14 +1910,15 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     }
 
     /*사용자*/
-    .dash-box-6 div{
+    .dash-count div{
         top: 23px; 
-        transition: all .3s ease; 
     }
     
     /* ======== gncloud 인스턴스 리스트 ======== */ 
     /*리스트 왼쪽 첫번째 "이름"*/
-    .gn-tdody > tr > td.visible-xs-3 > a{width: 173px;}    
+    .gn-tdody > tr > td.visible-xs-3 > a{
+        width: 173px;
+    }    
     
     /* ======== gncloud 인스턴스 생성 ======== */
  
@@ -1956,7 +1964,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
         background-color: transparent;
     } 
     
-    li.nav-link{margin-left: 0;}       
+    li.nav-link{margin-left: 0;}
+    
     li.nav-link a{margin-left: 0; margin-top: 20px;}
     
     .navbar-collapse.gn-header-collapsed{
@@ -1997,15 +2006,16 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 
     
     /* ======== gncloud 대시보드 ======== */
-    .dash-margin-box > .gn-dash-graph-box{border-right: none;}
+    .dash-margin-box > .gn-dash-graph-box{
+        border-right: none;    
+    }
     
     .dash-margin-box > .gn-dash-graph-box img{
         width: 30%;
         margin-bottom: 10px;}
     
-
     
-    /*개발*/
+    /* 개발 */
     .dash-margin-box > .gn-dash-graph-box canvas{
         width: 50% !important;
         height: inherit !important;
@@ -2013,10 +2023,11 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
         margin-bottom: 10px;
     } 
     
-    /*사용자*/
-    .dash-box-6 div{
-        top: 50px; 
-        transition: all .3s ease;}    
+    /* 사용자 */
+    .dash-count div{top: 50px;}
+    
+    /* 사용자(총 사용자 수 dash-count) */
+    .total-user .dash-count{min-height: 142px;}    
     
     /* ======== gncloud 인스턴스 리스트 ======== */  
     /*리스트 왼쪽 첫번째 "이름"*/
@@ -2026,6 +2037,9 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     .gn-detail-icon{display: none;}
     .gn-tag-group{margin-left: 15px;}
     .graph-sm-box > .col-sm-2{margin-bottom: 5px;}
+    
+    /*인스턴스 상세*/
+    .gn-detail-main .gn-margin-box{margin-bottom: 35px;}    
     
     /* ======== gncloud 인스턴스 생성 ======== */
     #snap > form > .btn-group > div{padding: 0px 5px;}        
@@ -2042,12 +2056,12 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     
     /* ======== gncloud 시스템 설정 ======== */
     .form-group > .col-sm-7 > .form-control,
-    .form-group > .col-sm-8 > .form-control{margin-bottom: 10px;}
+    .form-group > .col-sm-8 > .form-control{
+        margin-bottom: 10px;
+    }
     
     /*개발*/
     #changereply{margin: 10px 0; padding-right: 0;}
-    
-    
 
 }
 
@@ -2061,8 +2075,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     .gn-tdody > tr > td > a.gn-table-ellip{width: 170px;}
     
     /*생성페이지*/
-    #snap > form > .btn-group > div{
-    padding: 0px; }   
+    #snap > form > .btn-group > div{padding: 0px;}   
 
     /*대시보드*/
     .vm-box{
@@ -2074,6 +2087,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     
     /*gn-board-table 에 속하는 이름 화면 최소로 줄였을 때 width 값*/
     .gn-board-table > .gn-tdody > tr > td > a.gn-table-ellip{width: 100px;}    
+    
     
 }
 
