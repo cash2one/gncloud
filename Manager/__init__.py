@@ -53,6 +53,13 @@ def vm_error_save():
     error_history_save(id,solve_content,user_id,db_session)
     return jsonify(status=True)
 
+@app.route('/vm/errorhist_all',methods=['PUT'])
+def vm_error_save_all():
+    idArr = request.json["id_selected"]
+    solve_content = request.json["solve_content"]
+    user_id = session['userId']
+    error_history_save_all(idArr,solve_content,user_id,db_session)
+    return jsonify(status=True)
 
 
 @app.route('/vm/errorhist',methods=['GET'])

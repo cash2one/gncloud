@@ -25,6 +25,15 @@ def error_history_save(id,solve_content,user_id,sql_session):
     error_hist.solve_time = datetime.datetime.now()
     sql_session.commit()
 
+def error_history_save_all(idArr,solve_content,user_id,sql_session):
+    for id in idArr:
+        error_hist = sql_session.query(GnErrorHist).filter(GnErrorHist.id == id).one()
+        error_hist.solve_content = solve_content
+        error_hist.solver_id = user_id
+        error_hist.solve_time = datetime.datetime.now()
+
+    sql_session.commit()
+
 
 def saveErrorTrace(id, action, sql_session):
     #vm 조회
@@ -36,6 +45,9 @@ def saveErrorTrace(id, action, sql_session):
 def error_history_info(id, sql_session):
     info = sql_session.query(GnErrorHist)\
                       .filter(GnErrorHist.id == id).one()
+    info.action_time = info.action_time.strftime('%Y-%m-%d %H:%M:%S')
+    if info.solve_time != None:
+        info.solve_time = info.solve_time.strftime('%Y-%m-%d %H:%M:%S')
     return info
 
 

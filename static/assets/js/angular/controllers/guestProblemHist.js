@@ -100,4 +100,45 @@ angular
                     console.log(status);
                 });
         }
+
+        $scope.save_all=function() {
+            var checkArr = new Array();
+            for(var i = 0 ;i < $scope.error_hist.length ; i++){
+                if($scope.error_hist[i].Selected == true && $scope.error_hist[i].solver_id == null){
+                    checkArr.push($scope.error_hist[i].id);
+                }
+            }
+
+            $http({
+                method: 'PUT',
+                url: '/api/manager/vm/errorhist_all',
+                data:'{"id_selected":['+checkArr+'],"solve_content":"'+$scope.error_info.solve_content+'"}',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.page($scope.data.page);
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
+
+        $scope.check_checklist = function(){
+            $scope.error_info = {};
+            var count = 0;
+            for(var i = 0 ;i < $scope.error_hist.length ; i++){
+                if($scope.error_hist[i].Selected == true && $scope.error_hist[i].solver_id == null){
+                    count++;
+                }
+            }
+            if(count == 0 ){
+                alert("처리할 장애목록을 체크해주세요.");
+            }else{
+                $("#modal-error-arr").modal('show');
+            }
+        }
     });

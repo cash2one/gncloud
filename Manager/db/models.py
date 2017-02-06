@@ -708,7 +708,7 @@ class GnErrorHist(Base):
                %(self.type, self.action, self.team_code, self.author_id, self.solve_time, self.solver_id)
 
     def __json__(self):
-        return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_id','gnTeam','gnVmMachines','gnUsers','vm_name']
+        return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_id','gnTeam','gnVmMachines','gnUsers','vm_name','solve_content']
 
 
 class GnBackup(Base):
