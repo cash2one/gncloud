@@ -205,7 +205,7 @@ angular
                         $(':input').val('');
                     }
                     else if(data.status==false){
-                        alert("잘못입력하셨습니다.");
+                        alert(data.message);
                     }
                 })
                 .error(function(data, status, headers, config) {
