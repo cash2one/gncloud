@@ -217,7 +217,7 @@ def doc_state(id):
                 # 서비스쪽 데이터 수정
                 service.internal_id = restart_service[0]["ID"]
                 service.internal_name = restart_service[0]['Spec']['Name']
-                service.start_time = datetime.strptime(restart_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+                service.start_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
                 service.status = "Running"
                 time.sleep(2)
                 # 컨테이너 데이터 수정
@@ -488,7 +488,7 @@ def doc_new_image():
     author_id = None
     # team_code = request.json["team_code"]
     # author_id = request.json["author_id"]
-    create_time = datetime.strptime(request.json["create_time"][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+    create_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
     status = "Running"
     image = GnDockerImages(
         id=id, base_image=id, name=name, view_name=view_name, tag=tag, os=os, os_ver=os_ver, sub_type=sub_type, team_code=team_code,
