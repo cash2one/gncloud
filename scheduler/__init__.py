@@ -19,6 +19,10 @@ app.ScheduleController.run()
 def index():
     return jsonify(status=True, message='서비스 정상 작동')
 
+@app.route('/service/isAlive', methods=['GET'])
+def index():
+    return jsonify(status=True, message='서비스 정상 작동')
+
 @app.route("/monitor/restart")
 def monitor_restart():
     return app.ScheduleController.monitor.restart_monitor()
