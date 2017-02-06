@@ -45,6 +45,16 @@ def index():
     return jsonify(status=True, message='Logged in as %s'% escape(session['user_id']))
 
 
+@app.route('/vm/errorhist',methods=['PUT'])
+def vm_error_save():
+    id = request.json["id"]
+    solve_content = request.json["solve_content"]
+    user_id = session['userId']
+    error_history_save(id,solve_content,user_id,db_session)
+    return jsonify(status=True)
+
+
+
 @app.route('/vm/errorhist',methods=['GET'])
 def vm_error_list():
     page = request.args.get("page")

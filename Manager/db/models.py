@@ -682,7 +682,8 @@ class GnErrorHist(Base):
     author_id = Column(String(50), ForeignKey('GN_USERS.user_id'))
     action_time = Column(DateTime, primary_key=False, default=datetime.datetime.now())
     solve_time = Column(DateTime, primary_key=False, nullable=True)
-    solver_name = Column(String(10), primary_key=False, nullable=True)
+    solver_id = Column(String(10), primary_key=False, nullable=True)
+    solve_content = Column(String(200), primary_key=False, nullable=True)
     vm_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'))
     vm_name = Column(String(50), primary_key=False, nullable=True)
     action_year = Column(String(4), primary_key=False, default=datetime.date.today().year)
@@ -691,22 +692,23 @@ class GnErrorHist(Base):
     gnVmMachines = relationship('GnVmMachines')
     gnUsers = relationship('GnUser')
 
-    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_name=None, vm_id=None, vm_name=None):
+    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_id=None, vm_id=None, vm_name=None, solve_content=None):
         self.type = type
         self.action = action
         self.team_code = team_code
         self.author_id = author_id
         self.solve_time = solve_time
-        self.solver_name = solver_name
+        self.solver_id = solver_id
         self.vm_id = vm_id
         self.vm_name = vm_name
+        self.solve_content = solve_content
 
     def __repr__(self):
-        return '<Type %r / Action %r / Team_code %r / Author id %r / Solve time %r / Solver name %r >' \
-               %(self.type, self.action, self.team_code, self.author_id, self.solve_time, self.solver_name)
+        return '<Type %r / Action %r / Team_code %r / Author id %r / Solve time %r / Solver id %r >' \
+               %(self.type, self.action, self.team_code, self.author_id, self.solve_time, self.solver_id)
 
     def __json__(self):
-        return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_name','gnTeam','gnVmMachines','gnUsers','vm_name']
+        return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_id','gnTeam','gnVmMachines','gnUsers','vm_name']
 
 
 class GnBackup(Base):

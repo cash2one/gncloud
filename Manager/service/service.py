@@ -18,6 +18,14 @@ from Manager.util.config import config
 from Manager.util.hash import random_string, convertToHashValue, convertsize
 
 
+def error_history_save(id,solve_content,user_id,sql_session):
+    error_hist = sql_session.query(GnErrorHist).filter(GnErrorHist.id == id).one()
+    error_hist.solve_content = solve_content
+    error_hist.solver_id = user_id
+    error_hist.solve_time = datetime.datetime.now()
+    sql_session.commit()
+
+
 def saveErrorTrace(id, action, sql_session):
     #vm 조회
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
@@ -1153,20 +1161,20 @@ def error_history(page,year,month,solve,notsolve,sql_session):
 
 
     if solve == 'true' and notsolve == 'false':
-        list_query = list_query.filter(GnErrorHist.solver_name != None)
+        list_query = list_query.filter(GnErrorHist.solver_id != None)
     elif solve == 'false' and notsolve == 'true':
-        list_query = list_query.filter(GnErrorHist.solver_name == None)
+        list_query = list_query.filter(GnErrorHist.solver_id == None)
     elif solve == 'false' and notsolve == 'false':
-        list_query = list_query.filter(GnErrorHist.solver_name != None).filter(GnErrorHist.solver_name == None)
+        list_query = list_query.filter(GnErrorHist.solver_id != None).filter(GnErrorHist.solver_id == None)
 
     list = list_query.order_by(GnErrorHist.action_time.desc()) \
                      .limit(page_size).offset(page*page_size).all()
 
     total_count = sql_session.query(func.count(GnErrorHist.id).label("count")).one()
     solve_count = sql_session.query(func.count(GnErrorHist.id).label("count"))\
-                             .filter(GnErrorHist.solver_name != None).one()
+                             .filter(GnErrorHist.solver_id != None).one()
     not_solve_count = sql_session.query(func.count(GnErrorHist.id).label("count"))\
-                                 .filter(GnErrorHist.solver_name == None).one()
+                                 .filter(GnErrorHist.solver_id == None).one()
     total = total_count.count /10
     for error_hist in list:
         error_hist.action_time = error_hist.action_time.strftime('%Y-%m-%d %H:%M:%S')

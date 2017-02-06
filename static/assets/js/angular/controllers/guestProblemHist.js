@@ -70,4 +70,34 @@ angular
                     console.log(status);
                 });
         }
+
+        $scope.checkAll = function () {
+            if ($scope.selectedAll) {
+                $scope.selectedAll = true;
+            } else {
+                $scope.selectedAll = false;
+            }
+            angular.forEach($scope.error_hist, function (item) {
+                item.Selected = $scope.selectedAll;
+            });
+        };
+
+        $scope.save_one=function(id) {
+            $http({
+                method: 'PUT',
+                url: '/api/manager/vm/errorhist',
+                data:'{"id":"'+$scope.error_info.id+'","solve_content":"'+$scope.error_info.solve_content+'"}',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            })
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.page($scope.data.page);
+                    }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
+                });
+        }
     });
