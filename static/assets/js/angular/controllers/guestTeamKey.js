@@ -1,71 +1,45 @@
 angular
     .module('gncloud')
-    .controller('guestKeyListCtrl', function ($scope, $http) {
+    .controller('guestTeamKeyCtrl', function ($scope, $http, dateModifyService, $rootScope) {
 
-        //탭이동
-        $('.nav-sidebar li').removeClass('active');
-        var url = window.location;
-        $('ul.nav-sidebar a').filter(function () {
-            return this.href.indexOf(url.hash) != -1;
-        }).parent().addClass('active');
-
-        $scope.getkeys = function() {
+        $scope.sshkey=function(){
             $http({
                 method: 'GET',
                 url: '/api/kvm/account/keys',
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
-                    if (data.status == true) {
-                        $scope.data_list = data.list;
+                    if (data) {
+                        $scope.data_list = data.list; //ssh키에 대한 정보
                     }
                     else {
-                        if(data.message != null) {
-                            alert(data.message)
-                        }
                     }
                 })
                 .error(function (data, status, headers, config) {
                     console.log(status);
                 });
         }
-
-
-        $scope.update = function (id, index) {
-            $http({
-                method: 'DELETE',
-                url: '/api/kvm/account/keys/' + id,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    $scope.data_list.splice(index, 1);
-                    alert("삭제되었습니다");
-                })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                });
-        }
-
-        $scope.save = function () {
+        $scope.sshkey();
+        $scope.sshkey_save=function(){
             $http({
                 method: 'POST',
                 url: '/api/kvm/account/keys',
-                data: $scope.data,
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                }
+                data:'{"name":"'+$("#sshkey_name").val()+'"}',
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
-                .success(function (data) {
-                    if (data.status == true) {
-                        alert("SSH key 추가되었습니다");
-                        $scope.getkeys();
-                    } else {
-                        alert(data.message)
+                .success(function (data, status, headers, config) {
+                    if (data) {
+                        $scope.sshkey();
+                        $(':input').val('');
                     }
+                    else {
+                    }
+                })
+                .error(function (data, status, headers, config) {
+                    console.log(status);
                 });
-        };
-
-        $scope.download = function (id) {
+        }
+        $scope.download = function (id) { //ssh키의 다운로드
             $http({
                 method: 'GET',
                 url: "/api/kvm/account/keys/download/"+id,
@@ -87,7 +61,23 @@ angular
                     })[0].click();
                 });
         };
-
-        $scope.getkeys();
-
+        $scope.sshkey_delete = function (id,index) { //ssh키의 다운로드
+            $http({
+                method: 'DELETE',
+                url: "/api/kvm//account/keys/"+id,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                }
+            })
+                .success(function (data, status, headers, config) {
+                    if (data.status == true) {
+                        alert(name + "상태가 변경되었습니다");
+                        $scope.data_list.splice(index, 1);
+                    } else {
+                        if(data.message != null) {
+                            alert(data.message)
+                        }
+                    }
+                });
+        };
     });

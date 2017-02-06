@@ -4,13 +4,8 @@ var serviceConfig = function ($routeProvider, $httpProvider) {
         .when('/guestCreate', {templateUrl: '/main/guestCreate.html', controller: 'guestCreateCtrl'})
         .when('/guestSnapList', {templateUrl: '/main/guestSnapList.html', controller: 'guestSnapListCtrl'})
         .when('/monitor', {templateUrl: '/main/guestRunList.html', controller: 'guestRunListCtrl'})
-        .when('/account', {templateUrl: '/main/guestLogin.html', controller: 'guestLoginCtrl'})
         .when('/guestLogout', {templateUrl: '/main/index.html', controller: 'guestLogoutCtrl'})
-        .when('/guestKeyList', {templateUrl: '/main/guestKeyList.html', controller: 'guestKeyListCtrl'})
-        .when('/guestSnapCreate', {templateUrl: '/main/guestSnapCreate.html', controller: 'guestSnapCreateCtrl'})
         .when('/account/users/list', {templateUrl: '/main/guestMeList.html', controller: 'guestMeListCtrl'})
-        .when('/account/users', {templateUrl: '/main/guestSignUp.html', controller: 'guestSignUpCtrl'})
-        .when('/guestRepair', {templateUrl: '/main/guestRepair.html', controller: 'guestRepairCtrl'})
         .when('/dashboard', {templateUrl: '/main/dashboard.html', controller: 'dashboardCtrl'})
         .when('/guestDetail', {templateUrl: '/main/guestDetail.html', controller: 'guestDetailCtrl'})
         .when('/guestSelectTeam', {templateUrl: '/main/guestSelectTeam.html', controller: 'guestSelectTeamCtrl'})
@@ -31,6 +26,11 @@ var serviceConfig = function ($routeProvider, $httpProvider) {
         .when('/guestQna', {templateUrl: '/main/guestQna.html', controller: 'guestQnaCtrl'})
         .when('/guestInvoice', {templateUrl: '/main/guestInvoice.html', controller: 'guestInvoiceCtrl'})
         .when('/guestBackupHist', {templateUrl: '/main/guestBackupHist.html', controller: 'guestBackupHistCtrl'})
+        .when('/guestTeamKey', {templateUrl: '/main/guestTeamKey.html', controller: 'guestTeamKeyCtrl'})
+        .when('/guestTeamProfile', {templateUrl: '/main/guestTeamProfile.html', controller: 'guestTeamProfileCtrl'})
+        .when('/guestTeamReso', {templateUrl: '/main/guestTeamReso.html', controller: 'guestTeamResoCtrl'})
+        .when('/guestTeamWon', {templateUrl: '/main/guestTeamWon.html', controller: 'guestTeamWonCtrl'})
+        .when('/guestTeamBackup', {templateUrl: '/main/guestTeamBackup.html', controller: 'guestTeamBackupCtrl'})
     $httpProvider.interceptors.push('serviceLogger');
 }
 
