@@ -2,8 +2,8 @@
 __author__ = 'jhjeon'
 
 import time
-from datetime import datetime
-
+#from datetime import datetime
+import datetime
 from flask import jsonify, request, session
 
 from Docker.db.database import db_session
@@ -120,7 +120,7 @@ def doc_create(id,sql_session):
             docker_info.internal_id = docker_service[0]['ID']
             docker_info.internal_name = docker_service[0]['Spec']['Name']
             #docker_info.create_time = datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
-            now_time = datetime.now().strftime('%Y%m%d%H%M%S')
+            now_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             docker_info.create_time = now_time
             docker_info.os = "docker"
             docker_info.os_ver = image.os
@@ -247,7 +247,7 @@ def doc_state(id):
                 return jsonify(status=False, message="서비스가 실행중이 아닙니다.", result=service.to_json())
             else:
                 ds.docker_service_stop(service)
-                service.stop_time = datetime.now()
+                service.stop_time = datetime.datetime.now()
                 service.ssh_key_id = "1"
                 service.status = "Suspend"
                 sql_session.commit()
@@ -257,7 +257,7 @@ def doc_state(id):
         elif type == "Reboot":
             if service.status == "Running":
                 ds.docker_service_stop(service)
-                service.stop_time = datetime.now()
+                service.stop_time = datetime.datetime.now()
                 service.status = "Suspend"
                 sql_session.commit()
                 # commit된 내용을 가지고 서비스 생성.
@@ -271,7 +271,7 @@ def doc_state(id):
             # 서비스쪽 데이터 수정
             service.internal_id = restart_service[0]["ID"]
             service.internal_name = restart_service[0]['Spec']['Name']
-            service.start_time = datetime.strptime(restart_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+            service.start_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             service.status = "Running"
             # 컨테이너 데이터 수정
             time.sleep(2)
@@ -340,7 +340,7 @@ def doc_snap():
         image = GnDockerImages(
             id=image_id, base_image=baseimage.id, name=snapshot["name"], view_name=name, tag=baseimage.tag, os=baseimage.os,
             os_ver=baseimage.os_ver, sub_type=snapshot["sub_type"], team_code=team_code, author_id=user_id,
-            create_time=datetime.now(), status="Running"
+            create_time=datetime.datetime.now(), status="Running"
         )
         sql_session.add(image)
         sql_session.commit()
@@ -381,7 +381,7 @@ def doc_delete(id,sql_session):
         logger.debug('delete docker %s' % service.internal_name)
         # 서비스 삭제 (서비스 및 컨테이너가 삭제된다)
         result = ds.docker_service_rm(service.internal_id)
-        1/0
+
         logger.debug('after docker_service_rm')
         for container in service.gnDockerContainers:
             # 각 컨테이너 노드 별로 존재하는 볼륨 삭제
@@ -405,7 +405,7 @@ def doc_delete(id,sql_session):
             sql_session.query(GnDockerServices).filter(GnDockerServices.service_id == service.id).delete()
 
             update_instance_status = db_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == service.id) \
-                .update({"delete_time": datetime.now().strftime('%Y%m%d%H%M%S')})
+                .update({"delete_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S')})
 
             sql_session.commit()
         ds.logout()
