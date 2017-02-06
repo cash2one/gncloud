@@ -298,6 +298,7 @@ def doc_state(id):
             ds.logout()
             return jsonify(status=False, message="정의된 상태값이 아닙니다.")
     except Exception as e:
+        print e
         sql_session.rollback()
         error_hist = GnErrorHist(type=service.type,action=type,team_code=service.team_code,author_id=service.author_id, vm_id=service.id, vm_name=service.name)
         sql_session.add(error_hist)
