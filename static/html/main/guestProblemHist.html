@@ -68,7 +68,7 @@
                             <th class="">소유자</th>
                             <th class="hidden-xs hidden-sm">에러항목</th>
                             <th class="hidden-xs hidden-sm">해결자</th>
-                            <th class="hidden-xs"><input type="checkbox" ng-model="selectedAll" ng-click="checkAll()"></th>
+                            <th class="hidden-xs">해결여부</th>
                         </tr>
                         </thead>
                         <tbody class="gn-tdody">
@@ -87,11 +87,12 @@
                                 <span ng-if="list.action == 'Create'">생성</span>
                                 <span ng-if="list.action == 'Suspend'">정지</span>
                                 <span ng-if="list.action == 'Resume'">시작</span>
-                                <span ng-if="list.action == 'Deleting'">삭제</span>
+                                <span ng-if="list.action == 'Delete'">삭제</span>
                                 <span ng-if="list.action == 'Reboot'">재시작</span>
+                                <span ng-if="list.action == 'Snap-create'">스냅샷 생성</span>
                             </td>
                             <td class="hidden-xs hidden-sm">{{list.solver_id}}</td>
-                            <td class="hidden-xs"><input type="checkbox" ng-model="list.Selected"  ng-show="list.solver_id == null"></td>
+                            <td class="hidden-xs"><input type="checkbox" ng-model="list.selected" ng-checked="list.solver_id != null" ng-click="save_check($event,list.id)"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -101,7 +102,6 @@
                 <div class="gn-page-btn">
                     <input type="button" class="btn btn-default pull-left" value="이전" ng-show="page_hist != 1">
                     <input type="button" class="btn btn-default" value="다음" ng-show="page_total!=page_hist">
-                    <input type="button" class="btn btn-default" style="float:right;" value="다량 처리"  ng-click="check_checklist()">
                 </div>
 
                 <!-- 장애현황 Modal -->
@@ -131,8 +131,9 @@
                                             <span ng-if="error_info.action == 'Create'">생성</span>
                                             <span ng-if="error_info.action == 'Suspend'">정지</span>
                                             <span ng-if="error_info.action == 'Resume'">시작</span>
-                                            <span ng-if="error_info.action == 'Deleting'">삭제</span>
+                                            <span ng-if="error_info.action == 'Delete'">삭제</span>
                                             <span ng-if="error_info.action == 'Reboot'">재시작</span>
+                                            <span ng-if="error_info.action == 'Snap-create'">스냅샷 생성</span>
                                         </dd>
                                         <dt>해결자</dt>
                                         <dd>{{error_info.solver_id}}</dd>

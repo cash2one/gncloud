@@ -164,13 +164,11 @@ def hvm_create(id, sql_session):
 def hvm_snapshot():
     vm_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['vm_id']).first()
     org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
-
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == org_id.host_id).first()
     # image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == org_id.host_id).first()
-
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
-    create_snap = ps.create_snap(org_id.internal_id, config.MANAGER_PATH, config.NAS_PATH)
     try:
+        ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+        create_snap = ps.create_snap(org_id.internal_id, config.MANAGER_PATH, config.NAS_PATH)
         if create_snap['Name'] is not None:
             # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
 
@@ -192,6 +190,8 @@ def hvm_snapshot():
                 db_session.commit()
                 return jsonify(status=False)
     except:
+        error_hist = GnErrorHist(type=vm_info.type,action="Snap-create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        db_session.add(error_hist)
         vm_info.status="Error"
         db_session.commit()
         return jsonify(status=False)
@@ -248,12 +248,16 @@ def hvm_state(id):
                 # print start_vm['Id']
                 return jsonify(status=True, message="success VM starting")
             else:
+                error_hist = GnErrorHist(type=vmid.type,action=type,team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+                db_session.add(error_hist)
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id'])\
                         .update({"status": "error"})
                 db_session.commit()
                 return jsonify(status=False, message="정상적인 결과가 아닙니다.")
         except Exception as err:
             logger.error(err)
+            error_hist = GnErrorHist(type=vmid.type,action=type,team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+            db_session.add(error_hist)
             db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == start_vm['Id']) \
                 .update({"status": "error"})
             db_session.commit()
@@ -271,6 +275,8 @@ def hvm_state(id):
                 db_session.commit()
                 return jsonify(status=True, message="VM Stop")
             else:
+                error_hist = GnErrorHist(type=vmid.type,action=type,team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+                db_session.add(error_hist)
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']) \
                         .update({"status": "error"})
                 db_session.commit()
@@ -278,6 +284,8 @@ def hvm_state(id):
                 # return jsonify(status=False, message="상태 미완성")
         except Exception as err:
             logger.error(err)
+            error_hist = GnErrorHist(type=vmid.type,action=type,team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+            db_session.add(error_hist)
             db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == stop['Id']) \
                 .update({"status": "error"})
             db_session.commit()
@@ -294,11 +302,15 @@ def hvm_state(id):
                 db_session.commit()
                 return jsonify(status=True, message="VM Restart")
             else:
+                error_hist = GnErrorHist(type=vmid.type,action=type,team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+                db_session.add(error_hist)
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id']) \
                     .update({"status": "error"})
                 db_session.commit()
                 return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
         except Exception as err:
+            error_hist = GnErrorHist(type=vmid.type,action=type,team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+            db_session.add(error_hist)
             logger.error(err)
             db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == restart['Id']) \
                 .update({"status": "error"})
@@ -308,17 +320,22 @@ def hvm_state(id):
     elif type == "Suspend":
         try:
             suspend = ps.suspend_vm(vmid.internal_id)
+            1/0
             if suspend['State'] is 9:
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id'])\
                     .update({"status": "Suspend"})
                 db_session.commit()
                 return jsonify(status=True, message="가상머신이 일시정지되었습니다.")
             else:
+                error_hist = GnErrorHist(type=vmid.type,action=type,team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+                db_session.add(error_hist)
                 db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id']) \
                     .update({"status": "error"})
                 db_session.commit()
                 return jsonify(status=False, message="정상적인 결과값이 아닙니다.")
         except Exception as err:
+            error_hist = GnErrorHist(type=vmid.type,action=type,team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+            db_session.add(error_hist)
             logger.error(err)
             db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == suspend['Id']) \
                 .update({"status": "error"})
@@ -337,23 +354,30 @@ def hvm_delete(id):
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vmid.host_id).first()
     #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == vmid.host_id).first()
 
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
-    vm_info =ps.get_vm_one(vmid.internal_id)
-    #  REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
-    stop_vm = ps.stop_vm(vmid.internal_id)
-    if stop_vm['State'] is 3:
-        delete_vm = ps.delete_vm(vmid.internal_id, config.LOCAL_PATH, config.MANAGER_PATH)
-        update_vm_machines = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
-        update_instance_status = db_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == vmid.id)\
-            .update({"delete_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S')})
+    try:
+        ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+        vm_info =ps.get_vm_one(vmid.internal_id)
+        #  REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
+        stop_vm = ps.stop_vm(vmid.internal_id)
+        if stop_vm['State'] is 3:
+            delete_vm = ps.delete_vm(vmid.internal_id, config.LOCAL_PATH, config.MANAGER_PATH)
+            update_vm_machines = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
+            update_instance_status = db_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == vmid.id) \
+                .update({"delete_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S')})
 
+            db_session.commit()
+            # update_vm_images = db_session.query(GnVmImages).filter(GnVmImages.filename == vm_info['VMName']
+            #                                                       +".vhdx").update({"status" : "Removed"})
+            # db_session.commit()
+            # REST hvm_delete 2. VM을 삭제한다.
+            # todo REST hvm_delete 3. 삭제된 VM DB 데이터를 삭제 상태로 업데이트한다.
+            return jsonify(message="Remove success", status=True)
+    except Exception as e:
+        print("error:"+e.message)
+        error_hist = GnErrorHist(type=vmid.type,action="Delete",team_code=vmid.team_code,author_id=vmid.author_id, vm_id=vmid.id, vm_name=vmid.name)
+        db_session.add(error_hist)
         db_session.commit()
-        # update_vm_images = db_session.query(GnVmImages).filter(GnVmImages.filename == vm_info['VMName']
-        #                                                       +".vhdx").update({"status" : "Removed"})
-        # db_session.commit()
-        # REST hvm_delete 2. VM을 삭제한다.
-        # todo REST hvm_delete 3. 삭제된 VM DB 데이터를 삭제 상태로 업데이트한다.
-        return jsonify(message="Remove success", status=True)
+        return jsonify(message="Remove success", status=False)
 
 
 # todo REST. VM 정보

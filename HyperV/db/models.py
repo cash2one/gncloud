@@ -581,19 +581,19 @@ class GnErrorHist(Base):
     author_id = Column(String(50), primary_key=False, nullable=False)
     action_time = Column(DateTime, primary_key=False, default=datetime.datetime.now())
     solve_time = Column(DateTime, primary_key=False, nullable=True)
-    solver_name = Column(String(10), primary_key=False, nullable=True)
+    solver_id = Column(String(10), primary_key=False, nullable=True)
     vm_id = Column(String(8), primary_key=False, nullable=False)
     vm_name = Column(String(50), primary_key=False, nullable=True)
     action_year = Column(String(4), primary_key=False, default=datetime.date.today().year)
     action_month = Column(String(4), primary_key=False, default=datetime.date.today().month)
 
-    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_name=None, vm_id=None, vm_name=None):
+    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_id=None, vm_id=None, vm_name=None):
         self.type = type
         self.action = action
         self.team_code = team_code
         self.author_id = author_id
         self.solve_time = solve_time
-        self.solver_name = solver_name
+        self.solver_id = solver_id
         self.vm_id = vm_id
         self.vm_name = vm_name
 

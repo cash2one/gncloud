@@ -25,15 +25,17 @@ def error_history_save(id,solve_content,user_id,sql_session):
     error_hist.solve_time = datetime.datetime.now()
     sql_session.commit()
 
-def error_history_save_all(idArr,solve_content,user_id,sql_session):
-    for id in idArr:
+def error_history_save_checked(id,checked,user_id,sql_session):
+    if checked == 'true':
         error_hist = sql_session.query(GnErrorHist).filter(GnErrorHist.id == id).one()
-        error_hist.solve_content = solve_content
         error_hist.solver_id = user_id
         error_hist.solve_time = datetime.datetime.now()
+    else:
+        error_hist = sql_session.query(GnErrorHist).filter(GnErrorHist.id == id).one()
+        error_hist.solver_id = None
+        error_hist.solve_time = None
 
     sql_session.commit()
-
 
 def saveErrorTrace(id, action, sql_session):
     #vm 조회

@@ -114,18 +114,22 @@ def setStaticIpAddress(ip, host_ip, ssh_id):
         pass
 
 def server_delete(id,sql_session):
-    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one();
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one();
     status_info = sql_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == id).one();
+    try:
+        # vm 삭제
+        kvm_vm_delete(vm_info.internal_name, vm_info.gnHostMachines.ip);
 
-    # vm 삭제
-    kvm_vm_delete(guest_info.internal_name, guest_info.gnHostMachines.ip);
-
-    # db 저장
-    sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
-    #과금 테이블 업데이트
-    status_info.delete_time = datetime.datetime.now()
-    sql_session.commit()
-
+        # db 저장
+        sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
+        #과금 테이블 업데이트
+        status_info.delete_time = datetime.datetime.now()
+        sql_session.commit()
+    except Exception as e:
+        print("error:"+e.message)
+        error_hist = GnErrorHist(type=vm_info.type,action="Delete",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        sql_session.add(error_hist)
+        sql_session.commit()
 
 def server_image_delete(id, sql_session):
 
@@ -140,33 +144,42 @@ def server_image_delete(id, sql_session):
 
 
 def server_change_status(id, status, sql_session):
-    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    kvm_change_status(guest_info.internal_name, status, guest_info.gnHostMachines.ip)
-    if status == "Reboot" or status == "Resume":
-        status = "Running"
-    guest_info.status = status
-    sql_session.commit()
+    try:
+        vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+        kvm_change_status(vm_info.internal_name, status, vm_info.gnHostMachines.ip)
+        if status == "Reboot" or status == "Resume":
+            status = "Running"
+        vm_info.status = status
+        sql_session.commit()
+    except:
+        error_hist = GnErrorHist(type=vm_info.type,action=status,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        sql_session.add(error_hist)
+        sql_session.commit()
+
 
 
 def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
     snap_info = db_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
-    guest_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     try:
+        1/0
         # 네이밍
-        new_image_name = guest_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        new_image_name = vm_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
         # 디스크 복사
         s = pxssh.pxssh(timeout=1200)
-        s.login(guest_info.gnHostMachines.ip, USER)
-        s.sendline("cp "+config.LIVERT_IMAGE_LOCAL_PATH+guest_info.internal_name+".img"+" "+config.LIVERT_IMAGE_SNAPSHOT_PATH+new_image_name+".img")
+        s.login(vm_info.gnHostMachines.ip, USER)
+        s.sendline("cp "+config.LIVERT_IMAGE_LOCAL_PATH+vm_info.internal_name+".img"+" "+config.LIVERT_IMAGE_SNAPSHOT_PATH+new_image_name+".img")
         s.logout()
 
         snap_info.filename = new_image_name+'.img'
         snap_info.status = "Running"
-        snap_info.host_id = guest_info.gnHostMachines.id
+        snap_info.host_id = vm_info.gnHostMachines.id
         sql_session.commit()
     except Exception as e:
         print(e.message)
+        error_hist = GnErrorHist(type=vm_info.type,action="Snap-create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        sql_session.add(error_hist)
         snap_info.status = "Error"
         sql_session.commit()
 

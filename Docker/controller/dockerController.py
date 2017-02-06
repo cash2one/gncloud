@@ -148,6 +148,7 @@ def doc_create(id,sql_session):
             ds.logout()
             return jsonify(status=True, message="서비스를 생성하였습니다.", result=docker_info.to_json())
     except Exception as e:
+        print(e.message)
         sql_session.rollback()
         error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
         sql_session.add(error_hist)
@@ -192,33 +193,88 @@ def doc_state(id):
     service = GnVmMachines.query.filter_by(id=id, type="docker").one()
     # -- 시작 (start)
     # service
-    if type == "Resume":
-        # 이미 서비스가 돌아가는 상태인 경우는 아무 것도 안하고 끝낸다.
-        if service.status == "Running":
-            ds.logout()
-            return jsonify(status=False, message="서비스가 이미 실행중입니다.", result=service.to_json())
-        else:
-            # commit된 내용을 가지고 서비스 생성.
-            # image = "%s:backup" % service.internal_name
+    try:
+        if type == "Resume":
+            # 이미 서비스가 돌아가는 상태인 경우는 아무 것도 안하고 끝낸다.
+            if service.status == "Running":
+                ds.logout()
+                return jsonify(status=False, message="서비스가 이미 실행중입니다.", result=service.to_json())
+            else:
+                # commit된 내용을 가지고 서비스 생성.
+                # image = "%s:backup" % service.internal_name
+                image = "%s:backup" % service.id
+                restart_service = ds.docker_service_start(
+                    id=id, image=service.gnDockerServices[0].image, backup_image=image,
+                    cpu=service.cpu, memory=str(service.memory)+"MB")
+                logger.debug(restart_service)
+                if restart_service == 'error':
+                    service.status = 'Error'
+                    sql_session.commit()
+                    ds.logout()
+                    return jsonify(status=False, message="error", result=None)
+
+                # 변경된 내용을 DB에 Update
+                # 서비스쪽 데이터 수정
+                service.internal_id = restart_service[0]["ID"]
+                service.internal_name = restart_service[0]['Spec']['Name']
+                service.start_time = datetime.strptime(restart_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
+                service.status = "Running"
+                time.sleep(2)
+                # 컨테이너 데이터 수정
+                service_container_list = ds.get_service_containers(restart_service[0]["ID"])
+                for service_container in service_container_list:
+                    node = GnHostMachines.query.filter_by(name=service_container['host_name']).first()
+                    container = GnDockerContainers.query.filter_by(service_id=id, host_id=node.id).first()
+                    container.internal_id = service_container['internal_id']
+                    container.internal_name = service_container['internal_name']
+                # 볼륨은 변경사항이 없기에 수정 X..? (이미지 세부사항 추가 시의 경우를 생각해 둘 필요성은 있음)
+                # 포트 정보 수정
+                ports = restart_service[0]['Endpoint']['Ports']
+                for port in ports:
+                    getports = GnDockerPorts.query.filter_by(protocol=port['Protocol'], target_port=port['TargetPort']).all()
+                    for getport in getports:
+                        sql_session.delete(getport)
+                    sql_session.commit()
+                    set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
+                    sql_session.add(set_port)
+                sql_session.commit()
+                ds.logout()
+                return jsonify(status=True, message="서비스가 시작되었습니다.", result=service.to_json())
+        # -- 정지 (suspend)
+        elif type == "Suspend":
+            if service.status != "Running":
+                ds.logout()
+                return jsonify(status=False, message="서비스가 실행중이 아닙니다.", result=service.to_json())
+            else:
+                ds.docker_service_stop(service)
+                service.stop_time = datetime.now()
+                service.ssh_key_id = "1"
+                service.status = "Suspend"
+                sql_session.commit()
+                ds.logout()
+                return jsonify(status=True, message="서비스가 정지되었습니다.", result=service.to_json())
+        # -- 재시작 (restart)
+        elif type == "Reboot":
+            if service.status == "Running":
+                ds.docker_service_stop(service)
+                service.stop_time = datetime.now()
+                service.status = "Suspend"
+                sql_session.commit()
+                # commit된 내용을 가지고 서비스 생성.
+                # image = "%s:backup" % service.internal_name
             image = "%s:backup" % service.id
             restart_service = ds.docker_service_start(
                 id=id, image=service.gnDockerServices[0].image, backup_image=image,
-                cpu=service.cpu, memory=str(service.memory)+"MB")
+                cpu=service.cpu, memory=str(service.memory) + "MB")
             logger.debug(restart_service)
-            if restart_service == 'error':
-                service.status = 'Error'
-                sql_session.commit()
-                ds.logout()
-                return jsonify(status=False, message="error", result=None)
-
             # 변경된 내용을 DB에 Update
             # 서비스쪽 데이터 수정
             service.internal_id = restart_service[0]["ID"]
             service.internal_name = restart_service[0]['Spec']['Name']
             service.start_time = datetime.strptime(restart_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
             service.status = "Running"
-            time.sleep(2)
             # 컨테이너 데이터 수정
+            time.sleep(2)
             service_container_list = ds.get_service_containers(restart_service[0]["ID"])
             for service_container in service_container_list:
                 node = GnHostMachines.query.filter_by(name=service_container['host_name']).first()
@@ -237,64 +293,16 @@ def doc_state(id):
                 sql_session.add(set_port)
             sql_session.commit()
             ds.logout()
-            return jsonify(status=True, message="서비스가 시작되었습니다.", result=service.to_json())
-    # -- 정지 (suspend)
-    elif type == "Suspend":
-        if service.status != "Running":
-            ds.logout()
-            return jsonify(status=False, message="서비스가 실행중이 아닙니다.", result=service.to_json())
+            return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
         else:
-            ds.docker_service_stop(service)
-            service.stop_time = datetime.now()
-            service.ssh_key_id = "1"
-            service.status = "Suspend"
-            sql_session.commit()
             ds.logout()
-            return jsonify(status=True, message="서비스가 정지되었습니다.", result=service.to_json())
-    # -- 재시작 (restart)
-    elif type == "Reboot":
-        if service.status == "Running":
-            ds.docker_service_stop(service)
-            service.stop_time = datetime.now()
-            service.status = "Suspend"
-            sql_session.commit()
-            # commit된 내용을 가지고 서비스 생성.
-            # image = "%s:backup" % service.internal_name
-        image = "%s:backup" % service.id
-        restart_service = ds.docker_service_start(
-            id=id, image=service.gnDockerServices[0].image, backup_image=image,
-            cpu=service.cpu, memory=str(service.memory) + "MB")
-        logger.debug(restart_service)
-        # 변경된 내용을 DB에 Update
-        # 서비스쪽 데이터 수정
-        service.internal_id = restart_service[0]["ID"]
-        service.internal_name = restart_service[0]['Spec']['Name']
-        service.start_time = datetime.strptime(restart_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
-        service.status = "Running"
-        # 컨테이너 데이터 수정
-        time.sleep(2)
-        service_container_list = ds.get_service_containers(restart_service[0]["ID"])
-        for service_container in service_container_list:
-            node = GnHostMachines.query.filter_by(name=service_container['host_name']).first()
-            container = GnDockerContainers.query.filter_by(service_id=id, host_id=node.id).first()
-            container.internal_id = service_container['internal_id']
-            container.internal_name = service_container['internal_name']
-        # 볼륨은 변경사항이 없기에 수정 X..? (이미지 세부사항 추가 시의 경우를 생각해 둘 필요성은 있음)
-        # 포트 정보 수정
-        ports = restart_service[0]['Endpoint']['Ports']
-        for port in ports:
-            getports = GnDockerPorts.query.filter_by(protocol=port['Protocol'], target_port=port['TargetPort']).all()
-            for getport in getports:
-                sql_session.delete(getport)
-            sql_session.commit()
-            set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
-            sql_session.add(set_port)
+            return jsonify(status=False, message="정의된 상태값이 아닙니다.")
+    except Exception as e:
+        sql_session.rollback()
+        error_hist = GnErrorHist(type=service.type,action=type,team_code=service.team_code,author_id=service.author_id, vm_id=service.id, vm_name=service.name)
+        sql_session.add(error_hist)
         sql_session.commit()
-        ds.logout()
-        return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
-    else:
-        ds.logout()
-        return jsonify(status=False, message="정의된 상태값이 아닙니다.")
+        return jsonify(status=False)
 
 
 # Docker Service 스냅샷 저장
@@ -373,6 +381,7 @@ def doc_delete(id,sql_session):
         logger.debug('delete docker %s' % service.internal_name)
         # 서비스 삭제 (서비스 및 컨테이너가 삭제된다)
         result = ds.docker_service_rm(service.internal_id)
+        1/0
         logger.debug('after docker_service_rm')
         for container in service.gnDockerContainers:
             # 각 컨테이너 노드 별로 존재하는 볼륨 삭제
@@ -402,6 +411,9 @@ def doc_delete(id,sql_session):
         ds.logout()
     except Exception as err:
         logger.error(err)
+        error_hist = GnErrorHist(type=service.type,action="Delete",team_code=service.team_code,author_id=service.author_id, vm_id=service.id, vm_name=service.name)
+        sql_session.add(error_hist)
+        sql_session.commit()
 
     if result == service.internal_id:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")
