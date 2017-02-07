@@ -16,10 +16,16 @@ def service_monitoring(sql_session):
             mem_usage = 0.0
             disk_usage = 0.0
             net_usage = 0.0
+            worker_count = 0
             for container in service.gnDockerContainers:
                 container_host = container.gnHostMachines
+                worker_count += 1
+
+                logger.debug("login start")
                 ssh = pxssh.pxssh()
-                ssh.login(container_host.ip, "root", "docker")
+                ssh.login(container_host.ip, "root")
+
+                logger.debug("login end")
 
                 docker_stat_cmd = "docker stats --all --no-stream | grep \"$(docker ps --filter=name=%s --quiet)\"" % container.internal_name
                 ssh.sendline(docker_stat_cmd)
@@ -29,11 +35,11 @@ def service_monitoring(sql_session):
                 for line in result:
                     line = line.split()
                     if len(line) < 2:
-                        pass
+                        continue
                     elif line[0] == "docker":
-                        pass
+                        continue
                     elif line[0] == "CONTAINER":
-                        pass
+                        continue
                     else:
                         # CPU 사용량 가지고 오기
                         cpu_usage += round(float(line[1][:-1]), 4)
@@ -45,10 +51,16 @@ def service_monitoring(sql_session):
                         # 네트워크 정보 가지고 오기
                         net_usage += float(line[8])
                 ssh.close()
-            cpu_usage = (cpu_usage/2.0)
-            mem_usage = (mem_usage/2.0)
+            if worker_count > 0:
+                cpu_usage = (cpu_usage/worker_count)
+                mem_usage = (mem_usage/worker_count)
+                net_usage = (net_usage/worker_count)
+            else:
+                cpu_usage = 0.0
+                mem_usage = 0.0
+                net_usage = 0.0
             #disk_usage = (disk_usage/2.0)
-            net_usage = (net_usage/2.0)
+
             vm_monitor_hist = GnMonitorHist(
                 id=service.id, type="docker", cpu_usage=cpu_usage, mem_usage=mem_usage,
                 disk_usage=disk_usage, net_usage=net_usage)
