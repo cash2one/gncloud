@@ -96,6 +96,7 @@ def getIpAddress(name, host_ip):
         s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
         s.prompt()
         ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
+        print ip
         s.logout()
         return ip
     except IOError as e:
