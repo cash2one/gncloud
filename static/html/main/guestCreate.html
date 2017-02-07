@@ -15,21 +15,27 @@
         <h2>타입 선택</h2>
         <form>
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('hyperv')" ng-show="hyper.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                <label class="btn btn-default gn-btn-snap btn-block" ng-click="selectType('hyperv')" ng-show="hyper.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input id="type" name="" value="" type="radio">
-                    <span class="sprite-img sprite-hyperv"></span>
-                    Hyper-V
+                    <span class="sprite-snap-img sprite-snap-windows"></span>
+                    <p class="ellipsis">Hyper-V</p>
                 </label>
-                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('kvm')" ng-show="kvm.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                <label class="btn btn-default gn-btn-snap btn-block" ng-click="selectType('kvm')" ng-show="kvm.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input name="" value="" type="radio">
-                    <span class="sprite-img sprite-kvm"></span>
-                    KVM
+                    <span class="sprite-snap-img sprite-snap-kvm"></span>
+                    <p class="ellipsis">KVM</p>
                 </label>
-                <label class="btn btn-default gn-btn-default label-box-type" ng-click="selectType('docker')" ng-show="docker.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                <label class="btn btn-default gn-btn-snap btn-block" ng-click="selectType('docker')" ng-show="docker.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input name="" value="" class="active" type="radio">
-                    <span class="sprite-img sprite-docker"></span>
-                    docker
+                    <span class="sprite-snap-img sprite-snap-docker"></span>
+                    <p class="ellipsis">docker</p>
                 </label>
+                </div>
                 <p ng-show="data_value == 'type' " class="error-message">타입을 선택해주세요.</p>
             </div>
         </form>
@@ -46,24 +52,27 @@
             <li><a data-toggle="tab" class="tab-title" ng-click="imageshow('snap')">스냅샷</a></li>
         </ul> <!-- class="nav nav-tabs"-->
         <br>
-        <div id="tap" class="tab-content gn-tab-content">
+        <div id="tap" class="tab-pane tab-second">
             <!--탭메뉴1 : 이미지 -->
             <div id="image">
+                <form>
                 <div class="btn-group" data-toggle="buttons">
-                    <label  ng-repeat="list in image_list" class="btn btn-default gn-btn-default inp-box-size" ng-click="update_image(list)" ng-class="{'gn-input-error':data_value == 'image_id'}">
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="list in image_list">
+                    <label class="btn btn-default gn-btn-snap btn-block" ng-click="update_image(list)" ng-class="{'gn-input-error':data_value == 'image_id'}">
                         <input id="image_id" name="" value="1" type="radio">
-                        <span class="sprite-img sprite-{{list.os}}"></span>
-                        {{list.os}}
-                        <span class="windows-small gn-name-ellip">{{list.name}}</span>
+                        <span class="sprite-snap-img sprite-snap-{{list.os}}"></span>
+                        <p class="ellipsis">{{list.name}}</p>
 
                     </label>
+                    </div>
                 </div>
+                </form>
             </div>
 
             <div id="snap">
                 <form>
                     <div class="btn-group" data-toggle="buttons">
-                        <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="list in snap_list" ng-click="update_image(list)">
+                        <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="list in snap_list" ng-click="update_image(list)">
                             <label class="btn btn-default gn-btn-snap btn-block"  ng-class="{'gn-input-error':data_value == 'image_id'}">
                                 <input name="" value="" type="radio">
                                 <span class="sprite-snap-img snap-sprite sprite-snap-{{list.os}}"></span>
@@ -85,17 +94,16 @@
 
         <form>
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default gn-btn-default height-auto inp-box-size" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
-                    <input id="cpu" name="" value="1" type="radio">
-                    <div class="size-info">{{size.cpu}} CPU</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">{{size.mem}}</div>
-                    <div class="border-bottom"></div>
-                    <div class="size-info">{{size.disk}}</div>
-                    <div class="gn-btn-devider"></div>
-                    <div class="price-info">₩{{size.hour_price}}<snap class="price-untis"></snap> / 시간</div>
-                    <div class="price-info">₩{{size.day_price}}<snap class="price-untis"></snap> / 일</div>
-                </label>
+                <div class="col-xs-12 col-sm-6 col-md-3" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
+                    <label class="btn btn-default gn-btn-snap btn-block">
+                        <input id="cpu" name="" value="" type="radio">
+                        <div class="size-info">{{size.cpu}} CPU / {{size.mem}} / {{size.disk}}</div>
+                        <div class="price-bg">
+                            <div class="price-info">₩{{size.hour_price}}<span class="price-untis"> / 시간</span></div>
+                            <div class="price-info">₩{{size.day_price}}<span class="price-untis"> / 일</span></div>
+                        </div>
+                    </label>
+                </div>
                 <p ng-show="data_value =='cpu' " class="error-message">cpu / memory / disk 의 크기를 선택해주세요.</p>
             </div>
         </form>
