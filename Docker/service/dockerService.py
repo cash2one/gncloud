@@ -15,24 +15,24 @@ from Docker.util.logger import logger
 
 class DockerService(object):
 
-    def __init__(self, addr, id, passwd):
+    def __init__(self, addr, id):
         self.addr = addr
         self.id = id
-        self.passwd = passwd
         self.login_check = False
         self.cmd = None
 
     def docker_login(self):
         try:
-            print('ssh login start')
+            logger.debug('ssh login start')
             if self.cmd is not None:
                 self.cmd.close()
 
             self.cmd = pxssh.pxssh()
-            self.login_check = self.cmd.login(self.addr, self.id, self.passwd)
+            self.login_check = self.cmd.login(self.addr, self.id)
+            self.cmd.sendline('pwd')
             self.cmd.prompt()
             self.login_check = True
-            print ('login success')
+            logger.debug ('login success')
             return True
         except Exception as e:
             logger.error(e)

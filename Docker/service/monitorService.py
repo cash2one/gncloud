@@ -23,7 +23,7 @@ def service_monitoring(sql_session):
 
                 logger.debug("login start")
                 ssh = pxssh.pxssh()
-                ssh.login(container_host.ip, "root", "docker")
+                ssh.login(container_host.ip, "root")
 
                 logger.debug("login end")
 

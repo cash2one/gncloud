@@ -20,7 +20,7 @@ def doc_create(id,sql_session):
     team_name = None
     user_name = None
     #로직 변경
-    print("get id"+id)
+    logger.debug("get id"+id)
     docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     if docker_info is not None:
         team_name = sql_session.query(GnTeam).filter(GnTeam.team_code == docker_info.team_code).one()
@@ -34,13 +34,13 @@ def doc_create(id,sql_session):
         disk = docker_info.disk
         memory = "%sB" % docker_info.memory
         tag = docker_info.tag
-        print(docker_info.id+":request ok")
+        logger.debug(docker_info.id+":request ok")
 
-        print("id: %s, image_id: %s, name: %s, tag: %s, cpu: %s, disk: %s, memory: %s" %
+        logger.debug("id: %s, image_id: %s, name: %s, tag: %s, cpu: %s, disk: %s, memory: %s" %
               (id, image_id, name, tag, cpu, disk, memory))
         # --- //파라미터 정리 ---
         # --- Docker Service (밖에서 보기엔 컨테이너 생성) 생성 ---
-        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID)
         login_check = ds.docker_login()
         login_count = 0
         while not login_check:
@@ -52,7 +52,7 @@ def doc_create(id,sql_session):
             login_check = ds.docker_login()
             login_count += 1
 
-        print(docker_info.id+":get class ok")
+        logger.debug(docker_info.id+":get class ok")
 
         # Docker Swarm manager 값을 가져온다.
         dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
@@ -177,7 +177,7 @@ def doc_state(id):
     # else:
     #     team_code = session['teamCode']
     # count = request.json["count"] # 쓸 일 없을 듯...
-    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID)
     login_check = ds.docker_login()
     login_count = 0
     while not login_check:
@@ -321,7 +321,7 @@ def doc_snap():
             team_code = session['teamCode']
         ord_id = request.json['ord_id']
         name = request.json['name']
-        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID)
         # ds.docker_create_snapshot(ord_id, name, user_id, team_code)
         # -- 스냅샷
         service = GnDockerServices.query.filter_by(service_id=ord_id).one()
@@ -363,7 +363,7 @@ def doc_delete(id,sql_session):
 
     logger.debug('delete docker start ~~~')
     try:
-        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+        ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID)
         login_check = ds.docker_login()
         login_count = 0
         while not login_check:
@@ -568,7 +568,7 @@ def doc_delete_image_detail(image_id, id):
 # Container 이미지 삭제
 def doc_delete_image(id):
     sql_session = db_session
-    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, config.DOCKER_MANAGER_SSH_PASSWD)
+    ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID)
     login_check = ds.docker_login()
     login_count = 0
     while not login_check:
