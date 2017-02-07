@@ -590,7 +590,8 @@ def saveBaseImageImportFileDocker():
         icon = secure_filename(file.filename)
         file.save(os.path.join(config.IMAGE_PATH, icon))
 
-    name = request.form['view_name']
+    name = request.form['name']
+    view_name = request.form['view_name']
     os_ver = request.form['os_ver']
     tag = request.form['tag']
     port = request.form['port']
@@ -598,15 +599,16 @@ def saveBaseImageImportFileDocker():
     vol = request.form['vol']
 
     if 'id' in request.form:
-        updateImageInfoDocker(request.form['id'],name,os_ver,tag,icon,port,env,vol,db_session)
+        updateImageInfoDocker(request.form['id'],name,view_name,os_ver,tag,icon,port,env,vol,db_session)
     else:
-        insertImageInfoDocker(name,os_ver,tag,icon,port,env,vol,db_session)
+        insertImageInfoDocker(name,view_name,os_ver,tag,icon,port,env,vol,db_session)
 
     return jsonify(status=True, message="success")
 
 @app.route('/vm/dockerimage',methods=['POST'])
 def saveBaseImageExceptFileDocker():
-    name = request.json['view_name']
+    name = request.json['name']
+    view_name = request.json['view_name']
     os_ver = request.json['os_ver']
     tag = request.json['tag']
     port = request.json['port']
@@ -614,9 +616,9 @@ def saveBaseImageExceptFileDocker():
     vol = request.json['vol']
 
     if 'id' in request.json:
-        updateImageInfoDocker(request.json['id'],name,os_ver,tag,"",port,env,vol,db_session)
+        updateImageInfoDocker(request.json['id'],name,view_name,os_ver,tag,"",port,env,vol,db_session)
     else:
-        insertImageInfoDocker(name,os_ver,tag,"",port,env,vol,db_session)
+        insertImageInfoDocker(name,view_name,os_ver,tag,"",port,env,vol,db_session)
 
     return jsonify(status=True, message="success")
 

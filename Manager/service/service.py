@@ -915,7 +915,7 @@ def selectImageInfoDocker(id,sql_session):
     return sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
 
 
-def insertImageInfoDocker(name,os_ver,tag,icon,port,env,vol,sql_session):
+def insertImageInfoDocker(name,view_name,os_ver,tag,icon,port,env,vol,sql_session):
     try:
         #id 생성
         while True:
@@ -923,7 +923,7 @@ def insertImageInfoDocker(name,os_ver,tag,icon,port,env,vol,sql_session):
             check_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == image_id).first();
             if not check_info:
                 break
-        image_info = GnDockerImages(id=image_id, view_name=name, sub_type="base",tag=tag, icon=icon, os_ver=os_ver, status=config.RUN_STATUS)
+        image_info = GnDockerImages(id=image_id, name=name, view_name=view_name, sub_type="base",tag=tag, icon=icon, os_ver=os_ver, status=config.RUN_STATUS)
         sql_session.add(image_info)
 
         #port 부분
@@ -970,10 +970,11 @@ def insertImageInfoDocker(name,os_ver,tag,icon,port,env,vol,sql_session):
 
     sql_session.commit()
 
-def updateImageInfoDocker(id,name,os_ver,tag,icon,port,env,vol,sql_session): #컨테이너 이미지 관리
+def updateImageInfoDocker(id,name,view_name,os_ver,tag,icon,port,env,vol,sql_session): #컨테이너 이미지 관리
     try:
         image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
-        image_info.view_name = name
+        image_info.name = name
+        image_info.view_name = view_name
         image_info.os_ver = os_ver;
         image_info.tag = tag
         if icon != "":

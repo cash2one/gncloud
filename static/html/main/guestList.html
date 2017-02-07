@@ -47,8 +47,8 @@
                 <td class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >{{ list.gnTeam.team_name }}</td>
                 <td class="hidden-md hidden-sm hidden-xs">{{ list.author_id }}</td>
 				<td class="hidden-md hidden-sm hidden-xs"><span data-toggle="tooltip" title="{{list.create_time}}" tooltip>{{list.create_time_diff}}</span></td>
-                <td class="hidden-xs">{{list.tagFirst}}
-                    <span ng-show="list.tag.length > 0" class="tag" data-toggle="tooltip" title="{{list.tag}}" tooltip>{{list.tagcount}}</span>
+                <td class="hidden-xs">{{list.tagFirst}} &nbsp;
+                    <span ng-show="list.tag.split(',').length > 1" class="tag" data-toggle="tooltip" title="{{list.tag}}" tooltip>{{list.tagcount}}</span>
                 </td>
                 <td class="dropdown">
                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false" ng-class="{'gn-disable-op':list.status == 'Starting'|| list.status == 'Deleting' || list.status == 'Error'}" ng-disabled="list.status == 'Starting'|| list.status == 'Deleting' || list.status == 'Error'">

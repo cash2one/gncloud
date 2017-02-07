@@ -194,12 +194,12 @@
 </div><!--class="container-fluid dash-body"-->
 
 <!-- 대시보드 헬스체크 -->
-<div class="container-fluid dash-body" ng-show="user_info.authority == 'sysowner' ">
+<div class="container-fluid dash-body" ng-show="user_info.authority == 'sysowner' " id="health_result" style="display:none;">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="gn-box">
                         <div class="dash-margin-box">
-                            <h3>시스템상태</h3>
+                            <h3>시스템 상태</h3>
 
                             <div class="table-responsive gn-table-responsive">
                                 <table class="table gn-health-check">
@@ -259,6 +259,25 @@
             </div>
 
         </div> <!-- class="container-fluid dash-body"  -->
+
+<div class="container-fluid dash-body" ng-show="user_info.authority == 'sysowner' " id="loding_health" style="display:;">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="gn-box">
+                <div class="dash-margin-box">
+                    <h3>시스템 상태</h3>
+                        <div class="load-3">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div></div>
+                        <!--<img src="/gn_images/ajax_loader5.gif" alt="" width="200">-->
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
 
 
 

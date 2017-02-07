@@ -145,6 +145,8 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
+                        $("#loding_health").css("display","none");
+                        $("#health_result").css("display","");
                         $scope.cluster_list = data.list;
                     }
                     else {
