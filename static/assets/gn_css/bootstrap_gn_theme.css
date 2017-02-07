@@ -1078,6 +1078,9 @@ a.log-join-btn:focus{
     padding: 2px;
     border-radius: 3px;}
 
+/*대시보드 헬스체크 - 개발에서 로딩 시 나타나는 애니메이션 여백*/
+div.load-3{padding: 5%;}
+
 /* 고정된 높이값 */
 .dash-body .dash-margin-box{min-height: 172px;} 
 .dash-body .dash-margin-box .gn-table-responsive{min-height: 296px;}
@@ -1491,7 +1494,7 @@ img.elli-img-icon{
 .size-info{
     font-size: 16px;
     margin:  auto;
-    padding: 3px;
+    padding: 15px 0px;
 }
 
 .border-bottom{
@@ -1501,9 +1504,7 @@ img.elli-img-icon{
 }
 
 .price-bg{
-    position: relative;
-    bottom: -5px;
-    padding: 5px 0;
+    padding: 10px 0 5px 0;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     background-color: rgba(215,215,215,.5);
@@ -1513,8 +1514,8 @@ img.elli-img-icon{
 
 .price-info {
     text-align: center;
-    font-size: 13px;
-    padding: 3px 0;
+    /*font-size: 13px;*/
+    padding: 2px 0;
 }
 
 .price-units {
@@ -1522,9 +1523,7 @@ img.elli-img-icon{
 }
 
 #vm_size label{
-    height: 105px;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 0;
 }
 
 .inp-box-size.active div.border-bottom{
