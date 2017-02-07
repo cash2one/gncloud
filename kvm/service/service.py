@@ -45,7 +45,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
         # 기존 저장된 ssh key 등록
         print(":processing set sshkey!!!")
-        #s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(host_info.ip) + " "+image_info.ssh_id)
+        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(host_info.ip) + " "+image_info.ssh_id)
 
 
         print(id+":processing modify data!!!")
