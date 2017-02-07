@@ -89,11 +89,11 @@
                             </tr>
                             </thead>
                             <tbody class="gn-tdody">
-                            <tr ng-repeat="snap in snap_list" ng-class="{'tr-on-error':snap.status =='Error'}">
+                            <tr ng-repeat="snap in snap_list">
                                 <td class="first-td">
                                     <img ng-show="snap.status == 'Starting' || snap.status == 'Deleting'" src="/gn_images/status-working-28.gif" alt="">
-                                    <img ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt="">
-                                    <img ng-show="list.status != 'Error'" src="/gn_images/gn_icon_{{snap.os}}.png" alt="">
+                                    <div class="gn-dot-error" ng-show="snap.status != 'Starting' && snap.status != 'Deleting' && snap.status == 'Error'" src="/gn_images/gn_dot_error.png" alt=""></div>
+                                    <img ng-show="list.status != 'Error' && snap.status != 'Starting' && snap.status != 'Deleting'" src="/gn_images/gn_icon_{{snap.os}}.png" alt="">
                                 </td>
                                 <td class="second-td-name" data-toggle="modal" data-target="#teamModal" ng-click="snap_list_info(snap.id)">
                                     <a class="gn-ms-cursor">{{snap.name}}</a>
