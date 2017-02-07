@@ -39,6 +39,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         ip = ""
         while len(ip) == 0:
             print(id+":processing init ip!!!")
+            s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + internal_name)
             ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + internal_name + "\r\n", "")
         s.logout()
         print("complete get ip="+ip)
