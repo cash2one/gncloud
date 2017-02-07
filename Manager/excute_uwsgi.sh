@@ -1,1 +1,1 @@
-nohup uwsgi --http-socket :8080 --plugin python --wsgi-file __init__.py --logto  manager.log --callable app &
+nohup uwsgi --http-socket :8080 --plugin python --wsgi-file __init__.py --logto --processes 4 --threads 2 manager.log --callable app &
