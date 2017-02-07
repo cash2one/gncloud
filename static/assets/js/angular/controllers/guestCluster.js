@@ -8,6 +8,7 @@ angular
              {"name":"Hyper-V","type":"hyperv","viewYn":"Y"}
             ,{"name":"Kvm","type":"kvm", "viewYn":"Y"}
             ,{"name":"Docker","type":"docker", "viewYn":"Y"}
+            ,{"name":"Scheduler","type":"scheduler", "viewYn":"Y"}
         ]
         $scope.cluster={};
         $scope.host={};
