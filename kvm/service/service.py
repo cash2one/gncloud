@@ -33,11 +33,17 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         print("complete init vm!!!")
 
         #ip 세팅
-        time.sleep(5)
+        s = pxssh.pxssh()
+        s.login(host_info.ip, USER)
+
+        s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
+        s.prompt()
+
         ip = ""
         while len(ip) == 0:
             print(id+":processing init ip!!!")
-            ip = getIpAddress(internal_name, host_info.ip)
+            ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + internal_name + "\r\n", "")
+        s.logout()
         print("complete get ip="+ip)
 
         # 기존 저장된 ssh key 등록
@@ -89,18 +95,18 @@ def setSsh(host_ip, path, ip, ssh_id):
         print("setSsh:"+e)
         pass
 
-def getIpAddress(name, host_ip):
-    try:
-        s = pxssh.pxssh()
-        s.login(host_ip, USER, auto_prompt_reset=False)
-        s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
-        s.prompt()
-        ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
-        s.logout()
-        return ip
-    except IOError as e:
-        print("getIpAddress:"+e)
-        pass
+# def getIpAddress(name, host_ip):
+#     try:
+#         s = pxssh.pxssh()
+#         s.login(host_ip, USER)
+#         s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
+#         s.prompt()
+#         ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
+#         s.logout()
+#         return ip
+#     except IOError as e:
+#         print("getIpAddress:"+e)
+#         pass
 
 
 def setStaticIpAddress(ip, host_ip, ssh_id):
