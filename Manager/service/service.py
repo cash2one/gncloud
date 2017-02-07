@@ -34,6 +34,7 @@ def error_history_save_checked(id,checked,user_id,sql_session):
         error_hist = sql_session.query(GnErrorHist).filter(GnErrorHist.id == id).one()
         error_hist.solver_id = None
         error_hist.solve_time = None
+        error_hist.solve_content = None
 
     sql_session.commit()
 

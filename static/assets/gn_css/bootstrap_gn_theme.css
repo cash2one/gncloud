@@ -1046,6 +1046,8 @@ a.log-join-btn:focus{
 
 /*사용자(총 사용자 수 dash-count)*/
 .total-user .dash-count{min-height: 296px;}
+.total-user .dash-count img{margin-top: 25%;}
+.total-user .dash-count div{margin-top: 25%;}
  
 /*대시보드 헬스체크*/
 .gn-health-check div,
@@ -1343,26 +1345,23 @@ form > .btn-group{
     height:auto !important;
 }
 
-.gn-btn-default{
+/*.gn-btn-default{
     padding: 12px 12px;
-    font-size: 18px; 
-    /*width: 135px; 
-    height: 135px;*/ 
+    font-size: 18px;  
     color: #6f6f6f;
     border: 2px solid rgba(215,215,215,.5); 
     border-radius: 3px !important;
     margin: 0px 8px 8px 0px;  
-}
+}*/
 
-.gn-btn-devider {
+/*.gn-btn-devider {
     border-top: solid 1px rgba(215,215,215,.5);
     width: 100%;
-    /*margin-left: -14px;*/
     margin-bottom: 7px;
-}
+}*/
 
 
-.gn-btn-snap{
+.gn-btn-create{
     padding: 10px 14px;
     font-size: 16px; 
     color: #6f6f6f;
@@ -1370,15 +1369,13 @@ form > .btn-group{
     border-radius: 3px !important;  
 }
 
-.gn-btn-snap:hover,
-.gn-btn-default:hover{
+.gn-btn-create:hover{
     color: #7d7d7d;
     background-color: rgba(215,215,215,.2);
     border: 2px solid rgba(215,215,215,.5);   
 }
 
-.gn-btn-snap.active,
-.gn-btn-default.active{
+.gn-btn-create.active{
     border: 2px solid rgba(88,196,198,.5);
     background-color: rgba(88,196,198,.1);
     color: rgba(88,196,198,1);
@@ -1387,12 +1384,18 @@ form > .btn-group{
     box-shadow: none;
 }
 
-.gn-btn-snap > input[type=radio]{
+.gn-btn-create > input[type=radio]{
     display: none;
 }
 
 #snap > form > .btn-group > .col-xs-4{
     padding: 0px 5px;
+}
+
+.btn-group p.label-name{
+    margin: 13px 0;
+    display: inline-block;
+    margin-left: -15px;
 }
 
 .ellipsis{   
@@ -1426,14 +1429,14 @@ form > .btn-group{
 .sprite-tomcat{background: url(../gn_images/instance_create_tomcat-s.png)no-repeat;}
 .sprite-windows{background: url(../gn_images/instance_create_windows-s.png)no-repeat;}
 
-.gn-btn-default.active .sprite-hyperv,
+/*.gn-btn-default.active .sprite-hyperv,
 .gn-btn-default.active .sprite-kvm,
 .gn-btn-default.active .sprite-docker,
 .gn-btn-default.active .sprite-ubuntu,
 .gn-btn-default.active .sprite-centos,
 .gn-btn-default.active .sprite-tomcat,
 .gn-btn-default.active .sprite-windows
-{background-position: 0px -38px;}
+{background-position: 0px -38px;}*/
 
 
 /*****====스냅샷에 있는 스프라이트 이미지 추가====*****/
@@ -1456,12 +1459,12 @@ form > .btn-group{
 .sprite-snap-centos{background: url(../gn_images/instance_create_snap_centos_s.png) no-repeat;}
 .sprite-snap-tomcat{background: url(../gn_images/instance_create_snap_tomcat_s.png) no-repeat;}
 
-.gn-btn-snap.active .sprite-snap-windows,
-.gn-btn-snap.active .sprite-snap-ubuntu,
-.gn-btn-snap.active .sprite-snap-docker,
-.gn-btn-snap.active .sprite-snap-kvm,
-.gn-btn-snap.active .sprite-snap-centos,
-.gn-btn-snap.active .sprite-snap-tomcat
+.gn-btn-create.active .sprite-snap-windows,
+.gn-btn-create.active .sprite-snap-ubuntu,
+.gn-btn-create.active .sprite-snap-docker,
+.gn-btn-create.active .sprite-snap-kvm,
+.gn-btn-create.active .sprite-snap-centos,
+.gn-btn-create.active .sprite-snap-tomcat
 {background-position: 0px -38px;}
 
 
@@ -1499,29 +1502,30 @@ img.elli-img-icon{
 
 .price-bg{
     position: relative;
-    bottom: -2px;
-    margin-left: -15px;
-    margin-right: -15px;
+    bottom: -5px;
     padding: 5px 0;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     background-color: rgba(215,215,215,.5);
 }
 
-.gn-btn-snap.active .price-bg,
-.gn-btn-default.active .price-bg{background-color: rgba(88,196,198,.1);}
+.gn-btn-create.active .price-bg{background-color: rgba(88,196,198,.1);}
 
 .price-info {
     text-align: center;
     font-size: 13px;
-    /*padding: 5px 0 0 0;*/
+    padding: 3px 0;
 }
 
 .price-units {
     font-size: 12px;
 }
 
-#vm_size label{height: 90px;}
+#vm_size label{
+    height: 105px;
+    padding-left: 0;
+    padding-right: 0;
+}
 
 .inp-box-size.active div.border-bottom{
     border-bottom: 1px solid rgba(88,196,198,.2);
@@ -1678,6 +1682,10 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 .gn-description-list.sett-detail > div > span{margin-right: 35px;}
 .gn-description-list.sett-detail > div > span.sett-detail-span{width: 63px; margin-right: 5px; text-align: right;}
 .gn-description-list.sett-detail > div > input{width: 120px;  margin: 0px 5px; float: right;} 
+
+/*클러스터*/
+#cluster .form-group label.endpoint{padding-top: 0;}
+#cluster .node-list{padding-top: 7px; display: block;}
 
 /*시스템 > 이미지 관리*/
 .img-icon-sett{
@@ -2005,6 +2013,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
         width: 30%;
         margin-bottom: 10px;}
     
+    .total-user .dash-count img{margin-top: 0;}
+    .total-user .dash-count div{margin-top: 0;}
     
     /* 개발 */
     .dash-margin-box > .gn-dash-graph-box canvas{

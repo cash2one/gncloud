@@ -31,19 +31,17 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
         print("complete init vm!!!")
         #ip 세팅
+
+        #ip 세팅
         ip = ""
         while len(ip) == 0:
             print(id+":processing init ip!!!")
             ip = getIpAddress(internal_name, host_info.ip)
         print("complete get ip="+ip)
-        #ip 고정
-        # if len(ip) != 0:
-        #     print(id+":set init ip!!!")
-        #     setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
-        #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
         setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
+
 
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
@@ -92,13 +90,17 @@ def setSsh(host_ip, path, ip, ssh_id):
         pass
 
 def getIpAddress(name, host_ip):
-    s = pxssh.pxssh(timeout=1200)
-    s.login(host_ip, USER)
-    s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
-    s.prompt()
-    ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
-    s.logout()
-    return ip
+    try:
+        s = pxssh.pxssh(timeout=1200)
+        s.login(host_ip, USER)
+        s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
+        s.prompt()
+        ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
+        s.logout()
+        return ip
+    except IOError as e:
+        print(e)
+        pass
 
 
 def setStaticIpAddress(ip, host_ip, ssh_id):
@@ -162,7 +164,6 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
     snap_info = db_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     try:
-        1/0
         # 네이밍
         new_image_name = vm_info.internal_name + "_" + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
