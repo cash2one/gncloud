@@ -6,6 +6,10 @@ from pexpect import pxssh
 from Docker.db.models import GnVmMachines, GnMonitorHist, GnMonitor
 from Docker.util.logger import logger
 
+KILO_TO_BYE=1024
+MEGA_TO_BYTE=1048576
+GIGA_TO_BYTE=1073741824
+TERA_TO_BYTE=1099511627776
 
 def service_monitoring(sql_session):
     service_list = sql_session.query(GnVmMachines).filter(GnVmMachines.type == "docker") \
@@ -44,12 +48,38 @@ def service_monitoring(sql_session):
                         # CPU 사용량 가지고 오기
                         cpu_usage += round(float(line[1][:-1]), 4)
                         # Memory 사용량 가지고 오기
-                        mem_usage += round(float(line[7][:-1]), 4)
+                        unit = line[3]
+                        mem_byte = 0.0
+                        mem = float(line[2])
+                        if unit == 'MiB':
+                            mem_byte = mem * MEGA_TO_BYTE
+                        elif unit == 'GiB':
+                            mem_byte = mem * GIGA_TO_BYTE
+                        elif unit == 'kB':
+                            mem_byte = mem * KILO_TO_BYE
+                        elif unit == 'TiB':
+                            mem_byte = mem * TERA_TO_BYTE
+                        else:
+                            mem_byte = mem
+
+                        mem_usage += round(mem_byte,4)
                         # container_info['DISK_USAGE'] = float(line[13])/float(line[16])
                         # 디스크 사용량 가지고 오기 => change "no disk usage of docker"
                         #disk_usage += round(float(line[13])/1000.0, 4)
                         # 네트워크 정보 가지고 오기
-                        net_usage += float(line[8])
+                        unit = line[9]
+                        net = float(line[8])
+                        if unit == 'MiB':
+                            net_byte = net * MEGA_TO_BYTE
+                        elif unit == 'GiB':
+                            net_byte = net * GIGA_TO_BYTE
+                        elif unit == 'kB':
+                            net_byte = net * KILO_TO_BYE
+                        elif unit == 'TiB':
+                            mem_byte = mem * TERA_TO_BYTE
+                        else:
+                            net_byte = mem
+                        net_usage += round(net_byte,4)
                 ssh.close()
             if worker_count > 0:
                 cpu_usage = (cpu_usage/worker_count)
