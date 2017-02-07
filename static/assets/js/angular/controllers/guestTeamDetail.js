@@ -292,7 +292,7 @@ angular
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
                         alert(data.message);
-                        location.href="#/guestSystemList?id=team-sett";
+                        location.href="#/guestTeamList";
                     } else {
                         alert(data.message);
                     }
