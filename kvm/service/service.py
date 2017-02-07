@@ -91,7 +91,7 @@ def setSsh(host_ip, path, ip, ssh_id):
 
 def getIpAddress(name, host_ip):
     try:
-        s = pxssh.pxssh(timeout=1200)
+        s = pxssh.pxssh()
         s.login(host_ip, USER)
         s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
         s.prompt()
