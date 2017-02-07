@@ -72,27 +72,21 @@ class Monitoring:
             response = requests.get(hyperv_url, data=None)
             print 'hyperv:%s:url=%s, period=%s:%s' % (datetime.datetime.now(), hyperv_url, self.period, response.json())
         except Exception as message:
-            print('hyperv:%s' % message)
-            errno = message.args[0].args[1].errno
-
+            print 'hyperv:%s' % message
 
     def kvm_monitor(self, kvm_url):
         try:
             response = requests.get(kvm_url, data=None)
             print 'kvm   :%s:url=%s, period=%s:%s' % (datetime.datetime.now(), kvm_url, self.period, response.json())
         except Exception as message:
-            print('kvm:%s') % message
-            errno = message.args[0].args[1].errno
-
+            print 'kvm:%s' % message
 
     def docker_monitor(self, docker_url):
         try:
             response = requests.get(docker_url, data=None)
             print 'docker:%s:url=%s, period=%s:%s' % (datetime.datetime.now(), docker_url, self.period, response.json())
         except Exception as message:
-            print('docker:%s') % message
-            errno = message.args[0].args[1].errno
-
+            print 'docker:%s' % message
 
     '''
     def alert_monitor(self, type, sub_type, status, msg):
