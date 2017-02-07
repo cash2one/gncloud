@@ -42,7 +42,6 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         # 기존 저장된 ssh key 등록
         setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
 
-
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id
@@ -86,7 +85,7 @@ def setSsh(host_ip, path, ip, ssh_id):
         s.logout()
         print(":complete set sshkey!!!")
     except IOError as e:
-        print(e)
+        print("setSsh:"+e)
         pass
 
 def getIpAddress(name, host_ip):
@@ -99,7 +98,7 @@ def getIpAddress(name, host_ip):
         s.logout()
         return ip
     except IOError as e:
-        print(e)
+        print("getIpAddress:"+e)
         pass
 
 
