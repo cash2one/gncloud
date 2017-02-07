@@ -9,6 +9,7 @@ from kvm.db.models import *
 from kvm.db.database import db_session
 from kvm.service.kvm_libvirt import *
 from kvm.util.config import config
+import time
 
 USER = "root"
 
@@ -30,9 +31,9 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
         print("complete init vm!!!")
-        #ip 세팅
 
         #ip 세팅
+        time.sleep(5)
         ip = ""
         while len(ip) == 0:
             print(id+":processing init ip!!!")
