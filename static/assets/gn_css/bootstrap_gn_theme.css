@@ -1521,7 +1521,7 @@ img.elli-img-icon{
     font-size: 12px;
 }
 
-#size label{height: 90px;}
+#vm_size label{height: 90px;}
 
 .inp-box-size.active div.border-bottom{
     border-bottom: 1px solid rgba(88,196,198,.2);
