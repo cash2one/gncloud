@@ -19,20 +19,21 @@ class GnHostMachines(Base):
     disk = Column(Integer, primary_key=False, nullable=False)
     host_agent_port = Column(Integer, primary_key=False, nullable=False)
 
-    def __init__(self, id=None, ip=None, type=None, cpu=None, mem=None,disk=None):
+    def __init__(self, id=None, ip=None, type=None, cpu=None, mem=None,disk=None, name=None):
         self.id = id
         self.type = type
         self.ip = ip
         self.cpu = cpu
         self.mem = mem
         self.disk = disk
+        self.name = name
 
     def __repr__(self):
         return '<Id %r / Ip %r / Type %r>' \
                % (self.id, self.ip, self.type)
 
     def __json__(self):
-        return ['id', 'ip', 'type']
+        return ['id', 'ip', 'type','name']
 
 
 class GnVmMachines(Base):

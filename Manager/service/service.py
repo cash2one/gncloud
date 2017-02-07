@@ -856,7 +856,7 @@ def deleteCluster(id,sql_session):
     sql_session.commit()
 
 
-def insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,sql_session):
+def insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,name,sql_session):
     mem=mem+mem_size
     disk=disk+disk_size
     byte_mem=convertsize(mem)
@@ -869,7 +869,7 @@ def insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,sql_session):
         if not check_info:
             break
 
-    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=byte_mem,disk=byte_disk,type=type)
+    host_info = GnHostMachines(id=id,ip=ip, cpu=cpu,mem=byte_mem,disk=byte_disk,type=type,name=name)
     sql_session.add(host_info)
     sql_session.commit()
 
@@ -1372,9 +1372,9 @@ def healthcheck_info(team_code,sql_session):
                     except:
                         response_host = 1
                 else:
-                    response_host = response_host = os.system("ping -c 1 -p "+ str(host.host_agent_port) +" "+ host.ip)
+                    response_host = os.system("ping -c 1 -p "+ str(host.host_agent_port) +" "+ host.ip)
 
-                host_list.append({"host_check":response_host,"host_ip":host.ip})
+                host_list.append({"host_check":response_host,"host_ip":host.ip,"host_name":host.name})
 
         result_list.append({"cluster_info":e,"status":response_cluster,"host_list":host_list})
 

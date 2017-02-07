@@ -510,6 +510,7 @@ def saveHostMachine():
     mem = request.json['mem']
     disk = request.json['disk']
     ip = request.json['ip']
+    name = request.json['name']
     type = request.json['type']
     mem_size = "GB"
     disk_size = "GB"
@@ -519,7 +520,7 @@ def saveHostMachine():
     if 'disk_size' in request.json:
         disk_size = request.json['disk_size']
 
-    insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,db_session)
+    insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,name,db_session)
     return jsonify(status=True, message="success")
 
 

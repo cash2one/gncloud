@@ -241,7 +241,7 @@
                                                     <li ng-repeat="host in list.host_list">
                                                         <span class="gn-dot-play" ng-show="host.host_check == 0"></span>
                                                         <span class="gn-dot-stop" ng-show="host.host_check != 0"></span>
-                                                        <span>Host-{{$index+1}}</span>
+                                                        <span>{{host.host_name}}</span>
                                                         <p class="gn-write">{{host.host_ip}}</p>
                                                     </li>
                                                 </ul>
