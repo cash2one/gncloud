@@ -32,20 +32,15 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         print("complete init vm!!!")
         #ip 세팅
 
-        s = pxssh.pxssh(timeout=1200)
-        s.login(host_info.ip, USER)
-
+        #ip 세팅
         ip = ""
         while len(ip) == 0:
             print(id+":processing init ip!!!")
-            s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + internal_name)
-            s.prompt()
-            ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + internal_name + "\r\n", "")
+            ip = getIpAddress(internal_name, host_info.ip)
         print("complete get ip="+ip)
 
         # 기존 저장된 ssh key 등록
-        print(":processing set sshkey!!!")
-        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(ssh_info.path) + "' " + str(host_info.ip) + " "+image_info.ssh_id)
+        setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
 
 
         print(id+":processing modify data!!!")
@@ -81,8 +76,32 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         sql_session.add(error_hist)
         vm_info.status = "Error"
         sql_session.commit()
-    finally:
+
+def setSsh(host_ip, path, ip, ssh_id):
+    try:
+        print(":processing set sshkey!!!")
+        s = pxssh.pxssh(timeout=1200)
+        s.login(host_ip, USER)
+        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(path) + "' " + str(ip) + " "+ssh_id)
         s.logout()
+        print(":complete set sshkey!!!")
+    except IOError as e:
+        print(e)
+        pass
+
+def getIpAddress(name, host_ip):
+    try:
+        s = pxssh.pxssh(timeout=1200)
+        s.login(host_ip, USER)
+        s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
+        s.prompt()
+        ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
+        s.logout()
+        return ip
+    except IOError as e:
+        print(e)
+        pass
+
 
 def setStaticIpAddress(ip, host_ip, ssh_id):
     try:
