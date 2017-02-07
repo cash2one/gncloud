@@ -31,18 +31,17 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         internal_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         intern_id = kvm_create(internal_name, vm_info.cpu, vm_info.memory, vm_info.disk, image_info.filename, image_info.sub_type, host_info.ip)
         print("complete init vm!!!")
-
         #ip 세팅
         ip = ""
-        s = pxssh.pxssh()
-        s.login(host_info.ip, USER)
         while len(ip) == 0:
             print(id+":processing init ip!!!")
-            s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + internal_name)
-            s.prompt()
-            ip = s.before.split("\r\n", 1)[1]
-        s.logout()
+            ip = getIpAddress(internal_name, host_info.ip)
         print("complete get ip="+ip)
+        #ip 고정
+        # if len(ip) != 0:
+        #     print(id+":set init ip!!!")
+        #     setStaticIpAddress(ip, host_info.ip, image_info.ssh_id)
+        #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
         setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
@@ -90,18 +89,17 @@ def setSsh(host_ip, path, ip, ssh_id):
         s.logout()
         print(":complete set sshkey!!!")
     except IOError as e:
-        print("setSsh:"+e)
+        print(e)
         pass
 
 def getIpAddress(name, host_ip):
-    s = pxssh.pxssh()
+    s = pxssh.pxssh(timeout=1200)
     s.login(host_ip, USER)
     s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
     s.prompt()
-    ip = s.before.split("\r\n", 1)[1]
+    ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
     s.logout()
     return ip
-
 
 
 def setStaticIpAddress(ip, host_ip, ssh_id):
