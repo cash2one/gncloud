@@ -4,7 +4,7 @@ __author__ = 'jhjeon'
 
 from datetime import timedelta
 
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for,session, make_response
 
 from HyperV.controller.powershellController import *
 from HyperV.util.config import config
@@ -68,6 +68,11 @@ app.add_url_rule("/vm/images/<type>/<id>", view_func=hvm_image, methods=['GET'])
 #     hvm_state(id, type, team_code)
 #     return jsonify(status= True, message="success")
 
+
+@app.before_request
+def before_request():
+    if ('userId' not in session) and request.path != '/monitor' and request.path != '/service/isAlive':
+        return make_response(jsonify(status=False),401)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):

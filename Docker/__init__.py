@@ -3,7 +3,7 @@ __author__ = 'jhjeon'
 import traceback
 
 from datetime import timedelta
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, session, make_response
 
 from Docker.controller.dockerController import *
 from Docker.db.database import db_session
@@ -70,6 +70,11 @@ app.add_url_rule("/vm/images/detail/<image_id>/<id>", view_func=doc_update_image
 # Docker 이미지 세부정보 삭제
 app.add_url_rule("/vm/images/detail/<image_id>/<id>", view_func=doc_delete_image_detail, methods=['DELETE'])
 
+
+@app.before_request
+def before_request():
+    if ('userId' not in session) and request.path != '/monitor' and request.path != '/service/isAlive':
+        return make_response(jsonify(status=False),401)
 
 # Controller 상태 확인
 @app.route("/service/isAlive")
