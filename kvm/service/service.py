@@ -36,9 +36,6 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         s = pxssh.pxssh()
         s.login(host_info.ip, USER)
 
-        s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
-        s.prompt()
-
         ip = ""
         while len(ip) == 0:
             print(id+":processing init ip!!!")
