@@ -34,9 +34,14 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
         #ip 세팅
         ip = ""
+        s = pxssh.pxssh()
+        s.login(host_info.ip, USER)
         while len(ip) == 0:
             print(id+":processing init ip!!!")
-            ip = getIpAddress(internal_name, host_info.ip)
+            s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + internal_name)
+            s.prompt()
+            ip = s.before.split("\r\n", 1)[1]
+        s.logout()
         print("complete get ip="+ip)
 
         # 기존 저장된 ssh key 등록
