@@ -92,11 +92,10 @@ def setSsh(host_ip, path, ip, ssh_id):
 def getIpAddress(name, host_ip):
     try:
         s = pxssh.pxssh()
-        s.login(host_ip, USER)
+        s.login(host_ip, USER, auto_prompt_reset=False)
         s.sendline(config.SCRIPT_PATH+"get_ipaddress.sh " + name)
         s.prompt()
         ip = s.before.replace(config.SCRIPT_PATH+"get_ipaddress.sh " + name + "\r\n", "")
-        print ip
         s.logout()
         return ip
     except IOError as e:
