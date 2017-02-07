@@ -11,7 +11,7 @@
                     <h2>클러스터 관리</h2>
                     <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" ng-show="registYn == 'Y'" data-target="#cluster" ng-click="clear()" >등록</button>
 
-                    <!-- 클러스터 Modal -->
+                    <!-- 클러스터 수정 Modal -->
                     <div class="modal fade" id="cluster" role="dialog">
                         <div class="modal-backdrop fade in" style="height: 3000px;"></div>
                         <div class="modal-dialog form-horizontal">
@@ -36,7 +36,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label">엔드 포인트 IP:PORT</label>
+                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label endpoint">
+                                                <span>엔드 포인트</span>
+                                                <span class="gn-write">IP:PORT</span>
+                                            </label>
                                             <div class="col-sm-9" ng-class="{ 'has-error' : clusterForm.ip.$invalid && !clusterForm.ip.$pristine }">
                                                 <input type="text" class="form-control" name="ip" placeholder="192.168.0.3" ng-model="cluster.ip" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.ip.$pristine" class="help-block">ip를 입력하세요.</p>
@@ -47,7 +50,7 @@
                                                 노드 리스트
                                             </label>
                                             <div class="col-sm-9">
-                                                <span ng-repeat="gnHostMachine in cluster.gnHostMachines">{{gnHostMachine.ip}}
+                                                <span class="node-list" ng-repeat="gnHostMachine in cluster.gnHostMachines">{{gnHostMachine.ip}}
                                                     <a href ng-click="deleteNode(gnHostMachine.id)"><img src="/gn_images/delete.png" width="14"></a><br/>
                                                 </span>
                                             </div>
