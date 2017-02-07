@@ -72,7 +72,7 @@ def doc_create(id,sql_session):
             image = GnDockerImages.query.filter_by(id=image_id).one()
 
             # Service 정보를 DB에 저장한다.
-            service_image = GnDockerServices(service_id=id, image=image.name)
+            service_image = GnDockerServices(service_id=id, image=image.view_name)
             sql_session.add(service_image)
 
             # os=image.os,
@@ -591,7 +591,7 @@ def doc_delete_image(id):
     if image is None:
         ds.logout()
         return jsonify(status=False, message="존재하지 않는 이미지입니다.")
-    image_name = image.name.split("/")[1].split(":")[0]
+    image_name = image.view_name.split("/")[1].split(":")[0]
     # Docker Registry 이미지 삭제
     result = ds.send(
         address=registry.ip,
