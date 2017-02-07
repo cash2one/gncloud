@@ -68,7 +68,7 @@ class DockerService(object):
                 command += " " + (detail.argument % id)
             else:
                 command += " %s" % detail.argument
-        command += " %s" % dockerimage.name
+        command += " %s" % dockerimage.view_name
         logger.debug("Docker Service Created: %s", command)
         # --- //Docker Service 생성 커맨드 작성 ---
         service_id = self.send_command(command)
