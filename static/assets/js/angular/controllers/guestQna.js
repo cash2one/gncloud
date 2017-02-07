@@ -44,6 +44,7 @@ angular
                         $scope.notice = data.list.qna_info;
                         $scope.reply = data.list.qna_ask;
                         $scope.qna_list(page);
+                        $scope.checkid = id;
                     }else {
                         if (data.message != null) {
                             alert(data.message);
@@ -81,6 +82,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.qna_list($scope.data.page);
+                        $scope.qna_info(id,$scope.data.page);
                         $scope.data.reply_text="";
                     }else {
                         if (data.message != null) {
@@ -157,7 +159,7 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        $scope.qna_list($scope.data.page);
+                        $scope.qna_info($scope.checkid,$scope.data.page);
                         alert("삭제 되었습니다.");
 
 
