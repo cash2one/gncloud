@@ -27,6 +27,11 @@ cat /root/id_rsa.pub >> /var/lib/libvirt/initcloud/user-data
 # 버추얼 네트워크 이름 'default'를 destroy 시킴
 virsh net-destroy default
 virsh net-undefine default
+
+virsh pool-define-as default dir --target  '/var/lib/libvirt/images'
+virsh pool-start default
+virsh pool-autostart gnpool
+
 systemctl restart libvirtd
 
 #ifcfg-br0 설정
