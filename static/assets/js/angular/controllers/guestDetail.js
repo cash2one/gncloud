@@ -50,7 +50,6 @@ angular
                     if (data.status == true) {
                         alert("이름이 수정되었습니다");
                         $scope.vm_data.name = $("#vm_name").val();
-                        $("#vm_name").val('');
                     }
                     else {
                         if(data.message != null) {
@@ -78,7 +77,6 @@ angular
                     if (data.status == true) {
                         alert("태그가 수정되었습니다");
                         $scope.tag_list = $("#vm_tag").val().split(",");
-                        $("#vm_name").val('');
                     }
                     else {
                         if(data.message != null) {
@@ -184,7 +182,10 @@ angular
                 }
             })
         }
-
+        $scope.close=function () {
+            $("#vm_name").val($scope.vm_data.name);
+            $("#vm_tag").val($scope.vm_data.tag);
+        }
         $scope.getConfig = function (data_info) {
             config = {
                 type: 'line',

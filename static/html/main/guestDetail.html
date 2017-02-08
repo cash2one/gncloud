@@ -18,13 +18,13 @@
                         <form name="vm_nameForm" ng-submit="submitForm(vm_nameForm.$valid)" novalidate>
                             <div class="modal-body gn-modal-body">
                                 <div class="form-group" ng-class="{ 'has-error' : vm_nameForm.name.$invalid && !vm_nameForm.name.$pristine }">
-                                    <input type="text" id="vm_name" name="name" class="form-control gn-form-control" ng-model="name" placeholder="{{vm_data.name}}" ng-keyup="$event.keyCode=='13' && change_name()" required>
+                                    <input type="text" id="vm_name" name="name" class="form-control gn-form-control" ng-model="name" ng-value="vm_data.name" ng-keyup="$event.keyCode=='13' && change_name()" required>
                                     <p ng-show="vm_nameForm.name.$invalid && !vm_nameForm.name.$pristine" class="help-block">이름을 입력하세요.</p>
                                 </div>
                             </div>
                         </form>
                         <div class="modal-footer gn-modal-footer">
-                            <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal" ng-click="change_name()"  ng-disabled="vm_nameForm.$invalid">저장</button>
+                            <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal" ng-click="change_name()">저장</button>
                         </div>
                     </div> <!--class="modal-content"-->
                 </div> <!--class="modal-dialog modal-sm"-->
@@ -71,12 +71,12 @@
                 </div>
                 <form name="tagForm" ng-submit="submitForm(tagForm.$valid)" novalidate>
                 <div class="modal-body gn-modal-body" ng-class="{ 'has-error' : tagForm.tag.$invalid && !tagForm.tag.$pristine }">
-                    <input type="text" name="tag" placeholder="{{vm_data.tag}}" class="form-control gn-form-control" id="vm_tag" ng-model="tag" ng-keypress="$event.keyCode == '13' && change_tag()" required>
+                    <input type="text" name="tag" ng-value="vm_data.tag" class="form-control gn-form-control" id="vm_tag" ng-model="tag" ng-keypress="$event.keyCode == '13' && change_tag()" required>
                     <p ng-show="tagForm.tag.$invalid && !tagForm.tag.$pristine" class="help-block">태그를 입력해주세요.</p>
                 </div>
                 </form>
                 <div class="modal-footer gn-modal-footer">
-                    <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal" ng-click="change_tag()" ng-disabled="tagForm.$invalid">저장</button>
+                    <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal" ng-click="change_tag()">저장</button>
                 </div>
             </div> <!--class="modal-content"-->
         </div> <!--class="modal-dialog modal-sm"-->
