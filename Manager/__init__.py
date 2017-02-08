@@ -8,7 +8,6 @@ from flask import Flask, jsonify, request, session, escape, make_response
 from Manager.db.database import db_session
 from Manager.util.config import config
 from Manager.util.json_encoder import AlchemyEncoder
-from db.database import db_session
 from service.service import *
 
 app = Flask(__name__)
