@@ -11,6 +11,7 @@ from pexpect import pxssh
 from Docker.db.models import GnDockerContainers, GnDockerImages, GnDockerImageDetail, GnHostMachines, GnVmMachines
 from Docker.util.config import config
 from Docker.util.logger import logger
+from sqlalchemy import and_
 
 
 class DockerService(object):
@@ -83,7 +84,7 @@ class DockerService(object):
             logger.error("SSH 로그인 에러")
             return "error"
 
-        dockerimage = GnDockerImages.query.filter_by(name=image).first()
+        dockerimage = GnDockerImages.query.filter_by(view_name=image).first()
         if dockerimage is None:
             return None
         image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
@@ -196,7 +197,10 @@ class DockerService(object):
         service = self.send_command_return_json(command)
         mounts = service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
         # 볼륨의 목적지를 확인한다. 모든 노드의 볼륨이 동일하다는 전제 하에 첫 번째 worker 노드에서 볼륨 값을 가져온다.
-        host = GnHostMachines.query.filter_by(type="docker_w").first()
+        host = GnHostMachines.query.filter(and_(GnHostMachines.type=='docker',
+                                                GnHostMachines.name!='manager',
+                                                GnHostMachines.name != 'registry')).first()
+
         for mount in mounts:
             command = "docker -H %s:2375 volume inspect %s" % (host.ip, mount["Source"])
             volume = ""
@@ -252,7 +256,8 @@ class DockerService(object):
         # $(docker -H {ip}:2375 ps --filter label=com.docker.swarm.service.name={internal_name} -q)
         # {id}:stop
         first_worker = GnHostMachines.query.filter_by(id=container.host_id).first()
-        registry = GnHostMachines.query.filter_by(type="docker_r").first()
+        #registry = GnHostMachines.query.filter_by(type="docker_r").first()
+        registry = GnHostMachines.query.filter(GnHostMachines.type=='docker').filter(GnHostMachines.name=='registry').first()
         # 스냅샷 이미지 이름에 넣기 위한 현재 시각 저장
         snaptime = datetime.now().strftime('%Y%m%d%H%M%S')
         # 스냅샷 이미지 이름 정의
