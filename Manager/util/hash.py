@@ -36,9 +36,12 @@ def convertsize(size):
         size_split[0].strip()
         return int(size_split[0])*1024**3
 
-def convertprice(price):
-    size_split = price.partition('$')
-    if(size_split[0]!='$'):
-        return price
+def convertcore(core):
+
+    size_split = core.partition('CORE')
+    if size_split[1] !="":
+        size_split[1]=size_split[1].upper()
+    if size_split[1]!="":
+        return size_split[0]
     else:
-        return size_split[1]
+        return core

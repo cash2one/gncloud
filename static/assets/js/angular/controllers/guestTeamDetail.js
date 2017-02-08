@@ -1,6 +1,7 @@
 angular
     .module('gncloud')
     .controller('guestTeamDetailCtrl', function ($scope, $http, $routeParams, dateModifyService) {
+        $scope.data={};
         $scope.profile=function(){
         $http({
             method: 'GET',
@@ -9,7 +10,7 @@ angular
         })
             .success(function (data, status, headers, config) {
                 if (data.status == true) {
-                    $scope.teamname = data.list; //유저팀에 대한 정보
+                    $scope.teamname = data.list;//유저팀에 대한 정보
 
                 } else {
                     alert(data.message);
@@ -35,7 +36,6 @@ angular
 
                         $scope.team_list = newArr; // 팀원들에 대한 정보
                         $scope.team_list.total = data.list.info
-
                     } else {
                         alert(data.message);
                     }

@@ -32,7 +32,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label gn-control-label">팀명</label>
                                             <div class="col-sm-9" ng-class="{ 'has-error' : userForm.team_name.$invalid && !userForm.team_name.$pristine }">
-                                                <input type="text" class="form-control gn-form-control" id="team_name" name="team_name" ng-model="data.team_name" placeholder="{{teamname.team_name}}" ng-pattern="/^[가-힣0-9]+$/" ng-keyup="keyup()">
+                                                <input type="text" class="form-control gn-form-control" id="team_name" name="team_name" ng-model="data.team_name" ng-value="teamname.team_name" ng-pattern="/^[가-힣0-9]+$/" ng-keyup="keyup()">
                                                 <p ng-show="userForm.team_name.$invalid && !userForm.team_name.$pristine" class="help-block">한글과 숫자만 사용할수 있습니다.</p>
                                             </div>
                                         </div>
@@ -45,7 +45,7 @@
                                           <div ng-class="{ 'has-error' : userForm.cpu.$invalid && !userForm.cpu.$pristine }">
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.cpu_use_cnt}} / </span>
-                                              <input type="text" ng-model="data.cpu" id="cpu" name="cpu" class="form-control gn-form-control" placeholder="{{total.cpu_total_cnt}}CORE">
+                                              <input type="text" ng-model="data.cpu" id="cpu" name="cpu" class="form-control gn-form-control" ng-value="total.cpu_total_cnt">
                                               <p ng-show="userForm.cpu.$invalid && !userForm.cpu.$pristine" class="help-block">입력해주세요.</p>
                                           </div>  
                                           
@@ -54,7 +54,7 @@
                                           <div ng-class="{ 'has-error' : userForm.mem.$invalid && !userForm.mem.$pristine }">
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.mem_use_cnt}} / </span>
-                                              <input type="text" ng-model="data.mem" id="mem" name="mem" class="form-control gn-form-control" placeholder="{{total.mem_total_cnt}}">
+                                              <input type="text" ng-model="data.mem" id="mem" name="mem" class="form-control gn-form-control" ng-value="total.mem_total_cnt">
                                               <p ng-show="userForm.mem.$invalid && !userForm.mem.$pristine" class="help-block">입력해주세요.</p>
                                           </div>                                                                                  
                                           <dt>DISK</dt>
@@ -62,7 +62,7 @@
                                           <div ng-class="{ 'has-error' : userForm.disk.$invalid && !userForm.disk.$pristine }">
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.disk_use_cnt}} / </span>
-                                              <input type="text" ng-model="data.disk" id="disk" name="disk" class="form-control gn-form-control" placeholder="{{total.disk_total_cnt}}">
+                                              <input type="text" ng-model="data.disk" id="disk" name="disk" class="form-control gn-form-control" ng-value="total.disk_total_cnt">
                                               <p ng-show="userForm.disk.$invalid && !userForm.disk.$pristine" class="help-block">입력해주세요.</p>
                                           </div>
                                         </dl>                                         
