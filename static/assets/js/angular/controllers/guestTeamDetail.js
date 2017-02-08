@@ -343,7 +343,10 @@ angular
             $scope.won_list = Array.prototype.slice.call($scope.won_list).reverse();
         }
         $scope.close=function () {
-            $scope.profile();
+            $scope.data.team_name=$scope.teamname.team_name;
+            $scope.data.cpu=$scope.total.cpu_total_cnt;
+            $scope.data.mem=$scope.total.mem_total_cnt;
+            $scope.data.disk=$scope.total.disk_total_cnt;
         }
     }).directive('tooltip', function(){
         return {
