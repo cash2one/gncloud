@@ -141,7 +141,7 @@
                                                 <!--더보기>드롭다운-->
                                                 <ul class="dropdown-menu gn-dropdown" role="menu">
                                                     <li><a href  ng-click="getInstanceImage(path.id)" data-toggle="modal" data-target="#image" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
-                                                    <li><a href class="gn-danger" ng-click="deleteInstanceImage(path.id)">삭제</a></li>
+                                                    <li><a href class="gn-danger" ng-click="deleteInstanceImage(path.id,path.name)">삭제</a></li>
                                                 </ul>
                                             </td>
                                         </tr>
@@ -299,7 +299,7 @@
                                                 <!--더보기>드롭다운-->
                                                 <ul class="dropdown-menu gn-dropdown" role="menu">
                                                     <li><a href  ng-click="getInstanceImageDocker(contain.id)" data-toggle="modal" data-target="#img-cont" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
-                                                    <li><a href class="gn-danger" ng-click="deleteInstanceImageDoker(contain.id)">삭제</a></li>
+                                                    <li><a href class="gn-danger" ng-click="deleteInstanceImageDoker(contain.id,contain.name)">삭제</a></li>
                                                 </ul>
                                             </td>
                                         </tr>

@@ -56,22 +56,26 @@ angular
             {name: '삭제', type: 'delete'}
         ];
         $scope.update=function(id){
-            $http({
-                method: 'DELETE',
-                url: '/api/manager/vm/price/'+id,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function(data, status, headers, config) {
-                    if (data.status == true) {
-                        alert("삭제 되었습니다.");
-                        $scope.price();
-                    } else {
-                        alert(data.message);
-                    }
+            var returnvalue = confirm('삭제하시겠습니까 ?');
+            if(returnvalue==true){
+                $http({
+                    method: 'DELETE',
+                    url: '/api/manager/vm/price/'+id,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
-                .error(function(data, status, headers, config) {
-                    console.log(status);
-                });
+                    .success(function(data, status, headers, config) {
+                        if (data.status == true) {
+                            alert("삭제 되었습니다.");
+                            $scope.price();
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .error(function(data, status, headers, config) {
+                        console.log(status);
+                    });
+            }
+
         }
         $scope.close=function () {
             $(':input').val('');

@@ -114,25 +114,28 @@ angular
         }
 
 
-        $scope.deleteInstanceImage = function(id){
-            $http({
-                method: 'DELETE',
-                url: '/api/manager/vm/image/'+id,
-                data: $scope.instanceImage,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data) {
-                        $scope.image();
-                    }else{
-                        if(data.message != null){
-                            alert(data.message);
-                        }
-                    }
+        $scope.deleteInstanceImage = function(id, name){
+            var returnvalue = confirm( name + "를 삭제하시겠습니까 ?");
+            if(returnvalue == true){
+                $http({
+                    method: 'DELETE',
+                    url: '/api/manager/vm/image/'+id,
+                    data: $scope.instanceImage,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                });
+                    .success(function (data, status, headers, config) {
+                        if (data) {
+                            $scope.image();
+                        }else{
+                            if(data.message != null){
+                                alert(data.message);
+                            }
+                        }
+                    })
+                    .error(function (data, status, headers, config) {
+                        console.log(status);
+                    });
+            }
         }
 
         $scope.getInstanceImage = function(id){
@@ -265,27 +268,30 @@ angular
                 });
         }
 
-        $scope.deleteInstanceImageDoker = function(id){
-            $http({
-                method: 'DELETE',
-                url: '/api/manager/vm/dockerimage/'+id,
-                data: $scope.dockerImage,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data) {
-                        $scope.contain();
-                    }else{
-                        if(data.message != null){
-                            alert(data.message);
-                        }
-                    }
+        $scope.deleteInstanceImageDoker = function(id,name){
+            var returnvalue = confirm(name + "를 삭제하시겠습니까?")
+            if(returnvalue ==true){
+                $http({
+                    method: 'DELETE',
+                    url: '/api/manager/vm/dockerimage/'+id,
+                    data: $scope.dockerImage,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                });
-        }
+                    .success(function (data, status, headers, config) {
+                        if (data) {
+                            $scope.contain();
+                        }else{
+                            if(data.message != null){
+                                alert(data.message);
+                            }
+                        }
+                    })
+                    .error(function (data, status, headers, config) {
+                        console.log(status);
+                    });
+            }
 
+        }
         $scope.refresh = function(type){
             if(type == 'table'){
                 $scope.table = Array.prototype.slice.call($scope.table).reverse();
