@@ -65,8 +65,8 @@
                                                 <td>{{pr.vm_name}}</td>
                                                 <td>{{pr.author_name}}</td>
                                                 <td>{{pr.used}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td>
-                                                <td>&#65510;{{pr.unit_price}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td><!--&#65510; : 원 코드-->
-                                                <td>{{pr.total_price}}&#50896;</td><!--&#50896; : 원(한글)코드-->
+                                                <td>&#65510;{{pr.unit_price | number}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td><!--&#65510; : 원 코드-->
+                                                <td>{{pr.total_price | number}}&#50896;</td><!--&#50896; : 원(한글)코드-->
                                             </tr>
 
                                             <!--총계-->
@@ -75,7 +75,7 @@
                                                 <td style="border-bottom:none"></td>
                                                 <td style="border-bottom:none"></td>
                                                 <td style="padding-top:20px"><strong>총계</strong></td>
-                                                <td style="padding-top:20px"><strong>{{price_invoice.team_price}}&#50896;</strong></td>
+                                                <td style="padding-top:20px"><strong>{{price_invoice.team_price | number}}&#50896;</strong></td>
                                             </tr>
                                             </tbody>
                                         </table>
