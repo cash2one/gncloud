@@ -430,8 +430,6 @@ def changeteamnamesystem(code):
     team_cpu=""
     team_memory=""
     team_disk=""
-    if request.json == None:
-        return jsonify(status=False, message='아무것도 입력하지 않았습니다.')
     if 'team_name' in request.json:
         team_name=request.json['team_name']
     if 'cpu' in request.json:
