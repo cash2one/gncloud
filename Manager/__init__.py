@@ -25,7 +25,7 @@ def before_request():
         return make_response(jsonify(status=False),401)
 
     session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=1)
+    app.permanent_session_lifetime = timedelta(minutes=60)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
