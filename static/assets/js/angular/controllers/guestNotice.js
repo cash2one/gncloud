@@ -92,24 +92,28 @@ angular
 
                 })
         }
-        $scope.deletenoti=function (id) {
-            $http({
-                method:'DELETE',
-                url: '/api/manager/vm/notice/'+id
-            })
-                .success(function (data, status, headers, config) {
-                    if (data.status == true) {
-                        $scope.noticeList($scope.data.page);
-                        alert("삭제 되었습니다.");
-
-
-                    }else {
-                        if (data.message != null) {
-                            alert(data.message);
-                        }
-                    }
-
+        $scope.deletenoti=function (id,title) {
+            var returnvalue = confirm(title + "을 삭제하시겠습니까 ?");
+            if(returnvalue == true){
+                $http({
+                    method:'DELETE',
+                    url: '/api/manager/vm/notice/'+id
                 })
+                    .success(function (data, status, headers, config) {
+                        if (data.status == true) {
+                            $scope.noticeList($scope.data.page);
+                            alert("삭제 되었습니다.");
+
+
+                        }else {
+                            if (data.message != null) {
+                                alert(data.message);
+                            }
+                        }
+
+                    })
+            }
+
         }
         $scope.close=function () {
             $("#title").val('');
