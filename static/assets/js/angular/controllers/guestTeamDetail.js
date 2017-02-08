@@ -343,7 +343,7 @@ angular
             $scope.won_list = Array.prototype.slice.call($scope.won_list).reverse();
         }
         $scope.close=function () {
-            $(':input').val('');
+            $scope.profile();
         }
     }).directive('tooltip', function(){
         return {
