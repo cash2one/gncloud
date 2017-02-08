@@ -80,14 +80,14 @@
                                         <div>
                                             <dl class="dl-horizontal gn-description-node">
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">IP</label>
+                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">노드 이름</label>
                                                     <div class="col-sm-6" ng-class="{ 'has-error' : hostForm.name.$invalid && !hostForm.name.$pristine }">
                                                         <input type="text" name="name" id="name" class="form-control gn-form-control" placeholder="worker-1" ng-model="host.name" required>
                                                         <p ng-show="hostForm.name.$invalid && !hostForm.name.$pristine" class="help-block">이름을 입력하세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">IP</label>
+                                                    <label for="inputtext" class="col-sm-3 control-label gn-control-label">아이피 주소</label>
                                                     <div class="col-sm-6" ng-class="{ 'has-error' : hostForm.ip.$invalid && !hostForm.ip.$pristine }">
                                                         <input type="text" name="ip" id="ip" class="form-control gn-form-control" placeholder="192.168.1.100" ng-model="host.ip" required>
                                                         <p ng-show="hostForm.ip.$invalid && !hostForm.ip.$pristine" class="help-block">IP를 입력하세요.</p>
