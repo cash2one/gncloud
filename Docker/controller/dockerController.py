@@ -55,7 +55,8 @@ def doc_create(id,sql_session):
         logger.debug(docker_info.id+":get class ok")
 
         # Docker Swarm manager 값을 가져온다.
-        dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
+        #dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
+        dsmanager = GnHostMachines.query.filter_by(name='manager').one()
         # Docker Swarm Service를 생성한다.
         # docker_service_create: Docker Service 생성
         print(docker_info.id+":start create")
