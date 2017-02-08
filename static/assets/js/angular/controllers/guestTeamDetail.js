@@ -202,7 +202,6 @@ angular
                         alert("변경되었습니다");
                         $scope.profile();
                         $scope.resose();
-                        $(':input').val('');
                     }
                     else if(data.status==false){
                         alert(data.message);
