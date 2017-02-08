@@ -5,6 +5,7 @@ import time
 #from datetime import datetime
 import datetime
 from flask import jsonify, request, session
+from sqlalchemy import and_
 
 from Docker.db.database import db_session
 from Docker.db.models import *
@@ -55,7 +56,8 @@ def doc_create(id,sql_session):
         logger.debug(docker_info.id+":get class ok")
 
         # Docker Swarm manager 값을 가져온다.
-        dsmanager = GnHostMachines.query.filter_by(type='docker_m').one()
+        #dsmanager = GnHostMachines.query.filter_by(type='docker').one()
+        dsmanager = GnHostMachines.query.filter(and_(GnHostMachines.type=='docker', GnHostMachines.name=='manager')).one()
         # Docker Swarm Service를 생성한다.
         # docker_service_create: Docker Service 생성
         print(docker_info.id+":start create")
@@ -207,7 +209,7 @@ def doc_state(id):
                     id=id, image=service.gnDockerServices[0].image, backup_image=image,
                     cpu=service.cpu, memory=str(service.memory)+"MB")
                 logger.debug(restart_service)
-                if restart_service == 'error':
+                if restart_service == 'error' or restart_service is None:
                     service.status = 'Error'
                     sql_session.commit()
                     ds.logout()

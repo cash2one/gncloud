@@ -24,6 +24,7 @@ class Config:
     LOCAL_PATH = None
     NAS_PATH = None
     MANAGER_PATH = None
+    BACKUP_PATH=None
 
     def __init__(self, path="../conf/config.conf"):
         # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
@@ -59,6 +60,7 @@ class Config:
         self.LOCAL_PATH = parser.get(config_section,"LOCAL_PATH")
         self.NAS_PATH = parser.get(config_section,"NAS_PATH")
         self.MANAGER_PATH = parser.get(config_section,"MANAGER_PATH")
+        self.BACKUP_PATH = parser.get(config_section, "BACKUP_PATH")
 
 
 # 전역 공통사용 객체이다.

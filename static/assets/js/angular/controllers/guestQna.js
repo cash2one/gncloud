@@ -134,42 +134,50 @@ angular
                 })
         }
         $scope.deleteqna=function (id) {
-            $http({
-                method:'DELETE',
-                url: '/api/manager/vm/qna/'+id
-            })
-                .success(function (data, status, headers, config) {
-                    if (data.status == true) {
-                        $scope.qna_list($scope.data.page);
-                        alert("삭제 되었습니다.");
-
-
-                    }else {
-                        if (data.message != null) {
-                            alert(data.message);
-                        }
-                    }
-
+            var returnvalue = confirm("글을 삭제하시겠습니까?");
+            if(returnvalue==true){
+                $http({
+                    method:'DELETE',
+                    url: '/api/manager/vm/qna/'+id
                 })
+                    .success(function (data, status, headers, config) {
+                        if (data.status == true) {
+                            $scope.qna_list($scope.data.page);
+                            alert("삭제 되었습니다.");
+
+
+                        }else {
+                            if (data.message != null) {
+                                alert(data.message);
+                            }
+                        }
+
+                    })
+            }
+
         }
         $scope.delete_reply=function (id) {
-            $http({
-                method:'DELETE',
-                url: '/api/manager/vm/qna/ask/'+id
-            })
-                .success(function (data, status, headers, config) {
-                    if (data.status == true) {
-                        $scope.qna_info($scope.checkid,$scope.data.page);
-                        alert("삭제 되었습니다.");
-
-
-                    }else {
-                        if (data.message != null) {
-                            alert(data.message);
-                        }
-                    }
-
+            var returnvalue = confirm("댓글을 삭제하시겠습니까?");
+            if(returnvalue ==true){
+                $http({
+                    method:'DELETE',
+                    url: '/api/manager/vm/qna/ask/'+id
                 })
+                    .success(function (data, status, headers, config) {
+                        if (data.status == true) {
+                            $scope.qna_info($scope.checkid,$scope.data.page);
+                            alert("삭제 되었습니다.");
+
+
+                        }else {
+                            if (data.message != null) {
+                                alert(data.message);
+                            }
+                        }
+
+                    })
+            }
+
         }
         $scope.close=function () {
             $("#title").val('');

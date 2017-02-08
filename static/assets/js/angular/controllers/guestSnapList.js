@@ -126,23 +126,26 @@ angular
         $scope.actions = [
             {name: '삭제', type: 'delete'}
         ];
-        $scope.update = function (id, action, ty,index) {
-            $http({
-                method: 'PUT',
-                url: '/api/manager/vm/images/'+id,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function(data, status, headers, config) {
-                    if (data.status == true) {
-                        $scope.snapshotsdelete(ty,id);
-                    } else {
-                        alert("삭제 되었습니다.");
-                        $scope.snapList();
-                    }
+        $scope.update = function (id, action, ty,index,name) {
+            var returnvalue = confirm( name + "를 삭제하시겠습니까 ?");
+            if(returnvalue == true){
+                $http({
+                    method: 'PUT',
+                    url: '/api/manager/vm/images/'+id,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
-                .error(function(data, status, headers, config) {
-                    console.log(status);
-                });
+                    .success(function(data, status, headers, config) {
+                        if (data.status == true) {
+                            $scope.snapshotsdelete(ty,id);
+                        } else {
+                            alert("삭제 되었습니다.");
+                            $scope.snapList();
+                        }
+                    })
+                    .error(function(data, status, headers, config) {
+                        console.log(status);
+                    });
+            }
         };
         $scope.snapshotsdelete=function(ty,id){
             $timeout(function(){

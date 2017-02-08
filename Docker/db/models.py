@@ -40,6 +40,7 @@ class GnHostMachines(Base):
                     host_agent_port=self.host_agent_port)
 
 
+'''
 class GnHostDocker(Base):
     __tablename__ = 'GN_HOST_DOCKER'
     id = Column(String(8), primary_key=True, nullable=False, default='')
@@ -74,6 +75,7 @@ class GnHostDocker(Base):
         return dict(id=self.id, name=self.name, ip=self.ip, type=self.type, cpu=self.cpu, mem=self.mem,
                     disk=self.disk, max_cpu=self.max_cpu, max_mem=self.max_mem, max_disk=self.max_disk,
                     host_agent_port=self.host_agent_port)
+'''
 
 
 class GnVmMachines(Base):

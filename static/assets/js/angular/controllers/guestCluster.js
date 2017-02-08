@@ -105,22 +105,26 @@ angular
                     console.log(status);
                 });
         }
-        $scope.deleteCluster=function(id){
-            $http({
-                method: 'DELETE',
-                url: '/api/manager/vm/cluster/'+id,
-                headers: {'Content-Type': 'application/json; charset=utf-8'}
-            })
-                .success(function (data, status, headers, config) {
-                    if (data) {
-                        $scope.getClusterList();
-                    }
-                    else {
-                    }
+        $scope.deleteCluster=function(id, type){
+            var returnvalue = confirm( type + "를 삭제하시겠습니까 ?");
+            if(returnvalue==true){
+                $http({
+                    method: 'DELETE',
+                    url: '/api/manager/vm/cluster/'+id,
+                    headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                });
+                    .success(function (data, status, headers, config) {
+                        if (data) {
+                            $scope.getClusterList();
+                        }
+                        else {
+                        }
+                    })
+                    .error(function (data, status, headers, config) {
+                        console.log(status);
+                    });
+            }
+
         }
 
         //****클러스터, 노드 저장****//
