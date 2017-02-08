@@ -99,8 +99,8 @@
                         <input id="cpu" name="" value="" type="radio">
                         <div class="size-info">{{size.cpu}} CPU / {{size.mem}} / {{size.disk}}</div>
                         <div class="price-bg">
-                            <div class="price-info">₩{{size.hour_price}}<span class="price-units"> / 시간</span></div>
-                            <div class="price-info">₩{{size.day_price}}<span class="price-units"> / 일</span></div>
+                            <div class="price-info">₩{{size.hour_price | number}}<span class="price-units"> / 시간</span></div>
+                            <div class="price-info">₩{{size.day_price | number}}<span class="price-units"> / 일</span></div>
                         </div>
                     </label>
                 </div>
