@@ -1,7 +1,9 @@
 angular
     .module('gncloud')
     .controller('guestTeamKeyCtrl', function ($scope, $http, dateModifyService, $rootScope) {
-
+        $scope.close=function () {
+            $(':input').val('');
+        }
         $scope.sshkey=function(){
             $http({
                 method: 'GET',
