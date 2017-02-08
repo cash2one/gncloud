@@ -22,6 +22,7 @@
                         <thead>
                         <tr>
                             <th class="first-td"></th>
+                            <th class="">이름</th>
                             <th class="">OS</th>
                             <th class="">버전</th>
                             <th class="hidden-xs">Bit</th>
@@ -31,7 +32,8 @@
                         <tbody class="gn-tdody">
                         <tr ng-repeat="base in base_list">
                             <td class="first-td"><img src="/gn_images/gn_icon_{{base.os}}.png" alt=""></td>
-                            <td class="second-td-name">{{base.os}}</td>
+                            <td class="second-td-name">{{base.name}}</td>
+                            <td class="first-td">{{base.os}}</td>
                             <td>{{base.os_ver}}{{base.os_subver}}</td>
                             <td class="hidden-xs">{{base.os_bit}}</td>
                             <td class="hidden-xs">{{base.type}}</td>                            
@@ -179,7 +181,7 @@
             <table class="table table gn-table">
                 <thead>
                 <tr>
-                    <th class="first-td"></th> 
+                    <th class="first-td"></th>
                     <th class="">OS</th>
                     <th class="">버전</th>
                     <th class="hidden-xs">태그</th>
