@@ -604,3 +604,51 @@ class GnErrorHist(Base):
     def __json__(self):
         return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_name','vm_name']
 
+
+
+class GnBackup(Base):
+    __tablename__ = 'GN_BACKUP'
+    vm_id = Column(String(8), primary_key=True, nullable=False)
+    backup_time = Column(DateTime, nullable=True, default=None)
+    team_code = Column(String(10), nullable=True, default='')
+    author_id = Column(String(50), nullable=True, default='')
+    vm_type = Column(String(10), nullable=True, default='')
+    vm_name = Column(String(50), nullable=True, default='')
+    team_name = Column(String(10), nullable=True, default='')
+    author_name = Column(String(20), nullable=True, default='')
+
+    def __init__(self, vm_id, backup_time=None, team_code=None, author_id=None, vm_type=None,
+                 vm_name=None, team_name=None, author_name=None):
+        self.vm_id = vm_id
+        self.backup_time = backup_time
+        self.team_code = team_code
+        self.author_id = author_id
+        self.vm_type = vm_type
+        self.vm_name = vm_name
+        self.team_name = team_name
+        self.author_name = author_name
+
+    def __repr__(self):
+        return "<GnBackup(vm_id='%r', backup_time='%r', team_code='%r', author_id='%r', vm_type='%r', vm_name='%r', team_name='%r', author_name='%r' " \
+               % (self.vm_id, self.backup_time, self.team_code, self.author_id, self.vm_type, self.vm_name, self.team_name, self.author_name)
+
+
+class GnBackupHist(Base):
+    __tablename__ = 'GN_BACKUP_HIST'
+    vm_id = Column(String(8), primary_key=True, nullable=False)
+    filename = Column(String(150), primary_key=True, nullable=False, default='')
+    backup_time = Column(DateTime, nullable=True, default=datetime.datetime.now())
+    vm_type = Column(String(10), nullable=True, default='')
+    host_ip = Column(String(50), nullable=True, default='')
+
+    def __init__(self, vm_id, filename, backup_time, vm_type=None, host_ip=None):
+        self.vm_id = vm_id
+        self.filename = filename
+        self.backup_time = backup_time
+        self.vm_type = vm_type
+        self.host_ip = host_ip
+
+    def __repr__(self):
+        return "<GnBackupHist(vm_id='%r', filename='%r', backup_time='%r', vm_type='%r', host_ip='%r' " \
+               % (self.vm_id, self.filename, self.backup_time, self.vm_type, self.host_ip)
+

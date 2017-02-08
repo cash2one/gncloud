@@ -185,25 +185,6 @@ class GnMonitor(Base):
                "net_usage='%r')>" \
                % (self.id, self.type, self.cpu_usage, self.mem_usage, self.disk_usage, self.net_usage)
 
-class GnAlert(Base):
-    __tablename__ = "GN_ALERT"
-    create_time = Column(DateTime, primary_key=True, nullable=False, default=datetime.datetime.now())
-    type = Column(String(10), primary_key=True, nullable=False, default='')
-    sub_type = Column(String(50), primary_key=True, nullable=False, default='')
-    status = Column(String(15), nullable=True, default='')
-    description = Column(String(15000), nullable=True, default='')
-
-    def __init__(self, create_time, type, sub_type, status, description):
-        self.create_time = create_time
-        self.type = type
-        self.sub_type = sub_type
-        self.status = status
-        self.description = description
-
-    def __repr__(self):
-        return "<GnAlert(create_time='%r', type='%r', sub_type='%r', status='%r', description='%r')>" \
-               % (self.create_time, self.type, self.sub_type, self.status, self.description)
-
 
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'

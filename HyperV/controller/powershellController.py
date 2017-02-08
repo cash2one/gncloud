@@ -16,7 +16,7 @@ import time
 from flask import request, jsonify
 from HyperV.service.powershellService import PowerShell
 from HyperV.db.database import db_session
-from HyperV.db.models import GnVmMachines, GnVmImages, GnMonitor, GnUsers, GnTeam
+from HyperV.db.models import GnVmMachines, GnVmImages, GnMonitor, GnUsers, GnTeam, GnBackup, GnBackupHist
 
 from HyperV.util.config import config
 from HyperV.util.hash import random_string
@@ -364,10 +364,15 @@ def hvm_delete(id):
             update_instance_status = db_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == vmid.id) \
                 .update({"delete_time": datetime.datetime.now().strftime('%Y%m%d%H%M%S')})
 
+            backup_hist_list = db_session.query(GnBackupHist).filter(GnBackupHist.vm_id==id).all()
+            filename = ''
+            for hist in backup_hist_list:
+                ps.delete_backup(hist.filename, config.BACKUP_PATH)
+
+            db_session.query(GnBackupHist).filter(GnBackupHist.vm_id == id).delete()
+            db_session.query(GnBackup).filter(GnBackup.vm_id == id).delete()
+
             db_session.commit()
-            # update_vm_images = db_session.query(GnVmImages).filter(GnVmImages.filename == vm_info['VMName']
-            #                                                       +".vhdx").update({"status" : "Removed"})
-            # db_session.commit()
             # REST hvm_delete 2. VM을 삭제한다.
             # todo REST hvm_delete 3. 삭제된 VM DB 데이터를 삭제 상태로 업데이트한다.
             return jsonify(message="Remove success", status=True)

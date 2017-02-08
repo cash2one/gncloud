@@ -369,4 +369,7 @@ class PowerShell(object):
         else:
             return "Other"
 
-
+    # delete backup
+    def delete_backup(self, filename, path):
+        script = 'Remove-Item -Path %s/%s ;' % (path, filename)
+        return self.send(script)
