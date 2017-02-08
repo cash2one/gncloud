@@ -50,6 +50,9 @@ li{
     list-style: none;
 }
 
+.disabled {
+    cursor: not-allowed;
+}
 .gn-box{
     border-radius: 3px;
     border: 2px solid rgba(215,215,215,.5);
