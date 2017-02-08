@@ -1,7 +1,8 @@
 angular
     .module('gncloud')
     .controller('guestMeListCtrl', function ($scope, $http, dateModifyService, $rootScope) {
-
+        $scope.email="";
+        $scope.tel="";
         //탭이동
         $('.nav-sidebar li').removeClass('active');
         var url = window.location;
@@ -10,7 +11,9 @@ angular
         }).parent().addClass('active');
 
         $scope.close=function () {
-            $(':input').val('');
+            $("#pass").val('');
+            $("#password").val('');
+            $("#password_ret").val('');
         }
         $scope.profile=function(){
             $http({
@@ -21,6 +24,10 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.te_list = data.list; // 유저 부분 리스트
+                        $("#tel").val($scope.te_list.tel);
+                        $("#email").val($scope.te_list.email);
+                        $scope.email=$scope.te_list.email;
+                        $scope.tel=$scope.te_list.tel;
 
                     } else {
                         if(data.message != null) {
@@ -38,6 +45,12 @@ angular
 
 
         $scope.submit = function() {
+            if($scope.data.tel == null){
+                $scope.data.tel = $scope.tel;
+            }
+            if($scope.data.email == null){
+                $scope.data.email = $scope.email;
+            }
             $http({
                 method  : 'PUT',
                 url: '/api/manager/vm/account/users/list',
@@ -50,7 +63,9 @@ angular
                     if (data.status == 2) {
                         alert("변경되었습니다.");
                         $scope.profile();
-                        $(':input').val('');
+                        $("#pass").val('');
+                        $("#password").val('');
+                        $("#password_ret").val('');
                     }
                     else if(data.status == 1){
                         alert("비밀번호가 틀렸습니다");

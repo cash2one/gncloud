@@ -245,8 +245,6 @@ def repair_list():
     password_ret=""
     tel=""
     email=""
-    if request.json == None:
-        return jsonify(status=False, message='아무것도 입력하지 않았습니다.')
     if 'password' in request.json:
         password = request.json['password']
     if 'password_new' in request.json:

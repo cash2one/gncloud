@@ -40,34 +40,34 @@
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label gn-control-label">현재 비밀번호</label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control gn-form-control" name="password" ng-model="data.password" placeholder="Password">
+                                                <input type="password" class="form-control gn-form-control" id="pass" name="password" ng-model="data.password" placeholder="Password">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label gn-control-label">새 비밀번호</label>
                                             <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_new.$invalid && !meForm.password_new.$pristine }">
-                                                <input type="password" class="form-control gn-form-control" name="password_new" ng-model="data.password_new" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
+                                                <input type="password" class="form-control gn-form-control" name="password_new" ng-model="data.password_new" id="password" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
                                                 <p ng-show="meForm.password_new.$invalid && !meForm.password_new.$pristine" class="help-block">숫자, 영문 특수문자를 6~15자리까지 혼합해서 사용해 주세요.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label gn-control-label">새 비밀번호 확인</label>
                                             <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_ret.$invalid && !meForm.password_ret.$pristine }">
-                                                <input type="password" class="form-control gn-form-control" name="password_ret" ng-model="data.password_ret" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
+                                                <input type="password" class="form-control gn-form-control" name="password_ret" ng-model="data.password_ret" id="password_ret" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
                                                 <p ng-show="meForm.password_ret.$invalid && !meForm.password_ret.$pristine" class="help-block">비밀번호가 일치 하지 않습니다.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label gn-control-label">연락처</label>
                                             <div class="col-sm-8" ng-class="{ 'has-error' : meForm.tel.$invalid && !meForm.tel.$pristine }">
-                                                <input type="text" class="form-control gn-form-control" name="tel" ng-model="data.tel" placeholder="{{te_list.tel}}" ng-pattern="/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/">
+                                                <input type="text" class="form-control gn-form-control" name="tel" ng-model="data.tel" id="tel" value="te_list.tel" ng-pattern="/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/">
                                                 <p ng-show="meForm.tel.$invalid && !meForm.tel.$pristine" class="help-block"> - 을 포함한 10자리 숫자를 입력하세요.</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-4 control-label gn-control-label">이메일</label>
                                             <div class="col-sm-8" ng-class="{ 'has-error' : meForm.email.$invalid && !meForm.email.$pristine }">
-                                                <input type="email" class="form-control gn-form-control" name="email" ng-model="data.email" placeholder="{{te_list.email}}" ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/">
+                                                <input type="email" class="form-control gn-form-control" name="email" ng-model="data.email" id="email" value="te_list.email" ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/">
                                                 <p ng-show="meForm.email.$invalid && !meForm.email.$pristine" class="help-block">이메일 형식으로 넣어주세요.</p>
                                             </div>
                                         </div>
