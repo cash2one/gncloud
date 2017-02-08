@@ -66,6 +66,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">이름</label>
+                                                    <div class="col-sm-10" ng-class="{ 'has-error' : myForm.name.$invalid && !myForm.name.$pristine }">
+                                                        <input type="text" name="name" class="form-control gn-form-control" placeholder="windows" ng-model="instanceImage.name" required>
+                                                        <p ng-show="myForm.name.$invalid && !myForm.name.$pristine" class="help-block">이름을 입력하세요.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">OS</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myForm.os.$invalid && !myForm.os.$pristine }">
                                                         <input type="text" name="os" class="form-control gn-form-control" placeholder="windows" ng-model="instanceImage.os" required>
@@ -75,7 +82,7 @@
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">버전</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myForm.os_ver.$invalid && !myForm.os_ver.$pristine }">
-                                                        <input type="text" name="os_ver" class="form-control gn-form-control"  placeholder="10" ng-model="instanceImage.os_ver" maxlength="2" required>
+                                                        <input type="text" name="os_ver" class="form-control gn-form-control"  placeholder="10" ng-model="instanceImage.os_ver" maxlength="6" required>
                                                         <p ng-show="myForm.os_ver.$invalid && !myForm.os_ver.$pristine" class="help-block">버전을 입력하세요.</p>
                                                     </div>
                                                 </div>
@@ -114,21 +121,20 @@
                                         <thead>
                                         <tr>
                                             <th class="first-td"></th>
+                                            <th class="">이름</th>
                                             <th class="">OS</th>
                                             <th class="">버전</th>
                                             <th class="hidden-xs">BIT</th>
                                             <th class="hidden-xs">타입</th>
-                                            <th class="hidden-xs hidden-sm">
-                                                생성일
-                                                <div class="refresh" ng-click="refresh('image')"></div>
-                                            </th>
+                                            <th class="hidden-xs hidden-sm">생성일</th>
                                             <th><!--더보기--></th>
                                         </tr>
                                         </thead>
                                         <tbody class="gn-tdody">
                                         <tr ng-repeat="path in images_list">
-                                            <td><img src="/gn_images/{{path.icon}}" alt="" ng-show="path.icon != ''"></td>
-                                            <td class="second-td-name">{{path.os}}</td>
+                                            <td><img src="/gn_images/gn_icon_{{path.os}}.png" alt=""></td>
+                                            <td class="second-td-name">{{path.name}}</td>
+                                            <td class="hidden-xs">{{path.os}}</td>
                                             <td class="hidden-xs">{{path.os_ver}}</td>
                                             <td class="hidden-xs">{{path.os_bit}}</td>
                                             <td>{{path.type}}</td>
@@ -164,8 +170,8 @@
                                     <div class="modal-content">
                                         <div class="modal-header gn-modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <!--<h4 class="modal-title">이미지 등록</h4>
-                                              <span class="gn-lead">
+                                            <h4 class="modal-title">이미지 등록</h4>
+                                            <!-- <span class="gn-lead">
                                                   도커 이미지 정보는 <a href="" class="link-color">http://hub.docker.com/explore/</a>에서 확인 가능 합니다.
                                                   특히, EXPOSEPORT 를 확인하여야 도커 컨테이너와 부모 시스템 간에 맵핑을 할 수 있습니다.
                                                   HA Proxy에 세팅을 할 때, 부모 시스템의 빈 포트 중 랜덤하게 연결 할 수 있습니다.
@@ -273,9 +279,7 @@
                                             <th class="">이름</th>
                                             <th class="">버전</th>
                                             <th class="">태그</th>
-                                            <th class="hidden-xs hidden-sm">
-                                                생성일
-                                                <div class="refresh" ng-click="refresh('contain')"></div>
+                                            <th class="hidden-xs hidden-sm">생성일</div>
                                             </th>
                                             <th class=""><!--더보기--></th>
                                         </tr>

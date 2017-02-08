@@ -871,7 +871,7 @@ def insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,name,sql_session):
     sql_session.commit()
 
 
-def insertImageInfo(type,os,os_ver,os_bit,filename,icon,sql_session):
+def insertImageInfo(type,os,os_ver,os_bit,filename,icon,name,sql_session):
     #id 생성
     while True:
         id = random_string(8)
@@ -881,7 +881,7 @@ def insertImageInfo(type,os,os_ver,os_bit,filename,icon,sql_session):
             sql_session.add(id_info)
             sql_session.commit()
             break
-    image_info = GnVmImages(id=id, filename=filename, type=type, os=os, name=os, sub_type="base"
+    image_info = GnVmImages(id=id, filename=filename, type=type, os=os, name=name, sub_type="base"
                             , icon=icon, os_ver=os_ver, os_bit=os_bit, author_id=None, status=config.RUN_STATUS)
     sql_session.add(image_info)
     sql_session.commit()
@@ -896,13 +896,14 @@ def selectImageInfo(id,sql_session):
     return sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
 
 
-def updateImageInfo(id,type,os_name,os_ver,os_bit,filename,icon,sql_session):
+def updateImageInfo(id,type,os_name,os_ver,os_bit,filename,icon,name,sql_session):
     image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one();
     image_info.type = type
     image_info.os = os_name
     image_info.os_ver = os_ver;
     image_info.os_bit = os_bit
     image_info.filename = filename
+    image_info.name = name
     if icon != "":
         image_info.icon = icon
 

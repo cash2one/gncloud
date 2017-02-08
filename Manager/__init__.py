@@ -569,11 +569,12 @@ def saveBaseImageExceptFile():
     os_ver = request.json['os_ver']
     os_bit = request.json['os_bit']
     filename = request.json['filename']
+    name = request.json['name']
 
     if 'id' in request.json:
-        updateImageInfo(request.json['id'],type,os_name,os_ver,os_bit,filename,"",db_session)
+        updateImageInfo(request.json['id'],type,os_name,os_ver,os_bit,filename,"",name,db_session)
     else:
-        insertImageInfo(type,os_name,os_ver,os_bit,filename, "", db_session)
+        insertImageInfo(type,os_name,os_ver,os_bit,filename, "", name, db_session)
 
     return jsonify(status=True, message="success")
 
