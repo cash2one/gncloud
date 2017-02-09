@@ -139,7 +139,7 @@ angular
                         if (data.status == true) {
                             $scope.snapshotsdelete(ty,id);
                         } else {
-                            alert("삭제 되었습니다.");
+                            notification.sendMessage("success","삭제되었습니다.");
                             $scope.snapList();
                         }
                     })
@@ -159,7 +159,7 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert("삭제 되었습니다.");
+                        notification.sendMessage("success","삭제되었습니다.");
                         $scope.snapList();
                     } else {
                         alert(data.message);
