@@ -23,20 +23,20 @@
                         <tr>
                             <th class="first-td"></th>
                             <th class="">이름</th>
-                            <th class="">OS</th>
-                            <th class="">버전</th>
+                            <th class="hidden-xs">OS</th>
+                            <th class="hidden-xs">버전</th>
                             <th class="hidden-xs">Bit</th>
-                            <th class="hidden-xs">타입</th>                            
+                            <th class="">타입</th>                            
                         </tr>
                         </thead>
                         <tbody class="gn-tdody">
                         <tr ng-repeat="base in base_list">
                             <td class="first-td"><img src="/gn_images/gn_icon_{{base.os}}.png" alt=""></td>
-                            <td class="second-td-name">{{base.name}}</td>
-                            <td class="first-td">{{base.os}}</td>
-                            <td>{{base.os_ver}}{{base.os_subver}}</td>
+                            <td class="second-td-name"><span class="gn-table-ellip">{{base.name}}</span></td>
+                            <td class="hidden-xs">{{base.os}}</td>
+                            <td class="hidden-xs">{{base.os_ver}}{{base.os_subver}}</td>
                             <td class="hidden-xs">{{base.os_bit}}</td>
-                            <td class="hidden-xs">{{base.type}}</td>                            
+                            <td class="">{{base.type}}</td>                            
                         </tr>
                         </tbody>
                     </table>
@@ -98,7 +98,7 @@
                                     <img ng-show="list.status != 'Error' && snap.status != 'Starting' && snap.status != 'Deleting'" src="/gn_images/gn_icon_{{snap.os}}.png" alt="">
                                 </td>
                                 <td class="second-td-name" data-toggle="modal" data-target="#teamModal" ng-click="snap_list_info(snap.id)">
-                                    <a class="gn-ms-cursor">{{snap.name}}</a>
+                                    <a class="gn-table-ellip">{{snap.name}}</a>
                                 </td>
                                 <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
                                 
@@ -309,8 +309,8 @@
                 <tbody class="gn-tdody">
                 <tr ng-repeat="con in contain_list">
                     <td class="first-td"><img src="/gn_images/gn_icon_{{con.os}}.png"></td>
-                    <td class="second-td-name">{{con.name}}</td>
-                    <td>{{con.os_ver}}</td>
+                    <td class="second-td-name"><span class="gn-table-ellip">{{con.name}}</span></td>
+                    <td><span class="gn-table-ellip">{{con.os_ver}}</span></td>
                     <td class="hidden-xs">{{con.tagFirst}}&nbsp;<span ng-show="con.tag.split(',').length > 1" data-toggle="tooltip" data-original-title="{{con.tag}}" tooltip><span class="tag">{{con.tagcount}}</span></span></td>
                     <td class="hidden-xs">{{con.create_time_diff}}</td>
                     <td class="dropdown">
