@@ -104,16 +104,16 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data) {
-                        $scope.contain_list = data.list;
                         for (var i = 0; i < data.list.length; i++) {
-                            $scope.contain_list[i].create_time_diff = dateModifyService.modifyDate(data.list[i].create_time);
+                            data.list[i].create_time_diff = dateModifyService.modifyDate(data.list[i].create_time);
                             var tagArr = data.list[i].tag.split(",");
                             if (tagArr.length - 1 > 0) {
-                                $scope.contain_list[i].tagFirst = tagArr[0];
-                                $scope.contain_list[i].tagcount = "+" + (tagArr.length - 1);
+                                data.list[i].tagFirst = tagArr[0];
+                                data.list[i].tagcount = "+" + (tagArr.length - 1);
                             } else {
-                                $scope.contain_list[i].tagFirst = data.list[i].tag;
+                                data.list[i].tagFirst = data.list[i].tag;
                             }
+                            $scope.contain_list = data.list;
                         }
                     }else {
                     }
