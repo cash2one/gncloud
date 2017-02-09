@@ -55,8 +55,7 @@ def create_vm():
     user_id = session['userId']
     user_name = session['userName']
     id = request.json['id']
-    server_create(team_code, user_id,user_name, id, db_session)
-    return jsonify(status=True)
+    return jsonify(status=server_create(team_code, user_id,user_name, id, db_session))
 
 
 @app.route('/vm/machines/<id>', methods=['PUT'])

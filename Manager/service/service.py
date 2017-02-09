@@ -83,11 +83,11 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
 
     if type == "kvm" or type == "hyperv":
         if (current_info.sum_cpu + max_cpu) >  team_info.cpu_quota or (current_info.sum_mem + max_mem) > team_info.mem_quota or (disk_info.sum_disk + max_disk) > team_info.disk_quota:
-            return {"status":False, "value":"팀의 사용량을 초과하였습니다"}
+            return {"status":False, "value":"팀의 사용량을 초과하였습니다."}
     else:
         if (current_info.sum_cpu + max_cpu) >  team_info.cpu_quota \
                 or (current_info.sum_mem + max_mem) >  team_info.mem_quota:
-            return {"status":False, "value":"팀의 사용량을 초과하였습니다"}
+            return {"status":False, "value":"팀의 사용량을 초과하였습니다."}
 
 
     #호스트의 남아있는 자원체크

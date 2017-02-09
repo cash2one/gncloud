@@ -2,6 +2,7 @@ var serviceAddModules = [
     'ngRoute'
     ,'ngFileUpload'
     ,'uiSwitch'
+    ,'angularNotify'
 ];
 
 (function () {
@@ -111,6 +112,17 @@ var serviceAddModules = [
             }
             return dateDiff
         };
+    });
+
+    app.service('notification', function($rootScope){
+        this.sendMessage = function(data_type, data_title, data_contetnt) {
+            var notify = {
+                type: data_type,
+                title: data_title,
+                content: data_contetnt
+            };
+            $rootScope.$emit('notify', notify);
+        }
     });
 
 })();

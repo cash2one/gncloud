@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestListCtrl', function ($scope, $http, $interval, dateModifyService, $rootScope) {
+    .controller('guestListCtrl', function ($scope, $http, $interval, dateModifyService, $rootScope, notification) {
         var stop;
         $scope.selectGuestList = function() {
             $http({
@@ -70,7 +70,7 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert(name + " 인스턴스의 상태가 변경되었습니다");
+                        notification.sendMessage("success",$scope.guest_list[index].name+" 인스턴스가 "+action.name +"되었습니다.");
                         $scope.selectGuestList();
                     } else {
                         if(data.message != null) {
