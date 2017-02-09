@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestTeamWonCtrl', function ($scope, $http, dateModifyService, $rootScope) {
+    .controller('guestTeamWonCtrl', function ($scope, $http, dateModifyService, $rootScope, notification) {
         $scope.team_profile=function(){
             $http({
                 method: 'GET',
@@ -114,7 +114,7 @@ angular
                     })
                         .success(function(data, status, headers, config) {
                             if (data.status == true) {
-                                alert(name + data.message);
+                                notification.sendMessage("success",name + data.message);
                                 $scope.teamtable();
                             } else {
                                 //alert(data.message);
@@ -137,7 +137,7 @@ angular
                     })
                         .success(function(data, status, headers, config) {
                             if (data.status == true) {
-                                alert(name + data.message);
+                                notification.sendMessage("success",name + data.message);
                                 $scope.teamtable();
                             } else {
                                 //alert(data.message);
@@ -162,7 +162,7 @@ angular
                     })
                         .success(function(data, status, headers, config) {
                             if (data.status == true) {
-                                alert(name + data.message);
+                                notification.sendMessage("success",name + data.message);
                                 $scope.teamtable();
                             } else {
                                 //alert(data.message);
@@ -174,7 +174,7 @@ angular
                 }
             }else if(action == "reset"){
                 var retrunvalue = confirm(name+"의 비밀번호를 초기화 시키겠습니까 ?");
-                if(returnvalue == true){
+                if(retrunvalue == true){
                     $http({
                         method: method,
                         url: url,
@@ -182,7 +182,7 @@ angular
                     })
                         .success(function(data, status, headers, config) {
                             if (data.status == true) {
-                                alert(name + data.message);
+                                notification.sendMessage("success",name + data.message);
                                 $scope.teamtable();
                             } else {
                                 //alert(data.message);

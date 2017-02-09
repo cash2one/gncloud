@@ -263,9 +263,9 @@ def repair_list():
         if test == 2:
             return jsonify(status=2, message='success')
         elif test == 1:
-            return jsonify (status=1, message = '비밀번호가 틀렸습니다.')
+            return jsonify(status=1, message='비밀번호가 틀렸습니다.')
         else:
-            return jsonify(status=False, message = 'False')
+            return jsonify(status=False, message='False')
 
 
 @app.route('/useinfo', methods=['GET'])

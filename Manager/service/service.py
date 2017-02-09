@@ -355,7 +355,7 @@ def repair(user_id, password, password_new, password_re, tel, email, sql_session
         if (list != None and password_re == password_new):
               list.password = convertToHashValue(password_re)
         else:
-                return 1
+            return 1
     test.tel = tel
     test.email = email
     sql_session.commit()
