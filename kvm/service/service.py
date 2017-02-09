@@ -72,6 +72,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
         sql_session.commit()
         print(id+":complete modify data!!!")
+        return True
     except Exception as e:
         print(id+":init vm error!!!")
         print("error:"+e.message)
@@ -79,6 +80,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         sql_session.add(error_hist)
         vm_info.status = "Error"
         sql_session.commit()
+        return False
 
 def setSsh(host_ip, path, ip, ssh_id):
     try:
