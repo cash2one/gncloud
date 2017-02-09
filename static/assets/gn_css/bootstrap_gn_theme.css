@@ -2080,8 +2080,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     /*리스트 왼쪽 첫번째 "이름"*/
     .gn-tdody > tr > td.visible-xs-3 > .gn-table-ellip{width: 120px;}
     
-    #image-sett #machine .gn-table-ellip,
-    #image-sett #container .gn-table-ellip{width: 48px;}
+    #machine .gn-table-ellip{width: 80px;}    
     
     /*생성페이지*/
     #snap > form > .btn-group > div{padding: 0px 0px 10px 0px;}    
@@ -2109,6 +2108,10 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     /*설정 > ssh key*/
     #key-sett .gn-table-ellip{width: 95px;}
     #team-group .gn-table-ellip{width: 40px;}
+    
+    /*설정 이미지관리*/
+    #image-sett #machine .gn-table-ellip,
+    #image-sett #container .gn-table-ellip{width: 48px;}
     
 }
 
