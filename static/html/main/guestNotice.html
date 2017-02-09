@@ -68,7 +68,7 @@
                     <form class="form-horizontal">
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <span class="gn-write" ng-show="showData=='2'">{{notice.text}}</span>
+                                <span class="gn-write" id="textread" ng-show="showData=='2'"><pre>{{notice.text}}</pre></span>
                             </div>
                             <div id="change" class="second-td-name gn-lead" ng-show="showData=='1'">
                                 <textarea class="form-control gn-write" rows="6" ng-model="notice.text"></textarea></div>

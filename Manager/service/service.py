@@ -60,6 +60,7 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
     # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
     host_id = None
     size_info = sql_session.query(GnVmSize).filter(GnVmSize.id == size_id).one()
+    image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
     max_cpu = int(size_info.cpu)
     max_mem = int(size_info.mem)
     max_disk = int(size_info.disk)
@@ -133,17 +134,17 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                               , type=type, team_code=team_code, author_id=user_id
                               , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                              , host_id=host_id, hyperv_pass=password, backup_confirm=backup, size_id=size_id)
+                              , host_id=host_id, hyperv_pass=password, backup_confirm=backup, size_id=size_id, os=image_info.os)
     elif(type=="kvm"):
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id=host_id, ssh_key_id=sshkeys, backup_confirm=backup,size_id=size_id)
+                                  , host_id=host_id, ssh_key_id=sshkeys, backup_confirm=backup,size_id=size_id, os=image_info.os)
     else:
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id="", backup_confirm=backup,size_id=size_id)
+                                  , host_id="", backup_confirm=backup,size_id=size_id, os=image_info.os)
                                 
     sql_session.add(vm_machine)
 

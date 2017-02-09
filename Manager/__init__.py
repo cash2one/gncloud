@@ -6,9 +6,9 @@ from datetime import timedelta
 from flask import Flask, jsonify, request, session, escape, make_response
 
 from Manager.db.database import db_session
+from Manager.service.service import *
 from Manager.util.config import config
 from Manager.util.json_encoder import AlchemyEncoder
-from service.service import *
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -35,7 +35,7 @@ def shutdown_session(exception=None):
 @app.errorhandler(500)
 def internal_error(error):
     print(traceback.format_exc())
-    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세요.")
 
 #####common function end#####
 
