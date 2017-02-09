@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestTeamDetailCtrl', function ($scope, $http, $routeParams, dateModifyService) {
+    .controller('guestTeamDetailCtrl', function ($scope, $http, $routeParams, dateModifyService, notification) {
         $scope.data={};
         $scope.profile=function(){
         $http({
@@ -110,7 +110,7 @@ angular
                     })
                         .success(function(data, status, headers, config) {
                             if (data.status == true) {
-                                alert(name + data.message);
+                                notification.sendMessage("success",name + data.message);
                                 $scope.teamtable();
                             } else {
                                 //alert(data.message);
@@ -133,7 +133,7 @@ angular
                     })
                         .success(function(data, status, headers, config) {
                             if (data.status == true) {
-                                alert(name + data.message);
+                                notification.sendMessage("success",name + data.message);
                                 $scope.teamtable();
                             } else {
                                 //alert(data.message);
@@ -157,7 +157,7 @@ angular
                     })
                         .success(function(data, status, headers, config) {
                             if (data.status == true) {
-                                alert(name + data.message);
+                                notification.sendMessage("success",name + data.message);
                                 $scope.teamtable();
                             } else {
                                 //alert(data.message);
@@ -169,7 +169,7 @@ angular
                     }
                 }else if(action == "reset"){
                 var retrunvalue = confirm(name+"의 비밀번호를 초기화 시키겠습니까 ?");
-                if(returnvalue == true){
+                if(retrunvalue == true){
                     $http({
                         method: method,
                         url: url,
@@ -177,7 +177,7 @@ angular
                     })
                         .success(function(data, status, headers, config) {
                             if (data.status == true) {
-                                alert(name + data.message);
+                                notification.sendMessage("success",name + data.message);
                                 $scope.teamtable();
                             } else {
                                 //alert(data.message);
@@ -203,7 +203,7 @@ angular
             })
                 .success(function(data) {
                     if (data.status == true) {
-                        alert("변경되었습니다");
+                        notification.sendMessage("success","변경되었습니다.");
                         $scope.profile();
                         $scope.resose();
                     }
@@ -294,10 +294,10 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert(data.message);
+                        notification.sendMessage("success", data.message);
                         location.href="#/guestTeamList";
                     } else {
-                        alert(data.message);
+                        notification.sendMessage("warning", data.message);
                     }
                 })
                 .error(function(data, status, headers, config) {

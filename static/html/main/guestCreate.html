@@ -19,21 +19,21 @@
                 <label class="btn gn-btn-create btn-block" ng-click="selectType('hyperv')" ng-show="hyper.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input id="type" name="" value="" type="radio">
                     <span class="sprite-snap-img sprite-snap-windows"></span>
-                    <p class="label-name">Hyper-V</p>
+                    <p class="label-name ellipsis">Hyper-V</p>
                 </label>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">
                 <label class="btn gn-btn-create btn-block" ng-click="selectType('kvm')" ng-show="kvm.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input name="" value="" type="radio">
                     <span class="sprite-snap-img sprite-snap-kvm"></span>
-                    <p class="label-name">KVM</p>
+                    <p class="label-name ellipsis">KVM</p>
                 </label>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-3">
                 <label class="btn gn-btn-create btn-block" ng-click="selectType('docker')" ng-show="docker.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
                     <input name="" value="" class="active" type="radio">
                     <span class="sprite-snap-img sprite-snap-docker"></span>
-                    <p class="label-name">docker</p>
+                    <p class="label-name ellipsis">docker</p>
                 </label>
                 </div>
                 <p ng-show="data_value == 'type' " class="error-message">타입을 선택해주세요.</p>
@@ -97,7 +97,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-3" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
                     <label class="btn gn-btn-create btn-block">
                         <input id="cpu" name="" value="" type="radio">
-                        <div class="size-info">{{size.cpu}} CPU / {{size.mem}} / {{size.disk}}</div>
+                        <div class="size-info ellipsis">{{size.cpu}} CPU / {{size.mem}} / {{size.disk}}</div>
                         <div class="price-bg">
                             <div class="price-info">₩&nbsp;{{size.hour_price | number}}<span class="price-units"> / 시간</span></div>
                             <div class="price-info">₩&nbsp;{{size.day_price | number}}<span class="price-units"> / 일</span></div>

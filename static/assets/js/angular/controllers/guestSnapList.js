@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestSnapListCtrl', function ($scope, $http, dateModifyService, $timeout, $interval, $rootScope) {
+    .controller('guestSnapListCtrl', function ($scope, $http, dateModifyService, $timeout, $interval, $rootScope, notification) {
         $scope.user_info = $rootScope.user_info;
         $rootScope.$on('init', function () {
             $scope.user_info = $rootScope.user_info;
@@ -139,7 +139,7 @@ angular
                         if (data.status == true) {
                             $scope.snapshotsdelete(ty,id);
                         } else {
-                            alert("삭제 되었습니다.");
+                            notification.sendMessage("success","삭제되었습니다.");
                             $scope.snapList();
                         }
                     })
@@ -159,7 +159,7 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert("삭제 되었습니다.");
+                        notification.sendMessage("success","삭제되었습니다.");
                         $scope.snapList();
                     } else {
                         alert(data.message);
@@ -207,6 +207,7 @@ angular
             })
                 .success(function (data) {
                     if (data.status == true) {
+                        notification.sendMessage("success","스냅샷이 생성되었습니다.")
                         $scope.snapList();
                     } else {
                         alert(data.message);
