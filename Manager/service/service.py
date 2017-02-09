@@ -10,7 +10,7 @@ import humanfriendly
 import requests
 from flask import render_template
 from pexpect import pxssh
-from sqlalchemy import func
+from sqlalchemy import func,or_
 
 from Manager.db.database import db_session
 from Manager.db.models import *
@@ -60,7 +60,8 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
     # host의 조회 순서를 우선으로 가용할 수 있는 자원이 있으면 해당 vm을 해당 host에서 생성한다
     host_id = None
     size_info = sql_session.query(GnVmSize).filter(GnVmSize.id == size_id).one()
-    image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
+    if type != 'docker':
+        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == image_id).one()
     max_cpu = int(size_info.cpu)
     max_mem = int(size_info.mem)
     max_disk = int(size_info.disk)
@@ -144,7 +145,7 @@ def server_create(name, size_id, image_id, team_code, user_id, sshkeys, tag, typ
         vm_machine = GnVmMachines(id=id, name=name, cpu=size_info.cpu, memory=size_info.mem, disk=size_info.disk
                                   , type=type, team_code=team_code, author_id=user_id
                                   , status=config.STARTING_STATUS, tag=tag, image_id=image_id, create_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-                                  , host_id="", backup_confirm=backup,size_id=size_id, os=image_info.os)
+                                  , host_id="", backup_confirm=backup,size_id=size_id, os='docker')
                                 
     sql_session.add(vm_machine)
 
@@ -573,10 +574,7 @@ def team_list(user_id, sql_sesssion):
     return list
 
 def container(type,team_code ,sql_sesssion):
-    if type == "base":
-        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.status != "Removed").all()
-    else:
-        list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(GnDockerImages.team_code ==team_code).filter(GnDockerImages.status != "Removed").all()
+    list = sql_sesssion.query(GnDockerImages).filter(GnDockerImages.sub_type == type).filter(or_(GnDockerImages.team_code ==team_code, GnDockerImages.team_code == 000)).filter(GnDockerImages.status != "Removed").all()
     for vm in list:
         vm.create_time = vm.create_time.strftime('%Y-%m-%d %H:%M:%S')
     return list
@@ -915,7 +913,7 @@ def selectImageInfoDocker(id,sql_session):
     return sql_session.query(GnDockerImages).filter(GnDockerImages.id == id).one()
 
 
-def insertImageInfoDocker(name,view_name,os_ver,tag,icon,port,env,vol,sql_session):
+def insertImageInfoDocker(name,view_name,os,os_ver,tag,icon,port,env,vol,team_code,sql_session):
     try:
         #id 생성
         while True:
@@ -923,7 +921,7 @@ def insertImageInfoDocker(name,view_name,os_ver,tag,icon,port,env,vol,sql_sessio
             check_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == image_id).first();
             if not check_info:
                 break
-        image_info = GnDockerImages(id=image_id, name=name, view_name=view_name, sub_type="base",tag=tag, icon=icon, os_ver=os_ver, status=config.RUN_STATUS)
+        image_info = GnDockerImages(id=image_id, name=name, view_name=view_name,team_code=team_code,os=os,sub_type="base",tag=tag, icon=icon, os_ver=os_ver, status=config.RUN_STATUS)
         sql_session.add(image_info)
 
         #port 부분

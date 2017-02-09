@@ -312,11 +312,11 @@ class GnDockerImages(Base):
         self.sub_type = sub_type
 
     def __repr__(self):
-        return '<ID %r / Name %r / Tag %r / Os %r / Os_ver %r /Team_code %r / create_time %r / Status %r/ View_name %r />'\
-            % (self.id, self.name, self.tag, self.os, self.os_ver, self.team_code, self.create_time, self.Status, self.view_name)
+        return '<ID %r / Name %r / Tag %r / Os %r / Os_ver %r /Team_code %r / create_time %r / Status %r/ View_name %r /Author_id %r />'\
+            % (self.id, self.name, self.tag, self.os, self.os_ver, self.team_code, self.create_time, self.Status, self.view_name, self.author_id)
 
     def __json__(self):
-        return ['id', 'name','tag' ,'os','os_ver','team_code', 'create_time','status', 'view_name', 'icon', 'gnDockerImageDetail']
+        return ['id', 'name','tag' ,'os','os_ver','team_code', 'create_time','status', 'view_name', 'icon', 'author_id','gnDockerImageDetail']
 
 class GnMonitor(Base):
     __tablename__ = "GN_MONITOR"
