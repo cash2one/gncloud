@@ -3,9 +3,7 @@ __author__ = 'gncloud'
 
 import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Numeric
-from sqlalchemy.orm import relationship
-
+from sqlalchemy import Column, Integer, String, DateTime, Numeric
 from Docker.db.database import Base
 
 
@@ -40,44 +38,6 @@ class GnHostMachines(Base):
                     host_agent_port=self.host_agent_port)
 
 
-'''
-class GnHostDocker(Base):
-    __tablename__ = 'GN_HOST_DOCKER'
-    id = Column(String(8), primary_key=True, nullable=False, default='')
-    name = Column(String(100), nullable=True, default='')
-    ip = Column(String(50), nullable=True, default='')
-    type = Column(String(10), nullable=True, default='')
-    cpu = Column(Integer, nullable=True, default='')
-    mem = Column(Integer, nullable=True, default='')
-    disk = Column(Integer, nullable=True, default='')
-    max_cpu = Column(Integer, nullable=True, default='')
-    max_mem = Column(Integer, nullable=True, default='')
-    max_disk = Column(Integer, nullable=True, default='')
-    host_agent_port = Column(Integer, nullable=True, default='')
-
-    def __init__(self, id, name, ip, type, cpu, mem, disk, max_cpu, max_mem, max_disk, host_agent_port):
-        self.id = id
-        self.name = name
-        self.ip = ip
-        self.type = type
-        self.cpu = cpu
-        self.mem = mem
-        self.disk = disk
-        self.max_cpu = max_cpu
-        self.max_mem = max_mem
-        self.max_disk = max_disk
-        self.host_agent_port = host_agent_port
-
-    def __repr__(self):
-        return "<GnHostDocker %r>" % self.id
-
-    def to_json(self):
-        return dict(id=self.id, name=self.name, ip=self.ip, type=self.type, cpu=self.cpu, mem=self.mem,
-                    disk=self.disk, max_cpu=self.max_cpu, max_mem=self.max_mem, max_disk=self.max_disk,
-                    host_agent_port=self.host_agent_port)
-'''
-
-
 class GnVmMachines(Base):
     __tablename__ = 'GN_VM_MACHINES'
     id = Column(String(8), primary_key=True, nullable=False, default='')
@@ -86,7 +46,7 @@ class GnVmMachines(Base):
     type = Column(String(10), nullable=False, default='')
     internal_id = Column(String(100), nullable=True, default='')
     internal_name = Column(String(100), nullable=True, default='')
-    host_id = Column(Integer, ForeignKey('GN_HOST_MACHINES.id'))
+    host_id = Column(Integer, nullable=False, default='')
     ip = Column(String(20), nullable=True, default='')
     cpu = Column(Integer, nullable=False, default='')
     memory = Column( nullable=False, default='')
@@ -104,11 +64,6 @@ class GnVmMachines(Base):
     hyperv_pass = Column(String(50), nullable=True, default='')
     image_id = Column(String(8), nullable=True, default='')
     ssh_key_id = Column(Integer, nullable=True, default='')
-    gnHostMachines = relationship('GnHostMachines')
-    gnDockerServices = relationship('GnDockerServices')
-    gnDockerContainers = relationship('GnDockerContainers')
-    gnDockerVolumes = relationship('GnDockerVolumes')
-    gnDockerPorts = relationship('GnDockerPorts')
     size_id = Column(String(8), nullable=False, default=None)
 
     def __init__(self,
@@ -155,9 +110,8 @@ class GnVmMachines(Base):
 
 class GnDockerServices(Base):
     __tablename__ = 'GN_DOCKER_SERVICES'
-    service_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'), primary_key=True, nullable=False)
-    image = Column(String(100), ForeignKey('GN_DOCKER_IMAGES.name'), nullable=True, default='')
-    gnDockerImages = relationship('GnDockerImages')
+    service_id = Column(String(8), primary_key=True, nullable=False)
+    image = Column(String(100), nullable=True, default='')
 
     def __init__(self, service_id, image):
         self.service_id = service_id
@@ -170,65 +124,14 @@ class GnDockerServices(Base):
         return dict(service_id=self.service_id, image=self.image)
 
 
-# class GnDockerServices(Base):
-#     __tablename__ = 'GN_DOCKER_SERVICES'
-#     id = Column(String(8), primary_key=True, nullable=False, default='')
-#     name = Column(String(50), nullable=True, default='')
-#     internal_id = Column(String(100), nullable=True, default='')
-#     internal_name = Column(String(100), nullable=True, default='')
-#     image = Column(String(50), nullable=True, default='')
-#     cpu = Column(Integer, nullable=True, default='')
-#     memory = Column(Integer, nullable=True, default='')
-#     volume = Column(String(8), nullable=True, default='')
-#     team_code = Column(String(10), nullable=True, default='')
-#     author_id = Column(String(50), nullable=False, default='')
-#     create_time = Column(DateTime, nullable=False, default=datetime.datetime.now())
-#     start_time = Column(DateTime, nullable=True, default=datetime.datetime.now())
-#     stop_time = Column(DateTime, nullable=True, default=datetime.datetime.now())
-#     tag = Column(String(100), nullable=True, default='')
-#     status = Column(String(10), nullable=True, default='')
-#
-#     def __init__(
-#         self,
-#         id, name, tag, internal_id, internal_name,
-#         image, cpu, memory, volume, team_code,
-#         author_id, create_time, start_time=create_time, stop_time=create_time, status=''
-#     ):
-#         self.id = id
-#         self.name = name
-#         self.tag = tag
-#         self.internal_id = internal_id
-#         self.internal_name = internal_name
-#         self.image = image,
-#         self.cpu = cpu
-#         self.memory = memory
-#         self.volume = volume
-#         self.team_code = team_code
-#         self.author_id = author_id
-#         self.create_time = create_time
-#         self.start_time = start_time
-#         self.stop_time = stop_time
-#         self.status = status
-#
-#     def __repr__(self):
-#         return "<GnDockerServices %r>" % self.id
-#
-#     def to_json(self):
-#         return dict(id=self.id, name=self.name, tag=self.tag, internal_id=self.internal_id,
-#                     internal_name=self.internal_name, image=self.image, cpu=self.cpu, memory=self.memory,
-#                     volume=self.volume, team_code=self.team_code, author_id=self.author_id,
-#                     create_time=self.create_time, start_time=self.start_time,
-#                     stop_time=self.stop_time, status=self.status)
-
 
 class GnDockerContainers(Base):
     __tablename__ = 'GN_DOCKER_CONTAINERS'
-    service_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'), primary_key=True, nullable=False)
+    service_id = Column(String(8), primary_key=True, nullable=False)
     internal_id = Column(String(100), primary_key=True, nullable=True, default='')
     internal_name = Column(String(100), primary_key=True, nullable=True, default='')
-    host_id = Column(String(8), ForeignKey('GN_HOST_MACHINES.id'), nullable=False, default='')
+    host_id = Column(String(8), nullable=False, default='')
     status = Column(String(10), nullable=True, default='')
-    gnHostMachines = relationship('GnHostMachines')
 
     def __init__(self, service_id, internal_id, internal_name, host_id, status=""):
         self.service_id = service_id
@@ -247,9 +150,9 @@ class GnDockerContainers(Base):
 
 class GnDockerVolumes(Base):
     __tablename__ = 'GN_DOCKER_VOLUMES'
-    service_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'), primary_key=True)
-    name = Column(String(200), nullable=False, default='')
-    source_path = Column(String(200), nullable=False, default='')
+    service_id = Column(String(8), primary_key=True, nullable=False, default='')
+    name = Column(String(200), primary_key=True, nullable=False, default='')
+    source_path = Column(String(200), primary_key=True, nullable=False, default='')
     destination_path = Column(String(200), nullable=False, default='')
     status = Column(String(10), nullable=True, default='')
 
@@ -270,7 +173,7 @@ class GnDockerVolumes(Base):
 
 class GnDockerPorts(Base):
     __tablename__ = 'GN_DOCKER_PORTS'
-    service_id = Column(String(8), ForeignKey('GN_VM_MACHINES.id'), primary_key=True, nullable=False, default='')
+    service_id = Column(String(8), primary_key=True, nullable=False, default='')
     protocol = Column(String(10), primary_key=True, nullable=False, default='')
     target_port = Column(String(5), primary_key=True, nullable=False, default='0')
     published_port = Column(String(5), primary_key=True, nullable=False, default='0')
@@ -382,7 +285,7 @@ class GnVmImages(Base):
 class GnDockerImageDetail(Base):
     __tablename__ = 'GN_DOCKER_IMAGES_DETAIL'
     id = Column(String(8), primary_key=True, nullable=False, default='')
-    image_id = Column(String(8), ForeignKey('GN_DOCKER_IMAGES.id'))
+    image_id = Column(String(8), primary_key=True, nullable=False, default='')
     arg_type = Column(String(10), nullable=False, default='')
     argument = Column(String(200), nullable=False, default='')
     description = Column(String(300), nullable=True, default='')
