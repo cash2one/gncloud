@@ -154,10 +154,12 @@ def server_change_status(id, status, sql_session):
             status = "Running"
         vm_info.status = status
         sql_session.commit()
+        return True
     except:
         error_hist = GnErrorHist(type=vm_info.type,action=status,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
         sql_session.add(error_hist)
         sql_session.commit()
+        return False
 
 
 

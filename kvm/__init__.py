@@ -61,8 +61,7 @@ def create_vm():
 @app.route('/vm/machines/<id>', methods=['PUT'])
 def change_status(id):
     status = request.json['type']
-    server_change_status(id, status, db_session)
-    return jsonify(status=True, message="success")
+    return jsonify(status=server_change_status(id, status, db_session))
 
 
 @app.route('/vm/machines/<id>', methods=['DELETE'])
