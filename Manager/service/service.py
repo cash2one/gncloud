@@ -205,6 +205,28 @@ def server_change_status(id, status,team_code, user_id, sql_session):
 
 def vm_list(sql_session, team_code):
     list_query = sql_session.query(GnVmMachines) \
+                            .filter(GnVmMachines.type != "docker") \
+                            .filter(GnVmMachines.status != config.REMOVE_STATUS)
+
+    if team_code != "000":
+        list_query = list_query.filter(GnVmMachines.team_code == team_code)
+    list = list_query.order_by(GnVmMachines.create_time.desc()).all()
+
+    for vmMachine in list:
+        vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
+        vmMachine.disk = convertHumanFriend(vmMachine.disk)
+        vmMachine.memory = convertHumanFriend(vmMachine.memory)
+        vmMachine.author_id =vmMachine.gnUser.user_name
+
+    retryCheck = False
+    if not all((e.status != "Starting" and e.status != "Deleting") for e in list):
+        retryCheck = True
+
+    return {"guest_list":list,"retryCheck":retryCheck}
+
+def sv_list(sql_session, team_code):
+    list_query = sql_session.query(GnVmMachines) \
+                            .filter(GnVmMachines.type == "docker") \
                             .filter(GnVmMachines.status != config.REMOVE_STATUS)
 
     if team_code != "000":

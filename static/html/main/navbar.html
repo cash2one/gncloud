@@ -22,7 +22,7 @@
                 <li class="nav-link" ng-class="{'active':3 == selected}" ng-click="select(3)"><a href="#guestSnapList/">이미지</a></li>
             </ul><!--class="nav navbar-nav"-->
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#/guestNotice" class="gn-noti"></a></li>
+                <li><a href="#/guestNotice" class="gn-noti" ng-click="select(0)"></a></li>
                 <!-- ========== 모바일에서 보여지는 dropdown ========== -->
                 <li class="dropdown mobile-head-dropdown">
                     <div href="#" class="dropdown-toggle mobile-user" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -31,7 +31,7 @@
                     </div>
 
                     <ul class="dropdown-menu gn-head-drop" role="menu">
-                        <li><a href="#/account/users/list">개인설정</a>
+                        <li><a href="#/account/users/list" ng-click="select(0)">개인설정</a>
                         <li ng-show="user_info.authority == 'sysowner' "><a href="#/guestSystemList" id="system">시스템 설정</a></li>
                         <li><a href="#/guestQna">묻고답하기</a></li>
                         <li><a href=javascript:logout(); class="gn-danger">로그아웃</a></li>
@@ -45,9 +45,9 @@
                         <span class="gn-caret"></span>
                     </div>
                     <ul class="dropdown-menu gn-head-drop" role="menu">
-                        <li><a href="#/account/users/list">개인설정</a></li>
-                        <li ng-show="user_info.authority == 'sysowner' "><a href="#/guestSystemList" id="system">시스템 설정</a></li>
-                        <li><a href="#/guestQna">묻고답하기</a></li>
+                        <li><a href="#/account/users/list" ng-click="select(0)">개인설정</a></li>
+                        <li ng-show="user_info.authority == 'sysowner' "><a href="#/guestSystemList" id="system" ng-click="select(0)">시스템 설정</a></li>
+                        <li><a href="#/guestQna" ng-click="select(0)">묻고답하기</a></li>
                         <li><a href=javascript:logout(); class="gn-danger">로그아웃</a></li>
                     </ul>
                 </li>

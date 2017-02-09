@@ -75,6 +75,7 @@ def vm_error_list():
 def vm_error_info(id):
     return jsonify(status=True, message="success", info=error_history_info(id,db_session))
 
+
 @app.route('/vm/machine', methods=['POST'])
 def create_vm():
     password=""
@@ -158,6 +159,11 @@ def change_status():
 def guest_list():
     team_code = session['teamCode']
     return jsonify(status=True, message="success", list=vm_list(db_session, team_code))
+
+@app.route('/vm/services', methods=['GET'])
+def service_list():
+    team_code = session['teamCode']
+    return jsonify(status=True, message="success", list=sv_list(db_session, team_code))
 
 @app.route('/vm/snaplist', methods=['GET'])
 def guest_list_snap():

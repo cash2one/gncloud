@@ -1,0 +1,112 @@
+<!-- Main component for a primary marketing message or call to action -->
+<h1>서비스</h1>
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>서비스 이름</h2>
+        <div class="row">
+            <div class="col-sm-5">
+                <input type="text" class="form-control gn-form-control gn-margin-bott10" name="vm_name" ng-model="data.vm_name" placeholder="이름을 입력하여주세요." id="vm_name" ng-class="{'gn-input-error':data_value=='name'}" required><p ng-show="data_value == 'name'" class="error-message">이름을 입력해주세요</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>타입 선택</h2>
+        <form>
+            <div class="btn-group" data-toggle="buttons">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                <label class="btn gn-btn-create btn-block" ng-click="selectType('docker')" ng-show="docker.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
+                    <input name="" value="" class="active" type="radio">
+                    <span class="sprite-snap-img sprite-snap-docker"></span>
+                    <p class="label-name ellipsis">docker</p>
+                </label>
+                </div>
+                <p ng-show="data_value == 'type' " class="error-message">타입을 선택해주세요.</p>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="container-fluid gn-container" id="vm_image">
+    <div class="row">
+        <h2>이미지 선택</h2>
+        <!--탭메뉴-->
+        <ul class="nav nav-tabs gn-nav-tabs">
+            <li class="active"><a data-toggle="tab" class="tab-title" ng-click="imageshow('image')">이미지</a></li>
+        </ul> <!-- class="nav nav-tabs"-->
+        <br>
+        <div id="tap" class="tab-pane tab-second">
+            <!--탭메뉴1 : 이미지 -->
+            <div id="image">
+                <form>
+                <div class="btn-group" data-toggle="buttons">
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="list in image_list">
+                    <label class="btn gn-btn-create btn-block" ng-click="update_image(list)" ng-class="{'gn-input-error':data_value == 'image_id'}">
+                        <input id="image_id" name="" value="1" type="radio">
+                        <span class="sprite-snap-img sprite-snap-{{list.os}}"></span>
+                        <p class="ellipsis">{{list.name}}</p>
+
+                    </label>
+                    </div>
+                </div>
+                </form>
+            </div>
+            <p ng-show="data_value =='image_id' " class="error-message">이미지를 선택해주세요.</p>
+        </div>
+    </div>  <!--class="tab-content"-->
+</div>
+
+
+<div id="vm_size" class="container-fluid gn-container">
+    <div class="row">
+        <h2>사이즈 선택</h2>
+
+        <form>
+            <div class="btn-group" data-toggle="buttons">
+                <div class="col-xs-12 col-sm-6 col-md-3" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
+                    <label class="btn gn-btn-create btn-block">
+                        <input id="cpu" name="" value="" type="radio">
+                        <div class="size-info ellipsis">{{size.cpu}} CPU / {{size.mem}}</div>
+                        <div class="price-bg">
+                            <div class="price-info">₩&nbsp;{{size.hour_price | number}}<span class="price-units"> / 시간</span></div>
+                            <div class="price-info">₩&nbsp;{{size.day_price | number}}<span class="price-units"> / 일</span></div>
+                        </div>
+                    </label>
+                </div>
+                <p ng-show="data_value =='cpu' " class="error-message">cpu / memory / disk 의 크기를 선택해주세요.</p>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>태그입력</h2>
+        <div class="form-group">
+            <label for="comment" class="gn-lead">태그와 태그는 쉼표로 구분됩니다.</label>
+            <textarea class="form-control gn-form-control" id="tag" rows="5" id="comment" placeholder="ex)패스트캣, 개발, 512MB" ng-keyup=""></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid gn-container">
+    <div class="row">
+        <h2>백업</h2>
+        <div class="form-group">
+            <label for="comment" class="gn-lead">백업주기는 시스템 관리자가 설정합니다.</label>
+            <div class="checkbox-switch">
+                <form>
+                    <switch id="data.backup" name="data.backup" ng-model="data.backup" on="ON" off="OFF" class="wide"></switch>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="container-fluid gn-container">
+
+</div>-->
+<button type="submit" value="submit" class="btn btn-gn-primary btn-block btn-lg" ng-click="submit();" ng-disabled="isAlive" >인스턴스 생성</button>
+

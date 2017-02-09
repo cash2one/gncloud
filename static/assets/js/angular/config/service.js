@@ -31,6 +31,9 @@ var serviceConfig = function ($routeProvider, $httpProvider) {
         .when('/guestTeamReso', {templateUrl: '/main/guestTeamReso.html', controller: 'guestTeamResoCtrl'})
         .when('/guestTeamWon', {templateUrl: '/main/guestTeamWon.html', controller: 'guestTeamWonCtrl'})
         .when('/guestTeamBackup', {templateUrl: '/main/guestTeamBackup.html', controller: 'guestTeamBackupCtrl'})
+        .when('/guestServiceList', {templateUrl: '/main/guestServiceList.html', controller: 'guestServiceListCtrl'})
+        .when('/guestServiceCreate', {templateUrl: '/main/guestServiceCreate.html', controller: 'guestServiceCreateCtrl'})
+        .when('/guestServiceDetail', {templateUrl: '/main/guestServiceDetail.html', controller: 'guestServiceDetailCtrl'})
     $httpProvider.interceptors.push('serviceLogger');
 }
 
