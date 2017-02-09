@@ -76,12 +76,12 @@
                 <form class="form-horizontal">
                     <!--본문 내용-->
                     <div class="form-group" ng-class="{'gn-content':showData == 1}">
-                        <div class="container-fluid">
-                            <pre class="gn-write" ng-show="showData == '1'">{{notice.text}}</pre>
-                            <div id="change" class="second-td-name gn-lead" ng-show="showData=='2'">
-                                <textarea class="form-control gn-write"  rows="6" ng-model="notice.text"></textarea></div>
+                        <pre class="gn-write com-sm-12" ng-show="showData == '1'">{{notice.text}}</pre>
+                        <div id="change" class="second-td-name gn-lead com-sm-12" ng-show="showData=='2'">
+                            <textarea class="form-control gn-write"  rows="6" ng-model="notice.text"></textarea>
                         </div>
                     </div>
+                    
                     <!--댓글 : 사용자이름-->
                     <div class="form-group">
                         <div ng-repeat="reply in reply">
