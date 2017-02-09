@@ -187,6 +187,7 @@ angular
             })
                 .success(function(data){
                 if(data.status ==true){
+                    notification.sendMessage("success","스냅샷이 생성되었습니다.")
                     $scope.createSnap(data.ord_id, data.snap_id);
                 }else{
                     if(data.value != null) {
