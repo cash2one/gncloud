@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestQnaCtrl', function ($scope, $http, $rootScope) {
+    .controller('guestQnaCtrl', function ($scope, $http, $rootScope, notification) {
         $scope.user_info = $rootScope.user_info;
         $scope.showData=1;
         $rootScope.$on('init', function () {
@@ -63,6 +63,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.qna_list($scope.data.page);
+                        notification.sendMessage("success","등록되었습니다.");
                         $scope.data.title="";$scope.data.text="";
                     }else {
                         if (data.message != null) {
@@ -143,7 +144,7 @@ angular
                     .success(function (data, status, headers, config) {
                         if (data.status == true) {
                             $scope.qna_list($scope.data.page);
-                            alert("삭제 되었습니다.");
+                            notification.sendMessage("success", "삭제되었습니다.");
 
 
                         }else {

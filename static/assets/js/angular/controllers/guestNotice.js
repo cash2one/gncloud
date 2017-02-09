@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestNoticeCtrl', function ($scope, $http, $rootScope) {
+    .controller('guestNoticeCtrl', function ($scope, $http, $rootScope, notification) {
         $scope.user_info = $rootScope.user_info;
         $scope.showData=2;
         $rootScope.$on('init', function () {
@@ -62,6 +62,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.noticeList($scope.data.page);
+                        notification.sendMessage("success","등록되었습니다.");
                         $scope.data.title="";$scope.data.text="";
                     }else {
                         if (data.message != null) {
@@ -83,7 +84,6 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.noticeList($scope.data.page);
-                        alert("수정 되었습니다.");
                     }else {
                         if (data.message != null) {
                             alert(data.message);
@@ -102,7 +102,7 @@ angular
                     .success(function (data, status, headers, config) {
                         if (data.status == true) {
                             $scope.noticeList($scope.data.page);
-                            alert("삭제 되었습니다.");
+                            notification.sendMessage("success","삭제되었습니다.");
 
 
                         }else {

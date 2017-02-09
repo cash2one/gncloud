@@ -117,7 +117,7 @@
 
             <div class="modal-footer gn-modal-footer">
                 <p><!--구분선--></p>
-                <button type="submit" class="btn btn-default btn-delete pull-left" ng-show="user_info.authority == 'sysowner' || user_info.user_id == notice.author_id" ng-click="deleteqna(notice.id)">삭제</button>
+                <button type="submit" class="btn btn-default btn-delete pull-left" data-dismiss="modal" ng-show="user_info.authority == 'sysowner' || user_info.user_id == notice.author_id" ng-click="deleteqna(notice.id)">삭제</button>
                 <button type="submit" class="btn btn-default pull-right" data-dismiss="modal" ng-click="showData='1';close()">닫기</button>
                 <button type="submit" class="btn btn-gn-primary pull-right" ng-show=" user_info.user_id == notice.author_id && showData =='1' " ng-click="showData= '2'">수정</button>
                 <button type="submit" class="btn btn-gn-primary pull-right" ng-show=" user_info.user_id == notice.author_id && showData=='2' " ng-click="showData='1';changeqna(notice.id, notice.text)">저장</button>
