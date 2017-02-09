@@ -72,6 +72,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
         sql_session.commit()
         print(id+":complete modify data!!!")
+        return True
     except Exception as e:
         print(id+":init vm error!!!")
         print("error:"+e.message)
@@ -79,6 +80,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         sql_session.add(error_hist)
         vm_info.status = "Error"
         sql_session.commit()
+        return False
 
 def setSsh(host_ip, path, ip, ssh_id):
     try:
@@ -152,10 +154,12 @@ def server_change_status(id, status, sql_session):
             status = "Running"
         vm_info.status = status
         sql_session.commit()
+        return True
     except:
         error_hist = GnErrorHist(type=vm_info.type,action=status,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
         sql_session.add(error_hist)
         sql_session.commit()
+        return False
 
 
 

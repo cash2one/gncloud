@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestDetailCtrl', function ($scope, $http, $routeParams, $sce, $timeout) {
+    .controller('guestDetailCtrl', function ($scope, $http, $routeParams, $sce, $timeout,notification) {
 
         $scope.cpu_url = $sce.trustAsResourceUrl("cpu.html?id="+$routeParams.id);
         $scope.mem_url = $sce.trustAsResourceUrl("memory.html?id="+$routeParams.id);
@@ -145,7 +145,7 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-
+                        notification.sendMessage("success",$scope.vm_data.name+" 인스턴스가 삭제되었습니다.");
                     }
                     else {
 

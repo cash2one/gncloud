@@ -1,8 +1,7 @@
 angular
     .module('gncloud')
-    .controller('guestMeListCtrl', function ($scope, $http, dateModifyService, $rootScope) {
-        $scope.email="";
-        $scope.tel="";
+    .controller('guestMeListCtrl', function ($scope, $http, dateModifyService, $rootScope,notification) {
+        $scope.data={};
         //탭이동
         $('.nav-sidebar li').removeClass('active');
         var url = window.location;
@@ -45,12 +44,6 @@ angular
 
 
         $scope.submit = function() {
-            if($scope.data.tel == null){
-                $scope.data.tel = $scope.tel;
-            }
-            if($scope.data.email == null){
-                $scope.data.email = $scope.email;
-            }
             $http({
                 method  : 'PUT',
                 url: '/api/manager/vm/account/users/list',
@@ -60,25 +53,17 @@ angular
                 }
             })
                 .success(function(data) {
-                    if (data.status == 2) {
-                        alert("변경되었습니다.");
+                    if(data.status == '2') {
+                        notification.sendMessage("success","변경되었습니다.");
                         $scope.profile();
                         $("#pass").val('');
                         $("#password").val('');
                         $("#password_ret").val('');
-                    }
-                    else if(data.status == 1){
-                        alert("비밀번호가 틀렸습니다");
-                    }
-                    else {
-                        if(data.message != null) {
-                            alert(data.message)
-                        }
+                    }else if(data.status == '1'){
+                        notification.sendMessage("warning","비밀번호가 틀렸습니다.");
                     }
                 });
         };
-
-
 
             $scope.user_info = $rootScope.user_info;
 

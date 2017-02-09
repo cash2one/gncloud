@@ -263,9 +263,9 @@ def repair_list():
         if test == 2:
             return jsonify(status=2, message='success')
         elif test == 1:
-            return jsonify (status=1, message = '비밀번호가 틀렸습니다.')
+            return jsonify(status=1, message='비밀번호가 틀렸습니다.')
         else:
-            return jsonify(status=False, message = 'False')
+            return jsonify(status=False, message='False')
 
 
 @app.route('/useinfo', methods=['GET'])
@@ -596,11 +596,12 @@ def saveBaseImageImportFileDocker():
     port = request.form['port']
     env = request.form['env']
     vol = request.form['vol']
+    os = request.form['os']
 
     if 'id' in request.form:
         updateImageInfoDocker(request.form['id'],name,view_name,os_ver,tag,icon,port,env,vol,db_session)
     else:
-        insertImageInfoDocker(name,view_name,os_ver,tag,icon,port,env,vol,db_session)
+        insertImageInfoDocker(name,view_name,os,os_ver,tag,icon,port,env,vol,session['teamCode'],db_session)
 
     return jsonify(status=True, message="success")
 
@@ -613,11 +614,12 @@ def saveBaseImageExceptFileDocker():
     port = request.json['port']
     env = request.json['env']
     vol = request.json['vol']
+    os = request.json['os']
 
     if 'id' in request.json:
         updateImageInfoDocker(request.json['id'],name,view_name,os_ver,tag,"",port,env,vol,db_session)
     else:
-        insertImageInfoDocker(name,view_name,os_ver,tag,"",port,env,vol,db_session)
+        insertImageInfoDocker(name,view_name,os,os_ver,tag,"",port,env,vol,session['teamCode'],db_session)
 
     return jsonify(status=True, message="success")
 

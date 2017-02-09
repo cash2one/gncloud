@@ -63,6 +63,9 @@ li{
     margin-bottom: 50px;
 }
 
+/*textarea 수직 상하 길이만 조절 가능하게*/ 
+textarea{resize: vertical;}
+
 .container:after,
 .container-fluid:after,
 .container-login:after,
@@ -182,29 +185,6 @@ textarea.gn-form-control{
 
 
 /* ============================= gncloud BUTTON STYLE ============================= */
-/*인스턴스 생성버튼*/
-/*.btn-success {
-    color: #fff;
-    background-color: #15cd72;
-    border-color: #15cd72;
-    border-radius: 3px;
-}
-.btn-success:hover,
-.btn-success:focus,
-.btn-success.focus,
-.btn-success:active,
-.btn-success.active,
-.open > .dropdown-toggle.btn-success {
-    color: #ffffff;
-    background-color: #00a252;
-    border-color: #00a252;
-}
-.btn-success:active,
-.btn-success.active,
-.open > .dropdown-toggle.btn-success {
-    background-image: none;
-}*/
-
 /*인스턴스 생성버튼*/
 .btn-gn-primary {
     color: #fff;
@@ -683,7 +663,7 @@ pre.gn-write{
 #modal-board .gn-modal-footer{padding-top: 0;}
 
 .gn-page-btn .pull-left{margin-right: 5px;}
-.gn-content{padding-bottom: 50px;}
+.gn-content{padding-bottom: 30px;}
 
 /* ========== gncloud 묻고답하기 HTML ========== */
 
@@ -1110,8 +1090,8 @@ td.first-td img{width: 35px;}
 }
 
 .gn-tdody > tr > td.visible-xs-3 > a{
-    /*width: 220px;*/
-    width: 170px;
+    width: 220px;
+    /*width: 170px;*/
     line-height: 37px;
 }
 
@@ -1157,21 +1137,16 @@ td.first-td img{width: 35px;}
 }
 
 /* ========== gncloud 인스턴스 > 상세 HTML ========== */
-.col-sm-1.gn-detail-icon{
-    padding-right: 0;    
-}
+.gn-detail-icon{float: left;}
 
 .gn-detail-icon img{
     width: 50px;
+    margin: 0px 15px;
 }
 
-.col-sm-11.gn-detail-title{
-    padding-left: 0;    
-}
+.col-sm-11.gn-detail-title{padding-left: 0;}
 
-.gn-detail-title h2{
-    margin-bottom: 5px; 
-}
+.gn-detail-title h2{margin-bottom: 5px;}
 
 .gn-spec-group{padding: 0;}
 
@@ -1251,11 +1226,10 @@ ul.gn-tag-group > li{
     margin-bottom: 20px;
 }
 
-.gn-detail-main{
-    margin-bottom: 30px;
-}
-
+.gn-detail-main{margin-bottom: 30px;}
 .gn-detail-main .gn-margin-box > div{padding-left: 0; padding-right: 0;}
+.gn-detail-main > .gn-margin-box > .gn-description-list dd{margin-left: 120px;}
+.gn-detail-main > .gn-margin-box > .gn-description-list dd > p{margin: 0;}
 
 /*=======================SWITCH==========================*/
 .switch {
@@ -1592,6 +1566,16 @@ li.active > .tab-sm-box{
 [ng-click]{
     cursor : pointer;
 }
+
+/* ========== gncloud 서비스 관련 HTML ========== */
+.service-table{font-size: 14px; height: 50px;}
+.service-table > thead > tr >  th{text-align: center; border: none;}
+.service-table > tbody > tr > td{text-align: center; border: none; }
+
+
+
+
+
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
 .gn-ms-cursor{cursor: pointer;}
 .gn-ms-cursor:hover{color: #58c4c6;}
@@ -1696,7 +1680,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 
 /*클러스터*/
 #cluster .form-group label.endpoint{padding-top: 0;}
-/*#cluster .node-list{padding-top: 7px; display: block;}*/
+#cluster .form-group label{padding-top: 0;}
 
 #cluster-more .form-group > span{line-height: 37px;}
 
@@ -2054,7 +2038,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     
     /* ======== gncloud 인스터스 상세 ======== */
     .gn-detail-icon{display: none;}
-    .gn-tag-group{margin-left: 15px;}
+    /*.gn-tag-group{margin-left: 15px;}*/
     .graph-sm-box > .col-sm-2{margin-bottom: 5px;}
     
     /*인스턴스 상세*/
@@ -2094,10 +2078,9 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     /* ======== gncloud 공통 ======== */
     
     /*리스트 왼쪽 첫번째 "이름"*/
-    a.gn-table-ellip{width: 95px;}
+    .gn-tdody > tr > td.visible-xs-3 > .gn-table-ellip{width: 120px;}
     
-    #machine a.gn-table-ellip,
-    #container a.gn-table-ellip{width: 48px;}
+    #machine .gn-table-ellip{width: 80px;}    
     
     /*생성페이지*/
     #snap > form > .btn-group > div{padding: 0px 0px 10px 0px;}    
@@ -2111,7 +2094,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     }
     
     /*gn-board-table 에 속하는 이름 화면 최소로 줄였을 때 width 값*/
-    .gn-board-table > .gn-tdody > tr > td > a.gn-table-ellip{width: 95px;} 
+    .gn-board-table > .gn-tdody > tr > td > .gn-table-ellip,
+    #snap a.gn-table-ellip{width: 95px;} 
     
     /*설정 > 넓은 dd가 필요하지 않은 경우*/
     .gn-description-list.sm dd{
@@ -2121,8 +2105,13 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
         overflow: hidden;
     }
     
+    /*설정 > ssh key*/
+    #key-sett .gn-table-ellip{width: 95px;}
+    #team-group .gn-table-ellip{width: 40px;}
     
-    
+    /*설정 이미지관리*/
+    #image-sett #machine .gn-table-ellip,
+    #image-sett #container .gn-table-ellip{width: 48px;}
     
 }
 

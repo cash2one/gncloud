@@ -7,7 +7,6 @@ angular.module('uiSwitch', [])
             , transclude: true
             , template: function(element, attrs) {
                 var html = '';
-                console.log(attrs.on);
                 html += '<span';
                 html +=   ' class="switch' + (attrs.class ? ' ' + attrs.class : '') + '"';
                 html +=   attrs.ngModel ? ' ng-click="' + attrs.disabled + ' ? ' + attrs.ngModel + ' : ' + attrs.ngModel + '=!' + attrs.ngModel + (attrs.ngChange ? '; ' + attrs.ngChange + '()"' : '"') : '';

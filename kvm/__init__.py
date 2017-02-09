@@ -55,15 +55,13 @@ def create_vm():
     user_id = session['userId']
     user_name = session['userName']
     id = request.json['id']
-    server_create(team_code, user_id,user_name, id, db_session)
-    return jsonify(status=True)
+    return jsonify(status=server_create(team_code, user_id,user_name, id, db_session))
 
 
 @app.route('/vm/machines/<id>', methods=['PUT'])
 def change_status(id):
     status = request.json['type']
-    server_change_status(id, status, db_session)
-    return jsonify(status=True, message="success")
+    return jsonify(status=server_change_status(id, status, db_session))
 
 
 @app.route('/vm/machines/<id>', methods=['DELETE'])
@@ -111,8 +109,8 @@ def list_sshKey():
 
 @app.route('/account/keys/download/<id>', methods=['GET'])
 def download_sshKey(id):
-    headers = {"Content-Disposition": "attachment; filename=sshkey"}
     sshkey_path = getsshkey_info(id)
+    headers = {"Content-Disposition": "attachment; filename="+sshkey_path.name+".pem"}
     with open(sshkey_path.path, 'r') as f:
         body = f.read()
     return make_response((body, headers))

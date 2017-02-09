@@ -1,7 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestCreateCtrl', function ($scope, $http, $timeout, $rootScope) {
-
+    .controller('guestCreateCtrl', function ($scope, $http, $timeout, $rootScope,notification) {
         $("#windows").hide();
         $("#ssh").hide();
         $("#snap").hide();
@@ -240,7 +239,7 @@ angular
                         }
                     } else {
                         if(data.value != null) {
-                            alert(data.value)
+                            notification.sendMessage("warning",data.value);
                         }
                     }
                 });
@@ -261,9 +260,9 @@ angular
             })
                 .success(function(data) {
                     if (data.status == true) {
-
+                        notification.sendMessage("success",$scope.data.vm_name+" 인스턴스 생성이 완료되었습니다.");
                     }else {
-
+                        notification.sendMessage("error",$scope.data.vm_name+" 인스턴스 생성중 에러가 발생했습니다.");
                     }
                 });
         };

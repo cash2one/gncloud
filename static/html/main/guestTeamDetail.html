@@ -2,9 +2,9 @@
 <!--왼쪽 메뉴-->
 <navleft></navleft>
 
-<div class="tab-content col-sm-10">
+<div class="tab-content col-xs-12 col-sm-10">
     <!--팀 > 프로필-->
-    <div id="profile-team"  class="">
+    <div id="profile-team" class="">
         <div class="gn-box gn-container">
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
@@ -96,8 +96,9 @@
             </div> <!--class="gn-sett-margin-box"-->
         </div> <!--class="gn-box profile-team"-->
     </div> <!--id="profile-team"  class="tab-pane fade"-->
+    
     <!--팀 그래프-->
-    <div id="team-reso"  class="gn-container">
+    <div id="team-reso" class="gn-container">
         <div class="gn-box">
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
@@ -130,7 +131,7 @@
     </div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
 
     <!--팀 > 팀원-->
-    <div id="team-group"  class="">
+    <div id="team-group" class="">
         <div class="gn-box gn-container">
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
@@ -139,26 +140,26 @@
                         <table class="table table gn-table">
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>등급</th>
-                                <th>이름</th>
-                                <th>아이디</th>
-                                <th>상태</th>
+                                <th class="hidden-xs">번호</th>
+                                <th class="hidden-xs">등급</th>
+                                <th >이름</th>
+                                <th >아이디</th>
+                                <th class="hidden-xs">상태</th>
                                 <th><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="won in won_list" ng-class="{'tr-on-wait': won.team_check == 'N'}">
-                                <td class="">{{$index+1}}</td>
-                                <td class="">{{won.team_owner}}</td>
-                                <td class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">{{won.user_name}}</td>
-                                <td class="" ng-model="data.user_id">{{won.user_id}}</td>
+                                <td class="hidden-xs">{{$index+1}}</td>
+                                <td class="hidden-xs">{{won.team_owner}}</td>
+                                <td class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);"><span class="gn-table-ellip">{{won.user_name}}</span></td>
+                                <td class="" ng-model="data.user_id"><span class="gn-table-ellip">{{won.user_id}}</span></td>
                                 <!--<td class="">{{won.tel}}</td>-->
                                 <!--<td class="">{{won.email}}</td>-->
                                 <!--<td class=""><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>-->
                                 <!--<td class=""><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>-->
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                                <td class="">{{won.comf}}</td>
+                                <td class="hidden-xs">{{won.comf}}</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         더보기
@@ -213,37 +214,37 @@
                             </div> <!--class="modal-dialog modal-sm"-->
                         </div>
                     </div> <!--class="table-responsiv"-->
-                    </div> <!--class="table-responsiv"-->
                 </div>
             </div> <!--class="gn-sett-margin-box"-->
-        </div> <!--class="gn-box profile-team"-->
+        </div> <!--class="gn-box-->
+    
         <div class="gn-box">
             <div class="gn-margin-box">
                 <h2>삭제</h2>
                 <p class="gn-lead">해당 팀 및 관련된 모든 팀원들이 삭제되며, 모든 데이터는 복구할 수 없습니다.<br>정말 삭제 하시겠습니까?</p>
                 <button type="button" class="btn btn-delete btn-lg" data-toggle="modal" data-target="#modal-modi2">삭제</button>
             </div>
-        </div>
-        <!-- modal -->
-        <div class="modal fade" id="modal-modi2" role="dialog">
-            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
-            <div class="modal-dialog form-horizontal">
-                <div class="modal-content col-sm-10 col-sm-offset-1">
-                    <div class="modal-header gn-modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">팀 삭제</h4>
-                    </div>
-                    <div class="modal-body gn-modal-body">
-                    <p>해당 팀 및 관련된 모든 팀원들이 삭제되며 모든 데이터는 복구할 수 없습니다.<br> 그래도 삭제 하시겠습니까 ? </p>
+        </div><!--class="gn-box-->
+    </div><!--id="team-group" 팀원-->
+    
+    <!-- modal -->
+    <div class="modal fade" id="modal-modi2" role="dialog">
+        <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+        <div class="modal-dialog form-horizontal">
+            <div class="modal-content col-sm-10 col-sm-offset-1">
+                <div class="modal-header gn-modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">팀 삭제</h4>
+                </div>
+                <div class="modal-body gn-modal-body">
+                <p>해당 팀 및 관련된 모든 팀원들이 삭제되며 모든 데이터는 복구할 수 없습니다.<br> 그래도 삭제 하시겠습니까 ? </p>
 
-                    </div>
-                    <div class="modal-footer gn-modal-footer">
-                        <button type="submit" class="btn btn-delete btn-block" data-dismiss="modal" ng-click="delete()">삭제</button>
-                    </div>
+                </div>
+                <div class="modal-footer gn-modal-footer">
+                    <button type="submit" class="btn btn-delete btn-block" data-dismiss="modal" ng-click="delete()">삭제</button>
                 </div>
             </div>
         </div>
-
-
-    </div> <!--id="profile-team"  class="tab-pane fade"-->
-</div>
+    </div><!--모달--> 
+       
+</div><!--class="tab-content-->

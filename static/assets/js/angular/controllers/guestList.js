@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestListCtrl', function ($scope, $http, $interval, dateModifyService, $rootScope) {
+    .controller('guestListCtrl', function ($scope, $http, $interval,$timeout, dateModifyService, $rootScope, notification) {
         var stop;
         $scope.selectGuestList = function() {
             $http({
@@ -49,7 +49,7 @@ angular
         ];
 
         $scope.update = function (id, action, sh, index) {
-
+            console.log(index);
             $http({
                 method: "POST",
                 url: "/api/manager/vm_hist/machines/" + id,
@@ -58,6 +58,7 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
+                        $scope.guest_list[index].status = "Starting"
                     } else {
                     }
                 })
@@ -70,12 +71,10 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert(name + " 인스턴스의 상태가 변경되었습니다");
+                        notification.sendMessage("success",$scope.guest_list[index].name+" 인스턴스가 "+action.name +"되었습니다.");
                         $scope.selectGuestList();
                     } else {
-                        if(data.message != null) {
-                            alert(data.message);
-                        }
+                        notification.sendMessage("error",$scope.guest_list[index].name+" 인스턴스 "+action.name +"중에 에러가 발생하였습니다.");
                     }
                 })
 
