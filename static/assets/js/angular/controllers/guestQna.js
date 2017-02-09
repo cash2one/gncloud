@@ -18,6 +18,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.list = data.list.list;
+                        $scope.team = data.list.team_info;
                         $scope.total_page=data.list.total_page;
                         $scope.page_hist =data.list.page+1;
                         $scope.page_total =data.list.total+1;

@@ -297,7 +297,7 @@
                                             <td class="second-td-name">{{contain.name}}</td>
                                             <td>{{contain.os_ver}}</td>
                                             <td class="hidden-xs">{{contain.tagFirst}}&nbsp;
-                                                <span ng-show="list.tag.split(',').length > 1" data-toggle="tooltip" title="{{contain.tag}}" tooltip>
+                                                <span ng-show="contain.tag.split(',').length > 1" data-toggle="tooltip" data-original-title="{{contain.tag}}" tooltip>
                                                     <span class="tag">{{contain.tagcount}}</span>
                                                 </span>
                                             </td>

@@ -97,7 +97,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-3" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
                     <label class="btn gn-btn-create btn-block">
                         <input id="cpu" name="" value="" type="radio">
-                        <div class="size-info ellipsis">{{size.cpu}} CPU / {{size.mem}} / {{size.disk}}</div>
+                        <div class="size-info ellipsis">{{size.cpu}} CPU / {{size.mem}} / {{size.disk}} Disk</div>
                         <div class="price-bg">
                             <div class="price-info">₩&nbsp;{{size.hour_price | number}}<span class="price-units"> / 시간</span></div>
                             <div class="price-info">₩&nbsp;{{size.day_price | number}}<span class="price-units"> / 일</span></div>
