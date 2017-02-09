@@ -59,7 +59,7 @@ angular
                     var link = angular.element('<a/>');
                     link.attr({
                         href : objectUrl,
-                        download : "sshkey"
+                        download : fileName
                     })[0].click();
                 });
         };
