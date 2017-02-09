@@ -673,7 +673,7 @@ li.nav-link.active>a:hover,
 }
 
 pre.gn-write{
-    padding: 0;
+    padding: 0px 15px;
     background-color: transparent;
     border: none;
     border-radius: 0;
