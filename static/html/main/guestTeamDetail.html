@@ -140,26 +140,26 @@
                         <table class="table table gn-table">
                             <thead>
                             <tr>
-                                <th>번호</th>
-                                <th>등급</th>
-                                <th>이름</th>
-                                <th>아이디</th>
-                                <th>상태</th>
+                                <th class="hidden-xs">번호</th>
+                                <th class="hidden-xs">등급</th>
+                                <th >이름</th>
+                                <th >아이디</th>
+                                <th class="hidden-xs">상태</th>
                                 <th><!--더보기--></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr ng-repeat="won in won_list" ng-class="{'tr-on-wait': won.team_check == 'N'}">
-                                <td class="">{{$index+1}}</td>
-                                <td class="">{{won.team_owner}}</td>
-                                <td class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">{{won.user_name}}</td>
-                                <td class="" ng-model="data.user_id">{{won.user_id}}</td>
+                                <td class="hidden-xs">{{$index+1}}</td>
+                                <td class="hidden-xs">{{won.team_owner}}</td>
+                                <td class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);"><span class="gn-table-ellip">{{won.user_name}}</span></td>
+                                <td class="" ng-model="data.user_id"><span class="gn-table-ellip">{{won.user_id}}</span></td>
                                 <!--<td class="">{{won.tel}}</td>-->
                                 <!--<td class="">{{won.email}}</td>-->
                                 <!--<td class=""><p data-toggle="tooltip" title="{{won.apply_date}}" tooltip>{{won.create_time_diff}}</p></td>-->
                                 <!--<td class=""><p data-toggle="tooltip" title="{{won.approve_date}}" tooltip>{{won.create_time_diff1}}</p></td>-->
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                                <td class="">{{won.comf}}</td>
+                                <td class="hidden-xs">{{won.comf}}</td>
                                 <td class="dropdown">
                                     <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                         더보기
