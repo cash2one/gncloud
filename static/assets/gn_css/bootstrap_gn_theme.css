@@ -63,6 +63,9 @@ li{
     margin-bottom: 50px;
 }
 
+/*textarea 수직 상하 길이만 조절 가능하게*/ 
+textarea{resize: vertical;}
+
 .container:after,
 .container-fluid:after,
 .container-login:after,
@@ -683,7 +686,7 @@ pre.gn-write{
 #modal-board .gn-modal-footer{padding-top: 0;}
 
 .gn-page-btn .pull-left{margin-right: 5px;}
-.gn-content{padding-bottom: 50px;}
+.gn-content{padding-bottom: 30px;}
 
 /* ========== gncloud 묻고답하기 HTML ========== */
 
@@ -1157,21 +1160,20 @@ td.first-td img{width: 35px;}
 }
 
 /* ========== gncloud 인스턴스 > 상세 HTML ========== */
-.col-sm-1.gn-detail-icon{
+/*.col-sm-1.gn-detail-icon{
     padding-right: 0;    
-}
+}*/
+
+.gn-detail-icon{float: left;}
 
 .gn-detail-icon img{
     width: 50px;
+    margin: 0px 15px;
 }
 
-.col-sm-11.gn-detail-title{
-    padding-left: 0;    
-}
+.col-sm-11.gn-detail-title{padding-left: 0;}
 
-.gn-detail-title h2{
-    margin-bottom: 5px; 
-}
+.gn-detail-title h2{margin-bottom: 5px;}
 
 .gn-spec-group{padding: 0;}
 
@@ -1251,11 +1253,10 @@ ul.gn-tag-group > li{
     margin-bottom: 20px;
 }
 
-.gn-detail-main{
-    margin-bottom: 30px;
-}
-
+.gn-detail-main{margin-bottom: 30px;}
 .gn-detail-main .gn-margin-box > div{padding-left: 0; padding-right: 0;}
+.gn-detail-main > .gn-margin-box > .gn-description-list dd{margin-left: 120px;}
+.gn-detail-main > .gn-margin-box > .gn-description-list dd > p{margin: 0;}
 
 /*=======================SWITCH==========================*/
 .switch {
@@ -2054,7 +2055,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     
     /* ======== gncloud 인스터스 상세 ======== */
     .gn-detail-icon{display: none;}
-    .gn-tag-group{margin-left: 15px;}
+    /*.gn-tag-group{margin-left: 15px;}*/
     .graph-sm-box > .col-sm-2{margin-bottom: 5px;}
     
     /*인스턴스 상세*/
