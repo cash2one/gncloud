@@ -100,7 +100,7 @@ angular
         }
         $scope.teamtable();
         $scope.lits={};
-        $scope.update = function (id, code, action, name) {  //팀장이 팀원 등급권한
+        $scope.update = function (id, code, action, name, owner) {  //팀장이 팀원 등급권한
             var url = '/api/manager/vm/account/teamset/'+id+'/'+code+'/'+action;
             var method = "PUT";
             $scope.lits.type=action;
@@ -148,7 +148,12 @@ angular
                         });
                 }
             }else if(action == 'change'){
-                var retrunvalue = confirm(name+"을 관리자로 변경하시겠습니까 ?");
+                if(owner == '관리자'){
+                    var retrunvalue = confirm(name+"을 팀원으로 변경하시겠습니까 ?");
+                }else{
+                    var retrunvalue = confirm(name+"을 관리자로 변경하시겠습니까 ?");
+                }
+
                 if(retrunvalue == true){
                     $http({
                         method: method,

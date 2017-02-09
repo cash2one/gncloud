@@ -76,18 +76,18 @@
                 <form class="form-horizontal">
                     <!--본문 내용-->
                     <div class="form-group" ng-class="{'gn-content':showData == 1}">
-                        <div class="container-fluid">
-                            <span class="gn-write" ng-show="showData == '1'">{{notice.text}}</span>
-                            <div id="change" class="second-td-name gn-lead" ng-show="showData=='2'">
-                                <textarea class="form-control gn-write"  rows="6" ng-model="notice.text"></textarea></div>
+                        <pre class="gn-write com-sm-12" ng-show="showData == '1'">{{notice.text}}</pre>
+                        <div id="change" class="second-td-name gn-lead col-sm-12" ng-show="showData=='2'">
+                            <textarea class="form-control gn-write col-sm-12" rows="6" ng-model="notice.text"></textarea>
                         </div>
                     </div>
+                    
                     <!--댓글 : 사용자이름-->
                     <div class="form-group">
                         <div ng-repeat="reply in reply">
                             <div class="gn-comment container-fluid comment-border">
                                 <span class="col-xs-2 col-sm-2">{{reply.author_id}}</span>
-                                <span class="col-xs-8 col-sm-9 gn-write" ng-show="showData=='1' || showData=='2'">{{reply.text}}</span>
+                                <pre class="col-xs-8 col-sm-9 gn-write" ng-show="showData=='1' || showData=='2'">{{reply.text}}</pre>
                                 <div id="changereply" class="second-td-name gn-lead col-sm-9" ng-show="showData=='3'">
                                     <textarea class="form-control gn-write" rows="6" ng-model="reply.text"></textarea></div>
 

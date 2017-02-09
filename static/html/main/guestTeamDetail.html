@@ -166,10 +166,10 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li><a ng-click="update(won.user_id, teamname.team_code, 'approve', won.user_name)">승인</a></li>
-                                        <li><a ng-click="update(won.user_id, teamname.team_code, 'change', won.user_name)">등급변경</a></li>
-                                        <li><a ng-click="update(won.user_id, teamname.team_code, 'reset', won.user_name)">비밀번호초기화</a></li>
-                                        <li><a class="gn-danger" ng-click="update(won.user_id, teamname.team_code, 'dropout', won.user_name)">탈퇴</a></li>
+                                        <li><a ng-disabled="won.team_check == 'Y'" class="btn" ng-click="update(won.user_id, teamname.team_code, 'approve', won.user_name,won.team_owner)" >승인</a></li>
+                                        <li><a class="btn" ng-click="update(won.user_id, teamname.team_code, 'change', won.user_name,won.team_owner)">등급변경</a></li>
+                                        <li><a class="btn" ng-click="update(won.user_id, teamname.team_code, 'reset', won.user_name,won.team_owner)">비밀번호초기화</a></li>
+                                        <li><a class="btn gn-danger" ng-click="update(won.user_id, teamname.team_code, 'dropout', won.user_name,won.team_owner)">탈퇴</a></li>
                                     </ul>
                                 </td>
                             </tr>

@@ -6,10 +6,9 @@ from datetime import timedelta
 from flask import Flask, jsonify, request, session, escape, make_response
 
 from Manager.db.database import db_session
+from Manager.service.service import *
 from Manager.util.config import config
 from Manager.util.json_encoder import AlchemyEncoder
-from db.database import db_session
-from service.service import *
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
@@ -36,7 +35,7 @@ def shutdown_session(exception=None):
 @app.errorhandler(500)
 def internal_error(error):
     print(traceback.format_exc())
-    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
+    return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세요.")
 
 #####common function end#####
 
@@ -597,11 +596,12 @@ def saveBaseImageImportFileDocker():
     port = request.form['port']
     env = request.form['env']
     vol = request.form['vol']
+    os = request.form['os']
 
     if 'id' in request.form:
         updateImageInfoDocker(request.form['id'],name,view_name,os_ver,tag,icon,port,env,vol,db_session)
     else:
-        insertImageInfoDocker(name,view_name,os_ver,tag,icon,port,env,vol,db_session)
+        insertImageInfoDocker(name,view_name,os,os_ver,tag,icon,port,env,vol,session['teamCode'],db_session)
 
     return jsonify(status=True, message="success")
 
@@ -614,11 +614,12 @@ def saveBaseImageExceptFileDocker():
     port = request.json['port']
     env = request.json['env']
     vol = request.json['vol']
+    os = request.json['os']
 
     if 'id' in request.json:
         updateImageInfoDocker(request.json['id'],name,view_name,os_ver,tag,"",port,env,vol,db_session)
     else:
-        insertImageInfoDocker(name,view_name,os_ver,tag,"",port,env,vol,db_session)
+        insertImageInfoDocker(name,view_name,os,os_ver,tag,"",port,env,vol,session['teamCode'],db_session)
 
     return jsonify(status=True, message="success")
 
