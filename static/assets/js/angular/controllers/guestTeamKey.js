@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestTeamKeyCtrl', function ($scope, $http, dateModifyService, $rootScope) {
+    .controller('guestTeamKeyCtrl', function ($scope, $http, dateModifyService, $rootScope,notification) {
         $scope.close=function () {
             $(':input').val('');
         }
@@ -75,7 +75,7 @@ angular
                 })
                     .success(function (data, status, headers, config) {
                         if (data.status == true) {
-                            alert(name + "상태가 변경되었습니다");
+                            notification.sendMessage("success", name + "키가 삭제되었습니다.");
                             $scope.data_list.splice(index, 1);
                         } else {
                             if(data.message != null) {
