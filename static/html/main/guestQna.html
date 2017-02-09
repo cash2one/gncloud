@@ -77,7 +77,7 @@
                     <!--본문 내용-->
                     <div class="form-group" ng-class="{'gn-content':showData == 1}">
                         <div class="container-fluid">
-                            <span class="gn-write" ng-show="showData == '1'">{{notice.text}}</span>
+                            <span class="gn-write" ng-show="showData == '1'"><pre>{{notice.text}}</pre></span>
                             <div id="change" class="second-td-name gn-lead" ng-show="showData=='2'">
                                 <textarea class="form-control gn-write"  rows="6" ng-model="notice.text"></textarea></div>
                         </div>
