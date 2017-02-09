@@ -64,10 +64,10 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">{{notice.title}}</h4>
                 <p><span class="noti-count">&nbsp;{{notice.write_date}}</span></p>
-            </div>
+
 
             <div class="modal-body gn-modal-body" ng-class="{'gn-content':showData !=1}">
-                <form class="">
+                <form class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-12">
                             <pre class="gn-write"  id="textread" ng-show="showData=='2'">{{notice.text}}</pre>
@@ -76,8 +76,8 @@
                             <textarea class="form-control gn-write" rows="6" ng-model="notice.text"></textarea></div>
                     </div>
                 </form>
-            </div><!--modal-body-->            
-            
+            </div><!--modal-body-->
+            </div>
             <div class="modal-footer gn-modal-footer">
                 <p><!--구분선--></p>
                 <button type="submit" class="btn btn-delete btn-default gn-btn-height pull-left" ng-show="user_info.authority == 'sysowner' " ng-click="deletenoti(notice.id,notice.title)">삭제</button>
