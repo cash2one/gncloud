@@ -24,8 +24,8 @@
                             <tbody class="gn-tdody">
                                 <tr ng-repeat="list in login_hist">
                                     <td class="hidden-xs">{{list.id}}</td>
-                                    <td>{{list.gnTeam.team_name}}</td>
-                                    <td>{{list.user_id}}</td>
+                                    <td><span class="gn-table-ellip">{{list.gnTeam.team_name}}</span></td>
+                                    <td><span class="gn-table-ellip">{{list.user_id}}</span></td>
                                     <td>
                                         <span ng-if="list.action == 'Create'">생성</span>
                                         <span ng-if="list.action == 'Suspend'">정지</span>
