@@ -10,28 +10,26 @@
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
                     <h2>로그인 이력 조회</h2>
-                       <div class="container-fluid">
-                            <div class="table-responsive gn-table-responsive">
-                                <table class="table gn-board-table">
-                                    <thead>
-                                    <tr>
-                                        <th class="col-sm-1">#</th>
-                                        <th class="col-sm-3 col-xs-9">아이디</th>
-                                        <th class="col-sm-1 hidden-xs">액션</th>
-                                        <th class="col-sm-3 hidden-sm hidden-xs">날짜</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody class="gn-tdody">
-                                    <tr ng-repeat="list in login_hist">
-                                        <td>{{list.id}}</td>
-                                        <td>{{list.user_id}}</td>
-                                        <td>{{list.action}}</td>
-                                        <td>{{list.action_time}}</td> <!--초 빼고-->
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div> <!--class="table-responsive table-reset"-->
-                        </div> <!--class="container-fluid"--> 
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table gn-board-table">
+                            <thead>
+                                <tr>
+                                    <th class="hidden-xs">#</th>
+                                    <th class="">아이디</th>
+                                    <th class="">액션</th>
+                                    <th class="hidden-sm hidden-xs">날짜</th>
+                                </tr>
+                            </thead>
+                            <tbody class="gn-tdody">
+                                <tr ng-repeat="list in login_hist">
+                                    <td class="hidden-xs">{{list.id}}</td>
+                                    <td>{{list.user_id}}</td>
+                                    <td>{{list.action}}</td>
+                                    <td class="hidden-sm hidden-xs">{{list.action_time}}</td><!--초 빼고-->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> <!--class="table-responsive table-reset"-->
                 </div><!-- div class="container-fluid"-->
                 
                 <!--이전/다음 버튼-->
