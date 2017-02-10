@@ -227,6 +227,18 @@ angular
                         var teamwonArr = new Array();
                         data.list[0][0].approve_date = data.list[0][1].approve_date;
                         data.list[0][0].apply_date = data.list[0][1].apply_date;
+                        if(data.list[0][1].comfirm == 'Y'){
+                            var confirm_re = '승인';
+                        } else {
+                            var confirm_re = '대기';
+                        }//승인 한글화
+                        if(data.list[0][1].team_owner == 'owner') {
+                            var team_owner = '관리자';
+                        }else {
+                            var team_owner='팀원';
+                        }
+                        data.list[0][0].team_owner = team_owner;
+                        data.list[0][0].confirm = confirm_re;
                         teamwonArr.push(data.list[0][0]);
                         $scope.teamwon_list = teamwonArr;
 
