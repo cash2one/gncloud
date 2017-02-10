@@ -11,7 +11,7 @@
                     <table class="table gn-board-table">
                         <thead>
                         <tr>
-                            <th class="">#</th>
+                            <th class="hidden-xs">#</th>
                             <th class="">팀</th>
                             <th class="">과금월</th>
                             <th class=""></th>
@@ -19,8 +19,8 @@
                         </thead>
                         <tbody class="gn-tdody">
                         <tr ng-repeat="price in pricelist">
-                            <td>{{$index+1}}</td>
-                            <td>{{price.gnTeam.team_name}}</td>
+                            <td class="hidden-xs">{{$index+1}}</td>
+                            <td><span class="gn-table-ellip">{{price.gnTeam.team_name}}</span></td>
                             <td>{{price.year}}-{{price.month}}</td>
                             <td>
                                 <button type="button" class="btn-default btn pull-right" data-toggle="modal" data-target="#priceModal" ng-click="price_list_info(price.year,price.month,price.team_code)">보기</button>
@@ -54,28 +54,31 @@
                                             <thead>
                                             <tr>
                                                 <th class="">인스턴스</th>
-                                                <th class="">소유자</th>
-                                                <th class="">사용량</th>
-                                                <th class="">단위가격</th>
+                                                <th class="hidden-xs">소유자</th>
+                                                <th class="hidden-xs">사용량</th>
+                                                <th class="hidden-xs">단위가격</th>
                                                 <th class="">총액</th>
+                                                <th class="hidden-xs"></th>
                                             </tr>
                                             </thead>
                                             <tbody class="gn-tdody">
                                             <tr class="" ng-repeat="pr in price_info">
-                                                <td>{{pr.vm_name}}</td>
-                                                <td>{{pr.author_name}}</td>
-                                                <td>{{pr.used}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td>
-                                                <td>&#65510;{{pr.unit_price | number}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td><!--&#65510; : 원 코드-->
+                                                <td><span class="gn-table-ellip">{{pr.vm_name}}</span></td>
+                                                <td class="hidden-xs">{{pr.author_name}}</td>
+                                                <td class="hidden-xs">{{pr.used}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td>
+                                                <td class="hidden-xs">&#65510;{{pr.unit_price | number}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td><!--&#65510; : 원 코드-->
                                                 <td>{{pr.total_price | number}}&#50896;</td><!--&#50896; : 원(한글)코드-->
+                                                <td class="hidden-xs"></td>
                                             </tr>
 
                                             <!--총계-->
                                             <tr class="">
                                                 <td style="border-bottom:none"></td>
-                                                <td style="border-bottom:none"></td>
-                                                <td style="border-bottom:none"></td>
-                                                <td style="padding-top:20px"><strong>총계</strong></td>
+                                                <td class="hidden-xs" style="border-bottom:none"></td>
+                                                <td class="hidden-xs" style="border-bottom:none"></td>
+                                                <td class="hidden-xs" style="padding-top:20px"><strong>총계</strong></td>
                                                 <td style="padding-top:20px"><strong>{{price_invoice.team_price | number}}&#50896;</strong></td>
+                                                <td class="hidden-xs"></td>
                                             </tr>
                                             </tbody>
                                         </table>
