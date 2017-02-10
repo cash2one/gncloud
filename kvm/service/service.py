@@ -117,11 +117,19 @@ def setStaticIpAddress(ip, host_ip, ssh_id):
         pass
 
 def server_delete(id,sql_session):
-    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one();
-    status_info = sql_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == id).one();
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    status_info = sql_session.query(GnInstanceStatus).filter(GnInstanceStatus.vm_id == id).one()
+    backup_list = sql_session.query(GnBackupHist).filter(GnBackupHist.vm_id == id).all()
     try:
         # vm 삭제
         kvm_vm_delete(vm_info.internal_name, vm_info.gnHostMachines.ip);
+
+        s = pxssh.pxssh()
+        s.login(vm_info.gnHostMachines.ip, USER)
+        for backup_info in backup_list:
+            s.sendline("rm -f "+config.LIVERT_IMAGE_BACKUP_PATH+backup_info.filename)
+
+        s.logout()
 
         # db 저장
         sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
@@ -137,14 +145,11 @@ def server_delete(id,sql_session):
 def server_image_delete(id, sql_session):
 
     image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
-    backup_list = sql_session.query(GnBackupHist).filter(GnBackupHist.vm_id == id).one()
     s = pxssh.pxssh()
     s.login(image_info.gnHostMachines.ip, USER)
-    for backup_info in backup_list:
-        s.sendline("rm -f "+config.LIVERT_IMAGE_BACKUP_PATH+backup_info.filename)
-
+    s.sendline("rm -f "+config.LIVERT_IMAGE_SNAPSHOT_PATH+image_info.filename)
     s.logout()
-    kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
+    #kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
     sql_session.query(GnVmImages).filter(GnVmImages.id == id).delete()
     sql_session.commit()
 
