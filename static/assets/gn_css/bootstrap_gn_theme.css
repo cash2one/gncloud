@@ -1570,10 +1570,13 @@ li.active > .tab-sm-box{
 /* ========== gncloud 서비스 관련 HTML ========== */
 .service-table{font-size: 14px; height: 50px;}
 .service-table > thead > tr >  th{text-align: center; border: none;}
-.service-table > tbody > tr > td{text-align: center; border: none; }
+.service-table > tbody > tr > td{text-align: right; border: none; padding: 2px;}
 
+.service-table .gn-table-ellip{width: 180px; text-align: left;}
 
-
+.col-left{padding-right: 30px !important;}
+.col-center{padding-left: 30px !important; padding-right: 30px !important;}
+.col-right{padding-left: 30px !important;}
 
 
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
@@ -1937,6 +1940,12 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
  
     /* ======== gncloud 인스턴스 상세 ======== */
     
+    /* ======== gncloud 서비스 ======== */
+    .col-left{padding-right: 10px !important;}
+    .col-center{padding-left: 10px !important; padding-right: 10px !important;}
+    .col-right{padding-left: 10px !important;}    
+    .service-table .gn-table-ellip{width: 80px; text-align: left;}
+    
     /* ======== gncloud 이미지 ======== */
     
     /* ======== gncloud 설정 ======== */
@@ -2048,7 +2057,13 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     #snap > form > .btn-group > div{padding: 0px 5px 10px 5px;}        
     
     /* ======== gncloud 이미지 ======== */
-    .row.gn-margin-bott10 > div.col-sm-2 > button.btn-gn-sub{margin-bottom: 10px;}    
+    .row.gn-margin-bott10 > div.col-sm-2 > button.btn-gn-sub{margin-bottom: 10px;}  
+    
+    /* ======== gncloud 서비스 ======== */
+    .col-left{padding-right: 0px !important;}
+    .col-center{padding-left: 0px !important; padding-right: 0px !important;}
+    .col-right{padding-left: 0px !important;} 
+
     
     /* ======== gncloud 설정 ======== */ 
     .gn-sett-margin-box{margin: 15px;}
@@ -2113,6 +2128,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     #image-sett #machine .gn-table-ellip,
     #image-sett #container .gn-table-ellip{width: 48px;}
     
+    /*서비스*/
+    .service-table .gn-table-ellip{width: 80px; text-align: left;}
 }
 
 
