@@ -187,9 +187,17 @@
                                     <div class="modal-body gn-modal-body">
                                         <form>
                                             <div class="form-group" ng-repeat="team in teamwon_list">
+                                                <label class="col-sm-4 control-label gn-control-label">등급</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{team.team_owner}}</p>
+                                                </div>
                                                 <label class="col-sm-4 control-label gn-control-label">이름</label>
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{team.user_name}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">아이디</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{team.user_id}}</p>
                                                 </div>
                                                 <label class="col-sm-4 control-label gn-control-label">연락처</label>
                                                 <div class="col-sm-8">
@@ -198,6 +206,10 @@
                                                 <label class="col-sm-4 control-label gn-control-label">이메일</label>
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{team.email}}</p>
+                                                </div>
+                                                <label class="col-sm-4 control-label gn-control-label">상태</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{team.confirm}}</p>
                                                 </div>
                                                 <label class="col-sm-4 control-label gn-control-label">신청일</label>
                                                 <div class="col-sm-8">
