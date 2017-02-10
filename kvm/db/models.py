@@ -349,3 +349,22 @@ class GnErrorHist(Base):
 
     def __json__(self):
         return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_name','vm_name']
+
+class GnBackupHist(Base):
+    __tablename__ = 'GN_BACKUP_HIST'
+    vm_id = Column(String(8), primary_key=True, nullable=False)
+    filename = Column(String(150), primary_key=True, nullable=False, default='')
+    backup_time = Column(DateTime, nullable=True, default=datetime.datetime.now())
+    vm_type = Column(String(10), nullable=True, default='')
+    host_ip = Column(String(50), nullable=True, default='')
+
+    def __init__(self, vm_id, filename, backup_time, vm_type=None, host_ip=None):
+        self.vm_id = vm_id
+        self.filename = filename
+        self.backup_time = backup_time
+        self.vm_type = vm_type
+        self.host_ip = host_ip
+
+    def __repr__(self):
+        return "<GnBackupHist(vm_id='%r', filename='%r', backup_time='%r', vm_type='%r', host_ip='%r' " \
+               % (self.vm_id, self.filename, self.backup_time, self.vm_type, self.host_ip)

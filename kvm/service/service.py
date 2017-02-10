@@ -137,11 +137,14 @@ def server_delete(id,sql_session):
 def server_image_delete(id, sql_session):
 
     image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == id).one()
+    backup_list = sql_session.query(GnBackupHist).filter(GnBackupHist.vm_id == id).one()
     s = pxssh.pxssh()
     s.login(image_info.gnHostMachines.ip, USER)
-    s.sendline("rm -f "+config.LIVERT_IMAGE_SNAPSHOT_PATH+image_info.filename)
+    for backup_info in backup_list:
+        s.sendline("rm -f "+config.LIVERT_IMAGE_BACKUP_PATH+backup_info.filename)
+
     s.logout()
-    #kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
+    kvm_image_delete(image_info.filename, image_info.gnHostMachines.ip)
     sql_session.query(GnVmImages).filter(GnVmImages.id == id).delete()
     sql_session.commit()
 
