@@ -20,10 +20,21 @@ angular
                         $scope.image_data = data.info.image_info;
                     }else{
                         $scope.image_data = data.info.image_info;
-                        $scope.image_data.name = data.info.image_info.view_name;
+                        $scope.image_data.name = data.info.image_info.name;
                     }
                     if($scope.vm_data.backup_confirm == 'false')
                     $scope.vm_data.backup_confirm=0;
+                    for(i=0; i<data.info.image_info.gnDockerImageDetail.length;i++){
+                        if(data.info.image_info.gnDockerImageDetail[i].arg_type == 'mount'){
+                            if(data.info.image_info.gnDockerImageDetail[i].argument.indexOf("LOG") != -1){
+                                $scope.Log = data.info.image_info.gnDockerImageDetail[i].argument.replace(/LOG=/g,"");
+                            }else if(data.info.image_info.gnDockerImageDetail[i].argument.indexOf("DATA")!=-1){
+                                $scope.Data = data.info.image_info.gnDockerImageDetail[i].argument.replace(/DATA=/g,"");
+                            }else{
+                                $scope.Log = "-";$scope.Data = "-";
+                            }
+                        }
+                    }
                 }
                 else {
                     alert(data.message)
