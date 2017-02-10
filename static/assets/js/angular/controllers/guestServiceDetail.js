@@ -27,11 +27,9 @@ angular
                     for(i=0; i<data.info.image_info.gnDockerImageDetail.length;i++){
                         if(data.info.image_info.gnDockerImageDetail[i].arg_type == 'mount'){
                             if(data.info.image_info.gnDockerImageDetail[i].argument.indexOf("LOG") != -1){
-                                $scope.Log = data.info.image_info.gnDockerImageDetail[i].argument.replace(/LOG=/g,"");
+                                $scope.Log = data.info.image_info.gnDockerImageDetail[i].argument.replace(/LOG:/g,"");
                             }else if(data.info.image_info.gnDockerImageDetail[i].argument.indexOf("DATA")!=-1){
-                                $scope.Data = data.info.image_info.gnDockerImageDetail[i].argument.replace(/DATA=/g,"");
-                            }else{
-                                $scope.Log = "-";$scope.Data = "-";
+                                $scope.Data = data.info.image_info.gnDockerImageDetail[i].argument.replace(/DATA:/g,"");
                             }
                         }
                     }
