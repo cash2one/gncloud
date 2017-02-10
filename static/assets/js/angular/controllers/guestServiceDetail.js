@@ -142,7 +142,7 @@ angular
 
         $scope.deleteInstance = function(){
             $timeout(function () {
-                window.location.href = '#/guestList';
+                window.location.href = '#/guestSeriveList';
             }, 1000 , true );
 
             $http({

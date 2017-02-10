@@ -50,7 +50,8 @@
                                                 노드 리스트
                                             </label>
                                             <div class="col-sm-9">
-                                                <span class="node-list" ng-repeat="gnHostMachine in cluster.gnHostMachines">{{gnHostMachine.ip}}
+                                                <span class="node-list" ng-repeat="gnHostMachine in cluster.gnHostMachines">
+                                                    {{gnHostMachine.name}} <span class="gn-write">{{gnHostMachine.ip}}</span>
                                                     <a href ng-click="deleteNode(gnHostMachine.id)"><img src="/gn_images/delete.png" width="14"></a><br/>
                                                 </span>
                                             </div>
@@ -153,7 +154,9 @@
                                 <td >{{list.type}}</td>
                                 <td class="hidden-xs">{{list.ip}}</td>
                                 <td class="hidden-xs gn-syssett-td">
-                                    <p ng-repeat="host in list.gnHostMachines">{{host.ip}}</p>
+                                    <p ng-repeat="host in list.gnHostMachines">
+                                        {{host.ip}}
+                                    </p>
                                 </td>
                                 <td class="">{{list.create_time_diff}}</td>
                                 <td class="dropdown">
