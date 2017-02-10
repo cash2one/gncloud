@@ -20,7 +20,10 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 @app.before_request
 def before_request():
-    if ('userId' not in session) and request.path != '/vm/logincheck' and request.path != '/vm/guestLogout' and request.path != '/vm/account' and (request.path!= 'vm/account/users' and request.method !='POST') and  request.path != '/vm/account/testtest':
+    if ('userId' not in session) and request.path != '/vm/logincheck' \
+            and request.path != '/vm/guestLogout' and request.path != '/vm/account' \
+            and (request.path!= 'vm/account/users' and request.method !='POST') \
+            and  request.path != '/vm/account/testtest':
         return make_response(jsonify(status=False),401)
 
     session.permanent = True
