@@ -652,7 +652,7 @@ li.nav-link.active>a:hover,
     font-family: 'Nanum Barun Gothic', sans-serif;
 }
 
-pre{white-space: normal;}
+pre{white-space: pre-line;}
 
 pre.gn-write{
     padding: 0px 15px;
@@ -660,7 +660,7 @@ pre.gn-write{
     border: none;
     border-radius: 0;
     font-size: 14px;
-    white-space: normal;
+    white-space: pre-line;
 }
 
 #modal-board .gn-modal-footer{padding-top: 0;}
