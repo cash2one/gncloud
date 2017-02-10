@@ -87,7 +87,7 @@
                         <div ng-repeat="reply in reply">
                             <div class="gn-comment container-fluid comment-border">
                                 <span class="col-xs-2 col-sm-2">{{reply.author_id}}</span>
-                                <pre class="col-xs-8 col-sm-9 gn-write" ng-show="showData=='1' || showData=='2'">{{reply.text}}</pre>
+                                <span class="col-xs-8 col-sm-9 gn-write" ng-show="showData=='1' || showData=='2'">{{reply.text}}</span>
                                 <div id="changereply" class="second-td-name gn-lead col-sm-9" ng-show="showData=='3'">
                                     <textarea class="form-control gn-write" rows="6" ng-model="reply.text"></textarea></div>
 

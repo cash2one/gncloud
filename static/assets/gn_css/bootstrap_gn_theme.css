@@ -652,6 +652,8 @@ li.nav-link.active>a:hover,
     font-family: 'Nanum Barun Gothic', sans-serif;
 }
 
+pre{white-space: normal;}
+
 pre.gn-write{
     padding: 0px 15px;
     background-color: transparent;
