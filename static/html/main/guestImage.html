@@ -115,49 +115,48 @@
                             </div>
 
 
-                            <div class="container-fluid">
+                            <div class="container-fluid row">
                                 <div class="table-responsive gn-table-responsive">
                                     <table class="table gn-table gn-top">
                                         <thead>
-                                        <tr>
-                                            <th class="first-td"></th>
-                                            <th class="">이름</th>
-                                            <th class="">OS</th>
-                                            <th class="">버전</th>
-                                            <th class="hidden-xs">BIT</th>
-                                            <th class="hidden-xs">타입</th>
-                                            <th class="hidden-xs hidden-sm">생성일</th>
-                                            <th><!--더보기--></th>
-                                        </tr>
+                                            <tr>
+                                                <th class="first-td"></th>
+                                                <th class="">이름</th>
+                                                <th class="hidden-xs">OS</th>
+                                                <th class="hidden-xs">버전</th>
+                                                <th class="hidden-xs">BIT</th>
+                                                <th class="hidden-xs">타입</th>
+                                                <th class="hidden-xs hidden-sm">생성일</th>
+                                                <th><!--더보기--></th>
+                                            </tr>
                                         </thead>
                                         <tbody class="gn-tdody">
-                                        <tr ng-repeat="path in images_list">
-                                            <td><img src="/gn_images/gn_icon_{{path.os}}.png" alt=""></td>
-                                            <td class="second-td-name">{{path.name}}</td>
-                                            <td class="hidden-xs">{{path.os}}</td>
-                                            <td class="hidden-xs">{{path.os_ver}}</td>
-                                            <td class="hidden-xs">{{path.os_bit}}</td>
-                                            <td>{{path.type}}</td>
-                                            <td class="hidden-xs hidden-sm">{{path.create_time_diff}}</td>
-                                            <td class="dropdown">
-                                                <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                                                    <div class="gn-more">더보기</div>
-                                                    <span class="gn-caret-table"></span>
-                                                </div>
-                                                <!--더보기>드롭다운-->
-                                                <ul class="dropdown-menu gn-dropdown" role="menu">
-                                                    <li><a href  ng-click="getInstanceImage(path.id)" data-toggle="modal" data-target="#image" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
-                                                    <li><a href class="gn-danger" ng-click="deleteInstanceImage(path.id,path.name)">삭제</a></li>
-                                                </ul>
-                                            </td>
-                                        </tr>
+                                            <tr ng-repeat="path in images_list">
+                                                <td><img src="/gn_images/gn_icon_{{path.os}}.png" alt=""></td>
+                                                <td class="second-td-name"><span class="gn-table-ellip">{{path.name}}</span></td>
+                                                <td class="hidden-xs">{{path.os}}</td>
+                                                <td class="hidden-xs">{{path.os_ver}}</td>
+                                                <td class="hidden-xs">{{path.os_bit}}</td>
+                                                <td class="hidden-xs">{{path.type}}</td>
+                                                <td class="hidden-xs hidden-sm">{{path.create_time_diff}}</td>
+                                                <td class="dropdown">
+                                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                        <div class="gn-more">더보기</div>
+                                                        <span class="gn-caret-table"></span>
+                                                    </div>
+                                                    <!--더보기>드롭다운-->
+                                                    <ul class="dropdown-menu gn-dropdown" role="menu">
+                                                        <li><a href  ng-click="getInstanceImage(path.id)" data-toggle="modal" data-target="#image" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
+                                                        <li><a href class="gn-danger" ng-click="deleteInstanceImage(path.id,path.name)">삭제</a></li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div> <!--class="table-responsive table-reset"-->
                             </div>
 
                         </div> <!--id="image" class="tab-pane fade in active"-->
-
 
                         <!--시스템 > 이미지 관리 > 탭메뉴2 : 컨테이너-->
                         <div id="container" class="">
@@ -276,44 +275,42 @@
                                 </div>
                             </div>
 
-
                             <div class="container-fluid row">
                                 <div class="table-responsive gn-table-responsive">
                                     <table class="table gn-table gn-top">
                                         <thead>
-                                        <tr>
-                                            <th class="first-td"></th>
-                                            <th class="">이름</th>
-                                            <th class="">버전</th>
-                                            <th class="">태그</th>
-                                            <th class="hidden-xs hidden-sm">생성일
-                                            </th>
-                                            <th class=""><!--더보기--></th>
-                                        </tr>
+                                            <tr>
+                                                <th class="first-td"></th>
+                                                <th class="">이름</th>
+                                                <th class="hidden-xs">버전</th>
+                                                <th class="hidden-xs">태그</th>
+                                                <th class="hidden-xs hidden-sm">생성일</th>
+                                                <th class=""><!--더보기--></th>
+                                            </tr>
                                         </thead>
                                         <tbody class="gn-tdody">
-                                        <tr ng-repeat="contain in contain_list">
-                                            <td><img src="/gn_images/gn_icon_{{contain.os}}.png" alt="" ng-show="contain.os != '' "></td>
-                                            <td class="second-td-name">{{contain.name}}</td>
-                                            <td>{{contain.os_ver}}</td>
-                                            <td class="hidden-xs">{{contain.tagFirst}}&nbsp;
-                                                <span ng-show="contain.tag.split(',').length > 1" data-toggle="tooltip" data-original-title="{{contain.tag}}" tooltip>
-                                                    <span class="tag">{{contain.tagcount}}</span>
-                                                </span>
-                                            </td>
-                                            <td class="hidden-xs hidden-sm">{{contain.create_time_diff}}</td>
-                                            <td class="dropdown">
-                                                <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                                                    <div class="gn-more">더보기</div>
-                                                    <span class="gn-caret-table"></span>
-                                                </div>
-                                                <!--더보기>드롭다운-->
-                                                <ul class="dropdown-menu gn-dropdown" role="menu">
-                                                    <li><a href  ng-click="getInstanceImageDocker(contain.id)" data-toggle="modal" data-target="#img-cont" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
-                                                    <li><a href class="gn-danger" ng-click="deleteInstanceImageDoker(contain.id,contain.name)">삭제</a></li>
-                                                </ul>
-                                            </td>
-                                        </tr>
+                                            <tr ng-repeat="contain in contain_list">
+                                                <td><img src="/gn_images/gn_icon_{{contain.os}}.png" alt="" ng-show="contain.os != '' "></td>
+                                                <td class="second-td-name"><span class="gn-table-ellip">{{contain.name}}</span></td>
+                                                <td class="hidden-xs">{{contain.os_ver}}</td>
+                                                <td class="hidden-xs">{{contain.tagFirst}}&nbsp;
+                                                    <span ng-show="contain.tag.split(',').length > 1" data-toggle="tooltip" data-original-title="{{contain.tag}}" tooltip>
+                                                        <span class="tag">{{contain.tagcount}}</span>
+                                                    </span>
+                                                </td>
+                                                <td class="hidden-xs hidden-sm">{{contain.create_time_diff}}</td>
+                                                <td class="dropdown">
+                                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                                        <div class="gn-more">더보기</div>
+                                                        <span class="gn-caret-table"></span>
+                                                    </div>
+                                                    <!--더보기>드롭다운-->
+                                                    <ul class="dropdown-menu gn-dropdown" role="menu">
+                                                        <li><a href  ng-click="getInstanceImageDocker(contain.id)" data-toggle="modal" data-target="#img-cont" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
+                                                        <li><a href class="gn-danger" ng-click="deleteInstanceImageDoker(contain.id,contain.name)">삭제</a></li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div> <!--class="table-responsive table-reset"-->

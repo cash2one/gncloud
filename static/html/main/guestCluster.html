@@ -134,44 +134,41 @@
                             </div><!--class="modal-content"-->
                         </div> <!--class="modal-dialog form-horizontal"-->
                     </div> <!--class="modal fade" id="cluster" role="dialog"-->
-
                 </div>
 
                 <div class="container-fluid">
                     <div class="table-responsive gn-table-responsive">
                         <table class="table table gn-table">
                             <thead>
-                            <tr>
-                                <th class="">타입</th>
-                                <th class="hidden-xs">엔드 포인트</th>
-                                <th class="hidden-xs">노드</th>
-                                <th class="">생성일</th>
-                                <th class=""><!--더보기--></th>
-                            </tr>
+                                <tr>
+                                    <th class="">타입</th>
+                                    <th class="hidden-xs">엔드 포인트</th>
+                                    <th class="hidden-xs">노드</th>
+                                    <th class="hidden-xs">생성일</th>
+                                    <th class=""><!--더보기--></th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="list in cluster_list">
-                                <td >{{list.type}}</td>
-                                <td class="hidden-xs">{{list.ip}}</td>
-                                <td class="hidden-xs gn-syssett-td">
-                                    <p ng-repeat="host in list.gnHostMachines">
-                                        {{host.ip}}
-                                    </p>
-                                </td>
-                                <td class="">{{list.create_time_diff}}</td>
-                                <td class="dropdown">
-                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                                        <div class="gn-more">더보기</div>
-                                        <span class="gn-caret-table"></span>
-                                    </div>
-                                    <!--더보기>드롭다운-->
-                                    <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li><a href data-toggle="modal" data-target="#cluster" ng-click="getCluster(list.id)">수정</a></li>
-                                        <li><a href data-toggle="modal" data-target="#cluster-more" ng-click="addNode(list.type)">노드추가</a></li>
-                                        <li><a class="gn-danger" ng-click="deleteCluster(list.id, list.type)">삭제</a></li>
-                                    </ul>
-                                </td>
-                            </tr>
+                                <tr ng-repeat="list in cluster_list">
+                                    <td >{{list.type}}</td>
+                                    <td class="hidden-xs">{{list.ip}}</td>
+                                    <td class="hidden-xs gn-syssett-td">
+                                        <p ng-repeat="host in list.gnHostMachines">{{host.ip}}</p>
+                                    </td>
+                                    <td class="hidden-xs">{{list.create_time_diff}}</td>
+                                    <td class="dropdown">
+                                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            <div class="gn-more">더보기</div>
+                                            <span class="gn-caret-table"></span>
+                                        </div>
+                                        <!--더보기>드롭다운-->
+                                        <ul class="dropdown-menu gn-dropdown" role="menu">
+                                            <li><a href data-toggle="modal" data-target="#cluster" ng-click="getCluster(list.id)">수정</a></li>
+                                            <li><a href data-toggle="modal" data-target="#cluster-more" ng-click="addNode(list.type)">노드추가</a></li>
+                                            <li><a class="gn-danger" ng-click="deleteCluster(list.id, list.type)">삭제</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div> <!--class="table-responsive table-reset"-->

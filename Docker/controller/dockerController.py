@@ -14,7 +14,7 @@ from Docker.util.config import config
 from Docker.util.hash import random_string
 from Docker.util.logger import logger
 
-ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID)
+ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, sql_session=db_session)
 
 # Docker Service 생성 및 실행
 # 서비스 생성 시에는 실행은 자동이다.
@@ -85,14 +85,15 @@ def doc_create(id,sql_session):
             host_ip = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_ip_list[0]).first().ip
             service_volume_list = ds.get_service_volumes(docker_service[0]['ID'], host_ip)
             logger.debug("service_volume_list: %s" % service_volume_list)
-            for service_volume in service_volume_list:
-                volume = GnDockerVolumes(
-                    service_id=id,
-                    name=service_volume['Source'],
-                    source_path=service_volume['Mountpoint'],
-                    destination_path=service_volume['Target']
-                )
-                sql_session.add(volume)
+            if service_volume_list is not None:
+                for service_volume in service_volume_list:
+                    volume = GnDockerVolumes(
+                        service_id=id,
+                        name=service_volume['Source'],
+                        source_path=service_volume['Mountpoint'],
+                        destination_path=service_volume['Target']
+                    )
+                    sql_session.add(volume)
             # 생성된 접속 포트 정보를 DB에 저장한다.
             ports = docker_service[0]['Endpoint']['Ports']
             logger.debug("ports: %s" % ports)
@@ -569,3 +570,36 @@ def doc_image_list():
     for image in imagelist:
         result.append(image.to_json())
     return jsonify(status=True, message="컨테이너 이미지 리스트 호출 완료.", result=result)
+
+
+# get Container logs
+def get_container_logs(id):
+    sql_session = db_session
+    try:
+        volume_list = sql_session.query(GnDockerVolumes).filter(GnDockerVolumes.service_id == id).all()
+        container_list = sql_session.query(GnDockerContainers).filter(GnDockerContainers.service_id == id).all()
+        result = ''
+        file_list = ''
+
+        for container in container_list:
+            host = sql_session.query(GnHostMachines).filter(GnHostMachines.id == container.host_id).first()
+            host_ip = host.ip
+            result = '%s#%s' % (result, host.name)
+            for volume in volume_list:
+                if volume.source_path.find('LOG') >= 0:
+                    file_list = ds.get_filelist(host_ip, volume.source_path)
+                    result = '%s\r\n%s' % (result, file_list)
+
+        sql_session.commit()
+
+        result_list=result.split('#')
+        '''
+        for files in result_list:
+            if files is not None:
+                file = files.split('\r\n')
+        '''
+        return jsonify(status=True, message="success filelist", result=result)
+    except Exception as msg:
+        sql_session.rollback()
+        logger.debug('filelist error' % msg)
+        return jsonify(status=False, message="failure filelist", result=msg)

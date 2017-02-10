@@ -4,42 +4,40 @@
 
 <!--오른쪽 메뉴-->
 <div class="tab-content col-xs-12 col-sm-10">
-    <!--시스템 > 로그인이력관리-->
+    <!--시스템 > 사용이력조회-->
     <div id="cluster-sett">
         <div class="gn-box">
             <div class="gn-sett-margin-box">
                 <div class="container-fluid">
                     <h2>사용 이력 조회</h2>
-                       <div class="container-fluid">
-                            <div class="table-responsive gn-table-responsive">
-                                <table class="table gn-board-table">
-                                    <thead>
-                                    <tr>
-                                        <th class="col-sm-1">#</th>
-                                        <th class="col-sm-3 col-xs-9">팀</th>
-                                        <th class="col-sm-3 col-xs-9">아이디</th>
-                                        <th class="col-sm-1 hidden-xs">액션</th>
-                                        <th class="col-sm-3 hidden-sm hidden-xs">날짜</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody class="gn-tdody">
-                                    <tr ng-repeat="list in login_hist">
-                                        <td>{{list.id}}</td>
-                                        <td>{{list.gnTeam.team_name}}</td>
-                                        <td>{{list.user_id}}</td>
-                                        <td>
-                                            <span ng-if="list.action == 'Create'">생성</span>
-                                            <span ng-if="list.action == 'Suspend'">정지</span>
-                                            <span ng-if="list.action == 'Resume'">시작</span>
-                                            <span ng-if="list.action == 'Deleting'">삭제</span>
-                                            <span ng-if="list.action == 'Reboot'">재시작</span>
-                                        </td>
-                                        <td>{{list.action_time}}</td> <!--초 빼고-->
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div> <!--class="table-responsive table-reset"-->
-                        </div> <!--class="container-fluid"--> 
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table gn-board-table">
+                            <thead>
+                                <tr>
+                                    <th class="hidden-xs">#</th>
+                                    <th class="">팀</th>
+                                    <th class="">아이디</th>
+                                    <th class="">액션</th>
+                                    <th class="hidden-sm hidden-xs">날짜</th>
+                                </tr>
+                            </thead>
+                            <tbody class="gn-tdody">
+                                <tr ng-repeat="list in login_hist">
+                                    <td class="hidden-xs">{{list.id}}</td>
+                                    <td><span class="gn-table-ellip">{{list.gnTeam.team_name}}</span></td>
+                                    <td><span class="gn-table-ellip">{{list.user_id}}</span></td>
+                                    <td>
+                                        <span ng-if="list.action == 'Create'">생성</span>
+                                        <span ng-if="list.action == 'Suspend'">정지</span>
+                                        <span ng-if="list.action == 'Resume'">시작</span>
+                                        <span ng-if="list.action == 'Deleting'">삭제</span>
+                                        <span ng-if="list.action == 'Reboot'">재시작</span>
+                                    </td>
+                                    <td class="hidden-sm hidden-xs">{{list.action_time}}</td> <!--초 빼고-->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> <!--class="table-responsive table-reset"-->
                 </div><!-- div class="container-fluid"-->
                 
                 <!--이전/다음 버튼-->
@@ -50,5 +48,5 @@
                 
             </div><!--class="gn-sett-margin-box"-->
         </div><!--div class="gn-box"-->
-    </div><!--<div id="cluster-sett">로그인이력관리-->
+    </div><!--<div id="cluster-sett">사용이력조회-->
 </div> <!-- /container -->

@@ -59,7 +59,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-3" ng-class="{'gn-input-error':data_value == 'cpu'}" ng-repeat="size in size" ng-click="func(size)">
                     <label class="btn gn-btn-create btn-block">
                         <input id="cpu" name="" value="" type="radio">
-                        <div class="size-info ellipsis">{{size.cpu}} CPU / {{size.mem}}</div>
+                        <div class="size-info ellipsis">{{size.cpu}} CPU / {{size.mem}} Memory</div>
                     </label>
                 </div>
                 <p ng-show="data_value =='cpu' " class="error-message">cpu / memory / disk 의 크기를 선택해주세요.</p>

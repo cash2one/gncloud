@@ -25,20 +25,20 @@
 
                                     <form name="clusterForm" class="form-horizontal">
                                         <div class="form-group">
-                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label">CPU</label>
-                                            <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.cpu.$invalid && !clusterForm.cpu.$pristine }">
+                                            <label for="inputtext" class="col-xs-12 col-sm-3 control-label gn-control-label">CPU</label>
+                                            <div class="col-xs-8 col-sm-6" ng-class="{ 'has-error' : clusterForm.cpu.$invalid && !clusterForm.cpu.$pristine }">
                                                 <input type="text" class="form-control gn-form-control" name="cpu" placeholder="1" ng-model="data.cpu" required>
                                                 <p ng-show="clusterForm.cpu.$invalid && !clusterForm.cpu.$pristine" class="help-block">CPU 개수를 입력하세요.</p>
                                             </div>
-                                            <span>CORE</span>
+                                            <span class="col-xs-4 col-sm-3">CORE</span>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label">Memory</label>
-                                            <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.mem.$invalid && !clusterForm.mem.$pristine }">
+                                            <label for="inputtext" class="col-xs-12 col-sm-3 control-label gn-control-label">Memory</label>
+                                            <div class="col-xs-8 col-sm-6" ng-class="{ 'has-error' : clusterForm.mem.$invalid && !clusterForm.mem.$pristine }">
                                                 <input type="text" class="form-control gn-form-control" name="mem" placeholder="2" ng-model="data.mem" required>
                                                 <p ng-show="clusterForm.mem.$invalid && !clusterForm.mem.$pristine" class="help-block">메모리 크기를 입력하세요.</p>
                                             </div>
-                                            <p ng-class="{ 'has-error' : clusterForm.mem_size.$invalid && !clusterForm.mem_size.$pristine }">
+                                            <p class="col-xs-4 col-sm-3" ng-class="{ 'has-error' : clusterForm.mem_size.$invalid && !clusterForm.mem_size.$pristine }">
                                                 <select class="gn-select gn-form-control col-sm-2" name="mem_size" ng-model="memsize" ng-options="mem.name for mem in mem" ng-change="sizemem(memsize)">
                                                     <option value="">선택</option>
                                                 </select>
@@ -46,12 +46,12 @@
                                             </p>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label">Disk</label>
-                                            <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.disk.$invalid && !clusterForm.disk.$pristine }">
+                                            <label for="inputtext" class="col-xs-12 col-sm-3 control-label gn-control-label">Disk</label>
+                                            <div class="col-xs-8 col-sm-6" ng-class="{ 'has-error' : clusterForm.disk.$invalid && !clusterForm.disk.$pristine }">
                                                 <input type="text" class="form-control gn-form-control" name="disk" placeholder="10" ng-model="data.disk" required>
                                                 <p ng-show="clusterForm.disk.$invalid && !clusterForm.disk.$pristine" class="help-block">디스크 크기를 입력하세요.</p>
                                             </div>
-                                            <p  ng-class="{ 'has-error' : clusterForm.disk_size.$invalid && !clusterForm.disk_size.$pristine }">
+                                            <p class="col-xs-4 col-sm-3" ng-class="{ 'has-error' : clusterForm.disk_size.$invalid && !clusterForm.disk_size.$pristine }">
                                                 <select class="gn-select gn-form-control col-sm-2" name="disk_size" ng-model="disksize" ng-options="disk.name for disk in disk" ng-change="sizedisk(disksize)" required>
                                                     <option value="">선택</option>
                                                 </select>
@@ -60,20 +60,20 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label">가격</label>
-                                            <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.won.$invalid && !clusterForm.won.$pristine }">
+                                            <label for="inputtext" class="col-xs-12 col-sm-3 control-label gn-control-label">가격</label>
+                                            <div class="col-xs-8 col-sm-6" ng-class="{ 'has-error' : clusterForm.won.$invalid && !clusterForm.won.$pristine }">
                                                 <input type="text" class="form-control gn-form-control" name="won" placeholder="1000" ng-model="data.won" required>
                                                 <p ng-show="clusterForm.won.$invalid && !clusterForm.won.$pristine" class="help-block">가격를 입력하세요.</p>
                                             </div>
-                                            <span>원/일</span>
+                                            <span class="col-xs-4 col-sm-3">원/일</span>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inputtext" class="col-sm-3 control-label gn-control-label">가격</label>
-                                            <div class="col-sm-6" ng-class="{ 'has-error' : clusterForm.won_hour.$invalid && !clusterForm.won_hour.$pristine }">
+                                            <label for="inputtext" class="col-xs-12 col-sm-3 control-label gn-control-label">가격</label>
+                                            <div class="col-xs-8 col-sm-6" ng-class="{ 'has-error' : clusterForm.won_hour.$invalid && !clusterForm.won_hour.$pristine }">
                                                 <input type="text" class="form-control gn-form-control" name="won_hour" placeholder="100" ng-model="data.won_hour" required>
                                                 <p ng-show="clusterForm.won_hour.$invalid && !clusterForm.won_hour.$pristine" class="help-block">가격를 입력하세요.</p>
                                             </div>
-                                            <span>원/시간</span>
+                                            <span class="col-xs-4 col-sm-3">원/시간</span>
                                         </div>
                                     </form>
                                 </div> <!--class="modal-body"-->
@@ -90,33 +90,33 @@
                     <div class="table-responsive gn-table-responsive">
                         <table class="table gn-board-table">
                             <thead>
-                            <tr>
-                                <th class="">#</th>
-                                <th class="">정보</th>
-                                <th class="hidden-xs">시간 가격</th>
-                                <th class="hidden-xs">일 가격</th>
-                                <th class=""></th>
-                            </tr>
+                                <tr>
+                                    <th class="hidden-xs">#</th>
+                                    <th class="">정보</th>
+                                    <th class="hidden-xs">시간 가격</th>
+                                    <th class="hidden-xs">일 가격</th>
+                                    <th class=""></th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="price in price_list">
-                                <td>{{$index+1}}</td>
-                                <td class="">{{price.cpu}} CPU/ {{price.mem}} / {{price.disk}}</td>
-                                <td class="hidden-xs">{{price.hour_price | number}}원</td>
-                                <td class="hidden-xs">{{price.day_price | number}}원</td>
-                                <td class="dropdown">
-                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                                        <div class="gn-more">더보기</div>
-                                        <span class="gn-caret-table"></span>
-                                    </div>
-                                    <!--더보기>드롭다운-->
-                                    <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li ng-repeat="sel in actions">
-                                            <a class="gn-danger" ng-click="update(price.id)">{{sel.name}}</a>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
+                                <tr ng-repeat="price in price_list">
+                                    <td class="hidden-xs">{{$index+1}}</td>
+                                    <td class="">{{price.cpu}} CPU/ {{price.mem}} / {{price.disk}}</td>
+                                    <td class="hidden-xs">{{price.hour_price | number}}원</td>
+                                    <td class="hidden-xs">{{price.day_price | number}}원</td>
+                                    <td class="dropdown">
+                                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            <div class="gn-more">더보기</div>
+                                            <span class="gn-caret-table"></span>
+                                        </div>
+                                        <!--더보기>드롭다운-->
+                                        <ul class="dropdown-menu gn-dropdown" role="menu">
+                                            <li ng-repeat="sel in actions">
+                                                <a class="gn-danger" ng-click="update(price.id)">{{sel.name}}</a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div> <!--class="table-responsive table-reset"-->

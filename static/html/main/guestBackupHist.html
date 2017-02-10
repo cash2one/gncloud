@@ -12,7 +12,7 @@
                     <table class="table gn-board-table table-hover">
                         <thead>
                         <tr>
-                            <th class="">#</th>
+                            <th class="hidden-xs">#</th>
                             <th class="hidden-xs">시간</th>
                             <th class="hidden-xs">팀</th>
                             <th class="">인스턴스</th>
@@ -21,7 +21,7 @@
                         </thead>
                         <tbody class="gn-tdody">
                         <tr class="" ng-repeat="backup in backup">
-                            <td>{{total_page-($index+this_page)}}</td>
+                            <td class="hidden-xs">{{total_page-($index+this_page)}}</td>
                             <td class="hidden-xs">{{backup.backup_time}}</td>
                             <td class="hidden-xs">{{backup.team_name}}</td>
                             <td class="second-td-name">
@@ -63,7 +63,7 @@
                                     </dl>
                                     
                                     <div class="table-responsive gn-table-responsive">
-                                        <table class="table table-bordered gn-board-table">
+                                        <table class="table gn-board-table">
                                             <thead>
                                             <tr>
                                                 <th>#</th>
@@ -74,8 +74,8 @@
                                             <tbody class="gn-tdody">
                                             <tr ng-repeat="hist in hist_info">
                                                 <td>{{total-$index}}</td>
-                                                <td>{{hist.backup_time}}</td>
-                                                <td>{{hist.filename}}</td>
+                                                <td><span class="gn-table-ellip">{{hist.backup_time}}</span></td>
+                                                <td><span class="gn-table-ellip">{{hist.filename}}</span></td>
                                             </tr>
                                             </tbody>
                                         </table>
