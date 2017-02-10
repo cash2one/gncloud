@@ -33,6 +33,7 @@ angular
                             }
                         }
                     }
+                    $scope.nodelist($scope.vm_info.id);
                 }
                 else {
                     alert(data.message)
@@ -41,7 +42,20 @@ angular
             .error(function (data, status, headers, config) {
                 console.log(status);
             });
+        $scope.nodelist=function (vm_id) {
+            $scope.data={};
+            $scope.data.vm_id = vm_id;
+            $http({
+                method: 'GET',
+                url: '/api/docker/vm/',
+                params:$scope.data,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            }).success(function (data, status, headers, config) {
 
+            }).error(function (data, status, headers, config) {
+                console.log(status);
+            });
+        }
         $scope.change_name = function() {
             if($("#vm_name").val() == "") {
                 alert("이름을 입력해주세요");
@@ -142,7 +156,7 @@ angular
 
         $scope.deleteInstance = function(){
             $timeout(function () {
-                window.location.href = '#/guestList';
+                window.location.href = '#/guestSeriveList';
             }, 1000 , true );
 
             $http({

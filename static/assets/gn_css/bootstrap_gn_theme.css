@@ -583,7 +583,7 @@ li.nav-link.active>a:hover,
 /* 모달창 공통 */
 .modal-open .modal {
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 .modal {
@@ -652,12 +652,15 @@ li.nav-link.active>a:hover,
     font-family: 'Nanum Barun Gothic', sans-serif;
 }
 
+pre{white-space: normal;}
+
 pre.gn-write{
     padding: 0px 15px;
     background-color: transparent;
     border: none;
     border-radius: 0;
     font-size: 14px;
+    white-space: normal;
 }
 
 #modal-board .gn-modal-footer{padding-top: 0;}
@@ -1083,7 +1086,7 @@ div.load-3{padding: 5%;}
 /* ========== gncloud 인스턴스 > 리스트 HTML ========== */
 th.first-td{width: 65px;}
 
-td.first-td img{width: 35px;}
+td.first-td img{width: 35px; display: block;}
 
 .second-td-name{
     text-align: left !important;
@@ -1100,7 +1103,7 @@ td.first-td img{width: 35px;}
     width: 15px;
     height: 35px;
     float: left;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 
 .gn-dot-play{
@@ -1108,20 +1111,20 @@ td.first-td img{width: 35px;}
     width: 15px;
     height: 35px;
     float: left;
-    margin-right: 5px;    
-}
-
-.gn-dot-error{
-    background: url(../gn_images/gn_dot_error.png) no-repeat;
-    width: 20px;
-    height: 35px;
-    float: left;
-    margin-right: 5px;    
+    margin-right: 10px;    
 }
 
 .gn-dot-suspend{
     background: url(../gn_images/gn_dot_suspend.png) no-repeat;
     width: 15px;
+    height: 35px;
+    float: left;
+    margin-right: 10px;    
+}
+
+.gn-dot-error{
+    background: url(../gn_images/gn_dot_error.png) no-repeat;
+    width: 20px;
     height: 35px;
     float: left;
     margin-right: 5px;    
@@ -1480,7 +1483,7 @@ img.elli-img-icon{
 .size-info{
     font-size: 16px;
     margin:  auto;
-    padding: 25px 0px;
+    padding: 23px 0px;
 }
 
 .border-bottom{
@@ -1568,15 +1571,9 @@ li.active > .tab-sm-box{
 }
 
 /* ========== gncloud 서비스 관련 HTML ========== */
-.service-table{font-size: 14px; height: 50px;}
-.service-table > thead > tr >  th{text-align: center; border: none;}
-.service-table > tbody > tr > td{text-align: right; border: none; padding: 2px;}
+.service-log div{padding: 0;}
+.service-log .gn-table-ellip{width: 210px;}
 
-.service-table .gn-table-ellip{width: 180px; text-align: left;}
-
-.col-left{padding-right: 30px !important;}
-.col-center{padding-left: 30px !important; padding-right: 30px !important;}
-.col-right{padding-left: 30px !important;}
 
 
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
@@ -1865,6 +1862,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     border: none !important;
 }
 
+
+
 /*백업현황*/
 #modal-backup dl.gn-description-list{margin-bottom: 5px;}
 
@@ -1941,10 +1940,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     /* ======== gncloud 인스턴스 상세 ======== */
     
     /* ======== gncloud 서비스 ======== */
-    .col-left{padding-right: 10px !important;}
-    .col-center{padding-left: 10px !important; padding-right: 10px !important;}
-    .col-right{padding-left: 10px !important;}    
-    .service-table .gn-table-ellip{width: 80px; text-align: left;}
+    /*서비스 생성(개발에서 타입을 선택해야 버튼이 생기는 btn-group에 해당) min-height*/
+    .create-min{min-height: 82px !important;} 
     
     /* ======== gncloud 이미지 ======== */
     
@@ -2060,9 +2057,6 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     .row.gn-margin-bott10 > div.col-sm-2 > button.btn-gn-sub{margin-bottom: 10px;}  
     
     /* ======== gncloud 서비스 ======== */
-    .col-left{padding-right: 0px !important;}
-    .col-center{padding-left: 0px !important; padding-right: 0px !important;}
-    .col-right{padding-left: 0px !important;} 
 
     
     /* ======== gncloud 설정 ======== */ 
@@ -2110,7 +2104,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     
     /*gn-board-table 에 속하는 이름 화면 최소로 줄였을 때 width 값*/
     .gn-board-table > .gn-tdody > tr > td > .gn-table-ellip,
-    #snap a.gn-table-ellip{width: 95px;} 
+    #snap a.gn-table-ellip{width: 90px;} 
     
     /*설정 > 넓은 dd가 필요하지 않은 경우*/
     .gn-description-list.sm dd{
@@ -2126,10 +2120,14 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     
     /*설정 이미지관리*/
     #image-sett #machine .gn-table-ellip,
-    #image-sett #container .gn-table-ellip{width: 48px;}
+    #image-sett #container .gn-table-ellip,
+    #use-history .gn-table-ellip{width: 48px;}
     
     /*서비스*/
-    .service-table .gn-table-ellip{width: 80px; text-align: left;}
+    .service-log .gn-table-ellip{width: 80px;}
+    
+    
+    
 }
 
 
