@@ -3,7 +3,7 @@ __author__ = 'jhjeon'
 
 from pexpect import pxssh
 
-from Docker.db.models import GnVmMachines, GnMonitorHist, GnMonitor
+from Docker.db.models import GnVmMachines, GnMonitorHist, GnMonitor, GnDockerContainers, GnHostMachines
 from Docker.util.logger import logger
 
 KILO_TO_BYE=1024
@@ -21,8 +21,9 @@ def service_monitoring(sql_session):
             disk_usage = 0.0
             net_usage = 0.0
             worker_count = 0
-            for container in service.gnDockerContainers:
-                container_host = container.gnHostMachines
+            container_list = sql_session.query(GnDockerContainers).filter(GnDockerContainers.service_id == service.id).all()
+            for container in container_list:
+                container_host = sql_session.query(GnHostMachines).filter(GnHostMachines.id == container.host_id).first()
                 worker_count += 1
 
                 logger.debug("login start")
