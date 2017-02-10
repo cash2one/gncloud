@@ -615,12 +615,36 @@ def saveBaseImageImportFileDocker():
 def saveBaseImageExceptFileDocker():
     name = request.json['name']
     view_name = request.json['view_name']
-    os_ver = request.json['os_ver']
-    tag = request.json['tag']
-    port = request.json['port']
-    env = request.json['env']
-    vol = request.json['vol']
-    os = request.json['os']
+
+    if 'os_ver' in request.json:
+        os_ver = request.json['os_ver']
+    else:
+        os_ver = ''
+
+    if 'tag' in request.json:
+        tag = request.json['tag']
+    else:
+        tag = ''
+
+    if 'port' in request.json:
+        port = request.json['port']
+    else:
+        port = ''
+
+    if 'env' in request.json:
+        env = request.json['env']
+    else:
+        env = ''
+
+    if 'vol' in request.json:
+        vol = request.json['vol']
+    else:
+        vol = ''
+
+    if 'os' in request.json:
+        os = request.json['os']
+    else:
+        os = ''
 
     if 'id' in request.json:
         updateImageInfoDocker(request.json['id'],name,view_name,os_ver,tag,"",port,env,vol,db_session)
