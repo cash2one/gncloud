@@ -138,7 +138,7 @@ angular
 
         $scope.createInstance = function(id){
             $timeout(function () {
-                window.location.href = '#/guestSerivceList';
+                window.location.href = '#/guestServiceList';
             }, 1000 , true );
 
             $http({

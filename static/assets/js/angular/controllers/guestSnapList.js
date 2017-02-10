@@ -137,9 +137,8 @@ angular
                 })
                     .success(function(data, status, headers, config) {
                         if (data.status == true) {
-                            $scope.snapshotsdelete(ty,id);
+                            $scope.snapshotsdelete(ty,id,name);
                         } else {
-                            notification.sendMessage("success","삭제되었습니다.");
                             $scope.snapList();
                         }
                     })
@@ -148,7 +147,7 @@ angular
                     });
             }
         };
-        $scope.snapshotsdelete=function(ty,id){
+        $scope.snapshotsdelete=function(ty,id,name){
             $timeout(function(){
                 $scope.snapList();
             },2000,true);
@@ -159,9 +158,10 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        notification.sendMessage("success","삭제되었습니다.");
+                        notification.sendMessage("success",name+" 스냅샷이 삭제되었습니다.");
                         $scope.snapList();
                     } else {
+                        notification.sendMessage("error",name+" 스냅샷 삭제중 오류가 발생하였습니다.");
                         alert(data.message);
                     }
                 })
@@ -207,10 +207,10 @@ angular
             })
                 .success(function (data) {
                     if (data.status == true) {
-                        notification.sendMessage("success","스냅샷이 생성되었습니다.")
+                        notification.sendMessage("success",$scope.data.vm_name+ " 스냅샷이 생성되었습니다.")
                         $scope.snapList();
                     } else {
-                        alert(data.message);
+                        notification.sendMessage("error",$scope.data.vm_name+ " 스냅샷 생성중 오류가 발생하였습니다.")
                     }
                 });
         };
