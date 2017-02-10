@@ -13,31 +13,28 @@
                     <div class="table-responsive gn-table-responsive">
                         <table class="table table gn-table">
                             <thead>
-                            <tr>
-                                <th class="">팀명</th>
-                                <th class="">관리자</th>
-                                <th class="">팀원</th>
-                                <th class="hidden-xs hidden-sm">생성일</th>
-                                <th class="hidden-xs">리소스</th>
-                            </tr>
+                                <tr>
+                                    <th class="">팀명</th>
+                                    <th class="">관리자</th>
+                                    <th class="hidden-xs">팀원</th>
+                                    <th class="hidden-xs hidden-sm">생성일</th>
+                                    <th class="hidden-xs">리소스</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="select in table">
-                                <td><a href="#/guestTeamDetail?code={{select.team_code}}">{{select.team_name}}</a></td>
-                                <td>{{select.owner_name}}
-                                    <br>
-                                    <span>{{select.owner_id}}</span>
-                                </td>
-                                <td>
-                                    <div>
+                                <tr ng-repeat="select in table">
+                                    <td><a href="#/guestTeamDetail?code={{select.team_code}}">{{select.team_name}}</a></td>
+                                    <td>{{select.owner_name}}<span>{{select.owner_id}}</span></td>
+                                    <td class="hidden-xs">
                                         <div>
-                                            <span><span class="tag" data-toggle="tooltip" title="{{select.users}}" tooltip>+{{select.userslen}}</span></span>
+                                            <div>
+                                                <span><span class="tag" data-toggle="tooltip" title="{{select.users}}" tooltip>+{{select.userslen}}</span></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="hidden-xs hidden-sm"><span data-toggle="tooltip" title="{{select.create_date}}" tooltip>{{select.create_time_diff}}</span></td>
-                                <td class="hidden-xs">{{select.cpu_use_cnt}}CORE/{{select.mem_use_cnt}}/{{select.disk_use_cnt}}</td>
-                            </tr>
+                                    </td>
+                                    <td class="hidden-xs hidden-sm"><span data-toggle="tooltip" title="{{select.create_date}}" tooltip>{{select.create_time_diff}}</span></td>
+                                    <td class="hidden-xs">{{select.cpu_use_cnt}}CORE/{{select.mem_use_cnt}}/{{select.disk_use_cnt}}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
