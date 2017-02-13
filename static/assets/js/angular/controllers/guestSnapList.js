@@ -305,11 +305,19 @@ angular
                         $scope.dockerImage = data.info;
 
                         for(var i=0; i < data.info.gnDockerImageDetail.length ; i++){
-                            if(data.info.gnDockerImageDetail[i].arg_type == "mount"){
-                                if($scope.dockerImage.vol != null) {
-                                    $scope.dockerImage.vol += data.info.gnDockerImageDetail[i].argument + "\n";
+                            if(data.info.gnDockerImageDetail[i].arg_type == "data_vol"){
+                                if($scope.dockerImage.data_vol != null) {
+                                    $scope.dockerImage.data_vol += data.info.gnDockerImageDetail[i].argument + "\n";
                                 }else{
-                                    $scope.dockerImage.vol = data.info.gnDockerImageDetail[i].argument + "\n";
+                                    $scope.dockerImage.data_vol = data.info.gnDockerImageDetail[i].argument + "\n";
+                                }
+                            }
+
+                            if(data.info.gnDockerImageDetail[i].arg_type == "log_vol"){
+                                if($scope.dockerImage.log_vol != null) {
+                                    $scope.dockerImage.log_vol += data.info.gnDockerImageDetail[i].argument + "\n";
+                                }else{
+                                    $scope.dockerImage.log_vol = data.info.gnDockerImageDetail[i].argument + "\n";
                                 }
                             }
 
@@ -330,7 +338,8 @@ angular
                             }
                         }
 
-                        $scope.dockerImage.vol = $scope.dockerImage.vol.slice(0,-1)
+                        $scope.dockerImage.data_vol = $scope.dockerImage.data_vol.slice(0,-1)
+                        $scope.dockerImage.log_vol = $scope.dockerImage.log_vol.slice(0,-1)
                         $scope.dockerImage.port = $scope.dockerImage.port.slice(0,-1)
                         $scope.dockerImage.env = $scope.dockerImage.env.slice(0,-1)
 

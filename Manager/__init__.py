@@ -604,13 +604,14 @@ def saveBaseImageImportFileDocker():
     tag = request.form['tag']
     port = request.form['port']
     env = request.form['env']
-    vol = request.form['vol']
+    data_vol = request.form['data_vol']
+    log_vol = request.form['log_vol']
     os = request.form['os']
 
     if 'id' in request.form:
-        updateImageInfoDocker(request.form['id'],name,view_name,os_ver,tag,icon,port,env,vol,db_session)
+        updateImageInfoDocker(request.form['id'],name,view_name,os_ver,tag,icon,port,env,data_vol,log_vol,db_session)
     else:
-        insertImageInfoDocker(name,view_name,os,os_ver,tag,icon,port,env,vol,session['teamCode'],db_session)
+        insertImageInfoDocker(name,view_name,os,os_ver,tag,icon,port,env,data_vol,log_vol,session['teamCode'],db_session)
 
     return jsonify(status=True, message="success")
 
@@ -639,10 +640,15 @@ def saveBaseImageExceptFileDocker():
     else:
         env = ''
 
-    if 'vol' in request.json:
-        vol = request.json['vol']
+    if 'data_vol' in request.json:
+        data_vol = request.json['data_vol']
     else:
-        vol = ''
+        data_vol = ''
+
+    if 'log_vol' in request.json:
+        log_vol = request.json['log_vol']
+    else:
+        log_vol = ''
 
     if 'os' in request.json:
         os = request.json['os']
@@ -650,9 +656,9 @@ def saveBaseImageExceptFileDocker():
         os = ''
 
     if 'id' in request.json:
-        updateImageInfoDocker(request.json['id'],name,view_name,os_ver,tag,"",port,env,vol,db_session)
+        updateImageInfoDocker(request.json['id'],name,view_name,os_ver,tag,"",port,env,data_vol,log_vol,db_session)
     else:
-        insertImageInfoDocker(name,view_name,os,os_ver,tag,"",port,env,vol,session['teamCode'],db_session)
+        insertImageInfoDocker(name,view_name,os,os_ver,tag,"",port,env,data_vol,log_vol,session['teamCode'],db_session)
 
     return jsonify(status=True, message="success")
 

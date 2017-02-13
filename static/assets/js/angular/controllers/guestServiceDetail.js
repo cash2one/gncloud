@@ -33,7 +33,7 @@ angular
                             }
                         }
                     }
-                    $scope.nodelist($scope.vm_info.id);
+                    $scope.nodelist($scope.vm_data.id);
                 }
                 else {
                     alert(data.message)
@@ -47,22 +47,27 @@ angular
             $scope.data.vm_id = vm_id;
             $http({
                 method: 'GET',
-                url: '/api/docker/vm/',
+                url: '/api/docker/vm/logfilelist',
                 params:$scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
+                if(data != null){
+                    $scope.log_list = JSON.parse(data);
+                    console.log($scope.log_list);
+                }
 
             }).error(function (data, status, headers, config) {
                 console.log(status);
             });
         }
-        $scope.node_info=function (vm_id, filename) {
+        $scope.node_info=function (vm_id, filename, work) {
             $scope.data={};
             $scope.data.vm_id = vm_id;
             $scope.data.filename = filename;
+            $scope.data.work_name = work;
             $http({
                 method: 'GET',
-                url: '/api/docker/vm/',
+                url: '/api/docker/vm/logfilecontents',
                 params:$scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
