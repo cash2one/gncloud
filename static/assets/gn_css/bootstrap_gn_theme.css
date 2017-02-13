@@ -1326,6 +1326,9 @@ ul.gn-tag-group > li{
 }
 
 /* ========== gncloud 인스턴스 > 생성 HTML ========== */
+/*서비스 생성(개발에서 타입을 선택해야 버튼이 생기는 btn-group에 해당) min-height*/
+.create-min{min-height: 82px !important;} 
+
 #snap > form > .btn-group,
 form > .btn-group{
     width: 100%;
@@ -1440,7 +1443,7 @@ form > .btn-group{
     width: 35px;
     height: 35px;
     overflow: hidden;  
-    margin: 5px 0px 5px 0px;
+    margin: 7px 0px 5px 0px;
     float: left;
 }
 .sprite-windows{background: url(../gn_images/sprite_windows.png) no-repeat;}
@@ -1946,8 +1949,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     /* ======== gncloud 인스턴스 상세 ======== */
     
     /* ======== gncloud 서비스 ======== */
-    /*서비스 생성(개발에서 타입을 선택해야 버튼이 생기는 btn-group에 해당) min-height*/
-    .create-min{min-height: 82px !important;} 
+    
     
     /* ======== gncloud 이미지 ======== */
     
