@@ -642,7 +642,12 @@ def get_contents(id, filename, worker_name):
                 f_contents = ds.get_filecontents(log_host.ip, log_volume.source_path, filename)
                 break
 
-        f_contents = f_contents.split('\r\n')[1:]
+        #f_contents = f_contents.split('\r\n')[1:]
+        if len(f_contents) > 0:
+            pos = f_contents.find('\r\n')
+            if pos >= 0:
+                f_contents = f_contents[pos+2:]
+
         sql_session.commit()
         return jsonify(status=True, message="success filecontents", result=f_contents)
     except Exception as msg:
