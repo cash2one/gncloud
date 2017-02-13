@@ -52,7 +52,8 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
                 if(data.status == true){
-                    $scope.log_list=data.result.filelist;
+                    $scope.host = data.list[0].hostname;
+                    $scope.log_list =data.list[0].filelist;
                     console.log($scope.log_list);
                 }
 
@@ -60,18 +61,21 @@ angular
                 console.log(status);
             });
         }
-        $scope.node_info=function (vm_id, filename, work) {
+        $scope.node_info=function (vm_id, filename, worker_name, filesize) {
             $scope.data={};
             $scope.data.vm_id = vm_id;
             $scope.data.filename = filename;
-            $scope.data.work_name = work;
+            $scope.data.worker_name = worker_name;
+            $scope.data.filesize = filesize
             $http({
                 method: 'GET',
                 url: '/api/docker/vm/logfilecontents',
                 params:$scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
-
+                if(data.status == true){
+                    $("#reso").val(data.list);
+                }
             }).error(function (data, status, headers, config) {
                 console.log(status);
             });

@@ -144,13 +144,13 @@
 <div class="gn-box gn-detail-main">
     <div class="gn-margin-box">
         <h2>로그</h2>
-        <h3>worker-1</h3><!--노드이름-->
+        <h3>{{host}}</h3><!--노드이름-->
         <div class="row service-log">
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="log in log_list track by $index">
                        <span class="col-sm-8">
-                           <a class="gn-table-ellip" data-toggle="modal" data-target="#detail-log" ng-click="node_info()">node_000000000001.txt</a>
+                           <a class="gn-table-ellip" data-toggle="modal" data-target="#detail-log" ng-click="node_info(vm_data.id,log.filename,host,log.filesize)">{{log.filename}}</a>
                        </span>
-                <span class="col-sm-4">1,024 KB</span>
+                <span class="col-sm-4">{{log.filesize}}</span>
             </div>
         </div>
     </div>
@@ -163,11 +163,11 @@
         <div class="modal-content">
             <div class="modal-header gn-modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">worker-1</h4><!--노드이름-->
-                <div class="gn-write">node_003.txt (<span>1,024 KB</span>)</div>
+                <h4 class="modal-title">{{host}}</h4><!--노드이름-->
+                <div class="gn-write">{{data.filename}} (<span>{{data.filesize}} KB</span>)</div>
             </div>
             <div class="modal-body gn-modal-body">
-                <textarea class="form-control" rows="3"></textarea>
+                <textarea class="form-control" rows="3" id="res"></textarea>
             </div>
             <div class="modal-footer gn-modal-footer">
                 <button type="submit" class="btn btn-gn-sub btn-lg btn-block" data-dismiss="modal">닫기</button>
