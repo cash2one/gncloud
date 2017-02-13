@@ -130,6 +130,7 @@ def server_delete(id,sql_session):
             s.sendline("rm -f "+config.LIVERT_IMAGE_BACKUP_PATH+backup_info.filename)
 
         s.logout()
+        sql_session.query(GnBackupHist).filter(GnBackupHist.vm_id == id).delete()
 
         # db 저장
         sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).delete()
