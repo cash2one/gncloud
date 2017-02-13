@@ -1,12 +1,11 @@
 <h1>설정</h1>
 
+<!--왼쪽 메뉴-->
+<navme></navme>
 
-    <!--왼쪽 메뉴-->
-    <navme></navme>
- 
 <div class="row">       
     <div class="tab-content col-xs-12 col-sm-10">
-       
+
         <!--프로필-->
         <div id="profile" class="">
             <div class="gn-box">
@@ -14,7 +13,7 @@
                     <div class="container-fluid">
                         <h2>{{te_list.user_name}}</h2>
                         <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#myModal">수정</button>
-    
+
                         <!-- Modal -->
                         <div class="modal fade" id="myModal" role="dialog">
                             <div class="modal-backdrop fade in" style="height: 3000px;"></div>
@@ -24,9 +23,9 @@
                                         <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
                                         <h4 class="modal-title">프로필 수정</h4>
                                     </div>
-    
+
                                     <div class="modal-body gn-modal-body">
-    
+
                                         <form class="form-horizontal" name="meForm" ng-submit="submitForm(meForm.$valid)" novalidate>
                                             <div class="form-group">
                                                 <label class="col-sm-4 control-label gn-control-label">이름</label>
@@ -75,7 +74,7 @@
                                                 </div>
                                             </div>
                                         </form>
-    
+
                                     </div> <!--modal-body-->
                                     <div class="modal-footer gn-modal-footer">
                                         <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="submit()" ng-disabled="meForm.$invalid">저장</button>
@@ -84,7 +83,7 @@
                             </div> <!--class="modal-dialog modal-sm"-->
                         </div> <!--class="modal fade" id="myModal" role="dialog" -->
                     </div>
-    
+
                     <div class="container-fluid">
                         <form>
                             <dl class="dl-horizontal gn-description-list">
@@ -99,12 +98,8 @@
                     </div>
                 </div> <!--class="gn-sett-margin-box" 사용자 이름-->
             </div>  <!--class="gn-box profile-user"-->
-    
-        </div> <!--id="profile" class="tab-pane fade in active"-->
-    
-    
-    
-    
-    
-    </div>
-</div>
+
+        </div> <!--id="profile"-->    
+
+    </div><!--tab-content-->
+</div><!--row-->
