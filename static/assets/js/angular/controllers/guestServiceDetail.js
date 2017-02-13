@@ -148,7 +148,7 @@ angular
                     if (data.status == true) {
                         $scope.deleteInstance();
                     }else if(data.status == false){
-                        window.location.href='#/guestList'
+                        window.location.href='#/guestServiceList'
                     } else {
                         if(data.value != null) {
                             alert(data.value)
@@ -180,7 +180,7 @@ angular
 
         $scope.deleteInstance = function(){
             $timeout(function () {
-                window.location.href = '#/guestSeriveList';
+                window.location.href = '#/guestServiceList';
             }, 1000 , true );
 
             $http({
