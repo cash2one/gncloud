@@ -606,43 +606,29 @@ def get_container_logfiles(id):
 
         result_list=result.split('#')
 
-        total_list = '{"filelist":[{'
+        all_result =[]
         host_count = 0
         for log_unit in result_list:
             if log_unit != '' and log_unit != ' ':
-                if host_count > 0:
-                    total_list = '%s}, {' % total_list
-
                 log_files = log_unit.split('\r\n')
-                ff_list = ''
+                ff_list = []
                 ls_count = 0;
                 for some_file in log_files:
                     if ls_count == 0:
-                        host_name=some_file
+                        hostname = some_file
                     elif ls_count > 2 and some_file != '':
-                        if ls_count > 3:
-                            ff_list = '%s,' % ff_list
                         sep = some_file.split(' ')
-                        file_info = '"filename":"%s", "filesize":"%s"' % (sep[1], sep[0])
-                        ff_list = '%s{%s}' %(ff_list, file_info)
-
-
+                        ff_list.append({"filename":sep[1], "filesize":sep[0]})
                     ls_count += 1
-
-                total_list = '%s"hostname":"%s", "logfile_list":[%s]' %(total_list, host_name, ff_list)
+                all_result.append({"hostname":hostname, "filelist":ff_list})
+                #all_result.append(ff_list)
                 host_count += 1
-
-        total_list = '%s}]}' % total_list
-
-        logger.debug(total_list)
-
-        all_json = '{"message":"sucess filelist", "result":%s, "status":true}' % (total_list)
-        list=json.loads(all_json)
-        return all_json
+        print (all_result)
+        return jsonify(status=True, message="success filelist", list=all_result)
     except Exception as msg:
         sql_session.rollback()
-        logger.debug('filelist error' % msg)
-        return jsonify(status=False, message="failure filelist", result=msg)
+        logger.debug('filelist error %s' % msg.message)
+        return jsonify(status=False, message="failure filelist", result=msg.message)
 
 
 #get logfile's contents
@@ -661,7 +647,7 @@ def get_contents(id, filename, worker_name):
         return jsonify(status=True, message="success filecontents", result=f_contents)
     except Exception as msg:
         sql_session.rollback()
-        logger.debug('filecontents error' % msg)
-        return jsonify(status=False, message="failure filecontents", result=msg)
+        logger.debug('filecontents error %s' % msg.message)
+        return jsonify(status=False, message="failure filecontents", result=msg.message)
 
 
