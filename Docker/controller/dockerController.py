@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
+import json
 import time
-#from datetime import datetime
-import datetime
+
 from flask import jsonify, request, session
 from sqlalchemy import and_
 
@@ -629,6 +629,7 @@ def get_container_logfiles(id):
         logger.debug(total_list)
 
         all_json = '{"message":"sucess filelist", "result":%s, "status":true}' % (total_list)
+        list=json.loads(all_json)
         return all_json
     except Exception as msg:
         sql_session.rollback()
