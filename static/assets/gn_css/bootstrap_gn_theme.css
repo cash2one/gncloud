@@ -1572,6 +1572,7 @@ li.active > .tab-sm-box{
 /* ========== gncloud 서비스 관련 HTML ========== */
 .service-log div{padding: 0;}
 .service-log .gn-table-ellip{width: 210px;}
+.service-log .bite{margin-bottom: 0; text-align: right; color: #a8a8a8;}
 
 #detail-log pre{
     max-height: 300px;

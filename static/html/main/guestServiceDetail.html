@@ -146,13 +146,12 @@
         <h2>로그</h2>
         <div class="gn-margin-bott10" ng-repeat="log in host_list track by $index">
         <h3>{{log.hostname}}</h3><!--노드이름-->
-            <div class="row service-log" >
-                <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="file in log.filelist">
-                           <span class="col-sm-8">
-                               <a class="gn-table-ellip" data-toggle="modal" data-target="#detail-log" ng-click="node_info(vm_data.id,file.filename,log.hostname,file.filesize)">{{file.filename}}</a>
-                           </span>
-                    <span class="col-sm-4">{{file.filesize}} KB</span>
-                </div>
+        <div class="row service-log" >
+            <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="file in log.filelist">
+                       <span class="col-xs-8 col-sm-8">
+                           <a class="gn-table-ellip" data-toggle="modal" data-target="#detail-log" ng-click="node_info(vm_data.id,file.filename,log.hostname,file.filesize)">{{file.filename}}</a>
+                       </span>
+                <span class="col-xs-4 col-sm-4 bite">{{file.filesize}} KB</span>
             </div>
         </div>
     </div>
