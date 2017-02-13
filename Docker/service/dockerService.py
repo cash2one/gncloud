@@ -73,7 +73,7 @@ class DockerService(object):
                     else:
                         vol_type = 'DATA'
                     command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
-                              (command, dockerimage.name, id, mount_count, vol_type, dest_path)
+                              (command, dockerimage.name, id, mount_count, vol_type, detail.argument)
                 else:
                     command = '%s %s' % (command, detail.argument)
             command += " %s" % dockerimage.view_name
@@ -129,7 +129,7 @@ class DockerService(object):
                     else:
                         vol_type = 'DATA'
                     command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
-                              (command, dockerimage.name, id, mount_count, vol_type, dest_path)
+                              (command, dockerimage.name, id, mount_count, vol_type, detail.argument)
                 else:
                     command = '%s %s' % (command, detail.argument)
 
