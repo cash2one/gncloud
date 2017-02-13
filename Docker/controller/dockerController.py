@@ -193,7 +193,7 @@ def doc_state(id):
                     id=id, image=service.gnDockerServices[0].image, backup_image=image,
                     cpu=service.cpu, memory=str(service.memory)+"MB")
                 logger.debug(restart_service)
-                if restart_service == 'error' or restart_service is None:
+                if restart_service == 'Error' or restart_service is None:
                     service.status = 'Error'
                     sql_session.commit()
                     return jsonify(status=False, message="error", result=None)
