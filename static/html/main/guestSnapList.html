@@ -267,10 +267,17 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputtext" class="col-sm-2 control-label gn-control-label" >볼륨</label>
-                                <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.vol.$invalid && !myDockerForm.vol.$pristine }">
-                                    <textarea class="form-control" rows="2" name="vol" placeholder="볼륨을 한 줄에 하나씩 넣어주세요" ng-model="dockerImage.vol"></textarea>
-                                    <p ng-show="myDockerForm.vol.$invalid && !myDockerForm.vol.$pristine" class="help-block">볼륨을 입력하세요.</p>
+                                <label for="inputtext" class="col-sm-2 control-label gn-control-label" >데이터 볼륨</label>
+                                <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.data_vol.$invalid && !myDockerForm.data_vol.$pristine }">
+                                    <textarea class="form-control" rows="2" name="data_vol" placeholder="볼륨을 한 줄에 하나씩 넣어주세요" ng-model="dockerImage.data_vol"></textarea>
+                                    <p ng-show="myDockerForm.data_vol.$invalid && !myDockerForm.data_vol.$pristine" class="help-block">데이터 볼륨을 입력하세요.</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputtext" class="col-sm-2 control-label gn-control-label" >로그 볼륨</label>
+                                <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.log_vol.$invalid && !myDockerForm.log_vol.$pristine }">
+                                    <textarea class="form-control" rows="2" name="log_vol" placeholder="볼륨을 한 줄에 하나씩 넣어주세요" ng-model="dockerImage.log_vol"></textarea>
+                                    <p ng-show="myDockerForm.log_vol.$invalid && !myDockerForm.data_vol.$pristine" class="help-block">로그 볼륨을 입력하세요.</p>
                                 </div>
                             </div>
                             <!--<div class="form-group">
