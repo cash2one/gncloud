@@ -51,7 +51,7 @@ angular
                 params:$scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
-                if(data.status == ture){
+                if(data.status == true){
                     $scope.log_list=data.result.filelist;
                     console.log($scope.log_list);
                 }
