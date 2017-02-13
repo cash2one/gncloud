@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'jhjeon'
 
-import json
 import time
 
 from flask import jsonify, request, session
@@ -649,10 +648,10 @@ def get_contents(id, filename, worker_name):
                 f_contents = f_contents[pos+2:]
 
         sql_session.commit()
-        return jsonify(status=True, message="success filecontents", result=f_contents)
+        return jsonify(status=True, message="success filecontents", list=f_contents)
     except Exception as msg:
         sql_session.rollback()
         logger.debug('filecontents error %s' % msg.message)
-        return jsonify(status=False, message="failure filecontents", result=msg.message)
+        return jsonify(status=False, message="failure filecontents", list=msg.message)
 
 
