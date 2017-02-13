@@ -50,6 +50,7 @@ class DockerService(object):
         command += " --constraint 'node.hostname != manager'"
         command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
         command = '%s --name="%s"' % (command, docker_info.name)
+        mount_count = 1;
         for detail in image_detail:
             if detail.arg_type == "mount":
                 # command += " " + (detail.argument % id)
@@ -60,7 +61,8 @@ class DockerService(object):
                     dest_path = split_data[1]
 
                 if mount_type == 'LOG' or mount_type == 'DATA':
-                    command = '%s --mount type=volume,source=%s_%s_%s,destination=%s' % (command, dockerimage.name, id, mount_type, dest_path)
+                    command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % (command, dockerimage.name, id, mount_type, mount_type, dest_path)
+                    mount_count += 1
                 '''
                 else:
                     option = detail.argument % id
