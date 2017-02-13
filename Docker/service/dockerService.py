@@ -310,8 +310,7 @@ class DockerService(object):
         ssh.close()
         return result
 
-
-# 내부에서 REST API 호출용 함수
+    # 내부에서 REST API 호출용 함수
     def send(self, address, port, method, uri, data={}):
         url = "http://" + address
         url += ":"
@@ -339,7 +338,29 @@ class DockerService(object):
                 logger.debug('login error')
                 break
             time.sleep(2)
-            login_result = ssh.login(self.addr, self.id)
+            login_result = ssh.login(host_ip, self.id)
+            login_count += 1
+
+        ssh.sendline(command)
+        ssh.prompt()
+        result = ssh.before
+
+        ssh.logout()
+        ssh.close()
+        return result
+
+    def get_filecontents(self, host_ip, volume_source_path, filename):
+        command = 'tail -n 1000 %s/%s' % (volume_source_path, filename)
+
+        login_count = 0
+        ssh = pxssh.pxssh()
+        login_result = ssh.login(host_ip, self.id)
+        while not login_result:
+            if login_count > 5:
+                logger.debug('login error')
+                break
+            time.sleep(2)
+            login_result = ssh.login(host_ip, self.id)
             login_count += 1
 
         ssh.sendline(command)

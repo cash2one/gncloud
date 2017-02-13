@@ -572,34 +572,83 @@ def doc_image_list():
     return jsonify(status=True, message="컨테이너 이미지 리스트 호출 완료.", result=result)
 
 
-# get Container logs
-def get_container_logs(id):
+# get Container logfiles
+def get_container_logfiles(id):
     sql_session = db_session
     try:
         volume_list = sql_session.query(GnDockerVolumes).filter(GnDockerVolumes.service_id == id).all()
         container_list = sql_session.query(GnDockerContainers).filter(GnDockerContainers.service_id == id).all()
-        result = ''
-        file_list = ''
+        result = '#'
 
         for container in container_list:
             host = sql_session.query(GnHostMachines).filter(GnHostMachines.id == container.host_id).first()
             host_ip = host.ip
-            result = '%s#%s' % (result, host.name)
+            result = '%s%s' % (result, host.name)
             for volume in volume_list:
                 if volume.source_path.find('LOG') >= 0:
                     file_list = ds.get_filelist(host_ip, volume.source_path)
                     result = '%s\r\n%s' % (result, file_list)
+            result = '%s#' % result
 
         sql_session.commit()
 
         result_list=result.split('#')
-        '''
-        for files in result_list:
-            if files is not None:
-                file = files.split('\r\n')
-        '''
-        return jsonify(status=True, message="success filelist", result=result)
+
+        total_list = '{"filelist":[{'
+        host_count = 0
+        for log_unit in result_list:
+            if log_unit != '' and log_unit != ' ':
+                if host_count > 0:
+                    total_list = '%s}, {' % total_list
+
+                log_files = log_unit.split('\r\n')
+                ff_list = ''
+                ls_count = 0;
+                for some_file in log_files:
+                    if ls_count == 0:
+                        host_name=some_file
+                    elif ls_count > 2 and some_file != '':
+                        if ls_count > 3:
+                            ff_list = '%s,' % ff_list
+                        sep = some_file.split(' ')
+                        file_info = '"filename":"%s", "filesize":"%s"' % (sep[1], sep[0])
+                        ff_list = '%s{%s}' %(ff_list, file_info)
+
+
+                    ls_count += 1
+
+                total_list = '%s"hostname":"%s", "logfile_list":[%s]' %(total_list, host_name, ff_list)
+                host_count += 1
+
+        total_list = '%s}]}' % total_list
+
+        logger.debug(total_list)
+
+        all_json = '{"message":"sucess filelist", "result":%s, "status":true}' % (total_list)
+        return all_json
     except Exception as msg:
         sql_session.rollback()
         logger.debug('filelist error' % msg)
         return jsonify(status=False, message="failure filelist", result=msg)
+
+
+#get logfile's contents
+def get_contents(id, filename, worker_name):
+    sql_session = db_session
+    try:
+        log_host = sql_session.query(GnHostMachines).filter(GnHostMachines.name == worker_name).first()
+        volumes = sql_session.query(GnDockerVolumes).filter(GnDockerVolumes.service_id == id).all()
+        for log_volume in volumes:
+            if log_volume.source_path.find('LOG') >= 0:
+                f_contents = ds.get_filecontents(log_host.ip, log_volume.source_path, filename)
+                break
+
+        f_contents = f_contents.split('\r\n')[1:]
+        sql_session.commit()
+        return jsonify(status=True, message="success filecontents", result=f_contents)
+    except Exception as msg:
+        sql_session.rollback()
+        logger.debug('filecontents error' % msg)
+        return jsonify(status=False, message="failure filecontents", result=msg)
+
+
