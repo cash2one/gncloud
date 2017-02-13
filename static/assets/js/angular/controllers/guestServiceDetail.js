@@ -74,7 +74,7 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
                 if(data.status == true){
-                    $("#reso").val(data.list);
+                    $scope.content = data.list;
                 }
             }).error(function (data, status, headers, config) {
                 console.log(status);
