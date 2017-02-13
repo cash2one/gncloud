@@ -36,8 +36,7 @@ def create_vm():
     team_code = session['teamCode']
     user_id = session['userId']
     id = request.json['id']
-    doc_create(id,db_session)
-    return jsonify(status=True)
+    return doc_create(id,db_session)
 
 # Docker Service 상태변경
 # change_status
@@ -73,8 +72,10 @@ app.add_url_rule("/vm/images/detail/<image_id>/<id>", view_func=doc_delete_image
 
 @app.before_request
 def before_request():
-    if ('userId' not in session) and request.path != '/monitor' and request.path != '/service/isAlive':
+    if 'userId' not in session and request.path != '/monitor' and request.path != '/service/isAlive' \
+            and request.path != '/' and request.path != '/vm/logfilelist' and request.path!='/vm/logfilecontents':
         return make_response(jsonify(status=False),401)
+
 
 # Controller 상태 확인
 @app.route("/service/isAlive")
@@ -91,9 +92,28 @@ def index():
 
 
 @app.route('/monitor', methods=['GET'])
-def cronMnitor():
+def cronMonitor():
     service_monitoring(db_session)
     return jsonify(status=True, message="success")
+
+
+@app.route('/vm/logfilelist', methods=['GET'])
+def get_logfiles():
+    vm_id = request.args.get("vm_id")
+    #vm_id='9d4c3e58'
+    result = get_container_logfiles(vm_id)
+    return result
+
+
+@app.route('/vm/logfilecontents', methods=['GET'])
+def get_logfile_contents():
+    log_id = request.args.get("vm_id")
+    filename = request.args.get("filename")
+    worker_name = request.args.get("worker_name")
+    # log_id = '9d4c3e58'
+    # filename = 'catalina.2017-02-10.log'
+    # worker_name = 'worker-2'
+    return get_contents(log_id, filename, worker_name)
 
 
 @app.teardown_appcontext
@@ -106,7 +126,7 @@ def internal_error(error):
     print(traceback.format_exc())
     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세요")
 
-
 if __name__ == '__main__':
     #app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
+    #app.run(host='192.168.1.101', port=int(config.CONTROLLER_PORT))
     app.run(port=int(config.CONTROLLER_PORT))
