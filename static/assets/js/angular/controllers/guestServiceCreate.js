@@ -151,9 +151,9 @@ angular
             })
                 .success(function(data) {
                     if (data.status == true) {
-                        notification.sendMessage("success",$scope.data.vm_name+" 인스턴스 생성이 완료되었습니다.");
+                        notification.sendMessage("success",$scope.data.vm_name+" 서비스 생성이 완료되었습니다.");
                     }else {
-                        notification.sendMessage("error",$scope.data.vm_name+" 인스턴스 생성중 에러가 발생했습니다.");
+                        notification.sendMessage("error",$scope.data.vm_name+" 서비스 생성중 에러가 발생했습니다.");
                     }
                 });
         };
