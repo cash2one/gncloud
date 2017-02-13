@@ -132,7 +132,7 @@
                                         </thead>
                                         <tbody class="gn-tdody">
                                             <tr ng-repeat="path in images_list">
-                                                <td><img src="/gn_images/gn_icon_{{path.os}}.png" alt=""></td>
+                                                <td class="first-td"><img src="/gn_images/gn_icon_{{path.os}}.png" alt=""></td>
                                                 <td class="second-td-name"><span class="gn-table-ellip">{{path.name}}</span></td>
                                                 <td class="hidden-xs">{{path.os}}</td>
                                                 <td class="hidden-xs">{{path.os_ver}}</td>
@@ -297,7 +297,7 @@
                                         </thead>
                                         <tbody class="gn-tdody">
                                             <tr ng-repeat="contain in contain_list">
-                                                <td><img src="/gn_images/gn_icon_{{contain.os}}.png" alt="" ng-show="contain.os != '' "></td>
+                                                <td class="first-td"><img src="/gn_images/gn_icon_{{contain.os}}.png" alt="" ng-show="contain.os != '' "></td>
                                                 <td class="second-td-name"><span class="gn-table-ellip">{{contain.name}}</span></td>
                                                 <td class="hidden-xs">{{contain.os_ver}}</td>
                                                 <td class="hidden-xs">{{contain.tagFirst}}&nbsp;
