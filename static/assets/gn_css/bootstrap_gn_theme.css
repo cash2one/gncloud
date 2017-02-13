@@ -1594,7 +1594,7 @@ li.left-title{
     margin-top: 20px;
 }
 
-.container > div.tab-content,
+div.tab-content,
 #key-sett,#profile-team,#team-reso,#team-group,#backuplist,#invoice,#guestSetting{padding: 0;}
 
 .gn-left-menu > li{
