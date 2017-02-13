@@ -33,7 +33,7 @@ angular
                             }
                         }
                     }
-                    $scope.nodelist($scope.vm_info.id);
+                    $scope.nodelist($scope.vm_data.id);
                 }
                 else {
                     alert(data.message)
