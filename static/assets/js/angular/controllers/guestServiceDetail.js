@@ -56,6 +56,21 @@ angular
                 console.log(status);
             });
         }
+        $scope.node_info=function (vm_id, filename) {
+            $scope.data={};
+            $scope.data.vm_id = vm_id;
+            $scope.data.filename = filename;
+            $http({
+                method: 'GET',
+                url: '/api/docker/vm/',
+                params:$scope.data,
+                headers: {'Content-Type': 'application/json; charset=utf-8'}
+            }).success(function (data, status, headers, config) {
+
+            }).error(function (data, status, headers, config) {
+                console.log(status);
+            });
+        }
         $scope.change_name = function() {
             if($("#vm_name").val() == "") {
                 alert("이름을 입력해주세요");
