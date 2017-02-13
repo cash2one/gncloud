@@ -21,14 +21,15 @@ ds = DockerService(config.DOCKER_MANAGE_IPADDR, config.DOCKER_MANAGER_SSH_ID, sq
 def doc_create(id,sql_session):
     team_name = None
     user_name = None
-    #로직 변경
-    logger.debug("get id"+id)
-    docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
-    if docker_info is not None:
-        team_name = sql_session.query(GnTeam).filter(GnTeam.team_code == docker_info.team_code).one()
-        user_name = sql_session.query(GnUsers).filter(GnUsers.user_id == docker_info.author_id).one()
-
+    docker_info = None
     try:
+        #로직 변경
+        logger.debug("get id"+id)
+        docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
+        if docker_info is not None:
+            team_name = sql_session.query(GnTeam).filter(GnTeam.team_code == docker_info.team_code).first()
+            user_name = sql_session.query(GnUsers).filter(GnUsers.user_id == docker_info.author_id).first()
+
         image_id = docker_info.image_id
         name = docker_info.name
         cpu = docker_info.cpu
@@ -39,7 +40,8 @@ def doc_create(id,sql_session):
 
         # Docker Swarm manager 값을 가져온다.
         #dsmanager = GnHostMachines.query.filter_by(type='docker').one()
-        dsmanager = GnHostMachines.query.filter(and_(GnHostMachines.type=='docker', GnHostMachines.name=='manager')).one()
+        dsmanager = GnHostMachines.query.filter(and_(GnHostMachines.type=='docker',
+                                                     GnHostMachines.name=='manager')).first()
         # Docker Swarm Service를 생성한다.
         # docker_service_create: Docker Service 생성
         logger.debug(docker_info.id+":start create")
@@ -47,8 +49,8 @@ def doc_create(id,sql_session):
         docker_service = ds.docker_service_create(docker_info)
         logger.debug(docker_info.id+":end create")
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
-        if docker_service is None:
-            return jsonify(status=False, message="존재하지 않는 도커 이미지입니다.")
+        if docker_service == 'Error':
+            return jsonify(status=False, message="failure service create.")
         if type(docker_service) is not list:
             return jsonify(status=False, message=docker_service)
         else:
@@ -140,6 +142,8 @@ def doc_create(id,sql_session):
         sql_session.rollback()
         error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
         sql_session.add(error_hist)
+        if docker_info is None:
+            docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
         docker_info.status = "Error"
         sql_session.commit()
         logger.error(e)
