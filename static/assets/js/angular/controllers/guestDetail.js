@@ -15,6 +15,7 @@ angular
                     $scope.disk_data = data.info.disk_info;
                     $scope.mem_data = data.info.mem_info;
                     $scope.name_data = data.info.name_info;
+                    $scope.ssh = data.info.ssh_key;
                     if($scope.vm_data.type != 'docker'){
                         $scope.image_data = data.info.image_info;
                     }else{

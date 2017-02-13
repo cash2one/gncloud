@@ -60,13 +60,14 @@ class GnVmMachines(Base):
     status = Column(String(10), primary_key=False, nullable=False)
     tag = Column(String(100), primary_key=False, nullable=False)
     image_id = Column(String(8), primary_key=False, nullable=False)
-    ssh_key_id = Column(Integer, primary_key=False, nullable=False)
+    ssh_key_id = Column(Integer, ForeignKey('GN_SSH_KEYS.id'))
     hyperv_pass= Column(String(50), primary_key=False, nullable=False)
     backup_confirm =Column(String(5), primary_key=False, nullable=False)
     size_id = Column(String(8), primary_key=False, nullable=False)
     gnHostMachines = relationship('GnHostMachines')
     gnUser = relationship('GnUser')
     gnTeam = relationship('GnTeam')
+    gnSshkeys = relationship('GnSshKeys')
 
     def __init__(self, id=id, name=None, type=None, internal_id=None, internal_name=None
                  , cpu=None, memory=None, disk=None, ip=None, host_id=None
