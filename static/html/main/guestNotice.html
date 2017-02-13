@@ -2,6 +2,7 @@
 <h2>목록
 <!--쓰기 버튼-->
 <input type="button" class="btn btn-default btn-right pull-right" data-toggle="modal" data-target="#modi-write" value="작성하기" ng-show="user_info.authority == 'sysowner' "></h2>
+
 <!-- 공지사항 글쓰기 Modal -->
 <div class="modal fade" id="modi-write" role="dialog">
     <div class="modal-backdrop fade in" style="height: 3000px;"></div>
@@ -22,7 +23,7 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label">내용</label>
                         <div class="col-sm-11">
-                            <textarea class="form-control gn-write" name="text" rows="6" ng-model="data.text" id="text" placeholder="내용을 입력하여주세요." required></textarea>
+                            <textarea class="form-control gn-write" name="text" rows="10" ng-model="data.text" id="text" placeholder="내용을 입력하여주세요." required></textarea>
                         </div>
                     </div>
                 </form>
@@ -33,6 +34,7 @@
         </div>
     </div>
 </div><!--<div class="modal fade" id="modi-write" role="dialog">-->
+
 <!--공지 목록-->
 <div class="table-responsive gn-table-responsive">
     <table class="table gn-board-table table-condensed table-hover">
@@ -52,9 +54,11 @@
         </tbody>
     </table>
 </div><!--div class="table-responsive gn-table-responsive" -->
+
 <!--이전/다음 버튼-->
 <input type="button" class="btn btn-default" ng-click="noticeList(prev_page)" value="이전" ng-show="page_hist != 1">
 <input type="button" class="btn btn-default" ng-click="noticeList(next_page)" value="다음" ng-show="page_total!=page_hist">
+
 <!-- 공지 Modal -->
 <div class="modal fade" id="modal-board" role="dialog">
     <!--<div class="modal-backdrop fade in" style="height: 3000px;"></div>-->
