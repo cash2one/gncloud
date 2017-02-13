@@ -29,54 +29,55 @@ class DockerService(object):
         cpu = docker_info.cpu
         memory = docker_info.memory
 
-        dockerimage = sql_session.query(GnDockerImages).filter(GnDockerImages.id == image_id).first()
-        #dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
-        if dockerimage is None:
-            return None
+        try:
+            dockerimage = sql_session.query(GnDockerImages).filter(GnDockerImages.id == image_id).first()
+            #dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
+            if dockerimage is None:
+                return None
 
-        real_image_id = None
-        if dockerimage.sub_type == 'snap':
-            real_image_id = dockerimage.base_image
-        else:
-            real_image_id = dockerimage.id
-
-        #image_detail = GnDockerImageDetail.query.filter_by(image_id=real_image_id).all()
-        image_detail = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.image_id == real_image_id).all()
-        # --- Docker Service 생성 커맨드 작성 ---
-        command = "docker service create"
-        command += " --limit-cpu %s" % cpu
-        command += " --limit-memory %s" % memory
-        command += " --replicas %s" % config.REPLICAS
-        command += " --constraint 'node.hostname != manager'"
-        command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
-        command = '%s --name="%s"' % (command, docker_info.name)
-        mount_count = 1;
-        for detail in image_detail:
-            if detail.arg_type == "mount":
-                # command += " " + (detail.argument % id)
-                split_data = detail.argument.split(':')
-                mount_type = split_data[0]
-                dest_path=''
-                if len(split_data) > 1:
-                    dest_path = split_data[1]
-
-                if mount_type == 'LOG' or mount_type == 'DATA':
-                    command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % (command, dockerimage.name, id, mount_type, mount_type, dest_path)
-                    mount_count += 1
-                '''
-                else:
-                    option = detail.argument % id
-                    command = '%s %s' % (command, option)
-                '''
+            real_image_id = None
+            if dockerimage.sub_type == 'snap':
+                real_image_id = dockerimage.base_image
             else:
-                command = '%s %s' % (command, detail.argument)
-        command += " %s" % dockerimage.view_name
-        logger.debug("Docker Service Created: %s", command)
-        sql_session.commit()
-        # --- //Docker Service 생성 커맨드 작성 ---
-        service_id = self.send_command(command, 1)
+                real_image_id = dockerimage.id
+
+            #image_detail = GnDockerImageDetail.query.filter_by(image_id=real_image_id).all()
+            image_detail = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.image_id == real_image_id).all()
+            # --- Docker Service 생성 커맨드 작성 ---
+            command = "docker service create"
+            command += " --limit-cpu %s" % cpu
+            command += " --limit-memory %s" % memory
+            command += " --replicas %s" % config.REPLICAS
+            command += " --constraint 'node.hostname != manager'"
+            command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
+            command = '%s --name="%s"' % (command, docker_info.name)
+            mount_count = 1;
+            for detail in image_detail:
+                if detail.arg_type == "mount":
+                    # command += " " + (detail.argument % id)
+                    split_data = detail.argument.split(':')
+                    mount_type = split_data[0]
+                    dest_path=''
+                    if len(split_data) > 1:
+                        dest_path = split_data[1]
+
+                    if mount_type == 'LOG' or mount_type == 'DATA':
+                        command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
+                                  (command, dockerimage.name, id, mount_count, mount_type, dest_path)
+                        mount_count += 1
+                else:
+                    command = '%s %s' % (command, detail.argument)
+            command += " %s" % dockerimage.view_name
+            logger.debug("Docker Service Created: %s", command)
+            sql_session.commit()
+            # --- //Docker Service 생성 커맨드 작성 ---
+            service_id = self.send_command(command, 1)
+        except Exception as e:
+            logger.error('docker service create error = %s' % e.message)
+            return 'Error'
+
         if service_id[:5] == "Error":
-            return service_id
+            return 'Error'
         else:
             return self.docker_service_ps(service_id)
 
