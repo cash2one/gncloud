@@ -51,7 +51,7 @@ class DockerService(object):
             command += " --replicas %s" % config.REPLICAS
             command += " --constraint 'node.hostname != manager'"
             command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
-            command = '%s --name="%s"' % (command, docker_name)
+            #command = '%s --name="%s"' % (command, docker_name)
             mount_count = 1
             for detail in image_detail:
                 if detail.arg_type == "mount":
