@@ -1,97 +1,100 @@
 <h1>설정</h1>
 
-<!--왼쪽 메뉴-->
-<navme></navme>
-<div id="backuplist" class="tab-pane col-xs-12 col-sm-10">
-    <div class="gn-box">
-        <div class="gn-sett-margin-box">
-            <div class="container-fluid">
-                <h2>백업현황</h2>
-
-                <!--백업현황 목록-->
-                <div class="table-responsive gn-table-responsive">
-                    <table class="table gn-board-table table-hover">
-                        <thead>
-                        <tr>
-                            <th class="">#</th>
-                            <th class="hidden-xs">시간</th>
-                            <th class="">인스턴스</th>
-                            <th class="">소유자</th>
-                        </tr>
-                        </thead>
-                        <tbody class="gn-tdody">
-                        <tr class="" ng-repeat="backup in backup">
-                            <td>{{total_page-($index+this_page)}}</td>
-                            <td class="hidden-xs">{{backup.backup_time}}</td>
-                            <td class="second-td-name">
-                                <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-backup" ng-click="backuphist(backup.vm_id)">{{backup.vm_name}}</a>
-                            </td>
-                            <td>{{backup.author_name}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div><!--div class="table-responsive gn-table-responsive" -->
-
-                <!--이전/다음 버튼-->
-                <div class="gn-page-btn">
-                    <input type="button" class="btn btn-default pull-left" ng-click="page(prev_page)" value="이전" ng-show="page_hist != 1">
-                    <input type="button" class="btn btn-default" ng-click="page(next_page)" value="다음" ng-show="page_total!=page_hist">
-                </div>
-
-                <!-- 백업현황 Modal -->
-                <div class="modal fade" id="modal-backup" role="dialog">
-                    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header gn-modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">백업정보</h4>
+<div class="row">
+    <!--왼쪽 메뉴-->
+    <navme></navme>
+    
+    <div id="backuplist" class="tab-pane col-xs-12 col-sm-10">
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>백업현황</h2>
+    
+                    <!--백업현황 목록-->
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table gn-board-table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="">#</th>
+                                <th class="hidden-xs">시간</th>
+                                <th class="">인스턴스</th>
+                                <th class="">소유자</th>
+                            </tr>
+                            </thead>
+                            <tbody class="gn-tdody">
+                            <tr class="" ng-repeat="backup in backup">
+                                <td>{{total_page-($index+this_page)}}</td>
+                                <td class="hidden-xs">{{backup.backup_time}}</td>
+                                <td class="second-td-name">
+                                    <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-backup" ng-click="backuphist(backup.vm_id)">{{backup.vm_name}}</a>
+                                </td>
+                                <td>{{backup.author_name}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div><!--div class="table-responsive gn-table-responsive" -->
+    
+                    <!--이전/다음 버튼-->
+                    <div class="gn-page-btn">
+                        <input type="button" class="btn btn-default pull-left" ng-click="page(prev_page)" value="이전" ng-show="page_hist != 1">
+                        <input type="button" class="btn btn-default" ng-click="page(next_page)" value="다음" ng-show="page_total!=page_hist">
+                    </div>
+    
+                    <!-- 백업현황 Modal -->
+                    <div class="modal fade" id="modal-backup" role="dialog">
+                        <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header gn-modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">백업정보</h4>
+                                </div>
+                                <div class="modal-body gn-modal-body">
+    
+                                    <form class="form-horizontal">
+                                        <dl class="dl-horizontal gn-description-list">
+                                            <dt>팀</dt>
+                                            <dd>{{vm_info.team_name}}</dd>
+                                            <dt>인스턴스</dt>
+                                            <dd>{{vm_info.vm_name}}</dd>
+                                            <dt>소유자</dt>
+                                            <dd>{{vm_info.author_name}}</dd>
+                                            <dt>히스토리</dt>
+                                            <dd></dd>
+                                        </dl>
+    
+                                        <div class="table-responsive gn-table-responsive">
+                                            <table class="table table-bordered gn-board-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th class="">백업시간</th>
+                                                    <th class="">파일</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="gn-tdody">
+                                                <tr ng-repeat="hist in hist_info">
+                                                    <td>{{total-$index}}</td>
+                                                    <td>{{hist.backup_time}}</td>
+                                                    <td>{{hist.filename}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>
+    
+                                </div>
+    
+                                <div class="modal-footer gn-modal-footer">
+                                    <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">닫기</button>
+                                </div>
+    
                             </div>
-                            <div class="modal-body gn-modal-body">
-
-                                <form class="form-horizontal">
-                                    <dl class="dl-horizontal gn-description-list">
-                                        <dt>팀</dt>
-                                        <dd>{{vm_info.team_name}}</dd>
-                                        <dt>인스턴스</dt>
-                                        <dd>{{vm_info.vm_name}}</dd>
-                                        <dt>소유자</dt>
-                                        <dd>{{vm_info.author_name}}</dd>
-                                        <dt>히스토리</dt>
-                                        <dd></dd>
-                                    </dl>
-
-                                    <div class="table-responsive gn-table-responsive">
-                                        <table class="table table-bordered gn-board-table">
-                                            <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th class="">백업시간</th>
-                                                <th class="">파일</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody class="gn-tdody">
-                                            <tr ng-repeat="hist in hist_info">
-                                                <td>{{total-$index}}</td>
-                                                <td>{{hist.backup_time}}</td>
-                                                <td>{{hist.filename}}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </form>
-
-                            </div>
-
-                            <div class="modal-footer gn-modal-footer">
-                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal">닫기</button>
-                            </div>
-
                         </div>
                     </div>
-                </div>
-
-            </div><!--<div class="container-fluid">-->
-        </div> <!--class="gn-sett-margin-box"-->
-    </div> <!--class="gn-box profile-team"-->
-</div> <!--id="image-sett"  class="tab-pane fade"-->
+    
+                </div><!--<div class="container-fluid">-->
+            </div> <!--class="gn-sett-margin-box"-->
+        </div> <!--class="gn-box profile-team"-->
+    </div> <!--id="image-sett"  class="tab-pane fade"-->
+</div><!--row-->
