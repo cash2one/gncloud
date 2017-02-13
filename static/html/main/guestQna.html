@@ -7,7 +7,7 @@
 
 <!-- 묻고 답하기 글쓰기 Modal -->
 <div class="modal fade" id="modi-write" role="dialog">
-    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+    
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header gn-modal-header">
@@ -63,7 +63,7 @@
 
 <!-- 묻고 답하기 내용 Modal -->
 <div class="modal fade" id="modal-board" role="dialog">
-    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header gn-modal-header">
@@ -78,7 +78,7 @@
                     <div class="form-group" ng-class="{'gn-content':showData == 1}">
                         <pre class="gn-write com-sm-12" ng-show="showData == '1'">{{notice.text}}</pre>
                         <div id="change" class="second-td-name gn-lead col-sm-12" ng-show="showData=='2'">
-                            <textarea class="form-control gn-write col-sm-12" rows="6" ng-model="notice.text"></textarea>
+                            <textarea class="form-control gn-write col-sm-12" rows="10" ng-model="notice.text"></textarea>
                         </div>
                     </div>
                     
