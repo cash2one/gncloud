@@ -145,32 +145,20 @@
     <div class="gn-margin-box">
         <h2>로그</h2>
         <h3>worker-1</h3><!--노드이름-->
-
-        <div class="col-sm-4 col-left">
-            <div class="table-responsive gn-table-responsive">
-                <table class="table service-table">
-                    <thead>
-                    <tr>
-                        <th class="pull-left"><!--파일이름--></th>
-                        <th class=""><!--크기--></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td class="pull-left">
-                            <a class="gn-table-ellip" data-toggle="modal" data-target="#detail-log">node_00312314112412414.txt</a>
-                        </td>
-                        <td>1,024 KB</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div> <!--table-->
-        </div> <!--col-4-->
+        <div class="row service-log">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                       <span class="col-sm-8">
+                           <a class="gn-table-ellip" data-toggle="modal" data-target="#detail-log" ng-click="node_info()">node_000000000001.txt</a>
+                       </span>
+                <span class="col-sm-4">1,024 KB</span>
+            </div>
+        </div>
     </div>
 </div><!--로그-->
 
 <!-- 로그 modal -->
 <div class="modal fade" id="detail-log" role="dialog">
+    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header gn-modal-header">

@@ -1,65 +1,70 @@
 <h1>설정</h1>
+
+
 <navme></navme>
-<!--팀 > 프로필-->
-<div id="profile-team"  class="tab-content col-xs-12 col-sm-10">
-    <div class="gn-box">
-        <div class="gn-sett-margin-box">
-            <div class="container-fluid">
-                <h2>{{teamname.team_name}}</h2>
-                <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#modal-modi" ng-show="authority == 'owner' ">수정</button>
 
-                <!-- 팀 Modal -->
-                <div class="modal fade" id="modal-modi" role="dialog">
-                    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
-                    <div class="modal-dialog form-horizontal">
-                        <div class="modal-content col-sm-10 col-sm-offset-1">
-                            <div class="modal-header gn-modal-header">
-                                <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
-                                <h4 class="modal-title">팀 수정</h4>
-                            </div>
-                            <div class="modal-body gn-modal-body">
-
-                                <form class="form-horizontal" name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label gn-control-label">팀 코드</label>
-                                        <div class="col-sm-9">
-                                            <p class="form-control-static">{{teamname.team_code}}</p>
+<div class="row">         
+    <!--팀 > 프로필-->
+    <div id="profile-team"  class="tab-content col-xs-12 col-sm-10">
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>{{teamname.team_name}}</h2>
+                    <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#modal-modi" ng-show="authority == 'owner' ">수정</button>
+    
+                    <!-- 팀 Modal -->
+                    <div class="modal fade" id="modal-modi" role="dialog">
+                        <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+                        <div class="modal-dialog form-horizontal">
+                            <div class="modal-content col-sm-10 col-sm-offset-1">
+                                <div class="modal-header gn-modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
+                                    <h4 class="modal-title">팀 수정</h4>
+                                </div>
+                                <div class="modal-body gn-modal-body">
+    
+                                    <form class="form-horizontal" name="userForm" ng-submit="submitForm(userForm.$valid)" novalidate>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label gn-control-label">팀 코드</label>
+                                            <div class="col-sm-9">
+                                                <p class="form-control-static">{{teamname.team_code}}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label gn-control-label">팀명</label>
-                                        <div class="col-sm-9" ng-class="{ 'has-error' : userForm.team_name.$invalid && !userForm.team_name.$pristine }">
-                                            <input type="text" class="form-control gn-form-control" name="team_name" ng-model="data.team_name" placeholder="{{teamname.team_name}}" ng-pattern="/^[가-힣0-9]+$/" required>
-                                            <p ng-show="userForm.team_name.$invalid && !userForm.team_name.$pristine" class="help-block">한글과 숫자만 사용할수 있습니다.</p>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label gn-control-label">팀명</label>
+                                            <div class="col-sm-9" ng-class="{ 'has-error' : userForm.team_name.$invalid && !userForm.team_name.$pristine }">
+                                                <input type="text" class="form-control gn-form-control" name="team_name" ng-model="data.team_name" placeholder="{{teamname.team_name}}" ng-pattern="/^[가-힣0-9]+$/" required>
+                                                <p ng-show="userForm.team_name.$invalid && !userForm.team_name.$pristine" class="help-block">한글과 숫자만 사용할수 있습니다.</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-
-                            </div>
-                            <div class="modal-footer gn-modal-footer">
-                                <button type="submit" class="btn btn-gn-sub btn-block" ng-click="change()" data-dismiss="modal" ng-disabled="userForm.$invalid">저장</button>
+                                    </form>
+    
+                                </div>
+                                <div class="modal-footer gn-modal-footer">
+                                    <button type="submit" class="btn btn-gn-sub btn-block" ng-click="change()" data-dismiss="modal" ng-disabled="userForm.$invalid">저장</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div> <!--<div class="container-fluid">-->
+    
+                <div class="container-fluid">
+                    <form class="form-horizontal">
+                        <dl class="dl-horizontal gn-description-list">
+                            <dt>팀 코드</dt>
+                            <dd>{{teamname.team_code}}</dd>
+                            <dt>관리자</dt>
+                            <dd ng-show="check_list==2" ng-repeat="team in team_list">{{team.user_id}}</dd><dd ng-show="check_list ==1">-</dd>
+                            <dt>팀 생성일</dt>
+                            <dd>{{teamname.create_date}}</dd>
+                            <dt>총원</dt>
+                            <dd>{{team_list.total}}명</dd>
+    
+                        </dl>
+                    </form>
                 </div>
-            </div> <!--<div class="container-fluid">-->
-
-            <div class="container-fluid">
-                <form class="form-horizontal">
-                    <dl class="dl-horizontal gn-description-list">
-                        <dt>팀 코드</dt>
-                        <dd>{{teamname.team_code}}</dd>
-                        <dt>관리자</dt>
-                        <dd ng-show="check_list==2" ng-repeat="team in team_list">{{team.user_id}}</dd><dd ng-show="check_list ==1">-</dd>
-                        <dt>팀 생성일</dt>
-                        <dd>{{teamname.create_date}}</dd>
-                        <dt>총원</dt>
-                        <dd>{{team_list.total}}명</dd>
-
-                    </dl>
-                </form>
-            </div>
-
-        </div> <!--class="gn-sett-margin-box"-->
-    </div> <!--class="gn-box profile-team"-->
-</div> <!--id="profile-team"  class="tab-pane fade"-->
+    
+            </div> <!--class="gn-sett-margin-box"-->
+        </div> <!--class="gn-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade"-->
+</div><!--row-->

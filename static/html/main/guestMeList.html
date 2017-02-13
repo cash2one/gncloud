@@ -3,104 +3,103 @@
 <!--왼쪽 메뉴-->
 <navme></navme>
 
-<div class="tab-content col-xs-12 col-sm-10">
-    <!--프로필-->
-    <div id="profile" class="">
-        <div class="gn-box">
-            <div class="gn-sett-margin-box">
-                <div class="container-fluid">
-                    <h2>{{te_list.user_name}}</h2>
-                    <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#myModal">수정</button>
+<div class="row">       
+    <div class="tab-content col-xs-12 col-sm-10">
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-backdrop fade in" style="height: 3000px;"></div>
-                        <div class="modal-dialog form-horizontal">
-                            <div class="modal-content col-sm-10 col-sm-offset-1">
-                                <div class="modal-header gn-modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
-                                    <h4 class="modal-title">프로필 수정</h4>
-                                </div>
+        <!--프로필-->
+        <div id="profile" class="">
+            <div class="gn-box">
+                <div class="gn-sett-margin-box">
+                    <div class="container-fluid">
+                        <h2>{{te_list.user_name}}</h2>
+                        <button type="button" class="btn btn-gn-sub gn-sett-btn" data-toggle="modal" data-target="#myModal">수정</button>
 
-                                <div class="modal-body gn-modal-body">
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+                            <div class="modal-dialog form-horizontal">
+                                <div class="modal-content col-sm-10 col-sm-offset-1">
+                                    <div class="modal-header gn-modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
+                                        <h4 class="modal-title">프로필 수정</h4>
+                                    </div>
 
-                                    <form class="form-horizontal" name="meForm" ng-submit="submitForm(meForm.$valid)" novalidate>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label gn-control-label">이름</label>
-                                            <div class="col-sm-8">
-                                                <p class="form-control-static">{{te_list.user_name}}</p>
+                                    <div class="modal-body gn-modal-body">
+
+                                        <form class="form-horizontal" name="meForm" ng-submit="submitForm(meForm.$valid)" novalidate>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">이름</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{te_list.user_name}}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label gn-control-label">아이디</label>
-                                            <div class="col-sm-8">
-                                                <p class="form-control-static">{{te_list.user_id}}</p>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">아이디</label>
+                                                <div class="col-sm-8">
+                                                    <p class="form-control-static">{{te_list.user_id}}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label gn-control-label">현재 비밀번호</label>
-                                            <div class="col-sm-8">
-                                                <input type="password" class="form-control gn-form-control" id="pass" name="password" ng-model="data.password" placeholder="Password">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">현재 비밀번호</label>
+                                                <div class="col-sm-8">
+                                                    <input type="password" class="form-control gn-form-control" id="pass" name="password" ng-model="data.password" placeholder="Password">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label gn-control-label">새 비밀번호</label>
-                                            <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_new.$invalid && !meForm.password_new.$pristine }">
-                                                <input type="password" class="form-control gn-form-control" name="password_new" ng-model="data.password_new" id="password" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
-                                                <p ng-show="meForm.password_new.$invalid && !meForm.password_new.$pristine" class="help-block">숫자, 영문 특수문자를 6~15자리까지 혼합해서 사용해 주세요.</p>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">새 비밀번호</label>
+                                                <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_new.$invalid && !meForm.password_new.$pristine }">
+                                                    <input type="password" class="form-control gn-form-control" name="password_new" ng-model="data.password_new" id="password" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
+                                                    <p ng-show="meForm.password_new.$invalid && !meForm.password_new.$pristine" class="help-block">숫자, 영문 특수문자를 6~15자리까지 혼합해서 사용해 주세요.</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label gn-control-label">새 비밀번호 확인</label>
-                                            <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_ret.$invalid && !meForm.password_ret.$pristine }">
-                                                <input type="password" class="form-control gn-form-control" name="password_ret" ng-model="data.password_ret" id="password_ret" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
-                                                <p ng-show="meForm.password_ret.$invalid && !meForm.password_ret.$pristine" class="help-block">비밀번호가 일치 하지 않습니다.</p>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">새 비밀번호 확인</label>
+                                                <div class="col-sm-8" ng-class="{ 'has-error' : meForm.password_ret.$invalid && !meForm.password_ret.$pristine }">
+                                                    <input type="password" class="form-control gn-form-control" name="password_ret" ng-model="data.password_ret" id="password_ret" placeholder="Password" ng-pattern="/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,15}$/">
+                                                    <p ng-show="meForm.password_ret.$invalid && !meForm.password_ret.$pristine" class="help-block">비밀번호가 일치 하지 않습니다.</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label gn-control-label">연락처</label>
-                                            <div class="col-sm-8" ng-class="{ 'has-error' : meForm.tel.$invalid && !meForm.tel.$pristine }">
-                                                <input type="text" class="form-control gn-form-control" name="tel" ng-model="data.tel" id="tel" value="te_list.tel" ng-pattern="/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/">
-                                                <p ng-show="meForm.tel.$invalid && !meForm.tel.$pristine" class="help-block"> - 을 포함한 10자리 숫자를 입력하세요.</p>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">연락처</label>
+                                                <div class="col-sm-8" ng-class="{ 'has-error' : meForm.tel.$invalid && !meForm.tel.$pristine }">
+                                                    <input type="text" class="form-control gn-form-control" name="tel" ng-model="data.tel" id="tel" value="te_list.tel" ng-pattern="/^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$/">
+                                                    <p ng-show="meForm.tel.$invalid && !meForm.tel.$pristine" class="help-block"> - 을 포함한 10자리 숫자를 입력하세요.</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-4 control-label gn-control-label">이메일</label>
-                                            <div class="col-sm-8" ng-class="{ 'has-error' : meForm.email.$invalid && !meForm.email.$pristine }">
-                                                <input type="email" class="form-control gn-form-control" name="email" ng-model="data.email" id="email" value="te_list.email" ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/">
-                                                <p ng-show="meForm.email.$invalid && !meForm.email.$pristine" class="help-block">이메일 형식으로 넣어주세요.</p>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">이메일</label>
+                                                <div class="col-sm-8" ng-class="{ 'has-error' : meForm.email.$invalid && !meForm.email.$pristine }">
+                                                    <input type="email" class="form-control gn-form-control" name="email" ng-model="data.email" id="email" value="te_list.email" ng-pattern="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/">
+                                                    <p ng-show="meForm.email.$invalid && !meForm.email.$pristine" class="help-block">이메일 형식으로 넣어주세요.</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
 
-                                </div> <!--modal-body-->
-                                <div class="modal-footer gn-modal-footer">
-                                    <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="submit()" ng-disabled="meForm.$invalid">저장</button>
-                                </div>
-                            </div> <!--class="modal-content"-->
-                        </div> <!--class="modal-dialog modal-sm"-->
-                    </div> <!--class="modal fade" id="myModal" role="dialog" -->
-                </div>
+                                    </div> <!--modal-body-->
+                                    <div class="modal-footer gn-modal-footer">
+                                        <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="submit()" ng-disabled="meForm.$invalid">저장</button>
+                                    </div>
+                                </div> <!--class="modal-content"-->
+                            </div> <!--class="modal-dialog modal-sm"-->
+                        </div> <!--class="modal fade" id="myModal" role="dialog" -->
+                    </div>
 
-                <div class="container-fluid">
-                    <form>
-                        <dl class="dl-horizontal gn-description-list">
-                            <dt>아이디</dt>
-                            <dd>{{te_list.user_id}}</dd>
-                            <dt>연락처</dt>
-                            <dd>{{te_list.tel}}</dd>
-                            <dt>이메일</dt>
-                            <dd>{{te_list.email}}</dd>
-                        </dl>
-                    </form>
-                </div>
-            </div> <!--class="gn-sett-margin-box" 사용자 이름-->
-        </div>  <!--class="gn-box profile-user"-->
+                    <div class="container-fluid">
+                        <form>
+                            <dl class="dl-horizontal gn-description-list">
+                                <dt>아이디</dt>
+                                <dd>{{te_list.user_id}}</dd>
+                                <dt>연락처</dt>
+                                <dd>{{te_list.tel}}</dd>
+                                <dt>이메일</dt>
+                                <dd>{{te_list.email}}</dd>
+                            </dl>
+                        </form>
+                    </div>
+                </div> <!--class="gn-sett-margin-box" 사용자 이름-->
+            </div>  <!--class="gn-box profile-user"-->
 
-    </div> <!--id="profile" class="tab-pane fade in active"-->
+        </div> <!--id="profile"-->    
 
-
-
-
-
-</div><!--class="tab-content right-box fl" -->
+    </div><!--tab-content-->
+</div><!--row-->

@@ -101,6 +101,8 @@
             <dd><spna ng-bind="name_data.user_name"></spna></dd>
             <dt>베이스이미지</dt>
             <dd><spna ng-bind="image_data.name"></spna></dd>
+            <dt ng-show="vm_data.type == 'kvm'">SSH 키</dt>
+            <dd ng-show="vm_data.type == 'kvm'"><spna ng-bind="ssh.name"></spna></dd>
         </dl>
     </div>
 </div>

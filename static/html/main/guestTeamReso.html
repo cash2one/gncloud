@@ -1,36 +1,41 @@
 <h1>설정</h1>
+
+
 <navme></navme>
-<!--팀 > 리소스-->
-<div id="team-reso" class="ab-pane col-xs-12 col-sm-10">
-    <div class="gn-box">
-        <div class="gn-sett-margin-box">
-            <div class="container-fluid">
-                <h2>리소스</h2>
 
-                <!--팀 그래프-->
-                <div class="row">
-                    <ul class="col-sm-4 gn-sett-graph">
-                        <li><h4>CPU</h4></li>
-                        <li><canvas id="cpu_chart" height="150"></canvas></li>
-                        <li class="cpu-color"><span id="cpu_per"></span>% 사용중</li>
-                        <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li>
-                    </ul>
-
-                    <ul class="col-sm-4 gn-sett-graph">
-                        <li><h4>MEMORY</h4></li>
-                        <li><canvas id="memory_chart" height="150"></canvas></li>
-                        <li class="memo-color"><span id="mem_per"></span>% 사용중</li>
-                        <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span></li>
-                    </ul>
-
-                    <ul class="col-sm-4 gn-sett-graph">
-                        <li><h4>DISK</h4></li>
-                        <li><canvas id="disk_chart" height="150"></canvas></li>
-                        <li class="disk-color"><span id="disk_per"></span>% 사용중</li>
-                        <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span></li>
-                    </ul>
-                </div><!-- class="team-graph clearfix" -->
-            </div> <!--<div class="container-fluid">-->
-        </div> <!--class="gn-sett-margin-box"-->
-    </div> <!--class="gn-box profile-team"-->
-</div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
+<div class="row">         
+    <!--팀 > 리소스-->
+    <div id="team-reso" class="ab-pane col-xs-12 col-sm-10">
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>리소스</h2>
+    
+                    <!--팀 그래프-->
+                    <div class="row">
+                        <ul class="col-sm-4 gn-sett-graph">
+                            <li><h4>CPU</h4></li>
+                            <li><canvas id="cpu_chart" height="150"></canvas></li>
+                            <li class="cpu-color"><span id="cpu_per"></span>% 사용중</li>
+                            <li class="sett-txt-graph"><span id="cpu_use_cnt"></span> / <span id="cpu_total_cnt"></span> CORE</li>
+                        </ul>
+    
+                        <ul class="col-sm-4 gn-sett-graph">
+                            <li><h4>MEMORY</h4></li>
+                            <li><canvas id="memory_chart" height="150"></canvas></li>
+                            <li class="memo-color"><span id="mem_per"></span>% 사용중</li>
+                            <li class="sett-txt-graph"><span id="mem_use_cnt"></span> / <span id="mem_total_cnt"></span></li>
+                        </ul>
+    
+                        <ul class="col-sm-4 gn-sett-graph">
+                            <li><h4>DISK</h4></li>
+                            <li><canvas id="disk_chart" height="150"></canvas></li>
+                            <li class="disk-color"><span id="disk_per"></span>% 사용중</li>
+                            <li class="sett-txt-graph"><span id="disk_use_cnt"></span> / <span id="disk_total_cnt"></span></li>
+                        </ul>
+                    </div><!-- class="team-graph clearfix" -->
+                </div> <!--<div class="container-fluid">-->
+            </div> <!--class="gn-sett-margin-box"-->
+        </div> <!--class="gn-box profile-team"-->
+    </div> <!--id="profile-team"  class="tab-pane fade" 팀 > 리소스-->
+</div><!--row-->
