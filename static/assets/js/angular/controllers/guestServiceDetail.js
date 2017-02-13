@@ -53,7 +53,7 @@ angular
             }).success(function (data, status, headers, config) {
                 if(data != null){
                     $scope.log_list = JSON.stringify(data);
-                    console.log($scope.log_list);
+                    console.log($scope.log_list.result);
                 }
 
             }).error(function (data, status, headers, config) {
