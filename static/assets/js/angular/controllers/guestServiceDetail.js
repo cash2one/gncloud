@@ -52,7 +52,7 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
                 if(data != null){
-                    $scope.log_list = JSON.parse(data);
+                    $scope.log_list = JSON.stringify(data);
                     console.log($scope.log_list);
                 }
 
