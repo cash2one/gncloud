@@ -583,6 +583,7 @@ li.nav-link.active>a:hover,
 .modal-open .modal {
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: rgba(39, 39, 39, 0.6);
 }
 
 .modal {
@@ -596,6 +597,8 @@ li.nav-link.active>a:hover,
     -webkit-overflow-scrolling: touch;
     outline: 0;
 }
+
+.modal-backdrop{background-color: transparent;}
 
 .click{
     font-weight: 400 !important;
