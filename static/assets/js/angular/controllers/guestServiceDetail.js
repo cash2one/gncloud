@@ -47,7 +47,7 @@ angular
             $scope.data.vm_id = vm_id;
             $http({
                 method: 'GET',
-                url: '/api/docker/vm/',
+                url: '/api/docker/vm/logfilelist',
                 params:$scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
@@ -56,13 +56,14 @@ angular
                 console.log(status);
             });
         }
-        $scope.node_info=function (vm_id, filename) {
+        $scope.node_info=function (vm_id, filename, work) {
             $scope.data={};
             $scope.data.vm_id = vm_id;
             $scope.data.filename = filename;
+            $scope.data.work_name = work;
             $http({
                 method: 'GET',
-                url: '/api/docker/vm/',
+                url: '/api/docker/vm/logfilecontents',
                 params:$scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
