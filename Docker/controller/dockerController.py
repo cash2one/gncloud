@@ -49,9 +49,17 @@ def doc_create(id,sql_session):
         docker_service = ds.docker_service_create(docker_info)
         logger.debug(docker_info.id+":end create")
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
-        if docker_service == 'Error':
+        if docker_service == 'Error' or docker_service is None or docker_service == '':
+            if docker_info is None:
+                docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
+            docker_info.status = "Error"
+            sql_session.commit()
             return jsonify(status=False, message="failure service create.")
-        if type(docker_service) is not list:
+        elif type(docker_service) is not list:
+            if docker_info is None:
+                docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
+            docker_info.status = "Error"
+            sql_session.commit()
             return jsonify(status=False, message=docker_service)
         else:
             image = GnDockerImages.query.filter_by(id=image_id).one()

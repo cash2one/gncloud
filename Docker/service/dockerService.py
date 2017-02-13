@@ -33,8 +33,9 @@ class DockerService(object):
             dockerimage = sql_session.query(GnDockerImages).filter(GnDockerImages.id == image_id).first()
             #dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
             if dockerimage is None:
-                return None
+                return 'Error'
 
+            docker_name = docker_info.name.replace(' ', '_')
             real_image_id = None
             if dockerimage.sub_type == 'snap':
                 real_image_id = dockerimage.base_image
@@ -50,7 +51,7 @@ class DockerService(object):
             command += " --replicas %s" % config.REPLICAS
             command += " --constraint 'node.hostname != manager'"
             command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
-            command = '%s --name="%s"' % (command, docker_info.name)
+            command = '%s --name="%s"' % (command, docker_name)
             mount_count = 1;
             for detail in image_detail:
                 if detail.arg_type == "mount":
