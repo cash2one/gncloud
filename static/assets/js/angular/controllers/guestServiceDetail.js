@@ -51,9 +51,9 @@ angular
                 params:$scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
-                if(data != null){
-                    $scope.log_list = JSON.stringify(data);
-                    console.log($scope.log_list.result);
+                if(data.status == ture){
+                    $scope.log_list=data.result.filelist;
+                    console.log($scope.log_list);
                 }
 
             }).error(function (data, status, headers, config) {
