@@ -97,10 +97,16 @@ var serviceAddModules = [
             var time   = date.getHours();
             var min = date.getMinutes();
             var dateDiff = "";
-            if(data_year != year){
+            if(data_year != year && month == data_month){
                 dateDiff = (year-data_year)+"년 전";
             }else if(data_month != month){
-                dateDiff = (month-data_month)+"개월 전";
+                if(month-data_month>0){
+                    dateDiff = (month-data_month)+"개월 전";
+                }else{
+                    dateDiff = (12-data_month)+month+"개월 전";
+                    console.log(dateDiff);
+                }
+
             }else if(data_day != day){
                 dateDiff = (day-data_day)+"일 전";
             }else if(data_time != time){
