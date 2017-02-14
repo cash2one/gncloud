@@ -607,11 +607,12 @@ def get_container_logfiles(id):
 
         all_result =[]
         host_count = 0
+        hostname = ''
         for log_unit in result_list:
             if log_unit != '' and log_unit != ' ':
                 log_files = log_unit.split('\r\n')
                 ff_list = []
-                ls_count = 0;
+                ls_count = 0
                 for some_file in log_files:
                     if ls_count == 0:
                         hostname = some_file
@@ -633,6 +634,7 @@ def get_container_logfiles(id):
 #get logfile's contents
 def get_contents(id, filename, worker_name):
     sql_session = db_session
+    f_contents=''
     try:
         log_host = sql_session.query(GnHostMachines).filter(GnHostMachines.name == worker_name).first()
         volumes = sql_session.query(GnDockerVolumes).filter(GnDockerVolumes.service_id == id).all()
