@@ -53,6 +53,7 @@ class DockerService(object):
             command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
             #command = '%s --name="%s"' % (command, docker_name)
             postfix=''
+            data_path=''
             mount_count = 1
             for detail in image_detail:
                 if detail.arg_type == "mount":
@@ -67,12 +68,15 @@ class DockerService(object):
                         command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
                                   (command, dockerimage.name, id, mount_count, mount_type, dest_path)
                         mount_count += 1
+                        if mount_type == 'DATA':
+                            data_path = '%s_%s_%d_%s/_data' % (dockerimage.name, id, mount_count, vol_type)
                 elif detail.arg_type == 'log_vol' or detail.arg_type == 'data_vol':
                     vol_type = ''
                     if detail.arg_type == 'log_vol':
                         vol_type = 'LOG'
                     else:
                         vol_type = 'DATA'
+                        data_path = '%s_%s_%d_%s/_data' % (dockerimage.name, id, mount_count, vol_type)
                     command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
                               (command, dockerimage.name, id, mount_count, vol_type, detail.argument)
                 else:
@@ -113,7 +117,8 @@ class DockerService(object):
             command += " --replicas %s" % config.REPLICAS
             command += " --constraint 'node.hostname != manager'"
             command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
-            mount_count = 1;
+            mount_count = 1
+            postfix=''
             for detail in image_detail:
                 if detail.arg_type == "mount":
                     # command += " " + (detail.argument % id)
@@ -136,9 +141,12 @@ class DockerService(object):
                     command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
                               (command, dockerimage.name, id, mount_count, vol_type, detail.argument)
                 else:
-                    command = '%s %s' % (command, detail.argument)
-
-            command += " %s" % backup_image
+                    if detail.argument.find('--command') >= 0:
+                        postfix = '%s %s' % (postfix, detail.argument.split('=')[1])
+                    else:
+                        command = '%s %s' % (command, detail.argument)
+            command = '%s %s' % (command, backup_image)
+            command = '%s %s' % (command, postfix)
 
             sql_session.commit()
             service_id = self.send_command(command, 1)
