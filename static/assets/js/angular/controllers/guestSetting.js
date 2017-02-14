@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestSettingCtrl', function ($scope, $http) {
+    .controller('guestSettingCtrl', function ($scope, $http, notification) {
 
         $scope.weeked = [
             { "name" : "월", "checked" : false },
@@ -42,7 +42,7 @@ angular
                         $("#dayforback").val($scope.backup_days);
                     } else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.messagess);
                         }
                     }
 
@@ -64,12 +64,12 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        alert("저장되었습니다.");
+                        notification.sendMessage("success","모니터링 설정이 저장되었습니다.");
                         $scope.List();
 
                     } else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.messagess);
                         }
                     }
 
@@ -87,12 +87,12 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        alert("저장되었습니다.");
+                        notification.sendMessage("success","과금 설정이 저장되었습니다.");
                         $scope.List();
 
                     } else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.messagess);
                         }
                     }
 
@@ -120,12 +120,12 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        alert("저장되었습니다.");
+                        notification.sendMessage("success","백업 설정이 저장되었습니다.");
                         $scope.List();
 
                     } else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.messagess);
                         }
                     }
 

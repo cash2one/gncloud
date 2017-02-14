@@ -25,7 +25,7 @@
                     <div class="form-group">
                         <label class="col-sm-1 control-label">내용</label>
                         <div class="col-sm-11">
-                            <textarea class="form-control gn-write" name="text" rows="6" id="text" placeholder="내용을 입력하여주세요." ng-model="data.text" required></textarea>
+                            <textarea class="form-control" name="text" rows="6" id="text" placeholder="내용을 입력하여주세요." ng-model="data.text" required></textarea>
                         </div>
                     </div>
                 </form>
@@ -71,13 +71,15 @@
 
 <!-- 묻고 답하기 내용 Modal -->
 <div class="modal fade" id="modal-board" role="dialog">
-    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header gn-modal-header">
                 <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
                 <h4 class="modal-title">{{notice.title}}</h4>
-                <p><span class="gn-write">&nbsp;{{notice.create_date}}</span></p>
+                <p>
+                    <span class="gn-write">홍길동</span>&nbsp;&mid;&nbsp;
+                    <span class="gn-write">{{notice.create_date}}</span>
+                </p>
             </div>
             <div class="modal-body gn-modal-body">
 
@@ -86,7 +88,7 @@
                     <div class="form-group" ng-class="{'gn-content':showData == 1}">
                         <pre class="gn-write com-sm-12" ng-show="showData == '1'">{{notice.text}}</pre>
                         <div id="change" class="second-td-name gn-lead col-sm-12" ng-show="showData=='2'">
-                            <textarea class="form-control gn-write col-sm-12" rows="6" ng-model="notice.text"></textarea>
+                            <textarea class="form-controlcol-sm-12" rows="6" ng-model="notice.text"></textarea>
                         </div>
                     </div>
                     
@@ -114,7 +116,7 @@
                             <form name="createForm">
                                 <span class="col-sm-2 gn-margin-bott10">답변</span>
                                 <span class="col-sm-10">
-                                        <textarea class="form-control gn-write gn-margin-bott10"  ng-class="{'gn-input-error':check_list == 'error'}" name="reple" ng-model="data.reply_text" rows="6" id="replytext" placeholder="내용을 입력하여주세요."></textarea>
+                                        <textarea class="form-control gn-margin-bott10"  ng-class="{'gn-input-error':check_list == 'error'}" name="reple" ng-model="data.reply_text" rows="6" id="replytext" placeholder="내용을 입력하여주세요."></textarea>
                                         <p class="error-message" ng-show="check_list == 'error'">입력해주세요.</p>
                                         <button type="submit" ng-disabled="createForm.$invalid" class="btn btn-gn-sub gn-btn-height btn-block"  ng-click="qna_reply_create(notice.id)" >저장</button>
                                 </span>
