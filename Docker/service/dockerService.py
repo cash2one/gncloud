@@ -52,6 +52,7 @@ class DockerService(object):
             command += " --constraint 'node.hostname != manager'"
             command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
             #command = '%s --name="%s"' % (command, docker_name)
+            postfix=''
             mount_count = 1
             for detail in image_detail:
                 if detail.arg_type == "mount":
@@ -75,8 +76,12 @@ class DockerService(object):
                     command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
                               (command, dockerimage.name, id, mount_count, vol_type, detail.argument)
                 else:
-                    command = '%s %s' % (command, detail.argument)
-            command += " %s" % dockerimage.view_name
+                    if detail.argument.find('--command') >= 0:
+                        postfix = '%s %s' % (postfix, detail.argument.split('=')[1])
+                    else:
+                        command = '%s %s' % (command, detail.argument)
+            command = '%s %s' % (command, dockerimage.view_name)
+            command = '%s %s' % (command, postfix)
             logger.debug("Docker Service Created: %s", command)
             sql_session.commit()
             # --- //Docker Service 생성 커맨드 작성 ---
@@ -211,28 +216,34 @@ class DockerService(object):
     # Docker 서비스의 볼륨 정보를 가져온다.
     # 매개변수의 internal_id는
     def get_service_volumes(self, internal_id, host_ip):
-        command = "docker service inspect %s" % internal_id
-        # 서비스 내의 Mounts 정보 가져오기
-        service = self.send_command(command, 3)
-        container_spec_list = service[0]['Spec']['TaskTemplate']['ContainerSpec']
-        ok_volume = False
-        for isExist in container_spec_list:
-            if isExist == 'Mounts':
-                ok_volume = True
-                break
 
-        if ok_volume:
-            mounts = service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
-        else:
+        try:
+            command = "docker service inspect %s" % internal_id
+            # 서비스 내의 Mounts 정보 가져오기
+            service = self.send_command(command, 3)
+            container_spec_list = service[0]['Spec']['TaskTemplate']['ContainerSpec']
+            ok_volume = False
+            for isExist in container_spec_list:
+                if isExist == 'Mounts':
+                    ok_volume = True
+                    break
+
+            if ok_volume:
+                mounts = service[0]['Spec']['TaskTemplate']['ContainerSpec']['Mounts']
+            else:
+                return None
+
+            for mount in mounts:
+                command = "docker -H %s:2375 volume inspect %s" % (host_ip, mount["Source"])
+                volume = ""
+                while type(volume) is not list:
+                    volume = self.send_command(command, 3)
+                mount['Mountpoint'] = volume[0]['Mountpoint']
+            return mounts
+        except Exception as e:
+            logger.debug('get_service_volumes error = %s' % e)
+            logger.debug('mounts = %s' % mounts)
             return None
-
-        for mount in mounts:
-            command = "docker -H %s:2375 volume inspect %s" % (host_ip, mount["Source"])
-            volume = ""
-            while type(volume) is not list:
-                volume = self.send_command(command, 3)
-            mount['Mountpoint'] = volume[0]['Mountpoint']
-        return mounts
 
     # Docker Service의 Containers Commit
     # 매개변수의 id는 서비스 DB id

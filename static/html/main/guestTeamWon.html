@@ -15,7 +15,7 @@
                             <thead>
                             <tr>
                                 <th class="">번호</th>
-                                <th class="">등급</th>
+                                <th class="hidden-xs">등급</th>
                                 <th class="">이름</th>
                                 <th class="hidden-xs">아이디</th>
                                 <th class="hidden-xs">상태</th>
@@ -26,9 +26,9 @@
                             <tbody>
                             <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_info.user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}" ng-cloak>
                                 <td class="">{{$index+1}}</td>
-                                <td class="">{{won.team_owner}}</td>
-                                <td class="" class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);"><a class="gn-ms-cursor">{{won.user_name}}</a></td>
-                                <td class="" ng-model="data.user_id">{{won.user_id}}</td>
+                                <td class="hidden-xs">{{won.team_owner}}</td>
+                                <td class="" class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);"><a >{{won.user_name}}</a></td>
+                                <td class="hidden-xs" ng-model="data.user_id">{{won.user_id}}</td>
                                 <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
                                 <td class="hidden-xs">{{won.comf}}</td>
                                 <td class="dropdown" ng-show="user_info.authority == 'owner' ">
