@@ -54,9 +54,9 @@ angular
             ]
         };
         $scope.List();
-        $scope.submit=function (data) {
-            $scope.data={}
-            $scope.data.monitor_period = data;
+        $scope.submit=function () {
+            $scope.data={};
+            $scope.data.monitor_period = Number($("#monitor").val());
             $http({
                 method: 'PUT',
                 url: '/api/manager/vm/money/monitor',
