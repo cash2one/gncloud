@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-</div><!--<div class="modal fade" id="modi-write" role="dialog">-->
+</div><!--modal-->
 
 <!--공지 목록-->
 <div class="table-responsive gn-table-responsive">
@@ -48,12 +48,12 @@
         <tbody class="gn-tdody">
         <tr class="" ng-repeat="list in list">
             <td>{{total_page-($index+this_page)}}</td>
-            <td class="second-td-name"><a class="gn-ms-cursor"  data-toggle="modal" data-target="#modal-board" ng-click="notice_lnfo(list.id,page_hist)">{{list.title}}</a></td>
+            <td class="second-td-name"><a class="gn-table-ellip" data-toggle="modal" data-target="#modal-board" ng-click="notice_lnfo(list.id,page_hist)">{{list.title}}</a></td>
             <td>{{list.write_date}}</td>
         </tr>
         </tbody>
     </table>
-</div><!--div class="table-responsive gn-table-responsive" -->
+</div><!--table-->
 
 <!--이전/다음 버튼-->
 <input type="button" class="btn btn-default" ng-click="noticeList(prev_page)" value="이전" ng-show="page_hist != 1">
@@ -89,4 +89,4 @@
             </div>
         </div>
     </div>
-</div>
+</div><!--modal-->

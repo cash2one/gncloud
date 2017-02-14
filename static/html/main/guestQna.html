@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-</div><!--<div class="modal fade" id="modi-write" role="dialog">-->
+</div><!--modal-->
 <!--묻고 답하기 목록-->
 <div class="table-responsive gn-table-responsive">
     <table class="table gn-board-table table-condensed table-hover">
@@ -49,13 +49,13 @@
         <tbody class="gn-tdody">
         <tr class="" ng-repeat="list in list">
             <td>{{total_page-($index+this_page)}}</td>
-            <td class="second-td-name"><a data-toggle="modal" data-target="#modal-board" ng-click="qna_info(list.id,data.page)">{{list.title}}</a></td>
+            <td class="second-td-name"><a class="gn-table-ellip" data-toggle="modal" data-target="#modal-board" ng-click="qna_info(list.id,data.page)">{{list.title}}</a></td>
             <td>{{list.create_date}}</td>
         </tr>
 
         </tbody>
     </table>
-</div><!--div class="table-responsive gn-table-responsive" -->
+</div><!--table-->
 
 <!--이전/다음 버튼-->
 <input type="button" class="btn" ng-click="noticeList(prev_page)" value="이전" ng-show="page_hist != 1">
@@ -125,4 +125,4 @@
             </div>
         </div>
     </div>
-</div>
+</div><!--modal-->

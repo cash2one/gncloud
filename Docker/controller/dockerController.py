@@ -70,10 +70,19 @@ def doc_create(id,sql_session):
             # os=image.os,
             # os_ver=image.os_ver,
             # 생성된 Service의 Container 정보를 DB에 저장한다.
+            service_container_count = 0
             service_container_list = ds.get_service_containers(docker_service[0]['ID'])
             while service_container_list is None:
+                if service_container_count > 10:
+                    sql_session.rollback()
+                    if docker_info is None:
+                        docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
+                    docker_info.status = "Error"
+                    sql_session.commit()
+                    return jsonify(status=False, message="서비스 생성 실패: %s" % service_container_list )
                 time.sleep(3)
                 service_container_list = ds.get_service_containers(docker_service[0]['ID'])
+                service_container_count += 1
             logger.debug("service_container_list: %s" % service_container_list)
             host_ip_list = [ ]
             for service_container in service_container_list:
@@ -93,6 +102,9 @@ def doc_create(id,sql_session):
             #service_volume_list = ds.get_service_volumes(docker_service[0]['ID'])
             host_ip = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_ip_list[0]).first().ip
             service_volume_list = ds.get_service_volumes(docker_service[0]['ID'], host_ip)
+            if service_container_list is None:
+                time.sleep(5)
+                service_volume_list = ds.get_service_volumes(docker_service[0]['ID'], host_ip)
             logger.debug("service_volume_list: %s" % service_volume_list)
             if service_volume_list is not None:
                 for service_volume in service_volume_list:
