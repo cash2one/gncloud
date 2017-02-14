@@ -43,14 +43,21 @@
         <thead>
         <tr>
             <th class="col-sm-1">#</th>
-            <th class="col-sm-9">제목</th>
+            <th class="col-sm-6">제목</th>
+            <!--<th class="col-sm-1">댓글</th>-->
+            <th class="col-sm-2">작성자</th>
             <th class="col-sm-2">작성일</th>
         </tr>
         </thead>
         <tbody class="gn-tdody">
         <tr class="" ng-repeat="list in list">
             <td>{{total_page-($index+this_page)}}</td>
-            <td class="second-td-name"><a class="gn-table-ellip" data-toggle="modal" data-target="#modal-board" ng-click="qna_info(list.id,data.page)">{{list.title}}</a></td>
+            <td class="second-td-name">
+                <a class="gn-table-ellip" data-toggle="modal" data-target="#modal-board" ng-click="qna_info(list.id,data.page)">{{list.title}}</a>
+                <span class="badge">{{list.count}}</span>
+            </td>
+            <!--<td>{{list.count}}</td>-->
+            <td>{{team.author_id}}</td>
             <td>{{list.create_date}}</td>
         </tr>
 

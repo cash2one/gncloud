@@ -17,8 +17,12 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        $scope.list = data.list.list;
                         $scope.team = data.list.team_info;
+                        for(var i=0;i < data.list.qna_count.length; i++){
+                            data.list.list[i].count = data.list.qna_count[i];
+                        }
+                        $scope.list = data.list.list;
+                        $scope.reply = data.list.qna_count;
                         $scope.total_page=data.list.total_page;
                         $scope.page_hist =data.list.page+1;
                         $scope.page_total =data.list.total+1;
@@ -43,7 +47,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.notice = data.list.qna_info;
-                        $scope.reply = data.list.qna_ask;
+                        $scope.reply = data.list.qna;
                         $scope.qna_list(page);
                         $scope.checkid = id;
                     }else {
