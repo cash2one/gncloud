@@ -43,12 +43,13 @@ var serviceAddModules = [
             restrict: 'E',
             templateUrl:'/main/navme.html',
             controller: function ($scope, $location) {
-                if($location.path() == "/account/users/list") $scope.menu = 1;
-                if($location.path() == "/guestTeamKey") $scope.menu = 2;
-                if($location.path() == "/guestTeamProfile") $scope.menu = 3;
-                if($location.path() == "/guestTeamReso") $scope.menu = 4;
-                if($location.path() == "/guestTeamWon") $scope.menu = 5;
-                if($location.path() == "/guestTeamBackup") $scope.menu = 6;
+                if($location.path() == "/account/users/list") $scope.me_menu = 1;
+                if($location.path() == "/guestTeamKey") $scope.me_menu = 2;
+                if($location.path() == "/guestTeamProfile") $scope.me_menu = 3;
+                if($location.path() == "/guestTeamReso") $scope.me_menu = 4;
+                if($location.path() == "/guestTeamWon") $scope.me_menu = 5;
+                if($location.path() == "/guestTeamBackup") $scope.me_menu = 6;
+                if($location.path() == "/guestInvoice") $scope.me_menu = 7;
             }
         };
     });

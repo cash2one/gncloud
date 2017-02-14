@@ -1,15 +1,22 @@
 angular
     .module('gncloud')
     .controller('guestInvoiceCtrl', function ($scope, $http, dateModifyService, $rootScope) {
-        $scope.price=function () {
+        $scope.data={};
+        $scope.page=function (page) {
+            $scope.data.page=page;
             $http({
                 method: 'GET',
                 url: '/api/manager/price',
+                params:$scope.data,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        $scope.pricelist =data.list;
+                        $scope.pricelist =data.list.list;
+                        $scope.page_hist = data.list.page+1;
+                        $scope.page_total =data.list.total+1;
+                        $scope.prev_page = page - 1;
+                        $scope.next_page = page + 1;
                     } else {
                         if(data.message != null) {
                             alert(data.message)
@@ -17,7 +24,7 @@ angular
                     }
                 });
         }
-        $scope.price();
+        $scope.page(1);
         $scope.price_list_info=function (year, month, team_code) {
             $scope.data={};
             $scope.data.year = year;

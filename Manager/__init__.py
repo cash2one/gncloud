@@ -836,7 +836,8 @@ def cluster_healthcheck():
 @app.route('/price',methods=['GET'])
 def Price_list():
     team_code = session['teamCode']
-    return jsonify(status=True, list=team_price_lsit(team_code,db_session))
+    page = request.args.get("page")
+    return jsonify(status=True, list=team_price_lsit(team_code,page,db_session))
 
 @app.route('/price/list',methods=['GET'])
 def Price_list_info():
