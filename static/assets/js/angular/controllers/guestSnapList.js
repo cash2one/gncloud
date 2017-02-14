@@ -65,7 +65,6 @@ angular
                         for(var i = 0 ; i < $scope.snap_list.length ; i++){
                             $scope.snap_list[i].create_time_diff = dateModifyService.modifyDate(data.list.guest_list[i].create_time);
                         }
-                        console.log(data.list.guest_list.length);
                     }
                     if(data.list.retryCheck == false){
                         $interval.cancel(stop);

@@ -41,7 +41,7 @@
                                         <dl class="dl-horizontal gn-description-list sett-detail">
                                           <dt>CPU</dt>
                                           <dd>{{total.cpu_per}}%</dd>
-                                          <div ng-class="{ 'has-error' : userForm.cpu.$invalid && !userForm.cpu.$pristine }">
+                                          <div class="clearfix" ng-class="{ 'has-error' : userForm.cpu.$invalid && !userForm.cpu.$pristine }">
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.cpu_use_cnt}} / </span>
                                               <input type="text" ng-model="data.cpu" id="cpu" name="cpu" class="form-control gn-form-control" ng-value="total.cpu_total_cnt">
@@ -50,7 +50,7 @@
                                           
                                           <dt>MEMORY</dt>
                                           <dd>{{total.mem_per}}%</dd>
-                                          <div ng-class="{ 'has-error' : userForm.mem.$invalid && !userForm.mem.$pristine }">
+                                          <dsiv class="clearfix" ng-class="{ 'has-error' : userForm.mem.$invalid && !userForm.mem.$pristine }">
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.mem_use_cnt}} / </span>
                                               <input type="text" ng-model="data.mem" id="mem" name="mem" class="form-control gn-form-control" ng-value="total.mem_total_cnt">
@@ -58,7 +58,7 @@
                                           </div>                                                                                  
                                           <dt>DISK</dt>
                                           <dd>{{total.disk_per}}%</dd>
-                                          <div ng-class="{ 'has-error' : userForm.disk.$invalid && !userForm.disk.$pristine }">
+                                          <div class="clearfix" ng-class="{ 'has-error' : userForm.disk.$invalid && !userForm.disk.$pristine }">
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.disk_use_cnt}} / </span>
                                               <input type="text" ng-model="data.disk" id="disk" name="disk" class="form-control gn-form-control" ng-value="total.disk_total_cnt">
