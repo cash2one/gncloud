@@ -64,7 +64,7 @@
                                         </dl>
     
                                         <div class="table-responsive gn-table-responsive">
-                                            <table class="table table-bordered gn-board-table">
+                                            <table class="table gn-board-table">
                                                 <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -75,8 +75,8 @@
                                                 <tbody class="gn-tdody">
                                                 <tr ng-repeat="hist in hist_info">
                                                     <td>{{total-$index}}</td>
-                                                    <td>{{hist.backup_time}}</td>
-                                                    <td>{{hist.filename}}</td>
+                                                    <td><span class="gn-table-ellip">{{hist.backup_time}}</span></td>
+                                                    <td><span class="gn-table-ellip">{{hist.filename}}</span></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
