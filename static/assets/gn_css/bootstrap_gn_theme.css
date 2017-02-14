@@ -2137,7 +2137,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     /*서비스*/
     .service-log .gn-table-ellip{width: 80px;}
     
-    
+    /*시스템관리자 상세 모달*/
+    .gn-description-list.sett-detail > div > span{margin-right: 0px;}
     
 }
 
