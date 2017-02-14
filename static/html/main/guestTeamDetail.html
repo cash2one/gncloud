@@ -50,7 +50,7 @@
                                           
                                           <dt>MEMORY</dt>
                                           <dd>{{total.mem_per}}%</dd>
-                                          <dsiv class="clearfix" ng-class="{ 'has-error' : userForm.mem.$invalid && !userForm.mem.$pristine }">
+                                          <div class="clearfix" ng-class="{ 'has-error' : userForm.mem.$invalid && !userForm.mem.$pristine }">
                                               <span>사용중</span>
                                               <span class="sett-detail-span">{{total.mem_use_cnt}} / </span>
                                               <input type="text" ng-model="data.mem" id="mem" name="mem" class="form-control gn-form-control" ng-value="total.mem_total_cnt">
