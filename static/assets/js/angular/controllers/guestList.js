@@ -49,7 +49,6 @@ angular
         ];
 
         $scope.update = function (id, action, sh, index) {
-            console.log(index);
             $http({
                 method: "POST",
                 url: "/api/manager/vm_hist/machines/" + id,
