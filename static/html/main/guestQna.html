@@ -57,7 +57,7 @@
                 <span class="badge">{{list.count}}</span>
             </td>
             <!--<td>{{list.count}}</td>-->
-            <td>{{team.author_id}}</td>
+            <td>{{list.author_id}}</td>
             <td>{{list.create_date}}</td>
         </tr>
 
@@ -77,7 +77,7 @@
                 <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
                 <h4 class="modal-title">{{notice.title}}</h4>
                 <p>
-                    <span class="gn-write">홍길동</span>&nbsp;&mid;&nbsp;
+                    <span class="gn-write">{{notice.author_id}}</span>&nbsp;&mid;&nbsp;
                     <span class="gn-write">{{notice.create_date}}</span>
                 </p>
             </div>

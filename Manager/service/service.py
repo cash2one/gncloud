@@ -1343,6 +1343,7 @@ def qna_list(page,team_code,syscheck,sql_session):
         total=int(total_page.count)/10
         for qna in qna_info:
             qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
+            qna.author_id = qna.gnUser.user_name
             qna_count.append(len(sql_session.query(GnQnA).filter(GnQnA.farent_id ==qna.id).all()))
     else:
         team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
@@ -1355,11 +1356,13 @@ def qna_list(page,team_code,syscheck,sql_session):
         total=int(total_page.count)/10
         for qna in qna_info:
             qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
+            qna.author_id = qna.gnUser.user_name
             qna_count.append(len(sql_session.query(GnQnA).filter(GnQnA.farent_id ==qna.id).all()))
     return {"list":qna_info, "total_page":total_page.count,"total":total, "page":page, "team_info":team_info,"qna_count":qna_count}
 
 def qna_info_list(id,sql_session):
     qna_info = sql_session.query(GnQnA).filter(GnQnA.id ==id).one()
+    qna_info.author_id = qna_info.gnUser.user_name
     qna_ask = sql_session.query(GnQnA).filter(GnQnA.farent_id ==id).all()
     for qna in qna_ask:
        qna.author_id = qna.gnUser.user_name
