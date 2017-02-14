@@ -185,6 +185,8 @@ textarea.gn-form-control{
 
 
 
+
+
 /* ============================= gncloud BUTTON STYLE ============================= */
 /*인스턴스 생성버튼*/
 .btn-gn-primary {
@@ -683,6 +685,15 @@ h2 > .pull-right{margin-top: -6px;}
 .comment-border{border-bottom: 1px solid rgba(215,215,215,0.5); padding: 0; margin: 0}
 
 .gn-answer span,.gn-comment span{padding-right: 0; padding-left: 0; display: block;}
+
+.gn-board-table .badge{
+    margin-left: 5px;
+    background-color: rgba(88, 196, 198,.8);
+    font-weight: 400;
+    padding: 5px 8px;
+    border-radius: 15px;
+}
+
 
 /*개발*/
 #changereply{padding-left: 0;}
@@ -1572,9 +1583,7 @@ div.tab-content,
 }
 
 #machine > .gn-sett-btn,
-#container > .gn-sett-btn{
-    margin-top: -75px;
-} 
+#container > .gn-sett-btn{margin-top: -75px;} 
 
 ul.gn-sett-graph{text-align: center;}
 
@@ -1809,6 +1818,10 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     text-align: right; 
     line-height: 37px;
 }
+
+.gn-select-error label{margin-left: 10px;}
+.gn-select-error span{font-weight: 400;}
+
 .gn-select-error select{line-height: 16px;}
 .gn-select-error input{margin-left: 10px;} 
 .gn-select-error .check-sm{display: none;}
@@ -1822,7 +1835,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 .gn-sys-sett input[type=radio]{margin-right: 10px;}
 
 .gn-sys-sett .list-inline{margin-left: 0px; margin-top: 5px;}
-.gn-sys-sett .list-inline span{margin-left: 10px;}
+.gn-sys-sett .list-inline span.gn-write{margin-left: 10px;}
+.radio label span{font-weight: 400;}
 
 .gn-sys-sett label{margin-right: 10px; font-weight: 200;}
 .gn-sys-sett label input[type=checkbox]{margin-right: 5px;}
@@ -2054,7 +2068,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     .gn-description-list.sm dd{
         font-weight: 400;
         margin-left: 70px;
-        padding: 2px 0;
+        /*padding: 2px 0;*/
+        padding-bottom: 5px;
         overflow: hidden;
     }
     

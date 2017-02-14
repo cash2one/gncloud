@@ -1437,8 +1437,20 @@ def healthcheck_info(team_code,sql_session):
 
 #_________________________과금______________________________________________________________#
 
-def team_price_lsit(team_code,sql_session):
-    list = sql_session.query(GnInvoiceResult).all()
+def team_price_lsit(team_code,page,sql_session):
+    page_size = 10
+    page = int(page)-1
+    total_query = sql_session.query(func.count(GnInvoiceResult.team_code).label("count"))
+    list_query = sql_session.query(GnInvoiceResult)
+    if team_code != "000":
+        total_query = total_query.filter(GnInvoiceResult.team_code == team_code)
+        list_query = list_query.filter(GnInvoiceResult.team_code == team_code)
+
+    total_page= total_query.one()
+    list=list_query.limit(page_size).offset(page*page_size).all()
+
+    total=int(total_page.count)/10
+    return {"list":list, "total_page":total_page.count,"total":total, "page":page}
 
     return list
 
