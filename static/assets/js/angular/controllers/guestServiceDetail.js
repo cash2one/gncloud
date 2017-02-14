@@ -21,18 +21,11 @@ angular
                     }else{
                         $scope.image_data = data.info.image_info;
                         $scope.image_data.name = data.info.image_info.name;
+                        $scope.Log = data.info.vol_info.log_vol;
+                        $scope.Data = data.info.vol_info.data_vol;
                     }
                     if($scope.vm_data.backup_confirm == 'false')
-                    $scope.vm_data.backup_confirm=0;
-                    for(i=0; i<data.info.image_info.gnDockerImageDetail.length;i++){
-                        if(data.info.image_info.gnDockerImageDetail[i].arg_type == 'mount'){
-                            if(data.info.image_info.gnDockerImageDetail[i].argument.indexOf("LOG") != -1){
-                                $scope.Log = data.info.image_info.gnDockerImageDetail[i].argument.replace(/LOG:/g,"");
-                            }else if(data.info.image_info.gnDockerImageDetail[i].argument.indexOf("DATA")!=-1){
-                                $scope.Data = data.info.image_info.gnDockerImageDetail[i].argument.replace(/DATA:/g,"");
-                            }
-                        }
-                    }
+                        $scope.vm_data.backup_confirm=0;
                     $scope.nodelist($scope.vm_data.id);
                 }
                 else {

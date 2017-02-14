@@ -762,3 +762,26 @@ class GnBackupHist(Base):
 
     def __json__(self):
         return ['vm_id', 'filename', 'backup_time', 'vm_type', 'host_ip']
+
+
+class GnDockerVolumes(Base):
+    __tablename__ = 'GN_DOCKER_VOLUMES'
+    service_id = Column(String(8), primary_key=True, nullable=False, default='')
+    name = Column(String(200), primary_key=True, nullable=False, default='')
+    source_path = Column(String(200), primary_key=True, nullable=False, default='')
+    destination_path = Column(String(200), nullable=False, default='')
+    status = Column(String(10), nullable=True, default='')
+
+    def __init__(self, service_id, name, source_path, destination_path, status=""):
+        self.service_id = service_id
+        self.name = name
+        self.source_path = source_path
+        self.destination_path = destination_path
+        self.status = status
+
+    def __repr__(self):
+        return "<GnDockerVolumes %r_%r>" % (self.service_id, self.name)
+
+    def to_json(self):
+        return dict(service_id=self.service_id, name=self.name, source_path=self.source_path,
+                    destination_path=self.destination_path, status=self.status)

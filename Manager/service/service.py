@@ -263,6 +263,43 @@ def vm_list_snap(sql_session, team_code):
     return {"guest_list":list,"retryCheck":retryCheck}
 
 def vm_info(sql_session, id):
+    data_vol=''
+    log_vol=''
+    vol_info={}
+    vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
+    name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
+    if vm_info.type != 'docker':
+        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one_or_none()
+    else:
+        image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
+        volume_info = sql_session.query(GnDockerVolumes).filter(GnDockerVolumes.service_id == id).all()
+        for volume in volume_info:
+            if volume.name.find('DATA') >= 0:
+                data_vol='%s:%s' % (volume.source_path, volume.destination_path)
+            elif volume.name.find('LOG') >= 0:
+                log_vol='%s:%s' % (volume.source_path, volume.destination_path)
+        vol_info={"data_vol":data_vol, "log_vol":log_vol}
+    monitor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == id).first()
+    mem_info={}
+    disk_info = {}
+    if monitor_info is not None:
+        total = vm_info.disk
+        use = int(monitor_info.disk_usage)
+        disk_per_info = int((use*100)/total)
+        rest_disk = total - use;
+        disk_info = {"total":convertHumanFriend(total), "use":convertHumanFriend(use), "rest_disk":convertHumanFriend(rest_disk), "disk_per_info":disk_per_info}
+
+        mem_total = vm_info.memory
+        mem_use = int(monitor_info.mem_usage)
+        mem_per_info = int((mem_use*100)/mem_total)
+        rest_mem = mem_total - mem_use;
+        mem_info = {"mem_total":convertHumanFriend(mem_total), "mem_use":convertHumanFriend(mem_use), "rest_mem":convertHumanFriend(rest_mem), "mem_per_info":mem_per_info}
+    vm_info.disk = convertHumanFriend(vm_info.disk)
+    vm_info.memory = convertHumanFriend(vm_info.memory)
+    info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info,"name_info":name_info,"image_info":image_info, "ssh_key":vm_info.gnSshkeys, "vol_info":vol_info}
+    return info
+'''
+def vm_info(sql_session, id):
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
     if vm_info.type != 'docker':
@@ -288,6 +325,8 @@ def vm_info(sql_session, id):
     vm_info.memory = convertHumanFriend(vm_info.memory)
     info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info,"name_info":name_info,"image_info":image_info, "ssh_key":vm_info.gnSshkeys}
     return info
+'''
+
 
 def vm_info_graph(sql_session, id):
     monitor_history_list = sql_session.query(GnMonitorHist).filter(GnMonitorHist.id == id).order_by(GnMonitorHist.cur_time.desc()).limit(30).all()
@@ -1343,6 +1382,7 @@ def qna_list(page,team_code,syscheck,sql_session):
         total=int(total_page.count)/10
         for qna in qna_info:
             qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
+            qna.author_id = qna.gnUser.user_name
             qna_count.append(len(sql_session.query(GnQnA).filter(GnQnA.farent_id ==qna.id).all()))
     else:
         team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == team_code).one()
@@ -1355,11 +1395,13 @@ def qna_list(page,team_code,syscheck,sql_session):
         total=int(total_page.count)/10
         for qna in qna_info:
             qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
+            qna.author_id = qna.gnUser.user_name
             qna_count.append(len(sql_session.query(GnQnA).filter(GnQnA.farent_id ==qna.id).all()))
     return {"list":qna_info, "total_page":total_page.count,"total":total, "page":page, "team_info":team_info,"qna_count":qna_count}
 
 def qna_info_list(id,sql_session):
     qna_info = sql_session.query(GnQnA).filter(GnQnA.id ==id).one()
+    qna_info.author_id = qna_info.gnUser.user_name
     qna_ask = sql_session.query(GnQnA).filter(GnQnA.farent_id ==id).all()
     for qna in qna_ask:
        qna.author_id = qna.gnUser.user_name
