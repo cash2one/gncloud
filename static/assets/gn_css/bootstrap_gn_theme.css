@@ -583,6 +583,7 @@ li.nav-link.active>a:hover,
 .modal-open .modal {
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: rgba(39, 39, 39, 0.6);
 }
 
 .modal {
@@ -596,6 +597,8 @@ li.nav-link.active>a:hover,
     -webkit-overflow-scrolling: touch;
     outline: 0;
 }
+
+.modal-backdrop{background-color: transparent;}
 
 .click{
     font-weight: 400 !important;
@@ -1326,6 +1329,9 @@ ul.gn-tag-group > li{
 }
 
 /* ========== gncloud 인스턴스 > 생성 HTML ========== */
+/*서비스 생성(개발에서 타입을 선택해야 버튼이 생기는 btn-group에 해당) min-height*/
+.create-min{min-height: 82px !important;} 
+
 #snap > form > .btn-group,
 form > .btn-group{
     width: 100%;
@@ -1400,7 +1406,7 @@ form > .btn-group{
     padding-left: 10px;
 }
 
-.sprite-img{
+/*.sprite-img{
     display: block;
     margin-top: 10px;
     margin-bottom: 5px;
@@ -1408,17 +1414,17 @@ form > .btn-group{
     height: 38px;
     overflow: hidden;  
     float: left;
-}
+}*/
 
-.sprite-hyperv{background: url(../gn_images/instance_create_snap_window_s.png)no-repeat;}
+/*.sprite-hyperv{background: url(../gn_images/instance_create_snap_window_s.png)no-repeat;}
 .sprite-kvm{background: url(../gn_images/instance_create_snap_kvm_s.png)no-repeat;}
-.sprite-docker{background: url(../gn_images/instance_create_snap_docker_s.png)no-repeat;}
+.sprite-docker{background: url(../gn_images/sprite_docker.png)no-repeat;}*/
 
 /***  추가된 스프라이트 이미지  ***/
-.sprite-ubuntu{background: url(../gn_images/instance_create_ubuntu-s.png)no-repeat;}
+/*.sprite-ubuntu{background: url(../gn_images/instance_create_ubuntu-s.png)no-repeat;}
 .sprite-centos{background: url(../gn_images/instance_create_centos-s.png)no-repeat;}
 .sprite-tomcat{background: url(../gn_images/instance_create_tomcat-s.png)no-repeat;}
-.sprite-windows{background: url(../gn_images/instance_create_windows-s.png)no-repeat;}
+.sprite-windows{background: url(../gn_images/instance_create_windows-s.png)no-repeat;}*/
 
 /*.gn-btn-default.active .sprite-hyperv,
 .gn-btn-default.active .sprite-kvm,
@@ -1434,29 +1440,29 @@ form > .btn-group{
 /*.snap-sprite{float: left;}*/
 
 /***  스냅샷 스프라이트 이미지  ***/
-.sprite-snap-img{
+.sprite-img{
     display: block;
     margin: auto;
-    width: 37px;
-    height: 38px;
+    width: 35px;
+    height: 35px;
     overflow: hidden;  
-    margin: 5px 0px 5px 0px;
+    margin: 7px 0px 5px 0px;
     float: left;
 }
-.sprite-snap-windows{background: url(../gn_images/instance_create_snap_window_s.png) no-repeat;}
-.sprite-snap-ubuntu{background: url(../gn_images/instance_create_snap_ubuntu_s.png) no-repeat;}
-.sprite-snap-docker{background: url(../gn_images/instance_create_snap_docker_s.png) no-repeat;}
-.sprite-snap-kvm{background: url(../gn_images/instance_create_snap_kvm_s.png) no-repeat;}
-.sprite-snap-centos{background: url(../gn_images/instance_create_snap_centos_s.png) no-repeat;}
-.sprite-snap-tomcat{background: url(../gn_images/instance_create_snap_tomcat_s.png) no-repeat;}
+.sprite-windows{background: url(../gn_images/sprite_windows.png) no-repeat;}
+.sprite-ubuntu{background: url(../gn_images/sprite_ubuntu.png) no-repeat;}
+.sprite-docker{background: url(../gn_images/sprite_docker.png) no-repeat;}
+.sprite-kvm{background: url(../gn_images/sprite_kvm.png) no-repeat;}
+.sprite-centos{background: url(../gn_images/sprite_centos.png) no-repeat;}
+.sprite-tomcat{background: url(../gn_images/sprite_tomcat.png) no-repeat;}
 
-.gn-btn-create.active .sprite-snap-windows,
-.gn-btn-create.active .sprite-snap-ubuntu,
-.gn-btn-create.active .sprite-snap-docker,
-.gn-btn-create.active .sprite-snap-kvm,
-.gn-btn-create.active .sprite-snap-centos,
-.gn-btn-create.active .sprite-snap-tomcat
-{background-position: 0px -38px;}
+.gn-btn-create.active .sprite-windows,
+.gn-btn-create.active .sprite-ubuntu,
+.gn-btn-create.active .sprite-docker,
+.gn-btn-create.active .sprite-kvm,
+.gn-btn-create.active .sprite-centos,
+.gn-btn-create.active .sprite-tomcat
+{background-position: 0px -35px;}
 
 
 .gn-name-ellip{
@@ -1572,8 +1578,12 @@ li.active > .tab-sm-box{
 /* ========== gncloud 서비스 관련 HTML ========== */
 .service-log div{padding: 0;}
 .service-log .gn-table-ellip{width: 210px;}
+.service-log .bite{margin-bottom: 0; text-align: right; color: #a8a8a8;}
 
-
+#detail-log pre{
+    max-height: 300px;
+    overflow-y: scroll;
+}
 
 /* ========== gncloud 설정 > 팀원/팀장 HTML ========== */
 .gn-ms-cursor{cursor: pointer;}
@@ -1942,8 +1952,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     /* ======== gncloud 인스턴스 상세 ======== */
     
     /* ======== gncloud 서비스 ======== */
-    /*서비스 생성(개발에서 타입을 선택해야 버튼이 생기는 btn-group에 해당) min-height*/
-    .create-min{min-height: 82px !important;} 
+    
     
     /* ======== gncloud 이미지 ======== */
     

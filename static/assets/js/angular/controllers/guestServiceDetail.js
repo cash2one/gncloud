@@ -52,8 +52,7 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).success(function (data, status, headers, config) {
                 if(data.status == true){
-                    $scope.host = data.list[0].hostname;
-                    $scope.log_list =data.list[0].filelist;
+                    $scope.host_list = data.list;
                     console.log($scope.log_list);
                 }
 
@@ -63,6 +62,7 @@ angular
         }
         $scope.node_info=function (vm_id, filename, worker_name, filesize) {
             $scope.data={};
+            $scope.content="";
             $scope.data.vm_id = vm_id;
             $scope.data.filename = filename;
             $scope.data.worker_name = worker_name;
@@ -148,7 +148,7 @@ angular
                     if (data.status == true) {
                         $scope.deleteInstance();
                     }else if(data.status == false){
-                        window.location.href='#/guestList'
+                        window.location.href='#/guestServiceList'
                     } else {
                         if(data.value != null) {
                             alert(data.value)
@@ -180,7 +180,7 @@ angular
 
         $scope.deleteInstance = function(){
             $timeout(function () {
-                window.location.href = '#/guestSeriveList';
+                window.location.href = '#/guestServiceList';
             }, 1000 , true );
 
             $http({

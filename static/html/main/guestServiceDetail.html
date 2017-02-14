@@ -9,7 +9,6 @@
     
                 <!-- Modal : 이름 수정 -->
                 <div class="modal fade" id="name-Modal" role="dialog">
-                    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                             <div class="modal-header gn-modal-header">
@@ -61,7 +60,6 @@
     
             <!-- Modal : 태그 수정 -->
             <div class="modal fade" id="tag-modal" role="dialog">
-                <div class="modal-backdrop fade in" style="height: 3000px;"></div>
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header gn-modal-header">
@@ -144,26 +142,29 @@
 <div class="gn-box gn-detail-main">
     <div class="gn-margin-box">
         <h2>로그</h2>
-        <h3>{{host}}</h3><!--노드이름-->
-        <div class="row service-log">
-            <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="log in log_list track by $index">
-                       <span class="col-sm-8">
-                           <a class="gn-table-ellip" data-toggle="modal" data-target="#detail-log" ng-click="node_info(vm_data.id,log.filename,host,log.filesize)">{{log.filename}}</a>
-                       </span>
-                <span class="col-sm-4">{{log.filesize}}</span>
+        
+        <div class="gn-margin-bott10" ng-repeat="log in host_list track by $index">
+            <h3>{{log.hostname}}</h3><!--노드이름-->
+            <div class="row service-log" >
+                <div class="col-xs-12 col-sm-6 col-md-4" ng-repeat="file in log.filelist">
+                   <span class="col-xs-8 col-sm-8">
+                       <a class="gn-table-ellip" data-toggle="modal" data-target="#detail-log" ng-click="node_info(vm_data.id,file.filename,log.hostname,file.filesize)">{{file.filename}}</a>
+                   </span>
+                    <span class="col-xs-4 col-sm-4 bite">{{file.filesize}} KB</span>
+                </div>
             </div>
+            <br>
         </div>
     </div>
 </div><!--로그-->
 
 <!-- 로그 modal -->
 <div class="modal fade" id="detail-log" role="dialog">
-    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header gn-modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">{{host}}</h4><!--노드이름-->
+                <h4 class="modal-title">{{data.worker_name}}</h4><!--노드이름-->
                 <div class="gn-write">{{data.filename}} (<span>{{data.filesize}} KB</span>)</div>
             </div>
             <div class="modal-body gn-modal-body">
@@ -186,7 +187,6 @@
 </div>
 <!-- modal -->
 <div class="modal fade" id="modal-modi2" role="dialog">
-    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
     <div class="modal-dialog form-horizontal">
         <div class="modal-content col-sm-10 col-sm-offset-1">
             <div class="modal-header gn-modal-header">

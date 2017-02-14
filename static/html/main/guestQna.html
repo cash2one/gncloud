@@ -7,7 +7,7 @@
 
 <!-- 묻고 답하기 글쓰기 Modal -->
 <div class="modal fade" id="modi-write" role="dialog">
-    <div class="modal-backdrop fade in" style="height: 3000px;"></div>
+
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header gn-modal-header">
@@ -103,11 +103,12 @@
                     <!--댓글달기 영역-->
                     <div class="form-group">
                         <div class="gn-answer container-fluid">
-                            <form name="replyForm" ng-submit="submitForm(replyForm.$valid)" novalidate>
+                            <form name="createForm">
                                 <span class="col-sm-2 gn-margin-bott10">답변</span>
-                                <span class="col-sm-10" ng-class="{ 'has-error' : replyForm.replytext.$invalid && !replyForm.replytext.$pristine }">
-                                        <textarea class="form-control gn-write gn-margin-bott10" name="replytext" ng-model="data.reply_text" rows="6" id="replytext" placeholder="내용을 입력하여주세요." required></textarea>
-                                        <button type="submit" class="btn btn-gn-sub gn-btn-height btn-block"  ng-click="qna_reply_create(notice.id)" ng-disabled="replyForm.$invalid">저장</button>
+                                <span class="col-sm-10">
+                                        <textarea class="form-control gn-write gn-margin-bott10"  ng-class="{'gn-input-error':check_list == 'error'}" name="reple" ng-model="data.reply_text" rows="6" id="replytext" placeholder="내용을 입력하여주세요."></textarea>
+                                        <p class="error-message" ng-show="check_list == 'error'">입력해주세요.</p>
+                                        <button type="submit" ng-disabled="createForm.$invalid" class="btn btn-gn-sub gn-btn-height btn-block"  ng-click="qna_reply_create(notice.id)" >저장</button>
                                 </span>
                             </form>
                         </div>

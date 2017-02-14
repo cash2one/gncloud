@@ -790,7 +790,7 @@ def Qna_reply_create(id):
     if 'reply_text' in request.json:
         text = request.json['reply_text']
     if text == "":
-        return jsonify(status=False, message='아무것도 입력하지 않았습니다.')
+        return jsonify(status=False, showData='error')
     user_id=session['userId']
     team_code = session['teamCode']
     return jsonify(status=True, list=qna_ask_reply(id, text, user_id,team_code, db_session))

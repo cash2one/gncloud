@@ -87,6 +87,7 @@ angular
                         $scope.qna_info(id,$scope.data.page);
                         $scope.data.reply_text="";
                     }else {
+                        $scope.check_list = data.showData;
                         if (data.message != null) {
                             alert(data.message);
                         }
