@@ -42,9 +42,7 @@
         <thead>
         <tr>
             <th class="col-sm-1">#</th>
-            <th class="col-sm-6">제목</th>
-            <th class="col-sm-1">댓글</th>
-            <th class="col-sm-2">작성자</th>
+            <th class="col-sm-9">내용</th>
             <th class="col-sm-2">작성일</th>
         </tr>
         </thead>
@@ -52,8 +50,6 @@
         <tr class="" ng-repeat="list in list">
             <td>{{total_page-($index+this_page)}}</td>
             <td class="second-td-name"><a class="gn-table-ellip" data-toggle="modal" data-target="#modal-board" ng-click="qna_info(list.id,data.page)">{{list.title}}</a></td>
-            <td>{{list.count}}</td>
-            <td>{{team.author_id}}</td>
             <td>{{list.create_date}}</td>
         </tr>
 
@@ -97,7 +93,7 @@
 
                                 <span class="col-xs-2 col-sm-1">
                                         <a class="glyphicon glyphicon-trash pull-right" ng-show="user_info.authority == 'sysowner'|| user_info.name == reply.author_id" ng-click="delete_reply(reply.id)"></a>
-                                        <a class="glyphicon glyphicon-pencil pull-right" ng-show="user_info.name == reply.author_id&& showData=='1'" ng-click="showData='3'"></a>
+                                        <a class="glyphicon glyphicon-pencil pull-right" ng-show="user_info.name == reply.author_id && showData=='1'" ng-click="showData='3'"></a>
                                         <a class="glyphicon glyphicon-pencil pull-right" ng-show="user_info.name == reply.author_id && showData=='3'" ng-click="showData='1'"></a>
                                     <button type="submit" style="margin-top:90px" class="btn btn-default pull-right" ng-show="showData=='3'" ng-click="showData='1';changereply(reply.id,reply.text)">저장</button>
                                 </span>
