@@ -1621,7 +1621,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 
 /*클러스터*/
 #cluster .form-group label.endpoint{padding-top: 0;}
-#cluster .form-group label{padding-top: 0;}
+#cluster .form-group label{padding-top: 0; line-height: 37px;}
 
 #cluster-more .form-group > span{line-height: 37px;}
 
