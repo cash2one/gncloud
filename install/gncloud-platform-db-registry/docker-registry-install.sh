@@ -22,3 +22,33 @@ mkdir /srv/docker-registry
 systemctl enable docker-registry
 systemctl start docker-registry
 
+# version 2
+./docker-install.sh
+# gncloud : id, gncloud : password
+mkdir auth
+docker run --entrypoint htpasswd registry:2 -Bbn gncloud gncloud > auth/htpasswd
+docker stop registry && docker rm -v registry
+
+mkdir certs
+cd certs
+#generate key
+openssl genrsa 1024 > domain.key
+#generate cert
+openssl req -new -x509 -nodes -sha1 -days 365 -key domain.key -out domain.cert
+# input country, locality, organization, unit, name, email etc
+openssl x509 -inform PER -in domain.cert -out domain.crt
+
+cd ..
+#docker run registry
+docker run -d -p 5000:5000 --restart=always --name registry \
+  -v `pwd`/auth:/auth \
+  -e "REGISTRY_AUTH=htpasswd" \
+  -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" \
+  -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd \
+  -v `pwd`/certs:/certs \
+  -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+  -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+  registry:2
+
+
+
