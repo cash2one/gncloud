@@ -47,7 +47,7 @@ angular
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
                         $scope.notice = data.list.qna_info;
-                        $scope.reply = data.list.qna;
+                        $scope.reply_do = data.list.qna;
                         $scope.qna_list(page);
                         $scope.checkid = id;
                     }else {

@@ -1357,6 +1357,7 @@ def qna_list(page,team_code,syscheck,sql_session):
             qna.create_date = qna.create_date.strftime('%Y-%m-%d %H:%M')
             qna_count.append(len(sql_session.query(GnQnA).filter(GnQnA.farent_id ==qna.id).all()))
     return {"list":qna_info, "total_page":total_page.count,"total":total, "page":page, "team_info":team_info,"qna_count":qna_count}
+
 def qna_info_list(id,sql_session):
     qna_info = sql_session.query(GnQnA).filter(GnQnA.id ==id).one()
     qna_ask = sql_session.query(GnQnA).filter(GnQnA.farent_id ==id).all()
