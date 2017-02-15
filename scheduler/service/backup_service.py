@@ -2,13 +2,14 @@
 import sys
 import datetime
 from flask import jsonify
-from db.models import *
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ProcessPoolExecutor
-from db.models import GnHostMachines, GnVmMachines
-from util.config import config
-from service.powershell import BackupPowerShell
-from service.kvmshell import KvmShell
+
+from scheduler.db.models import GnHostMachines, GnVmMachines, GnSystemSetting, GnBackup, GnBackupHist, GnTeam, GnUsers
+from scheduler.util.config import config
+from scheduler.service.powershell import BackupPowerShell
+from scheduler.service.kvmshell import KvmShell
+from scheduler.db.database import init_db, db_session
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -33,6 +34,9 @@ class Backup:
     def backup(self):
         try:
             sql_session = self.sql_session
+            if sql_session is None:
+                init_db()
+                sql_session = db_session
             backup_settings = sql_session.query(GnSystemSetting).first()
             if backup_settings.backup_schedule_type == 'W':
                 week_day = 0;

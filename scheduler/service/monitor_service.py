@@ -4,9 +4,9 @@ from flask import jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ProcessPoolExecutor
 
-from db.models import *
-from db.models import GnCluster
-from util.config import config
+from scheduler.db.models import *
+from scheduler.db.models import GnCluster
+from scheduler.util.config import config
 
 __author__ = 'nhcho'
 
@@ -88,13 +88,6 @@ class Monitoring:
         except Exception as message:
             print 'docker:%s' % message
 
-    '''
-    def alert_monitor(self, type, sub_type, status, msg):
-        sql_session = self.sql_session
-        insert_alert = GnAlert(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), type, sub_type, status, msg)
-        sql_session.add(insert_alert)
-        sql_session.commit()
-    '''
 
     def restart_monitor(self):
         self.shutdown()

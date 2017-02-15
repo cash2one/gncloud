@@ -2,10 +2,9 @@
 __author__ = 'nhcho'
 
 import datetime
-from db.database import Base
 from sqlalchemy import Column, Integer, String, DateTime, Numeric, BigInteger, ForeignKey
 from sqlalchemy.orm import relationship
-
+from scheduler.db.database import Base
 
 class GnCluster(Base):
     __tablename__ = "GN_CLUSTER"
@@ -32,6 +31,7 @@ class GnCluster(Base):
 
     def _json__(self):
         return ['id', 'name', 'ip', 'type', 'swarm_join', 'create_time', 'status']
+
 
 class GnSystemSetting(Base):
     __tablename__ = 'GN_SYSTEM_SETTING'

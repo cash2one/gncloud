@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
 from flask import jsonify
-from db.models import *
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ProcessPoolExecutor
 from sqlalchemy import and_
-from db.models import GnHostMachines, GnVmMachines
-from util.config import config
-from service.powershell import BackupPowerShell
-from service.kvmshell import KvmShell
+
+from scheduler.db.database import init_db, db_session
+from scheduler.db.models import GnSystemSetting, GnBackup, GnBackupHist
+from scheduler.util.config import config
+from scheduler.service.powershell import BackupPowerShell
+from scheduler.service.kvmshell import KvmShell
 
 
 class BackupDelete:
@@ -29,6 +30,9 @@ class BackupDelete:
 
     def backup_delete(self):
         sql_session = self.sql_session
+        if sql_session is None:
+            init_db()
+            sql_session = db_session
         try:
             settings = sql_session.query(GnSystemSetting).first()
             period = int(settings.backup_day)

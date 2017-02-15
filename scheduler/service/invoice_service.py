@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 import calendar
 import sys
+import datetime
 
 from apscheduler.executors.pool import ProcessPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
 from dateutil.relativedelta import relativedelta
-from db.models import *
-from db.models import GnInstanceStatus
 from flask import jsonify
 from sqlalchemy import or_
-from util.config import config
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+from scheduler.db.database import init_db, db_session
+from scheduler.db.models import GnInstanceStatus, GnInvoiceResult
+from scheduler.util.config import config
+
 
 __author__ = 'nhcho'
 
@@ -37,6 +37,9 @@ class Invoice:
 
     def invoice_calc(self):
         sql_session = self.sql_session
+        if sql_session is None:
+            init_db()
+            sql_session = db_session
         try:
             # validation date about create_time(start) to delete_time(delete)
             # if vm isn't deleted, delete_time is null. In this case, we will send invoice.
@@ -87,7 +90,6 @@ class Invoice:
 
             for stat in status:
                 # team = sql_session.query(GnTeam).filter(GnTeam.team_code == stat.team_code).first()
-
                 count_start_day = None
                 count_end_day = None
                 if stat.create_time > start_date:
@@ -133,19 +135,21 @@ class Invoice:
 
                 if stat.team_code != team_code and team_code is not None:
                     all_text = '{"version":"%s", "year":"%s", "month":"%s", "calc_day":"%s", "team":"%s","team_name":"%s", "team_price":"%d", "each_user":[%s] }' \
-                               % (version, year, month, today, team_code, stat.team_name, total_price, json_text)
+                               % (version, year, month, today, team_code, team_name, total_price, json_text)
 
                     invoid_result = GnInvoiceResult(year, month, team_code, all_text)
                     sql_session.add(invoid_result)
 
                     team_code = stat.team_code
-                    day_count = 0;
-                    total_price = one_vm_price;
-                    one_vm_price = 0;
+                    team_name = stat.team_name
+                    day_count = 0
+                    total_price = one_vm_price
+                    one_vm_price = 0
                     json_text = None
                     print(all_text)
                 elif team_code is None:
                     team_code = stat.team_code
+                    team_name = stat.team_name
                     author_id = stat.author_id
                     instance = None
 
@@ -156,7 +160,7 @@ class Invoice:
                 json_text = "%s,%s" % (json_text, author_text)
 
             all_text = '{"version":"%s", "year":"%s", "month":"%s", "calc_day":"%s", "team":"%s","team_name":"%s", "team_price":"%d", "each_user":[%s] }' \
-                       % (version, year, month, today, team_code, stat.team_name, total_price, json_text)
+                       % (version, year, month, today, team_code, team_name, total_price, json_text)
 
             invoid_result = GnInvoiceResult(year, month, team_code, all_text)
             sql_session.add(invoid_result)
@@ -166,13 +170,4 @@ class Invoice:
         except Exception as message:
             print(message)
             sql_session.rollback()
-            errno = message.args[0].args[1].errno
-            self.alert_invoice('controller', 'invoice', errno, message)
-            sql_session.commit()
             return jsonify(status=False, message='invoice calc failure')
-
-    def alert_invoice(self, type, sub_type, status, msg):
-        sql_session = self.sql_session
-        insert_alert = GnAlert(datetime.datetime.now().strftime('%Y%m%d%H%M%S'), type, sub_type, status, msg)
-        sql_session.add(insert_alert)
-        sql_session.commit()

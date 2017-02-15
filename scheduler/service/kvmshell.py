@@ -5,9 +5,9 @@ import subprocess
 
 import datetime
 from pexpect import pxssh
-from db.models import *
-from db.database import db_session
-from util.config import config
+from scheduler.db.models import *
+from scheduler.db.database import db_session
+from scheduler.util.config import config
 
 
 # It must be ssh key setting.
