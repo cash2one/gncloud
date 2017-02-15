@@ -785,3 +785,25 @@ class GnDockerVolumes(Base):
     def to_json(self):
         return dict(service_id=self.service_id, name=self.name, source_path=self.source_path,
                     destination_path=self.destination_path, status=self.status)
+
+class GnDockerContainers(Base):
+    __tablename__ = 'GN_DOCKER_CONTAINERS'
+    service_id = Column(String(8), primary_key=True, nullable=False)
+    internal_id = Column(String(100), primary_key=True, nullable=True, default='')
+    internal_name = Column(String(100), primary_key=True, nullable=True, default='')
+    host_id = Column(String(8), nullable=False, default='')
+    status = Column(String(10), nullable=True, default='')
+
+    def __init__(self, service_id, internal_id, internal_name, host_id, status=""):
+        self.service_id = service_id
+        self.internal_id = internal_id
+        self.internal_name = internal_name
+        self.host_id = host_id
+        self.status = status
+
+    def __repr__(self):
+        return "<GnDockerContainers %r>" % self.internal_id
+
+    def to_json(self):
+        return dict(service_id=self.service_id, internal_id=self.internal_id,
+                    internal_name=self.internal_name, host_id=self.host_id, status=self.status)

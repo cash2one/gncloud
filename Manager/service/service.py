@@ -263,8 +263,6 @@ def vm_list_snap(sql_session, team_code):
     return {"guest_list":list,"retryCheck":retryCheck}
 
 def vm_info(sql_session, id):
-    data_vol=''
-    log_vol=''
     vol_info={}
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
@@ -272,6 +270,14 @@ def vm_info(sql_session, id):
         image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one_or_none()
     else:
         image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
+        host_contents = ''
+        container_info = sql_session.query(GnDockerContainers).filter(GnDockerContainers.service_id == id).all()
+        for container in container_info:
+            host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == container.host_id).first()
+            host_contents = '%s%s/%s\r\n' % (host_contents, host_machine.name, host_machine.ip)
+
+        data_vol=''
+        log_vol=''
         volume_info = sql_session.query(GnDockerVolumes).filter(GnDockerVolumes.service_id == id).all()
         for volume in volume_info:
             if volume.name.find('DATA') >= 0:
@@ -296,7 +302,8 @@ def vm_info(sql_session, id):
         mem_info = {"mem_total":convertHumanFriend(mem_total), "mem_use":convertHumanFriend(mem_use), "rest_mem":convertHumanFriend(rest_mem), "mem_per_info":mem_per_info}
     vm_info.disk = convertHumanFriend(vm_info.disk)
     vm_info.memory = convertHumanFriend(vm_info.memory)
-    info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info,"name_info":name_info,"image_info":image_info, "ssh_key":vm_info.gnSshkeys, "vol_info":vol_info}
+    info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info,"name_info":name_info,"image_info":image_info,
+            "ssh_key":vm_info.gnSshkeys, "vol_info":vol_info, "host_info":host_contents}
     return info
 '''
 def vm_info(sql_session, id):
