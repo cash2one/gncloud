@@ -666,6 +666,7 @@ pre{white-space: pre-line;}
 
 pre.gn-write{
     padding: 0px 15px;
+    margin: 0;
     background-color: transparent;
     border: none;
     border-radius: 0;
