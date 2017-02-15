@@ -2071,7 +2071,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     
     /*gn-board-table 에 속하는 이름 화면 최소로 줄였을 때 width 값*/
     .gn-board-table > .gn-tdody > tr > td > .gn-table-ellip,
-    #snap a.gn-table-ellip{width: 90px;} 
+    #snap a.gn-table-ellip{width: 80px;} 
     
     /*설정 > 넓은 dd가 필요하지 않은 경우*/
     .gn-description-list.sm dd{
