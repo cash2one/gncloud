@@ -121,7 +121,7 @@
                                             <tr>
                                                 <th class="first-td"></th>
                                                 <th class="">이름</th>
-                                                <th class="hidden-xs">OS</th>
+                                                <th class="hidden-xs hidden-sm">OS</th>
                                                 <th class="hidden-xs">버전</th>
                                                 <th class="hidden-xs">BIT</th>
                                                 <th class="hidden-xs">타입</th>
@@ -207,7 +207,7 @@
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">이미지 위치</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.view_name.$invalid && !myDockerForm.view_name.$pristine }">
-                                                        <input type="text" class="form-control" name="view_name" placeholder="postgres" ng-model="dockerImage.view_name" required>
+                                                        <input type="text" class="form-control" name="view_name" placeholder="192.168.1.204:5000/mysql" ng-model="dockerImage.view_name" required>
                                                         <p ng-show="myDockerForm.view_name.$invalid && !myDockerForm.view_name.$pristine" class="help-block">내부 이름을 입력하세요.</p>
                                                     </div>
                                                 </div>
