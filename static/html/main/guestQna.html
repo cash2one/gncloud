@@ -54,7 +54,7 @@
             <td>{{total_page-($index+this_page)}}</td>
             <td class="second-td-name">
                 <a class="gn-table-ellip" data-toggle="modal" data-target="#modal-board" ng-click="qna_info(list.id,data.page)">{{list.title}}</a>
-                <span class="badge">{{list.count}}</span>
+                <span class="badge" ng-show="list.count > 0">{{list.count}}</span>
             </td>
             <!--<td>{{list.count}}</td>-->
             <td>{{list.author_id}}</td>
