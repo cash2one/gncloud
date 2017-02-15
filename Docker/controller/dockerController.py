@@ -2,6 +2,7 @@
 __author__ = 'jhjeon'
 
 import time
+import humanfriendly
 
 from flask import jsonify, request, session
 from sqlalchemy import and_
@@ -630,7 +631,8 @@ def get_container_logfiles(id):
                         hostname = some_file
                     elif ls_count > 2 and some_file != '':
                         sep = some_file.split(' ')
-                        ff_list.append({"filename":sep[1], "filesize":sep[0]})
+                        human_size = humanfriendly.format_size(int(sep[0]),binary=True).replace("i","")
+                        ff_list.append({"filename":sep[1], "filesize":human_size})
                     ls_count += 1
                 all_result.append({"hostname":hostname, "filelist":ff_list})
                 #all_result.append(ff_list)
