@@ -72,7 +72,7 @@
 <!-- 묻고 답하기 내용 Modal -->
 <div class="modal fade" id="modal-board" role="dialog">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content col-xs-12">
             <div class="modal-header gn-modal-header">
                 <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
                 <h4 class="modal-title">{{notice.title}}</h4>
@@ -88,7 +88,7 @@
                     <div class="form-group" ng-class="{'gn-content':showData == 1}">
                         <pre class="gn-write com-sm-12" ng-show="showData == '1'">{{notice.text}}</pre>
                         <div id="change" class="second-td-name gn-lead col-sm-12" ng-show="showData=='2'">
-                            <textarea class="form-controlcol-sm-12" rows="6" ng-model="notice.text"></textarea>
+                            <textarea class="form-control col-sm-12" rows="6" ng-model="notice.text"></textarea>
                         </div>
                     </div>
                     
@@ -112,7 +112,7 @@
                     </div>
                     <!--댓글달기 영역-->
                     <div class="form-group">
-                        <div class="gn-answer container-fluid">
+                        <div class="gn-answer">
                             <form name="createForm">
                                 <span class="col-sm-2 gn-margin-bott10">답변</span>
                                 <span class="col-sm-10">
