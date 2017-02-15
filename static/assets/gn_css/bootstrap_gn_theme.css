@@ -699,8 +699,8 @@ h2 > .pull-right{margin-top: -6px;}
 #changereply{padding-left: 0;}
 
 /* ========== gncloud 로그인 HTML ========== */
-.body-white{background-color: #ffffff; min-height: 100%;}
-.body-gray{background-color: #f6f6f6; min-height: 100%;}
+.body-white{background-color: #ffffff; height: 100%;}
+.body-gray{background-color: #f6f6f6; height: 100%;}
 
 .container-login{
     text-align: center;
