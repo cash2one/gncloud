@@ -269,6 +269,8 @@ def vm_info(sql_session, id):
     name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
     if vm_info.type != 'docker':
         image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one_or_none()
+        host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).first()
+        host_contents = '%s | %s\r\n' % (host_machine.name, host_machine.ip)
     else:
         image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
         host_contents = ''
@@ -1193,7 +1195,7 @@ def create_size(sql_session): # 인스턴스 생성 size
     return list
 
 def price_list(sql_seesion):
-    price_info = sql_seesion.query(GnVmSize).order_by(GnVmSize.cpu.desc()).all()
+    price_info = sql_seesion.query(GnVmSize).order_by(GnVmSize.cpu.asc(),GnVmSize.mem.asc(),GnVmSize.disk.asc()).all()
     for price in price_info:
         price.mem = convertHumanFriend(price.mem)
         price.disk = convertHumanFriend(price.disk)
