@@ -33,7 +33,7 @@ class DockerService(object):
             dockerimage = sql_session.query(GnDockerImages).filter(GnDockerImages.id == image_id).first()
             #dockerimage = GnDockerImages.query.filter_by(id=image_id).first()
             if dockerimage is None:
-                return 'Error'
+                return 'Error cannot get docker image info from database'
 
             docker_name = docker_info.name.replace(' ', '_')
             real_image_id = None
@@ -91,11 +91,12 @@ class DockerService(object):
             # --- //Docker Service 생성 커맨드 작성 ---
             service_id = self.send_command(command, 1)
         except Exception as e:
-            logger.error('docker service create error = %s' % e.message)
-            return 'Error'
+            logger.error('service create error:%s' % e.message)
+            return 'Error service create error:%s' % e.message
 
         if service_id[:5] == "Error":
-            return 'Error'
+            logger.error('service create error:%s' % service_id)
+            return service_id
         else:
             return self.docker_service_ps(service_id)
 
@@ -106,7 +107,7 @@ class DockerService(object):
             #dockerimage = GnDockerImages.query.filter_by(view_name=image).first()
             dockerimage = sql_session.query(GnDockerImages).filter(GnDockerImages.view_name==image).first()
             if dockerimage is None:
-                return None
+                return 'Error cannot get docker image info from database'
 
             #image_detail = GnDockerImageDetail.query.filter_by(image_id=dockerimage.id).all()
             image_detail = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.image_id == dockerimage.id).all()
@@ -151,14 +152,13 @@ class DockerService(object):
             sql_session.commit()
             service_id = self.send_command(command, 1)
         except Exception as e:
-            logger.error('docker service create error = %s' % e.message)
-            return 'Error'
+            logger.error('service create error:%s' % e.message)
+            return 'Error service create error:%s' % e.message
 
-        # --- //Docker Service 생성 커맨드 작성 ---
         if service_id[:5] == "Error":
-            return 'Error'
+            logger.error('service create error:%s' % service_id)
+            return service_id
         else:
-            time.sleep(2)
             return self.docker_service_ps(service_id)
 
     # 서비스 정지 (라 해 놓고 서비스 내 컨테이너 백업 후 서비스 삭제)
@@ -358,7 +358,8 @@ class DockerService(object):
             result = ssh.before.split("\r\n", 1)[1]
             result = json.loads(result.replace("\r\n", ""))
         else:
-            result = 'Error'
+            logger.error('send_command error:%s' % ssh.before)
+            result = 'Error send_command(command, 1) missing 1'
 
         ssh.logout()
         ssh.close()
