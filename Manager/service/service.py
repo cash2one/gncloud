@@ -264,6 +264,7 @@ def vm_list_snap(sql_session, team_code):
 
 def vm_info(sql_session, id):
     vol_info={}
+    host_contents=''
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
     if vm_info.type != 'docker':
