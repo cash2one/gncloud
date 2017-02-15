@@ -35,7 +35,7 @@ EOF
 
 mysql -ugncloud -pgncloud < GNCLOUD_create_table.sql
 mysql -ugncloud -pgncloud < GN_USERS_superuser.sql
-mysql -ugncloud -pgncloud < GN_USER_TEAMS_superuser.sql
+#mysql -ugncloud -pgncloud < GN_USER_TEAMS_superuser.sql
 
 
 

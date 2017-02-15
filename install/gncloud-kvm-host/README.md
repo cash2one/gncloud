@@ -79,11 +79,11 @@
     ```
     * ifcfg-br0 설정
     > /etc/sysconfig/network-script/ifcfg-br0
-    echo "DEVICE=br0" >> /etc/sysconfig/network-script/ifcfg-br0
-    echo "TYPE=Bridge" >> /etc/sysconfig/network-script/ifcfg-br0
-    echo "BOOTPROTO=dhcp" >> /etc/sysconfig/network-script/ifcfg-br0
-    echo "ONBOOT=yes" >> /etc/sysconfig/network-script/ifcfg-br0
-    echo "DELAY=0" >> /etc/sysconfig/network-script/ifcfg-br0
+    echo "DEVICE=br0" >> /etc/sysconfig/network-scripts/ifcfg-br0
+    echo "TYPE=Bridge" >> /etc/sysconfig/network-scripts/ifcfg-br0
+    echo "BOOTPROTO=dhcp" >> /etc/sysconfig/network-scripts/ifcfg-br0
+    echo "ONBOOT=yes" >> /etc/sysconfig/network-scripts/ifcfg-br0
+    echo "DELAY=0" >> /etc/sysconfig/network-scripts/ifcfg-br0
 
     * ifcfg-eth? 또는 ifcfg-enp???
     if [ -e /etc/sysconfig/network-scripts/ifcfg-eth0 ]

@@ -6,6 +6,7 @@
 1. 설치 절차
 2. docker-install.sh 실행
 3. shell 내용
+4. swarm init & join
 
 <span></span>
 1. 설치 절차
@@ -51,4 +52,18 @@
 
     systemctl enable docker
     systemctl start docker
+    ```
+<span></span>
+4. swarm init & join
+--------------------
+
+- swarm init
+    ```
+    docker swarm init --advertise-addr [manager-ip]
+    # result has token
+    ```
+- swarm join
+    ```
+    # all docker worker
+    docker swarm join --token [TOKEN] [IP]:2377
     ```
