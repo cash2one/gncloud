@@ -718,35 +718,14 @@ h2 > .pull-right{margin-top: -6px;}
     display: block;
 }
 
-/* 지앤클라우드 체크박스 스타일*/
-.btn-id{
-    position:relative;  
-    text-align:left; 
-    cursor:pointer; 
-    overflow:hidden;
-}
-.btn-id input.form-inputPop {
-    position:absolute; 
-    top:0; 
-    left:0; 
-    opacity:0; 
-    cursor:pointer; 
-    z-index:5;
-}
-
-.btn-id i {
-    float:left; 
-    width:15px; 
-    height:15px; 
-    background:url(../gn_images/checkbox_arrow.png)no-repeat; 
-    /*z-index:3;*/
-    border-radius: 3px; 
-    /*background-color: #ffffff;*/
-}
-
+/* 지앤클라우드 로그인 체크박스 스타일 */
+.btn-id{position:relative; text-align:left; cursor:pointer; overflow:hidden;}
+.btn-id input.form-inputPop {position:absolute; top:0; left:0; opacity:0; z-index:5;}
+.btn-id i {float:left; width: 15px; height: 15px; background:url(../gn_images/checkbox_arrow.png)no-repeat; border-radius: 3px;}
 .btn-id label {margin-left:10px; cursor:pointer; font-weight: 400;}
 .btn-id input.form-inputPop:checked+i {background-position:left bottom;}
-.btn-id input.form-inputPop:checked+i+label {color:#00afb4;}
+.btn-id input.form-inputPop:checked+i+label {color:#58c4c6;}
+/* -------login checkbox style end ------- */
 
 .error-message{
     height: 20px;
@@ -773,6 +752,7 @@ input.error{
 form.signupForm label.error, label.error{
     color :rgba(255, 0, 0, 0.75);
 }
+
 /*지앤클라우드 로그인버튼 < btn-gn-login > STYLE*/
 .btn-gn-login {
   color: #fff;
@@ -1065,7 +1045,10 @@ a.log-join-btn:focus{
 .total-user .dash-count{min-height: 296px;}
 .total-user .dash-count img{margin-top: 25%;}
 .total-user .dash-count div{margin-top: 25%;}
- 
+
+table.table-dash .gn-table-ellip{width: 130px;}
+table.table-dash.vm .gn-table-ellip{width: 180px;}
+
 /*대시보드 헬스체크*/
 .gn-health-check div,
 .gn-health-check ul{display: table; margin: auto;}
@@ -1835,6 +1818,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 .gn-select-error input{margin-left: 10px;} 
 .gn-select-error .check-sm{display: none;}
 
+
 /*과금*/
 #invoice h2{margin-bottom: 10px}
 
@@ -1895,6 +1879,9 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 
     /*사용자*/
     .dash-count div{top: 23px;}
+    
+    table.table-dash .gn-table-ellip{width: 80px;}
+    table.table-dash.vm  .gn-table-ellip{width: 80px;}
     
     /* ======== gncloud 인스턴스 리스트 ======== */ 
     /*리스트 왼쪽 첫번째 "이름"*/
