@@ -29,6 +29,8 @@ class PowerShell(object):
         self.address = address
         self.port = port
         self.uri = uri
+        if self.port == '' or self.port is None:
+            self.port = config.AGENT_PORT
 
     # 가상머신을 생성한다.
     # example) New-VM -Name testvm -Generation 2 -MemoryStartupBytes 2048MB
