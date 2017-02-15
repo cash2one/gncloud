@@ -68,7 +68,7 @@
                                             <tr class="" ng-repeat="pr in price_info">
                                                 <td><span class="gn-table-ellip">{{pr.vm_name}}</span></td>
                                                 <td class="hidden-xs">{{pr.author_name}}</td>
-                                                <td class="hidden-xs">{{pr.used}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td>
+                                                <td class="hidden-xs">{{pr.used}}<span ng-show="pr.price_type == 'H'">시간</span><span ng-show="pr.price_type == 'D'">일</span></td>
                                                 <td class="hidden-xs">&#65510;{{pr.unit_price | number}}<span ng-show="pr.price_type == 'H'">/시간</span><span ng-show="pr.price_type == 'D'">/일</span></td><!--&#65510; : 원 코드-->
                                                 <td>{{pr.total_price | number}}&#50896;</td><!--&#50896; : 원(한글)코드-->
                                                 <td class="hidden-xs"></td>
