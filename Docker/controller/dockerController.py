@@ -80,6 +80,7 @@ def doc_create(id,sql_session):
                         docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
                     docker_info.status = "Error"
                     sql_session.commit()
+                    ds.docker_service_rm(docker_service[0]['ID'])
                     return jsonify(status=False, message="서비스 생성 실패: %s" % service_container_list )
                 time.sleep(3)
                 service_container_list = ds.get_service_containers(docker_service[0]['ID'])
