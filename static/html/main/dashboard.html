@@ -139,7 +139,7 @@
                             <tbody>
                             <tr ng-repeat="list in user_list">
                                 <td>{{list.user_name}}</td>
-                                <td>{{list.user_id}}</td>
+                                <td><span class="gn-table-ellip">{{list.user_id}}</span></td>
                                 <td>{{list.cnt}}개</td>
                             </tr>
 
@@ -158,7 +158,7 @@
                     <h3>가상머신 종류</h3>
 
                     <div class="table-responsive gn-table-responsive">
-                        <table class="table table-dash">
+                        <table class="table table-dash vm">
                             <thead>
                                 <tr>
                                     <!--<th class="" ng-show="user_info.authority == 'sysowner'" >팀</th>-->
@@ -169,7 +169,7 @@
                             <tbody class="gn-tdody">
                                 <tr ng-repeat="list in image_type_list">
                                     <!--<td ng-show="user_info.authority == 'sysowner'" >{{list.team_name}}</td>-->
-                                    <td>{{list.name}}</td>
+                                    <td><span class="gn-table-ellip">{{list.name}}</span></td>
                                     <td>{{list.cnt}}개</td>
                                 </tr>
                             </tbody>
