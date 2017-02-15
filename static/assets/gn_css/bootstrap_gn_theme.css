@@ -1632,6 +1632,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 #cluster-more .form-group > div{padding-left: 0;}
 #cluster-more .form-group > span{line-height: 37px;}
 
+
 /*시스템 > 이미지 관리*/
 .img-icon-sett{
     background: url(../gn_images/cloud_private_icon.png); 
@@ -1804,7 +1805,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 
 /*리소스단위설정*/
 .price-mod form span{line-height: 37px;}
-
+#price .form-group label{padding-top: 0; line-height: 37px;}
+#price .form-group > div{padding: 0;}
 .gn-board-table .gn-danger{
     border: none !important;
 }
