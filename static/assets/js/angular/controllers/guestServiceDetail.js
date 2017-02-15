@@ -21,7 +21,7 @@ angular
                     }else{
                         $scope.host_info = data.info.host_info
                         $scope.image_data = data.info.image_info;
-                        $scope.image_data.name = data.info.image_info.name;
+                        $scope.image_data.name = data.info.image_info.view_name;
                         $scope.Log = data.info.vol_info.log_vol;
                         $scope.Data = data.info.vol_info.data_vol;
                     }
