@@ -108,7 +108,7 @@ class GnVmMachines(Base):
 
     def __json__(self):
         return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu'
-            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id','backup_confirm', 'size_id','gnTeam']
+            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id','backup_confirm', 'size_id','gnTeam','gnHostMachines']
 
 
 class GnUser(Base):

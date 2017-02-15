@@ -40,7 +40,7 @@
                                                 <span class="gn-write">IP:PORT</span>
                                             </label>
                                             <div class="col-sm-9" ng-class="{ 'has-error' : clusterForm.ip.$invalid && !clusterForm.ip.$pristine }">
-                                                <input type="text" class="form-control" name="ip" placeholder="192.168.0.3" ng-model="cluster.ip" required>
+                                                <input type="text" class="form-control" name="ip" placeholder="192.168.0.3:8080" ng-model="cluster.ip" required>
                                                 <p ng-show="clusterForm.ip.$invalid && !clusterForm.ip.$pristine" class="help-block">ip를 입력하세요.</p>
                                             </div>
                                         </div>
