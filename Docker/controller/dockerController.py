@@ -2,6 +2,7 @@
 __author__ = 'jhjeon'
 
 import time
+import humanfriendly
 
 from flask import jsonify, request, session
 from sqlalchemy import and_
@@ -79,6 +80,7 @@ def doc_create(id,sql_session):
                         docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
                     docker_info.status = "Error"
                     sql_session.commit()
+                    ds.docker_service_rm(docker_service[0]['ID'])
                     return jsonify(status=False, message="서비스 생성 실패: %s" % service_container_list )
                 time.sleep(3)
                 service_container_list = ds.get_service_containers(docker_service[0]['ID'])
@@ -630,7 +632,8 @@ def get_container_logfiles(id):
                         hostname = some_file
                     elif ls_count > 2 and some_file != '':
                         sep = some_file.split(' ')
-                        ff_list.append({"filename":sep[1], "filesize":sep[0]})
+                        human_size = humanfriendly.format_size(int(sep[0]),binary=True).replace("i","")
+                        ff_list.append({"filename":sep[1], "filesize":human_size})
                     ls_count += 1
                 all_result.append({"hostname":hostname, "filelist":ff_list})
                 #all_result.append(ff_list)
