@@ -158,7 +158,7 @@ textarea.gn-form-control{
     width: 70px;
     text-align: left;
     padding-bottom: 5px;
-    font-weight: 400;
+    /*font-weight: 400;*/
 }
 
 .gn-description-list dd{
@@ -699,8 +699,8 @@ h2 > .pull-right{margin-top: -6px;}
 #changereply{padding-left: 0;}
 
 /* ========== gncloud 로그인 HTML ========== */
-.body-white{background-color: #ffffff; min-height: 100%;}
-.body-gray{background-color: #f6f6f6; min-height: 100%;}
+.body-white{background-color: #ffffff; height: 100%;}
+.body-gray{background-color: #f6f6f6; height: 100%;}
 
 .container-login{
     text-align: center;
@@ -730,17 +730,17 @@ h2 > .pull-right{margin-top: -6px;}
 
 .btn-id i {
     float:left; 
-    width:18px; 
-    height:18px; 
+    width:15px; 
+    height:15px; 
     background:url(../gn_images/checkbox_arrow.png)no-repeat; 
-    z-index:3;
+    /*z-index:3;*/
     border-radius: 3px; 
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
 }
 
 .btn-id label {margin-left:10px; cursor:pointer; font-weight: 400;}
 .btn-id input.form-inputPop:checked+i {background-position:left bottom;}
-.btn-id input.form-inputPop:checked+i+label {color:#58c4c6;}
+.btn-id input.form-inputPop:checked+i+label {color:#00afb4;}
 
 .error-message{
     height: 20px;
@@ -1659,8 +1659,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 
 .open > .dropdown-img-icon-cont,
 .open > .dropdown-img-icon {
-    display: block;
-}
+    display: block;}
 
 .dropdown-img-icon{
     position: absolute;

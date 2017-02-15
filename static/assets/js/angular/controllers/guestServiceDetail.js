@@ -183,7 +183,7 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        notification.sendMessage("success",$scope.vm_data.name+" 인스턴스가 삭제되었습니다.");
+                        notification.sendMessage("success",$scope.vm_data.name+" 서비스가 삭제되었습니다.");
                     }
                     else {
 

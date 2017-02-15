@@ -108,7 +108,7 @@ class GnVmMachines(Base):
 
     def __json__(self):
         return ['id', 'name', 'type', 'internal_id', 'internal_name', 'cpu'
-            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id','backup_confirm', 'size_id','gnTeam']
+            , 'memory', 'disk', 'ip', 'status', 'tag', 'create_time', 'os', 'hyperv_pass', 'author_id','backup_confirm', 'size_id','gnTeam','gnHostMachines']
 
 
 class GnUser(Base):
@@ -630,7 +630,7 @@ class GnQnA(Base):
                 %(self.title, self.text, self.farent_id, self.author_id, self.create_date, self.team_code)
 
     def __json__(self):
-        return ['id', 'title', 'text', 'farent_id', 'author_id', 'create_date', 'team_code']
+        return ['id', 'title', 'text', 'farent_id', 'author_id', 'create_date', 'team_code', 'gnUser']
 
 class GnInstanceActionHist(Base):
     __tablename__='GN_INSTANCE_ACTION_HISTORY'

@@ -133,7 +133,7 @@
                                             <tr ng-repeat="path in images_list">
                                                 <td class="first-td"><img src="/gn_images/gn_icon_{{path.os}}.png" alt=""></td>
                                                 <td class="second-td-name"><span class="gn-table-ellip">{{path.name}}</span></td>
-                                                <td class="hidden-xs">{{path.os}}</td>
+                                                <td class="hidden-xs hidden-sm">{{path.os}}</td>
                                                 <td class="hidden-xs">{{path.os_ver}}</td>
                                                 <td class="hidden-xs">{{path.os_bit}}</td>
                                                 <td class="hidden-xs">{{path.type}}</td>
@@ -200,12 +200,12 @@
                                                 <div class="form-group">
                                                     <label for="inputtext" class="col-sm-2 control-label gn-control-label">이름</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.name.$invalid && !myDockerForm.name.$pristine }">
-                                                        <input type="text" class="form-control" name="name" placeholder="postgres" ng-model="dockerImage.name" ng-pattern="/^[A-Za-z0-9\_\-]*$/" required>
-                                                        <p ng-show="myDockerForm.name.$invalid && !myDockerForm.name.$pristine" class="help-block">영어, 숫자, '_', '-' 만 입력 가능. 공백도 안되게</p>
+                                                        <input type="text" class="form-control" name="name" placeholder="postgres" ng-model="dockerImage.name" required>
+                                                        <p ng-show="myDockerForm.name.$invalid && !myDockerForm.name.$pristine" class="help-block">이름을 입력해 주세요.</p>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">내부 이름</label>
+                                                    <label for="inputtext" class="col-sm-2 control-label gn-control-label">이미지 위치</label>
                                                     <div class="col-sm-10" ng-class="{ 'has-error' : myDockerForm.view_name.$invalid && !myDockerForm.view_name.$pristine }">
                                                         <input type="text" class="form-control" name="view_name" placeholder="postgres" ng-model="dockerImage.view_name" required>
                                                         <p ng-show="myDockerForm.view_name.$invalid && !myDockerForm.view_name.$pristine" class="help-block">내부 이름을 입력하세요.</p>
@@ -295,7 +295,7 @@
                                         </thead>
                                         <tbody class="gn-tdody">
                                             <tr ng-repeat="contain in contain_list">
-                                                <td class="first-td"><img src="/gn_images/gn_icon_{{contain.os}}.png" alt="" ng-show="contain.os != '' "></td>
+                                                <td class="first-td"><img src="/gn_images/gn_icon_docker.png" alt=""></td>
                                                 <td class="second-td-name"><span class="gn-table-ellip">{{contain.name}}</span></td>
                                                 <td class="hidden-xs">{{contain.os_ver}}</td>
                                                 <td class="hidden-xs">{{contain.tagFirst}}&nbsp;
