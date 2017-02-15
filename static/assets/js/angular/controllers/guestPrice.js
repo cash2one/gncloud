@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestPriceCtrl', function ($scope, $http, dateModifyService, $rootScope) {
+    .controller('guestPriceCtrl', function ($scope, $http, dateModifyService, $rootScope, notification) {
         $scope.price=function(){
             $http({
                 method: 'GET',
@@ -65,7 +65,7 @@ angular
                 })
                     .success(function(data, status, headers, config) {
                         if (data.status == true) {
-                            alert("삭제 되었습니다.");
+                            notification.sendMessage("success","삭제 되었습니다.");
                             $scope.price();
                         } else {
                             alert(data.message);
