@@ -21,6 +21,7 @@ class Config:
     KVM_HOST_POOL_IMAGE_PATH = ""
     HYPERV_HOST_POOL_IMAGE_PATH = ""
     NGINX_CONF_PATH = ""
+    AGENT_PORT = ""
 
     def __init__(self, path="../conf/config.conf"):
         config_section = "DEFAULT"
@@ -48,6 +49,7 @@ class Config:
         self.KVM_HOST_POOL_IMAGE_PATH = parser.get(config_section, "KVM_HOST_POOL_IMAGE_PATH")
         self.HYPERV_HOST_POOL_IMAGE_PATH = parser.get(config_section, "HYPERV_HOST_POOL_IMAGE_PATH")
         self.NGINX_CONF_PATH = parser.get(config_section, "NGINX_CONF_PATH")
+        self.AGENT_PORT = parser.get(config_section, "AGENT_PORT")
 
 local_custom_file = os.environ.get('CONFIG_FILE_PATH')
 if local_custom_file is None:

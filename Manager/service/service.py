@@ -1487,7 +1487,7 @@ def healthcheck_info(team_code,sql_session):
                     except:
                         response_host = 1
                 else:
-                    response_host = os.system("ping -c 1 -p "+ str(host.host_agent_port) +" "+ host.ip)
+                    response_host = os.system("ping -c 1 -p "+ config.AGENT_PORT +" "+ host.ip)
 
                 host_list.append({"host_check":response_host,"host_ip":host.ip,"host_name":host.name})
 
