@@ -265,6 +265,7 @@ def vm_list_snap(sql_session, team_code):
 def vm_info(sql_session, id):
     vol_info={}
     host_contents=''
+    container_name=''
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
     if vm_info.type != 'docker':
@@ -273,11 +274,16 @@ def vm_info(sql_session, id):
         host_contents = '%s | %s\r\n' % (host_machine.name, host_machine.ip)
     else:
         image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
+
         host_contents = ''
+        container_count=0
         container_info = sql_session.query(GnDockerContainers).filter(GnDockerContainers.service_id == id).all()
         for container in container_info:
+            if container_count> 0:
+                container_name = '%s,' % container_name
             host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == container.host_id).first()
             host_contents = '%s%s | %s\r\n' % (host_contents, host_machine.name, host_machine.ip)
+            container_name = '%s%s' % (container_name, container.internal_name)
 
         data_vol=''
         log_vol=''
@@ -305,8 +311,9 @@ def vm_info(sql_session, id):
         mem_info = {"mem_total":convertHumanFriend(mem_total), "mem_use":convertHumanFriend(mem_use), "rest_mem":convertHumanFriend(rest_mem), "mem_per_info":mem_per_info}
     vm_info.disk = convertHumanFriend(vm_info.disk)
     vm_info.memory = convertHumanFriend(vm_info.memory)
+    container_name = '%s | %s' % (vm_info.os, container_name)
     info = {"vm_info":vm_info, "disk_info":disk_info,"mem_info":mem_info,"name_info":name_info,"image_info":image_info,
-            "ssh_key":vm_info.gnSshkeys, "vol_info":vol_info, "host_info":host_contents}
+            "ssh_key":vm_info.gnSshkeys, "vol_info":vol_info, "host_info":host_contents, "container_name":container_name}
     return info
 '''
 def vm_info(sql_session, id):
