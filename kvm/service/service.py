@@ -42,7 +42,6 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
         # 기존 저장된 ssh key 등록
         setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
-        a= 1/0
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id
