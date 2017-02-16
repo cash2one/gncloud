@@ -2,194 +2,167 @@
 <navleft></navleft>
 
 <div class="tab-content col-xs-12 col-sm-10">
-<!--시스템 > 장애현황-->
-<div id="errorlist">
-    <div class="gn-box">
-        <div class="gn-sett-margin-box">
-            <div class="container-fluid">
-                <h2>장애현황</h2>
+    <!--시스템 > 장애현황-->
+    <div id="errorlist">
+        <div class="gn-box">
+            <div class="gn-sett-margin-box">
+                <div class="container-fluid">
+                    <h2>장애현황</h2>
 
-                <!--전체/해결/미해결 카운트-->
-                <div class="gn-total-error gn-margin-bott10 row">
-                    <div class="col-xs-4 text-center">
-                        <div class="gn-box">
-                            <span>전체</span>
-                            <h4>{{total_count}}개</h4>
-                        </div>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                        <div class="gn-box">
-                            <span>해결</span>
-                            <h4>{{solve_count}}개</h4>
-                        </div>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                        <div class="gn-box">
-                            <span>미해결</span>
-                            <h4>{{not_solve_count}}개</h4>
-                        </div>
-                    </div>
-                </div> <!--전체/해결/미해결 카운트-->
-
-                <div class="gn-select-error row">
-                   
-                    <div class="col-sm-4 col-md-3 col-lg-2 check-lg">
-                        <div>완료<input type="checkbox" ng-model="data.solve" ng-change="page(1)"></div>
-                        <div>미완료<input type="checkbox" ng-model="data.notsolve" ng-change="page(1)"></div>
-                    </div>
-                    
-                    <div class="col-xs-12 col-sm-5 col-md-4 col-lg-4">
-                        <div class="col-lg-1">월</div>
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <select class="gn-select form-control gn-form-control" ng-model="data.month" ng-options="month.value as month.value for month in month_list" ng-change="page(1)">
-                                <option value="">선택</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-1">년</div>
-                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                            <select class="gn-select form-control gn-form-control" ng-model="data.year" ng-options="year.name as year.value for year in year_list" ng-change="page(1)">
-                                <option value="" >선택</option>
-                            </select>
-                        </div>
-                    </div> 
-                    
-                    <div class="col-sm-4 col-md-3 col-lg-2 check-sm">
-                        <div>완료<input type="checkbox" ng-model="data.notsolve" ng-change="page(1)"></div>
-                        <div>미완료<input type="checkbox" ng-model="data.solve" ng-change="page(1)"></div>
-                    </div> 
-                   
-                </div><!--class="gn-select-error row"-->
-
-                <!--장애현황 목록-->
-                <div class="table-responsive gn-table-responsive">
-                    <table class="table gn-board-table table-hover">
-                        <thead>
-                        <tr>
-                            <th class="">#</th>
-                            <th class="hidden-xs hidden-sm">시간</th>
-                            <th class="hidden-xs hidden-sm">팀</th>
-                            <th class="">인스턴스</th>
-                            <th class="hidden-xs hidden-sm">타입</th>
-                            <th class="">소유자</th>
-                            <th class="hidden-xs hidden-sm">에러항목</th>
-                            <th class="hidden-xs hidden-sm">해결자</th>
-                            <th class="hidden-xs">해결여부</th>
-                        </tr>
-                        </thead>
-                        <tbody class="gn-tdody">
-                        <tr class="" ng-repeat="list in error_hist">
-                            <td>{{(total_count - ((page_hist - 1)*10)) - $index }}</td>
-                            <td class="hidden-xs hidden-sm">{{list.action_time}}</td>
-                            <td class="hidden-xs hidden-sm">{{list.gnTeam.team_name}}</td>
-                            <td class="second-td-name">
-                                <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-error" ng-click="select_error_info(list.id)">
-                                    <span ng-if="list.gnVmMachines == null">{{list.vm_name}}</span>
-                                    <span ng-if="list.gnVmMachines != null">{{list.gnVmMachines.name}}</span>
-                                </a>
-                            </td>
-                            <td class="hidden-xs hidden-sm">{{list.type}}</td>
-                            <td>{{list.gnUsers.user_name}}</td>
-                            <td class="hidden-xs hidden-sm">
-                                <span ng-if="list.action == 'Create'">생성</span>
-                                <span ng-if="list.action == 'Suspend'">정지</span>
-                                <span ng-if="list.action == 'Resume'">시작</span>
-                                <span ng-if="list.action == 'Delete'">삭제</span>
-                                <span ng-if="list.action == 'Reboot'">재시작</span>
-                                <span ng-if="list.action == 'Snap-create'">스냅샷 생성</span>
-                            </td>
-                            <td class="hidden-xs hidden-sm">{{list.solver_id}}</td>
-                            <td class="hidden-xs"><input type="checkbox" ng-model="list.selected" ng-checked="list.solver_id != null" ng-click="save_check($event,list.id)"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div><!--div class="table-responsive gn-table-responsive" -->
-
-                <!--이전/다음 버튼-->
-                <div class="gn-page-btn">
-                    <input type="button" class="btn btn-default pull-left" value="이전" ng-click="page(prev_page)" ng-show="page_hist != 1">
-                    <input type="button" class="btn btn-default" value="다음" ng-click="page(next_page)" ng-show="page_total!=page_hist" >
-                </div>
-
-                <!-- 장애현황 Modal -->
-                <div class="modal fade" id="modal-error" role="dialog">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header gn-modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">장애현황 해결정보</h4>
-                            </div>
-                            <div class="modal-body gn-modal-body">
-
-                                <form class="form-horizontal">
-                                    <dl class="dl-horizontal gn-description-list">
-                                        <dt>팀</dt>
-                                        <dd>{{error_info.gnTeam.team_name}}</dd>
-                                        <dt>인스턴스</dt>
-                                        <dd>{{error_info.vm_name}}</dd>
-                                        <dt>타입</dt>
-                                        <dd>{{error_info.type}}</dd>
-                                        <dt>소유자</dt>
-                                        <dd>{{error_info.gnUsers.user_name}}</dd>
-                                        <dt>시간</dt>
-                                        <dd>{{error_info.action_time}}</dd>
-                                        <hr>
-                                        <dt>에러항목</dt>
-                                        <dd>
-                                            <span ng-if="error_info.action == 'Create'">생성</span>
-                                            <span ng-if="error_info.action == 'Suspend'">정지</span>
-                                            <span ng-if="error_info.action == 'Resume'">시작</span>
-                                            <span ng-if="error_info.action == 'Delete'">삭제</span>
-                                            <span ng-if="error_info.action == 'Reboot'">재시작</span>
-                                            <span ng-if="error_info.action == 'Snap-create'">스냅샷 생성</span>
-                                        </dd>
-                                        <dt>에러내용</dt>
-                                        <dd>{{error_info.cause}}</dd>
-                                        <dt>해결자</dt>
-                                        <dd>{{error_info.solver_id}}</dd>
-                                        <dt>해결시간</dt>
-                                        <dd>{{error_info.solve_time}}</dd>
-                                        <dt>해결내용</dt>
-                                        <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요." ng-model="error_info.solve_content"></textarea></dd>
-                                    </dl>
-                                </form>
-
-                            </div>
-                            <div class="modal-footer gn-modal-footer">
-                                <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="save_one()">저장</button>
+                    <!--전체/해결/미해결 카운트-->
+                    <div class="gn-total-error gn-margin-bott10 row">
+                        <div class="col-xs-4 text-center">
+                            <div class="gn-box">
+                                <span>전체</span>
+                                <h4>{{total_count}}개</h4>
                             </div>
                         </div>
+                        <div class="col-xs-4 text-center">
+                            <div class="gn-box">
+                                <span>해결</span>
+                                <h4>{{solve_count}}개</h4>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 text-center">
+                            <div class="gn-box">
+                                <span>미해결</span>
+                                <h4>{{not_solve_count}}개</h4>
+                            </div>
+                        </div>
+                    </div> <!--전체/해결/미해결 카운트-->
+
+                    <div class="gn-select-error row">
+
+                        <div class="col-sm-4 col-md-3 col-lg-2 check-lg">
+                            <div>완료<input type="checkbox" ng-model="data.solve" ng-change="page(1)"></div>
+                            <div>미완료<input type="checkbox" ng-model="data.notsolve" ng-change="page(1)"></div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-5 col-md-4 col-lg-4">
+                            <div class="col-lg-1">월</div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <select class="gn-select form-control gn-form-control" ng-model="data.month" ng-options="month.value as month.value for month in month_list" ng-change="page(1)">
+                                    <option value="">선택</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-1">년</div>
+                            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                <select class="gn-select form-control gn-form-control" ng-model="data.year" ng-options="year.name as year.value for year in year_list" ng-change="page(1)">
+                                    <option value="" >선택</option>
+                                </select>
+                            </div>
+                        </div> 
+
+                        <div class="col-sm-4 col-md-3 col-lg-2 check-sm">
+                            <div>완료<input type="checkbox" ng-model="data.notsolve" ng-change="page(1)"></div>
+                            <div>미완료<input type="checkbox" ng-model="data.solve" ng-change="page(1)"></div>
+                        </div> 
+
+                    </div><!--class="gn-select-error row"-->
+
+                    <!--장애현황 목록-->
+                    <div class="table-responsive gn-table-responsive">
+                        <table class="table gn-board-table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="">&num;</th>
+                                <th class="hidden-xs hidden-sm">시간</th>
+                                <th class="hidden-xs hidden-sm">팀</th>
+                                <th class="">인스턴스</th>
+                                <th class="hidden-xs hidden-sm">타입</th>
+                                <th class="hidden-xs hidden-sm">소유자</th>
+                                <th class="">에러항목</th>
+                                <th class="hidden-xs hidden-sm">해결자</th>
+                                <th class="hidden-xs">해결여부</th>
+                            </tr>
+                            </thead>
+                            <tbody class="gn-tdody">
+                            <tr class="" ng-repeat="list in error_hist">
+                                <td>{{(total_count - ((page_hist - 1)*10)) - $index }}</td>
+                                <td class="hidden-xs hidden-sm">{{list.action_time}}</td>
+                                <td class="hidden-xs hidden-sm">{{list.gnTeam.team_name}}</td>
+                                <td class="second-td-name">
+                                    <a class="gn-ms-cursor gn-table-ellip" data-toggle="modal" data-target="#modal-error" ng-click="select_error_info(list.id)">
+                                        <span ng-if="list.gnVmMachines == null">{{list.vm_name}}</span>
+                                        <span ng-if="list.gnVmMachines != null">{{list.gnVmMachines.name}}</span>
+                                    </a>
+                                </td>
+                                <td class="hidden-xs hidden-sm">{{list.type}}</td>
+                                <td class="hidden-xs hidden-sm">{{list.gnUsers.user_name}}</td>
+                                <td class="">
+                                    <span ng-if="list.action == 'Create'">생성</span>
+                                    <span ng-if="list.action == 'Suspend'">정지</span>
+                                    <span ng-if="list.action == 'Resume'">시작</span>
+                                    <span ng-if="list.action == 'Delete'">삭제</span>
+                                    <span ng-if="list.action == 'Reboot'">재시작</span>
+                                    <span ng-if="list.action == 'Snap-create'">스냅샷 생성</span>
+                                </td>
+                                <td class="hidden-xs hidden-sm">{{list.solver_id}}</td>
+                                <td class="hidden-xs"><input type="checkbox" ng-model="list.selected" ng-checked="list.solver_id != null" ng-click="save_check($event,list.id)"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div><!--table-->
+
+                    <!--이전/다음 버튼-->
+                    <div class="gn-page-btn">
+                        <input type="button" class="btn btn-default pull-left" value="이전" ng-click="page(prev_page)" ng-show="page_hist != 1">
+                        <input type="button" class="btn btn-default" value="다음" ng-click="page(next_page)" ng-show="page_total!=page_hist" >
                     </div>
-                </div>
+
+                    <!-- 장애현황 Modal -->
+                    <div class="modal fade" id="modal-error" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header gn-modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">장애현황 해결정보</h4>
+                                </div>
+                                <div class="modal-body gn-modal-body">
+
+                                    <form class="form-horizontal">
+                                        <dl class="dl-horizontal gn-description-list">
+                                            <dt>팀</dt>
+                                            <dd>{{error_info.gnTeam.team_name}}</dd>
+                                            <dt>인스턴스</dt>
+                                            <dd>{{error_info.vm_name}}</dd>
+                                            <dt>타입</dt>
+                                            <dd>{{error_info.type}}</dd>
+                                            <dt>소유자</dt>
+                                            <dd>{{error_info.gnUsers.user_name}}</dd>
+                                            <dt>시간</dt>
+                                            <dd>{{error_info.action_time}}</dd>
+                                            <hr>
+                                            <dt>에러항목</dt>
+                                            <dd>
+                                                <span ng-if="error_info.action == 'Create'">생성</span>
+                                                <span ng-if="error_info.action == 'Suspend'">정지</span>
+                                                <span ng-if="error_info.action == 'Resume'">시작</span>
+                                                <span ng-if="error_info.action == 'Delete'">삭제</span>
+                                                <span ng-if="error_info.action == 'Reboot'">재시작</span>
+                                                <span ng-if="error_info.action == 'Snap-create'">스냅샷 생성</span>
+                                            </dd>
+                                            <dt>에러내용</dt>
+                                            <dd>{{error_info.cause}}</dd>
+                                            <dt>해결자</dt>
+                                            <dd>{{error_info.solver_id}}</dd>
+                                            <dt>해결시간</dt>
+                                            <dd>{{error_info.solve_time}}</dd>
+                                            <dt>해결내용</dt>
+                                            <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요." ng-model="error_info.solve_content"></textarea></dd>
+                                        </dl>
+                                    </form>
+
+                                </div>
+                                <div class="modal-footer gn-modal-footer">
+                                    <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="save_one()">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--<div class="container-fluid">-->
             </div><!--<div class="container-fluid">-->
-
-            <!-- 장애현황 Modal -->
-            <div class="modal fade" id="modal-error-arr" role="dialog">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header gn-modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">장애현황 해결정보</h4>
-                        </div>
-                        <div class="modal-body gn-modal-body">
-
-                            <form class="form-horizontal">
-                                <dl class="dl-horizontal gn-description-list">
-                                    <dt>해결내용</dt>
-                                    <dd><textarea class="form-control gn-write" rows="6" placeholder="내용을 입력하여주세요." ng-model="error_info.solve_content">{{error_info.solve_content}}</textarea></dd>
-                                </dl>
-                            </form>
-
-                        </div>
-                        <div class="modal-footer gn-modal-footer">
-                            <button type="submit" class="btn btn-gn-sub btn-block" data-dismiss="modal" ng-click="save_all()">저장</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </div><!--<div class="container-fluid">-->
         </div> <!--class="gn-sett-margin-box"-->
-    </div> <!--class="gn-box profile-team"-->
-</div> <!--id="image-sett"  class="tab-pane fade"-->
+
+    </div> <!--id="image-sett"  class="tab-pane fade"-->
 </div>
