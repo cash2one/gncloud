@@ -130,15 +130,17 @@ class PowerShell(object):
         script += '$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)};'
         script += '$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $secstr;'
         script += '$s = New-PSSession -ComputerName "'+ip+'" -Credential $cred ;'
-        script += 'Invoke-Command -Session $s -ScriptBlock {'
+        script += '$return_val = Invoke-Command -Session $s -ScriptBlock {'
         script += '$user=[adsi]"WinNT://$env:computerName/gncloud";'
-        script += '$user.setPassword("'+password+'");}'
+        script += '$user.setPassword("'+password+'"); Return [adsi]"WinNT://$env:computerName/gncloud";};'
+        script += '$return_val | ConvertTo-Json ;'
 
         # while True:
         #     try:
         #         ret = self.send_new_vm(script, ip)
         #     except:
         #         break
+        #print script
         return self.send(script)
 
     # Get-WmiObject win32_useraccount | Select-Object -Property Name | ConvertTo-Json

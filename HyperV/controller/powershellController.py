@@ -83,40 +83,41 @@ def hvm_create(id, sql_session):
             start_vm = ps.start_vm(new_vm['VMId'])
 
             get_ip_count = 0
-            get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
 
-            while True:
-                if len(get_vm_ip) <= 2 and get_ip_count <= 160:
-                    #print get_vm_ip
-                    time.sleep(5)
-                    get_ip_count = get_ip_count + 1
-                    get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
-                elif get_ip_count > 160:
+            time.sleep(5)
+            get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
+            while len(get_vm_ip) <= 2:
+                if get_ip_count >= 100:
                     error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,
                                              author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name,
-                                             cause='cannot get ip address')
+                                             cause='cannot get vm ip')
                     sql_session.add(error_hist)
+                    vm_info.internal_id=new_vm['VMId']
+                    vm_info.internal_name=internal_name
                     vm_info.status = "Error"
                     sql_session.commit()
                     return False
-                # elif get_vm_ip[:2] == "16":
-                #     time.sleep(5)
-                #     get_ip_count = get_ip_count + 1
-                #     get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
-                else:
-                    break
-
-            count = 0
-            # password setting
-            while True:
                 time.sleep(5)
-                count += 1
-                if count >= 50 or base_image_info.sub_type == 'snap':
-                    break
-                try:
-                    ps.set_password(get_vm_ip, vm_info.hyperv_pass)
-                except Exception as message:
-                    break
+                get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
+                get_ip_count += 1
+
+            # password setting
+            set_pass_count = 0
+            return_val = ps.set_password(get_vm_ip, vm_info.hyperv_pass)
+            while len(return_val) <= 2:
+                if set_pass_count > 50:
+                    error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,
+                                             author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name,
+                                             cause='cannot set password')
+                    sql_session.add(error_hist)
+                    vm_info.internal_id=new_vm['VMId']
+                    vm_info.internal_name=internal_name
+                    vm_info.status = "Error"
+                    sql_session.commit()
+                    return False
+                time.sleep(5)
+                return_val = ps.set_password(get_vm_ip, vm_info.hyperv_pass)
+                set_pass_count += 1
 
             vm_info.internal_id=new_vm['VMId']
             vm_info.internal_name=internal_name
@@ -555,73 +556,3 @@ def vm_monitor(sql_session):
             sql_session.rollback()
 
 
-
-# 모니터링을 위한 스크립트 전송 함수
-'''
-def vm_monitor():
-    vm_ip_info = db_session.query(GnVmMachines).filter(GnVmMachines.type == "hyperv").all()
-    for i in range(0, len(vm_ip_info)):
-        if vm_ip_info[i].status == "Running":
-            ps = PowerShell(vm_ip_info[i].ip, config.AGENT_PORT, ps_exec)
-            script = "$freemem = Get-WmiObject -Class Win32_OperatingSystem;"
-            script += "$mem = $freemem.FreePhysicalMemory / $freemem.TotalVirtualMemorySize;"
-            script += "$idle = Get-Counter '\Process(idle)\% Processor Time' | "
-            script += "Select-Object -ExpandProperty countersamples | "
-            script += "Select-Object -Property instancename, cookedvalue| "
-            script += "Sort-Object -Property cookedvalue -Descending;"
-            script += "$total = Get-Counter '\Process(_total)\% Processor Time' | "
-            script += "Select-Object -ExpandProperty countersamples |"
-            script += "Select-Object -Property instancename, cookedvalue| "
-            script += "Sort-Object -Property cookedvalue -Descending;"
-            script += "$res = (($idle.CookedValue/$total.CookedValue)) ;"
-            script += "$hdd = Get-PSDrive C |Select-Object Free;"
-            script += "$hdd = $hdd.Free /1024 /1024/ 1024;"
-            script += "$res, $mem, $hdd | ConvertTo-Json -Compress;"
-            try:
-                result = json.loads(json.dumps(ps.send_get_vm_info(script, vm_ip_info[i].ip)))
-            except Exception as message:
-                print message
-            # finally:
-            #     print result
-
-            cpu = round(1 - result[0], 4)  #점유량 ex) 0.3~~
-            mem = round(1 - result[1], 4)
-            hdd = round(1 - (result[2]/float(vm_ip_info[i].disk)), 4)
-            #hdd_free_per = hdd/float(vm_ip_info[i].disk)
-
-            if cpu >= 1.0:
-                cpu = 1.0000
-            elif cpu <= 0:
-                cpu = 0.0000
-            else:
-                cpu = round(1-result[0], 4)
-
-            try:
-                monitor_insert = GnMonitorHist(vm_ip_info[i].id, "hyperv", datetime.datetime.now(),
-                                               cpu, mem*100, hdd, 0.0000)
-                db_session.add(monitor_insert)
-                db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
-                    {"cpu_usage": cpu, "mem_usage": mem*100, "disk_usage":hdd} )
-            except Exception as message:
-                print message
-                db_session.rollback()
-            finally:
-                db_session.commit()
-                #print "Running status"
-        elif vm_ip_info[i].status != "Removed": #단순히 db만 업데이트
-            #print "stop status"
-            try:
-                vm_info = db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).first()
-
-                monitor_insert = GnMonitorHist(vm_ip_info[i].id, "hyperv", datetime.datetime.now(),
-                                               0.0000, 0.0000, vm_info.disk_usage, 0.0000)
-                db_session.add(monitor_insert)
-                db_session.query(GnMonitor).filter(GnMonitor.id == vm_ip_info[i].id).update(
-                    {"cpu_usage": 0.0000, "mem_usage": 0.0000})
-                #print "insert success"
-            except Exception as message:
-                print message
-                db_session.rollback()
-            finally:
-                db_session.commit()
-'''
