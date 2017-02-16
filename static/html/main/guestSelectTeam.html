@@ -1,19 +1,19 @@
     <div class="container container-login"> 
         <div class="row gn-title-login">
-            <span class="col-md-12">지앤 클라우드 프라이빗 서비스에 오신것을 환영 합니다.</span>
+            <span class="col-md-12 col-sm-12 col-xs-12">지앤 클라우드 프라이빗 서비스에 오신것을 환영 합니다.</span>
         </div>
         <div class="row gn-box-login">
             <span class="col-md-12">계속해서 팀에 가입해주세요.</span>
             <div class="col-md-offset-2 col-md-8">
                 <div class="row gn-select-box">
-                    <span class="col-md-offset-2 col-md-1" >팀</span>
-                    <select class="gn-select col-md-5" ng-model="guset_image" ng-options="list.team_name for list in list" ng-change="update_image(guset_image)">
+                    <span class="col-md-offset-2 col-md-1 col-xs-3" >팀</span>
+                    <select class="gn-select col-md-5 col-xs-5" ng-model="guset_image" ng-options="list.team_name for list in list" ng-change="update_image(guset_image)">
                         <option value="">선택</option>
                     </select>
-                    <button type="submit" value="submit" class="btn btn-gn-login col-md-2" ng-click="submit()">신청하기</button> <button type="submit" value="submit" class="btn btn-gn-login" onclick=javascript:logout();>로그아웃</button>
+                    <button type="submit" value="submit" class="btn btn-gn-login col-md-2 col-xs-3" ng-click="submit()">신청하기</button> <button type="submit" value="submit" class="btn btn-gn-login" onclick=javascript:logout();>로그아웃</button>
                 </div>
             </div>
-            <span class="col-md-12">
+            <span class="col-md-12 col-sm-12 col-xs-12">
                 나의 팀을 찾을 수 없나요? 관리자라면 <a href="/main/#/guestCreateTeam">팀을 만들어</a> 주세요.
             </span>
 
