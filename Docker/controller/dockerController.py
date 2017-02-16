@@ -49,16 +49,25 @@ def doc_create(id,sql_session):
         docker_service = ds.docker_service_create(docker_info)
         logger.debug(docker_info.id+":end create")
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
-        if docker_service == 'Error' or docker_service is None or docker_service == '':
+        if docker_service[:5] == 'Error' or docker_service is None or docker_service == '':
             if docker_info is None:
                 docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
             docker_info.status = "Error"
+
+            error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
+                                     author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
+            sql_session.add(error_hist)
+
             sql_session.commit()
             return jsonify(status=False, message="failure service create.")
         elif type(docker_service) is not list:
             if docker_info is None:
                 docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
             docker_info.status = "Error"
+            error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
+                                     author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
+            sql_session.add(error_hist)
+
             sql_session.commit()
             return jsonify(status=False, message=docker_service)
         else:
@@ -79,6 +88,11 @@ def doc_create(id,sql_session):
                     if docker_info is None:
                         docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
                     docker_info.status = "Error"
+
+                    error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
+                                             author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
+                    sql_session.add(error_hist)
+
                     sql_session.commit()
                     ds.docker_service_rm(docker_service[0]['ID'])
                     return jsonify(status=False, message="서비스 생성 실패: %s" % service_container_list )

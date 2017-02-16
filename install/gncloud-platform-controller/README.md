@@ -40,7 +40,7 @@
 
 - selinux 내림   
     ```
-    sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+    ssed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
     ```
 
 - python 설치
@@ -74,7 +74,7 @@
 
     yum -y install docker-engine
 
-    sed -i "s/ExecStart=\/usr\/bin\/dockerd/ExecStart=\/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:2375 -H unix:\/\/\/var\/run\/docker.sock --insecure-registry $1:$2/g" \
+    sed -i "s/ExecStart=\/usr\/bin\/dockerd/ExecStart=\/usr\/bin\/dockerd -H tcp:\/\/0.0.0.0:2375 -H unix:\/\/\/var\/run\/docker.sock --insecure-registry [IP]:[PORT]/g" \
     /usr/lib/systemd/system/docker.service
 
     systemctl enable docker
@@ -97,39 +97,17 @@
 
 - source 설치    
     ```
-    mkdir -p /usr/local/source
-    cd /usr/local/source; git clone https://github.com/gncloud/gncloud.git
+    cd /var/lib/; git clone https://github.com/gncloud/gncloud.git
     mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.org
-    cp /usr/local/source/gncloud/sites-available/nginx.conf /etc/nginx/.
+    cp /var/lib/gncloud/sites-available/nginx.conf /etc/nginx/.
     systemctl restart nginx
     ```
 
 - start uwsgi
-    * gncloud 폴더에서 실행 시
     ```
-    cd /usr/local/source/gncloud; 
-    nohup uwsgi --http-socket :8080 --plugin python --wsgi-file ./Manager/__init__.py --logto  ./Manager/manager.log --callable app &
-    cd /usr/local/source/gncloud; 
-    nohup uwsgi --http-socket :8083 --plugin python --wsgi-file ./Docker/__init__.py --logto  ./Docker/docker.log --callable app &
-    cd /usr/local/source/gncloud; 
-    nohup uwsgi --http-socket :8081 --plugin python --wsgi-file ./kvm/__init__.py --logto  ./kvm/kvm.log --callable app &
-    cd /usr/local/source/gncloud; 
-    nohup uwsgi --http-socket :8082 --plugin python --wsgi-file ./HyperV/__init__.py --logto  ./HyperV/hyperv.log --callable app &
-    cd /usr/local/source/gncloud;
-    nohup uwsgi --http-socket :8084 --plugin python --wsgi-file ./scheduler/__init__.py --logto  ./scheduler/scheduler.log --callable app &
+    nohup uwsgi --http-socket :8080 --plugin python --wsgi-file /var/lib/gncloud/Manager/__init__.py --logto  /var/log/gncloud/manager_controller.log --processes 4 --threads 2 --callable app &
+    nohup uwsgi --http-socket :8081 --plugin python --wsgi-file /var/lib/gncloud/kvm/__init__.py --logto /var/log/gncloud/kvm_controller.log  --processes 4 --threads 2 --callable app &
+    nohup uwsgi --http-socket :8082 --plugin python --wsgi-file /var/lib/gncloud/HyperV/__init__.py --logto /var/log/gncloud/hyperv_controller.log  --processes 4 --threads 2 --callable app &
+    nohup uwsgi --http-socket :8083 --plugin python --wsgi-file /var/lib/gncloud/Docker/__init__.py --logto /var/log/gncloud/docker_controller.log  --processes 4 --threads 2 --callable app &
+    nohup uwsgi --http-socket :8084 --plugin python --wsgi-file /var/lib/gncloud/scheduler/__init__.py --logto /var/log/scheduler.log --callable app --enable-threads &
     ```
-
-    * 각 컴포넌트 폴더에서 실행 시
-    ```
-    cd /usr/local/source/gncloud/Manager; 
-    nohup uwsgi --http-socket :8080 --plugin python --wsgi-file __init__.py --logto  manager.log --callable app &
-    cd /usr/local/source/gncloud/Docker; 
-    nohup uwsgi --http-socket :8083 --plugin python --wsgi-file __init__.py --logto  docker.log --callable app &
-    cd /usr/local/source/gncloud/kvm; 
-    nohup uwsgi --http-socket :8081 --plugin python --wsgi-file __init__.py --logto  kvm.log --callable app &
-    cd /usr/local/source/gncloud/HyperV; 
-    nohup uwsgi --http-socket :8082 --plugin python --wsgi-file __init__.py --logto  hyperv.log --callable app &
-    cd /usr/local/source/gncloud/scheduler;
-    nohup uwsgi --http-socket :8084 --plugin python --wsgi-file __init__.py --logto  scheduler.log --callable app &
-    ```
-    

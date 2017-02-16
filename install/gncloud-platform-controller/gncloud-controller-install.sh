@@ -8,6 +8,12 @@ then
 	exit -1
 fi 
 
+echo "export PYTHONPATH=/var/lib/gncloud" >> ~/.bash_profile
+
+# ssh 접속을 위한 sshkey generation and key copy
+ssh-keygen -f ~/.ssh/id_rsa
+#ssh-copy-id ~/.ssh/id_rsa.pub root@[IP]
+
 yum -y install unzip
 systemctl disable firewalld
 systemctl stop firewalld

@@ -10,7 +10,7 @@ systemctl start libvirtd
 ./python-install.sh
 
 # host 서버 ssh 키 생성
-ssh-keygen -f /root/id_rsa
+ssh-keygen -f ~/.ssh/id_rsa
 mkdir -p /var/lib/libvirt/initcloud
 cp config.iso /var/lib/libvirt/initcloud/.
 cp meta-data /var/lib/libvirt/initcloud/.
@@ -22,7 +22,7 @@ echo "password: fastcat=1151" >> /var/lib/libvirt/initcloud/user-data
 echo "chpasswd: {expire: False}" >> /var/lib/libvirt/initcloud/user-data
 echo "ssh_pwauth: true" >> /var/lib/libvirt/initcloud/user-data
 echo "ssh_authorized_keys:" >> /var/lib/libvirt/initcloud/user-data
-cat /root/id_rsa.pub >> /var/lib/libvirt/initcloud/user-data
+cat ~/.ssh/id_rsa.pub >> /var/lib/libvirt/initcloud/user-data
 
 # 버추얼 네트워크 이름 'default'를 destroy 시킴
 virsh net-destroy default
@@ -34,7 +34,7 @@ virsh pool-autostart gnpool
 
 systemctl restart libvirtd
 
-#ifcfg-br0 설정
+#ifcfg-br0 설정 DHCP ? need to static IP
 > /etc/sysconfig/network-scripts/ifcfg-br0
 echo "DEVICE=br0" >> /etc/sysconfig/network-scripts/ifcfg-br0
 echo "TYPE=Bridge" >> /etc/sysconfig/network-scripts/ifcfg-br0
