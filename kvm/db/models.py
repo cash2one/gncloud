@@ -334,7 +334,7 @@ class GnErrorHist(Base):
     action_month = Column(String(4), primary_key=False, default=datetime.date.today().month)
     cause = Column(String(1000), primary_key=False, nullable=False)
 
-    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_id=None, vm_id=None, vm_name=None, cause=None):
+    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_id=None, vm_id=None, vm_name=None, cause=None, action_time=None):
         self.type = type
         self.action = action
         self.team_code = team_code
@@ -344,10 +344,11 @@ class GnErrorHist(Base):
         self.vm_id = vm_id
         self.vm_name = vm_name
         self.cause = cause
+        self.action_time = action_time
 
     def __repr__(self):
-        return '<Type %r / Action %r / Team_code %r / Author id %r / Solve time %r / Solver name %r / Cause %r />' \
-               %(self.type, self.action, self.team_code, self.author_id, self.solve_time, self.solver_name, self.cause)
+        return '<Type %r / Action %r / Team_code %r / Author id %r / Solve time %r / Solver name %r / Cause %r / Action_time %r / >' \
+               %(self.type, self.action, self.team_code, self.author_id, self.solve_time, self.solver_name, self.cause, self.action_time)
 
     def __json__(self):
         return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_name','vm_name','cause']
