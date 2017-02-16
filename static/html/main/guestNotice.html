@@ -1,7 +1,7 @@
 <h1>공지</h1>
 <h2>목록
 <!--쓰기 버튼-->
-<input type="button" class="btn btn-default btn-right pull-right" data-toggle="modal" data-target="#modi-write" value="작성하기" ng-show="user_info.authority == 'sysowner' "></h2>
+<input type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#modi-write" value="작성하기" ng-show="user_info.authority == 'sysowner' "></h2>
 
 <!-- 공지사항 글쓰기 Modal -->
 <div class="modal fade" id="modi-write" role="dialog">
@@ -15,14 +15,14 @@
             <div class="modal-body gn-modal-body">
                 <form class="form-horizontal" name="noticeForm" ng-submit="submitForm(noticeForm.$valid)" novalidate>
                     <div class="form-group">
-                        <label class="col-sm-1 control-label">제목</label>
-                        <div class="col-sm-11">
+                        <label class="col-sm-2 col-md-1 control-label">제목</label>
+                        <div class="col-sm-10 col-md-11">
                             <input type="text" ng-model="data.title" id="title" class="form-control" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-1 control-label">내용</label>
-                        <div class="col-sm-11">
+                        <label class="col-sm-2 col-md-1 control-label">내용</label>
+                        <div class="col-sm-10 col-md-11">
                             <textarea class="form-control" name="text" rows="10" ng-model="data.text" id="text" placeholder="내용을 입력하여주세요." required></textarea>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
     <table class="table gn-board-table table-condensed table-hover">
         <thead>
         <tr>
-            <th class="col-sm-1">#</th>
+            <th class="col-sm-1">&num;</th>
             <th class="col-sm-9">제목</th>
             <th class="col-sm-2">작성일</th>
         </tr>
