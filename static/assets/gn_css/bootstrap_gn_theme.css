@@ -545,13 +545,13 @@ li.nav-link.active>a:hover,
 	height: 46px;   
 }
 
-.dropdown-menu.gn-dropdown.gn-list{
+/*.dropdown-menu.gn-dropdown.gn-list{
     position: absolute;
     top: 70%;
     left : -45px;
     min-width: 120px;
     margin: 0;
-}
+}*/
 
 .dropdown-menu.gn-dropdown{
     position: absolute;
@@ -1821,6 +1821,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
 /*과금*/
 #invoice h2{margin-bottom: 10px}
 
+
 /*시스템관리자 > 설정*/
 .gn-sett-margin-box > h4{margin-top: 25px;}
 
@@ -2082,7 +2083,6 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     
     /*시스템관리자 상세 모달*/
     .gn-description-list.sett-detail > div > span{margin-right: 0px;}
-    
     
     
 }
