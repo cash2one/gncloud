@@ -1507,10 +1507,10 @@ def team_price_lsit(team_code,page,sql_session):
     if team_code != "000":
         total_query = total_query.filter(GnInvoiceResult.team_code == team_code)
         list_query = list_query.filter(GnInvoiceResult.team_code == team_code)
-
     total_page= total_query.one()
     list=list_query.limit(page_size).offset(page*page_size).all()
-
+    for vm in list:
+        vm.invoice_data=json.loads(vm.invoice_data)
     total=int(total_page.count)/10
     return {"list":list, "total_page":total_page.count,"total":total, "page":page}
 

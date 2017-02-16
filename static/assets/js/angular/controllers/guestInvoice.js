@@ -12,7 +12,11 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
+                        for(var i = 0; i < data.list.list.length;i++){
+                            data.list.list[i].totalprice = data.list.list[i].invoice_data.team_price;
+                        }
                         $scope.pricelist =data.list.list;
+
                         $scope.page_hist = data.list.page+1;
                         $scope.page_total =data.list.total+1;
                         $scope.prev_page = page - 1;
