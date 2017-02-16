@@ -18,7 +18,7 @@
             <div id="image" class="gn-box">
                 <div class="table-responsive gn-table-responsive gn-margin-box">
                     <h2>목록</h2>
-                    <table class="table table gn-table">
+                    <table class="table gn-table">
                         <thead>
                         <tr>
                             <th class="first-td"></th>
@@ -101,8 +101,7 @@
                                     <a class="gn-table-ellip">{{snap.name}}</a>
                                 </td>
                                 <td class="hidden-xs">{{snap.os}}{{snap.os_ver}}{{snap.os_subver}}</td>
-                                
-                                <td class="hidden-sm hidden-xs">{{snap.type}}</td>
+                                <td class="hidden-xs">{{snap.type}}</td>
                                 <td class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >{{ snap.gnTeam.team_name }}</td>
                                 <td class="hidden-sm hidden-xs">{{snap.create_time_diff}}</td>
                                 <td class="dropdown">
@@ -299,14 +298,14 @@
         </div>
 
 
-            <table class="table table gn-table">
+            <table class="table gn-table">
                 <thead>
                 <tr>
                     <th class="first-td"></th>
                     <th class="">이름</th>
                     <th class="">버전</th>
                     <th class="hidden-xs">태그</th>
-                    <th class="hidden-xs hidden-sm">생성일
+                    <th class="hidden-xs">생성일
                     </th>
                     <th class=""><!--더보기--></th>
                 </tr>

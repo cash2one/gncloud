@@ -4,7 +4,7 @@
 
         <div class="container container-login"> 
             <div class="row gn-title-login">
-                <span>
+                <span class="col-md-12 col-sm-12 col-xs-12">
                    <strong>{{team_list.team_name}}</strong>&nbsp;가입 승인 대기중 입니다.
                     <br>
                     <p>{{team_list.apply_date}}</p>
@@ -12,7 +12,7 @@
             </div> <!--class="row gn-title-login"-->
             <div class="row gn-box-login">
                 <span class="col-md-12">
-                    혹시 팀을 잘못 신청했다면 <a href="" ng-click="delete(team_list.user_id,team_list.team_code)">가입을 취소</a> 주세요.
+                    혹시 팀을 잘못 신청했다면 <a ng-click="delete(team_list.user_id,team_list.team_code)">가입을 취소</a> 주세요.
                 </span>
                 <button type="submit" value="submit" class="btn btn-gn-login" onclick=javascript:logout();>로그아웃</button>
             </div> <!--class="row gn-box-login"-->
