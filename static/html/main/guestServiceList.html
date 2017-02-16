@@ -11,14 +11,14 @@
     <div class="table-responsive gn-table-responsive" >
         <table class="table table gn-table">
             <thead>
-                <tr>
+                <tr>                 
                     <th class="first-td"></th>
                     <th class="">이름</th>
                     <th class="hidden-xs">사양</th>
-                    <th class="hidden-sm hidden-xs">타입</th>
+                    <th class="hidden-xs">타입</th>
                     <th class="hidden-md hidden-sm hidden-xs">엔드포인트</th>
-                    <th class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >팀</th>
-                    <th class="hidden-md hidden-sm">소유자</th>
+                    <th class="hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >팀</th>
+                    <th class="">소유자</th>
                     <th class="hidden-md hidden-sm hidden-xs">생성일</div></th>
                     <th class="hidden-xs">태그</th>
                 </tr>
@@ -35,16 +35,18 @@
 </td>
                     <td class="visible-xs-3 second-td-name">
                         <a href="#/guestServiceDetail?id={{list.id}}" class="gn-table-ellip"> {{ list.name }} </a>
-</td>
+                    </td>
                     <td class="hidden-xs">{{ list.cpu }} CPU /{{ list.memory }} Memory</td>
-                    <td class="hidden-sm hidden-xs">{{ list.type }}</td>
+                    <td class="hidden-xs">{{ list.type }}</td>
                     <td class="hidden-md hidden-sm hidden-xs">{{ list.ip }}</td>
-                    <td class="hidden-md hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >{{ list.gnTeam.team_name }}</td>
-                    <td class="hidden-md hidden-sm">{{ list.author_id }}</td>
-                    <td class="hidden-md hidden-sm hidden-xs"><span data-toggle="tooltip" title="{{list.create_time}}" tooltip>{{list.create_time_diff}}</span></td>
+                    <td class="hidden-sm hidden-xs" ng-show="user_info.authority == 'sysowner'" >{{ list.gnTeam.team_name }}</td>
+                    <td class="">{{ list.author_id }}</td>
+                    <td class="hidden-md hidden-sm hidden-xs">
+                        <span data-toggle="tooltip" title="{{list.create_time}}" tooltip>{{list.create_time_diff}}</span>
+                    </td>
                     <td class="hidden-xs">{{list.tagFirst}} &nbsp;
                         <span ng-show="list.tag.split(',').length > 1" class="tag" data-toggle="tooltip" title="{{list.tag}}" tooltip>{{list.tagcount}}</span>
-</td>
+                    </td>
                 </tr>
             </tbody>
         </table>
