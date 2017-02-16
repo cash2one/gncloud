@@ -25,6 +25,7 @@ angular
                         $scope.te_list = data.list; // 유저 부분 리스트
                         $("#tel").val($scope.te_list.tel);
                         $("#email").val($scope.te_list.email);
+                        $("#user_name").val($scope.te_list.user_name);
                         $scope.data.email=$scope.te_list.email;
                         $scope.data.tel=$scope.te_list.tel;
 

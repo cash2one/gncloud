@@ -425,7 +425,7 @@ def sign_up(user_name, user_id, password, password_re):
     else:
         return 'password'
 
-def repair(user_id, password, password_new, password_re, tel, email, sql_session):
+def repair(user_id, password, password_new, password_re, tel, email,user_name ,sql_session):
     test = sql_session.query(GnUser).filter(GnUser.user_id == user_id).one()
     if password != "":
         password = convertToHashValue(password)
@@ -434,6 +434,8 @@ def repair(user_id, password, password_new, password_re, tel, email, sql_session
               list.password = convertToHashValue(password_re)
         else:
             return 1
+    if user_name != "":
+        test.user_name = user_name
     test.tel = tel
     test.email = email
     sql_session.commit()
