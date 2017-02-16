@@ -55,7 +55,8 @@ def doc_create(id,sql_session):
             docker_info.status = "Error"
 
             error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
-                                     author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
+                                     author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name,
+                                     cause=docker_service)
             sql_session.add(error_hist)
 
             sql_session.commit()
@@ -65,7 +66,8 @@ def doc_create(id,sql_session):
                 docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
             docker_info.status = "Error"
             error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
-                                     author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
+                                     author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name,
+                                     cause=docker_service)
             sql_session.add(error_hist)
 
             sql_session.commit()
@@ -83,14 +85,15 @@ def doc_create(id,sql_session):
             service_container_count = 0
             service_container_list = ds.get_service_containers(docker_service[0]['ID'])
             while service_container_list is None:
-                if service_container_count > 10:
+                if service_container_count > 5:
                     sql_session.rollback()
                     if docker_info is None:
                         docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
                     docker_info.status = "Error"
 
                     error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
-                                             author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
+                                             author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name,
+                                             cause=service_container_list)
                     sql_session.add(error_hist)
 
                     sql_session.commit()
@@ -175,7 +178,9 @@ def doc_create(id,sql_session):
     except Exception as e:
         print(e.message)
         sql_session.rollback()
-        error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name)
+        error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
+                                 author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name,
+                                 cause=e.message)
         sql_session.add(error_hist)
         if docker_info is None:
             docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
@@ -221,6 +226,11 @@ def doc_state(id):
                     cpu=service.cpu, memory=str(service.memory)+"MB")
                 logger.debug(restart_service)
                 if restart_service == 'Error' or restart_service is None:
+                    sql_session.rollback()
+                    error_hist = GnErrorHist(type=service.type,action=type,team_code=service.team_code,
+                                             author_id=service.author_id, vm_id=service.id, vm_name=service.name,
+                                             cause=restart_service)
+                    sql_session.add(error_hist)
                     service.status = 'Error'
                     sql_session.commit()
                     return jsonify(status=False, message="error", result=None)
@@ -298,16 +308,19 @@ def doc_state(id):
                 for getport in getports:
                     sql_session.delete(getport)
                 sql_session.commit()
-                set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'], published_port=port['PublishedPort'])
+                set_port = GnDockerPorts(service_id=id, protocol=port['Protocol'], target_port=port['TargetPort'],
+                                         published_port=port['PublishedPort'])
                 sql_session.add(set_port)
             sql_session.commit()
             return jsonify(status=True, message="서비스가 재시작되었습니다.", result=service.to_json())
         else:
+            logger.debug('undefined type = %s' % type)
             return jsonify(status=False, message="정의된 상태값이 아닙니다.")
     except Exception as e:
         print e
         sql_session.rollback()
-        error_hist = GnErrorHist(type=service.type,action=type,team_code=service.team_code,author_id=service.author_id, vm_id=service.id, vm_name=service.name)
+        error_hist = GnErrorHist(type=service.type,action=type,team_code=service.team_code,author_id=service.author_id,
+                                 vm_id=service.id, vm_name=service.name, cause=e.message)
         sql_session.add(error_hist)
         sql_session.commit()
         return jsonify(status=False)
@@ -315,8 +328,8 @@ def doc_state(id):
 
 # Docker Service 스냅샷 저장
 def doc_snap():
+    sql_session = db_session
     try:
-        sql_session = db_session
         if 'userId' in request.json:
             user_id = request.json['userId']
         else:
@@ -353,6 +366,8 @@ def doc_snap():
         # return jsonify(status=True, message="Success", result=image.to_json())
         return jsonify(status=True, message="Success")
     except Exception as err:
+        sql_session.rollback()
+        logger.debug('snapshot error = %s' % err.message)
         return jsonify(status=False, message="Error: %s" % err)
 
 
@@ -387,7 +402,11 @@ def doc_delete(id,sql_session):
             while check_v_rm == 'Error':
                 if rm_count > 5:
                     logger.debug('volume delete Error')
-                    break
+                    error_hist = GnErrorHist(type=service.type,action='Delete',team_code=service.team_code,author_id=service.author_id,
+                                             vm_id=service.id, vm_name=service.name, cause=check_v_rm)
+                    sql_session.add(error_hist)
+                    sql_session.commit()
+                    return jsonify(status=False, message=check_v_rm)
                 time.sleep(5)
                 result2 = ds.docker_volume_rm(host_ip, vo_list)
                 logger.debug('docker_volume_rm second result = %s' % result2)
@@ -414,13 +433,20 @@ def doc_delete(id,sql_session):
     except Exception as err:
         logger.error(err)
         sql_session.rollback()
-        error_hist = GnErrorHist(type=service.type,action="Delete",team_code=service.team_code,author_id=service.author_id, vm_id=service.id, vm_name=service.name)
+        error_hist = GnErrorHist(type=service.type,action="Delete",team_code=service.team_code,
+                                 author_id=service.author_id, vm_id=service.id, vm_name=service.name,
+                                 cause=err.message)
         sql_session.add(error_hist)
         sql_session.commit()
 
     if result == service.internal_id:
         return jsonify(status=True, message="서비스가 삭제되었습니다.")
     else:
+        error_hist = GnErrorHist(type=service.type,action="Delete",team_code=service.team_code,
+                                 author_id=service.author_id, vm_id=service.id, vm_name=service.name,
+                                 cause=result)
+        sql_session.add(error_hist)
+        sql_session.commit()
         return jsonify(status=False, message=result)
 
 
@@ -439,6 +465,7 @@ def doc_vm(id):
         ).one()
         service = GnVmMachines.query.filter_by(team_code=team_code, id=id).one()
     if service is None:
+        logger.debug('cannot get information about service, vm id = %s' % id)
         return jsonify(status=False, message="서비스 정보를 가져올 수 없습니다.")
     else:
         return jsonify(status=True, message="서비스 정보를 가져왔습니다.", result=service.to_json())
