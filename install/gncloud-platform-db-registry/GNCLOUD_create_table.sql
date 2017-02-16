@@ -123,6 +123,7 @@ COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
 
+
 CREATE TABLE `GN_ERROR_HIST` (
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`type` VARCHAR(10) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
@@ -137,12 +138,14 @@ CREATE TABLE `GN_ERROR_HIST` (
 	`action_year` VARCHAR(4) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
 	`action_month` VARCHAR(2) NOT NULL DEFAULT '' COLLATE 'utf8_unicode_ci',
 	`solve_content` TEXT NULL COLLATE 'utf8_unicode_ci',
+	`cause` VARCHAR(1000) NULL DEFAULT NULL COLLATE 'utf8_unicode_ci',
 	PRIMARY KEY (`id`)
 )
 COLLATE='utf8_unicode_ci'
 ENGINE=InnoDB
-AUTO_INCREMENT=108
+AUTO_INCREMENT=109
 ;
+
 
 CREATE TABLE `GN_HOST_MACHINES` (
 	`id` VARCHAR(8) NOT NULL,
@@ -478,4 +481,3 @@ CREATE TABLE `GN_VM_SIZE` (
 COLLATE='utf8_unicode_ci'
 ENGINE=InnoDB
 ;
-
