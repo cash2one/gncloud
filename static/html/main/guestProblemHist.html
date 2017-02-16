@@ -69,6 +69,7 @@
                             <th class="hidden-xs hidden-sm">시간</th>
                             <th class="hidden-xs hidden-sm">팀</th>
                             <th class="">인스턴스</th>
+                            <th class="hidden-xs">타입</th>
                             <th class="">소유자</th>
                             <th class="hidden-xs hidden-sm">에러항목</th>
                             <th class="hidden-xs hidden-sm">해결자</th>
@@ -86,6 +87,7 @@
                                     <span ng-if="list.gnVmMachines != null">{{list.gnVmMachines.name}}</span>
                                 </a>
                             </td>
+                            <td class="hidden-xs">{{list.type}}</td>
                             <td>{{list.gnUsers.user_name}}</td>
                             <td class="hidden-xs hidden-sm">
                                 <span ng-if="list.action == 'Create'">생성</span>
@@ -124,6 +126,8 @@
                                         <dd>{{error_info.gnTeam.team_name}}</dd>
                                         <dt>인스턴스</dt>
                                         <dd>{{error_info.vm_name}}</dd>
+                                        <dt>타입</dt>
+                                        <dd>{{error_info.type}}</dd>
                                         <dt>소유자</dt>
                                         <dd>{{error_info.gnUsers.user_name}}</dd>
                                         <dt>시간</dt>
@@ -138,6 +142,8 @@
                                             <span ng-if="error_info.action == 'Reboot'">재시작</span>
                                             <span ng-if="error_info.action == 'Snap-create'">스냅샷 생성</span>
                                         </dd>
+                                        <dt>에러 내용</dt>
+                                        <dd>{{error_info.cause}}</dd>
                                         <dt>해결자</dt>
                                         <dd>{{error_info.solver_id}}</dd>
                                         <dt>해결시간</dt>
