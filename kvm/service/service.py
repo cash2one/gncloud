@@ -3,13 +3,10 @@ __author__ = 'yhk'
 
 import subprocess
 
-import datetime
-from pexpect import pxssh
-from kvm.db.models import *
 from kvm.db.database import db_session
+from kvm.db.models import *
 from kvm.service.kvm_libvirt import *
 from kvm.util.config import config
-import time
 
 USER = "root"
 
@@ -45,7 +42,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
         # 기존 저장된 ssh key 등록
         setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
-
+        a= 1/0
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id
@@ -76,7 +73,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
     except Exception as e:
         print(id+":init vm error!!!")
         print("error:"+e.message)
-        error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message)
         sql_session.add(error_hist)
         vm_info.status = "Error"
         sql_session.commit()
@@ -139,7 +136,7 @@ def server_delete(id,sql_session):
         sql_session.commit()
     except Exception as e:
         print("error:"+e.message)
-        error_hist = GnErrorHist(type=vm_info.type,action="Delete",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        error_hist = GnErrorHist(type=vm_info.type,action="Delete",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message)
         sql_session.add(error_hist)
         sql_session.commit()
 
@@ -164,8 +161,9 @@ def server_change_status(id, status, sql_session):
         vm_info.status = status
         sql_session.commit()
         return True
-    except:
-        error_hist = GnErrorHist(type=vm_info.type,action=status,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+    except Exception as e:
+        print("error"+ e.message)
+        error_hist = GnErrorHist(type=vm_info.type,action=status,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message)
         sql_session.add(error_hist)
         sql_session.commit()
         return False
@@ -191,7 +189,7 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
         sql_session.commit()
     except Exception as e:
         print(e.message)
-        error_hist = GnErrorHist(type=vm_info.type,action="Snap-create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name)
+        error_hist = GnErrorHist(type=vm_info.type,action="Snap-create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message)
         sql_session.add(error_hist)
         snap_info.status = "Error"
         sql_session.commit()

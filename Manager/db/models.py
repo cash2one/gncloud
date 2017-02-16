@@ -690,11 +690,12 @@ class GnErrorHist(Base):
     vm_name = Column(String(50), primary_key=False, nullable=True)
     action_year = Column(String(4), primary_key=False, default=datetime.date.today().year)
     action_month = Column(String(4), primary_key=False, default=datetime.date.today().month)
+    cause = Column(String(1000), primary_key=False, nullable=False)
     gnTeam = relationship('GnTeam')
     gnVmMachines = relationship('GnVmMachines')
     gnUsers = relationship('GnUser')
 
-    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_id=None, vm_id=None, vm_name=None, solve_content=None):
+    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_id=None, vm_id=None, vm_name=None, solve_content=None, cause=None):
         self.type = type
         self.action = action
         self.team_code = team_code
@@ -704,13 +705,14 @@ class GnErrorHist(Base):
         self.vm_id = vm_id
         self.vm_name = vm_name
         self.solve_content = solve_content
+        self.cause = cause
 
     def __repr__(self):
-        return '<Type %r / Action %r / Team_code %r / Author id %r / Solve time %r / Solver id %r >' \
-               %(self.type, self.action, self.team_code, self.author_id, self.solve_time, self.solver_id)
+        return '<Type %r / Action %r / Team_code %r / Author id %r / Solve time %r / Solver id %r / Cause %r / >' \
+               %(self.type, self.action, self.team_code, self.author_id, self.solve_time, self.solver_id, self.cause)
 
     def __json__(self):
-        return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_id','gnTeam','gnVmMachines','gnUsers','vm_name','solve_content']
+        return ['id', 'type', 'action','action_time','team_code','author_id','solve_time','solver_id','gnTeam','gnVmMachines','gnUsers','vm_name','solve_content', 'cause']
 
 
 class GnBackup(Base):
