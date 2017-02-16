@@ -137,13 +137,13 @@
 
                 <div class="container-fluid">
                     <div class="table-responsive gn-table-responsive">
-                        <table class="table table gn-table">
+                        <table class="table gn-table">
                             <thead>
                                 <tr>
                                     <th class="">타입</th>
                                     <th class="hidden-xs">엔드 포인트</th>
                                     <th class="hidden-xs">노드</th>
-                                    <th class="hidden-xs">생성일</th>
+                                    <th class="">생성일</th>
                                     <th class=""><!--더보기--></th>
                                 </tr>
                             </thead>
@@ -154,7 +154,7 @@
                                     <td class="hidden-xs gn-syssett-td">
                                         <p ng-repeat="host in list.gnHostMachines">{{host.ip}}</p>
                                     </td>
-                                    <td class="hidden-xs">{{list.create_time_diff}}</td>
+                                    <td class="">{{list.create_time_diff}}</td>
                                     <td class="dropdown">
                                         <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
                                             <div class="gn-more">더보기</div>
