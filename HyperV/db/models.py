@@ -586,8 +586,10 @@ class GnErrorHist(Base):
     vm_name = Column(String(50), primary_key=False, nullable=True)
     action_year = Column(String(4), primary_key=False, default=datetime.date.today().year)
     action_month = Column(String(4), primary_key=False, default=datetime.date.today().month)
+    cause = Column(String(1000), primary_key=False, nullable=True)
 
-    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_id=None, vm_id=None, vm_name=None):
+    def __init__(self, type=None, action=None, team_code=None, author_id=None, solve_time=None, solver_id=None,
+                 vm_id=None, vm_name=None, cause=None):
         self.type = type
         self.action = action
         self.team_code = team_code
@@ -596,6 +598,7 @@ class GnErrorHist(Base):
         self.solver_id = solver_id
         self.vm_id = vm_id
         self.vm_name = vm_name
+        self.cause = cause
 
     def __repr__(self):
         return '<Type %r / Action %r / Team_code %r / Author id %r / Solve time %r / Solver name %r >' \
