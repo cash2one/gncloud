@@ -33,6 +33,7 @@ def hvm_create(id, sql_session):
     vm_info = None
     team_name = None
     user_name = None
+    host_port = config.AGENT_PORT
     try:
         vm_id = id
         vm_info =sql_session.query(GnVmMachines).filter(GnVmMachines.id == vm_id).first()
@@ -41,10 +42,15 @@ def hvm_create(id, sql_session):
             team_name = sql_session.query(GnTeam).filter(GnTeam.team_code == vm_info.team_code).one()
             user_name = sql_session.query(GnUsers).filter(GnUsers.user_id == vm_info.author_id).one()
 
-        host_id =vm_info.host_id
-        host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == host_id).first()
+        host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).first()
+        if host_machine.ip.find(':') >= 0:
+            host_ip = host_machine.ip.split(':')[0]
+            host_port = host_machine.ip.split(':')[1]
+        else:
+            host_ip = host_machine.ip
+
         #image_pool = sql_session.query(GnImagesPool).filter(GnImagesPool.host_id == host_id).first()
-        ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+        ps = PowerShell(host_ip, host_port, ps_exec)
 
         base_image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).first()
 
@@ -171,12 +177,19 @@ def hvm_create(id, sql_session):
 
 
 def hvm_snapshot():
+    host_port = config.AGENT_PORT
     vm_info = db_session.query(GnVmImages).filter(GnVmImages.id == request.json['vm_id']).first()
     org_id = db_session.query(GnVmMachines).filter(GnVmMachines.id == request.json['ord_id']).first()
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == org_id.host_id).first()
     # image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == org_id.host_id).first()
+    if host_machine.ip.find(':') >= 0:
+        host_ip = host_machine.ip.split(':')[0]
+        host_port = host_machine.ip.split(':')[1]
+    else:
+        host_ip = host_machine.ip
+
     try:
-        ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+        ps = PowerShell(host_ip, host_port, ps_exec)
         create_snap = ps.create_snap(org_id.internal_id, config.MANAGER_PATH, config.NAS_PATH)
         if create_snap['Name'] is not None:
             # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
@@ -241,10 +254,17 @@ def hvm_snapshot():
 # FastSaving 32780 - Corresponds to EnabledStateFastSuspending. State transition from Running to FastSaved.
 # -------------------------------------------------------
 def hvm_state(id):
-
+    host_port=config.AGENT_PORT
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vmid.host_id).first()
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+
+    if host_machine.ip.find(':') >= 0:
+        host_ip = host_machine.ip.split(':')[0]
+        host_port = host_machine.ip.split(':')[1]
+    else:
+        host_ip = host_machine.ip
+
+    ps = PowerShell(host_ip, host_port, ps_exec)
 
     type = request.json['type']
     #print vmid.internal_id
@@ -377,12 +397,19 @@ def hvm_state(id):
 
 # REST. VM 삭제
 def hvm_delete(id):
+    host_port=config.AGENT_PORT
     vmid = db_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vmid.host_id).first()
+    if host_machine.ip.find(':') >= 0:
+        host_ip = host_machine.ip.split(':')[0]
+        host_port = host_machine.ip.split(':')[1]
+    else:
+        host_ip = host_machine.ip
+
     #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == vmid.host_id).first()
 
     try:
-        ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+        ps = PowerShell(host_ip, host_port, ps_exec)
         vm_info =ps.get_vm_one(vmid.internal_id)
         #  REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
         stop_vm = ps.stop_vm(vmid.internal_id)
@@ -422,8 +449,15 @@ def hvm_delete(id):
 
 # todo REST. VM 정보
 def hvm_vm(vmid):
+    host_port=config.AGENT_PORT
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.name == 'hyperv').first()
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+    if host_machine.ip.find(':') >= 0:
+        host_ip = host_machine.ip.split(':')[0]
+        host_port = host_machine.ip.split(':')[1]
+    else:
+        host_ip = host_machine.ip
+
+    ps = PowerShell(host_ip, host_port, ps_exec)
     # Powershell Script를 통해 VM 정보를 가져온다.
     vm = ps.get_vm_one(vmid)
     # todo get-vm. VM 정보를 DB에서 가져온다.
@@ -432,8 +466,15 @@ def hvm_vm(vmid):
 
 # todo REST. VM 리스트 정보
 def hvm_vm_list():
+    host_port=config.AGENT_PORT
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.name == 'hyperv').first()
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+    if host_machine.ip.find(':') >= 0:
+        host_ip = host_machine.ip.split(':')[0]
+        host_port = host_machine.ip.split(':')[1]
+    else:
+        host_ip = host_machine.ip
+
+    ps = PowerShell(host_ip, host_port, ps_exec)
     vm_list = ps.get_vm()
     # todo get-vm. VM 정보를 DB에서 가져온다.
     return jsonify(list=vm_list, message="", status=True)
@@ -475,11 +516,17 @@ def hvm_modify_image(id):
 # 이미지를 백업 폴더로 옮긴다
 # 이미지 따로 관리
 def hvm_delete_image(id):
+    host_port=config.AGENT_PORT
     vhd_Name = db_session.query(GnVmImages).filter(GnVmImages.id == id).first()
     #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == vhd_Name.host_id).first()
     host_machine = db_session.query(GnHostMachines).filter(GnHostMachines.id == vhd_Name.host_id).first()
+    if host_machine.ip.find(':') >= 0:
+        host_ip = host_machine.ip.split(':')[0]
+        host_port = host_machine.ip.split(':')[1]
+    else:
+        host_ip = host_machine.ip
 
-    ps = PowerShell(host_machine.ip, host_machine.host_agent_port, ps_exec)
+    ps = PowerShell(host_ip, host_port, ps_exec)
     image_delete = ps.delete_vm_Image(vhd_Name.filename, config.NAS_PATH)
 
     json_obj = json.dumps(image_delete)
@@ -513,11 +560,17 @@ def hvm_image():
 
 
 def vm_monitor(sql_session):
-
+    host_port=config.AGENT_PORT
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.type == 'hyperv').filter(GnVmMachines.status == 'Running').all()
     for seq in vm_info:
         host = sql_session.query(GnHostMachines).filter(GnHostMachines.id == seq.host_id).first()
-        ps = PowerShell(host.ip, host.host_agent_port, "powershell/execute")
+        if host.ip.find(':') >= 0:
+            host_ip = host.ip.split(':')[0]
+            host_port = host.ip.split(':')[1]
+        else:
+            host_ip = host.ip
+
+        ps = PowerShell(host_ip, host_port, "powershell/execute")
 
         script = 'Get-VM -id '+seq.internal_id+' | Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json '
         monitor = ps.send(script)
