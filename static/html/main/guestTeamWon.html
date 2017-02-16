@@ -13,40 +13,43 @@
                     <div class="table-responsive gn-table-responsive">
                         <table class="table table gn-table">
                             <thead>
-                            <tr>
-                                <th class="">번호</th>
-                                <th class="hidden-xs">등급</th>
-                                <th class="">이름</th>
-                                <th class="hidden-xs">아이디</th>
-                                <th class="hidden-xs">상태</th>
-                                <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                                <th class="" ng-show="user_info.authority == 'owner' "><!--더보기--></th>
-                            </tr>
+                                <tr>
+                                    <th class="">번호</th>
+                                    <th class="hidden-xs">등급</th>
+                                    <th class="">이름</th>
+                                    <th class="hidden-xs">아이디</th>
+                                    <th class="hidden-xs">상태</th>
+                                    <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
+                                    <th class="" ng-show="user_info.authority == 'owner' "><!--더보기--></th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_info.user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}" ng-cloak>
-                                <td class="">{{$index+1}}</td>
-                                <td class="hidden-xs">{{won.team_owner}}</td>
-                                <td class="" class="gn-ms-cursor" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);"><a >{{won.user_name}}</a></td>
-                                <td class="hidden-xs" ng-model="data.user_id">{{won.user_id}}</td>
-                                <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
-                                <td class="hidden-xs">{{won.comf}}</td>
-                                <td class="dropdown" ng-show="user_info.authority == 'owner' ">
-                                    <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
-                                        <div class="gn-more">더보기</div>
-                                        <span class="gn-caret-table"></span>
-                                    </div>
-                                    <!--더보기>드롭다운-->
-                                    <ul class="dropdown-menu gn-dropdown" role="menu" >
-                                        <li><a class="btn" ng-click="update(won.user_id, won.team_code, 'approve', won.user_name,won.team_owner)" ng-disabled="won.team_check =='Y'">승인</a></li>
-                                        <li><a class="btn" ng-click="update(won.user_id, won.team_code, 'change', won.user_name,won.team_owner)">등급변경</a></li>
-                                        <li><a class="btn" ng-click="update(won.user_id, won.team_code, 'reset', won.user_name,won.team_owner)">비밀번호초기화</a></li>
-                                        <li><a class="btn gn-danger" ng-click="update(won.user_id, won.team_code, 'dropout', won.user_name,won.team_owner)">팀탈퇴</a></li>
-                                    </ul>
-                                </td>
-                            </tr>
+                                <tr ng-repeat="won in won_list" ng-class="{'tr-on-me': user_info.user_id == won.user_id, 'tr-on-wait':won.team_check =='N'}" ng-cloak>
+                                    <td class="">{{$index+1}}</td>
+                                    <td class="hidden-xs">{{won.team_owner}}</td>
+                                    <td class="" data-toggle="modal" data-target="#teamModal" ng-click="infolist(won.user_id);">
+                                        <a >{{won.user_name}}</a>
+                                    </td>
+                                    <td class="hidden-xs" ng-model="data.user_id">{{won.user_id}}</td>
+                                    <!--------------------------여기서부터 팀장 로그인 시 보이는 영역--------------------------------->
+                                    <td class="hidden-xs">{{won.comf}}</td>
+                                    <td class="dropdown" ng-show="user_info.authority == 'owner' ">
+                                        <div class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-expanded="false">
+                                            <div class="gn-more">더보기</div>
+                                            <span class="gn-caret-table"></span>
+                                        </div>
+                                        <!--더보기>드롭다운-->
+                                        <ul class="dropdown-menu gn-dropdown" role="menu" >
+                                            <li><a class="btn" ng-click="update(won.user_id, won.team_code, 'approve', won.user_name,won.team_owner)" ng-disabled="won.team_check =='Y'">승인</a></li>
+                                            <li><a class="btn" ng-click="update(won.user_id, won.team_code, 'change', won.user_name,won.team_owner)">등급변경</a></li>
+                                            <li><a class="btn" ng-click="update(won.user_id, won.team_code, 'reset', won.user_name,won.team_owner)">비밀번호초기화</a></li>
+                                            <li><a class="btn gn-danger" ng-click="update(won.user_id, won.team_code, 'dropout', won.user_name,won.team_owner)">팀탈퇴</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
+                        
                         <div class="modal fade" id="teamModal" role="dialog">
                             <div class="modal-dialog form-horizontal">
                                 <div class="modal-content col-sm-10 col-sm-offset-1">
@@ -56,7 +59,34 @@
                                     </div>
                                     <div class="modal-body gn-modal-body">
                                         <form>
-                                            <div class="form-group" ng-repeat="team in teamwon_list">
+                                           
+                                            <dl class="dl-horizontal gn-description-list" ng-repeat="team in teamwon_list">
+                                                <dt>등급</dt>
+                                                <dd>{{team.team_owner}}</dd>
+
+                                                <dt>이름</dt>
+                                                <dd>{{team.user_name}}</dd>
+
+                                                <dt>아이디</dt>
+                                                <dd>{{team.user_id}}</dd>
+
+                                                <dt>연락처</dt>
+                                                <dd>{{team.tel}}</dd> 
+
+                                                <dt>이메일</dt>
+                                                <dd>{{team.email}}</dd>
+                                                
+                                                <dt>상태</dt>
+                                                <dd>{{team.confirm}}</dd>
+                                                
+                                                <dt>신청일</dt>
+                                                <dd>{{team.apply_date}}</dd>
+                                                
+                                                <dt>승인일</dt>
+                                                <dd>{{team.approve_date}}</dd> 
+                                            </dl>
+                                            
+                                            <!--<div class="form-group" ng-repeat="team in teamwon_list">
                                                 <label class="col-sm-4 control-label gn-control-label">등급</label>
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{team.team_owner}}</p>
@@ -89,7 +119,7 @@
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{team.approve_date}}</p>
                                                 </div>
-                                            </div>
+                                            </div>-->
                                         </form>
                                     </div>
                                 </div> <!--class="modal-content"-->
