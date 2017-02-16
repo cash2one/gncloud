@@ -18,6 +18,7 @@
                             <th class="hidden-xs">#</th>
                             <th class="">팀</th>
                             <th class="">과금월</th>
+                            <th class="hidden-xs">총계</th>
                             <th class=""></th>
                         </tr>
                         </thead>
@@ -26,6 +27,7 @@
                             <td class="hidden-xs">{{$index+1}}</td>
                             <td><span class="gn-table-ellip">{{price.gnTeam.team_name}}</span></td>
                             <td>{{price.year}}-{{price.month}}</td>
+                            <td class="hidden-xs">{{price.totalprice | number}}&#50896;</td>
                             <td>
                                 <button type="button" class="btn-default btn pull-right" data-toggle="modal" data-target="#priceModal" ng-click="price_list_info(price.year,price.month,price.team_code)">보기</button>
                             </td>

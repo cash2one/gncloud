@@ -27,15 +27,16 @@
 
                                         <form class="form-horizontal" name="meForm" ng-submit="submitForm(meForm.$valid)" novalidate>
                                             <div class="form-group">
-                                                <label class="col-sm-4 control-label gn-control-label">이름</label>
-                                                <div class="col-sm-8">
-                                                    <p class="form-control-static">{{te_list.user_name}}</p>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <label class="col-sm-4 control-label gn-control-label">아이디</label>
                                                 <div class="col-sm-8">
                                                     <p class="form-control-static">{{te_list.user_id}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label gn-control-label">이름</label>
+                                                <div class="col-sm-8" ng-class="{ 'has-error' : meForm.user_name.$invalid && !meForm.user_name.$pristine }">
+                                                    <input type="text" class="form-control gn-form-control" name="user_name" ng-model="data.user_name" id="user_name" value="te_list.user_name" required>
+                                                    <p ng-show="meForm.user_name.$invalid && !meForm.user_name.$pristine" class="help-block">필수 항목입니다.</p>
                                                 </div>
                                             </div>
                                             <div class="form-group">

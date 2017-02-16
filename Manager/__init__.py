@@ -255,6 +255,9 @@ def repair_list():
     password_ret=""
     tel=""
     email=""
+    user_name=""
+    if 'user_name' in request.json:
+        user_name = request.json['user_name']
     if 'password' in request.json:
         password = request.json['password']
     if 'password_new' in request.json:
@@ -267,8 +270,7 @@ def repair_list():
         email = request.json['email']
     if session.get('userId', None):
         user_id=session['userId']
-        user_name =session['userName']
-        test = repair(user_id, password, password_new,password_ret, tel, email, db_session)
+        test = repair(user_id, password, password_new,password_ret, tel, email,user_name ,db_session)
         if test == 2:
             return jsonify(status=2, message='success')
         elif test == 1:

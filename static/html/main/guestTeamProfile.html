@@ -32,7 +32,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label gn-control-label">팀명</label>
                                             <div class="col-sm-9" ng-class="{ 'has-error' : userForm.team_name.$invalid && !userForm.team_name.$pristine }">
-                                                <input type="text" class="form-control gn-form-control" name="team_name" ng-model="data.team_name" placeholder="{{teamname.team_name}}" ng-pattern="/^[가-힣0-9]+$/" required>
+                                                <input type="text" class="form-control gn-form-control" id="team_name" name="team_name" ng-model="data.team_name" value="teamname.team_name" ng-pattern="/^[가-힣0-9]+$/" required>
                                                 <p ng-show="userForm.team_name.$invalid && !userForm.team_name.$pristine" class="help-block">한글과 숫자만 사용할수 있습니다.</p>
                                             </div>
                                         </div>

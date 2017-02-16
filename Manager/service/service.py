@@ -425,7 +425,7 @@ def sign_up(user_name, user_id, password, password_re):
     else:
         return 'password'
 
-def repair(user_id, password, password_new, password_re, tel, email, sql_session):
+def repair(user_id, password, password_new, password_re, tel, email,user_name ,sql_session):
     test = sql_session.query(GnUser).filter(GnUser.user_id == user_id).one()
     if password != "":
         password = convertToHashValue(password)
@@ -434,6 +434,8 @@ def repair(user_id, password, password_new, password_re, tel, email, sql_session
               list.password = convertToHashValue(password_re)
         else:
             return 1
+    if user_name != "":
+        test.user_name = user_name
     test.tel = tel
     test.email = email
     sql_session.commit()
@@ -1505,10 +1507,10 @@ def team_price_lsit(team_code,page,sql_session):
     if team_code != "000":
         total_query = total_query.filter(GnInvoiceResult.team_code == team_code)
         list_query = list_query.filter(GnInvoiceResult.team_code == team_code)
-
     total_page= total_query.one()
     list=list_query.limit(page_size).offset(page*page_size).all()
-
+    for vm in list:
+        vm.invoice_data=json.loads(vm.invoice_data)
     total=int(total_page.count)/10
     return {"list":list, "total_page":total_page.count,"total":total, "page":page}
 

@@ -72,7 +72,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
     except Exception as e:
         print(id+":init vm error!!!")
         print("error:"+e.message)
-        error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message)
+        error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message, action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
         sql_session.add(error_hist)
         vm_info.status = "Error"
         sql_session.commit()
@@ -135,7 +135,7 @@ def server_delete(id,sql_session):
         sql_session.commit()
     except Exception as e:
         print("error:"+e.message)
-        error_hist = GnErrorHist(type=vm_info.type,action="Delete",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message)
+        error_hist = GnErrorHist(type=vm_info.type,action="Delete",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message, action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
         sql_session.add(error_hist)
         sql_session.commit()
 
@@ -162,7 +162,7 @@ def server_change_status(id, status, sql_session):
         return True
     except Exception as e:
         print("error"+ e.message)
-        error_hist = GnErrorHist(type=vm_info.type,action=status,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message)
+        error_hist = GnErrorHist(type=vm_info.type,action=status,team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message,action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
         sql_session.add(error_hist)
         sql_session.commit()
         return False
@@ -188,7 +188,7 @@ def server_create_snapshot(id, image_id, user_id, team_code, sql_session):
         sql_session.commit()
     except Exception as e:
         print(e.message)
-        error_hist = GnErrorHist(type=vm_info.type,action="Snap-create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message)
+        error_hist = GnErrorHist(type=vm_info.type,action="Snap-create",team_code=vm_info.team_code,author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name, cause=e.message,action_time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
         sql_session.add(error_hist)
         snap_info.status = "Error"
         sql_session.commit()
