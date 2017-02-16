@@ -3,7 +3,11 @@
 ## HyperV 관리자 프로그램 추가
 # 제어판 -> 프로그램 -> windows 기능 켜기/끄기 -> Hyper-V 체크 후 확인 -> 리부팅
 
-## 관리자로 파워쉘 실행 후 
+## 관리자로 파워쉘 실행 후
+
+Enable-PSRemoting
+Enable-WSManCredSSP -Role server
+
 # 가상스위치 생성 스크립트
 $net = Get-NetAdapter -physical | where status -eq 'up';
 New-VMSwitch -Name out -NetAdapterName $net.Name -AllowManagementOS $true -Notes 'Parent OS, VMs, LAN';
@@ -11,10 +15,12 @@ New-VMSwitch -Name out -NetAdapterName $net.Name -AllowManagementOS $true -Notes
 ## 이미지저장 디렉토리 생성 스크립트
 # NAS (SAN) 설정 시 C drive 대신 세팅된 NAS(SAN) 네트워크 드라이브(예: Z)로 설정
 $image_path = "C:\images";
-New-Item $image_path\vhdx\original -ItemType directory;
+New-Item $image_path\vhdx\instance -ItemType directory;
+#$image_path = "Z:\images";
 New-Item $image_path\vhdx\base -ItemType directory;
-New-Item $image_path\vhdx\snap -ItemType directory;
+New-Item $image_path\vhdx\snapshot -ItemType directory;
 New-Item $image_path\vhdx\backup -ItemType directory;
+New-Item $image_path\vhdx\manager -ItemType directory;
  
 ## agent 인바운드 허용
 New-NetFirewallRule -DisplayName hypervagent -Direction Inbound -Action Allow -EdgeTraversalPolicy Allow -Protocol TCP -LocalPort 8180 
