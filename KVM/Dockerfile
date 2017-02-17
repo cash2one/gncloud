@@ -1,30 +1,45 @@
 FROM python:2.7
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
-WORKDIR /code
-ADD requirements.txt /code/
-RUN pip install -r requirements.txt
-ADD . /code/
+ENV PYTHONPATH=/var/lib/gncloud
 
 # install python
 RUN apt-get update && \
+        apt-get install -y apt-utils && \
         apt-get install -y python python-dev python-distribute python-pip && \
-        apt-get install -y libcurl4-openssl-dev libxml2-dev libxslt1-dev python-lxml python-mysqldb libpq-dev
+        apt-get install -y libcurl4-openssl-dev libxml2-dev libxslt1-dev python-lxml python-mysqldb libpq-dev && \
+        apt-get install -y libvirt && \
+        pip install -U pip setuptools  && \
+        pip install flask && \
+        pip install sqlalchemy && \
+        pip install libvirt-python && \
+        pip install pexpect && \
+        pip install ConfigParser && \
+        pip install apscheduler && \
+        pip install humanfriendly && \
+        pip install logger && \
+        pip install python-dateutil && \
+        pip install requests && \
+        pip install datetime && \
+        pip install MySQL-python && \
+        apt-get -y install uwsgi&& \
+        apt-get install -y uwsgi-plugin-python
 
-# install requirements
-RUN pip install -U pip setuptools
-RUN pip install --egg 'https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-2.1.5.zip#md5=ce4a24cb1746c1c8f6189a97087f21c1'
-ADD requirements.txt /opt/pyspider/requirements.txt
-RUN pip install -r /opt/pyspider/requirements.txt
+RUN mkdir -p /var/lib/gncloud/KVM
 
-# add all repo
-ADD ./ /opt/pyspider
+RUN mkdir -p /var/log/gncloud
 
-# run test
-WORKDIR /opt/pyspider
-RUN pip install -e .[all]
+COPY conf        /var/lib/gncloud/KVM/conf
+COPY controller  /var/lib/gncloud/KVM/controller
+COPY db          /var/lib/gncloud/KVM/db
+COPY service     /var/lib/gncloud/KVM/service
+COPY util        /var/lib/gncloud/KVM/util
+COPY templates   /var/lib/gncloud/KVM/templates
+COPY __init__.py /var/lib/gncloud/KVM/__init__.py
+COPY execute_uwsgi.sh  /
 
-VOLUME ["/opt/pyspider"]
-ENTRYPOINT ["pyspider"]
+RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
+RUN cp -R /usr/local/lib/python2.7/* /usr/lib/python2.7/.
 
-EXPOSE 5000 23333 24444 25555
+EXPOSE 80
+
+CMD ["/execute_uwsgi.sh","80"]
