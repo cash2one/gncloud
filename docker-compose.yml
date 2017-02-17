@@ -11,3 +11,14 @@ version: '2'
        - "8000:8000"
      depends_on:
        - db
+
+       # ssh-keygen -f ~/.ssh/id_rsa
+       # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.2
+       # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.201
+       # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.202
+       # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.203
+       # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.204
+       # docker run -d --name kvm-controller -p 8081:80 -v /var/log/gncloud:/var/log/gncloud -v /root/.ssh:/root/.ssh kvm-controller:0.1
+       # docker run -d --name hyperv-controller -p 8082:80 -v /var/log/gncloud:/var/log/gncloud -v /root/.ssh:/root/.ssh hyperv-controller:0.1
+       # docker run -d --name docker-controller -p 8083:80 -v /var/log/gncloud:/var/log/gncloud -v /root/.ssh:/root/.ssh docker-controller:0.1
+       # docker run -d --name scheduler -p 8084:80 -v /var/log/gncloud:/var/log/gncloud -v /root/.ssh:/root/.ssh scheduler:0.1
