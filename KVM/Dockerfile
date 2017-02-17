@@ -1,13 +1,13 @@
 FROM python:2.7
 ENV PYTHONUNBUFFERED 1
-ENV PYTHONPATH=/var/lib/gncloud
+ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
 
 # install python
 RUN apt-get update && \
         apt-get install -y apt-utils && \
         apt-get install -y python python-dev python-distribute python-pip && \
         apt-get install -y libcurl4-openssl-dev libxml2-dev libxslt1-dev python-lxml python-mysqldb libpq-dev && \
-        apt-get install -y qemu-kvm libvirt-bin && \
+        apt-get install -y libvirt-bin && \
         pip install -U pip setuptools  && \
         pip install flask && \
         pip install sqlalchemy && \
@@ -38,7 +38,6 @@ COPY execute_uwsgi.sh  /
 RUN chmod +x execute_uwsgi.sh
 
 RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
-RUN cp -R /usr/local/lib/python2.7/* /usr/lib/python2.7/.
 
 EXPOSE 80
 
