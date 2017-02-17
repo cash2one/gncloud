@@ -35,6 +35,7 @@ COPY util        /var/lib/gncloud/KVM/util
 COPY templates   /var/lib/gncloud/KVM/templates
 COPY __init__.py /var/lib/gncloud/KVM/__init__.py
 COPY execute_uwsgi.sh  /
+RUN chmod +x execute_uwsgi.sh
 
 RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
 RUN cp -R /usr/local/lib/python2.7/* /usr/lib/python2.7/.
