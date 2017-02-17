@@ -26,13 +26,14 @@ RUN mkdir -p /var/lib/gncloud/HyperV
 
 RUN mkdir -p /var/log/gncloud
 
-COPY conf        /var/lib/gncloud/HyperV/conf
-COPY controller  /var/lib/gncloud/HyperV/controller
-COPY db          /var/lib/gncloud/HyperV/db
-COPY service     /var/lib/gncloud/HyperV/service
-COPY util        /var/lib/gncloud/HyperV/util
-COPY __init__.py /var/lib/gncloud/HyperV/__init__.py
+COPY conf        /var/lib/gncloud/Scheduler/conf
+COPY controller  /var/lib/gncloud/Scheduler/controller
+COPY db          /var/lib/gncloud/Scheduler/db
+COPY service     /var/lib/gncloud/Scheduler/service
+COPY util        /var/lib/gncloud/Scheduler/util
+COPY __init__.py /var/lib/gncloud/Scheduler/__init__.py
 COPY execute_uwsgi.sh  /
+RUN chmod +x execute_uwsgi.sh
 
 RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
 RUN cp -R /usr/local/lib/python2.7/* /usr/lib/python2.7/.
