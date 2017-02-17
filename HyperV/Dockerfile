@@ -1,10 +1,4 @@
 FROM python:2.7
-ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
-WORKDIR /code
-ADD requirements.txt /code/
-RUN pip install -r requirements.txt
-ADD . /code/
 
 # install python
 RUN apt-get update && \
@@ -12,19 +6,20 @@ RUN apt-get update && \
         apt-get install -y libcurl4-openssl-dev libxml2-dev libxslt1-dev python-lxml python-mysqldb libpq-dev
 
 # install requirements
-RUN pip install -U pip setuptools
-RUN pip install --egg 'https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-2.1.5.zip#md5=ce4a24cb1746c1c8f6189a97087f21c1'
-ADD requirements.txt /opt/pyspider/requirements.txt
-RUN pip install -r /opt/pyspider/requirements.txt
+RUN pip install -U pip setuptools  && \
+        pip install flask && \
+        pip install sqlalchemy && \
+        pip install pexpect && \
+        pip install ConfigParser && \
+        pip install apscheduler && \
+        pip install humanfriendly && \
+        pip install logger && \
+        pip install python-dateutil && \
+        pip install requests && \
+        apt-get install uwsgi
 
-# add all repo
-ADD ./ /opt/pyspider
+RUN mkdir -p /var/lib/gncloud/HyperV
+COPY HyperV /var/lib/gncloud/.
+RUN export PYTHONPATH=/var/lib/gncloud
 
-# run test
-WORKDIR /opt/pyspider
-RUN pip install -e .[all]
-
-VOLUME ["/opt/pyspider"]
-ENTRYPOINT ["pyspider"]
-
-EXPOSE 5000 23333 24444 25555
+EXPOSE 80
