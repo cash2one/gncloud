@@ -5,11 +5,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ProcessPoolExecutor
 from sqlalchemy import and_
 
-from scheduler.db.database import init_db, db_session
-from scheduler.db.models import GnSystemSetting, GnBackup, GnBackupHist
-from scheduler.util.config import config
-from scheduler.service.powershell import BackupPowerShell
-from scheduler.service.kvmshell import KvmShell
+from Scheduler.db.database import init_db, db_session
+from Scheduler.db.models import GnSystemSetting, GnBackup, GnBackupHist
+from Scheduler.util.config import config
+from Scheduler.service.powershell import BackupPowerShell
+from Scheduler.service.kvmshell import KvmShell
 
 
 class BackupDelete:

@@ -4,9 +4,9 @@ from flask import jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ProcessPoolExecutor
 
-from scheduler.db.models import *
-from scheduler.db.models import GnCluster
-from scheduler.util.config import config
+from Scheduler.db.models import *
+from Scheduler.db.models import GnCluster
+from Scheduler.util.config import config
 
 __author__ = 'nhcho'
 

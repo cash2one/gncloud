@@ -5,14 +5,12 @@ from flask import jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ProcessPoolExecutor
 
-from scheduler.db.models import GnHostMachines, GnVmMachines, GnSystemSetting, GnBackup, GnBackupHist, GnTeam, GnUsers
-from scheduler.util.config import config
-from scheduler.service.powershell import BackupPowerShell
-from scheduler.service.kvmshell import KvmShell
-from scheduler.db.database import init_db, db_session
+from Scheduler.db.models import GnHostMachines, GnVmMachines, GnSystemSetting, GnBackup, GnBackupHist, GnTeam, GnUsers
+from Scheduler.util.config import config
+from Scheduler.service.powershell import BackupPowerShell
+from Scheduler.service.kvmshell import KvmShell
+from Scheduler.db.database import init_db, db_session
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 class Backup:
     def __init__(self, db_session=None):

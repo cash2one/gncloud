@@ -9,9 +9,9 @@ from dateutil.relativedelta import relativedelta
 from flask import jsonify
 from sqlalchemy import or_
 
-from scheduler.db.database import init_db, db_session
-from scheduler.db.models import GnInstanceStatus, GnInvoiceResult
-from scheduler.util.config import config
+from Scheduler.db.database import init_db, db_session
+from Scheduler.db.models import GnInstanceStatus, GnInvoiceResult
+from Scheduler.util.config import config
 
 
 __author__ = 'nhcho'

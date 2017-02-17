@@ -3,8 +3,8 @@ __author__ = 'nhcho'
 import json
 from datetime import timedelta
 from flask import Flask, jsonify
-from controller.schdule_controller import ScheduleController
-from util.config import config
+from Scheduler.controller.schdule_controller import ScheduleController
+from Scheduler.util.config import config
 
 
 app = Flask(__name__)

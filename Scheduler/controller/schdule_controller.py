@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from scheduler.db.database import db_session
-from scheduler.service.monitor_service import Monitoring
-from scheduler.service.invoice_service import Invoice
-from scheduler.service.backup_service import Backup
-from scheduler.service.backup_delete_service import BackupDelete
+from Scheduler.db.database import db_session
+from Scheduler.service.monitor_service import Monitoring
+from Scheduler.service.invoice_service import Invoice
+from Scheduler.service.backup_service import Backup
+from Scheduler.service.backup_delete_service import BackupDelete
 
 
 class ScheduleController:
