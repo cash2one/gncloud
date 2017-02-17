@@ -7,7 +7,7 @@ RUN apt-get update && \
         apt-get install -y apt-utils && \
         apt-get install -y python python-dev python-distribute python-pip && \
         apt-get install -y libcurl4-openssl-dev libxml2-dev libxslt1-dev python-lxml python-mysqldb libpq-dev && \
-        apt-get install -y libvirt && \
+        apt-get install -y qemu-kvm libvirt-bint && \
         pip install -U pip setuptools  && \
         pip install flask && \
         pip install sqlalchemy && \
