@@ -3,11 +3,11 @@ import traceback
 
 from flask import Flask, jsonify, request, make_response,session
 from datetime import timedelta, datetime
-from kvm.db.database import db_session
-from kvm.service.service import *
-from kvm.util.json_encoder import AlchemyEncoder
-from kvm.util.logger import logger
-from kvm.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
+from KVM.db.database import db_session
+from KVM.service.service import *
+from KVM.util.json_encoder import AlchemyEncoder
+from KVM.util.logger import logger
+from KVM.db.models import GnVmMachines, GnHostMachines, GnVmImages, GnMonitor, GnMonitorHist, GnSshKeys, GnId
 
 app = Flask(__name__)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)

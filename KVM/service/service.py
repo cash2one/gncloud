@@ -3,10 +3,10 @@ __author__ = 'yhk'
 
 import subprocess
 
-from kvm.db.database import db_session
-from kvm.db.models import *
-from kvm.service.kvm_libvirt import *
-from kvm.util.config import config
+from KVM.db.database import db_session
+from KVM.db.models import *
+from KVM.service.kvm_libvirt import *
+from KVM.util.config import config
 
 USER = "root"
 

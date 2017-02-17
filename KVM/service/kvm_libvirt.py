@@ -6,7 +6,7 @@ import libvirt
 from flask import  render_template
 from pexpect import pxssh
 
-from kvm.util.config import config
+from KVM.util.config import config
 
 USER = "root"
 

@@ -3,8 +3,7 @@ import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Numeric
 from sqlalchemy.orm import relationship
 
-from kvm.db.database import Base
-
+from KVM.db.database import Base
 
 class GnHostMachines(Base):
     __tablename__ = "GN_HOST_MACHINES"
