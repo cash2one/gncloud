@@ -29,7 +29,6 @@ RUN mkdir -p /var/lib/gncloud/KVM
 RUN mkdir -p /var/log/gncloud
 
 COPY conf        /var/lib/gncloud/KVM/conf
-COPY controller  /var/lib/gncloud/KVM/controller
 COPY db          /var/lib/gncloud/KVM/db
 COPY service     /var/lib/gncloud/KVM/service
 COPY util        /var/lib/gncloud/KVM/util
