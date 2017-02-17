@@ -4,7 +4,7 @@ import ConfigParser
 import os
 import sys
 
-from kvm.util.logger import logger
+from KVM.util.logger import logger
 
 class Config:
 
