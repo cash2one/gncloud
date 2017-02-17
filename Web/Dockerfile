@@ -1,24 +1,31 @@
-FROM nginx
+FROM debian:jessie
 
-# install python
-RUN apt-get update && \
-        apt-get install -y python python-dev python-distribute python-pip && \
-        apt-get install -y libcurl4-openssl-dev libxml2-dev libxslt1-dev python-lxml python-mysqldb libpq-dev
+MAINTAINER NGINX Docker Maintainers "docker-maint@nginx.com"
 
-# install requirements
-RUN pip install -U pip setuptools
-RUN pip install --egg 'https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-2.1.5.zip#md5=ce4a24cb1746c1c8f6189a97087f21c1'
-ADD requirements.txt /opt/pyspider/requirements.txt
-RUN pip install -r /opt/pyspider/requirements.txt
+ENV NGINX_VERSION 1.11.10-1~jessie
 
-# add all repo
-ADD ./ /opt/pyspider
+RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
+        && echo "deb http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list \
+        && apt-get update \
+        && apt-get install --no-install-recommends --no-install-suggests -y \
+                                                ca-certificates \
+                                                nginx=${NGINX_VERSION} \
+                                                nginx-module-xslt \
+                                                nginx-module-geoip \
+                                                nginx-module-image-filter \
+                                                nginx-module-perl \
+                                                nginx-module-njs \
+                                                gettext-base \
+        && rm -rf /var/lib/apt/lists/*
 
-# run test
-WORKDIR /opt/pyspider
-RUN pip install -e .[all]
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+        && ln -sf /dev/stderr /var/log/nginx/error.log
 
-VOLUME ["/opt/pyspider"]
-ENTRYPOINT ["pyspider"]
+RUN mkdir -p /var/lib/gncloud/Web/static
+COPY /static /var/lib/gncloud/Web/static/.
+COPY /sites-available/nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 5000 23333 24444 25555
+EXPOSE 80 443
+
+CMD ["nginx", "-g", "daemon off;"]
