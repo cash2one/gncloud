@@ -3,14 +3,12 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
 
 # install python
-RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-        yum -y update && \
-        yum -y install python-pip && \
-        yum -y group install "Development Tools" && \
-        yum -y install uwsgi && \
-        yum -y install uwsgi-plugin-python && \
-        yum -y install python-devel && \
-        yum -y install MySQL-python && \
+RUN     dnf -y update && \
+        dnf -y install python-pip && \
+        dnf -y install python-devel && \
+        dnf -y install uwsgi-plugin-python && \
+        dnf -y install python-devel && \
+        dnf -y install MySQL-python && \
         pip install --upgrade pip && \
         pip install flask && \
         pip install sqlalchemy && \
@@ -22,7 +20,8 @@ RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noa
         pip install --upgrade Flask-SQLAlchemy && \
         pip install python-dateutil && \
         pip install requests && \
-        pip install datetime
+        pip install datetime && \
+        pip install uwsgi
 
 RUN mkdir -p /var/lib/gncloud/KVM
 
