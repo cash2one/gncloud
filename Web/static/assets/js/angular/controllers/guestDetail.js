@@ -36,7 +36,7 @@ angular
 
         $scope.change_name = function() {
             if($("#vm_name").val() == "") {
-                alert("이름을 입력해주세요");
+                notification.sendMessage("warning","이름을 입력해주세요");
                 return false;
             }
             $http({
@@ -63,7 +63,7 @@ angular
 
         $scope.change_tag = function() {
             if($("#vm_tag").val() == "") {
-                alert("태그를 입력해주세요");
+                notification.sendMessage("warning","태그를 입력해주세요");
                 return false;
             }
             $http({
