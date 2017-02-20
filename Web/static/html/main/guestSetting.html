@@ -9,8 +9,8 @@
             <h2>과금</h2>
             <h4>과금 방식</h4>
             <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-click="day_submit()">저장</button>
-            <div class="gn-margin-bott10"><input type="radio" value="D" name="day" style="float:left" ng-checked="bills=='D'">일단위</div>
-            <div><input type="radio" value="H" name="day" style="float:left" ng-checked="bills=='H'">시간단위</div>
+            <div class="gn-margin-bott10"><input type="radio" value="D" name="day" id="priceday" style="float:left" ng-checked="bills=='D'"><label for="priceday">일단위</label></div>
+            <div><input type="radio" value="H" name="day" style="float:left" id="pricehour" ng-checked="bills=='H'"><label for="pricehour">시간단위</label></div>
         </div>
     </div>
     <div class="gn-box gn-detail-main">
@@ -20,14 +20,14 @@
                 <h4>백업 주기</h4>
                 <button type="button" class="btn btn-gn-sub gn-sett-btn" ng-click="backup_day()">저장</button>
                 <div class="gn-margin-bott10">
-                    <input type="radio" name="select" value="D" style="float:left" ng-model="data.day" ng-checked="backup_type == 'D'"><span>일별</span>
+                    <input type="radio" name="select" value="D" style="float:left" ng-model="data.day" id="backupday" ng-checked="backup_type == 'D'"><label for="backupday">일별</label>
                     <div class="list-inline">
                         <input type="number" class="gn-form-control"  id="day" ng-model="changeday" min="0" ><span class="gn-write">일마다</span>
                     </div>
                 </div>
                 <br>
                 <div>
-                    <input type="radio" name="select" value="W" ng-checked="backup_type == 'W'"><span>요일별</span>
+                    <input type="radio" name="select" value="W" id="selectweek" ng-checked="backup_type == 'W'"><label for="selectweek">요일별</label>
                     <div class="list-inline">
                         <label ng-repeat="days in weeked" >
                             <input type="checkbox" name="week" ng-model="days.checked" value="{{days.checked}}">
