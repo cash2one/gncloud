@@ -6,6 +6,7 @@ ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
 RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
         yum -y update && \
         yum -y install python-pip && \
+        yum -y group install "Development Tools" && \
         yum -y install uwsgi && \
         yum -y install uwsgi-plugin-python && \
         yum -y install python-devel && \
@@ -21,8 +22,7 @@ RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noa
         pip install --upgrade Flask-SQLAlchemy && \
         pip install python-dateutil && \
         pip install requests && \
-        pip install datetime && \
-        pip install MySQL-python
+        pip install datetime
 
 RUN mkdir -p /var/lib/gncloud/KVM
 
