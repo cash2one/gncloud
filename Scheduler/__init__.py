@@ -12,10 +12,9 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 
-print __name__
-
-app.ScheduleController = ScheduleController()
-app.ScheduleController.run()
+if __name__ == 'Scheduler':
+    app.ScheduleController = ScheduleController()
+    app.ScheduleController.run()
 
 # 페이지 리스트
 @app.route("/")
