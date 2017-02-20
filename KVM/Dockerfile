@@ -1,6 +1,6 @@
 FROM centos
 ENV PYTHONUNBUFFERED 1
-ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
+ENV PYTHONPATH=/var/lib/gncloud
 
 # install python
 RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -38,7 +38,7 @@ COPY __init__.py /var/lib/gncloud/KVM/__init__.py
 COPY execute_uwsgi.sh  /
 RUN chmod +x execute_uwsgi.sh
 
-RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
+# RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
 
 EXPOSE 80
 

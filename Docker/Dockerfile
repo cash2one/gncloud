@@ -34,7 +34,7 @@ COPY db          /var/lib/gncloud/Docker/db
 COPY service     /var/lib/gncloud/Docker/service
 COPY util        /var/lib/gncloud/Docker/util
 COPY __init__.py /var/lib/gncloud/Docker/__init__.py
-COPY execute_uwsgi.sh  /
+RUN echo "uwsgi --http-socket :80 --plugin python --wsgi-file /var/lib/gncloud/Docker/__init__.py --logto /var/log/gncloud/docker.log --processes 4 --threads 2 --callable app" > /execute_uwsgi.sh
 RUN chmod +x execute_uwsgi.sh
 
 # RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/

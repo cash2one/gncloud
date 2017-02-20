@@ -34,7 +34,8 @@ COPY db          /var/lib/gncloud/HyperV/db
 COPY service     /var/lib/gncloud/HyperV/service
 COPY util        /var/lib/gncloud/HyperV/util
 COPY __init__.py /var/lib/gncloud/HyperV/__init__.py
-COPY execute_uwsgi.sh  /
+
+RUN echo "uwsgi --http-socket :80 --plugin python --wsgi-file /var/lib/gncloud/HyperV/__init__.py --logto /var/log/gncloud/hyperv.log --processes 4 --threads 2 --callable app" > /execute_uwsgi.sh
 RUN chmod +x execute_uwsgi.sh
 
 EXPOSE 80
