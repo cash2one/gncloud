@@ -1,28 +1,29 @@
-FROM python:2.7
+FROM centos
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
 
 # install python
-RUN apt-get update && \
-        apt-get install -y apt-utils && \
-        apt-get install -y python python-dev python-distribute python-pip && \
-        apt-get install -y libcurl4-openssl-dev libxml2-dev libxslt1-dev python-lxml python-mysqldb libpq-dev && \
-        apt-get install -y libvirt-bin && \
-        pip install -U pip setuptools  && \
+RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+        yum -y update && \
+        yum -y install qemu-kvm libvirt virt-install bridge-utils &&\
+        yum -y install python-pip && \
+        yum -y install python-devel && \
+        yum -y install uwsgi-plugin-python && \
+        yum -y install MySQL-python && \
+        yum -y groupinstall "Development Tools" && \
+        yum -y install uwsgi &&\
+        pip install --upgrade pip && \
         pip install flask && \
         pip install sqlalchemy && \
-        pip install libvirt-python && \
         pip install pexpect && \
         pip install ConfigParser && \
         pip install apscheduler && \
         pip install humanfriendly && \
         pip install logger && \
+        pip install --upgrade Flask-SQLAlchemy && \
         pip install python-dateutil && \
         pip install requests && \
-        pip install datetime && \
-        pip install MySQL-python && \
-        apt-get -y install uwsgi&& \
-        apt-get install -y uwsgi-plugin-python
+        pip install datetime
 
 RUN mkdir -p /var/lib/gncloud/KVM
 
