@@ -111,7 +111,7 @@ def list_sshKey():
 def download_sshKey(id):
     sshkey_path = getsshkey_info(id)
     headers = {"Content-Disposition": "attachment; filename="+sshkey_path.name+".pem"}
-    with open(sshkey_path.path, 'r') as f:
+    with open(sshkey_path.content, 'r') as f:
         body = f.read()
     return make_response((body, headers))
 
