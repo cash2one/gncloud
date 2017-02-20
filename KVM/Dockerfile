@@ -3,27 +3,27 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
 
 # install python
-RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-        yum -y update && \
-        yum -y install qemu-kvm libvirt virt-install bridge-utils &&\
-        yum -y install python-pip && \
-        yum -y install python-devel && \
-        yum -y install uwsgi-plugin-python && \
-        yum -y install MySQL-python && \
-        yum -y groupinstall "Development Tools" && \
-        yum -y install uwsgi &&\
-        pip install --upgrade pip && \
-        pip install flask && \
-        pip install sqlalchemy && \
-        pip install pexpect && \
-        pip install ConfigParser && \
-        pip install apscheduler && \
-        pip install humanfriendly && \
-        pip install logger && \
-        pip install --upgrade Flask-SQLAlchemy && \
-        pip install python-dateutil && \
-        pip install requests && \
-        pip install datetime
+RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN        yum -y update
+RUN        yum -y install qemu-kvm libvirt virt-install bridge-utils
+RUN        yum -y install python-pip
+RUN        yum -y install python-devel
+RUN        yum -y install uwsgi-plugin-python
+RUN        yum -y install MySQL-python
+RUN        yum -y groupinstall "Development Tools"
+RUN        yum -y install uwsgi
+RUN        pip install --upgrade pip
+RUN        pip install flask
+RUN        pip install sqlalchemy
+RUN        pip install pexpect
+RUN        pip install ConfigParser
+RUN        pip install apscheduler
+RUN        pip install humanfriendly
+RUN        pip install logger
+RUN        pip install --upgrade Flask-SQLAlchemy
+RUN        pip install python-dateutil
+RUN        pip install requests
+RUN        pip install datetime
 
 RUN mkdir -p /var/lib/gncloud/KVM
 
