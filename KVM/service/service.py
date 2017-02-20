@@ -257,10 +257,11 @@ def add_user_sshkey(team_code, name):
         path = config.SSHKEY_PATH+ now
 
         result = subprocess.check_output("ssh-keygen -f "+ path +" -P ''", shell=True)
+        list = subprocess.check_output("cat "+path+".pub",shell=True)
         fingerprint = result.split("\n")[4].split(" ")[0]
 
         # db 저장
-        gnSshKeys = GnSshKeys(team_code=team_code, name=name, fingerprint=fingerprint, content=result)
+        gnSshKeys = GnSshKeys(team_code=team_code, name=name, fingerprint=fingerprint, content=list)
         db_session.add(gnSshKeys)
     except:
         db_session.rollback()
