@@ -538,7 +538,7 @@ def saveHostMachine():
 @app.route('/vm/cluster/<id>',methods=['DELETE'])
 def removeCluster(id):
     result = deleteCluster(id,db_session);
-    if result == "True":
+    if result == True:
         return jsonify(status=True, message="success")
     else:
         return jsonify(status=False)
