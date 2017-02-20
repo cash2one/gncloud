@@ -3,7 +3,8 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
 
 # install python
-RUN     yum -y update && \
+RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+        yum -y update && \
         yum -y install qemu-kvm libvirt virt-install bridge-utils &&\
         yum -y install python-pip && \
         yum -y install python-devel && \
