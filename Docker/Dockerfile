@@ -1,4 +1,3 @@
-# install python
 FROM centos
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/var/lib/gncloud
@@ -43,4 +42,4 @@ RUN chmod +x execute_uwsgi.sh
 
 EXPOSE 80
 
-CMD ["/execute_uwsgi.sh"]
+CMD ["/execute_uwsgi.sh","80"]
