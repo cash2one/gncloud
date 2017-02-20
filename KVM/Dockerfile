@@ -1,15 +1,16 @@
-FROM fedora/systemd-systemd
+FROM centos
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
 
 # install python
-RUN     dnf -y update && \
-        dnf -y install python-pip && \
-        dnf -y install python-devel && \
-        dnf -y install uwsgi-plugin-python && \
-        dnf -y install python-devel && \
-        dnf -y install MySQL-python && \
-        dnf -y groupinstall "C Development Tools and Libraries" && \
+RUN     yum -y update && \
+        yum -y install qemu-kvm libvirt virt-install bridge-utils &&\
+        yum -y install python-pip && \
+        yum -y install python-devel && \
+        yum -y install uwsgi-plugin-python && \
+        yum -y install MySQL-python && \
+        yum -y groupinstall "Development Tools" && \
+        yum -y install uwsgi &&\
         pip install --upgrade pip && \
         pip install flask && \
         pip install sqlalchemy && \
@@ -21,8 +22,7 @@ RUN     dnf -y update && \
         pip install --upgrade Flask-SQLAlchemy && \
         pip install python-dateutil && \
         pip install requests && \
-        pip install datetime && \
-        pip install uwsgi
+        pip install datetime
 
 RUN mkdir -p /var/lib/gncloud/KVM
 
