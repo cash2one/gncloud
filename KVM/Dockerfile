@@ -9,6 +9,7 @@ RUN     dnf -y update && \
         dnf -y install uwsgi-plugin-python && \
         dnf -y install python-devel && \
         dnf -y install MySQL-python && \
+        dnf -y groupinstall "Development Tools" && \
         pip install --upgrade pip && \
         pip install flask && \
         pip install sqlalchemy && \
