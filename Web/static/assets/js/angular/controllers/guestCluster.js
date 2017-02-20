@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestClusterCtrl', function ($scope, $http, dateModifyService,$routeParams,Upload) {
+    .controller('guestClusterCtrl', function ($scope, $http, dateModifyService,$routeParams,Upload, notification) {
 
         //****기본 변수 세팅*****//
         $scope.registYn = "N";
@@ -94,11 +94,12 @@ angular
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             })
                 .success(function (data, status, headers, config) {
-                    if (data) {
+                    if (data.status==true) {
                         $scope.getCluster($scope.cluster.id);
                         $scope.getClusterList();
                     }
                     else {
+                        notification.sendMessage("error","인스턴스가 남아 있어 호스트를 삭제 할 수 없습니다 먼저 인스턴스를 모두 삭제해주세요.");
                     }
                 })
                 .error(function (data, status, headers, config) {
@@ -114,10 +115,12 @@ angular
                     headers: {'Content-Type': 'application/json; charset=utf-8'}
                 })
                     .success(function (data, status, headers, config) {
-                        if (data) {
+                        if (data.status == true) {
                             $scope.getClusterList();
+                            notification.sendMessage("success","클러스터가 삭제 되었습니다.");
                         }
                         else {
+                            notification.sendMessage("error","인스턴스가 남아 있어 클러스터를 삭제 할 수 없습니다 먼저 인스턴스를 모두 삭제해주세요.");
                         }
                     })
                     .error(function (data, status, headers, config) {

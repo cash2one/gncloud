@@ -867,9 +867,13 @@ def hostMachineInfo(id,sql_session):
     return sql_session.query(GnCluster).filter(GnCluster.id == id).one()
 
 def deleteHostMachine(id,sql_session):
-    sql_session.query(GnHostMachines).filter(GnHostMachines.id == id).delete()
-    sql_session.query(GnImagePool).filter(GnImagePool.host_id == id).delete()
-    sql_session.commit()
+    if sql_session.query(GnVmMachines).filter(GnVmMachines.host_id == id).all() == "":
+        sql_session.query(GnHostMachines).filter(GnHostMachines.id == id).delete()
+        sql_session.query(GnImagePool).filter(GnImagePool.host_id == id).delete()
+        sql_session.commit()
+        return True
+    else:
+        return False
 
 def updateClusterInfo(id,ip,sql_session):
     try:
@@ -927,11 +931,19 @@ def nginx_reload(cluster_list):
 
 
 def deleteCluster(id,sql_session):
+    count = 0
     cluster_info = sql_session.query(GnCluster).filter(GnCluster.id == id).one()
-    cluster_info.status = config.REMOVE_STATUS
-    sql_session.commit()
-
-
+    host_info = sql_session.query(GnHostMachines).filter(GnHostMachines.type == cluster_info.type).all()
+    for host in host_info:
+        vm_list = sql_session.query(GnVmMachines).filter(GnVmMachines.host_id == host.id).one_or_none()
+        if vm_list != None:
+            count+=1
+    if count != 0:
+        cluster_info.status = config.REMOVE_STATUS
+        sql_session.commit()
+        return True
+    else:
+        return False
 def insertHostInfo(ip,cpu,mem,mem_size,disk,disk_size,type,name,sql_session):
     mem=mem+mem_size
     disk=disk+disk_size
