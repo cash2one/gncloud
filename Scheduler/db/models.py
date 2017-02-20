@@ -4,7 +4,7 @@ __author__ = 'nhcho'
 import datetime
 from sqlalchemy import Column, Integer, String, DateTime, Numeric, BigInteger, ForeignKey
 from sqlalchemy.orm import relationship
-from scheduler.db.database import Base
+from Scheduler.db.database import Base
 
 class GnCluster(Base):
     __tablename__ = "GN_CLUSTER"

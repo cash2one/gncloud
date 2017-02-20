@@ -4,7 +4,7 @@ __author__ = 'yhk'
 import logging
 from logging import handlers
 from config import config
-from util.config import config
+from Scheduler.util.config import config
 
 log_file = ('%s/scheduler.log') % config.LOG_DIR
 
