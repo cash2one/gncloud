@@ -77,7 +77,7 @@ angular
         }
         $scope.change_name = function() {
             if($("#vm_name").val() == "") {
-                alert("이름을 입력해주세요");
+                notification.sendMessage("warning","이름을 입력해주세요");
                 return false;
             }
             $http({
@@ -88,7 +88,7 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        alert("이름이 수정되었습니다");
+                        notification.sendMessage("success","이름이 수정되었습니다");
                         $scope.vm_data.name = $("#vm_name").val();
                     }
                     else {
@@ -104,7 +104,7 @@ angular
 
         $scope.change_tag = function() {
             if($("#vm_tag").val() == "") {
-                alert("태그를 입력해주세요");
+                notification.sendMessage("warning","태그를 입력해주세요");
                 return false;
             }
             $http({
@@ -115,7 +115,7 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        alert("태그가 수정되었습니다");
+                        notification.sendMessage("success","태그가 수정되었습니다");
                         $scope.tag_list = $("#vm_tag").val().split(",");
                     }
                     else {
