@@ -260,7 +260,7 @@ def add_user_sshkey(team_code, name):
         fingerprint = result.split("\n")[4].split(" ")[0]
 
         # db 저장
-        gnSshKeys = GnSshKeys(team_code=team_code, name=name, fingerprint=fingerprint, path=path)
+        gnSshKeys = GnSshKeys(team_code=team_code, name=name, fingerprint=fingerprint, content=result)
         db_session.add(gnSshKeys)
     except:
         db_session.rollback()
