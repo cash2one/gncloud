@@ -40,5 +40,4 @@ RUN chmod +x execute_uwsgi.sh
 
 EXPOSE 80
 
-# CMD ["/execute_uwsgi.sh","80"]
-CMD ["/bin/bash"]
+CMD ["/execute_uwsgi.sh","80"]
