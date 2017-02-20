@@ -497,8 +497,11 @@ def snapshotsdelete(id):
         return jsonify(status=False)
 @app.route('/vm/cluster/node/<id>',methods=['DELETE'])
 def removeHostMachine(id):
-    deleteHostMachine(id,db_session)
-    return jsonify(status=True, message="success")
+    result = deleteHostMachine(id,db_session)
+    if result == "True":
+        return jsonify(status=True, message="success")
+    else:
+        return jsonify(status=False)
 
 @app.route('/vm/cluster',methods=['POST'])
 def saveCluster():
@@ -534,8 +537,11 @@ def saveHostMachine():
 
 @app.route('/vm/cluster/<id>',methods=['DELETE'])
 def removeCluster(id):
-    deleteCluster(id,db_session);
-    return jsonify(status=True, message="success")
+    result = deleteCluster(id,db_session);
+    if result == "True":
+        return jsonify(status=True, message="success")
+    else:
+        return jsonify(status=False)
 
 
 @app.route('/vm/image/<id>',methods=['DELETE'])

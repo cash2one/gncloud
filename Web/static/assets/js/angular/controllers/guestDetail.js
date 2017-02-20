@@ -47,12 +47,12 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        alert("이름이 수정되었습니다");
+                        notification.sendMessage("success","이름이 수정되었습니다");
                         $scope.vm_data.name = $("#vm_name").val();
                     }
                     else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message)
                         }
                     }
                 })
@@ -74,12 +74,12 @@ angular
             })
                 .success(function (data, status, headers, config) {
                     if (data.status == true) {
-                        alert("태그가 수정되었습니다");
+                        notification.sendMessage("success","태그가 수정되었습니다");
                         $scope.tag_list = $("#vm_tag").val().split(",");
                     }
                     else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message)
                         }
                     }
                 })

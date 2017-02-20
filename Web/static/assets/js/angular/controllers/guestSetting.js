@@ -66,6 +66,10 @@ angular
                     if (data.status == true) {
                         notification.sendMessage("success","모니터링 설정이 저장되었습니다.");
                         $scope.List();
+                        $http({
+                            method: 'GET',
+                            url: '/api/scheduler/monitor/restart',
+                        })
 
                     } else {
                         if (data.message != null) {
