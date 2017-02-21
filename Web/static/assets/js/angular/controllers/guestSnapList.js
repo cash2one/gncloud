@@ -161,7 +161,7 @@ angular
                         $scope.snapList();
                     } else {
                         notification.sendMessage("error",name+" 스냅샷 삭제중 오류가 발생하였습니다.");
-                        alert(data.message);
+                        // alert(data.message);
                     }
                 })
                 .error(function(data, status, headers, config) {
@@ -189,7 +189,7 @@ angular
                     $scope.createSnap(data.ord_id, data.snap_id);
                 }else{
                     if(data.value != null) {
-                        alert(data.value)
+                        notification.sendMessage("error",data.value);
                     }
                 }
             })
@@ -282,7 +282,7 @@ angular
                         $scope.dockerImage = {};
                     }else{
                         if(data.message != null){
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 })
@@ -344,7 +344,7 @@ angular
 
                     }else{
                         if(data.message != null){
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 })
@@ -367,7 +367,7 @@ angular
                             $scope.container();
                         }else{
                             if(data.message != null){
-                                alert(data.message);
+                                notification.sendMessage("error",data.message);
                             }
                         }
                     })

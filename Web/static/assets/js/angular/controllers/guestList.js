@@ -31,7 +31,7 @@ angular
 
                     } else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 

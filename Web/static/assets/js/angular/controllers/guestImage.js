@@ -104,7 +104,7 @@ angular
                         $scope.instanceImage = {};
                     }else{
                         if(data.message != null){
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 })
@@ -128,7 +128,7 @@ angular
                             $scope.image();
                         }else{
                             if(data.message != null){
-                                alert(data.message);
+                                notification.sendMessage("error",data.message);
                             }
                         }
                     })
@@ -151,7 +151,7 @@ angular
                         $scope.instanceImage = data.info;
                     }else{
                         if(data.message != null){
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 })
@@ -206,7 +206,7 @@ angular
                         $scope.dockerImage = {};
                     }else{
                         if(data.message != null){
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 })
@@ -268,7 +268,7 @@ angular
 
                     }else{
                         if(data.message != null){
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 })
@@ -291,7 +291,7 @@ angular
                             $scope.contain();
                         }else{
                             if(data.message != null){
-                                alert(data.message);
+                                notification.sendMessage("error",data.message);
                             }
                         }
                     })

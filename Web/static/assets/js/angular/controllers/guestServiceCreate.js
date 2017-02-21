@@ -13,7 +13,7 @@ angular
                 }
                 else {
                     if(data.message != null) {
-                        alert(data.message)
+                        notification.sendMessage("error",data.message);
                     }
                 }
             })
@@ -34,7 +34,7 @@ angular
                 }
                 else {
                     if(data.message != null) {
-                        alert(data.message)
+                        notification.sendMessage("error",data.message);
                     }
                 }
             })
@@ -55,7 +55,7 @@ angular
                         }
                         else {
                             if(data.message != null) {
-                                alert(data.message)
+                                notification.sendMessage("error",data.message);
                             }
                         }
                     })
@@ -75,11 +75,11 @@ angular
             })
                 .success(function (data) {
                     if (data.status == true) {
-                        alert("SSH key 추가되었습니다");
+                        notification.sendMessage("success","SSH key 추가되었습니다");
                         $scope.getkeys();
                     } else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 });

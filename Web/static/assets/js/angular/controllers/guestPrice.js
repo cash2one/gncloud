@@ -68,7 +68,7 @@ angular
                             notification.sendMessage("success","삭제 되었습니다.");
                             $scope.price();
                         } else {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     })
                     .error(function(data, status, headers, config) {

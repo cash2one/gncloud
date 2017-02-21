@@ -13,7 +13,7 @@ angular
 
                     } else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -52,7 +52,7 @@ angular
 
                     } else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -103,7 +103,7 @@ angular
                         $scope.won_list=teamArr;
                         $scope.won_list.total = data.list.length;
                     }else{
-                        alert("error");
+                        notification.sendMessage("error",data.message);
                     }
                 })
                 .error(function (data, status, headers, config) {
