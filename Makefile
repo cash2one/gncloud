@@ -18,9 +18,9 @@ manager:
 scheduler:
 	cd /var/lib/gncloud/Scheduler; docker build -t scheduler .
 
-front:
-	cd /var/lib/gncloud/Web; docker build -t front-service .
+web-front:
+	cd /var/lib/gncloud/Web; docker build -t web-front .
 
 clean:
-	docker rmi kvm-controller hyperv-controller docker-controller manager-controller scheduler front-service
+	docker rmi kvm-controller hyperv-controller docker-controller manager-controller scheduler web-front
 

@@ -1,16 +1,43 @@
 version: '2'
- services:
-   db:
-     image: postgres
-   web:
-     build: .
-     command: python manage.py runserver 0.0.0.0:8000
-     volumes:
-       - .:/code
-     ports:
-       - "8000:8000"
-     depends_on:
-       - db
+  db:
+    image: mysql
+    volumes:
+      - /var/lib/mysql:/var/lib/mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: gncloud
+      MYSQL_DATABASE: gncloud
+      MYSQL_USER: gncloud
+      MYSQL_PASSWORD: gncloud
+
+  web:
+    image: web-front
+    command: nginx -g daemon off;
+    volumes:
+      - /etc/nginx:/etc/nginx
+      - /var/log/nginx:/var/log/nginx
+    ports:
+      - "80:80"
+
+  services:
+    manager:
+      image: manager-controller
+      volumes:
+        - /var/log/gncloud:/var/log/gncloud
+        - /root/.ssh:/root/.ssh
+      ports:
+        - "8080:80"
+      restart: always
+      environment:
+        IP: 192.168.1.101
+        PORT: 3306
+        USER: gncloud
+        PASS: gncloud
+        DBNAME: gncloud
+      depends_on:
+        - db
 
        # ssh-keygen -f ~/.ssh/id_rsa
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.2
@@ -18,7 +45,7 @@ version: '2'
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.202
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.203
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.204
-       # docker run -d --name front-service -p 80:80 -v /var/log/nginx:/var/log/nginx -v /etc/nginx:/etc/nginx front-service
+       # docker run -d --name web-front -p 80:80 -v /var/log/nginx:/var/log/nginx -v /etc/nginx:/etc/nginx web-front
        # docker run -d --name manager-controller -p 8080:80 -v /var/log/gncloud:/var/log/gncloud -v /root/.ssh:/root/.ssh manager-controller
        # docker run -d --name kvm-controller -p 8081:80 -v /var/log/gncloud:/var/log/gncloud -v /root/.ssh:/root/.ssh kvm-controller
        # docker run -d --name hyperv-controller -p 8082:80 -v /var/log/gncloud:/var/log/gncloud -v /root/.ssh:/root/.ssh hyperv-controller
