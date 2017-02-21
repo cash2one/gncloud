@@ -1,26 +1,28 @@
-FROM python:2.7
+FROM centos
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/var/lib/gncloud
 
 # install python
-RUN apt-get update && \
-        apt-get install -y apt-utils && \
-        apt-get install -y python python-dev python-distribute python-pip && \
-        apt-get install -y libcurl4-openssl-dev libxml2-dev libxslt1-dev python-lxml python-mysqldb libpq-dev && \
-        pip install -U pip setuptools  && \
-        pip install flask && \
-        pip install sqlalchemy && \
-        pip install pexpect && \
-        pip install ConfigParser && \
-        pip install apscheduler && \
-        pip install humanfriendly && \
-        pip install logger && \
-        pip install python-dateutil && \
-        pip install requests && \
-        pip install datetime && \
-        pip install MySQL-python && \
-        apt-get -y install uwsgi&& \
-        apt-get install -y uwsgi-plugin-python
+RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN        yum -y update
+RUN        yum -y install python-pip
+RUN        yum -y install python-devel
+RUN        yum -y install uwsgi-plugin-python
+RUN        yum -y install MySQL-python
+RUN        yum -y groupinstall "Development Tools"
+RUN        yum -y install uwsgi
+RUN        pip install --upgrade pip
+RUN        pip install flask
+RUN        pip install sqlalchemy
+RUN        pip install pexpect
+RUN        pip install ConfigParser
+RUN        pip install apscheduler
+RUN        pip install humanfriendly
+RUN        pip install logger
+RUN        pip install --upgrade Flask-SQLAlchemy
+RUN        pip install python-dateutil
+RUN        pip install requests
+RUN        pip install datetime
 
 RUN mkdir -p /var/lib/gncloud/HyperV
 
@@ -32,11 +34,11 @@ COPY db          /var/lib/gncloud/Scheduler/db
 COPY service     /var/lib/gncloud/Scheduler/service
 COPY util        /var/lib/gncloud/Scheduler/util
 COPY __init__.py /var/lib/gncloud/Scheduler/__init__.py
-COPY execute_uwsgi.sh  /
-RUN chmod +x execute_uwsgi.sh
 
-RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
-RUN cp -R /usr/local/lib/python2.7/* /usr/lib/python2.7/.
+RUN echo "#!/bin/bash" > /execute_uwsgi.sh
+RUN echo "uwsgi --http-socket :80 --plugin python --wsgi-file /var/lib/gncloud/Scheduler/__init__.py --logto /var/log/gncloud/scheduler.log --enable-threads --callable app" >> /execute_uwsgi.sh
+
+RUN chmod +x /execute_uwsgi.sh
 
 EXPOSE 80
 
