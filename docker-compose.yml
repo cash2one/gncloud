@@ -15,7 +15,7 @@ services:
 
   web:
     image: web-front
-    command: nginx -g daemon off;
+    command: nginx -g daemon off
     restart: always
     volumes:
       - /etc/nginx:/etc/nginx
