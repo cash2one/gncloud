@@ -1,6 +1,6 @@
 FROM centos
 ENV PYTHONUNBUFFERED 1
-ENV PYTHONPATH=/var/lib/gncloud:/usr/local/lib/python2.7:/usr/lib/python2.7
+ENV PYTHONPATH=/var/lib/gncloud
 
 # install python
 RUN     rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -26,8 +26,8 @@ RUN        pip install requests
 RUN        pip install datetime
 
 RUN mkdir -p /var/lib/gncloud/KVM
-
 RUN mkdir -p /var/log/gncloud
+RUN mkdir -p /data/kvm/sshkeys
 
 COPY conf        /var/lib/gncloud/KVM/conf
 COPY db          /var/lib/gncloud/KVM/db
@@ -35,10 +35,10 @@ COPY service     /var/lib/gncloud/KVM/service
 COPY util        /var/lib/gncloud/KVM/util
 COPY templates   /var/lib/gncloud/KVM/templates
 COPY __init__.py /var/lib/gncloud/KVM/__init__.py
-COPY execute_uwsgi.sh  /
-RUN chmod +x execute_uwsgi.sh
 
-RUN ln -s /usr/lib/python2.7/plat-*/_sysconfigdata_nd.py /usr/lib/python2.7/
+RUN echo "#!/bin/bash" > /execute_uwsgi.sh
+RUN echo "uwsgi --http-socket :80 --plugin python --wsgi-file /var/lib/gncloud/KVM/__init__.py --logto /var/log/gncloud/kvm.log --processes 4 --threads 2 --callable app" >> /execute_uwsgi.sh
+RUN chmod +x /execute_uwsgi.sh
 
 EXPOSE 80
 
