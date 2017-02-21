@@ -26,8 +26,8 @@ RUN        pip install requests
 RUN        pip install datetime
 
 RUN mkdir -p /var/lib/gncloud/KVM
-
 RUN mkdir -p /var/log/gncloud
+RUN mkdir -p /data/kvm/sshkeys
 
 COPY conf        /var/lib/gncloud/KVM/conf
 COPY db          /var/lib/gncloud/KVM/db

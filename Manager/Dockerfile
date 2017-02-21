@@ -25,8 +25,8 @@ RUN        pip install requests
 RUN        pip install datetime
 
 RUN mkdir -p /var/lib/gncloud/HyperV
-
 RUN mkdir -p /var/log/gncloud
+
 
 COPY conf        /var/lib/gncloud/Manager/conf
 COPY db          /var/lib/gncloud/Manager/db
