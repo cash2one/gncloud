@@ -5,7 +5,7 @@
     <div class="col-xs-12 col-sm-9 gn-detail-title">
         <div class="row">
             <div class="col-xs-12">
-                <h2 data-toggle="modal" data-target="#name-Modal" class="click"><span ng-bind="vm_data.name"></span></h2>
+                <h2 data-toggle="modal" data-target="#name-Modal" class="click" ng-disabled="user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' && user_info.authortiy != 'owner'"><span ng-bind="vm_data.name"></span></h2>
     
                 <!-- Modal : 이름 수정 -->
                 <div class="modal fade" id="name-Modal" role="dialog">
@@ -51,7 +51,7 @@
             <!--태그 list-->
             <ul class="col-xs-12 gn-tag-group">
                 <li class="gn-pensil">
-                    <img src="/gn_images/detail_tag_pencil.png" alt="태그 수정" data-toggle="modal" data-target="#tag-modal">
+                    <img src="/gn_images/detail_tag_pencil.png" alt="태그 수정" data-toggle="modal" data-target="#tag-modal" ng-disabled="user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' && user_info.authortiy != 'owner'">
                 </li>
                 <li ng-repeat="item in tag_list track by $index">
                     <span ng-show="item.length > 1">#{{ item }}</span>
@@ -184,7 +184,7 @@
     <div class="gn-margin-box">
         <h2>삭제</h2>
         <p class="gn-lead">해당 인스턴스 및 관련된 모든 백업이 삭제되며, 모든 데이터는 복구할 수 없습니다.<br>정말 삭제 하시겠습니까?</p>
-        <button type="button" class="btn btn-delete btn-lg" data-toggle="modal" data-target="#modal-modi2" >삭제</button>
+        <button type="button" class="btn btn-delete btn-lg" data-toggle="modal" data-target="#modal-modi2" ng-disabled="user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' && user_info.authortiy != 'owner'" >삭제</button>
     </div>
 </div>
 <!-- modal -->
@@ -201,7 +201,7 @@
 
             </div>
             <div class="modal-footer gn-modal-footer">
-                <button type="submit" class="btn btn-delete btn-block" data-dismiss="modal" ng-click="statusUpdate()">삭제</button>
+                <button type="submit" class="btn btn-delete btn-block" data-dismiss="modal" ng-click="statusUpdate()" ng-disabled="user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' && user_info.authortiy != 'owner'">삭제</button>
             </div>
         </div>
     </div>
