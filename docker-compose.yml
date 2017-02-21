@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    image: web-front
+    image: gncloud/gncloud-web
     restart: always
     volumes:
       - /etc/nginx:/etc/nginx
@@ -16,9 +16,6 @@ services:
       - docker
       - hyperv
       - scheduler
-    networks:
-      - front
-      - back
 
   db:
     image: mysql
@@ -30,12 +27,9 @@ services:
       MYSQL_DATABASE: gncloud
       MYSQL_USER: gncloud
       MYSQL_PASSWORD: gncloud
-    networks:
-      - front
-      - back
 
   manager:
-    image: manager-controller
+    image: gncloud/gncloud-manager
     volumes:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
@@ -52,11 +46,10 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
-    networks:
-      - back
+
 
   kvm:
-    image: kvm-controller
+    image: gncloud/gncloud-kvm
     volumes:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
@@ -73,11 +66,10 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
-    networks:
-      - back
+
 
   hyperv:
-    image: hyperv-controller
+    image: gncloud/gncloud-hyperv
     volumes:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
@@ -94,11 +86,10 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
-    networks:
-      - back
+
 
   docker:
-    image: docker-controller
+    image: gncloud/gncloud-docker
     volumes:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
@@ -115,11 +106,10 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
-    networks:
-      - back
+
 
   scheduler:
-    image: scheduler
+    image: gncloud/gncloud-scheduler
     volumes:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
@@ -136,14 +126,11 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
-    networks:
-      - back
+
 
 networks:
   front:
     driver: brigde
-  back:
-    driver: host
 
        # ssh-keygen -f ~/.ssh/id_rsa
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.2
