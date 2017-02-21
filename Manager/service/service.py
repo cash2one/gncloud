@@ -260,12 +260,9 @@ def vm_list_snap(sql_session,owner,author_id ,team_code):
             vmMachine.disk = convertHumanFriend(vmMachine.disk)
             vmMachine.memory = convertHumanFriend(vmMachine.memory)
     else:
-        list=""
-    retryCheck = False
-    if not all((e.status != config.STARTING_STATUS and e.status != config.DELETING_STATUS) for e in list):
-        retryCheck = True
+        list_q=""
 
-    return {"guest_list":list,"retryCheck":retryCheck}
+    return {"guest_list":list_q}
 
 def vm_info(sql_session, id):
     vol_info={}
