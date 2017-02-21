@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestServiceDetailCtrl', function ($scope, $http, $routeParams, $sce, $timeout,notification) {
+    .controller('guestServiceDetailCtrl', function ($scope, $http, $routeParams, $sce, $timeout,notification, $rootScope) {
 
         $scope.modify_data = {};
 
@@ -264,5 +264,9 @@ angular
         }
 
         $scope.getChartJs();
+        $scope.user_info = $rootScope.user_info;
+        $rootScope.$on('init', function () {
+            $scope.user_info = $rootScope.user_info;
+        });
 
     });
