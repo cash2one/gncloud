@@ -39,11 +39,6 @@ services:
     environment:
       WSGI_PROCESSES: 4
       WSGI_THREADS: 2
-      IP: 192.168.1.101
-      PORT: 3306
-      USER: gncloud
-      PASS: gncloud
-      DBNAME: gncloud
     depends_on:
       - db
 
@@ -59,11 +54,6 @@ services:
     environment:
       WSGI_PROCESSES: 4
       WSGI_THREADS: 2
-      IP: 192.168.1.101
-      PORT: 3306
-      USER: gncloud
-      PASS: gncloud
-      DBNAME: gncloud
     depends_on:
       - db
 
@@ -79,11 +69,6 @@ services:
     environment:
       WSGI_PROCESSES: 4
       WSGI_THREADS: 2
-      IP: 192.168.1.101
-      PORT: 3306
-      USER: gncloud
-      PASS: gncloud
-      DBNAME: gncloud
     depends_on:
       - db
 
@@ -99,11 +84,6 @@ services:
     environment:
       WSGI_PROCESSES: 4
       WSGI_THREADS: 2
-      IP: 192.168.1.101
-      PORT: 3306
-      USER: gncloud
-      PASS: gncloud
-      DBNAME: gncloud
     depends_on:
       - db
 
@@ -119,11 +99,6 @@ services:
     environment:
       WSGI_PROCESSES: 4
       WSGI_THREADS: 2
-      IP: 192.168.1.101
-      PORT: 3306
-      USER: gncloud
-      PASS: gncloud
-      DBNAME: gncloud
     depends_on:
       - db
 
