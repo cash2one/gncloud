@@ -12,7 +12,7 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
 
-if __name__ == 'Scheduler':
+if __name__ == 'uwsgi_file__var_lib_gncloud_Scheduler___init__':
     app.ScheduleController = ScheduleController()
     app.ScheduleController.run()
 
