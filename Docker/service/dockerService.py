@@ -49,7 +49,7 @@ class DockerService(object):
             command += " --limit-cpu %s" % cpu
             command += " --limit-memory %s" % memory
             command += " --replicas %s" % config.REPLICAS
-            command += " --constraint 'node.hostname != manager'"
+            #command += " --constraint 'node.hostname != manager'"
             command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
             #command = '%s --name="%s"' % (command, docker_name)
             postfix=''
@@ -116,7 +116,7 @@ class DockerService(object):
             command += " --limit-cpu %s" % cpu
             command += " --limit-memory %s" % memory
             command += " --replicas %s" % config.REPLICAS
-            command += " --constraint 'node.hostname != manager'"
+            #command += " --constraint 'node.hostname != manager'"
             command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
             mount_count = 1
             postfix=''
