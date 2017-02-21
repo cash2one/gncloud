@@ -575,7 +575,7 @@ def getQuotaOfTeam(team_code, sql_session):
                                  .filter(GnVmMachines.status != config.REMOVE_STATUS) \
                                  .filter(GnVmMachines.type != "docker")\
                                  .filter(GnVmMachines.status != config.ERROR_STATUS) \
-                                 .group_by(GnVmMachines.author_id)\
+                                 .group_by(GnVmMachines.author_id, GnUser.user_name, GnTeam.team_name)\
                                  .order_by(func.count().desc())
     if team_code != "000":
         user_list_query = user_list_query.filter(GnVmMachines.team_code == team_code)
@@ -587,7 +587,7 @@ def getQuotaOfTeam(team_code, sql_session):
                                   .join(GnTeam, GnVmMachines.team_code == GnTeam.team_code) \
                                   .filter(GnVmMachines.status != config.REMOVE_STATUS) \
                                   .filter(GnVmMachines.status != config.ERROR_STATUS) \
-                                  .group_by(GnVmImages.id) \
+                                  .group_by(GnVmImages.id, GnVmImages.name,GnTeam.team_name) \
                                   .order_by(func.count().desc())
     if team_code != "000":
         image_type_query = image_type_query.filter(GnVmMachines.team_code == team_code)
