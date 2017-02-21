@@ -41,7 +41,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
-        setSsh(host_info.ip,ssh_info.pub,ssh_info.name, ip, image_info.ssh_id)
+        setSsh(host_info.ip,ssh_info.pub,ssh_info.org,ssh_info.name, ip, image_info.ssh_id)
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id
@@ -78,10 +78,13 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         sql_session.commit()
         return False
 
-def setSsh(host_ip, pub,name, ip, ssh_id):
+def setSsh(host_ip, pub,org,name, ip, ssh_id):
     try:
-        f = open("/data/kvm/sshkeys/"+name, 'w')
+        f = open("/data/kvm/sshkeys/"+name+".pub", 'w')
         f.write(pub)
+        f.close()
+        f = open("/data/kvm/sshkeys/"+name, 'w')
+        f.write(org)
         f.close()
         print(":processing set sshkey!!!")
         s = pxssh.pxssh(timeout=1200)
