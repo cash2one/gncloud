@@ -5,8 +5,8 @@
     <div class="col-xs-12 col-sm-9 gn-detail-title">
         <div class="row">
             <div class="col-xs-12">
-                <h2 data-toggle="modal" data-target="#name-Modal" ng-class="{'click':user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' || user_info.authortiy != 'owner'}"
-                    ng-disabled="user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' || user_info.authortiy != 'owner'"><span ng-bind="vm_data.name"></span></h2>
+                <h2 data-toggle="modal" data-target="#name-Modal" ng-class="{'click':user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' && user_info.authortiy != 'owner'}"
+                    ng-disabled="user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' && user_info.authortiy != 'owner'"><span ng-bind="vm_data.name"></span></h2>
     
                 <!-- Modal : 이름 수정 -->
                 <div class="modal fade" id="name-Modal" role="dialog">
@@ -165,7 +165,7 @@
         <label class="gn-lead">백업주기는 시스템 관리자가 설정합니다.</label>
         <div class="checkbox-switch">
             <form>
-                <switch id="data.backup" name="data.backup" ng-model="vm_data.backup_confirm" on="ON" off="OFF" class="wide btn" ng-change="backupchange(vm_data.backup_confirm)" ng-disabled="user_info.user_id != id_info.user_id"></switch>
+                <switch id="data.backup" name="data.backup" ng-model="vm_data.backup_confirm" on="ON" off="OFF" class="wide btn" ng-change="backupchange(vm_data.backup_confirm)" ng-disabled="user_info.user_id != id_info.user_id && user_info.authority != 'sysowner' && user_info.authortiy != 'owner'"></switch>
 
             </form>
         </div>
