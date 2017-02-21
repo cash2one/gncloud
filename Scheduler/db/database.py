@@ -9,20 +9,8 @@ from Scheduler.util.config import config
 
 import os
 
-ip=os.environ['IP']
-user=os.environ['USER']
-pswd=os.environ['PASS']
-database_name=os.environ['DBNAME']
-port=os.environ['PORT']
 
-if port != '':
-    port = ':%s' % port
-if ip != '':
-    DB_URL = 'mysql://' + user + ':' + pswd + '@' + ip + port + '/' + database_name + '?charset=utf8'
-else:
-    DB_URL = config.DB_URL
-
-engine = create_engine(DB_URL, convert_unicode=True)
+engine = create_engine(config.DB_URL, convert_unicode=True)
 
 
 db_session = scoped_session(sessionmaker(autocommit=False,
