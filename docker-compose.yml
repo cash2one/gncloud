@@ -1,27 +1,27 @@
 version: '2'
-  db:
-    image: mysql
-    volumes:
-      - /var/lib/mysql:/var/lib/mysql
-    restart: always
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: gncloud
-      MYSQL_DATABASE: gncloud
-      MYSQL_USER: gncloud
-      MYSQL_PASSWORD: gncloud
-
-  web:
-    image: web-front
-    command: nginx -g daemon off;
-    volumes:
-      - /etc/nginx:/etc/nginx
-      - /var/log/nginx:/var/log/nginx
-    ports:
-      - "80:80"
-
   services:
+    db:
+      image: mysql
+      volumes:
+        - /var/lib/mysql:/var/lib/mysql
+      restart: always
+      ports:
+        - "3306:3306"
+      environment:
+        MYSQL_ROOT_PASSWORD: gncloud
+        MYSQL_DATABASE: gncloud
+        MYSQL_USER: gncloud
+        MYSQL_PASSWORD: gncloud
+
+    web:
+      image: web-front
+      command: nginx -g daemon off;
+      volumes:
+        - /etc/nginx:/etc/nginx
+        - /var/log/nginx:/var/log/nginx
+      ports:
+        - "80:80"
+
     manager:
       image: manager-controller
       volumes:
