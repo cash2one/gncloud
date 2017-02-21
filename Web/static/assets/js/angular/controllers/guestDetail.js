@@ -28,7 +28,7 @@ angular
                     $scope.vm_data.backup_confirm=0;
                 }
                 else {
-                    alert(data.message)
+                    notification.sendMessage("error",data.message);
                 }
             })
             .error(function (data, status, headers, config) {
@@ -106,7 +106,7 @@ angular
                         window.location.href='#/guestList'
                     } else {
                         if(data.value != null) {
-                            alert(data.value)
+                            notification.sendMessage("error",data.value);
                         }
                     }
                 });

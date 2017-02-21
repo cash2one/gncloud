@@ -27,7 +27,7 @@ angular
 
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -46,7 +46,7 @@ angular
                         $scope.noticeList(page);
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -66,7 +66,7 @@ angular
                         $scope.data.title="";$scope.data.text="";
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -86,7 +86,7 @@ angular
                         $scope.noticeList($scope.data.page);
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -107,7 +107,7 @@ angular
 
                         }else {
                             if (data.message != null) {
-                                alert(data.message);
+                                notification.sendMessage("error",data.message);
                             }
                         }
 

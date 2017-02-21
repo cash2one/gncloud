@@ -31,7 +31,7 @@ angular
                     $scope.nodelist($scope.vm_data.id);
                 }
                 else {
-                    alert(data.message)
+                    notification.sendMessage("error",data.message);
                 }
             })
             .error(function (data, status, headers, config) {
@@ -93,7 +93,7 @@ angular
                     }
                     else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 })
@@ -120,7 +120,7 @@ angular
                     }
                     else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 })
@@ -146,7 +146,7 @@ angular
                         window.location.href='#/guestServiceList'
                     } else {
                         if(data.value != null) {
-                            alert(data.value)
+                            notification.sendMessage("error",data.value);
                         }
                     }
                 });

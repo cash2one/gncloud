@@ -79,7 +79,7 @@ angular
                             $scope.data_list.splice(index, 1);
                         } else {
                             if(data.message != null) {
-                                alert(data.message)
+                                notification.sendMessage("error",data.message);
                             }
                         }
                     });

@@ -21,7 +21,7 @@ angular
                     //alert($scope.guest_list.id);
 
                 } else {
-                    alert(data.message);
+                    notification.sendMessage("error",data.message);
                 }
 
             })
@@ -45,11 +45,11 @@ angular
             })
                 .success(function (data) {
                     if (data.status == true) {
-                        alert("가입이 신청이 완료되었습니다");
+                        notification.sendMessage("success","가입이 신청이 완료되었습니다");
                         location.href="/main/#/guestReadyTeam"
 
                     } else {
-                        alert("이미 가입신청이 된 상태입니다.");
+                        notification.sendMessage("warning","이미 가입신청이 된 상태입니다.");
                     }
                 });
         }

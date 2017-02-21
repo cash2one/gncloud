@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestCreateTeamCtrl', function ($scope, $http, $window) {
+    .controller('guestCreateTeamCtrl', function ($scope, $http, $window, notification) {
         //탭이동
         $("#i").hide();
         $("#t").hide();
@@ -15,7 +15,7 @@ angular
             })
                 .success(function(data) {
                     if (data.test == 'success') {
-                        alert("팀생성이 완료되었습니다.");
+                        notification.sendMessage("success","팀생성이 완료되었습니다.");
                         //$rootScope.user_info.team_code = $scope.data.team_code;
                         //$rootScope.$emit('init');
                         $window.location.href = "/main/#/dashboard";

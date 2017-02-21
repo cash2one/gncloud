@@ -13,7 +13,7 @@ angular
                     $scope.teamname = data.list;//유저팀에 대한 정보
 
                 } else {
-                    alert(data.message);
+                    notification.sendMessage("error",data.message);
                 }
 
             })
@@ -37,7 +37,7 @@ angular
                         $scope.team_list = newArr; // 팀원들에 대한 정보
                         $scope.team_list.total = data.list.info
                     } else {
-                        alert(data.message);
+                        notification.sendMessage("error",data.message);
                     }
 
                 })
@@ -90,7 +90,7 @@ angular
                         $scope.won_list = teamArr;
                         $scope.won_list.total = data.list.length;
                     } else {
-                        alert("error");
+                        notification.sendMessage("error",data.message);
                     }
                 });
         }
@@ -208,11 +208,11 @@ angular
                         $scope.resose();
                     }
                     else if(data.status==false){
-                        alert(data.message);
+                        notification.sendMessage("error",data.message);
                     }
                 })
                 .error(function(data, status, headers, config) {
-                        alert("");
+                    notification.sendMessage("error",data.message);
                 });
         }
         //******************************팀 모달 *********************//
@@ -244,7 +244,7 @@ angular
 
                     } else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -290,7 +290,7 @@ angular
                         $scope.total = data.list;
                     }
                     else {
-                        alert(data.message)
+                        notification.sendMessage("error",data.message);
                     }
                 })
                 .error(function (data, status, headers, config) {

@@ -31,7 +31,7 @@ angular
                         $scope.this_page = data.list.page*10;
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -52,7 +52,7 @@ angular
                         $scope.checkid = id;
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -72,7 +72,7 @@ angular
                         $scope.data.title="";$scope.data.text="";
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -93,7 +93,7 @@ angular
                     }else {
                         $scope.check_list = data.showData;
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -113,7 +113,7 @@ angular
                         $scope.data.text="";
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -132,7 +132,7 @@ angular
                         $scope.data.text="";
                     }else {
                         if (data.message != null) {
-                            alert(data.message);
+                            notification.sendMessage("error",data.message);
                         }
                     }
 
@@ -153,7 +153,7 @@ angular
 
                         }else {
                             if (data.message != null) {
-                                alert(data.message);
+                                notification.sendMessage("error",data.message);
                             }
                         }
 
@@ -175,7 +175,7 @@ angular
 
                         }else {
                             if (data.message != null) {
-                                alert(data.message);
+                                notification.sendMessage("error",data.message);
                             }
                         }
 

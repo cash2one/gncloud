@@ -23,7 +23,7 @@ angular
                         $scope.next_page = page + 1;
                     } else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 });
@@ -57,7 +57,7 @@ angular
 
                     } else {
                         if(data.message != null) {
-                            alert(data.message)
+                            notification.sendMessage("error",data.message);
                         }
                     }
                 });

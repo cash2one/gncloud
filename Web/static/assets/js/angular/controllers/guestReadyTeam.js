@@ -21,7 +21,7 @@ angular
 
                 } else {
 
-                    alert(data.message);
+                    notification.sendMessage("error",data.message);
                 }
 
             })
@@ -37,10 +37,10 @@ angular
             })
                 .success(function(data, status, headers, config) {
                     if (data.status == true) {
-                        alert("가입취소되었습니다");
+                        notification.sendMessage("warning","가입취소되었습니다");
                         location.href="/main/#/guestSelectTeam"
                     } else {
-                        alert(data.message);
+                        notification.sendMessage("error",data.message);
                     }
                 })
                 .error(function(data, status, headers, config) {
