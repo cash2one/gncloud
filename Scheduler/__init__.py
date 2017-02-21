@@ -19,7 +19,7 @@ if __name__ == 'Scheduler':
 # 페이지 리스트
 @app.route("/")
 def index():
-    return jsonify(status=True, message='서비스 정상 작동')
+    return jsonify(status=True, message='서비스 정상 작동' )
 
 @app.route('/service/isAlive', methods=['GET'])
 def index_isalive():
