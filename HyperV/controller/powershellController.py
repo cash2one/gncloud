@@ -35,6 +35,7 @@ def hvm_create(id, sql_session):
     user_name = None
     host_port = config.AGENT_PORT
     try:
+        print ('id============%s' % id)
         vm_id = id
         vm_info =sql_session.query(GnVmMachines).filter(GnVmMachines.id == vm_id).first()
 
@@ -49,9 +50,11 @@ def hvm_create(id, sql_session):
         else:
             host_ip = host_machine.ip
 
+        print ('1111')
         #image_pool = sql_session.query(GnImagesPool).filter(GnImagesPool.host_id == host_id).first()
         ps = PowerShell(host_ip, host_port, ps_exec)
 
+        print ('2222')
         base_image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).first()
 
         source_path = "/base/"
@@ -69,6 +72,7 @@ def hvm_create(id, sql_session):
         SWITCHNAME = "out"
         new_vm = ps.new_vm(Name=internal_name, MemoryStartupBytes=str(vm_info.memory), Path=config.MANAGER_PATH,
                            SwitchName=SWITCHNAME)
+        print ('3333')
         if new_vm is not None:
             # 새 머신에서 추가적인 설정을 한다 (Set-VM)
             set_vm = ps.set_vm(VMId=new_vm['VMId'], ProcessorCount=str(vm_info.cpu), MemoryMaximumBytes=str(vm_info.memory))
@@ -173,7 +177,7 @@ def hvm_create(id, sql_session):
         vm_info.status = "Error"
         sql_session.commit()
         # sql_session.remove()
-        return True
+        return False
 
 
 def hvm_snapshot():
