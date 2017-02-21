@@ -63,8 +63,7 @@ def hvm_create(id, sql_session):
         os_ver = base_image_info.os_ver
         os_sub_ver = base_image_info.os_subver
         os_bit = base_image_info.os_bit
-        internal_name = base_image_info.os_ver + '_' + base_image_info.os_subver + '_' + \
-                        base_image_info.os_bit + '_' + vm_id
+        internal_name = base_image_info.os_ver + '_' + base_image_info.os_bit + '_' + vm_id
 
         SWITCHNAME = "out"
         print ('internal_name=%s, memory=%s, path=%s' %(internal_name, vm_info.memory, config.MANAGER_PATH))
