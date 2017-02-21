@@ -48,7 +48,7 @@ class PowerShell(object):
         #script += " -Generation " + str(self.GENERATION_TYPE_2)
         script += " -Generation " + str(self.GENERATION_TYPE_1) #1세대 통일하여 생성
         script += self.CONVERTTO_JSON
-        # print script
+        print 'script=%s' % script
         return self.send(script)
 
     # 가상머신 설정
