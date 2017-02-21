@@ -289,19 +289,17 @@ AUTO_INCREMENT=131
 ;
 
 CREATE TABLE `GN_SSH_KEYS` (
-	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`team_code` VARCHAR(50) NOT NULL DEFAULT '',
-	`name` VARCHAR(100) NOT NULL DEFAULT '',
-	`fingerprint` VARCHAR(50) NULL DEFAULT NULL,
-	`download_yn` VARCHAR(1) NOT NULL DEFAULT 'N',
-	`create_time` TIMESTAMP NULL DEFAULT NULL,
-	`path` VARCHAR(100) NOT NULL DEFAULT '',
-	PRIMARY KEY (`id`)
-)
-COLLATE='utf8_general_ci'
-ENGINE=InnoDB
-AUTO_INCREMENT=1231313253
-;
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `team_code` varchar(50) NOT NULL DEFAULT '',
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `fingerprint` varchar(50) DEFAULT NULL,
+  `download_yn` varchar(1) NOT NULL DEFAULT 'N',
+  `create_time` timestamp NULL DEFAULT NULL,
+  `pub` text,
+  `org` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1231313260 DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `GN_SSH_KEYS_MAPPING` (
 	`ssh_key_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,

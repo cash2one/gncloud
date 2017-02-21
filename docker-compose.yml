@@ -1,4 +1,5 @@
 version: '2'
+services:
   db:
     image: mysql
     volumes:
@@ -21,90 +22,89 @@ version: '2'
     ports:
       - "80:80"
 
-  services:
-    manager:
-      image: manager-controller
-      volumes:
-        - /var/log/gncloud:/var/log/gncloud
-        - /root/.ssh:/root/.ssh
-      ports:
-        - "8080:80"
-      restart: always
-      environment:
-        IP: 192.168.1.101
-        PORT: 3306
-        USER: gncloud
-        PASS: gncloud
-        DBNAME: gncloud
-      depends_on:
-        - db
-    kvm:
-      image: kvm-controller
-      volumes:
-        - /var/log/gncloud:/var/log/gncloud
-        - /root/.ssh:/root/.ssh
-      ports:
-        - "8080:80"
-      restart: always
-      environment:
-        IP: 192.168.1.101
-        PORT: 3306
-        USER: gncloud
-        PASS: gncloud
-        DBNAME: gncloud
-      depends_on:
-        - db
+  manager:
+    image: manager-controller
+    volumes:
+      - /var/log/gncloud:/var/log/gncloud
+      - /root/.ssh:/root/.ssh
+    ports:
+      - "8080:80"
+    restart: always
+    environment:
+      IP: 192.168.1.101
+      PORT: 3306
+      USER: gncloud
+      PASS: gncloud
+      DBNAME: gncloud
+    depends_on:
+      - db
+  kvm:
+    image: kvm-controller
+    volumes:
+      - /var/log/gncloud:/var/log/gncloud
+      - /root/.ssh:/root/.ssh
+    ports:
+      - "8081:80"
+    restart: always
+    environment:
+      IP: 192.168.1.101
+      PORT: 3306
+      USER: gncloud
+      PASS: gncloud
+      DBNAME: gncloud
+    depends_on:
+      - db
 
-    docker:
-      image: docker-controller
-      volumes:
-        - /var/log/gncloud:/var/log/gncloud
-        - /root/.ssh:/root/.ssh
-      ports:
-        - "8080:80"
-      restart: always
-      environment:
-        IP: 192.168.1.101
-        PORT: 3306
-        USER: gncloud
-        PASS: gncloud
-        DBNAME: gncloud
-      depends_on:
-        - db
+  docker:
+    image: docker-controller
+    volumes:
+      - /var/log/gncloud:/var/log/gncloud
+      - /root/.ssh:/root/.ssh
+    ports:
+      - "8083:80"
+    restart: always
+    environment:
+      IP: 192.168.1.101
+      PORT: 3306
+      USER: gncloud
+      PASS: gncloud
+      DBNAME: gncloud
+    depends_on:
+      - db
 
-    hyperv:
-      image: hyperv-controller
-      volumes:
-        - /var/log/gncloud:/var/log/gncloud
-        - /root/.ssh:/root/.ssh
-      ports:
-        - "8080:80"
-      restart: always
-      environment:
-        IP: 192.168.1.101
-        PORT: 3306
-        USER: gncloud
-        PASS: gncloud
-        DBNAME: gncloud
-      depends_on:
-        - db
+  hyperv:
+    image: hyperv-controller
+    volumes:
+      - /var/log/gncloud:/var/log/gncloud
+      - /root/.ssh:/root/.ssh
+    ports:
+      - "8082:80"
+    restart: always
+    environment:
+      IP: 192.168.1.101
+      PORT: 3306
+      USER: gncloud
+      PASS: gncloud
+      DBNAME: gncloud
+    depends_on:
+      - db
 
-    scheduler:
-      image: scheduler
-      volumes:
-        - /var/log/gncloud:/var/log/gncloud
-        - /root/.ssh:/root/.ssh
-      ports:
-        - "8080:80"
-      restart: always
-      environment:
-        IP: 192.168.1.101
-        PORT: 3306
-        USER: gncloud
-        PASS: gncloud
-        DBNAME: gncloud
-      depends_on:
-        - db
+  scheduler:
+    image: scheduler
+    volumes:
+      - /var/log/gncloud:/var/log/gncloud
+      - /root/.ssh:/root/.ssh
+    ports:
+      - "8084:80"
+    restart: always
+    environment:
+      IP: 192.168.1.101
+      PORT: 3306
+      USER: gncloud
+      PASS: gncloud
+      DBNAME: gncloud
+    depends_on:
+      - db
 
 
 
