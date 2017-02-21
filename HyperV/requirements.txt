@@ -1,0 +1,11 @@
+flask
+sqlalchemy
+pexpect
+ConfigParser
+apscheduler
+humanfriendly
+logger
+Flask-SQLAlchemy>=2.1
+python-dateutil
+requests
+datetime
