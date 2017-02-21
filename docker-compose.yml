@@ -38,6 +38,75 @@ version: '2'
         DBNAME: gncloud
       depends_on:
         - db
+    kvm:
+      image: kvm-controller
+      volumes:
+        - /var/log/gncloud:/var/log/gncloud
+        - /root/.ssh:/root/.ssh
+      ports:
+        - "8080:80"
+      restart: always
+      environment:
+        IP: 192.168.1.101
+        PORT: 3306
+        USER: gncloud
+        PASS: gncloud
+        DBNAME: gncloud
+      depends_on:
+        - db
+
+    docker:
+      image: docker-controller
+      volumes:
+        - /var/log/gncloud:/var/log/gncloud
+        - /root/.ssh:/root/.ssh
+      ports:
+        - "8080:80"
+      restart: always
+      environment:
+        IP: 192.168.1.101
+        PORT: 3306
+        USER: gncloud
+        PASS: gncloud
+        DBNAME: gncloud
+      depends_on:
+        - db
+
+    hyperv:
+      image: hyperv-controller
+      volumes:
+        - /var/log/gncloud:/var/log/gncloud
+        - /root/.ssh:/root/.ssh
+      ports:
+        - "8080:80"
+      restart: always
+      environment:
+        IP: 192.168.1.101
+        PORT: 3306
+        USER: gncloud
+        PASS: gncloud
+        DBNAME: gncloud
+      depends_on:
+        - db
+
+    scheduler:
+      image: scheduler
+      volumes:
+        - /var/log/gncloud:/var/log/gncloud
+        - /root/.ssh:/root/.ssh
+      ports:
+        - "8080:80"
+      restart: always
+      environment:
+        IP: 192.168.1.101
+        PORT: 3306
+        USER: gncloud
+        PASS: gncloud
+        DBNAME: gncloud
+      depends_on:
+        - db
+
+
 
        # ssh-keygen -f ~/.ssh/id_rsa
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.2
