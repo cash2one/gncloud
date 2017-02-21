@@ -41,7 +41,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
-        setSsh(host_info.ip,ssh_info.path, ip, image_info.ssh_id)
+        setSsh(host_info.ip,ssh_info.content,ssh_info.name, ip, image_info.ssh_id)
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id
@@ -78,12 +78,15 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         sql_session.commit()
         return False
 
-def setSsh(host_ip, path, ip, ssh_id):
+def setSsh(host_ip, content,name, ip, ssh_id):
     try:
+        f = open("/data/kvm/sshkeys/"+name+".pub", 'w')
+        f.write(content)
+        f.close()
         print(":processing set sshkey!!!")
         s = pxssh.pxssh(timeout=1200)
         s.login(host_ip, USER)
-        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" + str(path) + "' " + str(ip) + " "+ssh_id)
+        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" +"/data/kvm/sshkeys/"+name+".pub" + "' " + str(ip) + " "+ssh_id)
         s.logout()
         print(":complete set sshkey!!!")
     except IOError as e:

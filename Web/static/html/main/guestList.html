@@ -55,7 +55,8 @@
                         <ul class="dropdown-menu gn-dropdown" role="menu">
                             <li ng-repeat="test in actions" >
                                 <a class="btn" ng-click="update(list.id,test,list.type,$parent.$index)"
-                                   ng-disabled="(test.type == 'Resume' && list.status == 'Running')
+                                   ng-disabled=" (user_info.user_id != list.gnUser.user_id && user_info.authority != 'sysowner' && user_info.authority !='owner')
+                                             || (test.type == 'Resume' && list.status == 'Running')
                                              || (test.type == 'Suspend' && list.status != 'Running')
                                              || (test.type == 'Reboot' && list.status == 'Suspend')">{{test.name}}</a>
                             </li>

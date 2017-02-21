@@ -17,6 +17,7 @@ angular
                     $scope.name_data = data.info.name_info;
                     $scope.host_info = data.info.host_info;
                     $scope.ssh = data.info.ssh_key;
+                    $scope.id_info = data.info.gnUser;
                     if($scope.vm_data.type != 'docker'){
                         $scope.image_data = data.info.image_info;
                     }else{
