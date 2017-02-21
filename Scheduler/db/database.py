@@ -7,10 +7,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from Scheduler.util.config import config
 
-import os
+DB_URL = "mysql://db/gncloud?charset=utf8"
 
-
-engine = create_engine(config.DB_URL, convert_unicode=True)
+engine = create_engine(DB_URL, convert_unicode=True)
 
 
 db_session = scoped_session(sessionmaker(autocommit=False,
