@@ -2,8 +2,6 @@ version: '2'
 services:
   db:
     image: mysql
-    volumes:
-      - /var/lib/mysql:/var/lib/mysql
     restart: always
     ports:
       - "3306:3306"
