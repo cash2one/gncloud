@@ -2,8 +2,6 @@ version: '2'
 services:
   db:
     image: mysql
-    volumes:
-      - /var/lib/mysql:/var/lib/mysql
     restart: always
     ports:
       - "3306:3306"
@@ -15,12 +13,14 @@ services:
 
   web:
     image: web-front
-    command: nginx -g daemon off;
+    command: nginx -g daemon off
+    restart: always
     volumes:
       - /etc/nginx:/etc/nginx
       - /var/log/nginx:/var/log/nginx
     ports:
       - "80:80"
+      - "443:443"
 
   manager:
     image: manager-controller
