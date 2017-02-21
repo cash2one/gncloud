@@ -1,5 +1,25 @@
 version: '2'
 services:
+  web:
+    image: web-front
+    restart: always
+    volumes:
+      - /etc/nginx:/etc/nginx
+      - /var/log/nginx:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - db
+      - manager
+      - kvm
+      - docker
+      - hyperv
+      - scheduler
+    networks:
+      - front
+      - back
+
   db:
     image: mysql
     restart: always
@@ -10,16 +30,9 @@ services:
       MYSQL_DATABASE: gncloud
       MYSQL_USER: gncloud
       MYSQL_PASSWORD: gncloud
-
-  web:
-    image: web-front
-    restart: always
-    volumes:
-      - /etc/nginx:/etc/nginx
-      - /var/log/nginx:/var/log/nginx
-    ports:
-      - "80:80"
-      - "443:443"
+    networks:
+      - front
+      - back
 
   manager:
     image: manager-controller
@@ -30,6 +43,8 @@ services:
       - "8080:80"
     restart: always
     environment:
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
@@ -37,6 +52,9 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
+    networks:
+      - back
+
   kvm:
     image: kvm-controller
     volumes:
@@ -46,6 +64,8 @@ services:
       - "8081:80"
     restart: always
     environment:
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
@@ -53,23 +73,8 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
-
-  docker:
-    image: docker-controller
-    volumes:
-      - /var/log/gncloud:/var/log/gncloud
-      - /root/.ssh:/root/.ssh
-    ports:
-      - "8083:80"
-    restart: always
-    environment:
-      IP: 192.168.1.101
-      PORT: 3306
-      USER: gncloud
-      PASS: gncloud
-      DBNAME: gncloud
-    depends_on:
-      - db
+    networks:
+      - back
 
   hyperv:
     image: hyperv-controller
@@ -80,6 +85,8 @@ services:
       - "8082:80"
     restart: always
     environment:
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
@@ -87,6 +94,29 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
+    networks:
+      - back
+
+  docker:
+    image: docker-controller
+    volumes:
+      - /var/log/gncloud:/var/log/gncloud
+      - /root/.ssh:/root/.ssh
+    ports:
+      - "8083:80"
+    restart: always
+    environment:
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
+      IP: 192.168.1.101
+      PORT: 3306
+      USER: gncloud
+      PASS: gncloud
+      DBNAME: gncloud
+    depends_on:
+      - db
+    networks:
+      - back
 
   scheduler:
     image: scheduler
@@ -97,6 +127,8 @@ services:
       - "8084:80"
     restart: always
     environment:
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
@@ -104,8 +136,14 @@ services:
       DBNAME: gncloud
     depends_on:
       - db
+    networks:
+      - back
 
-
+networks:
+  front:
+    driver: brigde
+  back:
+    driver: host
 
        # ssh-keygen -f ~/.ssh/id_rsa
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.2
