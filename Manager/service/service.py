@@ -245,17 +245,22 @@ def sv_list(sql_session, team_code):
 
     return {"guest_list":list,"retryCheck":retryCheck}
 
-def vm_list_snap(sql_session, team_code):
+def vm_list_snap(sql_session,owner,author_id ,team_code):
     list = sql_session.query(GnVmMachines)\
                       .filter(GnVmMachines.status != config.REMOVE_STATUS)\
                       .filter(GnVmMachines.team_code == team_code)\
-                      .filter(GnVmMachines.type != 'docker')\
-                      .order_by(GnVmMachines.create_time.desc()).all()
-    for vmMachine in list:
-        vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
-        vmMachine.disk = convertHumanFriend(vmMachine.disk)
-        vmMachine.memory = convertHumanFriend(vmMachine.memory)
+                      .filter(GnVmMachines.type != 'docker')
 
+    if owner != 'owner':
+        list = list.filter(GnVmMachines.author_id == author_id)
+    list_q=list.order_by(GnVmMachines.create_time.desc()).all()
+    if len(list_q) !=0:
+        for vmMachine in list_q:
+            vmMachine.create_time = vmMachine.create_time.strftime('%Y-%m-%d %H:%M:%S')
+            vmMachine.disk = convertHumanFriend(vmMachine.disk)
+            vmMachine.memory = convertHumanFriend(vmMachine.memory)
+    else:
+        list=""
     retryCheck = False
     if not all((e.status != config.STARTING_STATUS and e.status != config.DELETING_STATUS) for e in list):
         retryCheck = True
