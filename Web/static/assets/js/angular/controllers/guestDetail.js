@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestDetailCtrl', function ($scope, $http, $routeParams, $sce, $timeout,notification) {
+    .controller('guestDetailCtrl', function ($scope, $http, $routeParams, $sce, $timeout,notification, $rootScope) {
         $scope.modify_data = {};
 
         $http({
@@ -17,7 +17,7 @@ angular
                     $scope.name_data = data.info.name_info;
                     $scope.host_info = data.info.host_info;
                     $scope.ssh = data.info.ssh_key;
-                    $scope.id_info = data.info.gnUser;
+                    $scope.id_info = data.info.vm_info.gnUser;
                     if($scope.vm_data.type != 'docker'){
                         $scope.image_data = data.info.image_info;
                     }else{
@@ -224,5 +224,9 @@ angular
         }
 
         $scope.getChartJs();
+        $scope.user_info = $rootScope.user_info;
+        $rootScope.$on('init', function () {
+            $scope.user_info = $rootScope.user_info;
+        });
 
     });
