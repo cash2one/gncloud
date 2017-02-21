@@ -1,6 +1,6 @@
 # Tobe
 
-all: kvm hyperv docker manager scheduler
+all: kvm hyperv docker manager scheduler front
 
 kvm:
 	cd /var/lib/gncloud/KVM; docker build -t kvm-controller .
@@ -18,6 +18,9 @@ manager:
 scheduler:
 	cd /var/lib/gncloud/Scheduler; docker build -t scheduler .
 
+front:
+	cd /var/lib/gncloud/Web; docker build -t front-service .
+
 clean:
-	docker rmi kvm-controller hyperv-controller docker-controller manager-controller scheduler
+	docker rmi kvm-controller hyperv-controller docker-controller manager-controller scheduler front-service
 
