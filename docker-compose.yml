@@ -43,8 +43,8 @@ services:
       - "8080:80"
     restart: always
     environment:
-      WSGI_PROCESSES:4
-      WSGI_THREADS:2
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
@@ -64,8 +64,8 @@ services:
       - "8081:80"
     restart: always
     environment:
-      WSGI_PROCESSES:4
-      WSGI_THREADS:2
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
@@ -85,8 +85,8 @@ services:
       - "8082:80"
     restart: always
     environment:
-      WSGI_PROCESSES:4
-      WSGI_THREADS:2
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
@@ -106,8 +106,8 @@ services:
       - "8083:80"
     restart: always
     environment:
-      WSGI_PROCESSES:4
-      WSGI_THREADS:2
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
@@ -127,8 +127,8 @@ services:
       - "8084:80"
     restart: always
     environment:
-      WSGI_PROCESSES:4
-      WSGI_THREADS:2
+      WSGI_PROCESSES: 4
+      WSGI_THREADS: 2
       IP: 192.168.1.101
       PORT: 3306
       USER: gncloud
