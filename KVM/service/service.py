@@ -41,7 +41,7 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         #     print(id+":complete set ip!!!")
 
         # 기존 저장된 ssh key 등록
-        setSsh(host_info.ip,ssh_info.content,ssh_info.name, ip, image_info.ssh_id)
+        setSsh(host_info.ip,ssh_info.pub,ssh_info.name, ip, image_info.ssh_id)
         print(id+":processing modify data!!!")
         vm_info.internal_name = internal_name
         vm_info.internal_id = intern_id
@@ -78,10 +78,10 @@ def server_create(team_code, user_id, user_name, id, sql_session):
         sql_session.commit()
         return False
 
-def setSsh(host_ip, content,name, ip, ssh_id):
+def setSsh(host_ip, pub,name, ip, ssh_id):
     try:
         f = open("/data/kvm/sshkeys/"+name, 'w')
-        f.write(content)
+        f.write(pub)
         f.close()
         print(":processing set sshkey!!!")
         s = pxssh.pxssh(timeout=1200)
@@ -261,10 +261,11 @@ def add_user_sshkey(team_code, name):
 
         result = subprocess.check_output("ssh-keygen -f "+ path +" -P ''", shell=True)
         list = subprocess.check_output("cat "+path+".pub",shell=True)
+        org = subprocess.check_output("cat "+path,shell=True)
         fingerprint = result.split("\n")[4].split(" ")[0]
 
         # db 저장
-        gnSshKeys = GnSshKeys(team_code=team_code, name=name, fingerprint=fingerprint, content=list)
+        gnSshKeys = GnSshKeys(team_code=team_code, name=name, fingerprint=fingerprint, pub=list, org=org)
         db_session.add(gnSshKeys)
     except:
         db_session.rollback()

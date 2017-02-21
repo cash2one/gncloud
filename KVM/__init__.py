@@ -112,7 +112,7 @@ def download_sshKey(id):
     sshkey_path = getsshkey_info(id)
     headers = {"Content-Disposition": "attachment; filename="+sshkey_path.name+".pem"}
     # with open(sshkey_path.content, 'r') as f:
-    body = sshkey_path.content
+    body = sshkey_path.org
     return make_response((body, headers))
 
 @app.route('/monitor', methods=['GET'])

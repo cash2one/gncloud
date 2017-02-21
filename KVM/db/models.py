@@ -205,18 +205,20 @@ class GnSshKeys(Base):
     team_code = Column(String(50), primary_key=False, nullable=False)
     name = Column(String(100), primary_key=False, nullable=False)
     fingerprint = Column(String(50), primary_key=False, nullable=False)
-    content = Column(nullable=True)
+    pub = Column(nullable=True)
+    org = Column(nullable=True)
     create_time = Column(DateTime, default=datetime.datetime.now())
 
-    def __init__(self, team_code=None, name=None, fingerprint=None, content=None):
+    def __init__(self, team_code=None, name=None, fingerprint=None, pub=None, org=None):
         self.team_code = team_code
         self.name = name
         self.fingerprint = fingerprint
-        self.content = content
+        self.pub = pub
+        self.org = org
 
     def __repr__(self):
-        return '<Id %r /Team_code %r / name %r / fingerprint %r / content %r >' \
-               % (self.id, self.team_code, self.name, self.fingerprint, self.content)
+        return '<Id %r /Team_code %r / name %r / fingerprint %r />' \
+               % (self.id, self.team_code, self.name, self.fingerprint)
 
     def __json__(self):
         return ['id', 'name', 'fingerprint', 'create_time']
