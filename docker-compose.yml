@@ -16,11 +16,13 @@ services:
   web:
     image: web-front
     command: nginx -g daemon off;
+    restart: always
     volumes:
       - /etc/nginx:/etc/nginx
       - /var/log/nginx:/var/log/nginx
     ports:
       - "80:80"
+      - "443:443"
 
   manager:
     image: manager-controller
