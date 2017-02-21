@@ -13,7 +13,6 @@ services:
 
   web:
     image: web-front
-    command: nginx
     restart: always
     volumes:
       - /etc/nginx:/etc/nginx
