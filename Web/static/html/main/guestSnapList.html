@@ -112,7 +112,7 @@
                                     </div>
                                     <!--더보기>드롭다운-->
                                     <ul class="dropdown-menu gn-dropdown" role="menu">
-                                        <li ng-repeat="sel in actions"><a ng-click="update(snap.id,sel,snap.type,$parent.$index,snap.name)" class="gn-danger">{{sel.name}}</a></li>
+                                        <li ng-repeat="sel in actions"><a ng-click="update(snap.id,sel,snap.type,$parent.$index,snap.name)" class="gn-danger btn" ng-disabled="user_info.user_id != snap.author_id && user_info.authority != 'sysowner' && user_info.authority != 'owner'">{{sel.name}}</a></li>
                                     </ul>
                                 </td>
                             </tr>
@@ -325,7 +325,7 @@
                         <!--더보기>드롭다운-->
                         <ul class="dropdown-menu gn-dropdown" role="menu">
                             <li><a class="btn" ng-disabled="con.team_code != user_info.team_code "  ng-click="getInstanceImageDocker(con.id)" data-toggle="modal" data-target="#img-cont" role="button" aria-haspopup="true" aria-expanded="false">수정</a></li>
-                            <li><a class="gn-danger btn" ng-disabled="con.team_code != user_info.team_code " ng-click="deleteInstanceImageDoker(con.id,con.name)">삭제</a></li>
+                            <li><a class="gn-danger btn" ng-disabled="con.team_code != user_info.team_code &&user_info.authority != 'sysowner' && user_info.authority != 'owner' " ng-click="deleteInstanceImageDoker(con.id,con.name)">삭제</a></li>
                         </ul>
                     </td>
                 </tr>

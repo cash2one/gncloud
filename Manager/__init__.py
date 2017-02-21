@@ -171,7 +171,9 @@ def service_list():
 @app.route('/vm/snaplist', methods=['GET'])
 def guest_list_snap():
     team_code = session['teamCode']
-    return jsonify(status=True, message="success", list=vm_list_snap(db_session, team_code))
+    owner = session['teamOwner']
+    author_id = session['userId']
+    return jsonify(status=True, message="success", list=vm_list_snap(db_session,owner,author_id ,team_code))
 
 @app.route('/vm/machines/<id>', methods=['GET'])
 def guest_info(id):
