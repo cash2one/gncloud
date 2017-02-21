@@ -39,7 +39,10 @@ angular
         };
         $scope.selectGuestList();
         stop = $interval($scope.selectGuestList,10000);
-
+        $scope.user_info = $rootScope.user_info;
+        $rootScope.$on('init', function () {
+            $scope.user_info = $rootScope.user_info;
+        });
 
     }).directive('tooltip', function(){
         return {
