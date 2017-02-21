@@ -3,7 +3,7 @@
 all: git-pull kvm hyperv docker manager scheduler front
 
 git-pull:
-    cd /var/lib/gncloud; git pull
+	cd /var/lib/gncloud; git pull
 
 kvm:
 	cd /var/lib/gncloud/KVM; docker build -t kvm-controller .
