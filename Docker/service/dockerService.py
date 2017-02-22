@@ -67,7 +67,7 @@ class DockerService(object):
             command = '%s %s' % (command, postfix)
             logger.debug("Docker Service Created: %s", command)
             # --- //Docker Service 생성 커맨드 작성 ---
-            service_id = subprocess.check_output(command, shell=True)
+            service_id = subprocess.check_output(command, shell=True).split('\n')[0]
             print 'service id = %s' % service_id
         except Exception as e:
             logger.error('service create error:%s' % e.message)
@@ -140,12 +140,9 @@ class DockerService(object):
         command = "docker -H %s:%s service inspect %s" % (ip, port, internal_id)
         try:
             # docker swarm manager need a second for assigning to service port
-            time.sleep(3)
             result = subprocess.check_output(command, shell=True)
-            result = result.split("\r\n", 1)[1]
-            result = json.loads(result.replace("\r\n", ""))
+            result = json.loads(result)
 
-            print result
         except Exception as e:
             logger.error(e)
 
@@ -160,24 +157,30 @@ class DockerService(object):
     def docker_volume_rm(self, volumes, ip, port):
         command = "docker -H %s:%s volume rm %s" % (ip, port, volumes)
         logger.debug(command)
-        return subprocess.check_output(command, shell=True)
+        result = ''
+        try:
+            result = subprocess.check_output(command, shell=True)
+        except Exception as e:
+            logger.debug('still using volume ? %s' % result)
+            return 'Error'
+        return result
 
     # Docker 서비스의 컨테이너를 가져온다.
     def get_service_containers(self, internal_id, ip, port):
         container_list = []
         command = "docker -H %s:%s service ps %s" % (ip, port, internal_id)
         result = subprocess.check_output(command, shell=True)
-        result = result.split("\r\n", 1)[1]
-        result = json.loads(result.replace("\r\n", ""))
+
+        result = result.split('\n')
         for line in result:
             logger.debug("get_service_containers result line: %s" % line)
             container_info = line.split()
             if len(container_info) == 0:
-                pass
+                continue
             elif container_info[0] == "docker" or container_info[0] == "ID":
-                pass
+                continue
             else:
-                if container_info[0] is None:
+                if container_info[0] is None or container_info[3] == 'Running' or container_info[3] == 'Shutdown':
                     return None
                 container = {}
                 container['internal_id'] = container_info[0]
@@ -188,12 +191,13 @@ class DockerService(object):
 
     # Docker 서비스의 볼륨 정보를 가져온다.
     # 매개변수의 internal_id는
-    def get_service_volumes(self, internal_id, ip, port):
+    def get_service_volumes(self, internal_id, manager_ip, worker_ip, port):
         mounts = ''
         try:
-            command = "docker -H %s:%s service inspect %s" % (ip, port, internal_id)
+            command = "docker -H %s:%s service inspect %s" % (manager_ip, port, internal_id)
             # 서비스 내의 Mounts 정보 가져오기
             service = subprocess.check_output(command, shell=True)
+            service = json.loads(service)
             container_spec_list = service[0]['Spec']['TaskTemplate']['ContainerSpec']
             ok_volume = False
             for isExist in container_spec_list:
@@ -207,12 +211,11 @@ class DockerService(object):
                 return None
 
             for mount in mounts:
-                command = "docker -H %s:%s volume inspect %s" % (ip, port, mount["Source"])
+                command = "docker -H %s:%s volume inspect %s" % (worker_ip, port, mount["Source"])
                 volume = ""
                 while type(volume) is not list:
                     volume = subprocess.check_output(command, shell=True)
-                    volume = volume.split("\r\n", 1)[1]
-                    volume = json.loads(volume.replace("\r\n", ""))
+                    volume = json.loads(volume)
                 mount['Mountpoint'] = volume[0]['Mountpoint']
             return mounts
         except Exception as e:

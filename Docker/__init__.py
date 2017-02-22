@@ -104,4 +104,4 @@ def internal_error(error):
     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세요")
 
 if __name__ == '__main__':
-    app.run(8083)
+    app.run(port=8083)

@@ -22,7 +22,7 @@ DockerService = DockerService('127.0.0.1', '2375')
 def doc_create(id,sql_session):
     team_name = None
     user_name = None
-    docker_info = None
+    container_info = None
     try:
         #로직 변경
         logger.debug("get id"+id)
@@ -59,6 +59,7 @@ def doc_create(id,sql_session):
             sql_session.add(error_hist)
             sql_session.commit()
             return jsonify(status=False, message="failure service create.")
+
         elif type(docker_service) is not list:
             container_info.status = "Error"
             error_hist = GnErrorHist(type=container_info.type,action="Create",team_code=container_info.team_code,
@@ -81,7 +82,7 @@ def doc_create(id,sql_session):
             service_container_count = 0
             service_container_list = DockerService.get_service_containers(docker_service[0]['ID'],
                                                                           docker_ip, docker_port)
-            while service_container_list is None:
+            while service_container_list is None or len(service_container_list) == 0:
                 if service_container_count > 5:
                     sql_session.rollback()
                     container_info.status = "Error"
@@ -100,25 +101,30 @@ def doc_create(id,sql_session):
             logger.debug("service_container_list: %s" % service_container_list)
             host_ip_list = []
             for service_container in service_container_list:
-                node = GnHostMachines.query.filter_by(name=service_container['host_name']).one()
-                logger.debug("container node: %s" % node)
+                worker = GnHostMachines.query.filter_by(name=service_container['host_name']).one()
+                logger.debug("container node: %s" % worker)
                 container = GnDockerContainers(
                     service_id=id,
                     internal_id=service_container['internal_id'],
                     internal_name=service_container['internal_name'],
-                    host_id=node.id
+                    host_id=worker.id
                 )
-                host_ip_list.append(node.id)
+                host_ip_list.append(worker.id)
                 logger.debug("container: %s" % container)
                 sql_session.add(container)
             # 생성된 volume 정보를 DB에 저장한다.
 
             #service_volume_list = ds.get_service_volumes(docker_service[0]['ID'])
-            host_ip = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_ip_list[0]).first().ip
-            service_volume_list = DockerService.get_service_volumes(docker_service[0]['ID'], host_ip, docker_port)
-            if service_container_list is None:
-                time.sleep(5)
-                service_volume_list = DockerService.get_service_volumes(docker_service[0]['ID'], host_ip, docker_port)
+            worker_ip = db_session.query(GnHostMachines).filter(GnHostMachines.id == host_ip_list[0]).first().ip
+            service_volume_count=0
+            service_volume_list = DockerService.get_service_volumes(docker_service[0]['ID'], docker_ip, worker_ip, docker_port)
+            while service_volume_list is None:
+                if service_volume_count > 5:
+                    break
+                time.sleep(3)
+                service_volume_list = DockerService.get_service_volumes(docker_service[0]['ID'], docker_ip, worker_ip, docker_port)
+                service_container_count += 1
+
             logger.debug("service_volume_list: %s" % service_volume_list)
             if service_volume_list is not None:
                 for service_volume in service_volume_list:
@@ -162,8 +168,8 @@ def doc_create(id,sql_session):
             else:
                 logger.error('invalid price_type : system_setting.billing_type %s' % system_setting.billing_type)
 
-            team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == docker_info.team_code).first()
-            user_info = sql_session.query(GnUsers).filter(GnUsers.user_id == docker_info.author_id).first()
+            team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == container_info.team_code).first()
+            user_info = sql_session.query(GnUsers).filter(GnUsers.user_id == container_info.author_id).first()
             insert_instance_status = GnInstanceStatus(vm_id=container_info.id,vm_name=container_info.name, create_time=now_time
                               , delete_time=None, author_id=container_info.author_id, author_name=user_info.user_name
                               , team_code=container_info.team_code, team_name=team_info.team_name
@@ -172,7 +178,7 @@ def doc_create(id,sql_session):
             sql_session.add(insert_instance_status)
 
             sql_session.commit()
-            return jsonify(status=True, message="서비스를 생성하였습니다.", result=docker_info.to_json())
+            return jsonify(status=True, message="서비스를 생성하였습니다.", result=container_info.to_json())
     except Exception as e:
         print(e.message)
         sql_session.rollback()
@@ -234,21 +240,19 @@ def doc_delete(id,sql_session):
             volume_list = sql_session.query(GnDockerVolumes).filter(GnDockerVolumes.service_id == id).all()
             for vo in volume_list:
                 vo_list = '%s %s' % (vo_list, vo.name)
-            result2 = DockerService.docker_volume_rm(worker_ip, worker_port, vo_list)
-            logger.debug('docker_volume_rm result = %s' % result2)
+            result2 = DockerService.docker_volume_rm(vo_list, worker_ip, worker_port)
             rm_count = 0
             check_v_rm = result2.split(' ')[0]
             while check_v_rm == 'Error':
                 if rm_count > 5:
-                    logger.debug('volume delete Error')
                     error_hist = GnErrorHist(type=service.type,action='Delete',team_code=service.team_code,author_id=service.author_id,
                                              vm_id=service.id, vm_name=service.name, cause=check_v_rm)
                     sql_session.add(error_hist)
                     sql_session.commit()
                     return jsonify(status=False, message=check_v_rm)
                 time.sleep(5)
-                result2 = DockerService.docker_volume_rm(worker_ip, worker_port, vo_list)
-                logger.debug('docker_volume_rm %d result = %s' % (rm_count, result2))
+                result2 = DockerService.docker_volume_rm(vo_list, worker_ip, worker_port)
+                logger.debug('docker_volume_rm %d result = %s' % (rm_count+1, result2))
                 check_v_rm = result2.split(' ')[0]
                 rm_count += 1
 
