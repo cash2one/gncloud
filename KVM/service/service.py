@@ -2,6 +2,7 @@
 __author__ = 'yhk'
 
 import subprocess
+import os
 
 from KVM.db.database import db_session
 from KVM.db.models import *
@@ -91,6 +92,10 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         s.login(host_ip, USER)
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" +"/tmp/"+name + "' " + str(ip) + " "+ssh_id)
         s.logout()
+        if os.path.exists(name):
+            os.remove(name)
+            os.remove(name+".pub")
+            print(":complete delete sshkeyfile")
         print(":complete set sshkey!!!")
     except IOError as e:
         print(e)
@@ -266,6 +271,10 @@ def add_user_sshkey(team_code, name):
         list = subprocess.check_output("cat "+path+".pub",shell=True)
         org = subprocess.check_output("cat "+path,shell=True)
         fingerprint = result.split("\n")[4].split(" ")[0]
+        if os.path.exists(path):
+            os.remove(path)
+            os.remove(path+".pub")
+            print(":complete delete sshkeyfile")
 
         # db 저장
         gnSshKeys = GnSshKeys(team_code=team_code, name=name, fingerprint=fingerprint, pub=list, org=org)
