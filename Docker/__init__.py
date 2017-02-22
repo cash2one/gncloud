@@ -8,7 +8,6 @@ from flask import Flask, redirect, url_for, session, make_response
 from Docker.controller.dockerController import *
 from Docker.db.database import db_session
 from Docker.service.monitorService import service_monitoring
-from Docker.util.config import config
 from Docker.util.json_encoder import AlchemyEncoder
 from Docker.util.logger import logger
 
@@ -38,15 +37,7 @@ def create_vm():
     id = request.json['id']
     return doc_create(id,db_session)
 
-# Docker Service 상태변경
-# change_status
-# app.add_url_rule("/container/services/<id>", view_func=doc_state, methods=['PUT'])
-app.add_url_rule("/vm/machines/<id>", view_func=doc_state, methods=['PUT'])
-# Docker Service 스냅샷 저장
-app.add_url_rule('/vm/machine/snapshots', view_func=doc_snap, methods=['POST'])
-# Docker Service 삭제
-# delete_vm
-# app.add_url_rule("/vm/machines/<id>", view_func=doc_delete, methods=['DELETE'])
+
 @app.route('/vm/machines/<id>', methods=['DELETE'])
 def delete_vm(id):
     doc_delete(id,db_session)
@@ -54,26 +45,15 @@ def delete_vm(id):
 
 # Docker Service 리스트
 app.add_url_rule("/vm/machines", view_func=doc_vm_list, methods=['GET'])
-# Docker 이미지 생성 및 업로드
-app.add_url_rule("/vm/images", view_func=doc_new_image, methods=['POST'])
-# Docker 이미지 수정
-# app.add_url_rule("/container/images/<id>", view_func=doc_modify_image, methods=['PUT'])
-# Docker 이미지 삭제
-app.add_url_rule("/vm/images/<id>", view_func=doc_delete_image, methods=['DELETE'])
+
 # Docker 이미지 리스트
 app.add_url_rule("/vm/images", view_func=doc_image_list, methods=['GET'])
-# Docker 이미지 세부정보 입력
-app.add_url_rule("/vm/images/detail/<image_id>", view_func=doc_new_image_detail, methods=['POST'])
-# Docker 이미지 세부정보 수정
-app.add_url_rule("/vm/images/detail/<image_id>/<id>", view_func=doc_update_image_detail, methods=['PUT'])
-# Docker 이미지 세부정보 삭제
-app.add_url_rule("/vm/images/detail/<image_id>/<id>", view_func=doc_delete_image_detail, methods=['DELETE'])
 
 
 @app.before_request
 def before_request():
-    if 'userId' not in session and request.path != '/monitor' and request.path != '/service/isAlive' \
-            and request.path != '/' and request.path != '/vm/logfilelist' and request.path!='/vm/logfilecontents':
+    if 'userId' not in session and request.path != '/monitor' \
+            and request.path != '/service/isAlive' and request.path != '/':
         return make_response(jsonify(status=False),401)
 
 
@@ -110,9 +90,6 @@ def get_logfile_contents():
     log_id = request.args.get("vm_id")
     filename = request.args.get("filename")
     worker_name = request.args.get("worker_name")
-    # log_id = '9d4c3e58'
-    # filename = 'catalina.2017-02-10.log'
-    # worker_name = 'worker-2'
     return get_contents(log_id, filename, worker_name)
 
 
@@ -127,6 +104,4 @@ def internal_error(error):
     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세요")
 
 if __name__ == '__main__':
-    #app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
-    #app.run(host='192.168.1.101', port=int(config.CONTROLLER_PORT))
-    app.run(port=int(config.CONTROLLER_PORT))
+    app.run(8083)

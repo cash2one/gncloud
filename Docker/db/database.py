@@ -4,13 +4,9 @@ __author__ = 'jhjeon'
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from Docker.util.config import Config
 
-from Docker.util.config import config
-
-import os
-
-
-engine = create_engine(config.DB_URL, convert_unicode=True)
+engine = create_engine(Config.DB_URL, convert_unicode=True)
 
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
