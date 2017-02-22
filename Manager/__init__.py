@@ -7,6 +7,13 @@ from flask import Flask, jsonify, request, session, escape, make_response
 
 from Manager.db.database import db_session
 from Manager.service.service import *
+from Manager.service.qnaservice import *
+from Manager.service.loginservice import *
+from Manager.service.noticeservice import *
+from Manager.service.backupservice import *
+from Manager.service.invoiceservice import *
+from Manager.service.dashboardservice import *
+from Manager.service.settingservice import *
 from Manager.util.config import config
 from Manager.util.json_encoder import AlchemyEncoder
 

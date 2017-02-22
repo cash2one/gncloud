@@ -1810,7 +1810,7 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     line-height: 37px;
 }
 
-.gn-select-error label{margin-left: 10px;}
+.gn-select-error label{margin-left: 4px;}
 .gn-select-error span{font-weight: 400;}
 
 .gn-select-error select{line-height: 16px;}

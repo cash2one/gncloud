@@ -42,7 +42,7 @@ class Config:
         parser = ConfigParser.ConfigParser()
         result = parser.read(config_file)
 
-        self.CONTROLLER_HOST = parser.get(config_section, "CONTROLLER_HOST")
+        # self.CONTROLLER_HOST = parser.get(config_section, "CONTROLLER_HOST")
         self.CONTROLLER_PORT = parser.get(config_section, "CONTROLLER_PORT")
         self.DB_URL = parser.get(config_section, "DB_URL")
         self.AGENT_SERVER_IP = parser.get(config_section, "AGENT_SERVER_IP")
