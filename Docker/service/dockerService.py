@@ -144,6 +144,8 @@ class DockerService(object):
             result = subprocess.check_output(command, shell=True)
             result = result.split("\r\n", 1)[1]
             result = json.loads(result.replace("\r\n", ""))
+
+            print result
         except Exception as e:
             logger.error(e)
 
