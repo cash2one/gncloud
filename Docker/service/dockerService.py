@@ -76,7 +76,7 @@ class DockerService(object):
             logger.error('service create error:%s' % service_id)
             return service_id
         else:
-            return self.docker_service_ps(service_id)
+            return self.docker_service_ps(service_id, ip, port)
 
     # Docker 서비스 다시 시작 (실제로는 commit된 이미지로 서비스 생성)
     def docker_service_start(self, container_info, image_info, image_detail, ip, port):
