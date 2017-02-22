@@ -131,7 +131,7 @@ class DockerService(object):
             logger.error('service create error:%s' % service_id)
             return service_id
         else:
-            return self.docker_service_ps(service_id)
+            return self.docker_service_ps(service_id, ip, port)
 
     # Docker 서비스 정보를 가지고 온다.
     def docker_service_ps(self, internal_id, ip, port):
