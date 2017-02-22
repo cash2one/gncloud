@@ -67,7 +67,7 @@ class DockerService(object):
             command = '%s %s' % (command, postfix)
             logger.debug("Docker Service Created: %s", command)
             # --- //Docker Service 생성 커맨드 작성 ---
-            service_id = subprocess.check_call(command, shell=True)
+            service_id = subprocess.check_output(command, shell=True)
             print 'service id = %s' % service_id
         except Exception as e:
             logger.error('service create error:%s' % e.message)
