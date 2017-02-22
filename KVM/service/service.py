@@ -81,21 +81,12 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
 def setSsh(host_ip, pub,org,name, ip, ssh_id):
     try:
+        name = config.SSHKEY_PATH + name
         print(":processing set sshkey!!!")
         s = pxssh.pxssh(timeout=1200)
         s.login(host_ip, USER)
-        f = open(config.SSHKEY_PATH + name+".pub", 'w')
-        f.write(pub)
-        f.close()
-        f = open(config.SSHKEY_PATH + name, 'w')
-        f.write(org)
-        f.close()
-        name = config.SSHKEY_PATH+name
-        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" +name + "' " + str(ip) + " "+ssh_id)
-        if os.path.exists(name):
-            os.remove(name)
-            os.remove(name+".pub")
-            print(":complete delete sshkeyfile")
+        s.sendline(config.SCRIPT_PATH+"make_sshkeys.sh '"+ name+"' " + org+" " + pub)
+        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '"+name + "' " + str(ip) + " "+ssh_id)
         s.logout()
         print(":complete set sshkey!!!")
     except IOError as e:
