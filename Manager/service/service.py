@@ -235,9 +235,14 @@ def vm_info(sql_session, id):
     container_name=''
     vm_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).one()
     name_info = sql_session.query(GnUser).filter(GnUser.user_id == vm_info.author_id).one()
-    if vm_info.type != 'docker':
+    if vm_info.type == 'kvm':
         image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one_or_none()
         host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).first()
+        host_contents = '%s | %s\r\n' % (host_machine.name, host_machine.ip)
+    elif vm_info.type == 'hyperv':
+        image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).one_or_none()
+        host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).first()
+        host_machine.ip = host_machine.ip.split(':')[0]
         host_contents = '%s | %s\r\n' % (host_machine.name, host_machine.ip)
     else:
         image_info = sql_session.query(GnDockerImages).filter(GnDockerImages.id == vm_info.image_id).one()
@@ -249,6 +254,7 @@ def vm_info(sql_session, id):
             if container_count> 0:
                 container_name = '%s,' % container_name
             host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == container.host_id).first()
+            host_machine.ip = host_machine.ip.split(':')[0]
             host_contents = '%s%s | %s\r\n' % (host_contents, host_machine.name, host_machine.ip)
             container_name = '%s%s' % (container_name, container.internal_name)
 
