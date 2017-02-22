@@ -49,7 +49,7 @@ class DockerService(object):
                                   (command, image_info.name, id, mount_count, mount_type, dest_path)
                         mount_count += 1
                         if mount_type == 'DATA':
-                            data_path = '%s_%s_%d_%s/_data' % (image_info.name, id, mount_count, mount_count)
+                            data_path = '%s_%s_%d_%s/_data' % (image_info.name, container_info.id, mount_count, mount_count)
                 elif detail.arg_type == 'log_vol' or detail.arg_type == 'data_vol':
                     mount_type = ''
                     if detail.arg_type == 'log_vol':
@@ -57,7 +57,7 @@ class DockerService(object):
                     else:
                         mount_type = 'DATA'
                     command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
-                              (command, image_info.name, id, mount_count, mount_type, detail.argument)
+                              (command, image_info.name, container_info.id, mount_count, mount_type, detail.argument)
                 else:
                     if detail.argument.find('--command') >= 0:
                         postfix = '%s %s' % (postfix, detail.argument.split('=')[1])
@@ -102,7 +102,7 @@ class DockerService(object):
 
                     if mount_type == 'LOG' or mount_type == 'DATA':
                         command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
-                                  (command, image_info.name, id, mount_count, mount_type, dest_path)
+                                  (command, image_info.name, container_info.id, mount_count, mount_type, dest_path)
                         mount_count += 1
                         if mount_type == 'DATA':
                             data_path = '%s_%s_%d_%s/_data' % (image_info.name, id, mount_count, mount_count)
@@ -113,7 +113,7 @@ class DockerService(object):
                     else:
                         mount_type = 'DATA'
                     command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
-                              (command, image_info.name, id, mount_count, mount_type, detail.argument)
+                              (command, image_info.name, container_info.id, mount_count, mount_type, detail.argument)
                 else:
                     if detail.argument.find('--command') >= 0:
                         postfix = '%s %s' % (postfix, detail.argument.split('=')[1])
