@@ -48,11 +48,11 @@ def doc_create(id,sql_session):
         logger.debug(container_info.id+":request ok")
         docker_service = DockerService.docker_service_create(container_info, image_info, image_detail,
                                                              docker_ip, docker_port)
-        logger.debug(docker_info.id+":end create")
+        logger.debug(container_info.id+":end create")
 
         # 데이터베이스에 없는 도커 이미지로 컨테이너를 생성할 경우
         if docker_service[:5] == 'Error' or docker_service is None or docker_service == '':
-            docker_info.status = "Error"
+            container_info.status = "Error"
             error_hist = GnErrorHist(type=container_info.type,action="Create",team_code=container_info.team_code,
                                      author_id=container_info.author_id, vm_id=container_info.id,
                                      vm_name=container_info.name, cause=docker_service)
@@ -60,7 +60,7 @@ def doc_create(id,sql_session):
             sql_session.commit()
             return jsonify(status=False, message="failure service create.")
         elif type(docker_service) is not list:
-            docker_info.status = "Error"
+            container_info.status = "Error"
             error_hist = GnErrorHist(type=container_info.type,action="Create",team_code=container_info.team_code,
                                      author_id=container_info.author_id, vm_id=container_info.id,
                                      vm_name=container_info.name, cause=docker_service)
@@ -84,10 +84,10 @@ def doc_create(id,sql_session):
             while service_container_list is None:
                 if service_container_count > 5:
                     sql_session.rollback()
-                    docker_info.status = "Error"
+                    container_info.status = "Error"
 
-                    error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
-                                             author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name,
+                    error_hist = GnErrorHist(type=container_info.type,action="Create",team_code=container_info.team_code,
+                                             author_id=container_info.author_id, vm_id=container_info.id, vm_name=container_info.name,
                                              cause=service_container_list)
                     sql_session.add(error_hist)
 
@@ -139,20 +139,20 @@ def doc_create(id,sql_session):
 
             #sql_session.add(service)
             # 데이터베이스 업데이트
-            docker_info.ip = swarm_manager.ip + ":%s" % ports[0]['PublishedPort']
-            docker_info.host_id = swarm_manager.id
-            docker_info.status = "Running"
-            docker_info.internal_id = docker_service[0]['ID']
-            docker_info.internal_name = docker_service[0]['Spec']['Name']
+            container_info.ip = swarm_manager.ip + ":%s" % ports[0]['PublishedPort']
+            container_info.host_id = swarm_manager.id
+            container_info.status = "Running"
+            container_info.internal_id = docker_service[0]['ID']
+            container_info.internal_name = docker_service[0]['Spec']['Name']
             #docker_info.create_time = datetime.strptime(docker_service[0]['CreatedAt'][:-2], '%Y-%m-%dT%H:%M:%S.%f')
             now_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-            docker_info.create_time = now_time
-            docker_info.os = "docker"
-            docker_info.os_ver = image.os
-            docker_info.os_sub_ver = image.os_ver
+            container_info.create_time = now_time
+            container_info.os = "docker"
+            container_info.os_ver = image.os
+            container_info.os_sub_ver = image.os_ver
 
             # for insert of GN_INSTANCE_STATUS table
-            vm_size = sql_session.query(GnVmSize).filter(GnVmSize.id == docker_info.size_id).first()
+            vm_size = sql_session.query(GnVmSize).filter(GnVmSize.id == container_info.size_id).first()
             instance_status_price = None
             system_setting = sql_session.query(GnSystemSetting).first()
             if system_setting.billing_type == 'D':
@@ -164,11 +164,11 @@ def doc_create(id,sql_session):
 
             team_info = sql_session.query(GnTeam).filter(GnTeam.team_code == docker_info.team_code).first()
             user_info = sql_session.query(GnUsers).filter(GnUsers.user_id == docker_info.author_id).first()
-            insert_instance_status = GnInstanceStatus(vm_id=docker_info.id,vm_name=docker_info.name, create_time=now_time
-                              , delete_time=None, author_id=docker_info.author_id, author_name=user_info.user_name
-                              , team_code=docker_info.team_code, team_name=team_info.team_name
+            insert_instance_status = GnInstanceStatus(vm_id=container_info.id,vm_name=container_info.name, create_time=now_time
+                              , delete_time=None, author_id=container_info.author_id, author_name=user_info.user_name
+                              , team_code=container_info.team_code, team_name=team_info.team_name
                               , price=instance_status_price,price_type=system_setting.billing_type
-                              , cpu=docker_info.cpu, memory=docker_info.memory,disk=docker_info.disk)
+                              , cpu=container_info.cpu, memory=container_info.memory,disk=container_info.disk)
             sql_session.add(insert_instance_status)
 
             sql_session.commit()
@@ -176,13 +176,11 @@ def doc_create(id,sql_session):
     except Exception as e:
         print(e.message)
         sql_session.rollback()
-        error_hist = GnErrorHist(type=docker_info.type,action="Create",team_code=docker_info.team_code,
-                                 author_id=docker_info.author_id, vm_id=docker_info.id, vm_name=docker_info.name,
+        error_hist = GnErrorHist(type=container_info.type,action="Create",team_code=container_info.team_code,
+                                 author_id=container_info.author_id, vm_id=container_info.id, vm_name=container_info.name,
                                  cause=e.message)
         sql_session.add(error_hist)
-        if docker_info is None:
-            docker_info = sql_session.query(GnVmMachines).filter(GnVmMachines.id == id).first()
-        docker_info.status = "Error"
+        container_info.status = "Error"
         sql_session.commit()
         logger.error(e)
         return jsonify(status=False, message="서비스 생성 실패: %s" % e)
