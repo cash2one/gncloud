@@ -76,6 +76,7 @@ class PowerShell(object):
         script += '$ip.IPAddresses.GetValue(0) | ConvertTo-Json'
         return self.send(script)
 
+    #고정ip 만드는 메서드, 현재는 사용 안함
     def set_vm_ip_address(self, ip, dns_address, dns_sub_address):
         script = '$IP = "'+ip+'";'
         script += '$MaskBits = '+config.MASK_BIT+';'

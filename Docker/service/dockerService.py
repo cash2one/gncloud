@@ -45,7 +45,7 @@ class DockerService(object):
             #image_detail = GnDockerImageDetail.query.filter_by(image_id=real_image_id).all()
             image_detail = sql_session.query(GnDockerImageDetail).filter(GnDockerImageDetail.image_id == real_image_id).all()
             # --- Docker Service 생성 커맨드 작성 ---
-            command = "docker service create"
+            command = "docker -H %s:port service create"
             command += " --limit-cpu %s" % cpu
             command += " --limit-memory %s" % memory
             command += " --replicas %s" % config.REPLICAS

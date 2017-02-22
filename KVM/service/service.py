@@ -80,16 +80,16 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
 def setSsh(host_ip, pub,org,name, ip, ssh_id):
     try:
-        f = open("/data/kvm/sshkeys/"+name+".pub", 'w')
+        f = open("/tmp/"+name+".pub", 'w')
         f.write(pub)
         f.close()
-        f = open("/data/kvm/sshkeys/"+name, 'w')
+        f = open("/tmp/"+name, 'w')
         f.write(org)
         f.close()
         print(":processing set sshkey!!!")
         s = pxssh.pxssh(timeout=1200)
         s.login(host_ip, USER)
-        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" +"/data/kvm/sshkeys/"+name + "' " + str(ip) + " "+ssh_id)
+        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" +"/tmp/"+name + "' " + str(ip) + " "+ssh_id)
         s.logout()
         print(":complete set sshkey!!!")
     except IOError as e:
