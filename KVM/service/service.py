@@ -81,10 +81,10 @@ def server_create(team_code, user_id, user_name, id, sql_session):
 
 def setSsh(host_ip, pub,org,name, ip, ssh_id):
     try:
-        f = open("/tmp/"+name+".pub", 'w')
+        f = open(config.SSHKEY_PATH + name+".pub", 'w')
         f.write(pub)
         f.close()
-        f = open("/tmp/"+name, 'w')
+        f = open(config.SSHKEY_PATH + name, 'w')
         f.write(org)
         f.close()
         print(":processing set sshkey!!!")
