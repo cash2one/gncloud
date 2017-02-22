@@ -68,6 +68,7 @@ class DockerService(object):
             logger.debug("Docker Service Created: %s", command)
             # --- //Docker Service 생성 커맨드 작성 ---
             service_id = subprocess.check_call(command, shell=True)
+            print 'service id = %s' % service_id
         except Exception as e:
             logger.error('service create error:%s' % e.message)
             return 'Error service create error:%s' % e.message
@@ -76,7 +77,7 @@ class DockerService(object):
             logger.error('service create error:%s' % service_id)
             return service_id
         else:
-            print 'service id = %s' % service_id
+
             return self.docker_service_ps(service_id, ip, port)
 
     # Docker 서비스 다시 시작 (실제로는 commit된 이미지로 서비스 생성)
