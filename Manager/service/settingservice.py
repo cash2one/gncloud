@@ -524,8 +524,8 @@ def price_del(id,sql_session):
     sql_session.commit()
 
 
-    def login_history(page, sql_session): #login history
-        page_size=10
+def login_history(page, sql_session): #login history
+    page_size=10
     page=int(page)-1
     list=sql_session.query(GnLoginHist).order_by(GnLoginHist.action_time.desc()).limit(page_size).offset(page*page_size).all()
     total_page= sql_session.query(func.count(GnLoginHist.id).label("count")).one()
