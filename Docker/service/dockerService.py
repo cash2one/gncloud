@@ -124,7 +124,7 @@ class DockerService(object):
             command = '%s %s' % (command, backup_image)
             command = '%s %s' % (command, postfix)
 
-            service_id = subprocess.check_call(command, shell=True)
+            service_id = subprocess.check_output(command, shell=True)
         except Exception as e:
             logger.error('service create error:%s' % e.message)
             return 'Error service create error:%s' % e.message
@@ -142,7 +142,7 @@ class DockerService(object):
         try:
             # docker swarm manager need a second for assigning to service port
             time.sleep(3)
-            result = subprocess.check_call(command, shell=True)
+            result = subprocess.check_output(command, shell=True)
         except Exception as e:
             logger.error(e)
 
@@ -151,19 +151,19 @@ class DockerService(object):
     # Docker 서비스를 삭제한다.
     def docker_service_rm(self, internal_id, ip, port):
         command = "docker -H %s:%s service rm %s" % (ip, port, internal_id)
-        return subprocess.check_call(command, shell=True)
+        return subprocess.check_output(command, shell=True)
 
     # Docker 볼륨을 삭제한다.
     def docker_volume_rm(self, volumes, ip, port):
         command = "docker -H %s:%s volume rm %s" % (ip, port, volumes)
         logger.debug(command)
-        return subprocess.check_call(command, shell=True)
+        return subprocess.check_output(command, shell=True)
 
     # Docker 서비스의 컨테이너를 가져온다.
     def get_service_containers(self, internal_id, ip, port):
         container_list = []
         command = "docker -H %s:%s service ps %s" % (ip, port, internal_id)
-        result = subprocess.check_call(command, shell=True)
+        result = subprocess.check_output(command, shell=True)
         result = result.split("\r\n", 1)[1]
         result = json.loads(result.replace("\r\n", ""))
         for line in result:
@@ -190,7 +190,7 @@ class DockerService(object):
         try:
             command = "docker -H %s:%s service inspect %s" % (ip, port, internal_id)
             # 서비스 내의 Mounts 정보 가져오기
-            service = subprocess.check_call(command, shell=True)
+            service = subprocess.check_output(command, shell=True)
             container_spec_list = service[0]['Spec']['TaskTemplate']['ContainerSpec']
             ok_volume = False
             for isExist in container_spec_list:
@@ -207,7 +207,7 @@ class DockerService(object):
                 command = "docker -H %s:%s volume inspect %s" % (ip, port, mount["Source"])
                 volume = ""
                 while type(volume) is not list:
-                    volume = subprocess.check_call(command, shell=True)
+                    volume = subprocess.check_output(command, shell=True)
                     volume = volume.split("\r\n", 1)[1]
                     volume = json.loads(volume.replace("\r\n", ""))
                 mount['Mountpoint'] = volume[0]['Mountpoint']
