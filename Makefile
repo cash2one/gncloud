@@ -1,5 +1,3 @@
-# Tobe
-
 all: git-pull gncloud-kvm gncloud-hyperv gncloud-docker gncloud-manager gncloud-scheduler gncloud-web
 
 git-pull:
