@@ -568,6 +568,7 @@ li.nav-link.active>a:hover,
     font-weight: normal;
     line-height: 1.42857143;
     white-space: nowrap;
+    text-align: left;
 }
 
 .dropdown-menu > li > a:hover,
@@ -1956,6 +1957,8 @@ ul.gn-sett-graph li.disk-color{margin-top: 15px; font-size: 20px;}
     }
     .gn-head-drop{text-align: center;}
     .gn-head-drop li{margin: 10px 0;}
+
+    
 
     
     /* ======== gncloud 버튼 ======== */
