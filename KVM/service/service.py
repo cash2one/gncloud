@@ -92,11 +92,11 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         s.login(host_ip, USER)
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '" +"/tmp/"+name + "' " + str(ip) + " "+ssh_id)
         s.logout()
+        print(":complete set sshkey!!!")
         if os.path.exists(name):
             os.remove(name)
             os.remove(name+".pub")
             print(":complete delete sshkeyfile")
-        print(":complete set sshkey!!!")
     except IOError as e:
         print(e)
         pass
