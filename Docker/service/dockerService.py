@@ -148,7 +148,7 @@ class DockerService(object):
 
     # Docker 서비스를 삭제한다.
     def docker_service_rm(self, internal_id, ip, port):
-        command = "docker -H %s:%s service rm %s" % (internal_id, ip, port)
+        command = "docker -H %s:%s service rm %s" % (ip, port, internal_id)
         return subprocess.check_call(command, shell=True)
 
     # Docker 볼륨을 삭제한다.
