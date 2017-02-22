@@ -610,8 +610,14 @@ li.nav-link.active>a:hover,
 .click{
     font-weight: 400 !important;
     cursor: pointer;
-    font-weight: normal;   
 }
+
+.label-click{
+    font-weight: 400 !important;
+    cursor: pointer;  
+}
+
+.pointer{cursor: pointer;}
 
 .click:hover{
     color: #58c4c6 !important; 
