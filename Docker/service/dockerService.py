@@ -136,7 +136,7 @@ class DockerService(object):
     # Docker 서비스 정보를 가지고 온다.
     def docker_service_ps(self, internal_id, ip, port):
         result=''
-        command = "docker -H %s:%s service inspect %s" % (internal_id, ip, port)
+        command = "docker -H %s:%s service inspect %s" % (ip, port, internal_id)
         try:
             # docker swarm manager need a second for assigning to service port
             time.sleep(3)
@@ -160,7 +160,7 @@ class DockerService(object):
     # Docker 서비스의 컨테이너를 가져온다.
     def get_service_containers(self, internal_id, ip, port):
         container_list = []
-        command = "docker -H %s:%s service ps %s" % (internal_id, ip, port)
+        command = "docker -H %s:%s service ps %s" % (ip, port, internal_id)
         result = subprocess.check_call(command, shell=True)
         result = result.split("\r\n", 1)[1]
         result = json.loads(result.replace("\r\n", ""))
@@ -186,7 +186,7 @@ class DockerService(object):
     def get_service_volumes(self, internal_id, ip, port):
         mounts = ''
         try:
-            command = "docker -H %s:%s service inspect %s" % (internal_id, ip, port)
+            command = "docker -H %s:%s service inspect %s" % (ip, port, internal_id)
             # 서비스 내의 Mounts 정보 가져오기
             service = subprocess.check_call(command, shell=True)
             container_spec_list = service[0]['Spec']['TaskTemplate']['ContainerSpec']
