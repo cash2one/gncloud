@@ -1,6 +1,6 @@
 # Tobe
 
-all: git-pull kvm hyperv docker manager scheduler web-front
+all: git-pull gncloud-kvm gncloud-hyperv gncloud-docker gncloud-manager gncloud-scheduler gncloud-web
 
 git-pull:
 	cd /var/lib/gncloud; git pull

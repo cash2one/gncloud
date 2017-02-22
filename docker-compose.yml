@@ -18,7 +18,7 @@ services:
       - scheduler
 
   db:
-    image: mysql
+    image: gncloud/gncloud-mysql
     restart: always
     ports:
       - "3306:3306"
