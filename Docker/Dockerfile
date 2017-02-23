@@ -4,6 +4,17 @@ ENV PYTHONPATH=/var/lib/gncloud
 
 # install python
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+RUN >/etc/yum.repos.d/docker.repo
+RUN echo '[dockerrepo]' >> /etc/yum.repos.d/docker.repo
+RUN echo 'name=Docker Repository' >> /etc/yum.repos.d/docker.repo
+RUN echo 'baseurl=https://yum.dockerproject.org/repo/main/centos/7/' >> /etc/yum.repos.d/docker.repo
+RUN echo 'enabled=1' >> /etc/yum.repos.d/docker.repo
+RUN echo 'gpgcheck=1' >> /etc/yum.repos.d/docker.repo
+RUN echo 'gpgkey=https://yum.dockerproject.org/gpg' >> /etc/yum.repos.d/docker.repo
+
+RUN yum history sync
+
 RUN yum -y update && \
     yum -y groupinstall "Development Tools" && \
     yum -y install \
@@ -12,7 +23,8 @@ RUN yum -y update && \
         uwsgi-plugin-python \
         MySQL-python \
         supervisor \
-        uwsgi
+        uwsgi \
+        docker-engine
 
 COPY requirements.txt /var/lib/gncloud/Docker/
 RUN pip install --upgrade pip
