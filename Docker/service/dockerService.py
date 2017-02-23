@@ -8,7 +8,7 @@ from datetime import datetime
 import requests
 from pexpect import pxssh
 
-from Docker.util.config import Config
+from Docker.util.config import config
 from Docker.util.logger import logger
 
 class DockerService(object):
@@ -29,9 +29,9 @@ class DockerService(object):
             command = "docker -H %s:%s service create" % (ip, port)
             command += " --limit-cpu %s" % container_info.cpu
             command += " --limit-memory %s" % container_info.memory
-            command += " --replicas %s" % Config.REPLICAS
+            command += " --replicas %s" % config.REPLICAS
             #command += " --constraint 'node.hostname != manager'"
-            command += " --restart-max-attempts %s" % Config.RESTART_MAX_ATTEMPTS
+            command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
             postfix=''
             data_path=''
             mount_count = 1
@@ -87,9 +87,9 @@ class DockerService(object):
             command = "docker -H %s:%s service create" % (ip, port)
             command += " --limit-cpu %s" % container_info.cpu
             command += " --limit-memory %s" % container_info.memory
-            command += " --replicas %s" % Config.REPLICAS
+            command += " --replicas %s" % config.REPLICAS
             #command += " --constraint 'node.hostname != manager'"
-            command += " --restart-max-attempts %s" % Config.RESTART_MAX_ATTEMPTS
+            command += " --restart-max-attempts %s" % config.RESTART_MAX_ATTEMPTS
             mount_count = 1
             postfix=''
             for detail in image_detail:

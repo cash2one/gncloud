@@ -7,3 +7,4 @@ class Config:
     REPLICAS = 1
     RESTART_MAX_ATTEMPTS = 2
 
+config = Config()

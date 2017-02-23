@@ -10,8 +10,6 @@ from sqlalchemy import and_
 from Docker.db.database import db_session
 from Docker.db.models import *
 from Docker.service.dockerService import DockerService
-from Docker.util.config import Config
-from Docker.util.hash import random_string
 from Docker.util.logger import logger
 
 # init value
