@@ -42,4 +42,4 @@ def backup_delete_force():
     return app.ScheduleController.backup_delete.backup_delete()
 
 if __name__ == '__main__':
-    app.run(host=config.CONTROLLER_HOST,port=int(config.CONTROLLER_PORT))
+    app.run(port=8084)

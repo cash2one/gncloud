@@ -25,7 +25,7 @@ class BackupDelete:
         job_defaults = { 'coalesce': False, 'max_instances': 3 }
         self.scheduler = BackgroundScheduler()
         self.scheduler.configure(executors=executors, job_defaults=job_defaults)
-        self.scheduler.add_job(lambda : self.backup_remove(), trigger='cron', hour=0, minute=0)
+        self.scheduler.add_job(lambda : self.backup_delete(), trigger='cron', hour=0, minute=0)
         self.scheduler.start()
 
     def backup_delete(self):

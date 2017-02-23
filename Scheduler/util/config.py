@@ -6,49 +6,27 @@ import sys
 
 
 class Config:
-    CONTROLLER_HOST = None
-    CONTROLLER_PORT = None
-    DB_URL = None
-    SALT = None
-    LOG_DIR=None
-    MONITOR_CYCLE_SEC=None
-    INVOICE_VER=None
-    LOCAL_PATH=None
-    NAS_PATH=None
-    MANAGER_PATH=None
-    BACKUP_PATH=None
-    LIVERT_IMAGE_BACKUP_PATH=None
-    LIVERT_IMAGE_LOCAL_PATH=None
+    DB_URL = 'mysql://gncloud:gncloud@db/gncloud?charset=utf8'
+    SALT = 'Scheduler'
+    MONITOR_CYCLE_SEC = 60
+    INVOICE_VER = 1.0
 
-    def __init__(self, path="../conf/config.conf"):
-        # 외부 Config파일을 환경변수로 설정시 이 파일을 이용한다.
-        config_section = "DEFAULT"
-        config_file = os.environ.get('APP_CONFIG')
-        if config_file is None or config_file == '':
-            config_file = os.path.join(os.path.dirname(__file__), path)
+    IMAGE_PATH_PREFIX = '/data/images/hyperv/'
 
-        if os.path.isfile(config_file):
-            self.load(config_file, config_section)
-        else:
-            sys.exit('Cannot read config file : ' + config_file)
+    BACKUP_PATH = '' #C:/data/images/hyperv/backup
+    LIVERT_IMAGE_BACKUP_PATH = '' #/home/images/kvm/backup/
+    LIVERT_IMAGE_LOCAL_PATH = '' #/home/images/kvm/instance/
 
-    def load(self, config_file, config_section="DEFAULT"):
-        parser = ConfigParser.ConfigParser()
-        result = parser.read(config_file)
 
-        self.CONTROLLER_HOST = parser.get(config_section, "CONTROLLER_HOST")
-        self.CONTROLLER_PORT = parser.get(config_section, "CONTROLLER_PORT")
-        self.DB_URL = parser.get(config_section, "DB_URL")
-        self.SALT = parser.get(config_section, "SALT")
-        self.LOG_DIR = parser.get(config_section, "LOG_DIR")
-        self.MONITOR_CYCLE_SEC = parser.get(config_section, "MONITOR_CYCLE_SEC")
-        self.INVOICE_VER = parser.get(config_section, "INVOICE_VER")
-        self.LOCAL_PATH = parser.get(config_section, "LOCAL_PATH")
-        self.NAS_PATH = parser.get(config_section, "NAS_PATH")
-        self.MANAGER_PATH = parser.get(config_section, "MANAGER_PATH")
-        self.BACKUP_PATH = parser.get(config_section, "BACKUP_PATH")
-        self.LIVERT_IMAGE_BACKUP_PATH = parser.get(config_section, "LIVERT_IMAGE_BACKUP_PATH")
-        self.LIVERT_IMAGE_LOCAL_PATH = parser.get(config_section, "LIVERT_IMAGE_LOCAL_PATH")
+    def __init__(self):
+        network_drive_letter = 'C'
+        keys = os.environ.keys()
+        for variable in keys:
+            if variable == 'LIVERT_IMAGE_BACKUP_PATH':
+                libvirt_backup_path = os.environ['LIVERT_IMAGE_BACKUP_PATH']
+            elif variable == 'NETWORK_DRIVE_LETTER':
+                network_drive_letter = os.environ['NETWORK_DRIVE_LETTER']
 
+        self.BACKUP_PATH = network_drive_letter + ':' + self.IMAGE_PATH_PREFIX
 # 전역 공통사용 객체이다.
 config = Config()
