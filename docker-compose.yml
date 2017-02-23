@@ -31,7 +31,6 @@ services:
   manager:
     image: gncloud/gncloud-manager
     volumes:
-      - /var/lib/gncloud/Manager/conf:/var/lib/gncloud/Manager/conf
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
     ports:
@@ -47,7 +46,6 @@ services:
   kvm:
     image: gncloud/gncloud-kvm
     volumes:
-      - /var/lib/gncloud/KVM/conf:/var/lib/gncloud/KVM/conf
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
     ports:
@@ -65,7 +63,6 @@ services:
   hyperv:
     image: gncloud/gncloud-hyperv
     volumes:
-      - /var/lib/gncloud/HyperV/conf:/var/lib/gncloud/HyperV/conf
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
     ports:
@@ -83,7 +80,6 @@ services:
   docker:
     image: gncloud/gncloud-docker
     volumes:
-      - /var/lib/gncloud/Docker/conf:/var/lib/gncloud/Docker/conf
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
     ports:
@@ -99,7 +95,6 @@ services:
   scheduler:
     image: gncloud/gncloud-scheduler
     volumes:
-      - /var/lib/gncloud/Scheduler/conf:/var/lib/gncloud/Scheduler/conf
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
     ports:
