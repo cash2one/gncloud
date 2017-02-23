@@ -21,13 +21,6 @@ from HyperV.db.models import GnVmMachines, GnVmImages, GnMonitor, GnUsers, GnTea
 from HyperV.util.config import config
 from HyperV.util.hash import random_string
 
-ps_exec = 'powershell/execute'
-
-def manual():
-    script = request.form['script']
-    ps = PowerShell(config.AGENT_SERVER_IP, config.AGENT_PORT, ps_exec)
-    return jsonify(result=ps.send(script))
-
 # VM 생성 및 실행
 def hvm_create(id, sql_session):
     vm_info = None
@@ -50,7 +43,7 @@ def hvm_create(id, sql_session):
             host_ip = host_machine.ip
 
         #image_pool = sql_session.query(GnImagesPool).filter(GnImagesPool.host_id == host_id).first()
-        ps = PowerShell(host_ip, host_port, ps_exec)
+        ps = PowerShell(host_ip, host_port, config.AGENT_REST_URI)
 
         base_image_info = sql_session.query(GnVmImages).filter(GnVmImages.id == vm_info.image_id).first()
 
@@ -76,9 +69,6 @@ def hvm_create(id, sql_session):
             CONVERT_VHD_DESTINATIONPATH = config.LOCAL_PATH + "/instance/" + internal_name + ".vhdx"
 
             CONVERT_VHD_PATH = config.NAS_PATH + source_path + base_image  #원본이미지로부터
-
-            # CONVERT_VHD_DESTINATIONPATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/base/"+internal_name+".vhdx"
-            # CONVERT_VHD_PATH = config.DISK_DRIVE+config.HYPERV_PATH+"/vhdx/original/" + base_image  #원본이미지로부터
 
             convert_vhd = ps.convert_vhd(DestinationPath=CONVERT_VHD_DESTINATIONPATH, Path=CONVERT_VHD_PATH)
             add_vmharddiskdrive = ps.add_vmharddiskdrive(VMId=new_vm['VMId'], Path=CONVERT_VHD_DESTINATIONPATH)
@@ -108,23 +98,24 @@ def hvm_create(id, sql_session):
                 get_vm_ip = ps.get_vm_ip_address(new_vm['VMId'])
                 get_ip_count += 1
 
-            # password setting
-            set_pass_count = 0
-            return_val = ps.set_password(get_vm_ip, vm_info.hyperv_pass)
-            while len(return_val) <= 2:
-                if set_pass_count > 50:
-                    error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,
-                                             author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name,
-                                             cause='cannot set password')
-                    sql_session.add(error_hist)
-                    vm_info.internal_id=new_vm['VMId']
-                    vm_info.internal_name=internal_name
-                    vm_info.status = "Error"
-                    sql_session.commit()
-                    return False
-                time.sleep(5)
+            # password setting without snapshot
+            if base_image_info.sub_type != 'snap':
+                set_pass_count = 0
                 return_val = ps.set_password(get_vm_ip, vm_info.hyperv_pass)
-                set_pass_count += 1
+                while len(return_val) <= 2:
+                    if set_pass_count > 50:
+                        error_hist = GnErrorHist(type=vm_info.type,action="Create",team_code=vm_info.team_code,
+                                                 author_id=vm_info.author_id, vm_id=vm_info.id, vm_name=vm_info.name,
+                                                 cause='cannot set password')
+                        sql_session.add(error_hist)
+                        vm_info.internal_id=new_vm['VMId']
+                        vm_info.internal_name=internal_name
+                        vm_info.status = "Error"
+                        sql_session.commit()
+                        return False
+                    time.sleep(5)
+                    return_val = ps.set_password(get_vm_ip, vm_info.hyperv_pass)
+                    set_pass_count += 1
 
             vm_info.internal_id=new_vm['VMId']
             vm_info.internal_name=internal_name
@@ -161,7 +152,6 @@ def hvm_create(id, sql_session):
             sql_session.add(insert_instance_status)
 
             sql_session.commit()
-            # sql_session.remove()
             return True
     except Exception as e:
         print(e.message)
@@ -173,7 +163,6 @@ def hvm_create(id, sql_session):
         sql_session.add(error_hist)
         vm_info.status = "Error"
         sql_session.commit()
-        # sql_session.remove()
         return False
 
 
@@ -190,11 +179,9 @@ def hvm_snapshot():
         host_ip = host_machine.ip
 
     try:
-        ps = PowerShell(host_ip, host_port, ps_exec)
+        ps = PowerShell(host_ip, host_port, config.AGENT_REST_URI)
         create_snap = ps.create_snap(org_id.internal_id, config.MANAGER_PATH, config.NAS_PATH)
         if create_snap['Name'] is not None:
-            # base_image_info = db_session.query(GnVmMachines).filter(GnVmMachines.internal_id == org_id.internal_id).first()
-
             filename = create_snap['Name']
             icon = 'gn_icon_windows.png'
 
@@ -265,11 +252,12 @@ def hvm_state(id):
     else:
         host_ip = host_machine.ip
 
-    ps = PowerShell(host_ip, host_port, ps_exec)
+    ps = PowerShell(host_ip, host_port, config.AGENT_REST_URI)
 
     type = request.json['type']
     #print vmid.internal_id
     #    vm = GnVmMachines.query.filter_by().first
+    start_vm = ''
     if type == "Resume":
         try:
             # VM 시작
@@ -304,6 +292,7 @@ def hvm_state(id):
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
 
     elif type == "stop" or type == "shutdown" :
+        stop = ''
         try:
             # stop 1. 가상머신을 정지한다. (Stop-VM)
             stop = ps.stop_vm(vmid.internal_id)
@@ -335,6 +324,7 @@ def hvm_state(id):
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
 
     elif type == "Reboot":
+        restart = ''
         try:
             restart = ps.restart_vm(vmid.internal_id)
             # resume 1. 가상머신을 재시작한다. (Restart-VM)
@@ -364,6 +354,7 @@ def hvm_state(id):
             return jsonify(status=False, message="정상적인 결과가 아닙니다.")
 
     elif type == "Suspend":
+        suspend = ''
         try:
             suspend = ps.suspend_vm(vmid.internal_id)
             if suspend['State'] is 9:
@@ -410,7 +401,7 @@ def hvm_delete(id):
     #image_pool = db_session.query(GnImagesPool).filter(GnImagesPool.host_id == vmid.host_id).first()
 
     try:
-        ps = PowerShell(host_ip, host_port, ps_exec)
+        ps = PowerShell(host_ip, host_port, config.AGENT_REST_URI)
         vm_info =ps.get_vm_one(vmid.internal_id)
         #  REST hvm_delete 1. Powershell Script를 통해 VM을 정지한다.
         stop_vm = ps.stop_vm(vmid.internal_id)
@@ -458,7 +449,7 @@ def hvm_vm(vmid):
     else:
         host_ip = host_machine.ip
 
-    ps = PowerShell(host_ip, host_port, ps_exec)
+    ps = PowerShell(host_ip, host_port, config.AGENT_REST_URI)
     # Powershell Script를 통해 VM 정보를 가져온다.
     vm = ps.get_vm_one(vmid)
     # todo get-vm. VM 정보를 DB에서 가져온다.
@@ -475,7 +466,7 @@ def hvm_vm_list():
     else:
         host_ip = host_machine.ip
 
-    ps = PowerShell(host_ip, host_port, ps_exec)
+    ps = PowerShell(host_ip, host_port, config.AGENT_REST_URI)
     vm_list = ps.get_vm()
     # todo get-vm. VM 정보를 DB에서 가져온다.
     return jsonify(list=vm_list, message="", status=True)
@@ -527,7 +518,7 @@ def hvm_delete_image(id):
     else:
         host_ip = host_machine.ip
 
-    ps = PowerShell(host_ip, host_port, ps_exec)
+    ps = PowerShell(host_ip, host_port, config.AGENT_REST_URI)
     image_delete = ps.delete_vm_Image(vhd_Name.filename, config.NAS_PATH)
 
     json_obj = json.dumps(image_delete)
@@ -571,7 +562,7 @@ def vm_monitor(sql_session):
         else:
             host_ip = host.ip
 
-        ps = PowerShell(host_ip, host_port, "powershell/execute")
+        ps = PowerShell(host_ip, host_port, config.AGENT_REST_URI)
 
         script = 'Get-VM -id '+seq.internal_id+' | Select-Object -Property id, cpuusage, memoryassigned | ConvertTo-Json '
         monitor = ps.send(script)
