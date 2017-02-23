@@ -29,8 +29,8 @@ class Config:
     #LOCAL_DRIVE = local
     #NETWORK_DRIVE = nas
     def __init__(self):
-        #NETOWRK_DRIVE = 'nas'
-        #LOCAL_DRIVE = 'local'
+        NETOWRK_DRIVE = 'nas'
+        LOCAL_DRIVE = 'local'
         keys = os.environ.keys()
         for values in keys:
             if values == 'NETOWRK_DRIVE':
@@ -40,9 +40,9 @@ class Config:
             elif values== 'LOCAL_DRIVE':
                 self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX + os.environ['LOCAL_DRIVE']+"/instance/"
             else:
-                self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX+ "/base/"
-                self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX +"/snapshot/"
-                self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX +"/backup/"
-                self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX +"/instance/"
+                self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX+NETOWRK_DRIVE+ "/fase/"
+                self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX+NETOWRK_DRIVE +"/fnapshot/"
+                self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX+NETOWRK_DRIVE +"/fackup/"
+                self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX+NETOWRK_DRIVE +"/fnstance/"
 
 config = Config()
