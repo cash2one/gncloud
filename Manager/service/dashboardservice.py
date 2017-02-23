@@ -40,8 +40,15 @@ def healthcheck_info(team_code,sql_session):
                     except:
                         response_host = 1
                 else:
-                    host.ip = host.ip.split(':')[0]
-                    response_host = os.system("ping -c 1 -p "+ config.AGENT_PORT +" "+ host.ip)
+                    host_port = ''
+                    if host.ip.find(':') >= 0:
+                        ip_tmp = host.ip.split(':')
+                        host.ip = ip_tmp[0]
+                        host_port = ip_tmp[1]
+                    else:
+                        host_port = config.AGENT_PORT
+
+                    response_host = os.system("ping -c 1 -p "+ host_port +" "+ host.ip)
 
                 host_list.append({"host_check":response_host,"host_ip":host.ip,"host_name":host.name})
 
