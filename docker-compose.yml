@@ -106,7 +106,7 @@ services:
       - "8084:80"
     restart: always
     environment:
-      WSGI_PROCESSES: 4
+      WSGI_PROCESSES: 1
       WSGI_THREADS: 2
       LOCAL_DRIVE_LETTER: C
       NETWORK_DRIVE_LETTER: C
