@@ -40,9 +40,10 @@ class Config:
             if values in 'LOCAL_DRIVE':
                 self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX + values.LOCAL_DRIVE+"/instance/"
             else:
-                self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX+ "/base/"
-                self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX +"/snapshot/"
-                self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX +"/backup/"
-                self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX +"/instance/"
+                break
+        self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX+ "/base/"
+        self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX +"/snapshot/"
+        self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX +"/backup/"
+        self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX +"/instance/"
 
 config = Config()
