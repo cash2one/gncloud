@@ -33,16 +33,16 @@ class Config:
         LOCAL_DRIVE = 'local'
         keys = os.environ.keys()
         for values in keys:
-            if values == 'NETOWRK_DRIVE':
-                self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX + os.environ['NETOWRK_DRIVE']+"/base/"
-                self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX + os.environ['NETOWRK_DRIVE']+"/snapshot/"
-                self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX + os.environ['NETOWRK_DRIVE']+"/backup/"
+            if values == 'NETWORK_DRIVE':
+                self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX + os.environ['NETWORK_DRIVE']+"/base/"
+                self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX + os.environ['NETWORK_DRIVE']+"/snapshot/"
+                self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX + os.environ['NETWORK_DRIVE']+"/backup/"
             elif values== 'LOCAL_DRIVE':
                 self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX + os.environ['LOCAL_DRIVE']+"/instance/"
             else:
                 self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX+NETOWRK_DRIVE+ "/fase/"
                 self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX+NETOWRK_DRIVE +"/fnapshot/"
                 self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX+NETOWRK_DRIVE +"/fackup/"
-                self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX+NETOWRK_DRIVE +"/fnstance/"
+                self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX+LOCAL_DRIVE +"/fnstance/"
 
 config = Config()
