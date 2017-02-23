@@ -6,46 +6,43 @@ import sys
 
 from KVM.util.logger import logger
 
-class Config:
+class config:
+    #[DEFAULT]
+    #kvm manage server
+    LIBVIRT_REMOTE_URL = 'qemu+ssh://root@ip/system?socket=/var/run/libvirt/libvirt-sock'
+    POOL_NAME = 'gnpool'
 
-    LIBVIRT_REMOTE_URL = ""
-    DB_URL = ""
-    SCRIPT_PATH = ""
-    SSHKEY_PATH = ""
-    LIVERT_IMAGE_BASE_PATH = ""
-    LIVERT_IMAGE_SNAPSHOT_PATH = ""
-    LIVERT_IMAGE_BACKUP_PATH = ""
-    LIVERT_IMAGE_LOCAL_PATH = ""
-    POOL_NAME = ""
+    #db server
+    DB_URL = 'mysql://gncloud:gncloud@db/gncloud?charset=utf8'
 
-    def __init__(self, path="../conf/config.conf"):
-        config_section = "DEFAULT"
-        config_file = os.environ.get('APP_CONFIG')
-        if config_file is None or config_file == '':
-            config_file = os.path.join(os.path.dirname(__file__), path)
+    #file_path
+    #LIVERT_IMAGE_BASE_PATH = '/home/images/kvm/base/'
+    #LIVERT_IMAGE_SNAPSHOT_PATH = '/home/images/kvm/snapshot/'
+    #LIVERT_IMAGE_BACKUP_PATH = '/home/images/kvm/backup/'
+    #LIVERT_IMAGE_LOCAL_PATH = '/home/images/kvm/instance/'
+    SCRIPT_PATH = '/var/lib/gncloud/KVM/script/'
+    SSHKEY_PATH = '/tmp/'
 
-        if os.path.isfile(config_file):
-            self.load(config_file, config_section)
-        else:
-            sys.exit('Cannot read config file : ' + config_file)
+    IMAGE_PATH_PRIFIX = '/home/images/kvm/'
 
-    def load(self, config_file, config_section="DEFAULT"):
-        parser = ConfigParser.ConfigParser()
-        logger.info("Default Conf file path : %s", os.path.abspath(config_file))
-        result = parser.read(config_file)
-        self.LIBVIRT_REMOTE_URL = parser.get(config_section, "LIBVIRT_REMOTE_URL")
-        self.DB_URL = parser.get(config_section, "DB_URL")
-        self.SCRIPT_PATH = parser.get(config_section, "SCRIPT_PATH")
-        self.SSHKEY_PATH = parser.get(config_section, "SSHKEY_PATH")
-        self.POOL_NAME = parser.get(config_section, "POOL_NAME")
-        self.LIVERT_IMAGE_BASE_PATH = parser.get(config_section, "LIVERT_IMAGE_BASE_PATH")
-        self.LIVERT_IMAGE_SNAPSHOT_PATH = parser.get(config_section, "LIVERT_IMAGE_SNAPSHOT_PATH")
-        self.LIVERT_IMAGE_BACKUP_PATH = parser.get(config_section, "LIVERT_IMAGE_BACKUP_PATH")
-        self.LIVERT_IMAGE_LOCAL_PATH = parser.get(config_section, "LIVERT_IMAGE_LOCAL_PATH")
+    #환경변수 /local/ /nas/
+    #LOCAL_DRIVE = local
+    #NETWORK_DRIVE = nas
+    def __init__(self):
+        #NETOWRK_DRIVE = 'nas'
+        #LOCAL_DRIVE = 'local'
+        keys = os.environ.keys()
+        for values in keys:
+            if values in 'NETOWRK_DRIVE':
+                self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX + values.NETOWRK_DRIVE+"/base/"
+                self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX + values.NETOWRK_DRIVE+"/snapshot/"
+                self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX + values.NETOWRK_DRIVE+"/backup/"
+            if values in 'LOCAL_DRIVE':
+                self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX + values.LOCAL_DRIVE+"/instance/"
+            else:
+                self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX+ "/base/"
+                self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX +"/snapshot/"
+                self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX +"/backup/"
+                self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX +"/instance/"
 
-# 전역 공통사용 객체이다.
-local_custom_file = os.environ.get('CONFIG_FILE_PATH')
-if local_custom_file is None:
-    config = Config()
-else:
-    config = Config(local_custom_file)
+config = config()
