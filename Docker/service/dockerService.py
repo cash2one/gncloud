@@ -219,7 +219,7 @@ class DockerService(object):
                 mount['Mountpoint'] = volume[0]['Mountpoint']
             return mounts
         except Exception as e:
-            logger.debug('get_service_volumes error = %s' % e)
+            logger.debug('still making volume ? = %s' % e)
             logger.debug('mounts = %s' % mounts)
             return None
 
