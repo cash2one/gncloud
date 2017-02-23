@@ -185,6 +185,7 @@ class PowerShell(object):
     # / Add-VMHardDiskDrive -VM $vm -Path C:\images\2_testvm\disk.vhdx
     # Return ?
     def add_vmharddiskdrive(self, **kwargs):
+        vmscript = ''
         script = "Add-VMHardDiskDrive $vm"
         for option, value in kwargs.items():
             # vmId 값의 경우 VMObject를 불러오기 위해서 필요한 값이므로 Set-VM Script에서는 직접 넣지 않는다.

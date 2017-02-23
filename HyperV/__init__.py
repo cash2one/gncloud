@@ -27,9 +27,6 @@ def monitor():
 def shutdown_session(exception=None):
     db_session.remove()
 
-
-# PowerShell Script Manual 실행: (Script) | ConvertTo-Json
-app.add_url_rule("/manual", view_func=manual, methods=['GET'])
 # --- VM 함수 --- #
 # VM 생성 및 실행
 # app.add_url_rule("/vm/machine", view_func=hvm_create, methods=['POST'])
@@ -106,5 +103,4 @@ def internal_error(error):
     return jsonify(status=False, message="서버에 에러가 발생했습니다. 관리자에게 문의해주세")
 
 if __name__ == '__main__':
-    #app.run(host=config.CONTROLLER_HOST, port=int(config.CONTROLLER_PORT))
-    app.run(port=int(config.CONTROLLER_PORT))
+    app.run(port=8082)
