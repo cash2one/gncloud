@@ -260,7 +260,7 @@ def insertImageInfo(type,os,os_ver,os_bit,filename,icon,name,sql_session):
             sql_session.commit()
             break
     image_info = GnVmImages(id=id, filename=filename, type=type, os=os, name=name, sub_type="base"
-                            , icon=icon, os_ver=os_ver, os_bit=os_bit, author_id=None, status=config.RUN_STATUS)
+                            , icon=icon, os_ver=os_ver, os_bit=os_bit, author_id=None,ssh_id=os ,status=config.RUN_STATUS)
     sql_session.add(image_info)
     sql_session.commit()
 
