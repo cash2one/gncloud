@@ -33,11 +33,11 @@ class Config:
         #LOCAL_DRIVE = 'local'
         keys = os.environ.keys()
         for values in keys:
-            if values in 'NETOWRK_DRIVE':
+            if 'NETOWRK_DRIVE' in values:
                 self.LIVERT_IMAGE_BASE_PATH = self.IMAGE_PATH_PRIFIX + values.NETOWRK_DRIVE+"/base/"
                 self.LIVERT_IMAGE_SNAPSHOT_PATH = self.IMAGE_PATH_PRIFIX + values.NETOWRK_DRIVE+"/snapshot/"
                 self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX + values.NETOWRK_DRIVE+"/backup/"
-            if values in 'LOCAL_DRIVE':
+            if 'LOCAL_DRIVE' in values:
                 self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX + values.LOCAL_DRIVE+"/instance/"
             else:
                 break
