@@ -13,3 +13,4 @@ class config:
     ERROR_STATUS = 'Error'
     SUSPEND_STATUS = 'Suspend'
     NGINX_CONF_PATH = '/etc/nginx'
+    AGENT_PORT = '8180'
