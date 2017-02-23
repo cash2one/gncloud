@@ -6,7 +6,7 @@
     <source>
     </source>
     <target>
-        <path>/var/lib/libvirt/{{pool_name}}</path>
+        <path>/data/{{pool_name}}</path>
         <permissions>
             <mode>0755</mode>
             <owner>-1</owner>

@@ -38,9 +38,9 @@ class Config:
             elif values== 'LOCAL_DRIVE':
                 LOCAL_DRIVE = os.environ['LOCAL_DRIVE']
 
-        self.LIVERT_IMAGE_BASE_PATH =NETWORK_DRIVE+ self.IMAGE_PATH_PRIFIX+ "/base"
-        self.LIVERT_IMAGE_SNAPSHOT_PATH =NETWORK_DRIVE + self.IMAGE_PATH_PRIFIX+"/snapshot"
-        self.LIVERT_IMAGE_BACKUP_PATH =NETWORK_DRIVE + self.IMAGE_PATH_PRIFIX+"/backup"
-        self.LIVERT_IMAGE_LOCAL_PATH =LOCAL_DRIVE + self.IMAGE_PATH_PRIFIX+"/instance"
+        self.LIVERT_IMAGE_BASE_PATH =NETWORK_DRIVE+ self.IMAGE_PATH_PRIFIX+ "/base/"
+        self.LIVERT_IMAGE_SNAPSHOT_PATH =NETWORK_DRIVE + self.IMAGE_PATH_PRIFIX+"/snapshot/"
+        self.LIVERT_IMAGE_BACKUP_PATH =NETWORK_DRIVE + self.IMAGE_PATH_PRIFIX+"/backup/"
+        self.LIVERT_IMAGE_LOCAL_PATH =LOCAL_DRIVE + self.IMAGE_PATH_PRIFIX+"/instance/"
 
 config = Config()

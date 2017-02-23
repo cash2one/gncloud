@@ -22,7 +22,9 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     print config.LIVERT_IMAGE_BACKUP_PATH
     print config.LIVERT_IMAGE_BASE_PATH
     print config.LIVERT_IMAGE_SNAPSHOT_PATH
+    print config.LIVERT_IMAGE_BACKUP_PATH
     print config.LIVERT_IMAGE_LOCAL_PATH
+    print config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name
     if base_sub_type == "base":
         s.sendline("\cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
         s.logout()
