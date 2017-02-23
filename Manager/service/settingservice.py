@@ -213,10 +213,10 @@ def nginx_reload(cluster_list):
         ,hyperv_endpoint = hyper_str
         ,docker_endpoint = docker_str
     );
-    f = open("/usr/local/nginx/conf/nginx.conf", 'w')
+    f = open("/etc/nginx.conf", 'w')
     f.write(nginx_conf)
     f.close()
-    subprocess.check_output("/usr/local/nginx/sbin/nginx -s reload", shell=True)
+    subprocess.check_output("systemctl restart nginx", shell=True)
 
 
 def deleteCluster(id,sql_session):
