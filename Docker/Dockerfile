@@ -12,7 +12,10 @@ RUN yum -y update && \
         uwsgi-plugin-python \
         MySQL-python \
         supervisor \
-        uwsgi
+        uwsgi \
+        docker-engine
+
+RUN systemctl enable docker
 
 COPY requirements.txt /var/lib/gncloud/Docker/
 RUN pip install --upgrade pip
