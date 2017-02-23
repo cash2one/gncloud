@@ -21,7 +21,7 @@ gncloud-scheduler:
 
 gncloud-web:
 	mkdir -p /etc/nginx
-	cp /var/lib/gncloud/Web/sites-avaliable/* /etc/nginx/.
+	cp /var/lib/gncloud/Web/sites-available/* /etc/nginx/.
 	cd /var/lib/gncloud/Web; docker build -t gncloud/gncloud-web .
 
 clean:
