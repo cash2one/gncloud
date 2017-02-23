@@ -90,6 +90,7 @@ services:
       WSGI_THREADS: 2
     depends_on:
       - db
+    privileged: true
 
 
   scheduler:
