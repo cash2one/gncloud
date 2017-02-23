@@ -4,24 +4,25 @@ git-pull:
 	cd /var/lib/gncloud; git pull
 
 gncloud-kvm:
-	cd /var/lib/gncloud/KVM; docker build -t gncloud-kvm .
+	docker build -t gncloud/gncloud-kvm /var/lib/gncloud/KVM
 
 gncloud-hyperv:
-	cd /var/lib/gncloud/HyperV; docker build -t gncloud-hyperv .
+	docker build -t gncloud/gncloud-hyperv /var/lib/gncloud/HyperV
 
 
 gncloud-docker:
-	cd /var/lib/gncloud/Docker; docker build -t gncloud-docker .
+	docker build -t gncloud/gncloud-docker /var/lib/gncloud/Docker
 
 gncloud-manager:
-	cd /var/lib/gncloud/Manager; docker build -t gncloud-manager .
+	docker build -t gncloud/gncloud-manager /var/lib/gncloud/Manager
 
 gncloud-scheduler:
-	cd /var/lib/gncloud/Scheduler; docker build -t gncloud-scheduler .
+	docker build -t gncloud/gncloud-scheduler /var/lib/gncloud/Scheduler
 
 gncloud-web:
-	cd /var/lib/gncloud/Web; docker build -t gncloud-web .
+	docker build -t gncloud/gncloud-web /var/lib/gncloud/Web
 
 clean:
-	docker rmi gncloud-kvm gncloud-hyperv gncloud-docker gncloud-manager gncloud-scheduler gncloud-web
+	docker rm gncloud/gncloud-kvm gncloud/gncloud-hyperv gncloud/gncloud-docker gncloud/gncloud-manager gncloud/gncloud-scheduler gncloud/gncloud-web
+
 
