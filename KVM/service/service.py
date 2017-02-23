@@ -84,7 +84,9 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         name = config.SSHKEY_PATH + name
         print(":processing set sshkey!!!")
         s = pxssh.pxssh(timeout=1200)
+        print host_ip + USER
         s.login(host_ip, USER)
+        print 2
         s.sendline(config.SCRIPT_PATH+"make_sshkeys.sh "+name+" '" + str(org)+"' '" + str(pub)+"'")
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh '"+name + "' '" + str(ip) +"' '"+str(ssh_id)+"'")
         s.sendline("rm -f "+ name)
