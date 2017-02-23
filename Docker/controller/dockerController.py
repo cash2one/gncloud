@@ -94,7 +94,8 @@ def doc_create(id,sql_session):
                     DockerService.docker_service_rm(docker_service[0]['ID'], docker_ip, docker_port)
                     return jsonify(status=False, message="서비스 생성 실패: %s" % service_container_list )
                 time.sleep(3)
-                service_container_list = DockerService.get_service_containers(docker_service[0]['ID'])
+                service_container_list = DockerService.get_service_containers(docker_service[0]['ID'],
+                                                                              docker_ip, docker_port)
                 service_container_count += 1
             logger.debug("service_container_list: %s" % service_container_list)
             host_ip_list = []
