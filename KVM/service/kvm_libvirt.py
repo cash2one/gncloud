@@ -19,10 +19,7 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
 
     # 스냅샷 기반 유무에 따른 생성 set_vm_ip.sh로직 분기
     instance_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
-    print config.LIVERT_IMAGE_BACKUP_PATH
-    print config.LIVERT_IMAGE_BASE_PATH
-    print config.LIVERT_IMAGE_SNAPSHOT_PATH
-    print config.LIVERT_IMAGE_LOCAL_PATH
+
     if base_sub_type == "base":
         s.sendline("\cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
         s.logout()
