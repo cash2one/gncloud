@@ -26,8 +26,6 @@ RUN yum -y update && \
         uwsgi \
         docker-engine
 
-RUN systemctl enable docker
-
 COPY requirements.txt /var/lib/gncloud/Docker/
 RUN pip install --upgrade pip
 RUN pip install -r /var/lib/gncloud/Docker/requirements.txt
