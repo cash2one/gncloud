@@ -21,7 +21,6 @@ RUN pip install -r /var/lib/gncloud/Scheduler/requirements.txt
 RUN mkdir -p /var/log/gncloud
 COPY supervisor-app.ini /etc/supervisord.d/
 
-COPY conf        /var/lib/gncloud/Scheduler/conf
 COPY controller  /var/lib/gncloud/Scheduler/controller
 COPY db          /var/lib/gncloud/Scheduler/db
 COPY service     /var/lib/gncloud/Scheduler/service

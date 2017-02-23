@@ -21,7 +21,6 @@ RUN pip install -r /var/lib/gncloud/HyperV/requirements.txt
 RUN mkdir -p /var/log/gncloud
 COPY supervisor-app.ini /etc/supervisord.d/
 
-COPY conf        /var/lib/gncloud/HyperV/conf
 COPY controller  /var/lib/gncloud/HyperV/controller
 COPY db          /var/lib/gncloud/HyperV/db
 COPY service     /var/lib/gncloud/HyperV/service
