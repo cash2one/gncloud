@@ -6,7 +6,7 @@ import sys
 
 from KVM.util.logger import logger
 
-class config:
+class Config:
     #[DEFAULT]
     #kvm manage server
     LIBVIRT_REMOTE_URL = 'qemu+ssh://root@ip/system?socket=/var/run/libvirt/libvirt-sock'
@@ -45,4 +45,4 @@ class config:
                 self.LIVERT_IMAGE_BACKUP_PATH = self.IMAGE_PATH_PRIFIX +"/backup/"
                 self.LIVERT_IMAGE_LOCAL_PATH = self.IMAGE_PATH_PRIFIX +"/instance/"
 
-config = config()
+config = Config()
