@@ -1,4 +1,4 @@
-FROM centos7
+FROM centos
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH=/var/lib/gncloud
 
