@@ -21,7 +21,6 @@ RUN pip install -r /var/lib/gncloud/Manager/requirements.txt
 RUN mkdir -p /var/log/gncloud
 COPY supervisor-app.ini /etc/supervisord.d/
 
-COPY conf        /var/lib/gncloud/Manager/conf
 COPY db          /var/lib/gncloud/Manager/db
 COPY service     /var/lib/gncloud/Manager/service
 COPY util        /var/lib/gncloud/Manager/util
