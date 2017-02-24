@@ -164,18 +164,8 @@ def deleteHostMachine(id,sql_session):
     else:
         return False
 
-def updateClusterInfo(id,ip,sql_session):
-    try:
-        cluster_info = sql_session.query(GnCluster).filter(GnCluster.id == id).one()
-        cluster_info.ip = ip
-        cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS)
-        nginx_reload(cluster_list)
-        sql_session.commit()
-    except:
-        sql_session.rollback()
 
-
-def insertClusterInfo(type,ip,sql_session):
+def insertClusterInfo(type,sql_session):
     try:
         while True:
             id = random_string(8)
@@ -183,41 +173,13 @@ def insertClusterInfo(type,ip,sql_session):
             if not check_info:
                 break
 
-        cluster_info =GnCluster(id=id,type=type, ip=ip, status=config.RUN_STATUS)
+        cluster_info =GnCluster(id=id,type=type,ip= type ,status=config.RUN_STATUS)
         sql_session.add(cluster_info)
         sql_session.commit()
         cluster_list = sql_session.query(GnCluster).filter(GnCluster.status == config.RUN_STATUS).all()
-        nginx_reload(cluster_list)
+
     except:
         sql_session.rollback()
-
-def nginx_reload(cluster_list):
-    #nginx reload
-    kvm_str = ""
-    hyper_str = ""
-    docker_str = ""
-    if any((e.type == "kvm") for e in cluster_list):
-        kvm_info = [x for x in cluster_list if x.type == "kvm"].pop()
-        kvm_str = kvm_info.ip
-    if any((e.type == "hyperv") for e in cluster_list):
-        hyperv_info = [x for x in cluster_list if x.type == "hyperv"].pop()
-        hyper_str = hyperv_info.ip
-    if any((e.type == "docker") for e in cluster_list):
-        docker_info = [x for x in cluster_list if x.type == "docker"].pop()
-        docker_str = docker_info.ip
-
-    subprocess.check_output("cp "+config.NGINX_CONF_PATH+"nginx.conf "+config.NGINX_CONF_PATH+"nginx.conf_bak", shell=True)
-    nginx_conf = render_template(
-        "nginx.conf"
-        ,kvm_endpoint = kvm_str
-        ,hyperv_endpoint = hyper_str
-        ,docker_endpoint = docker_str
-    );
-    f = open("/etc/nginx.conf", 'w')
-    f.write(nginx_conf)
-    f.close()
-    subprocess.check_output("systemctl restart nginx", shell=True)
-
 
 def deleteCluster(id,sql_session):
     cluster_info = sql_session.query(GnCluster).filter(GnCluster.id == id).one()
