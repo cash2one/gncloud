@@ -1,6 +1,6 @@
 angular
     .module('gncloud')
-    .controller('guestSelectTeamCtrl', function ($scope, $http, $window, $rootScope) {
+    .controller('guestSelectTeamCtrl', function ($scope, $http, $window, $rootScope, notification) {
         //탭이동
         $('.nav-sidebar li').removeClass('active');
         var url = window.location;
