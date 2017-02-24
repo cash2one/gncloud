@@ -26,3 +26,6 @@ systemctl start docker
 # docker workers
 # docker swarm join --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c [IP]:2377
 
+# 각 docker host에
+# vi /etc/hosts => "gncloud platform ip	docker-registry" 추가
+# 192.168.1.5	docker-registry

@@ -24,8 +24,14 @@ systemctl start docker-registry
 
 # version 2
 #./docker-install.sh
+#docker login gncloud
+#docker pull gncloud/gncloud-registry:latest
+
+# 밑에 보이는것 무시
 #mkdir auth
-#docker run --entrypoint htpasswd registry:2 -Bbn gncloud gncloud > auth/htpasswd
+#docker pull registry
+#docker tag registry gncloud/gncloud-registry
+#docker run --entrypoint htpasswd gncloud/gncloud-registry -Bbn gncloud gncloud > auth/htpasswd
 #docker stop registry && docker rm -v registry
 
 #mkdir certs
@@ -35,9 +41,9 @@ systemctl start docker-registry
 #openssl genrsa 1024 > domain.key
 
 #generate cert
+# input country, locality, organization, unit, name, email etc
 #openssl req -new -x509 -nodes -sha1 -days 365 -key domain.key -out domain.cert
 
-# input country, locality, organization, unit, name, email etc
 #openssl x509 -inform PER -in domain.cert -out domain.crt
 
 #cd ..
@@ -53,3 +59,4 @@ systemctl start docker-registry
 
 
 
+#docker run -d -p 5000:5000 --restart=always --name gncloud-registry  -v `pwd`/auth:/auth   -e "REGISTRY_AUTH=htpasswd"   -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"  -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd -v `pwd`/certs:/certs -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key  gncloud/gncloud-registry
