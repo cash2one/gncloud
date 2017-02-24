@@ -37,7 +37,7 @@ class Backup:
                 sql_session = db_session
             backup_settings = sql_session.query(GnSystemSetting).first()
             if backup_settings.backup_schedule_type == 'W':
-                week_day = 0;
+                week_day = 0
                 week_today = datetime.date.today().weekday()
                 for week in backup_settings.backup_schedule_period:
                     # if week_day is 1, weekday is monday. 0 is sunday
@@ -148,7 +148,13 @@ class Backup:
         ps_exec = 'powershell/execute'
         sql_session = self.sql_session
         host_machine = sql_session.query(GnHostMachines).filter(GnHostMachines.id == vm_info.host_id).first()
-        host_ip= '%s:%d' % (host_machine.ip, host_machine.host_agent_port)
+
+        #host_ip= '%s:%d' % (host_machine.ip, host_machine.host_agent_port)
+        if host_machine.ip.find(':') >= 0:
+            host_ip = host_machine.ip
+        else:
+            host_ip = '%s:%s' % (host_machine.ip, config.AGENT_PORT)
+
         ps = BackupPowerShell(host_ip, ps_exec)
         backup_info = ps.create_backup(vm_info.internal_id, config.MANAGER_PATH, config.BACKUP_PATH)
         try:
