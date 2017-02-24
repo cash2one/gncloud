@@ -15,18 +15,11 @@
         <h2>타입 선택</h2>
         <form>
             <div class="btn-group" data-toggle="buttons">
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                <label class="btn gn-btn-create btn-block" ng-click="selectType('hyperv')" ng-show="hyper.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
+                <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="type in type">
+                <label class="btn gn-btn-create btn-block pull-left" ng-click="selectType(type.type)" ng-class="{'gn-input-error':data_value =='type'}">
                     <input id="type" name="" value="" type="radio">
-                    <span class="sprite-img sprite-windows"></span>
-                    <p class="label-name ellipsis">Hyper-V</p>
-                </label>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                <label class="btn gn-btn-create btn-block" ng-click="selectType('kvm')" ng-show="kvm.status != Removed" ng-class="{'gn-input-error':data_value =='type'}">
-                    <input name="" value="" type="radio">
-                    <span class="sprite-img sprite-kvm"></span>
-                    <p class="label-name ellipsis">KVM</p>
+                    <span class="sprite-img sprite-{{type.ip}}"></span>
+                    <p class="label-name ellipsis">{{type.ip}}</p>
                 </label>
                 </div>
                 <p ng-show="data_value == 'type' " class="error-message">타입을 선택해주세요.</p>

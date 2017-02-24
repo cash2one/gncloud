@@ -519,6 +519,10 @@ def saveCluster():
 
     return jsonify(status=True, message="success")
 
+@app.route('/vm/createcluster', methods=['GET'])
+def Clusterforcreate():
+    return jsonify(status=True, message="success", list=cluster_type(db_session))
+
 @app.route('/vm/host',methods=['POST'])
 def saveHostMachine():
     cpu = request.json['cpu']

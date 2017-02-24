@@ -6,6 +6,24 @@ angular
         $("#snap").hide();
         $http({
             method: 'GET',
+            url: '/api/manager/vm/createcluster',
+            headers: {'Content-Type': 'application/json; charset=utf-8'}
+        })
+            .success(function (data, status, headers, config) {
+                if (data) {
+                    $scope.type = data.list;
+                }
+                else {
+                    if(data.message != null) {
+                        notification.sendMessage("error",data.message);
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                console.log(status);
+            });
+        $http({
+            method: 'GET',
             url: '/api/manager/vm/createsize',
             headers: {'Content-Type': 'application/json; charset=utf-8'}
         })

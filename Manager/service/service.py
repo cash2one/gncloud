@@ -415,3 +415,5 @@ def cluster_info(sql_session):
 
 
 
+def cluster_type(sql_session):
+    return sql_session.query(GnCluster).filter(GnCluster.type != 'docker').filter(GnCluster.type !='scheduler').all()

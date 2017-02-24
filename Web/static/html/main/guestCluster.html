@@ -26,7 +26,6 @@
                                         <div class="form-group" ng-show="cluster.id == null">
                                             <label class="col-sm-3 control-label gn-control-label">타입</label>
                                             <div class="col-sm-9"  ng-class="{ 'has-error' : clusterForm.type.$invalid && !clusterForm.type.$pristine }">
-
                                                 <label class="radio-inline mod-input-name" ng-repeat="list in cluster_type_list" ng-if="list.viewYn == 'Y'">
                                                     <input type="radio" name="type" ng-model="cluster.type" value="{{list.type}}" ng-required="!cluster.type">{{list.name}}
                                                 </label>
