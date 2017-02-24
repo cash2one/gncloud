@@ -88,7 +88,7 @@ def service_monitoring(sql_session):
             gnMontor_info = sql_session.query(GnMonitor).filter(GnMonitor.id == container.service_id).one_or_none()
             if gnMontor_info is None:
                 vm_monitor = GnMonitor(
-                    id=container.id, type="docker", cpu_usage=cpu_usage/2.0, mem_usage=mem_usage/2.0,
+                    id=container.service_id, type="docker", cpu_usage=cpu_usage/2.0, mem_usage=mem_usage/2.0,
                     disk_usage=disk_usage/2.0, net_usage=net_usage)
                 sql_session.add(vm_monitor)
             else:
