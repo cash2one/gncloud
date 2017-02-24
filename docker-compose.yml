@@ -37,8 +37,6 @@ services:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
       - /etc/localtime:/etc/localtime
-    ports:
-      - "8080:80"
     restart: always
     environment:
       WSGI_PROCESSES: 4
@@ -53,8 +51,6 @@ services:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
       - /etc/localtime:/etc/localtime
-    ports:
-      - "8081:80"
     restart: always
     environment:
       WSGI_PROCESSES: 4
@@ -71,8 +67,6 @@ services:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
       - /etc/localtime:/etc/localtime
-    ports:
-      - "8082:80"
     restart: always
     environment:
       WSGI_PROCESSES: 4
@@ -89,15 +83,12 @@ services:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
       - /etc/localtime:/etc/localtime
-    ports:
-      - "8083:80"
     restart: always
     environment:
       WSGI_PROCESSES: 4
       WSGI_THREADS: 2
     depends_on:
       - db
-    privileged: true
 
 
   scheduler:
@@ -106,8 +97,6 @@ services:
       - /var/log/gncloud:/var/log/gncloud
       - /root/.ssh:/root/.ssh
       - /etc/localtime:/etc/localtime
-    ports:
-      - "8084:80"
     restart: always
     environment:
       WSGI_PROCESSES: 1
@@ -126,9 +115,6 @@ services:
     ports:
       - "5000:5000"
 
-networks:
-  front:
-    driver: brigde
 
        # ssh-keygen -f ~/.ssh/id_rsa
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.2
