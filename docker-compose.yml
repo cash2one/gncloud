@@ -89,7 +89,6 @@ services:
       WSGI_THREADS: 2
     depends_on:
       - db
-    privileged: true
 
 
   scheduler:
@@ -116,9 +115,6 @@ services:
     ports:
       - "5000:5000"
 
-networks:
-  front:
-    driver: brigde
 
        # ssh-keygen -f ~/.ssh/id_rsa
        # ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.1.2
