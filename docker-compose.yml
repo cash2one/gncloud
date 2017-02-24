@@ -119,6 +119,12 @@ services:
     depends_on:
       - db
 
+  registry:
+    image: gncloud/gncloud-registry
+    volumes:
+      - /data/registry:/var/lib/registry
+    ports:
+      5000:5000
 
 networks:
   front:
