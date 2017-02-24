@@ -507,7 +507,7 @@ def snapshotsdelete(id):
 @app.route('/vm/cluster/node/<id>',methods=['DELETE'])
 def removeHostMachine(id):
     result = deleteHostMachine(id,db_session)
-    if result == "True":
+    if result == True:
         return jsonify(status=True, message="success")
     else:
         return jsonify(status=False)
