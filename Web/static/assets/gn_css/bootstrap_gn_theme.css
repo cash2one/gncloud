@@ -1406,7 +1406,7 @@ form > .btn-group{
     margin: 7px 0px 5px 0px;
     float: left;
 }
-
+.sprite-hyperv{background: url(../gn_images/sprite_windows.png) no-repeat;}
 .sprite-windows{background: url(../gn_images/sprite_windows.png) no-repeat;}
 .sprite-ubuntu{background: url(../gn_images/sprite_ubuntu.png) no-repeat;}
 .sprite-docker{background: url(../gn_images/sprite_docker.png) no-repeat;}
@@ -1414,6 +1414,7 @@ form > .btn-group{
 .sprite-centos{background: url(../gn_images/sprite_centos.png) no-repeat;}
 .sprite-tomcat{background: url(../gn_images/sprite_tomcat.png) no-repeat;}
 
+.gn-btn-create.active .sprite-hyperv,
 .gn-btn-create.active .sprite-windows,
 .gn-btn-create.active .sprite-ubuntu,
 .gn-btn-create.active .sprite-docker,

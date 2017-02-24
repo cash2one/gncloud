@@ -15,7 +15,7 @@
         <h2>타입 선택</h2>
         <form>
             <div class="btn-group" data-toggle="buttons">
-                <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="type in type">
+                <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="type in type_check">
                 <label class="btn gn-btn-create btn-block pull-left" ng-click="selectType(type.type)" ng-class="{'gn-input-error':data_value =='type'}">
                     <input id="type" name="" value="" type="radio">
                     <span class="sprite-img sprite-{{type.ip}}"></span>
