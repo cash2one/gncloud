@@ -1,4 +1,4 @@
-all: git-pull kvm hyperv docker manager scheduler web mysql registry
+all: git-pull
 
 git-pull:
 	git pull
