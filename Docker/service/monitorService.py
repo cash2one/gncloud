@@ -75,6 +75,7 @@ def service_monitoring(sql_session):
                         net = float(line[8])
                         net_byte = convert_to_byte(unit, net)
                         net_usage += round(net_byte,4)
+                        worker_count += 1
 
             if worker_count > 0:
                 cpu_usage = (cpu_usage/worker_count)
