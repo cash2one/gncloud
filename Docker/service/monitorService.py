@@ -49,7 +49,7 @@ def service_monitoring(sql_session):
                                   % (ip, port, ip, port, container.internal_name)
 
                 result = subprocess.check_output (docker_stat_cmd , shell=True)
-                result = result.split("\r\n")
+                result = result.split("\n")
                 for line in result:
                     line = line.split()
                     if len(line) < 2:
