@@ -16,5 +16,6 @@ git-pull:
 	docker tag registry gncloud/gncloud-registry
 
 clean:
-	docker rmi gncloud/gncloud-kvm gncloud/gncloud-hyperv gncloud/gncloud-docker gncloud/gncloud-manager gncloud/gncloud-scheduler gncloud/gncloud-web gncloud/gncloud-mysql gncloud/gncloud-registry
+	docker rmi gncloud/gncloud-kvm gncloud/gncloud-hyperv gncloud/gncloud-docker gncloud/gncloud-manager
+	docker rmi gncloud/gncloud-scheduler gncloud/gncloud-web gncloud/gncloud-mysql gncloud/gncloud-registry
 
