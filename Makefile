@@ -1,6 +1,4 @@
-all: git-pull
-
-git-pull:
+all:
 	git pull
 	chmod +x *.sh
 	docker-compose down
