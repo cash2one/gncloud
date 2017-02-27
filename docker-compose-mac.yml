@@ -31,7 +31,7 @@ services:
     image: gncloud/gncloud-manager
     volumes:
       - ~/var/log/gncloud:/var/log/gncloud
-      - /root/.ssh:/root/.ssh
+      - ~/.ssh:/root/.ssh
     restart: always
     environment:
       WSGI_PROCESSES: 4
@@ -44,7 +44,7 @@ services:
     image: gncloud/gncloud-kvm
     volumes:
       - ~/var/log/gncloud:/var/log/gncloud
-      - /root/.ssh:/root/.ssh
+      - ~/.ssh:/root/.ssh
     restart: always
     environment:
       WSGI_PROCESSES: 4
@@ -59,7 +59,7 @@ services:
     image: gncloud/gncloud-hyperv
     volumes:
       - ~/var/log/gncloud:/var/log/gncloud
-      - /root/.ssh:/root/.ssh
+      - ~/root/.ssh:/root/.ssh
     restart: always
     environment:
       WSGI_PROCESSES: 4
@@ -74,7 +74,7 @@ services:
     image: gncloud/gncloud-docker
     volumes:
       - ~/var/log/gncloud:/var/log/gncloud
-      - /root/.ssh:/root/.ssh
+      - ~/.ssh:/root/.ssh
     restart: always
     environment:
       WSGI_PROCESSES: 4
@@ -87,7 +87,7 @@ services:
     image: gncloud/gncloud-scheduler
     volumes:
       - ~/var/log/gncloud:/var/log/gncloud
-      - /root/.ssh:/root/.ssh
+      - ~/.ssh:/root/.ssh
     restart: always
     environment:
       WSGI_PROCESSES: 1
