@@ -99,8 +99,7 @@ def service_monitoring(sql_session):
                 gnMontor_info.net_usage = net_usage
             sql_session.commit()
             logger.info("도커 서비스 상태 업데이트 완료")
-            sql_session.remove()
     except:
         logger.exception("에러 발생")
-        sql_session.remove()
+        sql_session.rollback()
 
