@@ -56,7 +56,7 @@ class DockerService(object):
                         mount_type = 'LOG'
                     else:
                         mount_type = 'DATA'
-                    if len(detail.argument) > 1:
+                    if len(detail.argument) > 1 or detail.argument == None:
                         command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
                                   (command, image_info.name, container_info.id, mount_count, mount_type, detail.argument)
                 else:
