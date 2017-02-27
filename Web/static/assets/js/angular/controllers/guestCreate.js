@@ -11,7 +11,7 @@ angular
         })
             .success(function (data, status, headers, config) {
                 if (data) {
-                    $scope.type = data.list;
+                    $scope.type_check = data.list;
                 }
                 else {
                     if(data.message != null) {
