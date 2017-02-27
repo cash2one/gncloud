@@ -2,6 +2,7 @@ all: git-pull gncloud-kvm gncloud-hyperv gncloud-docker gncloud-manager gncloud-
 
 git-pull:
 	git pull
+	chmod +x *.sh
 
 gncloud-kvm:
 	cd ./KVM; docker build -t gncloud/gncloud-kvm . ; cd ..  
