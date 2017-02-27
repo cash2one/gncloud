@@ -1,33 +1,32 @@
-all: git-pull gncloud-kvm gncloud-hyperv gncloud-docker gncloud-manager gncloud-scheduler gncloud-web gncloud-mysql gncloud-registry
+all: git-pull kvm hyperv docker manager scheduler web mysql registry
 
 git-pull:
 	git pull
 	chmod +x *.sh
 
-gncloud-kvm:
+kvm:
 	cd ./KVM; docker build -t gncloud/gncloud-kvm . ; cd ..  
 
-gncloud-hyperv:
+hyperv:
 	cd ./HyperV; docker build -t gncloud/gncloud-hyperv . ; cd ..
 
-
-gncloud-docker:
+docker:
 	cd ./Docker; docker build -t gncloud/gncloud-docker . ; cd ..
 
-gncloud-manager:
+manager:
 	cd ./Manager; docker build -t gncloud/gncloud-manager . ; cd ..
 
-gncloud-scheduler:
+scheduler:
 	cd ./Scheduler; docker build -t gncloud/gncloud-scheduler . ; cd ..
 
-gncloud-web:
+web:
 	cd ./Web; docker build -t gncloud/gncloud-web . ; cd ..
 
-gncloud-mysql:
+mysql:
 	docker pull mysql
 	docker tag mysql gncloud/gncloud-mysql
 
-gncloud-registry:
+registry:
 	docker pull registry
 	docker tag registry gncloud/gncloud-registry
 
