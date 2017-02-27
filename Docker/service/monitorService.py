@@ -45,8 +45,8 @@ def service_monitoring(sql_session):
                     port = container_host.ip.split(':')[1]
                 else:
                     ip = container_host.ip
-                docker_stat_cmd = 'docker -H %s:%s stats --all --no-stream | grep "$(docker ps --filter=name=%s --quiet)"' \
-                                  % (ip, port, container.internal_name)
+                docker_stat_cmd = 'docker -H %s:%s stats --all --no-stream | grep "$(docker -H %s:%s ps --filter=name=%s --quiet)"' \
+                                  % (ip, port, ip, port, container.internal_name)
 
                 result = subprocess.check_output (docker_stat_cmd , shell=True)
                 result = result.split("\r\n")
