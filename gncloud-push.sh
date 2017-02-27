@@ -26,11 +26,3 @@ docker push gncloud/gncloud-kvm
 docker push gncloud/gncloud-mysql
 docker push gncloud/gncloud-registry
 
-docker push gncloud/gncloud-web:$1
-docker push gncloud/gncloud-scheduler:$1
-docker push gncloud/gncloud-manager:$1
-docker push gncloud/gncloud-docker:$1
-docker push gncloud/gncloud-hyperv:$1
-docker push gncloud/gncloud-kvm:$1
-docker push gncloud/gncloud-mysql:$1
-docker push gncloud/gncloud-registry:$1
