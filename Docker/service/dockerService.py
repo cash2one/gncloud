@@ -56,8 +56,9 @@ class DockerService(object):
                         mount_type = 'LOG'
                     else:
                         mount_type = 'DATA'
-                    command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
-                              (command, image_info.name, container_info.id, mount_count, mount_type, detail.argument)
+                    if len(detail.argument) > 1:
+                        command = '%s --mount type=volume,source=%s_%s_%d_%s,destination=%s' % \
+                                  (command, image_info.name, container_info.id, mount_count, mount_type, detail.argument)
                 else:
                     if detail.argument.find('--command') >= 0:
                         postfix = '%s %s' % (postfix, detail.argument.split('=')[1])
