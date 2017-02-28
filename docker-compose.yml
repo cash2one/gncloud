@@ -29,6 +29,7 @@ services:
       MYSQL_PASSWORD: gncloud
     volumes:
       - /etc/localtime:/etc/localtime
+      - /data/mysql:/var/lib/mysql
 
   manager:
     image: gncloud/gncloud-manager
