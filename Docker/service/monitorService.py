@@ -87,6 +87,7 @@ def service_monitoring(sql_session):
                 net_usage = 0.0
             #disk_usage = (disk_usage/2.0)
 
+
             vm_monitor_hist = GnMonitorHist(
                 id=service.id, type="docker", cpu_usage=cpu_usage, mem_usage=mem_usage,
                 disk_usage=disk_usage, net_usage=net_usage)
