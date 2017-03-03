@@ -88,9 +88,13 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         s.login(host_ip, USER)
         print 2
         s.sendline(config.SCRIPT_PATH+"make_sshkeys.sh "+name+" '" + str(org)+"' '" + str(pub)+"'")
+        s.prompt()
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh "+name + " '" + str(ip) +"' "+ssh_id)
+        s.prompt()
         s.sendline("rm -f "+ name)
+        s.prompt()
         s.sendline("rm -f "+ name+".pub")
+        s.prompt()
         s.logout()
         print(":complete set sshkey!!!")
     except IOError as e:
