@@ -94,7 +94,7 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         print '333'
         s.sendline('exit')
         # s.logout()
-        '''
+
         print 'login again'
         s = pxssh.pxssh(timeout=1200)
         s.login(host_ip, USER)
@@ -102,9 +102,8 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         print '444'
         s.prompt()
         s.sendline("rm -f "+ name+".pub")
-        s.prompt()
-        s.logout()
-        '''
+        s.sendline('exit')
+
         print(":complete set sshkey!!!")
     except IOError as e:
         print(e)
