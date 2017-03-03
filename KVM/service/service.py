@@ -93,6 +93,7 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh "+name + " '" + str(ip) +"' "+ssh_id)
         print '333'
         s.prompt()
+        s.sendline('exit')
         s.sendline("rm -f "+ name)
         print '444'
         s.prompt()
