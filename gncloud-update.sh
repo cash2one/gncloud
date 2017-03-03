@@ -1,6 +1,7 @@
 #!/bin/bash
 
 docker login
+
 docker pull gncloud/gncloud-docker
 docker pull gncloud/gncloud-web
 docker pull gncloud/gncloud-manager

@@ -17,6 +17,7 @@ docker tag gncloud/gncloud-kvm          gncloud/gncloud-kvm:$1
 docker tag gncloud/gncloud-mysql        gncloud/gncloud-mysql:$1
 docker tag gncloud/gncloud-registry     gncloud/gncloud-registry:$1
 
+
 docker push gncloud/gncloud-web
 docker push gncloud/gncloud-scheduler
 docker push gncloud/gncloud-manager
