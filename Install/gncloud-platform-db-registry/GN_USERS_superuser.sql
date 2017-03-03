@@ -1,4 +1,5 @@
 connect gncloud;
+
 INSERT INTO `GN_USERS` (`user_id`, `password`, `user_name`, `privilege`, `tel`, `email`, `start_date`, `end_date`) VALUES ('root', '0efcd128c7ebc05b8847ed430ab25fdd31c6df70315a0c862e', '시스템관리자', NULL, '-', '-', '2017-01-16 12:24:23', NULL);
 INSERT INTO `GN_TEAM` (`team_code`, `team_name`, `author_id`, `cpu_quota`, `mem_quota`, `disk_quota`, `create_date`) VALUES ('000', '시스템관리자', 'System', 0, 0, 0, '2017-01-01 17:58:00');
 INSERT INTO `GN_USER_TEAMS` (`user_id`, `team_code`, `comfirm`, `apply_date`, `approve_date`, `team_owner`) VALUES ('root', '000', 'Y', '2017-01-03 11:48:21', '2017-01-03 11:45:37', 'sysowner');
