@@ -6,6 +6,17 @@
     <os>
         <type arch='x86_64'>hvm</type>
         <boot dev='hd'/>
+        <loader supported='yes'>
+            <value>/usr/share/OVMF/OVMF_CODE.fd</value>
+            <enum name='type'>
+                <value>rom</value>
+                <value>pflash</value>
+            </enum>
+            <enum name='readonly'>
+                <value>yes</value>
+                <value>no</value>
+            </enum>
+        </loader>
         </os>
     <clock offset='utc'/>
     <on_poweroff>destroy</on_poweroff>
