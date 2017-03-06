@@ -83,15 +83,15 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
     try:
         name = config.SSHKEY_PATH + name
         print(":processing set sshkey!!!")
-        s = pxssh.pxssh(timeout=1200)
-        print host_ip + USER
-        s.login(host_ip, USER)
-        print 2
-        s.sendline(config.SCRIPT_PATH+"make_sshkeys.sh "+name+" '" + str(org)+"' '" + str(pub)+"'")
-        s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh "+name + " '" + str(ip) +"' "+ssh_id)
-        s.sendline("rm -f "+ name)
-        s.sendline("rm -f "+ name+".pub")
-        s.logout()
+        # s = pxssh.pxssh(timeout=1200)
+        # s.login(host_ip, USER)
+        # s.sendline(config.SCRIPT_PATH+"make_sshkeys.sh "+name+" '" + str(org)+"' '" + str(pub)+"'")
+        # s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh "+name + " '" + str(ip) +"' "+ssh_id)
+        # s.sendline("rm -f "+ name)
+        # s.sendline("rm -f "+ name+".pub")
+        # s.logout()
+        subprocess.check_output(config.SCRIPT_PATH+"make_sshkeys.sh "+name+" '" + str(org)+"' '" + str(pub)+"'")
+        subprocess.check_output(config.SCRIPT_PATH+"add_sshkeys.sh "+name + " '" + str(ip) +"' "+ssh_id)
         print(":complete set sshkey!!!")
     except IOError as e:
         print(e)

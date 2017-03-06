@@ -39,7 +39,7 @@ def qna_list(page,team_code,syscheck,sql_session):
         page=int(page)-1
         qna_info = sql_session.query(GnQnA).filter(GnQnA.farent_id == None) \
             .order_by(GnQnA.create_date.desc()).filter(GnQnA.team_code==team_code).limit(page_size).offset(page*page_size).all()
-        total_page = total_page= sql_session.query(func.count(GnQnA.id).label("count")) \
+        total_page = sql_session.query(func.count(GnQnA.id).label("count")) \
             .filter(GnQnA.farent_id==None).filter(GnQnA.team_code==team_code).one()
         total=int(total_page.count)/10
         for qna in qna_info:
