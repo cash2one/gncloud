@@ -25,6 +25,7 @@ RUN mkdir -p /var/log/gncloud
 RUN mkdir -p /data/kvm/sshkeys # TODO /var/lib/gncloud/KVM/sshkeys
 COPY supervisor-app.ini /etc/supervisord.d/
 
+COPY script      /var/lib/gncloud/KVM/script
 COPY db          /var/lib/gncloud/KVM/db
 COPY service     /var/lib/gncloud/KVM/service
 COPY util        /var/lib/gncloud/KVM/util
