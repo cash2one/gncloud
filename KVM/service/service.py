@@ -86,24 +86,12 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         s = pxssh.pxssh(timeout=1200)
         print host_ip + USER
         s.login(host_ip, USER)
-        print '111'
+        print 2
         s.sendline(config.SCRIPT_PATH+"make_sshkeys.sh "+name+" '" + str(org)+"' '" + str(pub)+"'")
-        print '222'
-        s.prompt()
         s.sendline(config.SCRIPT_PATH+"add_sshkeys.sh "+name + " '" + str(ip) +"' "+ssh_id)
-        print '333'
-        s.sendline('exit')
-        # s.logout()
-
-        print 'login again'
-        s = pxssh.pxssh(timeout=1200)
-        s.login(host_ip, USER)
         s.sendline("rm -f "+ name)
-        print '444'
-        s.prompt()
         s.sendline("rm -f "+ name+".pub")
-        s.sendline('exit')
-
+        s.logout()
         print(":complete set sshkey!!!")
     except IOError as e:
         print(e)
