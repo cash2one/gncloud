@@ -74,6 +74,7 @@ def kvm_vm_delete(guest_name, host_ip):
     conn = libvirt.open(url)
     ptr_VM = conn.lookupByName(guest_name)
     ptr_VM.destroy()
+    ptr_VM.undefine()
     ptr_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
     ptr_POOL.storageVolLookupByName(guest_name + ".img").delete()
     conn.close()

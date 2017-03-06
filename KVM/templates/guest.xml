@@ -28,5 +28,6 @@
             <source bridge='br0'/>
             <model type='virtio'/>
             </interface>
+        <graphics type='vnc' port='-1'/>
         </devices>
     </domain>
