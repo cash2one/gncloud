@@ -20,40 +20,32 @@ def kvm_create(name, cpu, memory, disk, base_name, base_sub_type, host_ip):
     # 스냅샷 기반 유무에 따른 생성 set_vm_ip.sh로직 분기
     instance_POOL = conn.storagePoolLookupByName(config.POOL_NAME)
 
-    base_full_name = '%s%s' % (config.LIVERT_IMAGE_BASE_PATH, base_name)
-    dest_full_name = '%s%s.img' % (config.LIVERT_IMAGE_LOCAL_PATH, name)
-
-    copy_cmd = "cp %s %s" % (base_full_name, dest_full_name)
-    s.sendline(copy_cmd)
-    s.prompt()
-    s.sendline("qemu-img info %s | grep 'virtual size' | cut -d' ' -f4 | cut -d'(' -f2')" % dest_full_name)
-
-    increase_size = disk - int(s.before)
-    resize_cmd = "qemu-img resize %s +%d" % (dest_full_name, increase_size)
-    s.sendline(resize_cmd)
-    s.prompt()
-    s.logout()
-
     if base_sub_type == "base":
+        s.sendline("\cp "+config.LIVERT_IMAGE_BASE_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+base_name)
+        s.logout()
+        instance_POOL.refresh()
         vol = render_template(
             "volume.xml"
             , guest_name=name
             , disk=disk
         )
-        defaultVol = instance_POOL.storageVolLookupByName(name)
+        defaultVol = instance_POOL.storageVolLookupByName(base_name)
         instance_POOL.createXMLFrom(vol, defaultVol, 0)
-        #instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
-        #defaultVol.delete()
-
-    instance_POOL.refresh()
+        instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
+        defaultVol.delete()
+    else:
+        s.sendline("\cp "+config.LIVERT_IMAGE_SNAPSHOT_PATH+base_name +" "+config.LIVERT_IMAGE_LOCAL_PATH+name + ".img")
+        s.logout()
+        instance_POOL.refresh()
+        instance_POOL.storageVolLookupByName(name + ".img").resize(disk)
 
     # vm 생성
     guest = render_template(
         "guest.xml"
-        , guest_name = name
-        , guest_path = dest_full_name
+        , guest_name=name
+        , guest_path=config.LIVERT_IMAGE_LOCAL_PATH+name+".img"
         , config_path = config.SCRIPT_PATH+"initcloud/config.iso"
-        , current_memory = memory
+        , current_memory=memory
         , vcpu=cpu
     )
     dom = conn.defineXML(guest)
