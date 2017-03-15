@@ -3,6 +3,7 @@ __author__ = 'yhk'
 
 import subprocess
 import os
+import time
 
 from KVM.db.database import db_session
 from KVM.db.models import *
@@ -90,8 +91,9 @@ def setSsh(host_ip, pub,org,name, ip, ssh_id):
         # s.sendline("rm -f "+ name)
         # s.sendline("rm -f "+ name+".pub")
         # s.logout()
-        subprocess.check_output(config.SCRIPT_PATH+"make_sshkey.sh "+name+" '" + str(org)+"' '" + str(pub)+"'", shell=True)
-        subprocess.check_output(config.SCRIPT_PATH+"add_sshkeys.sh "+name + " '" + str(ip) +"' "+ssh_id, shell=True)
+        subprocess.check_output(config.SCRIPT_PATH+"make_sshkeys.sh "+name+" '" + str(org)+"' '" + str(pub)+"'", shell=True)
+        time.sleep(5)
+        subprocess.check_output(config.SCRIPT_PATH+"add_sshkeys.sh "+name + " '" + str(ip) +"' "+ssh_id,shell=True)
         print(":complete set sshkey!!!")
     except IOError as e:
         print(e)
