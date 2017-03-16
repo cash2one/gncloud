@@ -597,7 +597,7 @@ def vm_monitor(sql_session):
             sql_session.commit()
             print 'success monitor'
         except Exception as message:
-            print message
+            print message.message
             sql_session.rollback()
 
 
